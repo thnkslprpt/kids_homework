@@ -120,3 +120,128 @@ const POPULATION_QUESTIONS = [
     difficulty: 5,
   },
 ];
+
+POPULATION_QUESTIONS.push(
+  ...[
+    {
+      question: "About how many people live in Myanmar?",
+      options: ["About 20 million", "About 60 million", "About 120 million", "About 240 million"],
+      answer: "About 60 million",
+      difficulty: 1,
+    },
+    {
+      question: "About how many people live in South Korea?",
+      options: ["About 20 million", "About 50 million", "About 100 million", "About 200 million"],
+      answer: "About 50 million",
+      difficulty: 1,
+    },
+    {
+      question: "About how many people live in Colombia?",
+      options: ["About 20 million", "About 50 million", "About 110 million", "About 220 million"],
+      answer: "About 50 million",
+      difficulty: 1,
+    },
+    {
+      question: "About how many people live in South Africa?",
+      options: ["About 20 million", "About 60 million", "About 130 million", "About 250 million"],
+      answer: "About 60 million",
+      difficulty: 1,
+    },
+    {
+      question: "About how many people live in Sudan?",
+      options: ["About 20 million", "About 50 million", "About 100 million", "About 220 million"],
+      answer: "About 50 million",
+      difficulty: 2,
+    },
+    {
+      question: "About how many people live in Algeria?",
+      options: ["About 20 million", "About 50 million", "About 110 million", "About 210 million"],
+      answer: "About 50 million",
+      difficulty: 2,
+    },
+    {
+      question: "About how many people live in Canada?",
+      options: ["About 10 million", "About 40 million", "About 100 million", "About 220 million"],
+      answer: "About 40 million",
+      difficulty: 2,
+    },
+    {
+      question: "About how many people live in Poland?",
+      options: ["About 10 million", "About 40 million", "About 90 million", "About 180 million"],
+      answer: "About 40 million",
+      difficulty: 2,
+    },
+    {
+      question: "About how many people live in Morocco?",
+      options: ["About 10 million", "About 40 million", "About 90 million", "About 170 million"],
+      answer: "About 40 million",
+      difficulty: 3,
+    },
+    {
+      question: "About how many people live in Saudi Arabia?",
+      options: ["About 10 million", "About 40 million", "About 90 million", "About 200 million"],
+      answer: "About 40 million",
+      difficulty: 3,
+    },
+    {
+      question: "About how many people live in Uzbekistan?",
+      options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
+      answer: "About 40 million",
+      difficulty: 3,
+    },
+    {
+      question: "About how many people live in Peru?",
+      options: ["About 10 million", "About 30 million", "About 70 million", "About 150 million"],
+      answer: "About 30 million",
+      difficulty: 3,
+    },
+    {
+      question: "About how many people live in Malaysia?",
+      options: ["About 10 million", "About 30 million", "About 70 million", "About 140 million"],
+      answer: "About 30 million",
+      difficulty: 4,
+    },
+    {
+      question: "About how many people live in Venezuela?",
+      options: ["About 10 million", "About 30 million", "About 70 million", "About 140 million"],
+      answer: "About 30 million",
+      difficulty: 4,
+    },
+    {
+      question: "About how many people live in Afghanistan?",
+      options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
+      answer: "About 40 million",
+      difficulty: 4,
+    },
+    {
+      question: "About how many people live in Yemen?",
+      options: ["About 10 million", "About 40 million", "About 80 million", "About 170 million"],
+      answer: "About 40 million",
+      difficulty: 4,
+    },
+    {
+      question: "About how many people live in Uganda?",
+      options: ["About 20 million", "About 50 million", "About 100 million", "About 220 million"],
+      answer: "About 50 million",
+      difficulty: 5,
+    },
+    {
+      question: "About how many people live in Australia?",
+      options: ["About 10 million", "About 30 million", "About 80 million", "About 150 million"],
+      answer: "About 30 million",
+      difficulty: 5,
+    },
+    {
+      question: "About how many people live in Kenya?",
+      options: ["About 20 million", "About 50 million", "About 100 million", "About 200 million"],
+      answer: "About 50 million",
+      difficulty: 5,
+    },
+    {
+      question: "About how many people live in Iraq?",
+      options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
+      answer: "About 40 million",
+      difficulty: 5,
+    },
+  ]
+);

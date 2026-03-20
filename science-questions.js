@@ -716,3 +716,760 @@ const SCIENCE_QUESTIONS = [
     "difficulty": 5
   }
 ];
+
+SCIENCE_QUESTIONS.push(
+  ...[
+    {
+      "question": "What do plants need to make food?",
+      "correctAnswer": "Sunlight",
+      "incorrectAnswers": [
+        "Music",
+        "Sand",
+        "Snow"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which organ pumps blood around the body?",
+      "correctAnswer": "Heart",
+      "incorrectAnswers": [
+        "Lungs",
+        "Stomach",
+        "Brain"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What gas do people breathe in to live?",
+      "correctAnswer": "Oxygen",
+      "incorrectAnswers": [
+        "Carbon dioxide",
+        "Helium",
+        "Nitrogen"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What do seeds grow into?",
+      "correctAnswer": "New plants",
+      "incorrectAnswers": [
+        "Clouds",
+        "Rocks",
+        "Shadows"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which is a solid?",
+      "correctAnswer": "Ice",
+      "incorrectAnswers": [
+        "Steam",
+        "Rain",
+        "Fog"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which body part helps you hear?",
+      "correctAnswer": "Ears",
+      "incorrectAnswers": [
+        "Knees",
+        "Elbows",
+        "Toes"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What do fish use to breathe?",
+      "correctAnswer": "Gills",
+      "incorrectAnswers": [
+        "Feathers",
+        "Roots",
+        "Shells"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which planet do we live on?",
+      "correctAnswer": "Earth",
+      "incorrectAnswers": [
+        "Mars",
+        "Venus",
+        "Jupiter"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What tool measures temperature?",
+      "correctAnswer": "Thermometer",
+      "incorrectAnswers": [
+        "Ruler",
+        "Compass",
+        "Magnifying glass"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What do bees help flowers do?",
+      "correctAnswer": "Pollinate",
+      "incorrectAnswers": [
+        "Freeze",
+        "Turn into rocks",
+        "Disappear"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which star is closest to Earth?",
+      "correctAnswer": "The Sun",
+      "incorrectAnswers": [
+        "Polaris",
+        "Sirius",
+        "Betelgeuse"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What do clouds often hold?",
+      "correctAnswer": "Tiny water droplets",
+      "incorrectAnswers": [
+        "Sand",
+        "Balloons",
+        "Fire"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "Which animal is a mammal?",
+      "correctAnswer": "Dog",
+      "incorrectAnswers": [
+        "Shark",
+        "Frog",
+        "Eagle"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    },
+    {
+      "question": "What is a habitat?",
+      "correctAnswer": "The place where an animal lives",
+      "incorrectAnswers": [
+        "The food an animal eats",
+        "The sound an animal makes",
+        "The color of an animal"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "Which planet is known as the Red Planet?",
+      "correctAnswer": "Mars",
+      "incorrectAnswers": [
+        "Mercury",
+        "Saturn",
+        "Neptune"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What does a skeleton do?",
+      "correctAnswer": "Supports the body",
+      "incorrectAnswers": [
+        "Makes food",
+        "Pumps blood",
+        "Cleans the air"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is evaporation?",
+      "correctAnswer": "Liquid changing to gas",
+      "incorrectAnswers": [
+        "Gas changing to solid",
+        "Rock changing to liquid",
+        "Sound changing to light"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What force pulls things down?",
+      "correctAnswer": "Gravity",
+      "incorrectAnswers": [
+        "Magnetism",
+        "Electricity",
+        "Friction"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What part of a plant takes in water?",
+      "correctAnswer": "Roots",
+      "incorrectAnswers": [
+        "Flowers",
+        "Seeds",
+        "Leaves"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is a germ?",
+      "correctAnswer": "A tiny living thing that can make you sick",
+      "incorrectAnswers": [
+        "A piece of metal",
+        "A kind of cloud",
+        "A type of plant"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What does a thermometer measure?",
+      "correctAnswer": "Temperature",
+      "incorrectAnswers": [
+        "Weight",
+        "Distance",
+        "Speed"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is a moon?",
+      "correctAnswer": "A natural satellite",
+      "incorrectAnswers": [
+        "A kind of cloud",
+        "A small star",
+        "A type of planet ring"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is an insect?",
+      "correctAnswer": "Ant",
+      "incorrectAnswers": [
+        "Whale",
+        "Snake",
+        "Eagle"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What do roots mainly do for a plant?",
+      "correctAnswer": "Absorb water and nutrients",
+      "incorrectAnswers": [
+        "Make seeds",
+        "Produce sunlight",
+        "Turn into flowers"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is a food chain?",
+      "correctAnswer": "Who eats whom in nature",
+      "incorrectAnswers": [
+        "A line of kitchens",
+        "A way to measure rain",
+        "A kind of plant root"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    },
+    {
+      "question": "What is a microscope used for?",
+      "correctAnswer": "Seeing tiny things",
+      "incorrectAnswers": [
+        "Measuring time",
+        "Cooking food",
+        "Finding directions"
+      ],
+      "category": "Curated Science",
+      "difficulty": 2
+    }
+  ]
+);
+
+SCIENCE_QUESTIONS.push(
+  ...[
+    {
+      "question": "What process do plants use to make food?",
+      "correctAnswer": "Photosynthesis",
+      "incorrectAnswers": [
+        "Evaporation",
+        "Condensation",
+        "Magnetism"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What are fossils?",
+      "correctAnswer": "Preserved remains or traces of living things",
+      "incorrectAnswers": [
+        "Pieces of candy",
+        "Tiny weather machines",
+        "Kinds of clouds"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "Why do we have day and night?",
+      "correctAnswer": "Earth rotates",
+      "incorrectAnswers": [
+        "The Moon changes shape",
+        "The Sun turns off at night",
+        "Clouds cover half the planet"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "Which part of blood carries oxygen?",
+      "correctAnswer": "Red blood cells",
+      "incorrectAnswers": [
+        "Bones",
+        "Skin cells",
+        "Teeth"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is condensation?",
+      "correctAnswer": "Gas changing to liquid",
+      "incorrectAnswers": [
+        "Liquid changing to gas",
+        "Solid changing to rock",
+        "Heat changing to light"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is a variable in an experiment?",
+      "correctAnswer": "One thing changed on purpose",
+      "incorrectAnswers": [
+        "A result that never changes",
+        "A kind of tool",
+        "A guess with no test"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is a vertebrate?",
+      "correctAnswer": "An animal with a backbone",
+      "incorrectAnswers": [
+        "An animal with no eyes",
+        "A plant that grows in water",
+        "A rock with layers"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is the main source of Earth's energy?",
+      "correctAnswer": "The Sun",
+      "incorrectAnswers": [
+        "The Moon",
+        "The wind",
+        "The oceans"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What does the small intestine do?",
+      "correctAnswer": "Absorbs nutrients",
+      "incorrectAnswers": [
+        "Pumps blood",
+        "Makes bones",
+        "Catches sunlight"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is an ecosystem?",
+      "correctAnswer": "Living things and their environment",
+      "incorrectAnswers": [
+        "Only the weather",
+        "Only one animal",
+        "A kind of mineral"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is a renewable resource?",
+      "correctAnswer": "A resource that can be replaced naturally",
+      "incorrectAnswers": [
+        "A resource that can never be used",
+        "A resource that always disappears",
+        "A resource made only of plastic"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What do magnets attract?",
+      "correctAnswer": "Some metals like iron",
+      "incorrectAnswers": [
+        "Rainbows",
+        "Clouds",
+        "Leaves"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "What is the atmosphere?",
+      "correctAnswer": "The layer of gases around Earth",
+      "incorrectAnswers": [
+        "The layer of rocks under Earth",
+        "The ocean floor",
+        "The inside of a volcano"
+      ],
+      "category": "Curated Science",
+      "difficulty": 3
+    },
+    {
+      "question": "Why do seasons happen?",
+      "correctAnswer": "Earth is tilted as it orbits the Sun",
+      "incorrectAnswers": [
+        "The Moon changes shape",
+        "The Sun moves closer and farther every week",
+        "Clouds block the Sun in winter only"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "Why is Venus so hot?",
+      "correctAnswer": "Its thick atmosphere traps heat",
+      "incorrectAnswers": [
+        "It is the biggest planet",
+        "It has the most water",
+        "It is closest to the Moon"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What does the circulatory system do?",
+      "correctAnswer": "Moves blood around the body",
+      "incorrectAnswers": [
+        "Makes leaves grow",
+        "Creates sound in the ears",
+        "Turns food into sunlight"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What are producers?",
+      "correctAnswer": "Organisms that make their own food",
+      "incorrectAnswers": [
+        "Animals that only eat meat",
+        "Plants that never need sunlight",
+        "Rocks that store water"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "Why do we see lightning before thunder?",
+      "correctAnswer": "Light travels faster than sound",
+      "incorrectAnswers": [
+        "Thunder happens only at night",
+        "Sound cannot move through air",
+        "Lightning is louder than thunder"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What is an adaptation?",
+      "correctAnswer": "A trait that helps survival",
+      "incorrectAnswers": [
+        "A broken bone",
+        "A kind of weather",
+        "A computer program"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What is osmosis?",
+      "correctAnswer": "Water moving through a membrane",
+      "incorrectAnswers": [
+        "Rocks melting in the sun",
+        "Sound moving through water",
+        "Plants making seeds"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    }
+  ]
+);
+
+SCIENCE_QUESTIONS.push(
+  ...[
+    {
+      "question": "What is a fossil fuel?",
+      "correctAnswer": "A fuel made from ancient living things",
+      "incorrectAnswers": [
+        "A fuel made from rocks",
+        "A fuel made from clouds",
+        "A fuel made from sunshine"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "Why do satellites stay in orbit?",
+      "correctAnswer": "Their forward motion and Earth's gravity balance together",
+      "incorrectAnswers": [
+        "They are held up by clouds",
+        "They have no gravity at all",
+        "They are pushed by the Moon"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What is the nervous system?",
+      "correctAnswer": "The body system that sends signals",
+      "incorrectAnswers": [
+        "The system that makes bones",
+        "The system that turns food into blood",
+        "The system that stores water in leaves"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What are prey animals?",
+      "correctAnswer": "Animals hunted by other animals",
+      "incorrectAnswers": [
+        "Animals that make their own food",
+        "Animals that never move",
+        "Animals that live only in water"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "Why is soil important for plants?",
+      "correctAnswer": "It gives support and nutrients",
+      "incorrectAnswers": [
+        "It makes plants turn into fish",
+        "It stops plants from needing water",
+        "It turns sunlight into roots"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What is a control group?",
+      "correctAnswer": "A comparison group",
+      "incorrectAnswers": [
+        "The group that changes every variable",
+        "The group that never gets checked",
+        "The group that always wins"
+      ],
+      "category": "Curated Science",
+      "difficulty": 4
+    },
+    {
+      "question": "What is the scientific method first step?",
+      "correctAnswer": "Ask a question",
+      "incorrectAnswers": [
+        "Write the conclusion first",
+        "Pick the answer without testing",
+        "Use random numbers"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is a hypothesis?",
+      "correctAnswer": "A testable prediction",
+      "incorrectAnswers": [
+        "A finished fact with no test",
+        "A kind of tool",
+        "A silly guess with no reason"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "Why are antibiotics not useful for viruses?",
+      "correctAnswer": "Viruses are not bacteria",
+      "incorrectAnswers": [
+        "Viruses are made of metal",
+        "Viruses are always too big",
+        "Antibiotics only work at night"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is plate tectonics?",
+      "correctAnswer": "Earth's crust is broken into moving plates",
+      "incorrectAnswers": [
+        "Earth's oceans freeze and move",
+        "The Moon pushes the continents around",
+        "Mountains roll like wheels"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What does the nucleus do in a cell?",
+      "correctAnswer": "It holds the cell's genetic instructions",
+      "incorrectAnswers": [
+        "It makes sunlight",
+        "It pumps blood",
+        "It turns water into air"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is the main job of alveoli?",
+      "correctAnswer": "Exchanging gases with the blood",
+      "incorrectAnswers": [
+        "Making bones grow",
+        "Turning food into teeth",
+        "Storing sunlight"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What does the excretory system remove?",
+      "correctAnswer": "Wastes from the body",
+      "incorrectAnswers": [
+        "Only oxygen",
+        "Only bones",
+        "Only sunlight"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "Why do some clouds look dark?",
+      "correctAnswer": "They hold more water and are thicker",
+      "incorrectAnswers": [
+        "They are made of rocks",
+        "They are farther from the Sun",
+        "They are covered by paint"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is a black hole?",
+      "correctAnswer": "A region with gravity so strong light cannot escape",
+      "incorrectAnswers": [
+        "A hole in the ground that never fills",
+        "A planet with no air",
+        "A star made of ice"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is the difference between mass and weight?",
+      "correctAnswer": "Mass is amount of matter; weight is gravity's pull",
+      "incorrectAnswers": [
+        "Mass is speed; weight is color",
+        "Mass is sound; weight is light",
+        "Mass is distance; weight is temperature"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is photosynthesis's main product besides oxygen?",
+      "correctAnswer": "Sugar",
+      "incorrectAnswers": [
+        "Salt",
+        "Metal",
+        "Smoke"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "Why is repeating an experiment useful?",
+      "correctAnswer": "It shows whether results are consistent",
+      "incorrectAnswers": [
+        "It changes the answer automatically",
+        "It makes the question disappear",
+        "It proves the first guess was perfect"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is a food web?",
+      "correctAnswer": "Many connected food chains",
+      "incorrectAnswers": [
+        "A list of cooking recipes",
+        "A type of plant root",
+        "A machine that makes rain"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    },
+    {
+      "question": "What is the best way to test one factor at a time?",
+      "correctAnswer": "Change only one variable",
+      "incorrectAnswers": [
+        "Change everything at once",
+        "Never measure anything",
+        "Guess the answer first"
+      ],
+      "category": "Curated Science",
+      "difficulty": 5
+    }
+  ]
+);
+
+SCIENCE_QUESTIONS.push(
+  ...[
+    {
+      "question": "Which part of a plant makes seeds?",
+      "correctAnswer": "The flower",
+      "incorrectAnswers": [
+        "The root",
+        "The stem",
+        "The soil"
+      ],
+      "category": "Curated Science",
+      "difficulty": 1
+    }
+  ]
+);

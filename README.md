@@ -67,7 +67,8 @@ Within math, the app uses both:
 - `Measurement`
   - length, mass, volume, temperature, and unit conversions
 - `Charts and Graphs`
-  - reading tables, totals, comparisons, and best-supported statements
+  - generated visual bar-chart and table questions
+  - reading totals, exact values, biggest/smallest values, and comparisons
 - `Calendar`
   - months, weekdays, leap years, dates, and elapsed days
 - `Estimation`

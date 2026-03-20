@@ -34,6 +34,22 @@ const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   4: { 4: 0.6, 3: 0.25, 2: 0.1, 1: 0.05 },
   5: { 5: 0.7, 4: 0.2, 3: 0.05, 2: 0.05 },
 };
+const CHART_BAR_TEMPLATES = [
+  { title: "Favorite Fruits", labels: ["Apples", "Bananas", "Grapes", "Oranges"] },
+  { title: "Pet Votes", labels: ["Dogs", "Cats", "Fish", "Birds"] },
+  { title: "Toy Boxes", labels: ["Blocks", "Cars", "Balls", "Dolls"] },
+  { title: "Snack Sales", labels: ["Crackers", "Yogurt", "Cheese", "Apples"] },
+  { title: "Books Read", labels: ["Mia", "Noam", "Eli", "Tali"] },
+  { title: "Sticker Colors", labels: ["Red", "Blue", "Green", "Yellow"] },
+];
+const CHART_TABLE_TEMPLATES = [
+  { title: "Library Visits", leftLabel: "Day", rightLabel: "Visitors", labels: ["Mon", "Tue", "Wed", "Thu"] },
+  { title: "Water Cups", leftLabel: "Day", rightLabel: "Cups", labels: ["Sun", "Mon", "Tue", "Wed"] },
+  { title: "Tree Heights", leftLabel: "Tree", rightLabel: "Meters", labels: ["Oak", "Pine", "Palm", "Maple"] },
+  { title: "Team Points", leftLabel: "Team", rightLabel: "Points", labels: ["Red", "Blue", "Green", "Yellow"] },
+  { title: "Class Jobs", leftLabel: "Job", rightLabel: "Students", labels: ["Clean", "Read", "Draw", "Build"] },
+  { title: "Plant Heights", leftLabel: "Plant", rightLabel: "Cm", labels: ["A", "B", "C", "D"] },
+];
 
 const HEBREW_NIKKUD_OVERRIDES = {
   "אבא": "אַבָּא",
@@ -153,6 +169,7 @@ const elements = {
   questionNumber: document.getElementById("question-number"),
   questionPrompt: document.getElementById("question-prompt"),
   questionMain: document.getElementById("question-main"),
+  questionVisual: document.getElementById("question-visual"),
   questionExtra: document.getElementById("question-extra"),
   answerForm: document.getElementById("answer-form"),
   inputArea: document.getElementById("input-area"),
@@ -509,6 +526,10 @@ function buildSessionQuestions(totalQuestions, difficulty) {
 
     if (category === "statistics") {
       return createStatisticsChoiceQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
+    }
+
+    if (category === "charts-and-graphs") {
+      return createChartsAndGraphsQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
     }
 
     const categoryConfig = choiceCategoryConfigs[category];
@@ -1059,6 +1080,284 @@ function createStatisticsDataQuestion(difficulty) {
   });
 }
 
+function createChartsAndGraphsQuestion(difficulty) {
+  const generators =
+    difficulty <= 2
+      ? [
+          createBarMostQuestion,
+          createBarFewestQuestion,
+          createBarExactQuestion,
+          createTableMostQuestion,
+          createTableExactQuestion,
+          createBarTotalQuestion,
+        ]
+      : difficulty <= 4
+        ? [
+            createBarMostQuestion,
+            createBarFewestQuestion,
+            createBarExactQuestion,
+            createBarTotalQuestion,
+            createBarDifferenceQuestion,
+            createTableMostQuestion,
+            createTableExactQuestion,
+            createTableTotalQuestion,
+            createTableDifferenceQuestion,
+          ]
+        : [
+            createBarExactQuestion,
+            createBarTotalQuestion,
+            createBarDifferenceQuestion,
+            createTableExactQuestion,
+            createTableTotalQuestion,
+            createTableCombinedQuestion,
+            createTableDifferenceQuestion,
+          ];
+
+  return randomChoice(generators)(difficulty);
+}
+
+function createBarMostQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const answerItem = dataset.sortedByValue[dataset.sortedByValue.length - 1];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: "Look at the graph. Which label has the most?",
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createBarFewestQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const answerItem = dataset.sortedByValue[0];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: "Look at the graph. Which label has the fewest?",
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createBarExactQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const answerItem = randomChoice(dataset.items);
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: `Look at the graph. How many does ${answerItem.label} have?`,
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answerItem.value, difficulty),
+    answerValue: String(answerItem.value),
+    answerLabel: String(answerItem.value),
+  });
+}
+
+function createBarTotalQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const answer = dataset.items.reduce((sum, item) => sum + item.value, 0);
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: "Look at the graph. What is the total?",
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answer, difficulty, answer + 3),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function createBarDifferenceQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const [smaller, larger] = [dataset.sortedByValue[0], dataset.sortedByValue[dataset.sortedByValue.length - 1]];
+  const answer = larger.value - smaller.value;
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: `Look at the graph. How many more does ${larger.label} have than ${smaller.label}?`,
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answer, difficulty),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function createTableMostQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const answerItem = dataset.sortedByValue[dataset.sortedByValue.length - 1];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: "Look at the table. Which row has the biggest number?",
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createTableExactQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const answerItem = randomChoice(dataset.items);
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: `Look at the table. What number is in the ${answerItem.label} row?`,
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answerItem.value, difficulty),
+    answerValue: String(answerItem.value),
+    answerLabel: String(answerItem.value),
+  });
+}
+
+function createTableTotalQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const answer = dataset.items.reduce((sum, item) => sum + item.value, 0);
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: "Look at the table. What is the total?",
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answer, difficulty, answer + 4),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function createTableCombinedQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const pair = shuffleArray([...dataset.items]).slice(0, 2);
+  const answer = pair[0].value + pair[1].value;
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: `Look at the table. What is ${pair[0].label} plus ${pair[1].label}?`,
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answer, difficulty, answer + 5),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function createTableDifferenceQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const pair = shuffleArray([...dataset.items]).slice(0, 2).sort((left, right) => right.value - left.value);
+  const answer = pair[0].value - pair[1].value;
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: `Look at the table. How many more is ${pair[0].label} than ${pair[1].label}?`,
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: buildVisualNumberOptions(answer, difficulty),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function buildChartDataset(difficulty, visualType) {
+  const template = randomChoice(
+    visualType === "bar" ? CHART_BAR_TEMPLATES : CHART_TABLE_TEMPLATES
+  );
+  const config = {
+    1: { min: 1, max: 6 },
+    2: { min: 2, max: 8 },
+    3: { min: 3, max: 12 },
+    4: { min: 4, max: 18 },
+    5: { min: 5, max: 24 },
+  }[difficulty];
+  const values = buildDistinctNumberList(template.labels.length, config.min, config.max, 1);
+  const items = template.labels.map((label, index) => ({
+    label,
+    value: values[index],
+  }));
+
+  return {
+    ...template,
+    items,
+    visualType,
+    sortedByValue: [...items].sort((left, right) => left.value - right.value),
+    summary: `${template.title}: ${items.map((item) => `${item.label} ${item.value}`).join(", ")}`,
+  };
+}
+
+function renderBarChartVisual(dataset) {
+  const maxValue = Math.max(...dataset.items.map((item) => item.value));
+  const rows = dataset.items
+    .map((item, index) => {
+      const width = Math.max(18, Math.round((item.value / maxValue) * 100));
+      return `
+        <div class="visual-bar-row">
+          <span class="visual-bar-label">${escapeHtml(item.label)}</span>
+          <span class="visual-bar-track">
+            <span class="visual-bar-fill visual-bar-fill-${index % 4}" style="width:${width}%"></span>
+          </span>
+          <span class="visual-bar-value">${item.value}</span>
+        </div>
+      `;
+    })
+    .join("");
+
+  return `
+    <div class="visual-card">
+      <div class="visual-card-title">${escapeHtml(dataset.title)}</div>
+      <div class="visual-bar-chart">${rows}</div>
+    </div>
+  `;
+}
+
+function renderTableVisual(dataset) {
+  const rows = dataset.items
+    .map(
+      (item) => `
+        <tr>
+          <th scope="row">${escapeHtml(item.label)}</th>
+          <td>${item.value}</td>
+        </tr>
+      `
+    )
+    .join("");
+
+  return `
+    <div class="visual-card">
+      <div class="visual-card-title">${escapeHtml(dataset.title)}</div>
+      <table class="visual-table">
+        <thead>
+          <tr>
+            <th>${escapeHtml(dataset.leftLabel)}</th>
+            <th>${escapeHtml(dataset.rightLabel)}</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>
+  `;
+}
+
 function createHebrewChoiceQuestion(entry) {
   return {
     type: "hebrew-choice",
@@ -1152,6 +1451,32 @@ function createNumericChoiceQuestion({ type, difficulty, questionText, displayTe
   };
 }
 
+function createVisualChoiceQuestion({
+  type,
+  difficulty,
+  questionText,
+  visualHtml,
+  visualSummary,
+  options,
+  answerValue,
+  answerLabel,
+}) {
+  return {
+    type,
+    difficulty,
+    mode: "choice",
+    questionText,
+    displayText: "",
+    extraText: "",
+    visualHtml,
+    visualSummary,
+    options,
+    answerValue,
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
 function renderCurrentQuestion() {
   const question = state.questions[state.currentIndex];
   if (!question) {
@@ -1169,6 +1494,9 @@ function renderCurrentQuestion() {
   elements.questionMain.textContent = question.displayText;
   elements.questionMain.hidden = !question.displayText;
   elements.questionMain.classList.toggle("hebrew", Boolean(question.isHebrew));
+
+  elements.questionVisual.innerHTML = question.visualHtml || "";
+  elements.questionVisual.hidden = !question.visualHtml;
 
   elements.questionExtra.textContent = question.extraText;
   elements.questionExtra.hidden = !question.extraText;
@@ -1284,6 +1612,10 @@ function formatQuestionReview(question, selectedValue) {
     lines.push(question.displayText);
   }
 
+  if (question.visualSummary) {
+    lines.push(question.visualSummary);
+  }
+
   if (Array.isArray(question.options) && question.options.length) {
     question.options.forEach((option, index) => {
       const markerText = option === selectedValue ? "  [your answer]" : "";
@@ -1388,6 +1720,10 @@ function formatQuestionForLog(question) {
 
   if (question.displayText) {
     lines.push(question.displayText);
+  }
+
+  if (question.visualSummary) {
+    lines.push(question.visualSummary);
   }
 
   if (question.extraText) {
@@ -2033,6 +2369,13 @@ function buildNumberOptions(answer, min = answer - 12, max = answer + 12) {
   }
 
   return shuffleArray(Array.from(options));
+}
+
+function buildVisualNumberOptions(answer, difficulty, maxOverride = null) {
+  const spread = difficulty <= 2 ? 4 : difficulty <= 4 ? 7 : 10;
+  const min = Math.max(0, answer - spread);
+  const max = Math.max(answer + spread, maxOverride ?? answer + spread);
+  return buildNumberOptions(answer, min, max).map(String);
 }
 
 function buildHebrewOptions(correctAnswer) {
