@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Homework</title>
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero card">
+        <h1>Homework</h1>
+      </section>
+
+      <section id="start-screen" class="card screen">
+        <h2>Start A Homework Session</h2>
+        <form id="start-form" class="start-form">
+          <div class="start-fields">
+            <label class="field">
+              <span>How many questions should this session have?</span>
+              <input
+                id="question-count"
+                name="questionCount"
+                type="number"
+                min="1"
+                max="150"
+                value="30"
+                required
+              >
+            </label>
+
+            <label class="field">
+              <span>Difficulty</span>
+              <select id="difficulty-level" name="difficultyLevel">
+                <option value="1">1 - Easiest</option>
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5 - Hardest</option>
+              </select>
+            </label>
+          </div>
+
+          <button type="submit" class="primary-button">Start Homework</button>
+        </form>
+        <button id="history-button" type="button" class="secondary-button history-button">Previous Sessions</button>
+        <p id="start-feedback" class="feedback" aria-live="polite"></p>
+      </section>
+
+      <section id="quiz-screen" class="card screen" hidden>
+        <div class="status-bar">
+          <div class="status-card progress-card">
+            <div id="progress-tracker" class="progress-tracker" aria-hidden="true"></div>
+          </div>
+          <div class="status-card score-card">
+            <p id="score-text" class="status-value">0/0</p>
+          </div>
+        </div>
+
+        <p id="feedback" class="feedback-banner" aria-live="polite"></p>
+
+        <div class="question-panel">
+          <p id="question-number" class="question-number">Question 1:</p>
+          <p id="question-prompt" class="question-prompt"></p>
+          <div id="question-main" class="question-main"></div>
+          <p id="question-extra" class="question-extra"></p>
+        </div>
+
+        <form id="answer-form" class="answer-form">
+          <div id="input-area" class="answer-area">
+            <input
+              id="answer-input"
+              name="answer"
+              type="number"
+              inputmode="numeric"
+              step="1"
+              autocomplete="off"
+              aria-label="Answer"
+            >
+          </div>
+        </form>
+
+        <div id="choices-area" class="choices-area" hidden></div>
+      </section>
+
+      <section id="results-screen" class="card screen" hidden>
+        <h2 id="results-title">Session Finished</h2>
+        <p id="results-summary" class="results-summary"></p>
+        <button id="restart-button" type="button" class="secondary-button">Start Another Session</button>
+      </section>
+
+      <section id="history-screen" class="card screen" hidden>
+        <div class="history-header">
+          <h2>Previous Sessions</h2>
+          <button id="history-back-button" type="button" class="secondary-button">Back</button>
+        </div>
+        <p id="history-empty" class="history-empty" hidden>No previous sessions yet.</p>
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+
+    <script src="hebrew-words.js"></script>
+    <script src="science-questions.js"></script>
+    <script src="general-knowledge-questions.js"></script>
+    <script src="logic-questions.js"></script>
+    <script src="rationality-questions.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
