@@ -122,8 +122,9 @@ h2 {
 
 .start-fields {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(180px, 0.8fr);
-  gap: 16px;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 20px;
+  align-items: end;
 }
 
 .field {
@@ -131,13 +132,79 @@ h2 {
   gap: 10px;
 }
 
+.question-count-field {
+  align-content: start;
+  justify-self: start;
+}
+
+.question-count-input {
+  width: 164px;
+}
+
+.difficulty-field {
+  justify-self: end;
+}
+
 .field span {
   font-weight: 700;
 }
 
+.difficulty-selector {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 58px;
+}
+
+.difficulty-button {
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 999px;
+  border: 2px solid rgba(39, 73, 114, 0.14);
+  background: #f2f4f7;
+  color: var(--muted);
+  font-size: 1.05rem;
+  font-weight: 800;
+  transform: none;
+}
+
+.difficulty-button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  border-color: rgba(39, 73, 114, 0.24);
+}
+
+.difficulty-button.active {
+  color: #17324a;
+  border-color: transparent;
+  box-shadow: 0 10px 22px rgba(24, 48, 76, 0.14);
+}
+
+.difficulty-button.level-1.active {
+  background: #89d48c;
+}
+
+.difficulty-button.level-2.active {
+  background: #b5de7a;
+}
+
+.difficulty-button.level-3.active {
+  background: #f3d46b;
+}
+
+.difficulty-button.level-4.active {
+  background: #f0ab63;
+}
+
+.difficulty-button.level-5.active {
+  background: #e57a7a;
+}
+
 .history-button {
-  background: #eef1f5;
-  color: var(--ink);
+  margin-top: 26px;
+  background: #edf0f3;
+  color: #334356;
+  padding: 12px 20px;
 }
 
 .history-header {
@@ -233,8 +300,7 @@ h2 {
   color: var(--danger);
 }
 
-input[type="number"],
-select {
+input[type="number"] {
   width: 100%;
   padding: 14px 16px;
   border: 2px solid rgba(20, 108, 148, 0.18);
@@ -253,21 +319,7 @@ input[type="number"]::-webkit-inner-spin-button {
   -webkit-appearance: none;
 }
 
-select {
-  appearance: none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, var(--accent) 50%),
-    linear-gradient(135deg, var(--accent) 50%, transparent 50%);
-  background-position:
-    calc(100% - 24px) calc(50% - 3px),
-    calc(100% - 16px) calc(50% - 3px);
-  background-size: 8px 8px, 8px 8px;
-  background-repeat: no-repeat;
-  padding-right: 42px;
-}
-
-input[type="number"]:focus,
-select:focus {
+input[type="number"]:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(20, 108, 148, 0.14);
@@ -352,12 +404,12 @@ button:disabled {
 .progress-tracker {
   display: flex;
   flex-wrap: wrap;
-  gap: 6px;
+  gap: 5px;
   width: 100%;
 }
 
 .progress-box {
-  width: 20px;
+  width: 12px;
   height: 12px;
   border-radius: 999px;
   background: rgba(20, 108, 148, 0.08);
@@ -538,6 +590,19 @@ button:disabled {
 
   .start-fields {
     grid-template-columns: 1fr;
+  }
+
+  .difficulty-field {
+    justify-self: start;
+  }
+
+  .question-count-input {
+    width: 100%;
+  }
+
+  .difficulty-selector {
+    gap: 10px;
+    flex-wrap: wrap;
   }
 
   .question-main {

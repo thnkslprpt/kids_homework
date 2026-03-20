@@ -1,4 +1,4 @@
-// Generated from Open Trivia DB Science & Nature easy multiple-choice questions.
+// Bundled offline science multiple-choice questions.
 const SCIENCE_QUESTIONS = [
   {
     "question": "Which element has the chemical symbol 'Fe'?",
@@ -9,7 +9,7 @@ const SCIENCE_QUESTIONS = [
       "Tin"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "What is the official name of the star located closest to the North Celestial Pole?",
@@ -20,7 +20,7 @@ const SCIENCE_QUESTIONS = [
       "Iota Cephei"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Which is the most abundant element in the universe?",
@@ -31,7 +31,7 @@ const SCIENCE_QUESTIONS = [
       "Oxygen"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What was the name of the first artificial Earth satellite, launched by the Soviet Union in 1957?",
@@ -42,7 +42,7 @@ const SCIENCE_QUESTIONS = [
       "Voskhod 3KV"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "How many planets are in our Solar System?",
@@ -53,7 +53,7 @@ const SCIENCE_QUESTIONS = [
       "Ten"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 1
   },
   {
     "question": "What organelle aids in synthesis of DNA in cells?",
@@ -64,7 +64,7 @@ const SCIENCE_QUESTIONS = [
       "Mitochondria"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "What is the chemical symbol for Helium?",
@@ -75,7 +75,7 @@ const SCIENCE_QUESTIONS = [
       "Hs"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 1
   },
   {
     "question": "What is an example of a bacterial pathogen?",
@@ -86,7 +86,7 @@ const SCIENCE_QUESTIONS = [
       "Ringworm"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "What is the hottest planet in the Solar System?",
@@ -97,7 +97,7 @@ const SCIENCE_QUESTIONS = [
       "Jupiter"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "How many bones are in the human body?",
@@ -108,7 +108,7 @@ const SCIENCE_QUESTIONS = [
       "200"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What is the chemical makeup of water?",
@@ -119,7 +119,7 @@ const SCIENCE_QUESTIONS = [
       "H"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What lies at the center of our galaxy?",
@@ -130,7 +130,7 @@ const SCIENCE_QUESTIONS = [
       "A quasar"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What is the powerhouse of the cell?",
@@ -141,7 +141,7 @@ const SCIENCE_QUESTIONS = [
       "Nucleus"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What is the atomic mass of Carbon?",
@@ -152,7 +152,7 @@ const SCIENCE_QUESTIONS = [
       "10"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "The biggest distinction between a eukaryotic cell and a prokaryotic cell is:",
@@ -163,7 +163,7 @@ const SCIENCE_QUESTIONS = [
       "The mode of reproduction"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "What is the largest planet in the Solar System?",
@@ -174,7 +174,7 @@ const SCIENCE_QUESTIONS = [
       "Mars"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 1
   },
   {
     "question": "What produces the green colour of most plant leaves?",
@@ -185,7 +185,7 @@ const SCIENCE_QUESTIONS = [
       "UV radiation"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What is the unit of electrical resistance?",
@@ -196,7 +196,7 @@ const SCIENCE_QUESTIONS = [
       "Joule"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "What name is given to all baby marsupials?",
@@ -207,7 +207,7 @@ const SCIENCE_QUESTIONS = [
       "Cub"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Rhinoplasty is a surgical procedure on what part of the human body?",
@@ -218,7 +218,7 @@ const SCIENCE_QUESTIONS = [
       "Neck"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "71% of the Earth's surface is made up of",
@@ -229,7 +229,7 @@ const SCIENCE_QUESTIONS = [
       "Forests"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What is the largest animal currently on Earth?",
@@ -240,7 +240,7 @@ const SCIENCE_QUESTIONS = [
       "Giraffe"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 1
   },
   {
     "question": "Which of the following bones is not in the leg?",
@@ -251,7 +251,7 @@ const SCIENCE_QUESTIONS = [
       "Fibula"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Which Apollo mission was the first one to land on the Moon?",
@@ -262,7 +262,7 @@ const SCIENCE_QUESTIONS = [
       "Apollo 13"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What is the first element on the periodic table?",
@@ -273,7 +273,7 @@ const SCIENCE_QUESTIONS = [
       "Lithium"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What is the elemental symbol for mercury?",
@@ -284,7 +284,7 @@ const SCIENCE_QUESTIONS = [
       "Hy"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "Who discovered the Law of Gravity?",
@@ -295,7 +295,7 @@ const SCIENCE_QUESTIONS = [
       "Albert Einstein"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "What does LASER stand for?",
@@ -306,7 +306,7 @@ const SCIENCE_QUESTIONS = [
       "Life antimatter by standing entry of range"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Stars consist mainly of hydrogen and which other gas?",
@@ -317,7 +317,7 @@ const SCIENCE_QUESTIONS = [
       "Nitrogen"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "The element involved in making human blood red is which of the following?",
@@ -328,7 +328,7 @@ const SCIENCE_QUESTIONS = [
       "Cobalt"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "How many laws of thermodynamics are there?",
@@ -339,7 +339,7 @@ const SCIENCE_QUESTIONS = [
       "Five"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "The medical term for the belly button is which of the following?",
@@ -350,7 +350,7 @@ const SCIENCE_QUESTIONS = [
       "Paxillus"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "How many moons does the Earth have?",
@@ -361,7 +361,7 @@ const SCIENCE_QUESTIONS = [
       "3"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 1
   },
   {
     "question": "What is the standard SI unit for time?",
@@ -372,7 +372,7 @@ const SCIENCE_QUESTIONS = [
       "Day"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Who is the chemical element Curium named after?",
@@ -383,7 +383,7 @@ const SCIENCE_QUESTIONS = [
       "Stephen Curry"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Which of these Elements is a metalloid?",
@@ -394,7 +394,7 @@ const SCIENCE_QUESTIONS = [
       "Rubidium"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "Which type of rock is created by intense heat AND pressure?",
@@ -405,7 +405,7 @@ const SCIENCE_QUESTIONS = [
       "Diamond"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What is the standard SI unit for distance?",
@@ -416,7 +416,7 @@ const SCIENCE_QUESTIONS = [
       "Fathom"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What does the letter 'S' stand for in 'NASA'?",
@@ -427,7 +427,7 @@ const SCIENCE_QUESTIONS = [
       "Star"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "About what percentage of the Earth's surface is water?",
@@ -438,7 +438,7 @@ const SCIENCE_QUESTIONS = [
       "90%"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "What does DNA stand for?",
@@ -449,7 +449,7 @@ const SCIENCE_QUESTIONS = [
       "Detoxic Acid"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "What is the thin, outermost layer of the Earth?",
@@ -460,7 +460,7 @@ const SCIENCE_QUESTIONS = [
       "Outer Core"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "What is the \"powerhouse\" of the Eukaryotic animal cell?",
@@ -471,7 +471,7 @@ const SCIENCE_QUESTIONS = [
       "Endoplasmic Reticulum"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "Which of these bones is hardest to break?",
@@ -482,7 +482,7 @@ const SCIENCE_QUESTIONS = [
       "Tibia"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What did Gregory Mendel use to test genetic crossovers?",
@@ -493,7 +493,7 @@ const SCIENCE_QUESTIONS = [
       "Parrots"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Which element has the highest melting point?",
@@ -504,7 +504,7 @@ const SCIENCE_QUESTIONS = [
       "Osmium"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 5
   },
   {
     "question": "This element, when overcome with extreme heat and pressure, creates diamonds.",
@@ -515,7 +515,7 @@ const SCIENCE_QUESTIONS = [
       "Hydrogen"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "Which is the longest bone in the human body?",
@@ -526,7 +526,7 @@ const SCIENCE_QUESTIONS = [
       "Ulna"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 4
   },
   {
     "question": "Which gas forms about 78% of the Earth’s atmosphere?",
@@ -537,7 +537,7 @@ const SCIENCE_QUESTIONS = [
       "Carbon Dioxide"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 3
   },
   {
     "question": "How many moons does Pluto have?",
@@ -548,7 +548,7 @@ const SCIENCE_QUESTIONS = [
       "One"
     ],
     "category": "Science & Nature",
-    "difficulty": "easy"
+    "difficulty": 2
   },
   {
     "question": "What causes day and night on Earth?",

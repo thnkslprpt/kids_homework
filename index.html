@@ -16,10 +16,11 @@
         <h2>Start A Homework Session</h2>
         <form id="start-form" class="start-form">
           <div class="start-fields">
-            <label class="field">
-              <span>How many questions should this session have?</span>
+            <label class="field question-count-field">
+              <span>How many questions?</span>
               <input
                 id="question-count"
+                class="question-count-input"
                 name="questionCount"
                 type="number"
                 min="1"
@@ -29,15 +30,16 @@
               >
             </label>
 
-            <label class="field">
+            <label class="field difficulty-field">
               <span>Difficulty</span>
-              <select id="difficulty-level" name="difficultyLevel">
-                <option value="1">1 - Easiest</option>
-                <option value="2">2</option>
-                <option value="3" selected>3</option>
-                <option value="4">4</option>
-                <option value="5">5 - Hardest</option>
-              </select>
+              <input id="difficulty-level" name="difficultyLevel" type="hidden" value="3">
+              <div class="difficulty-selector" role="group" aria-label="Difficulty">
+                <button type="button" class="difficulty-button level-1" data-difficulty="1" aria-pressed="false">1</button>
+                <button type="button" class="difficulty-button level-2" data-difficulty="2" aria-pressed="false">2</button>
+                <button type="button" class="difficulty-button level-3" data-difficulty="3" aria-pressed="true">3</button>
+                <button type="button" class="difficulty-button level-4" data-difficulty="4" aria-pressed="false">4</button>
+                <button type="button" class="difficulty-button level-5" data-difficulty="5" aria-pressed="false">5</button>
+              </div>
             </label>
           </div>
 
@@ -104,6 +106,21 @@
     <script src="general-knowledge-questions.js"></script>
     <script src="logic-questions.js"></script>
     <script src="rationality-questions.js"></script>
+    <script src="population-questions.js"></script>
+    <script src="financial-literacy-questions.js"></script>
+    <script src="measurement-questions.js"></script>
+    <script src="charts-and-graphs-questions.js"></script>
+    <script src="calendar-questions.js"></script>
+    <script src="estimation-questions.js"></script>
+    <script src="probability-questions.js"></script>
+    <script src="maps-and-directions-questions.js"></script>
+    <script src="digital-safety-questions.js"></script>
+    <script src="media-literacy-questions.js"></script>
+    <script src="health-and-first-aid-questions.js"></script>
+    <script src="nutrition-questions.js"></script>
+    <script src="household-problem-solving-questions.js"></script>
+    <script src="fractions-and-ratios-questions.js"></script>
+    <script src="spatial-reasoning-questions.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

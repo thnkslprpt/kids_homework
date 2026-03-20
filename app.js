@@ -1,16 +1,39 @@
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v1";
 const MAX_SAVED_SESSIONS = 10;
-const SESSION_CATEGORY_ORDER = [
-  "math",
-  "hebrew",
+const CORE_SESSION_CATEGORIES = ["math", "hebrew"];
+const NON_CORE_SESSION_CATEGORIES = [
   "science",
   "time",
   "statistics",
   "logic",
   "rationality",
   "general-knowledge",
+  "population",
+  "financial-literacy",
+  "measurement",
+  "charts-and-graphs",
+  "calendar",
+  "estimation",
+  "probability",
+  "maps-and-directions",
+  "digital-safety",
+  "media-literacy",
+  "health-and-first-aid",
+  "nutrition",
+  "household-problem-solving",
+  "fractions-and-ratios",
+  "spatial-reasoning",
 ];
+const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_CATEGORIES];
+const CORE_CATEGORY_SHARE = 0.45;
+const NON_HEBREW_DIFFICULTY_WEIGHTS = {
+  1: { 1: 1 },
+  2: { 2: 0.75, 1: 0.25 },
+  3: { 3: 0.7, 2: 0.2, 1: 0.1 },
+  4: { 4: 0.6, 3: 0.25, 2: 0.1, 1: 0.05 },
+  5: { 5: 0.7, 4: 0.2, 3: 0.05, 2: 0.05 },
+};
 
 const HEBREW_NIKKUD_OVERRIDES = {
   "אבא": "אַבָּא",
@@ -123,6 +146,7 @@ const elements = {
   historyEmpty: document.getElementById("history-empty"),
   questionCount: document.getElementById("question-count"),
   difficultyLevel: document.getElementById("difficulty-level"),
+  difficultyButtons: Array.from(document.querySelectorAll(".difficulty-button")),
   progressTracker: document.getElementById("progress-tracker"),
   scoreText: document.getElementById("score-text"),
   feedback: document.getElementById("feedback"),
@@ -146,18 +170,109 @@ const hebrewMeanings = hebrewQuestionBank.map((entry) => entry.english);
 const scienceQuestionBank = buildScienceQuestionBank(
   typeof SCIENCE_QUESTIONS !== "undefined" ? SCIENCE_QUESTIONS : []
 );
-const generalKnowledgeBank = buildStaticChoiceBank(
-  typeof GENERAL_KNOWLEDGE_QUESTIONS !== "undefined" ? GENERAL_KNOWLEDGE_QUESTIONS : [],
-  "general-knowledge"
+const staticChoiceBankSources = [
+  {
+    category: "general-knowledge",
+    entries: typeof GENERAL_KNOWLEDGE_QUESTIONS !== "undefined" ? GENERAL_KNOWLEDGE_QUESTIONS : [],
+  },
+  { category: "logic", entries: typeof LOGIC_QUESTIONS !== "undefined" ? LOGIC_QUESTIONS : [] },
+  {
+    category: "rationality",
+    entries: typeof RATIONALITY_QUESTIONS !== "undefined" ? RATIONALITY_QUESTIONS : [],
+  },
+  {
+    category: "population",
+    entries: typeof POPULATION_QUESTIONS !== "undefined" ? POPULATION_QUESTIONS : [],
+  },
+  {
+    category: "financial-literacy",
+    entries:
+      typeof FINANCIAL_LITERACY_QUESTIONS !== "undefined" ? FINANCIAL_LITERACY_QUESTIONS : [],
+  },
+  {
+    category: "measurement",
+    entries: typeof MEASUREMENT_QUESTIONS !== "undefined" ? MEASUREMENT_QUESTIONS : [],
+  },
+  {
+    category: "charts-and-graphs",
+    entries:
+      typeof CHARTS_AND_GRAPHS_QUESTIONS !== "undefined" ? CHARTS_AND_GRAPHS_QUESTIONS : [],
+  },
+  { category: "calendar", entries: typeof CALENDAR_QUESTIONS !== "undefined" ? CALENDAR_QUESTIONS : [] },
+  {
+    category: "estimation",
+    entries: typeof ESTIMATION_QUESTIONS !== "undefined" ? ESTIMATION_QUESTIONS : [],
+  },
+  {
+    category: "probability",
+    entries: typeof PROBABILITY_QUESTIONS !== "undefined" ? PROBABILITY_QUESTIONS : [],
+  },
+  {
+    category: "maps-and-directions",
+    entries:
+      typeof MAPS_AND_DIRECTIONS_QUESTIONS !== "undefined" ? MAPS_AND_DIRECTIONS_QUESTIONS : [],
+  },
+  {
+    category: "digital-safety",
+    entries: typeof DIGITAL_SAFETY_QUESTIONS !== "undefined" ? DIGITAL_SAFETY_QUESTIONS : [],
+  },
+  {
+    category: "media-literacy",
+    entries: typeof MEDIA_LITERACY_QUESTIONS !== "undefined" ? MEDIA_LITERACY_QUESTIONS : [],
+  },
+  {
+    category: "health-and-first-aid",
+    entries:
+      typeof HEALTH_AND_FIRST_AID_QUESTIONS !== "undefined"
+        ? HEALTH_AND_FIRST_AID_QUESTIONS
+        : [],
+  },
+  {
+    category: "nutrition",
+    entries: typeof NUTRITION_QUESTIONS !== "undefined" ? NUTRITION_QUESTIONS : [],
+  },
+  {
+    category: "household-problem-solving",
+    entries:
+      typeof HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS !== "undefined"
+        ? HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS
+        : [],
+  },
+  {
+    category: "fractions-and-ratios",
+    entries:
+      typeof FRACTIONS_AND_RATIOS_QUESTIONS !== "undefined" ? FRACTIONS_AND_RATIOS_QUESTIONS : [],
+  },
+  {
+    category: "spatial-reasoning",
+    entries: typeof SPATIAL_REASONING_QUESTIONS !== "undefined" ? SPATIAL_REASONING_QUESTIONS : [],
+  },
+];
+const staticChoiceBanks = Object.fromEntries(
+  staticChoiceBankSources.map(({ category, entries }) => [
+    category,
+    buildStaticChoiceBank(entries, category),
+  ])
 );
-const logicQuestionBank = buildStaticChoiceBank(
-  typeof LOGIC_QUESTIONS !== "undefined" ? LOGIC_QUESTIONS : [],
-  "logic"
-);
-const rationalityQuestionBank = buildStaticChoiceBank(
-  typeof RATIONALITY_QUESTIONS !== "undefined" ? RATIONALITY_QUESTIONS : [],
-  "rationality"
-);
+const choiceCategoryConfigs = {
+  hebrew: {
+    bank: hebrewQuestionBank,
+    createQuestion: createHebrewChoiceQuestion,
+  },
+  science: {
+    bank: scienceQuestionBank,
+    createQuestion: (entry) => createBankChoiceQuestion(entry, "science-choice"),
+  },
+  ...Object.fromEntries(
+    staticChoiceBankSources.map(({ category }) => [
+      category,
+      {
+        bank: staticChoiceBanks[category],
+        createQuestion: (entry) => createBankChoiceQuestion(entry, `${category}-choice`),
+      },
+    ])
+  ),
+};
 
 const mathInputGenerators = [
   createAdditionInputQuestion,
@@ -192,12 +307,15 @@ elements.restartButton.addEventListener("click", showStartScreen);
 elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
 
+initializeDifficultyButtons();
+
 function buildHebrewQuestionBank(entries) {
   const groupedEntries = new Map();
 
   for (const entry of entries) {
     const key = String(entry.hebrew || "").trim();
-    if (!key) {
+    const difficulty = getEntryDifficulty(entry.difficulty);
+    if (!key || difficulty === null) {
       continue;
     }
 
@@ -206,6 +324,7 @@ function buildHebrewQuestionBank(entries) {
         hebrew: key,
         englishSet: new Set(),
         transliteration: entry.transliteration,
+        difficulty,
       });
     }
 
@@ -217,88 +336,40 @@ function buildHebrewQuestionBank(entries) {
     hebrewDisplay: HEBREW_NIKKUD_OVERRIDES[entry.hebrew] || entry.hebrew,
     english: Array.from(entry.englishSet).join(" / "),
     transliteration: entry.transliteration || "",
+    difficulty: entry.difficulty,
   }));
 
-  return baseEntries.map((entry, index) => ({
-    ...entry,
-    difficulty: getHebrewDifficulty(entry, index, baseEntries.length),
-  }));
-}
-
-function getHebrewDifficulty(entry, index, totalEntries) {
-  const bucketSize = Math.ceil(totalEntries / 5);
-  let difficulty = Math.floor(index / bucketSize) + 1;
-
-  if (entry.hebrew.includes(" ")) {
-    difficulty = Math.max(difficulty, 3);
-  }
-
-  if (entry.hebrew.length >= 7 || entry.english.includes("/")) {
-    difficulty = Math.min(5, difficulty + 1);
-  }
-
-  return clamp(difficulty, 1, 5);
+  return baseEntries;
 }
 
 function buildScienceQuestionBank(entries) {
   return entries
     .filter((entry) => Array.isArray(entry.incorrectAnswers) && entry.incorrectAnswers.length === 3)
     .filter((entry) => !SCIENCE_EXCLUDED_PATTERNS.some((pattern) => pattern.test(entry.question)))
-    .map((entry) => ({
-      question: entry.question,
-      options: shuffleArray([entry.correctAnswer, ...entry.incorrectAnswers]),
-      answer: entry.correctAnswer,
-      difficulty: Number.isFinite(Number(entry.difficulty))
-        ? clamp(Number(entry.difficulty), 1, 5)
-        : getScienceDifficulty(entry.question),
-      type: "science-choice",
-    }));
-}
+    .map((entry) => {
+      const difficulty = getEntryDifficulty(entry.difficulty);
+      if (difficulty === null) {
+        return null;
+      }
 
-function getScienceDifficulty(questionText) {
-  const text = questionText.toLowerCase();
-
-  if (
-    /eukaryotic|prokaryotic|metalloid|electrical resistance|highest melting point|bacterial pathogen|law of gravity/i.test(
-      text
-    )
-  ) {
-    return 5;
-  }
-
-  if (
-    /dna|chlorophyll|atomic mass|outermost layer|longest bone|hottest planet|206|chemical symbol 'fe'|elemental symbol for mercury/i.test(
-      text
-    )
-  ) {
-    return 4;
-  }
-
-  if (
-    /galaxy|powerhouse|earth's surface|atmosphere|venus|periodic table|chemical makeup of water|ohm|rock/i.test(
-      text
-    )
-  ) {
-    return 3;
-  }
-
-  if (
-    /largest planet|largest animal|how many planets|how many moons does the earth have|first element|helium|water|nitrogen|photosynthesis/i.test(
-      text
-    )
-  ) {
-    return 1;
-  }
-
-  return 2;
+      return {
+        question: entry.question,
+        options: shuffleArray([entry.correctAnswer, ...entry.incorrectAnswers]),
+        answer: entry.correctAnswer,
+        difficulty,
+        type: "science-choice",
+      };
+    })
+    .filter(Boolean);
 }
 
 function buildStaticChoiceBank(entries, type) {
   return entries
     .map((entry) => {
+      const difficulty = getEntryDifficulty(entry.difficulty);
       const options = Array.from(new Set((entry.options || []).map(String)));
       const answer = String(entry.answer || "");
-      if (!answer || options.length !== 4 || !options.includes(answer)) {
+      if (difficulty === null || !answer || options.length !== 4 || !options.includes(answer)) {
         return null;
       }
 
@@ -306,11 +377,46 @@ function buildStaticChoiceBank(entries, type) {
         question: String(entry.question || ""),
         options,
         answer,
-        difficulty: clamp(Number(entry.difficulty) || 3, 1, 5),
+        difficulty,
         type,
       };
     })
     .filter(Boolean);
+}
+
+function getEntryDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5) {
+    return null;
+  }
+
+  return difficulty;
+}
+
+function initializeDifficultyButtons() {
+  elements.difficultyButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const difficulty = button.dataset.difficulty;
+      if (!difficulty) {
+        return;
+      }
+
+      elements.difficultyLevel.value = difficulty;
+      updateDifficultyButtons();
+    });
+  });
+
+  updateDifficultyButtons();
+}
+
+function updateDifficultyButtons() {
+  const selectedDifficulty = String(elements.difficultyLevel.value || "3");
+
+  elements.difficultyButtons.forEach((button) => {
+    const isActive = button.dataset.difficulty === selectedDifficulty;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 }
 
 function startSession(event) {
@@ -329,13 +435,7 @@ function startSession(event) {
     return;
   }
 
-  if (
-    !hebrewQuestionBank.length ||
-    !scienceQuestionBank.length ||
-    !generalKnowledgeBank.length ||
-    !logicQuestionBank.length ||
-    !rationalityQuestionBank.length
-  ) {
+  if (Object.values(choiceCategoryConfigs).some(({ bank }) => !bank.length)) {
     showStartMessage("One of the offline question files is missing.", "error");
     return;
   }
@@ -361,68 +461,73 @@ function startSession(event) {
 function buildSessionQuestions(totalQuestions, difficulty) {
   const categoryCounts = allocateCategoryCounts(totalQuestions);
   const categorySequence = buildCategorySequence(totalQuestions, categoryCounts);
-  const resources = {
-    hebrew: createPool(hebrewQuestionBank, difficulty),
-    science: createPool(scienceQuestionBank, difficulty),
-    logic: createPool(logicQuestionBank, difficulty),
-    rationality: createPool(rationalityQuestionBank, difficulty),
-    "general-knowledge": createPool(generalKnowledgeBank, difficulty),
-  };
+  const resources = Object.fromEntries(
+    Object.entries(choiceCategoryConfigs).map(([category, config]) => [
+      category,
+      createPool(config.bank),
+    ])
+  );
+  const nonHebrewDifficultyQueue = buildDifficultyQueue(
+    totalQuestions - (categoryCounts.hebrew || 0),
+    NON_HEBREW_DIFFICULTY_WEIGHTS[difficulty] || { [difficulty]: 1 }
+  );
+  const hebrewDifficultyQueue = buildHebrewDifficultyQueue(
+    categoryCounts.hebrew || 0,
+    difficulty,
+    hebrewQuestionBank
+  );
 
   let mathModeIndex = 0;
 
   return categorySequence.map((category) => {
     if (category === "math") {
+      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
       const question =
         mathModeIndex % 2 === 0
-          ? createMathInputQuestion(difficulty)
-          : createMathChoiceQuestion(difficulty);
+          ? createMathInputQuestion(effectiveDifficulty)
+          : createMathChoiceQuestion(effectiveDifficulty);
       mathModeIndex += 1;
       return question;
     }
 
     if (category === "hebrew") {
-      return createHebrewChoiceQuestion(drawFromPool(resources.hebrew));
+      const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, difficulty);
+      return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, effectiveDifficulty));
     }
 
     if (category === "science") {
-      return createBankChoiceQuestion(drawFromPool(resources.science), "science-choice");
+      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+      return createBankChoiceQuestion(
+        drawFromPool(resources.science, effectiveDifficulty),
+        "science-choice"
+      );
     }
 
     if (category === "time") {
-      return createTimeChoiceQuestion(difficulty);
+      return createTimeChoiceQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
     }
 
     if (category === "statistics") {
-      return createStatisticsChoiceQuestion(difficulty);
+      return createStatisticsChoiceQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
     }
 
-    if (category === "logic") {
-      return createBankChoiceQuestion(drawFromPool(resources.logic), "logic-choice");
+    const categoryConfig = choiceCategoryConfigs[category];
+    if (categoryConfig) {
+      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+      return categoryConfig.createQuestion(drawFromPool(resources[category], effectiveDifficulty));
     }
 
-    if (category === "rationality") {
-      return createBankChoiceQuestion(drawFromPool(resources.rationality), "rationality-choice");
-    }
-
-    return createBankChoiceQuestion(
-      drawFromPool(resources["general-knowledge"]),
-      "general-knowledge-choice"
-    );
+    throw new Error(`Unknown session category: ${category}`);
   });
 }
 
 function allocateCategoryCounts(totalQuestions) {
-  const coreCategories = ["math", "hebrew"];
-  const otherCategories = SESSION_CATEGORY_ORDER.filter(
-    (category) => !coreCategories.includes(category)
-  );
-  const coreTotal = Math.round(totalQuestions / 2);
+  const coreTotal = Math.min(totalQuestions, Math.max(1, Math.round(totalQuestions * CORE_CATEGORY_SHARE)));
   const otherTotal = totalQuestions - coreTotal;
 
   return {
-    ...allocateEvenCounts(coreCategories, coreTotal),
-    ...allocateEvenCounts(otherCategories, otherTotal),
+    ...allocateEvenCounts(CORE_SESSION_CATEGORIES, coreTotal),
+    ...allocateEvenCounts(NON_CORE_SESSION_CATEGORIES, otherTotal),
   };
 }
 
@@ -431,9 +536,15 @@ function allocateEvenCounts(categories, total) {
   const base = Math.floor(total / categories.length);
   const remainder = total % categories.length;
 
-  categories.forEach((category, index) => {
-    counts[category] = base + (index < remainder ? 1 : 0);
+  categories.forEach((category) => {
+    counts[category] = base;
   });
+
+  shuffleArray([...categories])
+    .slice(0, remainder)
+    .forEach((category) => {
+      counts[category] += 1;
+    });
 
   return counts;
 }
@@ -476,36 +587,121 @@ function buildCategorySequence(totalQuestions, categoryCounts) {
   return sequence;
 }
 
-function createPool(entries, difficulty) {
-  const source = getEntriesForDifficulty(entries, difficulty);
+function createPool(entries) {
+  const entriesByDifficulty = groupEntriesByDifficulty(entries);
   return {
-    source,
-    queue: shuffleArray([...source]),
+    entries,
+    entriesByDifficulty,
+    queuesByDifficulty: new Map(),
   };
 }
 
-function drawFromPool(pool) {
-  if (!pool.queue.length) {
-    pool.queue = shuffleArray([...pool.source]);
-  }
+function groupEntriesByDifficulty(entries) {
+  const grouped = new Map();
 
-  return pool.queue.pop();
+  entries.forEach((entry) => {
+    if (!grouped.has(entry.difficulty)) {
+      grouped.set(entry.difficulty, []);
+    }
+
+    grouped.get(entry.difficulty).push(entry);
+  });
+
+  return grouped;
 }
 
-function getEntriesForDifficulty(entries, difficulty) {
-  const exact = entries.filter((entry) => entry.difficulty === difficulty);
-  if (exact.length) {
-    return exact;
+function drawFromPool(pool, difficulty) {
+  const source = getEntriesForDifficulty(pool, difficulty);
+  let queue = pool.queuesByDifficulty.get(difficulty);
+
+  if (!queue || !queue.length) {
+    queue = shuffleArray([...source]);
+    pool.queuesByDifficulty.set(difficulty, queue);
   }
 
-  for (let distance = 1; distance <= 4; distance += 1) {
-    const nearby = entries.filter((entry) => Math.abs(entry.difficulty - difficulty) === distance);
-    if (nearby.length) {
-      return nearby;
+  return queue.pop();
+}
+
+function drawHebrewEntry(pool, difficulty) {
+  const source = pool.entriesByDifficulty.get(difficulty) || [];
+  let queue = pool.queuesByDifficulty.get(`hebrew-${difficulty}`);
+
+  if (!queue || !queue.length) {
+    queue = shuffleArray([...(source.length ? source : pool.entries)]);
+    pool.queuesByDifficulty.set(`hebrew-${difficulty}`, queue);
+  }
+
+  return queue.pop();
+}
+
+function getEntriesForDifficulty(pool, difficulty) {
+  const exact = pool.entriesByDifficulty.get(difficulty) || [];
+  return exact.length ? exact : pool.entries;
+}
+
+function buildDifficultyQueue(totalCount, weightMap) {
+  if (totalCount <= 0) {
+    return [];
+  }
+
+  const counts = allocateWeightedCounts(totalCount, weightMap);
+  return shuffleArray(
+    Object.entries(counts).flatMap(([difficulty, count]) => Array(count).fill(Number(difficulty)))
+  );
+}
+
+function buildHebrewDifficultyQueue(totalCount, sessionDifficulty, entries) {
+  if (totalCount <= 0) {
+    return [];
+  }
+
+  const availableLevels = [];
+  for (let difficulty = 1; difficulty <= sessionDifficulty; difficulty += 1) {
+    if (entries.some((entry) => entry.difficulty === difficulty)) {
+      availableLevels.push(difficulty);
     }
   }
 
-  return entries;
+  if (!availableLevels.length) {
+    return [sessionDifficulty];
+  }
+
+  const counts = allocateEvenCounts(availableLevels, totalCount);
+  return shuffleArray(
+    availableLevels.flatMap((difficulty) => Array(counts[difficulty]).fill(difficulty))
+  );
+}
+
+function drawNextDifficulty(queue, fallbackDifficulty) {
+  return queue.length ? queue.pop() : fallbackDifficulty;
+}
+
+function allocateWeightedCounts(totalCount, weightMap) {
+  const counts = {};
+  const entries = Object.entries(weightMap).map(([difficulty, weight]) => ({
+    difficulty: Number(difficulty),
+    exactCount: totalCount * (Number(weight) || 0),
+  }));
+
+  let assignedTotal = 0;
+
+  entries.forEach((entry) => {
+    const baseCount = Math.floor(entry.exactCount);
+    counts[entry.difficulty] = baseCount;
+    assignedTotal += baseCount;
+  });
+
+  let remainder = totalCount - assignedTotal;
+  const ranked = shuffleArray([...entries]).sort(
+    (left, right) => (right.exactCount % 1) - (left.exactCount % 1)
+  );
+
+  for (let index = 0; index < ranked.length && remainder > 0; index += 1) {
+    counts[ranked[index].difficulty] += 1;
+    remainder -= 1;
+  }
+
+  return counts;
 }
 
 function createMathInputQuestion(difficulty) {
@@ -520,6 +716,7 @@ function createAdditionInputQuestion(difficulty) {
   const [left, right, answer] = generateAdditionValues(difficulty);
   return createNumericInputQuestion({
     type: "math-input",
+    difficulty,
     questionText: "",
     displayText: `${formatSignedNumber(left)} + ${formatSignedNumber(right)} =`,
     answer,
@@ -530,6 +727,7 @@ function createAdditionChoiceQuestion(difficulty) {
   const [left, right, answer] = generateAdditionValues(difficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: "",
     displayText: `${formatSignedNumber(left)} + ${formatSignedNumber(right)} =`,
     answer,
@@ -540,6 +738,7 @@ function createSubtractionInputQuestion(difficulty) {
   const [left, right, answer] = generateSubtractionValues(difficulty);
   return createNumericInputQuestion({
     type: "math-input",
+    difficulty,
     questionText: "",
     displayText: `${formatSignedNumber(left)} - ${formatSignedNumber(right)} =`,
     answer,
@@ -550,6 +749,7 @@ function createSubtractionChoiceQuestion(difficulty) {
   const [left, right, answer] = generateSubtractionValues(difficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: "",
     displayText: `${formatSignedNumber(left)} - ${formatSignedNumber(right)} =`,
     answer,
@@ -560,6 +760,7 @@ function createMultiplicationInputQuestion(difficulty) {
   const { left, right } = generateMultiplicationValues(difficulty);
   return createNumericInputQuestion({
     type: "math-input",
+    difficulty,
     questionText: "",
     displayText: `${left} × ${right} =`,
     answer: left * right,
@@ -570,6 +771,7 @@ function createMultiplicationChoiceQuestion(difficulty) {
   const { left, right } = generateMultiplicationValues(difficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: "",
     displayText: `${left} × ${right} =`,
     answer: left * right,
@@ -592,6 +794,7 @@ function createSkipCountingChoiceQuestion(difficulty) {
 
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: `Skip count by ${step}. What comes next?`,
     displayText: `${sequence.join(", ")}, __`,
     answer,
@@ -602,6 +805,7 @@ function createNumberPatternChoiceQuestion(difficulty) {
   const pattern = generateNumberPattern(difficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: "What number should come next in this pattern?",
     displayText: `${pattern.sequence.join(", ")}, __`,
     answer: pattern.answer,
@@ -624,6 +828,7 @@ function createComparisonChoiceQuestion(difficulty) {
 
   return {
     type: "math-choice",
+    difficulty,
     mode: "choice",
     questionText: `Which number is ${askFor}?`,
     displayText: "",
@@ -639,6 +844,7 @@ function createMoneyInputQuestion(difficulty) {
   const { amount, price, answer } = generateMoneyProblem(difficulty);
   return createNumericInputQuestion({
     type: "math-input",
+    difficulty,
     questionText: `You have ${amount} shekels. You buy something for ${price} shekels. How much change should you get?`,
     displayText: "",
     answer,
@@ -654,6 +860,7 @@ function createMoneyChoiceQuestion(difficulty) {
 
   return {
     type: "math-choice",
+    difficulty,
     mode: "choice",
     questionText: `You have ${amount} shekels. You buy something for ${price} shekels. How much change should you get?`,
     displayText: "",
@@ -669,6 +876,7 @@ function createPercentageInputQuestion(difficulty) {
   const { percent, whole, answer } = generatePercentageProblem(difficulty);
   return createNumericInputQuestion({
     type: "math-input",
+    difficulty,
     questionText: `What is ${percent}% of ${whole}?`,
     displayText: "",
     answer,
@@ -679,6 +887,7 @@ function createPercentageChoiceQuestion(difficulty) {
   const { percent, whole, answer } = generatePercentageProblem(difficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
+    difficulty,
     questionText: `What is ${percent}% of ${whole}?`,
     displayText: "",
     answer,
@@ -703,6 +912,7 @@ function createStatisticsMeanQuestion(difficulty) {
 
   return createNumericChoiceQuestion({
     type: "statistics-choice",
+    difficulty,
     questionText: `The numbers are ${values.join(", ")}. What is the mean?`,
     displayText: "",
     answer,
@@ -726,6 +936,7 @@ function createStatisticsMedianQuestion(difficulty) {
 
   return createNumericChoiceQuestion({
     type: "statistics-choice",
+    difficulty,
     questionText: `The numbers are ${shuffled.join(", ")}. What is the median?`,
     displayText: "",
     answer,
@@ -753,6 +964,7 @@ function createStatisticsModeQuestion(difficulty) {
 
   return createNumericChoiceQuestion({
     type: "statistics-choice",
+    difficulty,
     questionText: `The numbers are ${values.join(", ")}. What is the mode?`,
     displayText: "",
     answer,
@@ -782,6 +994,7 @@ function createStatisticsRangeQuestion(difficulty) {
 
   return createNumericChoiceQuestion({
     type: "statistics-choice",
+    difficulty,
     questionText: `The numbers are ${values.join(", ")}. What is the range?`,
     displayText: "",
     answer,
@@ -806,6 +1019,7 @@ function createStatisticsDataQuestion(difficulty) {
     const answer = askType === "most" ? sorted[sorted.length - 1].category : sorted[0].category;
     return {
       type: "statistics-choice",
+      difficulty,
       mode: "choice",
       questionText: `A class counted pets: ${counts
         .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
@@ -823,6 +1037,7 @@ function createStatisticsDataQuestion(difficulty) {
     const answer = counts.reduce((sum, entry) => sum + entry.count, 0);
     return createNumericChoiceQuestion({
       type: "statistics-choice",
+      difficulty,
       questionText: `A class counted pets: ${counts
         .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
         .join(", ")}. How many pets were counted in total?`,
@@ -835,6 +1050,7 @@ function createStatisticsDataQuestion(difficulty) {
   const answer = sorted[0].count - sorted[1].count;
   return createNumericChoiceQuestion({
     type: "statistics-choice",
+    difficulty,
     questionText: `A class counted pets: ${counts
       .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
       .join(", ")}. How many more ${sorted[0].category} than ${sorted[1].category} were counted?`,
@@ -846,6 +1062,7 @@ function createStatisticsDataQuestion(difficulty) {
 function createHebrewChoiceQuestion(entry) {
   return {
     type: "hebrew-choice",
+    difficulty: entry.difficulty,
     mode: "choice",
     questionText: `What does "${entry.hebrewDisplay}" mean?`,
     displayText: "",
@@ -860,6 +1077,7 @@ function createHebrewChoiceQuestion(entry) {
 function createBankChoiceQuestion(entry, type) {
   return {
     type,
+    difficulty: entry.difficulty,
     mode: "choice",
     questionText: entry.question,
     displayText: "",
@@ -893,6 +1111,7 @@ function createTimeChoiceQuestion(difficulty) {
 
   return {
     type: "time-choice",
+    difficulty,
     mode: "choice",
     questionText: `It's ${formatClockTime(startMinutes)}. In ${minutesToAdd} minutes, what time will it be?`,
     displayText: "",
@@ -904,9 +1123,10 @@ function createTimeChoiceQuestion(difficulty) {
   };
 }
 
-function createNumericInputQuestion({ type, questionText, displayText, answer }) {
+function createNumericInputQuestion({ type, difficulty, questionText, displayText, answer }) {
   return {
     type,
+    difficulty,
     mode: "input",
     questionText,
     displayText,
@@ -917,9 +1137,10 @@ function createNumericInputQuestion({ type, questionText, displayText, answer })
   };
 }
 
-function createNumericChoiceQuestion({ type, questionText, displayText, answer }) {
+function createNumericChoiceQuestion({ type, difficulty, questionText, displayText, answer }) {
   return {
     type,
+    difficulty,
     mode: "choice",
     questionText,
     displayText,
@@ -1135,6 +1356,7 @@ function switchScreen(activeScreen) {
   elements.startScreen.hidden = activeScreen !== elements.startScreen;
   elements.quizScreen.hidden = activeScreen !== elements.quizScreen;
   elements.resultsScreen.hidden = activeScreen !== elements.resultsScreen;
+  elements.historyScreen.hidden = activeScreen !== elements.historyScreen;
 }
 
 function clearStartMessage() {
@@ -1145,139 +1367,6 @@ function clearStartMessage() {
 function showStartMessage(message, tone) {
   elements.startFeedback.textContent = message;
   elements.startFeedback.className = `feedback ${tone}`;
-}
-
-async function initializeLogsFolder() {
-  if (!logsRuntime.supported) {
-    setLogsStatus("Logs folder is not available in this browser.", "error");
-    elements.logsButton.disabled = true;
-    return;
-  }
-
-  setLogsStatus("Logs folder not connected.");
-
-  try {
-    const storedHandle = await loadStoredRootDirectoryHandle();
-    if (!storedHandle) {
-      return;
-    }
-
-    logsRuntime.rootHandle = storedHandle;
-    const isReady = await prepareLogsFolder(storedHandle, false);
-    if (isReady) {
-      setLogsStatus("Logs folder ready.", "ready");
-      return;
-    }
-
-    setLogsStatus("Reconnect the logs folder to save session files.");
-  } catch (error) {
-    setLogsStatus("Reconnect the logs folder to save session files.");
-  }
-}
-
-async function maybePromptForLogsFolder() {
-  if (!logsRuntime.supported || logsRuntime.logsFolderHandle || logsRuntime.autoPrompted) {
-    return;
-  }
-
-  logsRuntime.autoPrompted = true;
-  await connectLogsFolder({ silentAbort: true });
-}
-
-async function connectLogsFolder(options = {}) {
-  const { silentAbort = false } = options;
-
-  if (!logsRuntime.supported) {
-    setLogsStatus("Logs folder is not available in this browser.", "error");
-    return false;
-  }
-
-  try {
-    let rootHandle = logsRuntime.rootHandle;
-
-    if (rootHandle) {
-      const isReady = await prepareLogsFolder(rootHandle, true);
-      if (isReady) {
-        await saveStoredRootDirectoryHandle(rootHandle);
-        setLogsStatus("Logs folder ready.", "ready");
-        return true;
-      }
-    }
-
-    if (!rootHandle || !logsRuntime.logsFolderHandle) {
-      rootHandle = await window.showDirectoryPicker({
-        id: "homework-root-folder",
-        mode: "readwrite",
-      });
-    }
-
-    const isReady = await prepareLogsFolder(rootHandle, true);
-    if (!isReady) {
-      setLogsStatus("Logs folder permission was not granted.", "error");
-      return false;
-    }
-
-    await saveStoredRootDirectoryHandle(rootHandle);
-    setLogsStatus("Logs folder ready.", "ready");
-    return true;
-  } catch (error) {
-    if (error && error.name === "AbortError") {
-      if (!silentAbort) {
-        setLogsStatus("Logs folder was not changed.");
-      }
-      return false;
-    }
-
-    setLogsStatus("Could not connect the logs folder.", "error");
-    return false;
-  }
-}
-
-async function prepareLogsFolder(rootHandle, shouldPrompt) {
-  if (!rootHandle) {
-    return false;
-  }
-
-  try {
-    const hasPermission = await ensureDirectoryPermission(rootHandle, shouldPrompt);
-    if (!hasPermission) {
-      logsRuntime.logsFolderHandle = null;
-      return false;
-    }
-
-    const logsFolderHandle = await rootHandle.getDirectoryHandle(LOGS_DIRECTORY_NAME, {
-      create: true,
-    });
-
-    logsRuntime.rootHandle = rootHandle;
-    logsRuntime.logsFolderHandle = logsFolderHandle;
-    return true;
-  } catch (error) {
-    logsRuntime.logsFolderHandle = null;
-    return false;
-  }
-}
-
-async function ensureDirectoryPermission(directoryHandle, shouldPrompt) {
-  const options = { mode: "readwrite" };
-
-  if (typeof directoryHandle.queryPermission === "function") {
-    const queryResult = await directoryHandle.queryPermission(options);
-    if (queryResult === "granted") {
-      return true;
-    }
-  }
-
-  if (!shouldPrompt || typeof directoryHandle.requestPermission !== "function") {
-    return false;
-  }
-
-  return (await directoryHandle.requestPermission(options)) === "granted";
-}
-
-function setLogsStatus(message, tone = "") {
-  elements.logsStatus.textContent = message;
-  elements.logsStatus.className = tone ? `logs-status ${tone}` : "logs-status";
 }
 
 function buildSessionRecord(questionNumber, question, selectedValue, isCorrect) {
@@ -1308,149 +1397,159 @@ function formatQuestionForLog(question) {
   return lines.join("\n");
 }
 
-async function saveSessionLog() {
-  if (!logsRuntime.logsFolderHandle || !state.sessionRecords.length) {
+function buildSessionHistoryEntry() {
+  const startedAt = state.sessionStartedAt || new Date();
+  return {
+    id: startedAt.toISOString(),
+    startedAt: startedAt.toISOString(),
+    difficulty: state.difficulty,
+    totalQuestions: state.totalQuestions,
+    correctCount: state.correctCount,
+    records: state.sessionRecords.map((record) => ({ ...record })),
+  };
+}
+
+function saveSessionHistory() {
+  if (!state.sessionRecords.length) {
+    return false;
+  }
+
+  const sessionHistory = loadSessionHistory();
+  sessionHistory.unshift(buildSessionHistoryEntry());
+  sessionHistory.splice(MAX_SAVED_SESSIONS);
+
+  return writeSessionHistory(sessionHistory);
+}
+
+function loadSessionHistory() {
+  const storage = getSessionStorage();
+  if (!storage) {
+    return [];
+  }
+
+  try {
+    const rawValue = storage.getItem(SESSION_HISTORY_STORAGE_KEY);
+    if (!rawValue) {
+      return [];
+    }
+
+    const parsed = JSON.parse(rawValue);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+}
+
+function writeSessionHistory(sessionHistory) {
+  const storage = getSessionStorage();
+  if (!storage) {
     return false;
   }
 
   try {
-    const filename = `${LOG_FILE_PREFIX}${formatLogFilenameTimestamp(state.sessionStartedAt || new Date())}.txt`;
-    const fileHandle = await logsRuntime.logsFolderHandle.getFileHandle(filename, { create: true });
-    const writable = await fileHandle.createWritable();
-    await writable.write(buildSessionLogText());
-    await writable.close();
-    await pruneOldLogFiles();
-    setLogsStatus("Logs folder ready.", "ready");
+    storage.setItem(SESSION_HISTORY_STORAGE_KEY, JSON.stringify(sessionHistory));
     return true;
   } catch (error) {
-    logsRuntime.logsFolderHandle = null;
-    setLogsStatus("Could not save the session log. Reconnect the logs folder.", "error");
     return false;
   }
 }
 
-function buildSessionLogText() {
-  const lines = [];
-  const startedAt = state.sessionStartedAt || new Date();
-
-  lines.push("Homework Session Log");
-  lines.push(`Date: ${formatLogDate(startedAt)}`);
-  lines.push(`Difficulty: ${state.difficulty}`);
-  lines.push(`Questions: ${state.totalQuestions}`);
-  lines.push(`Score: ${state.correctCount}/${state.totalQuestions}`);
-  lines.push("");
-
-  state.sessionRecords.forEach((record) => {
-    lines.push(`Question ${record.questionNumber}`);
-    lines.push(record.questionText);
-    lines.push(`Chosen answer: ${record.chosenAnswer}`);
-    lines.push(`Correct answer: ${record.correctAnswer}`);
-    lines.push(`Result: ${record.isCorrect ? "Correct" : "Wrong"}`);
-    lines.push("");
-  });
-
-  return lines.join("\n");
+function getSessionStorage() {
+  try {
+    return window.localStorage;
+  } catch (error) {
+    return null;
+  }
 }
 
-async function pruneOldLogFiles() {
-  if (!logsRuntime.logsFolderHandle) {
+function showHistoryScreen() {
+  renderHistoryScreen();
+  switchScreen(elements.historyScreen);
+}
+
+function renderHistoryScreen() {
+  const sessionHistory = loadSessionHistory();
+  elements.historyList.innerHTML = "";
+  elements.historyEmpty.hidden = sessionHistory.length > 0;
+
+  if (!sessionHistory.length) {
+    elements.historyEmpty.textContent = "No previous sessions yet.";
     return;
   }
 
-  const logFileNames = [];
-
-  for await (const [name, handle] of logsRuntime.logsFolderHandle.entries()) {
-    if (
-      handle.kind === "file" &&
-      name.startsWith(LOG_FILE_PREFIX) &&
-      name.endsWith(".txt")
-    ) {
-      logFileNames.push(name);
-    }
-  }
-
-  logFileNames.sort();
-
-  while (logFileNames.length > MAX_SAVED_LOG_FILES) {
-    const nameToRemove = logFileNames.shift();
-    await logsRuntime.logsFolderHandle.removeEntry(nameToRemove);
-  }
+  sessionHistory.forEach((session, index) => {
+    elements.historyList.appendChild(createHistorySessionElement(session, index === 0));
+  });
 }
 
-function formatLogFilenameTimestamp(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
-  const seconds = String(date.getSeconds()).padStart(2, "0");
-  const milliseconds = String(date.getMilliseconds()).padStart(3, "0");
+function createHistorySessionElement(session, shouldOpen) {
+  const details = document.createElement("details");
+  details.className = "history-session";
+  details.open = shouldOpen;
 
-  return `${year}-${month}-${day}_${hours}-${minutes}-${seconds}-${milliseconds}`;
+  const summary = document.createElement("summary");
+  const title = document.createElement("span");
+  title.textContent = formatHistoryDate(session.startedAt);
+
+  const meta = document.createElement("span");
+  meta.className = "history-session-meta";
+  meta.textContent =
+    `${session.correctCount}/${session.totalQuestions} correct | Difficulty ${session.difficulty}`;
+
+  summary.appendChild(title);
+  summary.appendChild(meta);
+  details.appendChild(summary);
+
+  const body = document.createElement("div");
+  body.className = "history-session-body";
+
+  session.records.forEach((record) => {
+    body.appendChild(createHistoryQuestionElement(record));
+  });
+
+  details.appendChild(body);
+  return details;
 }
 
-function formatLogDate(date) {
+function createHistoryQuestionElement(record) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "history-question";
+
+  const title = document.createElement("p");
+  title.className = "history-question-title";
+  title.textContent = `Question ${record.questionNumber}`;
+  wrapper.appendChild(title);
+
+  const questionText = document.createElement("p");
+  questionText.className = "history-question-text";
+  questionText.textContent = record.questionText;
+  wrapper.appendChild(questionText);
+
+  const chosenAnswer = document.createElement("p");
+  chosenAnswer.className = "history-answer-line";
+  chosenAnswer.textContent = `Chosen answer: ${record.chosenAnswer}`;
+  wrapper.appendChild(chosenAnswer);
+
+  const correctAnswer = document.createElement("p");
+  correctAnswer.className = "history-answer-line";
+  correctAnswer.textContent = `Correct answer: ${record.correctAnswer}`;
+  wrapper.appendChild(correctAnswer);
+
+  const result = document.createElement("p");
+  result.className = `history-answer-line ${record.isCorrect ? "correct" : "wrong"}`;
+  result.textContent = `Result: ${record.isCorrect ? "Correct" : "Wrong"}`;
+  wrapper.appendChild(result);
+
+  return wrapper;
+}
+
+function formatHistoryDate(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "Previous session";
+  }
+
   return date.toLocaleString();
-}
-
-async function openLogsDatabase() {
-  if (!("indexedDB" in window)) {
-    return null;
-  }
-
-  return await new Promise((resolve, reject) => {
-    const request = window.indexedDB.open(LOGS_DB_NAME, 1);
-
-    request.onupgradeneeded = () => {
-      if (!request.result.objectStoreNames.contains(LOGS_DB_STORE)) {
-        request.result.createObjectStore(LOGS_DB_STORE);
-      }
-    };
-
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result);
-  });
-}
-
-async function saveStoredRootDirectoryHandle(handle) {
-  const db = await openLogsDatabase();
-  if (!db) {
-    return;
-  }
-
-  try {
-    await new Promise((resolve, reject) => {
-      const transaction = db.transaction(LOGS_DB_STORE, "readwrite");
-      transaction.objectStore(LOGS_DB_STORE).put(handle, LOGS_HANDLE_KEY);
-      transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject(transaction.error);
-      transaction.onabort = () => reject(transaction.error);
-    });
-  } catch (error) {
-    return;
-  } finally {
-    db.close();
-  }
-}
-
-async function loadStoredRootDirectoryHandle() {
-  const db = await openLogsDatabase();
-  if (!db) {
-    return null;
-  }
-
-  try {
-    return await new Promise((resolve, reject) => {
-      const transaction = db.transaction(LOGS_DB_STORE, "readonly");
-      const request = transaction.objectStore(LOGS_DB_STORE).get(LOGS_HANDLE_KEY);
-      request.onsuccess = () => resolve(request.result || null);
-      request.onerror = () => reject(request.error);
-    });
-  } catch (error) {
-    return null;
-  } finally {
-    db.close();
-  }
 }
 
 function getResultsPraise(percentage) {

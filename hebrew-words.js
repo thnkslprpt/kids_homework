@@ -4,3030 +4,3535 @@ const HEBREW_WORDS = [
     "category": "Adjectives, Adverbs",
     "english": "A little",
     "transliteration": "K-tsat",
-    "hebrew": "קצת"
+    "hebrew": "קצת",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "A lot",
     "transliteration": "Har-be",
-    "hebrew": "הרבה"
+    "hebrew": "הרבה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Again",
     "transliteration": "Shuv",
-    "hebrew": "שוב"
+    "hebrew": "שוב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "All",
     "transliteration": "Kol",
-    "hebrew": "כל"
+    "hebrew": "כל",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Alone",
     "transliteration": "Le-vad",
-    "hebrew": "לבד"
+    "hebrew": "לבד",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Also",
     "transliteration": "Gam",
-    "hebrew": "גם"
+    "hebrew": "גם",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Angry",
     "transliteration": "Ko-es",
-    "hebrew": "כועס"
+    "hebrew": "כועס",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Bad",
     "transliteration": "Ra",
-    "hebrew": "רע"
+    "hebrew": "רע",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Beautiful",
     "transliteration": "Ya-fe",
-    "hebrew": "יפה"
+    "hebrew": "יפה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Big",
     "transliteration": "Ga-dol",
-    "hebrew": "גדול"
+    "hebrew": "גדול",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Black",
     "transliteration": "Sha-khor",
-    "hebrew": "שחור"
+    "hebrew": "שחור",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Blue",
     "transliteration": "Ka-chol",
-    "hebrew": "כחול"
+    "hebrew": "כחול",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Boring",
     "transliteration": "Me-sha-a-mem",
-    "hebrew": "משעמם"
+    "hebrew": "משעמם",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Cheap",
     "transliteration": "Zol",
-    "hebrew": "זול"
+    "hebrew": "זול",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Clean",
     "transliteration": "Na-ki",
-    "hebrew": "נקי"
+    "hebrew": "נקי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Closed",
     "transliteration": "Sa-gur",
-    "hebrew": "סגור"
+    "hebrew": "סגור",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Cold",
     "transliteration": "Kar",
-    "hebrew": "קר"
+    "hebrew": "קר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Correct",
     "transliteration": "Na-chon",
-    "hebrew": "נכון"
+    "hebrew": "נכון",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Difficult",
     "transliteration": "Ka-she",
-    "hebrew": "קשה"
+    "hebrew": "קשה",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Down",
     "transliteration": "Le-ma-ta",
-    "hebrew": "למטה"
+    "hebrew": "למטה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Early",
     "transliteration": "Muk-dam",
-    "hebrew": "מוקדם"
+    "hebrew": "מוקדם",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Easy",
     "transliteration": "Kal",
-    "hebrew": "קל"
+    "hebrew": "קל",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Exciting",
     "transliteration": "Mal-hiv",
-    "hebrew": "מלהיב"
+    "hebrew": "מלהיב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Expensive",
     "transliteration": "Ya-kar",
-    "hebrew": "יקר"
+    "hebrew": "יקר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Fast",
     "transliteration": "Ma-hair",
-    "hebrew": "מהיר"
+    "hebrew": "מהיר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Fat",
     "transliteration": "Sha-men",
-    "hebrew": "שמן"
+    "hebrew": "שמן",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "First",
     "transliteration": "Ri-shon",
-    "hebrew": "ראשון"
+    "hebrew": "ראשון",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Forbidden",
     "transliteration": "A-sur",
-    "hebrew": "אסור"
+    "hebrew": "אסור",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Fried",
     "transliteration": "Me-tu-gan",
-    "hebrew": "מטוגן"
+    "hebrew": "מטוגן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Full",
     "transliteration": "Ma-le",
-    "hebrew": "מלא"
+    "hebrew": "מלא",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Funny",
     "transliteration": "Mats-chik",
-    "hebrew": "מצחיק"
+    "hebrew": "מצחיק",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Good",
     "transliteration": "Tov",
-    "hebrew": "טוב"
+    "hebrew": "טוב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Green",
     "transliteration": "Ya-rok",
-    "hebrew": "ירוק"
+    "hebrew": "ירוק",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Hard",
     "transliteration": "Ka-she",
-    "hebrew": "קשה"
+    "hebrew": "קשה",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Half (of something)",
     "transliteration": "Che-tsi",
-    "hebrew": "חצי"
+    "hebrew": "חצי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Healthy",
     "transliteration": "Ba-ri",
-    "hebrew": "בריא"
+    "hebrew": "בריא",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Here",
     "transliteration": "Po",
-    "hebrew": "פה"
+    "hebrew": "פה",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "High",
     "transliteration": "Ga-vo-ha",
-    "hebrew": "גבוה"
+    "hebrew": "גבוה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Hot",
     "transliteration": "Kham",
-    "hebrew": "חם"
+    "hebrew": "חם",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Hungry",
     "transliteration": "Ra-ev",
-    "hebrew": "רעב"
+    "hebrew": "רעב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Important",
     "transliteration": "Cha-shuv",
-    "hebrew": "חשוב"
+    "hebrew": "חשוב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Inside",
     "transliteration": "Bif-nim",
-    "hebrew": "בפנים"
+    "hebrew": "בפנים",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Intelligent",
     "transliteration": "Na-von",
-    "hebrew": "נבון"
+    "hebrew": "נבון",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Interesting",
     "transliteration": "Me-an-yen",
-    "hebrew": "מעניין"
+    "hebrew": "מעניין",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Jewish",
     "transliteration": "Ye-hu-di",
-    "hebrew": "יהודי"
+    "hebrew": "יהודי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Kosher",
     "transliteration": "Ka-sher",
-    "hebrew": "כשר"
+    "hebrew": "כשר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Last, final",
     "transliteration": "A-cha-ron",
-    "hebrew": "אחרון"
+    "hebrew": "אחרון",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Late",
     "transliteration": "Me-u-char",
-    "hebrew": "מאוחר"
+    "hebrew": "מאוחר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Lazy",
     "transliteration": "Ats-lan",
-    "hebrew": "עצלן"
+    "hebrew": "עצלן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Left (direction)",
     "transliteration": "Smo-la",
-    "hebrew": "שמאלה"
+    "hebrew": "שמאלה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Low",
     "transliteration": "Na-mukh",
-    "hebrew": "נמוך"
+    "hebrew": "נמוך",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Married",
     "transliteration": "Na-su-i",
-    "hebrew": "נשוי"
+    "hebrew": "נשוי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Medium",
     "transliteration": "Bei-no-ni",
-    "hebrew": "בינוני"
+    "hebrew": "בינוני",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "New",
     "transliteration": "Cha-dash",
-    "hebrew": "חדש"
+    "hebrew": "חדש",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Next",
     "transliteration": "Ha-ba",
-    "hebrew": "הבא"
+    "hebrew": "הבא",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Noisy",
     "transliteration": "Ro-esh",
-    "hebrew": "רועש"
+    "hebrew": "רועש",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Okay",
     "transliteration": "Be-se-der",
-    "hebrew": "בסדר"
+    "hebrew": "בסדר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Old (person)",
     "transliteration": "Za-ken",
-    "hebrew": "זקן"
+    "hebrew": "זקן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Old (thing)",
     "transliteration": "Ya-shan",
-    "hebrew": "ישן"
+    "hebrew": "ישן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Open",
     "transliteration": "Pa-tu-akh",
-    "hebrew": "פתוח"
+    "hebrew": "פתוח",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Orange (color)",
     "transliteration": "Ka-tom",
-    "hebrew": "כתום"
+    "hebrew": "כתום",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Outside",
     "transliteration": "Ba-chuts",
-    "hebrew": "בחוץ"
+    "hebrew": "בחוץ",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Poor",
     "transliteration": "A-ni",
-    "hebrew": "עני"
+    "hebrew": "עני",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Purple",
     "transliteration": "Sa-gol",
-    "hebrew": "סגול"
+    "hebrew": "סגול",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Quarter (of something)",
     "transliteration": "Re-va",
-    "hebrew": "רבע"
+    "hebrew": "רבע",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Quickly",
     "transliteration": "Ma-hair",
-    "hebrew": "מהר"
+    "hebrew": "מהר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Quiet",
     "transliteration": "She-ket",
-    "hebrew": "שקט"
+    "hebrew": "שקט",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Ready",
     "transliteration": "Mu-chan",
-    "hebrew": "מוכן"
+    "hebrew": "מוכן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Red",
     "transliteration": "A-dom",
-    "hebrew": "אדום"
+    "hebrew": "אדום",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Religious",
     "transliteration": "Da-ti",
-    "hebrew": "דתי"
+    "hebrew": "דתי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Rich",
     "transliteration": "A-shir",
-    "hebrew": "עשיר"
+    "hebrew": "עשיר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Right (direction)",
     "transliteration": "Ya-mi-na",
-    "hebrew": "ימינה"
+    "hebrew": "ימינה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Secular",
     "transliteration": "Chi-lo-ni",
-    "hebrew": "חלוני"
+    "hebrew": "חלוני",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Sick",
     "transliteration": "Cho-le",
-    "hebrew": "חולה"
+    "hebrew": "חולה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Simple",
     "transliteration": "Pa-shut",
-    "hebrew": "פשוט"
+    "hebrew": "פשוט",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Singular; single (not married)",
     "transliteration": "Ya-chid",
-    "hebrew": "יחיד"
+    "hebrew": "יחיד",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Slow",
     "transliteration": "I-ti",
-    "hebrew": "איטי"
+    "hebrew": "איטי",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Slowly",
     "transliteration": "Le-at",
-    "hebrew": "לאט"
+    "hebrew": "לאט",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Small",
     "transliteration": "Ka-tan",
-    "hebrew": "קטן"
+    "hebrew": "קטן",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Smart",
     "transliteration": "Pi-ke-ach",
-    "hebrew": "פיקח"
+    "hebrew": "פיקח",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Smelly",
     "transliteration": "Mas-ri-ach",
-    "hebrew": "מסריח"
+    "hebrew": "מסריח",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Soft",
     "transliteration": "Rach",
-    "hebrew": "רך"
+    "hebrew": "רך",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Soon",
     "transliteration": "Be-ka-rov",
-    "hebrew": "בקרוב"
+    "hebrew": "בקרוב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Spicy (hot)",
     "transliteration": "Cha-rif",
-    "hebrew": "חריף"
+    "hebrew": "חריף",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Straight ahead; honest",
     "transliteration": "Ya-shar",
-    "hebrew": "ישר"
+    "hebrew": "ישר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Strong",
     "transliteration": "Cha-zak",
-    "hebrew": "חזק"
+    "hebrew": "חזק",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Sweet",
     "transliteration": "Ma-tok",
-    "hebrew": "מתוק"
+    "hebrew": "מתוק",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Tasty",
     "transliteration": "Ta-im",
-    "hebrew": "טעים"
+    "hebrew": "טעים",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "There",
     "transliteration": "Sham",
-    "hebrew": "שם"
+    "hebrew": "שם",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Thin",
     "transliteration": "Ra-ze",
-    "hebrew": "רזה"
+    "hebrew": "רזה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Third (of something)",
     "transliteration": "Shlish",
-    "hebrew": "שליש"
+    "hebrew": "שליש",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Tired",
     "transliteration": "A-yef",
-    "hebrew": "עייף"
+    "hebrew": "עייף",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Today",
     "transliteration": "Ha-yom",
-    "hebrew": "היום"
+    "hebrew": "היום",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Together",
     "transliteration": "Be-ya-chad",
-    "hebrew": "ביחד"
+    "hebrew": "ביחד",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Tomorrow",
     "transliteration": "Ma-char",
-    "hebrew": "מחר"
+    "hebrew": "מחר",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Twice",
     "transliteration": "Pa-a-ma-yim",
-    "hebrew": "פעמים"
+    "hebrew": "פעמים",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Ugly",
     "transliteration": "Me-cho-ar",
-    "hebrew": "מכוער"
+    "hebrew": "מכוער",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Up",
     "transliteration": "Le-ma-la",
-    "hebrew": "למעלה"
+    "hebrew": "למעלה",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Weak",
     "transliteration": "Cha-lash",
-    "hebrew": "חלש"
+    "hebrew": "חלש",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Very",
     "transliteration": "Me-od",
-    "hebrew": "מאוד"
+    "hebrew": "מאוד",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Wet",
     "transliteration": "Ra-tuv",
-    "hebrew": "רטוב"
+    "hebrew": "רטוב",
+    "difficulty": 1
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "White",
     "transliteration": "La-van",
-    "hebrew": "לבן"
+    "hebrew": "לבן",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Who",
     "transliteration": "Mi",
-    "hebrew": "מי"
+    "hebrew": "מי",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Whole",
     "transliteration": "Sha-laim",
-    "hebrew": "שלם"
+    "hebrew": "שלם",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Without",
     "transliteration": "Bli",
-    "hebrew": "בלי"
+    "hebrew": "בלי",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Yellow",
     "transliteration": "Tsa-hov",
-    "hebrew": "צהוב"
+    "hebrew": "צהוב",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Yes",
     "transliteration": "Ken",
-    "hebrew": "כן"
+    "hebrew": "כן",
+    "difficulty": 2
   },
   {
     "category": "Adjectives, Adverbs",
     "english": "Yesterday",
     "transliteration": "Et-mol",
-    "hebrew": "אתמול"
+    "hebrew": "אתמול",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "And",
     "transliteration": "Ve",
-    "hebrew": "-ו"
+    "hebrew": "-ו",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Before",
     "transliteration": "Lif-nei",
-    "hebrew": "לפני"
+    "hebrew": "לפני",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "But",
     "transliteration": "A-val",
-    "hebrew": "אבל"
+    "hebrew": "אבל",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "By, with, at the place of",
     "transliteration": "Ets-el",
-    "hebrew": "אצל"
+    "hebrew": "אצל",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "From",
     "transliteration": "Me",
-    "hebrew": "-מ"
+    "hebrew": "-מ",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "If",
     "transliteration": "Im",
-    "hebrew": "אם"
+    "hebrew": "אם",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "In, at",
     "transliteration": "Be, ba",
-    "hebrew": "-ב"
+    "hebrew": "-ב",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Like/ as",
     "transliteration": "Ke",
-    "hebrew": "-כ"
+    "hebrew": "-כ",
+    "difficulty": 3
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Maybe",
     "transliteration": "U-lai",
-    "hebrew": "אולי"
+    "hebrew": "אולי",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "No",
     "transliteration": "Lo",
-    "hebrew": "לא"
+    "hebrew": "לא",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Now",
     "transliteration": "Ach-shav",
-    "hebrew": "עכשיו"
+    "hebrew": "עכשיו",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Of",
     "transliteration": "Shel",
-    "hebrew": "של"
+    "hebrew": "של",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "On, about",
     "transliteration": "Al",
-    "hebrew": "על"
+    "hebrew": "על",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Once",
     "transliteration": "Pa-am",
-    "hebrew": "פעם"
+    "hebrew": "פעם",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Only",
     "transliteration": "Rak",
-    "hebrew": "רק"
+    "hebrew": "רק",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Or",
     "transliteration": "O",
-    "hebrew": "או"
+    "hebrew": "או",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "So",
     "transliteration": "Az",
-    "hebrew": "אז"
+    "hebrew": "אז",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "The",
     "transliteration": "Ha",
-    "hebrew": "-ה"
+    "hebrew": "-ה",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "This",
     "transliteration": "Ze",
-    "hebrew": "זה"
+    "hebrew": "זה",
+    "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "To, for",
     "transliteration": "Le",
-    "hebrew": "-ל"
+    "hebrew": "-ל",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Address",
     "transliteration": "Ktov-et",
-    "hebrew": "כתובת"
+    "hebrew": "כתובת",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Air conditioner",
     "transliteration": "Maz-gan",
-    "hebrew": "מזגן"
+    "hebrew": "מזגן",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Airplane",
     "transliteration": "Ma-tos",
-    "hebrew": "מטוס"
+    "hebrew": "מטוס",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Airport",
     "transliteration": "Na-mal te-u-fa",
-    "hebrew": "נמל תעופה"
+    "hebrew": "נמל תעופה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Almond",
     "transliteration": "Sha-ked",
-    "hebrew": "שקד"
+    "hebrew": "שקד",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Answer",
     "transliteration": "Tshu-va",
-    "hebrew": "תשובה"
+    "hebrew": "תשובה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Ant",
     "transliteration": "Ne-ma-la",
-    "hebrew": "נמלה"
+    "hebrew": "נמלה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Apartment",
     "transliteration": "Di-ra",
-    "hebrew": "דירה"
+    "hebrew": "דירה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Apple",
     "transliteration": "Ta-pu-akh",
-    "hebrew": "תפוח"
+    "hebrew": "תפוח",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Arabic",
     "transliteration": "A-ra-vit",
-    "hebrew": "ערבית"
+    "hebrew": "ערבית",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Arm",
     "transliteration": "Yad",
-    "hebrew": "יד"
+    "hebrew": "יד",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Atm",
     "transliteration": "Kas-po-mat",
-    "hebrew": "כספומט"
+    "hebrew": "כספומט",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Aunt",
     "transliteration": "Do-da",
-    "hebrew": "דודה"
+    "hebrew": "דודה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Baby",
     "transliteration": "Ti-nok",
-    "hebrew": "תינוק"
+    "hebrew": "תינוק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Back",
     "transliteration": "Gav",
-    "hebrew": "גב"
+    "hebrew": "גב",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bag",
     "transliteration": "Tik",
-    "hebrew": "תיק"
+    "hebrew": "תיק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bakery",
     "transliteration": "Ma-a-fi-ya",
-    "hebrew": "מאפייה"
+    "hebrew": "מאפייה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Ball",
     "transliteration": "Ka-dur",
-    "hebrew": "כדור"
+    "hebrew": "כדור",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Banana",
     "transliteration": "Ba-na-na",
-    "hebrew": "בננה"
+    "hebrew": "בננה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bank",
     "transliteration": "Bank",
-    "hebrew": "בנק"
+    "hebrew": "בנק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Basketball",
     "transliteration": "Ka-dur-sal",
-    "hebrew": "כדורסל"
+    "hebrew": "כדורסל",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Beach",
     "transliteration": "Khof",
-    "hebrew": "חוף"
+    "hebrew": "חוף",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bed",
     "transliteration": "Mi-ta",
-    "hebrew": "מיטה"
+    "hebrew": "מיטה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Beef",
     "transliteration": "Ba-kar",
-    "hebrew": "בקר"
+    "hebrew": "בקר",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Beer",
     "transliteration": "Bi-ra",
-    "hebrew": "בירה"
+    "hebrew": "בירה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Beet(root)",
     "transliteration": "Se-lek",
-    "hebrew": "סלק"
+    "hebrew": "סלק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Belt",
     "transliteration": "Cha-go-ra",
-    "hebrew": "חגורה"
+    "hebrew": "חגורה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bicycle",
     "transliteration": "O-fa-na-yim",
-    "hebrew": "אופניים"
+    "hebrew": "אופניים",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Bill, check",
     "transliteration": "Khesh-bon",
-    "hebrew": "חשבון"
+    "hebrew": "חשבון",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bird",
     "transliteration": "Tsi-por",
-    "hebrew": "ציפור"
+    "hebrew": "ציפור",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Body",
     "transliteration": "Guf",
-    "hebrew": "גוף"
+    "hebrew": "גוף",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bone",
     "transliteration": "E-tsem",
-    "hebrew": "עצם"
+    "hebrew": "עצם",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Book",
     "transliteration": "Se-fer",
-    "hebrew": "ספר"
+    "hebrew": "ספר",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bottle",
     "transliteration": "Bak-buk",
-    "hebrew": "בקבוק"
+    "hebrew": "בקבוק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bowl",
     "transliteration": "Ke-a-ra",
-    "hebrew": "קערה"
+    "hebrew": "קערה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Boy",
     "transliteration": "Ye-led",
-    "hebrew": "ילד"
+    "hebrew": "ילד",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Brain",
     "transliteration": "Mo-akh",
-    "hebrew": "מוח"
+    "hebrew": "מוח",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bread",
     "transliteration": "Le-khem",
-    "hebrew": "לחם"
+    "hebrew": "לחם",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Break",
     "transliteration": "Haf-sa-ka",
-    "hebrew": "הפסקה"
+    "hebrew": "הפסקה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Breakfast",
     "transliteration": "A-ru-chat bo-ker",
-    "hebrew": "ארוחת בוקר"
+    "hebrew": "ארוחת בוקר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Brother",
     "transliteration": "Ach",
-    "hebrew": "אח"
+    "hebrew": "אח",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Brown",
     "transliteration": "Khum",
-    "hebrew": "חום"
+    "hebrew": "חום",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Building",
     "transliteration": "Bin-yan",
-    "hebrew": "בניין"
+    "hebrew": "בניין",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Bus",
     "transliteration": "O-to-bus",
-    "hebrew": "אוטובוס"
+    "hebrew": "אוטובוס",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Butter",
     "transliteration": "Chem-a",
-    "hebrew": "חמאה"
+    "hebrew": "חמאה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cabbage",
     "transliteration": "Kruv",
-    "hebrew": "כרוב"
+    "hebrew": "כרוב",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cake",
     "transliteration": "U-ga",
-    "hebrew": "עוגה"
+    "hebrew": "עוגה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Camera",
     "transliteration": "Mats-le-ma",
-    "hebrew": "מצלמה"
+    "hebrew": "מצלמה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Car",
     "transliteration": "Me-kho-nit",
-    "hebrew": "מכונית"
+    "hebrew": "מכונית",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Carrot",
     "transliteration": "Ge-zer",
-    "hebrew": "גזר"
+    "hebrew": "גזר",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cat",
     "transliteration": "Cha-tul",
-    "hebrew": "חתול"
+    "hebrew": "חתול",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Ceiling",
     "transliteration": "Tik-ra",
-    "hebrew": "תקרה"
+    "hebrew": "תקרה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Chair",
     "transliteration": "Ki-se",
-    "hebrew": "כיסא"
+    "hebrew": "כיסא",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Challah",
     "transliteration": "Cha-la",
-    "hebrew": "חלה"
+    "hebrew": "חלה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Channel (tv)",
     "transliteration": "A-ruts",
-    "hebrew": "ערוץ"
+    "hebrew": "ערוץ",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Chapter",
     "transliteration": "Pe-rek",
-    "hebrew": "פרק"
+    "hebrew": "פרק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cheese",
     "transliteration": "Gvi-na",
-    "hebrew": "גבינה"
+    "hebrew": "גבינה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cherry",
     "transliteration": "Duv-de-van",
-    "hebrew": "דובדבן"
+    "hebrew": "דובדבן",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Chest",
     "transliteration": "Cha-ze",
-    "hebrew": "חזה"
+    "hebrew": "חזה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Chicken",
     "transliteration": "Of",
-    "hebrew": "עוף"
+    "hebrew": "עוף",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Chocolate",
     "transliteration": "Sho-ko-lad",
-    "hebrew": "שוקולד"
+    "hebrew": "שוקולד",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "City",
     "transliteration": "Ir",
-    "hebrew": "עיר"
+    "hebrew": "עיר",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Classroom",
     "transliteration": "Ki-ta",
-    "hebrew": "כיתה"
+    "hebrew": "כיתה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Clock",
     "transliteration": "Sha-on",
-    "hebrew": "שעון"
+    "hebrew": "שעון",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Clothes",
     "transliteration": "Be-ga-dim",
-    "hebrew": "בגדים"
+    "hebrew": "בגדים",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cloud",
     "transliteration": "A-nan",
-    "hebrew": "ענן"
+    "hebrew": "ענן",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cockroach",
     "transliteration": "Juk",
-    "hebrew": "ג’וק"
+    "hebrew": "ג’וק",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Coffee",
     "transliteration": "Ka-fe",
-    "hebrew": "קפה"
+    "hebrew": "קפה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Color",
     "transliteration": "Tse-va",
-    "hebrew": "צבע"
+    "hebrew": "צבע",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Company",
     "transliteration": "Chev-ra",
-    "hebrew": "חברה"
+    "hebrew": "חברה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Computer",
     "transliteration": "Mach-shev",
-    "hebrew": "מחשב"
+    "hebrew": "מחשב",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Country",
     "transliteration": "Me-di-na",
-    "hebrew": "מדינה"
+    "hebrew": "מדינה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Cousin",
     "transliteration": "Ben dod",
-    "hebrew": "בן דוד"
+    "hebrew": "בן דוד",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Cucumber",
     "transliteration": "Me-la-fe-fon",
-    "hebrew": "מלפפון"
+    "hebrew": "מלפפון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Dad",
     "transliteration": "A-ba",
-    "hebrew": "אבא"
+    "hebrew": "אבא",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Date (the fruit)",
     "transliteration": "Ta-mar",
-    "hebrew": "תמר"
+    "hebrew": "תמר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Daughter",
     "transliteration": "Bat",
-    "hebrew": "בת"
+    "hebrew": "בת",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Day",
     "transliteration": "Yom",
-    "hebrew": "יום"
+    "hebrew": "יום",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Desert",
     "transliteration": "Mid-bar",
-    "hebrew": "מדבר"
+    "hebrew": "מדבר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Dictionary",
     "transliteration": "Mi-lon",
-    "hebrew": "מילון"
+    "hebrew": "מילון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Doctor/physician",
     "transliteration": "Ro-fe",
-    "hebrew": "רופא"
+    "hebrew": "רופא",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Dog",
     "transliteration": "Ke-lev",
-    "hebrew": "כלב"
+    "hebrew": "כלב",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Door",
     "transliteration": "De-let",
-    "hebrew": "דלת"
+    "hebrew": "דלת",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Drink",
     "transliteration": "Shti-ya",
-    "hebrew": "שתייה"
+    "hebrew": "שתייה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Driver",
     "transliteration": "Na-hag",
-    "hebrew": "נהג"
+    "hebrew": "נהג",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Ear",
     "transliteration": "O-zen",
-    "hebrew": "אוזן"
+    "hebrew": "אוזן",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "East",
     "transliteration": "Miz-rakh",
-    "hebrew": "מזרח"
+    "hebrew": "מזרח",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Egg",
     "transliteration": "Bei-tsa",
-    "hebrew": "ביצה"
+    "hebrew": "ביצה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "End",
     "transliteration": "Sof",
-    "hebrew": "סוף"
+    "hebrew": "סוף",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Engineer",
     "transliteration": "Me-han-des",
-    "hebrew": "מהנדס"
+    "hebrew": "מהנדס",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "English",
     "transliteration": "An-glit",
-    "hebrew": "אנגלית"
+    "hebrew": "אנגלית",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Entrance",
     "transliteration": "Kni-sa",
-    "hebrew": "כניסה"
+    "hebrew": "כניסה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Evening",
     "transliteration": "E-rev",
-    "hebrew": "ערב"
+    "hebrew": "ערב",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Excellent",
     "transliteration": "Me-tsu-yan",
-    "hebrew": "מצוין"
+    "hebrew": "מצוין",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Exercise",
     "transliteration": "Hit-am-lut",
-    "hebrew": "התעמלות"
+    "hebrew": "התעמלות",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Exit",
     "transliteration": "Ye-tsi-a",
-    "hebrew": "יציאה"
+    "hebrew": "יציאה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Eye",
     "transliteration": "A-yin",
-    "hebrew": "עין"
+    "hebrew": "עין",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Face",
     "transliteration": "Pa-nim",
-    "hebrew": "פנים"
+    "hebrew": "פנים",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Faculty",
     "transliteration": "Fa-kul-ta",
-    "hebrew": "פקולטה"
+    "hebrew": "פקולטה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Falafel",
     "transliteration": "Fa-la-fel",
-    "hebrew": "פלאפל"
+    "hebrew": "פלאפל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Fall (the season)",
     "transliteration": "Stav",
-    "hebrew": "סתיו"
+    "hebrew": "סתיו",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Family",
     "transliteration": "Mish-pa-cha",
-    "hebrew": "משפחה"
+    "hebrew": "משפחה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Fig",
     "transliteration": "Te-e-na",
-    "hebrew": "תאנה"
+    "hebrew": "תאנה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Toe",
     "transliteration": "Ets-ba",
-    "hebrew": "אצבע"
+    "hebrew": "אצבע",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Finger",
     "transliteration": "Ets-ba",
-    "hebrew": "אצבע"
+    "hebrew": "אצבע",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Fish",
     "transliteration": "Dag",
-    "hebrew": "דג"
+    "hebrew": "דג",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Floor",
     "transliteration": "Rits-pa",
-    "hebrew": "רצפה"
+    "hebrew": "רצפה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Food",
     "transliteration": "O-chel",
-    "hebrew": "אוכל"
+    "hebrew": "אוכל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Foot",
     "transliteration": "Kaf re-gel",
-    "hebrew": "כף רגל"
+    "hebrew": "כף רגל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Fork",
     "transliteration": "Maz-leg",
-    "hebrew": "מזלג"
+    "hebrew": "מזלג",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Friday",
     "transliteration": "Yom shi-shi",
-    "hebrew": "יום שישי"
+    "hebrew": "יום שישי",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Friend",
     "transliteration": "Cha-ver",
-    "hebrew": "חבר"
+    "hebrew": "חבר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Fruit",
     "transliteration": "Pri",
-    "hebrew": "פרי"
+    "hebrew": "פרי",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Future",
     "transliteration": "A-tid",
-    "hebrew": "עתיד"
+    "hebrew": "עתיד",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Game",
     "transliteration": "Mis-chak",
-    "hebrew": "משחק"
+    "hebrew": "משחק",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Garbage can",
     "transliteration": "Pach ash-pa",
-    "hebrew": "פח אשפה"
+    "hebrew": "פח אשפה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Garlic",
     "transliteration": "Shoom",
-    "hebrew": "שום"
+    "hebrew": "שום",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Gasoline",
     "transliteration": "De-lek",
-    "hebrew": "דלק"
+    "hebrew": "דלק",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Gate",
     "transliteration": "Sha-ar",
-    "hebrew": "שער"
+    "hebrew": "שער",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Girl",
     "transliteration": "Yal-da",
-    "hebrew": "ילדה"
+    "hebrew": "ילדה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Glass, cup",
     "transliteration": "Kos",
-    "hebrew": "כוס"
+    "hebrew": "כוס",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Government",
     "transliteration": "Mem-sha-la",
-    "hebrew": "ממשלה"
+    "hebrew": "ממשלה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Grandfather",
     "transliteration": "Sa-ba",
-    "hebrew": "סבא"
+    "hebrew": "סבא",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Grandmother",
     "transliteration": "Sav-ta",
-    "hebrew": "סבתא"
+    "hebrew": "סבתא",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Grapefruit",
     "transliteration": "Esh-ko-lit",
-    "hebrew": "אשכולית"
+    "hebrew": "אשכולית",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Grapes",
     "transliteration": "A-na-vim",
-    "hebrew": "ענבים"
+    "hebrew": "ענבים",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Group",
     "transliteration": "Kvu-tsa",
-    "hebrew": "קבוצה"
+    "hebrew": "קבוצה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hair",
     "transliteration": "Se-ar",
-    "hebrew": "שער"
+    "hebrew": "שער",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Hand",
     "transliteration": "Yad",
-    "hebrew": "יד"
+    "hebrew": "יד",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hat",
     "transliteration": "Ko-va",
-    "hebrew": "כובע"
+    "hebrew": "כובע",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "He",
     "transliteration": "Hu",
-    "hebrew": "הוא"
+    "hebrew": "הוא",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Head",
     "transliteration": "Rosh",
-    "hebrew": "ראש"
+    "hebrew": "ראש",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Heart",
     "transliteration": "Lev",
-    "hebrew": "לב"
+    "hebrew": "לב",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hebrew",
     "transliteration": "Iv-rit",
-    "hebrew": "עברית"
+    "hebrew": "עברית",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Height",
     "transliteration": "Go-va",
-    "hebrew": "גובה"
+    "hebrew": "גובה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hobby",
     "transliteration": "Takh-biv",
-    "hebrew": "תחביב"
+    "hebrew": "תחביב",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Holiday",
     "transliteration": "Khag",
-    "hebrew": "חג"
+    "hebrew": "חג",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Honey",
     "transliteration": "Dvash",
-    "hebrew": "דבש"
+    "hebrew": "דבש",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hospital",
     "transliteration": "Beit kho-lim",
-    "hebrew": "בית חולים"
+    "hebrew": "בית חולים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Hot chocolate",
     "transliteration": "Sho-ko kham",
-    "hebrew": "שוקו חם"
+    "hebrew": "שוקו חם",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Hotel",
     "transliteration": "Ma-lon",
-    "hebrew": "מלון"
+    "hebrew": "מלון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hour",
     "transliteration": "Sha-a",
-    "hebrew": "שעה"
+    "hebrew": "שעה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "House",
     "transliteration": "Ba-yit",
-    "hebrew": "בית"
+    "hebrew": "בית",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Hummus",
     "transliteration": "Chu-mus",
-    "hebrew": "חומוס"
+    "hebrew": "חומוס",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Husband",
     "transliteration": "Ba-al",
-    "hebrew": "בעל"
+    "hebrew": "בעל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "I",
     "transliteration": "A-ni",
-    "hebrew": "אני"
+    "hebrew": "אני",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "I.d.f. (israel defense forces)",
     "transliteration": "Tsa-hal",
-    "hebrew": "צה”ל"
+    "hebrew": "צה”ל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Ice cream",
     "transliteration": "Gli-da",
-    "hebrew": "גלידה"
+    "hebrew": "גלידה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Idea",
     "transliteration": "Ra-a-yon",
-    "hebrew": "רעיון"
+    "hebrew": "רעיון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Israel",
     "transliteration": "Is-ra-el",
-    "hebrew": "ישראל"
+    "hebrew": "ישראל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Juice",
     "transliteration": "Mits",
-    "hebrew": "מיץ"
+    "hebrew": "מיץ",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Key",
     "transliteration": "Maf-te-ach",
-    "hebrew": "מפתח"
+    "hebrew": "מפתח",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Kitchen",
     "transliteration": "Mit-bakh",
-    "hebrew": "מטבח"
+    "hebrew": "מטבח",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Knife",
     "transliteration": "Sa-kin",
-    "hebrew": "סכין"
+    "hebrew": "סכין",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Lamb",
     "transliteration": "Ta-le",
-    "hebrew": "טלה"
+    "hebrew": "טלה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Language",
     "transliteration": "Sa-fa",
-    "hebrew": "שפה"
+    "hebrew": "שפה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Leg",
     "transliteration": "Re-gel",
-    "hebrew": "רגל"
+    "hebrew": "רגל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Lemon",
     "transliteration": "Li-mon",
-    "hebrew": "לימון"
+    "hebrew": "לימון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Lesson",
     "transliteration": "Shi-ur",
-    "hebrew": "שיעור"
+    "hebrew": "שיעור",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Lettuce",
     "transliteration": "Cha-sa",
-    "hebrew": "חסה"
+    "hebrew": "חסה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Library",
     "transliteration": "Sif-ri-ya",
-    "hebrew": "ספרייה"
+    "hebrew": "ספרייה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Lizard",
     "transliteration": "Le-ta-a",
-    "hebrew": "לטאה"
+    "hebrew": "לטאה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Mail; post office",
     "transliteration": "Do-ar",
-    "hebrew": "דואר"
+    "hebrew": "דואר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Mall",
     "transliteration": "Kan-yon",
-    "hebrew": "קניון"
+    "hebrew": "קניון",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Manager",
     "transliteration": "Me-na-hel",
-    "hebrew": "מנהל"
+    "hebrew": "מנהל",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Mango",
     "transliteration": "Man-go",
-    "hebrew": "מנגו"
+    "hebrew": "מנגו",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Meat",
     "transliteration": "Ba-sar",
-    "hebrew": "בשר"
+    "hebrew": "בשר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Meter",
     "transliteration": "Me-ter",
-    "hebrew": "מטר"
+    "hebrew": "מטר",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Microwave",
     "transliteration": "Mik-ro-gal",
-    "hebrew": "מיקרוגל"
+    "hebrew": "מיקרוגל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Milk",
     "transliteration": "Cha-lav",
-    "hebrew": "חלב"
+    "hebrew": "חלב",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Minute",
     "transliteration": "Da-ka",
-    "hebrew": "דקה"
+    "hebrew": "דקה",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Mold",
     "transliteration": "O-vesh",
-    "hebrew": "עובש"
+    "hebrew": "עובש",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Mom",
     "transliteration": "I-ma",
-    "hebrew": "אימא"
+    "hebrew": "אימא",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Moment",
     "transliteration": "Re-ga",
-    "hebrew": "רגע"
+    "hebrew": "רגע",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Monday",
     "transliteration": "Yom she-ni",
-    "hebrew": "יום שני"
+    "hebrew": "יום שני",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Money",
     "transliteration": "Ke-sef",
-    "hebrew": "כסף"
+    "hebrew": "כסף",
+    "difficulty": 3
   },
   {
     "category": "Nouns",
     "english": "Month",
     "transliteration": "Cho-desh",
-    "hebrew": "חודש"
+    "hebrew": "חודש",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Moon",
     "transliteration": "Ya-re-akh",
-    "hebrew": "ירח"
+    "hebrew": "ירח",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Morning",
     "transliteration": "Bo-ker",
-    "hebrew": "בוקר"
+    "hebrew": "בוקר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Mosquito",
     "transliteration": "Ya-tush",
-    "hebrew": "יתוש"
+    "hebrew": "יתוש",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Mouth",
     "transliteration": "Pe",
-    "hebrew": "פה"
+    "hebrew": "פה",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Movie",
     "transliteration": "Se-ret",
-    "hebrew": "סרט"
+    "hebrew": "סרט",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Museum",
     "transliteration": "Mu-zei-on",
-    "hebrew": "מוזיאון"
+    "hebrew": "מוזיאון",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Mushrooms",
     "transliteration": "Pit-ri-yot",
-    "hebrew": "פטריות"
+    "hebrew": "פטריות",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Music",
     "transliteration": "Mu-zi-ka",
-    "hebrew": "מוזיקה"
+    "hebrew": "מוזיקה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Name",
     "transliteration": "Shem",
-    "hebrew": "שם"
+    "hebrew": "שם",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Napkin",
     "transliteration": "Ma-pit",
-    "hebrew": "מפית"
+    "hebrew": "מפית",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Nectarine",
     "transliteration": "Nek-ta-ri-na",
-    "hebrew": "נקטרינה"
+    "hebrew": "נקטרינה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Neighborhood",
     "transliteration": "Sh’chu-na",
-    "hebrew": "שכונה"
+    "hebrew": "שכונה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "News",
     "transliteration": "Cha-da-shot",
-    "hebrew": "חדשות"
+    "hebrew": "חדשות",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Newspaper",
     "transliteration": "I-ton",
-    "hebrew": "עיתון"
+    "hebrew": "עיתון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Night",
     "transliteration": "Lai-la",
-    "hebrew": "לילה"
+    "hebrew": "לילה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Noon",
     "transliteration": "Tso-ho-ra-yim",
-    "hebrew": "צהריים"
+    "hebrew": "צהריים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "North",
     "transliteration": "Tsa-fon",
-    "hebrew": "צפון"
+    "hebrew": "צפון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Nose",
     "transliteration": "Af",
-    "hebrew": "אף"
+    "hebrew": "אף",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Notebook",
     "transliteration": "Mach-be-ret",
-    "hebrew": "מחברת"
+    "hebrew": "מחברת",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Nothing",
     "transliteration": "Klum",
-    "hebrew": "כלום"
+    "hebrew": "כלום",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Number",
     "transliteration": "Mis-par",
-    "hebrew": "מספר"
+    "hebrew": "מספר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Office",
     "transliteration": "Mis-rad",
-    "hebrew": "משרד"
+    "hebrew": "משרד",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Oil",
     "transliteration": "She-men",
-    "hebrew": "שמן"
+    "hebrew": "שמן",
+    "difficulty": 2
   },
   {
     "category": "Nouns",
     "english": "Olive",
     "transliteration": "Za-yit",
-    "hebrew": "זית"
+    "hebrew": "זית",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Onion",
     "transliteration": "Ba-tsal",
-    "hebrew": "בצל"
+    "hebrew": "בצל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Orange (food)",
     "transliteration": "Ta-puz",
-    "hebrew": "תפוז"
+    "hebrew": "תפוז",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Oven",
     "transliteration": "Ta-nur",
-    "hebrew": "תנור"
+    "hebrew": "תנור",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pain/ache",
     "transliteration": "Ke-ev",
-    "hebrew": "כאב"
+    "hebrew": "כאב",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Palm",
     "transliteration": "Kaf yad",
-    "hebrew": "כף יד"
+    "hebrew": "כף יד",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pants",
     "transliteration": "Mich-na-sa-yim",
-    "hebrew": "מכנסים"
+    "hebrew": "מכנסים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Paper",
     "transliteration": "Ni-yar",
-    "hebrew": "נייר"
+    "hebrew": "נייר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Parents",
     "transliteration": "Ho-rim",
-    "hebrew": "הורים"
+    "hebrew": "הורים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Parsley",
     "transliteration": "Pet-ro-zil-ya",
-    "hebrew": "פטרוזיליה"
+    "hebrew": "פטרוזיליה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Passport",
     "transliteration": "Dar-kon",
-    "hebrew": "דרכון"
+    "hebrew": "דרכון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Past",
     "transliteration": "A-var",
-    "hebrew": "עבר"
+    "hebrew": "עבר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pasta",
     "transliteration": "Pas-ta",
-    "hebrew": "פסטה"
+    "hebrew": "פסטה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pastry",
     "transliteration": "Ma-a-fe",
-    "hebrew": "מאפה"
+    "hebrew": "מאפה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Peach",
     "transliteration": "A-far-sek",
-    "hebrew": "אפרסק"
+    "hebrew": "אפרסק",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pear",
     "transliteration": "A-gas",
-    "hebrew": "אגס"
+    "hebrew": "אגס",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pen",
     "transliteration": "Et",
-    "hebrew": "עט"
+    "hebrew": "עט",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pencil",
     "transliteration": "I-pa-ron",
-    "hebrew": "עפרון"
+    "hebrew": "עפרון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pepper",
     "transliteration": "Pil-pel",
-    "hebrew": "פלפל"
+    "hebrew": "פלפל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pharmacy",
     "transliteration": "Beit mir-ka-chat",
-    "hebrew": "בית מרקחת"
+    "hebrew": "בית מרקחת",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Piano",
     "transliteration": "Psan-ter",
-    "hebrew": "פסנתר"
+    "hebrew": "פסנתר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pickles",
     "transliteration": "Cha-mu-tsim",
-    "hebrew": "חמוצים"
+    "hebrew": "חמוצים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Picture",
     "transliteration": "Tmu-na",
-    "hebrew": "תמונה"
+    "hebrew": "תמונה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pillow",
     "transliteration": "Ka-rit",
-    "hebrew": "כרית"
+    "hebrew": "כרית",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pineapple",
     "transliteration": "A-na-nas",
-    "hebrew": "אננס"
+    "hebrew": "אננס",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pita",
     "transliteration": "Pi-ta",
-    "hebrew": "פיתה"
+    "hebrew": "פיתה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Place",
     "transliteration": "Ma-kom",
-    "hebrew": "מקום"
+    "hebrew": "מקום",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Plate",
     "transliteration": "Tsa-la-chat",
-    "hebrew": "צלחת"
+    "hebrew": "צלחת",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Plum",
     "transliteration": "She-zif",
-    "hebrew": "שזיף"
+    "hebrew": "שזיף",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Police",
     "transliteration": "Mish-ta-ra",
-    "hebrew": "משטרה"
+    "hebrew": "משטרה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Pomegranate",
     "transliteration": "Ri-mon",
-    "hebrew": "רימון"
+    "hebrew": "רימון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Potato",
     "transliteration": "Ta-pu-ach a-da-ma",
-    "hebrew": "תפוח אדמה"
+    "hebrew": "תפוח אדמה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Present (tense)",
     "transliteration": "Ho-ve",
-    "hebrew": "הווה"
+    "hebrew": "הווה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Printer",
     "transliteration": "Mad-pe-set",
-    "hebrew": "מדפסת"
+    "hebrew": "מדפסת",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Question",
     "transliteration": "She-e-la",
-    "hebrew": "שאלה"
+    "hebrew": "שאלה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Quinoa",
     "transliteration": "Ki-no-a",
-    "hebrew": "קינואה"
+    "hebrew": "קינואה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Rabbi",
     "transliteration": "Rav",
-    "hebrew": "רב"
+    "hebrew": "רב",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Rain",
     "transliteration": "Ge-shem",
-    "hebrew": "גשם"
+    "hebrew": "גשם",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Receipt",
     "transliteration": "Ka-ba-la",
-    "hebrew": "קבלה"
+    "hebrew": "קבלה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Refrigerator",
     "transliteration": "Me-ka-rer",
-    "hebrew": "מקרר"
+    "hebrew": "מקרר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Restaurant",
     "transliteration": "Mis-a-da",
-    "hebrew": "מסעדה"
+    "hebrew": "מסעדה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Rice",
     "transliteration": "O-rez",
-    "hebrew": "אורז"
+    "hebrew": "אורז",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "River",
     "transliteration": "Na-har",
-    "hebrew": "נהר"
+    "hebrew": "נהר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Road, route",
     "transliteration": "Kvish",
-    "hebrew": "כביש"
+    "hebrew": "כביש",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Room",
     "transliteration": "Che-der",
-    "hebrew": "חדר"
+    "hebrew": "חדר",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Rug",
     "transliteration": "Sha-ti-akh",
-    "hebrew": "שטיח"
+    "hebrew": "שטיח",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Salad",
     "transliteration": "Sa-lat",
-    "hebrew": "סלט"
+    "hebrew": "סלט",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Salt",
     "transliteration": "Me-lakh",
-    "hebrew": "מלח"
+    "hebrew": "מלח",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sandals",
     "transliteration": "San-da-lim",
-    "hebrew": "סנדלים"
+    "hebrew": "סנדלים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Saturday",
     "transliteration": "Sha-bat",
-    "hebrew": "שבת"
+    "hebrew": "שבת",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sauce",
     "transliteration": "Ro-tev",
-    "hebrew": "רוטב"
+    "hebrew": "רוטב",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Schnitzel",
     "transliteration": "Shni-tsel",
-    "hebrew": "שניצל"
+    "hebrew": "שניצל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "School",
     "transliteration": "Beit se-fer",
-    "hebrew": "בית ספר"
+    "hebrew": "בית ספר",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Scientist",
     "transliteration": "Mad-an",
-    "hebrew": "מדען"
+    "hebrew": "מדען",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sea",
     "transliteration": "Yam",
-    "hebrew": "ים"
+    "hebrew": "ים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Serving/portion",
     "transliteration": "Ma-na",
-    "hebrew": "מנה"
+    "hebrew": "מנה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Shakshuka",
     "transliteration": "Shak-shu-ka",
-    "hebrew": "שקשוקה"
+    "hebrew": "שקשוקה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Shawarma",
     "transliteration": "Sha-war-ma",
-    "hebrew": "שווארמה"
+    "hebrew": "שווארמה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "She",
     "transliteration": "Hi",
-    "hebrew": "היא"
+    "hebrew": "היא",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sheet",
     "transliteration": "Sa-din",
-    "hebrew": "סדין"
+    "hebrew": "סדין",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Shekel",
     "transliteration": "She-kel",
-    "hebrew": "שקל"
+    "hebrew": "שקל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Shirt",
     "transliteration": "Chul-tsa",
-    "hebrew": "חולצה"
+    "hebrew": "חולצה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Shoes",
     "transliteration": "Na-a-la-yim",
-    "hebrew": "נעליים"
+    "hebrew": "נעליים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Shorts",
     "transliteration": "Mich-na-sa-yim k-tsar-im",
-    "hebrew": "מכנסים קצרים"
+    "hebrew": "מכנסים קצרים",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Shuttle taxi",
     "transliteration": "Shei-rut",
-    "hebrew": "שירות"
+    "hebrew": "שירות",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sidewalk",
     "transliteration": "Mid-ra-cha",
-    "hebrew": "מדרכה"
+    "hebrew": "מדרכה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sister",
     "transliteration": "A-chot",
-    "hebrew": "אחות"
+    "hebrew": "אחות",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Skirt",
     "transliteration": "Cha-tsa-it",
-    "hebrew": "חצאית"
+    "hebrew": "חצאית",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sky",
     "transliteration": "Sha-ma-yim",
-    "hebrew": "שמיים"
+    "hebrew": "שמיים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Soap",
     "transliteration": "Sa-bon",
-    "hebrew": "סבון"
+    "hebrew": "סבון",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Soccer",
     "transliteration": "Ka-du-re-gel",
-    "hebrew": "כדורגל"
+    "hebrew": "כדורגל",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Socks",
     "transliteration": "Gar-ba-yim",
-    "hebrew": "גרביים"
+    "hebrew": "גרביים",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Sofa",
     "transliteration": "Sa-pa",
-    "hebrew": "ספה"
+    "hebrew": "ספה",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Someone",
     "transliteration": "Mi-she-hu",
-    "hebrew": "מישהו"
+    "hebrew": "מישהו",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Something",
     "transliteration": "Ma-she-hu",
-    "hebrew": "משהו"
+    "hebrew": "משהו",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Son",
     "transliteration": "Ben",
-    "hebrew": "בן"
+    "hebrew": "בן",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Soup",
     "transliteration": "Ma-rak",
-    "hebrew": "מרק"
+    "hebrew": "מרק",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "South",
     "transliteration": "Da-rom",
-    "hebrew": "דרום"
+    "hebrew": "דרום",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Spider",
     "transliteration": "A-ka-vish",
-    "hebrew": "עכביש"
+    "hebrew": "עכביש",
+    "difficulty": 4
   },
   {
     "category": "Nouns",
     "english": "Spinach",
     "transliteration": "Te-red",
-    "hebrew": "תרד"
+    "hebrew": "תרד",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Spoon",
     "transliteration": "Kaf",
-    "hebrew": "כף"
+    "hebrew": "כף",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Sport",
     "transliteration": "Sport",
-    "hebrew": "ספורט"
+    "hebrew": "ספורט",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Spring",
     "transliteration": "A-viv",
-    "hebrew": "אביב"
+    "hebrew": "אביב",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Squash, zucchini",
     "transliteration": "Ki-shu",
-    "hebrew": "קישוא"
+    "hebrew": "קישוא",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Star",
     "transliteration": "Ko-chav",
-    "hebrew": "כוכב"
+    "hebrew": "כוכב",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Station, stop",
     "transliteration": "Ta-cha-na",
-    "hebrew": "תחנה"
+    "hebrew": "תחנה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Stomach",
     "transliteration": "Be-ten",
-    "hebrew": "בטן"
+    "hebrew": "בטן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Stop",
     "transliteration": "A-tsor",
-    "hebrew": "עצור"
+    "hebrew": "עצור",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Store",
     "transliteration": "Kha-nut",
-    "hebrew": "חנות"
+    "hebrew": "חנות",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Story",
     "transliteration": "Si-pur",
-    "hebrew": "סיפור"
+    "hebrew": "סיפור",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Strawberry",
     "transliteration": "Tut",
-    "hebrew": "תות"
+    "hebrew": "תות",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Street",
     "transliteration": "Re-chov",
-    "hebrew": "רחוב"
+    "hebrew": "רחוב",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Student",
     "transliteration": "Stu-dent",
-    "hebrew": "סטודנט"
+    "hebrew": "סטודנט",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Sugar",
     "transliteration": "Su-kar",
-    "hebrew": "סוכר"
+    "hebrew": "סוכר",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Summer",
     "transliteration": "Ka-yits",
-    "hebrew": "קיץ"
+    "hebrew": "קיץ",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Sun",
     "transliteration": "She-mesh",
-    "hebrew": "שמש"
+    "hebrew": "שמש",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Sunday",
     "transliteration": "Yom ri-shon",
-    "hebrew": "יום ראשון"
+    "hebrew": "יום ראשון",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Supermarket",
     "transliteration": "Su-per-mar-ket",
-    "hebrew": "סופרמרקט"
+    "hebrew": "סופרמרקט",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Surname",
     "transliteration": "Shem mish-pa-cha",
-    "hebrew": "שם משפחה"
+    "hebrew": "שם משפחה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Sweet potato",
     "transliteration": "Ba-ta-ta",
-    "hebrew": "בטטה"
+    "hebrew": "בטטה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Swimming",
     "transliteration": "Schi-ya",
-    "hebrew": "שחייה"
+    "hebrew": "שחייה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Synagogue",
     "transliteration": "Beit kne-set",
-    "hebrew": "בית כנסת"
+    "hebrew": "בית כנסת",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Table",
     "transliteration": "Shul-chan",
-    "hebrew": "שולחן"
+    "hebrew": "שולחן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Taxi",
     "transliteration": "Mo-nit",
-    "hebrew": "מונית"
+    "hebrew": "מונית",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tea",
     "transliteration": "Te",
-    "hebrew": "תה"
+    "hebrew": "תה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Teacher",
     "transliteration": "Mo-re, mo-ra",
-    "hebrew": "מורה"
+    "hebrew": "מורה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Teeth",
     "transliteration": "Shi-na-yim",
-    "hebrew": "שיניים"
+    "hebrew": "שיניים",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Telephone",
     "transliteration": "Te-le-fon",
-    "hebrew": "טלפון"
+    "hebrew": "טלפון",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Test/exam",
     "transliteration": "Miv-khan",
-    "hebrew": "מבחן"
+    "hebrew": "מבחן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "They (f.)",
     "transliteration": "Hen",
-    "hebrew": "הן"
+    "hebrew": "הן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "They (m.)",
     "transliteration": "Hem",
-    "hebrew": "הם"
+    "hebrew": "הם",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Thumb",
     "transliteration": "A-gu-dal",
-    "hebrew": "אגודל"
+    "hebrew": "אגודל",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Thursday",
     "transliteration": "Yom cha-mi-shi",
-    "hebrew": "יום חמישי"
+    "hebrew": "יום חמישי",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Time",
     "transliteration": "Zman",
-    "hebrew": "זמן"
+    "hebrew": "זמן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Toilet (bathroom)",
     "transliteration": "She-ru-tim",
-    "hebrew": "שרותים"
+    "hebrew": "שרותים",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tomato",
     "transliteration": "Ag-va-ni-ya",
-    "hebrew": "עגבניה"
+    "hebrew": "עגבניה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Towel",
     "transliteration": "Ma-ge-vet",
-    "hebrew": "מגבת"
+    "hebrew": "מגבת",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Traffic",
     "transliteration": "Tnu-a",
-    "hebrew": "תנועה"
+    "hebrew": "תנועה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Train",
     "transliteration": "Ra-ke-vet",
-    "hebrew": "רכבת"
+    "hebrew": "רכבת",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tree, wood",
     "transliteration": "Ets",
-    "hebrew": "עץ"
+    "hebrew": "עץ",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Trip, hike",
     "transliteration": "Ti-yul",
-    "hebrew": "טיול"
+    "hebrew": "טיול",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tuesday",
     "transliteration": "Yom shli-shi",
-    "hebrew": "יום שלישי"
+    "hebrew": "יום שלישי",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tunnel",
     "transliteration": "Min-ha-ra",
-    "hebrew": "מנהרה"
+    "hebrew": "מנהרה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Turkey",
     "transliteration": "Ho-du",
-    "hebrew": "הודו"
+    "hebrew": "הודו",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Tv",
     "transliteration": "Te-le-viz-ya",
-    "hebrew": "טלוויזיה"
+    "hebrew": "טלוויזיה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Uncle",
     "transliteration": "Dod",
-    "hebrew": "דוד"
+    "hebrew": "דוד",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "University",
     "transliteration": "U-ni-ver-si-ta",
-    "hebrew": "אוניברסיטה"
+    "hebrew": "אוניברסיטה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Vacation",
     "transliteration": "Chuf-sha",
-    "hebrew": "חופשה"
+    "hebrew": "חופשה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Vegetables",
     "transliteration": "Ye-ra-kot",
-    "hebrew": "ירקות"
+    "hebrew": "ירקות",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Wall",
     "transliteration": "Kir",
-    "hebrew": "קיר"
+    "hebrew": "קיר",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Wallet",
     "transliteration": "Ar-nak",
-    "hebrew": "ארנק"
+    "hebrew": "ארנק",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Walnut",
     "transliteration": "E-goz me-lech",
-    "hebrew": "אגוז מלך"
+    "hebrew": "אגוז מלך",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Water",
     "transliteration": "Ma-yim",
-    "hebrew": "מים"
+    "hebrew": "מים",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Watermelon",
     "transliteration": "A-va-ti-ach",
-    "hebrew": "אבטיח"
+    "hebrew": "אבטיח",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "We",
     "transliteration": "A-nach-nu",
-    "hebrew": "אנחנו"
+    "hebrew": "אנחנו",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Weapon",
     "transliteration": "Ne-shek",
-    "hebrew": "נשק"
+    "hebrew": "נשק",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Weather",
     "transliteration": "Me-zeg a-vir",
-    "hebrew": "מזג אוויר"
+    "hebrew": "מזג אוויר",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Wednesday",
     "transliteration": "Yom re-vi-i",
-    "hebrew": "יום רביעי"
+    "hebrew": "יום רביעי",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Week",
     "transliteration": "Sha-vu-a",
-    "hebrew": "שבוע"
+    "hebrew": "שבוע",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Weekend",
     "transliteration": "Sof sha-vu-a",
-    "hebrew": "סוף שבוע"
+    "hebrew": "סוף שבוע",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Weight",
     "transliteration": "Mish-kal",
-    "hebrew": "משקל"
+    "hebrew": "משקל",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "West",
     "transliteration": "Ma-a-rav",
-    "hebrew": "מערב"
+    "hebrew": "מערב",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Wife",
     "transliteration": "I-sha",
-    "hebrew": "אישה"
+    "hebrew": "אישה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Window",
     "transliteration": "Cha-lon",
-    "hebrew": "חלון"
+    "hebrew": "חלון",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Wine",
     "transliteration": "Yay-in",
-    "hebrew": "יין"
+    "hebrew": "יין",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Winter",
     "transliteration": "Cho-ref",
-    "hebrew": "חורף"
+    "hebrew": "חורף",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "World",
     "transliteration": "O-lam",
-    "hebrew": "עולם"
+    "hebrew": "עולם",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Year",
     "transliteration": "Sha-na",
-    "hebrew": "שנה"
+    "hebrew": "שנה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "Yogurt",
     "transliteration": "Yo-gurt",
-    "hebrew": "יוגורט"
+    "hebrew": "יוגורט",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "You (f.)",
     "transliteration": "At",
-    "hebrew": "את"
+    "hebrew": "את",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "You (f.p.)",
     "transliteration": "A-ten",
-    "hebrew": "אתן"
+    "hebrew": "אתן",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "You (m.)",
     "transliteration": "A-ta",
-    "hebrew": "אתה"
+    "hebrew": "אתה",
+    "difficulty": 5
   },
   {
     "category": "Nouns",
     "english": "You (m.p.)",
     "transliteration": "A-tem",
-    "hebrew": "אתם"
+    "hebrew": "אתם",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Bless you",
     "transliteration": "Liv-ri-ut",
-    "hebrew": "לבריאות"
+    "hebrew": "לבריאות",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Cheers!",
     "transliteration": "Le-cha-yim",
-    "hebrew": "לחיים"
+    "hebrew": "לחיים",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Date of birth",
     "transliteration": "Ta-a-rich lei-da",
-    "hebrew": "תאריך לידה"
+    "hebrew": "תאריך לידה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Dinner",
     "transliteration": "A-ru-chat e-rev",
-    "hebrew": "ארוחת ערב"
+    "hebrew": "ארוחת ערב",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Excuse me",
     "transliteration": "Sli-kha",
-    "hebrew": "סליחה"
+    "hebrew": "סליחה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "First name",
     "transliteration": "Shem pra-ti",
-    "hebrew": "שם פרטי"
+    "hebrew": "שם פרטי",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Get going",
     "transliteration": "Ya-la",
-    "hebrew": "יאללה"
+    "hebrew": "יאללה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Good luck",
     "transliteration": "Be-hats-la-cha",
-    "hebrew": "בהצלחה"
+    "hebrew": "בהצלחה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Hello",
     "transliteration": "Sha-lom",
-    "hebrew": "שלום"
+    "hebrew": "שלום",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "It is possible",
     "transliteration": "Ef-shar",
-    "hebrew": "אפשר"
+    "hebrew": "אפשר",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Lunch",
     "transliteration": "A-ru-chat tso-ho-ra-yim",
-    "hebrew": "ארוחת צהריים"
+    "hebrew": "ארוחת צהריים",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Please",
     "transliteration": "Be-va-ka-sha",
-    "hebrew": "בבקשה"
+    "hebrew": "בבקשה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Hold on",
     "transliteration": "Shni-ya",
-    "hebrew": "שניה"
+    "hebrew": "שניה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "See you later",
     "transliteration": "Le-hit-ra-ot",
-    "hebrew": "להתראות"
+    "hebrew": "להתראות",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "Thank you",
     "transliteration": "To-da",
-    "hebrew": "תודה"
+    "hebrew": "תודה",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "There is/are",
     "transliteration": "Yesh",
-    "hebrew": "יש"
+    "hebrew": "יש",
+    "difficulty": 5
   },
   {
     "category": "Phrases",
     "english": "There isn’t/aren’t",
     "transliteration": "Ein",
-    "hebrew": "אין"
+    "hebrew": "אין",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "How",
     "transliteration": "Eich",
-    "hebrew": "איך"
+    "hebrew": "איך",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "How much",
     "transliteration": "Ka-ma",
-    "hebrew": "כמה"
+    "hebrew": "כמה",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "What",
     "transliteration": "Ma",
-    "hebrew": "מה"
+    "hebrew": "מה",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "When",
     "transliteration": "Ma-tai",
-    "hebrew": "מתי"
+    "hebrew": "מתי",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "Where",
     "transliteration": "Ei-fo",
-    "hebrew": "איפה"
+    "hebrew": "איפה",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "Which",
     "transliteration": "Ei-ze",
-    "hebrew": "איזה"
+    "hebrew": "איזה",
+    "difficulty": 5
   },
   {
     "category": "Question Words",
     "english": "Why",
     "transliteration": "La-ma",
-    "hebrew": "למה"
+    "hebrew": "למה",
+    "difficulty": 5
   }
 ];
