@@ -12,9 +12,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Tom is older than Mia. Mia is older than Eli. Who is youngest?",
-    options: ["Tom", "Mia", "Eli", "You cannot tell"],
-    answer: "Eli",
+    question: "Noga is older than Gideon. Gideon is older than Teva. Who is youngest?",
+    options: ["Noga", "Gideon", "Teva", "You cannot tell"],
+    answer: "Teva",
     difficulty: 1,
   },
   {
@@ -36,9 +36,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Ava is left of Ben. Ben is left of Cara. Who is in the middle?",
-    options: ["Ava", "Ben", "Cara", "No one"],
-    answer: "Ben",
+    question: "Gabriel is left of Noga. Noga is left of Eden. Who is in the middle?",
+    options: ["Gabriel", "Noga", "Eden", "No one"],
+    answer: "Noga",
     difficulty: 2,
   },
   {
@@ -96,7 +96,7 @@ const LOGIC_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "The toy is not in the box. It is either on the shelf or under the bed. Mia checked under the bed and it is not there. Where is the toy?",
+    question: "The toy is not in the box. It is either on the shelf or under the bed. Gideon checked under the bed and it is not there. Where is the toy?",
     options: ["In the box", "On the shelf", "Outside", "In the closet"],
     answer: "On the shelf",
     difficulty: 4,
@@ -180,9 +180,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Mia sits between Noah and Eli. Who cannot sit on an end?",
-    options: ["Mia", "Noah", "Eli", "Noah and Eli"],
-    answer: "Mia",
+    question: "Gideon sits between Noah and Teva. Who cannot sit on an end?",
+    options: ["Gideon", "Noah", "Teva", "Noah and Teva"],
+    answer: "Gideon",
     difficulty: 3,
   },
   {
@@ -300,9 +300,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Mia is older than Leo. Leo is older than Ava. Who is youngest?",
-    options: ["Mia", "Leo", "Ava", "You cannot tell"],
-    answer: "Ava",
+    question: "Gideon is older than Gabriel. Gabriel is older than Eden. Who is youngest?",
+    options: ["Gideon", "Gabriel", "Eden", "You cannot tell"],
+    answer: "Eden",
     difficulty: 1,
   },
   {
@@ -324,9 +324,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Sara is left of Ben. Ben is left of Kim. Who is in the middle?",
-    options: ["Sara", "Ben", "Kim", "No one"],
-    answer: "Ben",
+    question: "Sara is left of Noga. Noga is left of Kim. Who is in the middle?",
+    options: ["Sara", "Noga", "Kim", "No one"],
+    answer: "Noga",
     difficulty: 2,
   },
   {
@@ -390,8 +390,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Three kids wore red, blue, and green shirts. Ana did not wear red. Ben did not wear blue. Cara wore green. Who wore blue?",
-    options: ["Ana", "Ben", "Cara", "No one"],
+    question: "Three kids wore red, blue, and green shirts. Ana did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
+    options: ["Ana", "Noga", "Eden", "No one"],
     answer: "Ana",
     difficulty: 3,
   },
@@ -402,9 +402,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Mia is taller than Ava. Ava is taller than Leo. Who is shortest?",
-    options: ['Mia', 'Ava', 'Leo', 'You cannot tell'],
-    answer: "Leo",
+    question: "Noga is taller than Gideon. Gideon is taller than Gabriel. Who is shortest?",
+    options: ['Noga', 'Gideon', 'Gabriel', 'You cannot tell'],
+    answer: "Gabriel",
     difficulty: 1,
   },
   {
@@ -414,9 +414,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Mia sits between Tom and Zoe. Who cannot sit on an end?",
-    options: ["Mia", "Tom", "Zoe", "Tom and Zoe"],
-    answer: "Mia",
+    question: "Gideon sits between Tom and Zoe. Who cannot sit on an end?",
+    options: ["Gideon", "Tom", "Zoe", "Tom and Zoe"],
+    answer: "Gideon",
     difficulty: 3,
   },
   {
@@ -522,9 +522,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "Dana is first. Ben is not first. Cara is not last. Who is in the middle?",
-    options: ["Dana", "Ben", "Cara", "You cannot tell"],
-    answer: "Cara",
+    question: "Dana is first. Noga is not first. Eden is not last. Who is in the middle?",
+    options: ["Dana", "Noga", "Eden", "You cannot tell"],
+    answer: "Eden",
     difficulty: 5,
   },
   {
@@ -576,8 +576,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Mia is taller than Ben. Ben is taller than Ali. Who is shortest?",
-    options: ["Mia", "Ben", "Ali", "No one"],
+    question: "Noga is taller than Gideon. Gideon is taller than Ali. Who is shortest?",
+    options: ["Noga", "Gideon", "Ali", "No one"],
     answer: "Ali",
     difficulty: 1,
   },
@@ -624,9 +624,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "If Sam is left of Ben and Ben is left of Kim, who is in the middle?",
-    options: ["Sam", "Ben", "Kim", "No one"],
-    answer: "Ben",
+    question: "If Sam is left of Noga and Noga is left of Kim, who is in the middle?",
+    options: ["Sam", "Noga", "Kim", "No one"],
+    answer: "Noga",
     difficulty: 1,
   },
   {
@@ -696,9 +696,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Tom is older than Ava. Ava is older than Eli. Who is youngest?",
-    options: ["Tom", "Ava", "Eli", "You cannot tell"],
-    answer: "Eli",
+    question: "Gabriel is older than Eden. Eden is older than Teva. Who is youngest?",
+    options: ["Gabriel", "Eden", "Teva", "You cannot tell"],
+    answer: "Teva",
     difficulty: 2,
   },
   {
@@ -762,9 +762,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Three kids wore hats. Ava did not wear red. Ben did not wear blue. Cara wore green. Who wore blue?",
-    options: ['Ava', 'Ben', 'Cara', 'No one'],
-    answer: "Ava",
+    question: "Three kids wore hats. Gabriel did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
+    options: ['Gabriel', 'Noga', 'Eden', 'No one'],
+    answer: "Gabriel",
     difficulty: 3,
   },
   {
@@ -816,9 +816,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Ben sits between Ava and Eli. Who cannot sit on an end?",
-    options: ['Ava', 'Ben', 'Eli', 'No one'],
-    answer: "Ben",
+    question: "Noga sits between Gabriel and Teva. Who cannot sit on an end?",
+    options: ['Gabriel', 'Noga', 'Teva', 'No one'],
+    answer: "Noga",
     difficulty: 3,
   },
   {
@@ -876,9 +876,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "Three kids wore red, blue, and green shirts. Ali is not red. Bea is not blue. Cara is not green. Who wore red?",
-    options: ["Ali", "Bea", "Cara", "No one"],
-    answer: "Cara",
+    question: "Three kids wore red, blue, and green shirts. Ali is not red. Bea is not blue. Eden wore green. Who wore red?",
+    options: ["Ali", "Bea", "Eden", "No one"],
+    answer: "Bea",
     difficulty: 4,
   },
   {
@@ -936,9 +936,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "Dana is first, Ben is not first, and Cara is not last. Who is in the middle?",
-    options: ["Dana", "Ben", "Cara", "No one"],
-    answer: "Cara",
+    question: "Dana is first, Noga is not first, and Eden is not last. Who is in the middle?",
+    options: ["Dana", "Noga", "Eden", "No one"],
+    answer: "Eden",
     difficulty: 4,
   },
   {

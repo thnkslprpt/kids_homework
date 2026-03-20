@@ -6,7 +6,7 @@ const RATIONALITY_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Mia checked 3 thermometers. Two showed 22 degrees and one showed 31 degrees. What is the best guess for the temperature?",
+    question: "Gideon checked 3 thermometers. Two showed 22 degrees and one showed 31 degrees. What is the best guess for the temperature?",
     options: ["22 degrees", "31 degrees", "10 degrees", "50 degrees"],
     answer: "22 degrees",
     difficulty: 1,
@@ -24,7 +24,7 @@ const RATIONALITY_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Ben took one route to school on Monday and a different route on Tuesday. What is a smart next step before deciding which route is faster?",
+    question: "Noga took one route to school on Monday and a different route on Tuesday. What is a smart next step before deciding which route is faster?",
     options: ["Decide after those two days only", "Time both routes on more days", "Ask one friend to guess", "Pick the route with more trees"],
     answer: "Time both routes on more days",
     difficulty: 1,
@@ -48,8 +48,8 @@ const RATIONALITY_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Ben says, \"I studied and got 100, so studying always gives 100.\" What is the best response?",
-    options: ["One example is not enough to prove always", "Ben is always right", "Studying never helps", "Tests are all the same"],
+    question: "Noga says, \"I studied and got 100, so studying always gives 100.\" What is the best response?",
+    options: ["One example is not enough to prove always", "Noga is always right", "Studying never helps", "Tests are all the same"],
     answer: "One example is not enough to prove always",
     difficulty: 2,
   },
@@ -96,7 +96,7 @@ const RATIONALITY_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "Ava wore a lucky shirt and won two games. What is the most reasonable idea?",
+    question: "Gabriel wore a lucky shirt and won two games. What is the most reasonable idea?",
     options: ["The shirt definitely caused the wins", "The shirt may not be the reason", "Lucky shirts always work", "The games do not count"],
     answer: "The shirt may not be the reason",
     difficulty: 4,

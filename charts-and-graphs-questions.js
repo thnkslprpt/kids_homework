@@ -6,7 +6,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "A chart shows books read this month: Mia 4, Noam 7, Eli 5, Tali 6. How many books were read altogether?",
+    question: "A chart shows books read this month: Noga 4, Gideon 7, Gabriel 5, Eden 6. How many books were read altogether?",
     options: ["18", "20", "22", "24"],
     answer: "22",
     difficulty: 1,

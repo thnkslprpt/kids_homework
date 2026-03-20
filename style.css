@@ -429,8 +429,8 @@ button:disabled {
 .feedback-banner {
   min-height: 0;
   margin: 0 0 18px;
-  font-weight: 800;
-  white-space: pre-line;
+  font-weight: 700;
+  white-space: normal;
 }
 
 .feedback-banner.success,
@@ -447,6 +447,41 @@ button:disabled {
 .feedback-banner.error {
   background: var(--danger-soft);
   color: var(--danger);
+}
+
+.feedback-banner.error .feedback-review {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.feedback-banner.error .feedback-review-line + .feedback-review-line {
+  margin-top: 4px;
+}
+
+.feedback-banner.error .feedback-review-question {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.feedback-banner.error .feedback-review-option,
+.feedback-banner.error .feedback-review-label {
+  color: var(--muted);
+}
+
+.feedback-banner.error .feedback-review-option.selected,
+.feedback-banner.error .feedback-review-answer.selected {
+  color: var(--danger);
+  font-weight: 800;
+}
+
+.feedback-banner.error .feedback-review-option.correct,
+.feedback-banner.error .feedback-review-answer.correct {
+  color: var(--success);
+  font-weight: 800;
+}
+
+.feedback-banner.error .feedback-review-spacer {
+  height: 10px;
 }
 
 .question-panel {

@@ -35,20 +35,196 @@ const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   5: { 5: 0.7, 4: 0.2, 3: 0.05, 2: 0.05 },
 };
 const CHART_BAR_TEMPLATES = [
-  { title: "Favorite Fruits", labels: ["Apples", "Bananas", "Grapes", "Oranges"] },
-  { title: "Pet Votes", labels: ["Dogs", "Cats", "Fish", "Birds"] },
-  { title: "Toy Boxes", labels: ["Blocks", "Cars", "Balls", "Dolls"] },
-  { title: "Snack Sales", labels: ["Crackers", "Yogurt", "Cheese", "Apples"] },
-  { title: "Books Read", labels: ["Mia", "Noam", "Eli", "Tali"] },
-  { title: "Sticker Colors", labels: ["Red", "Blue", "Green", "Yellow"] },
+  {
+    title: "Favorite Fruits",
+    labels: ["Apples", "Bananas", "Grapes", "Oranges"],
+    prompts: {
+      most: () => "Which fruit got the most votes?",
+      secondMost: () => "Which fruit got the second most votes?",
+      fewest: () => "Which fruit got the fewest votes?",
+      exact: (label) => `How many votes did ${label.toLowerCase()} get?`,
+      total: () => "How many votes were there altogether?",
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger.toLowerCase()} get than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label} got ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Pet Votes",
+    labels: ["Dogs", "Cats", "Fish", "Birds"],
+    prompts: {
+      most: () => "Which pet got the most votes?",
+      secondMost: () => "Which pet got the second most votes?",
+      fewest: () => "Which pet got the fewest votes?",
+      exact: (label) => `How many votes did ${label.toLowerCase()} get?`,
+      total: () => "How many votes were there altogether?",
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger.toLowerCase()} get than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label} got ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Toy Boxes",
+    labels: ["Blocks", "Cars", "Balls", "Dolls"],
+    prompts: {
+      most: () => "Which toy type has the most pieces?",
+      secondMost: () => "Which toy type has the second most pieces?",
+      fewest: () => "Which toy type has the fewest pieces?",
+      exact: (label) => `How many ${label.toLowerCase()} are there?`,
+      total: () => "How many toy pieces are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "piece")}`,
+  },
+  {
+    title: "Snack Sales",
+    labels: ["Crackers", "Yogurt", "Cheese", "Apples"],
+    prompts: {
+      most: () => "Which snack sold the most?",
+      secondMost: () => "Which snack sold the second most?",
+      fewest: () => "Which snack sold the fewest?",
+      exact: (label) => `How many ${label.toLowerCase()} were sold?`,
+      total: () => "How many snacks were sold altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} were sold than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "snack")} sold`,
+  },
+  {
+    title: "Books Read",
+    labels: ["Noga", "Gideon", "Gabriel", "Eden"],
+    prompts: {
+      most: () => "Who read the most books?",
+      secondMost: () => "Who read the second most books?",
+      fewest: () => "Who read the fewest books?",
+      exact: (label) => `How many books did ${label} read?`,
+      total: () => "How many books were read altogether?",
+      difference: (larger, smaller) => `How many more books did ${larger} read than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label} read ${formatUnitCount(item.value, "book")}`,
+  },
+  {
+    title: "Sticker Colors",
+    labels: ["Red", "Blue", "Green", "Yellow"],
+    prompts: {
+      most: () => "Which color has the most stickers?",
+      secondMost: () => "Which color has the second most stickers?",
+      fewest: () => "Which color has the fewest stickers?",
+      exact: (label) => `How many ${label.toLowerCase()} stickers are there?`,
+      total: () => "How many stickers are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} stickers are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "sticker")}`,
+  },
 ];
 const CHART_TABLE_TEMPLATES = [
-  { title: "Library Visits", leftLabel: "Day", rightLabel: "Visitors", labels: ["Mon", "Tue", "Wed", "Thu"] },
-  { title: "Water Cups", leftLabel: "Day", rightLabel: "Cups", labels: ["Sun", "Mon", "Tue", "Wed"] },
-  { title: "Tree Heights", leftLabel: "Tree", rightLabel: "Meters", labels: ["Oak", "Pine", "Palm", "Maple"] },
-  { title: "Team Points", leftLabel: "Team", rightLabel: "Points", labels: ["Red", "Blue", "Green", "Yellow"] },
-  { title: "Class Jobs", leftLabel: "Job", rightLabel: "Students", labels: ["Clean", "Read", "Draw", "Build"] },
-  { title: "Plant Heights", leftLabel: "Plant", rightLabel: "Cm", labels: ["A", "B", "C", "D"] },
+  {
+    title: "Library Visits",
+    leftLabel: "Day",
+    rightLabel: "Visitors",
+    labels: ["Mon", "Tue", "Wed", "Thu"],
+    prompts: {
+      most: () => "Which day had the most visitors?",
+      secondMost: () => "Which day had the second most visitors?",
+      fewest: () => "Which day had the fewest visitors?",
+      exact: (label) => `How many visitors were there on ${label}?`,
+      total: () => "How many visitors were there altogether?",
+      combined: (left, right) => `How many visitors were there on ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more visitors were there on ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "visitor")}`,
+  },
+  {
+    title: "Water Cups",
+    leftLabel: "Day",
+    rightLabel: "Cups",
+    labels: ["Sun", "Mon", "Tue", "Wed"],
+    prompts: {
+      most: () => "Which day had the most cups of water?",
+      secondMost: () => "Which day had the second most cups of water?",
+      fewest: () => "Which day had the fewest cups of water?",
+      exact: (label) => `How many cups of water were drunk on ${label}?`,
+      total: () => "How many cups of water were drunk altogether?",
+      combined: (left, right) =>
+        `How many cups of water were drunk on ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more cups of water were drunk on ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "cup")} of water`,
+  },
+  {
+    title: "Tree Heights",
+    leftLabel: "Tree",
+    rightLabel: "Meters",
+    labels: ["Oak", "Pine", "Palm", "Maple"],
+    prompts: {
+      most: () => "Which tree is tallest?",
+      secondMost: () => "Which tree is the second tallest?",
+      fewest: () => "Which tree is shortest?",
+      exact: (label) => `How tall is ${label} in meters?`,
+      total: () => "What is the total height of all the trees in meters?",
+      combined: (left, right) => `What is the total height of ${left} and ${right} in meters?`,
+      difference: (larger, smaller) => `How many meters taller is ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "meter")}`,
+  },
+  {
+    title: "Team Points",
+    leftLabel: "Team",
+    rightLabel: "Points",
+    labels: ["Red", "Blue", "Green", "Yellow"],
+    prompts: {
+      most: () => "Which team scored the most points?",
+      secondMost: () => "Which team scored the second most points?",
+      fewest: () => "Which team scored the fewest points?",
+      exact: (label) => `How many points did the ${label} team score?`,
+      total: () => "How many points were scored altogether?",
+      combined: (left, right) =>
+        `How many points did the ${left} and ${right} teams score altogether?`,
+      difference: (larger, smaller) =>
+        `How many more points did the ${larger} team score than the ${smaller} team?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "point")}`,
+  },
+  {
+    title: "Class Jobs",
+    leftLabel: "Job",
+    rightLabel: "Students",
+    labels: ["Clean", "Read", "Draw", "Build"],
+    prompts: {
+      most: () => "Which job had the most students?",
+      secondMost: () => "Which job had the second most students?",
+      fewest: () => "Which job had the fewest students?",
+      exact: (label) => `How many students had the ${label.toLowerCase()} job?`,
+      total: () => "How many students are shown altogether?",
+      combined: (left, right) =>
+        `How many students had the ${left.toLowerCase()} and ${right.toLowerCase()} jobs altogether?`,
+      difference: (larger, smaller) =>
+        `How many more students had the ${larger.toLowerCase()} job than the ${smaller.toLowerCase()} job?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "student")}`,
+  },
+  {
+    title: "Plant Heights",
+    leftLabel: "Plant",
+    rightLabel: "Cm",
+    labels: ["A", "B", "C", "D"],
+    prompts: {
+      most: () => "Which plant is tallest?",
+      secondMost: () => "Which plant is the second tallest?",
+      fewest: () => "Which plant is shortest?",
+      exact: (label) => `How tall is plant ${label} in centimeters?`,
+      total: () => "What is the total height of all the plants in centimeters?",
+      combined: (left, right) =>
+        `What is the total height of plants ${left} and ${right} in centimeters?`,
+      difference: (larger, smaller) =>
+        `How many centimeters taller is plant ${larger} than plant ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "centimeter")}`,
+  },
 ];
 
 const HEBREW_NIKKUD_OVERRIDES = {
@@ -1082,31 +1258,42 @@ function createStatisticsDataQuestion(difficulty) {
 
 function createChartsAndGraphsQuestion(difficulty) {
   const generators =
-    difficulty <= 2
+    difficulty === 1
       ? [
           createBarMostQuestion,
           createBarFewestQuestion,
           createBarExactQuestion,
+          createTableFewestQuestion,
           createTableMostQuestion,
           createTableExactQuestion,
           createBarTotalQuestion,
+          createTableTotalQuestion,
         ]
-      : difficulty <= 4
+      : difficulty <= 3
         ? [
             createBarMostQuestion,
             createBarFewestQuestion,
+            createBarSecondMostQuestion,
             createBarExactQuestion,
             createBarTotalQuestion,
             createBarDifferenceQuestion,
+            createTableFewestQuestion,
             createTableMostQuestion,
+            createTableSecondMostQuestion,
             createTableExactQuestion,
             createTableTotalQuestion,
             createTableDifferenceQuestion,
           ]
         : [
+            createBarMostQuestion,
+            createBarFewestQuestion,
+            createBarSecondMostQuestion,
             createBarExactQuestion,
             createBarTotalQuestion,
             createBarDifferenceQuestion,
+            createTableFewestQuestion,
+            createTableMostQuestion,
+            createTableSecondMostQuestion,
             createTableExactQuestion,
             createTableTotalQuestion,
             createTableCombinedQuestion,
@@ -1123,7 +1310,23 @@ function createBarMostQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: "Look at the graph. Which label has the most?",
+    questionText: buildChartQuestionText(dataset, "most"),
+    visualHtml: renderBarChartVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createBarSecondMostQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "bar");
+  const answerItem = dataset.sortedByValue[dataset.sortedByValue.length - 2];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: buildChartQuestionText(dataset, "secondMost"),
     visualHtml: renderBarChartVisual(dataset),
     visualSummary: dataset.summary,
     options: shuffleArray(dataset.items.map((item) => item.label)),
@@ -1139,7 +1342,7 @@ function createBarFewestQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: "Look at the graph. Which label has the fewest?",
+    questionText: buildChartQuestionText(dataset, "fewest"),
     visualHtml: renderBarChartVisual(dataset),
     visualSummary: dataset.summary,
     options: shuffleArray(dataset.items.map((item) => item.label)),
@@ -1155,7 +1358,7 @@ function createBarExactQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: `Look at the graph. How many does ${answerItem.label} have?`,
+    questionText: buildChartQuestionText(dataset, "exact", answerItem.label),
     visualHtml: renderBarChartVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answerItem.value, difficulty),
@@ -1171,7 +1374,7 @@ function createBarTotalQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: "Look at the graph. What is the total?",
+    questionText: buildChartQuestionText(dataset, "total"),
     visualHtml: renderBarChartVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answer, difficulty, answer + 3),
@@ -1188,7 +1391,7 @@ function createBarDifferenceQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: `Look at the graph. How many more does ${larger.label} have than ${smaller.label}?`,
+    questionText: buildChartQuestionText(dataset, "difference", larger.label, smaller.label),
     visualHtml: renderBarChartVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answer, difficulty),
@@ -1204,7 +1407,39 @@ function createTableMostQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: "Look at the table. Which row has the biggest number?",
+    questionText: buildChartQuestionText(dataset, "most"),
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createTableSecondMostQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const answerItem = dataset.sortedByValue[dataset.sortedByValue.length - 2];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: buildChartQuestionText(dataset, "secondMost"),
+    visualHtml: renderTableVisual(dataset),
+    visualSummary: dataset.summary,
+    options: shuffleArray(dataset.items.map((item) => item.label)),
+    answerValue: answerItem.label,
+    answerLabel: answerItem.label,
+  });
+}
+
+function createTableFewestQuestion(difficulty) {
+  const dataset = buildChartDataset(difficulty, "table");
+  const answerItem = dataset.sortedByValue[0];
+
+  return createVisualChoiceQuestion({
+    type: "charts-and-graphs-choice",
+    difficulty,
+    questionText: buildChartQuestionText(dataset, "fewest"),
     visualHtml: renderTableVisual(dataset),
     visualSummary: dataset.summary,
     options: shuffleArray(dataset.items.map((item) => item.label)),
@@ -1220,7 +1455,7 @@ function createTableExactQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: `Look at the table. What number is in the ${answerItem.label} row?`,
+    questionText: buildChartQuestionText(dataset, "exact", answerItem.label),
     visualHtml: renderTableVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answerItem.value, difficulty),
@@ -1236,7 +1471,7 @@ function createTableTotalQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: "Look at the table. What is the total?",
+    questionText: buildChartQuestionText(dataset, "total"),
     visualHtml: renderTableVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answer, difficulty, answer + 4),
@@ -1253,7 +1488,7 @@ function createTableCombinedQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: `Look at the table. What is ${pair[0].label} plus ${pair[1].label}?`,
+    questionText: buildChartQuestionText(dataset, "combined", pair[0].label, pair[1].label),
     visualHtml: renderTableVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answer, difficulty, answer + 5),
@@ -1270,7 +1505,7 @@ function createTableDifferenceQuestion(difficulty) {
   return createVisualChoiceQuestion({
     type: "charts-and-graphs-choice",
     difficulty,
-    questionText: `Look at the table. How many more is ${pair[0].label} than ${pair[1].label}?`,
+    questionText: buildChartQuestionText(dataset, "difference", pair[0].label, pair[1].label),
     visualHtml: renderTableVisual(dataset),
     visualSummary: dataset.summary,
     options: buildVisualNumberOptions(answer, difficulty),
@@ -1301,8 +1536,26 @@ function buildChartDataset(difficulty, visualType) {
     items,
     visualType,
     sortedByValue: [...items].sort((left, right) => left.value - right.value),
-    summary: `${template.title}: ${items.map((item) => `${item.label} ${item.value}`).join(", ")}`,
+    summary: buildChartSummary(template, items),
   };
+}
+
+function buildChartQuestionText(dataset, promptName, ...args) {
+  const promptBuilder = dataset.prompts?.[promptName];
+  if (typeof promptBuilder !== "function") {
+    throw new Error(`Missing chart prompt: ${promptName}`);
+  }
+
+  const visualName = dataset.visualType === "bar" ? "graph" : "table";
+  return `Look at the ${visualName}. ${promptBuilder(...args)}`;
+}
+
+function buildChartSummary(template, items) {
+  if (typeof template.summaryItem === "function") {
+    return `${template.title}: ${items.map((item) => template.summaryItem(item)).join(", ")}`;
+  }
+
+  return `${template.title}: ${items.map((item) => `${item.label} ${item.value}`).join(", ")}`;
 }
 
 function renderBarChartVisual(dataset) {
@@ -1603,31 +1856,62 @@ function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
 
 function formatQuestionReview(question, selectedValue) {
   const lines = [];
+  const addLine = (content, className = "") => {
+    const classAttribute = className ? ` class="${className}"` : "";
+    lines.push(`<div${classAttribute}>${content}</div>`);
+  };
 
   if (question.questionText) {
-    lines.push(question.questionText);
+    addLine(escapeHtml(question.questionText), "feedback-review-line feedback-review-question");
   }
 
   if (question.displayText) {
-    lines.push(question.displayText);
+    addLine(escapeHtml(question.displayText), "feedback-review-line");
   }
 
   if (question.visualSummary) {
-    lines.push(question.visualSummary);
+    addLine(escapeHtml(question.visualSummary), "feedback-review-line");
   }
 
   if (Array.isArray(question.options) && question.options.length) {
     question.options.forEach((option, index) => {
-      const markerText = option === selectedValue ? "  [your answer]" : "";
-      lines.push(`${OPTION_LABELS[index]}) ${option}${markerText}`);
+      const optionClasses = ["feedback-review-line", "feedback-review-option"];
+      if (option === selectedValue) {
+        optionClasses.push("selected");
+      }
+      if (option === question.answerValue) {
+        optionClasses.push("correct");
+      }
+
+      addLine(
+        `<span class="feedback-review-option-label">${OPTION_LABELS[index]})</span> ` +
+          `<span class="feedback-review-option-text">${escapeHtml(option)}</span>`,
+        optionClasses.join(" ")
+      );
     });
   } else if (selectedValue !== "") {
-    lines.push(`Your answer: ${selectedValue}`);
+    lines.push('<div class="feedback-review-spacer"></div>');
+    addLine(
+      `<span class="feedback-review-label">Your answer:</span> ` +
+        `<span class="feedback-review-answer selected">${escapeHtml(String(selectedValue))}</span>`,
+      "feedback-review-line"
+    );
+    lines.push('<div class="feedback-review-spacer"></div>');
+    addLine(
+      `<span class="feedback-review-label">Correct answer:</span> ` +
+        `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
+      "feedback-review-line"
+    );
+  } else {
+    lines.push('<div class="feedback-review-spacer"></div>');
+    addLine(
+      `<span class="feedback-review-label">Correct answer:</span> ` +
+        `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
+      "feedback-review-line"
+    );
   }
 
-  lines.push("");
-  lines.push(`Correct answer: ${question.answerLabel}`);
-  return lines.join("\n");
+  return `<div class="feedback-review">${lines.join("")}</div>`;
 }
 
 function finishSession() {
@@ -1678,7 +1962,7 @@ function renderProgressTracker() {
 }
 
 function renderFeedback() {
-  elements.feedback.textContent = state.feedbackMessage;
+  elements.feedback.innerHTML = state.feedbackMessage;
   elements.feedback.className = state.feedbackMessage
     ? `feedback-banner ${state.feedbackTone}`
     : "feedback-banner";
@@ -2419,6 +2703,10 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#39;");
+}
+
+function formatUnitCount(value, singular, plural = `${singular}s`) {
+  return `${value} ${value === 1 ? singular : plural}`;
 }
 
 function capitalize(value) {
