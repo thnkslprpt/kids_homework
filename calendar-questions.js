@@ -485,3 +485,321 @@ CALENDAR_QUESTIONS.push(
     },
   ]
 );
+
+const CALENDAR_DAY_NAMES = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
+const CALENDAR_MONTHS = [
+  { name: "January", days: 31 },
+  { name: "February", days: 28 },
+  { name: "March", days: 31 },
+  { name: "April", days: 30 },
+  { name: "May", days: 31 },
+  { name: "June", days: 30 },
+  { name: "July", days: 31 },
+  { name: "August", days: 31 },
+  { name: "September", days: 30 },
+  { name: "October", days: 31 },
+  { name: "November", days: 30 },
+  { name: "December", days: 31 },
+];
+
+function createCalendarGeneratedEntry(difficulty) {
+  const level = calendarClampDifficulty(difficulty);
+  const generators = {
+    1: [
+      createCalendarNextMonthQuestion,
+      createCalendarTomorrowQuestion,
+      createCalendarDaysInWeekQuestion,
+      createCalendarMonthCountQuestion,
+    ],
+    2: [
+      createCalendarDayOffsetQuestion,
+      createCalendarMonthRelationQuestion,
+      createCalendarYesterdayQuestion,
+      createCalendarFebruaryQuestion,
+    ],
+    3: [
+      createCalendarDaysBetweenDatesQuestion,
+      createCalendarWeeksQuestion,
+      createCalendarDateShiftQuestion,
+      createCalendarLeapYearQuestion,
+    ],
+    4: [
+      createCalendarDayOffsetQuestion,
+      createCalendarMonthOffsetQuestion,
+      createCalendarDateShiftQuestion,
+      createCalendarWeeksQuestion,
+    ],
+    5: [
+      createCalendarDateShiftQuestion,
+      createCalendarMonthOffsetQuestion,
+      createCalendarCommonYearQuestion,
+      createCalendarDaysBetweenDatesQuestion,
+    ],
+  };
+
+  return calendarRandomChoice(generators[level])();
+}
+
+function createCalendarNextMonthQuestion() {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 2);
+  const answer = CALENDAR_MONTHS[monthIndex + 1].name;
+  return {
+    question: `Which month comes after ${CALENDAR_MONTHS[monthIndex].name}?`,
+    options: calendarMakeMonthOptions(answer),
+    answer,
+    difficulty: 1,
+  };
+}
+
+function createCalendarTomorrowQuestion() {
+  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const answer = CALENDAR_DAY_NAMES[(dayIndex + 1) % CALENDAR_DAY_NAMES.length];
+  return {
+    question: `If today is ${CALENDAR_DAY_NAMES[dayIndex]}, what day will it be tomorrow?`,
+    options: calendarMakeDayOptions(answer),
+    answer,
+    difficulty: 1,
+  };
+}
+
+function createCalendarDaysInWeekQuestion() {
+  return {
+    question: "How many days are in 1 week?",
+    options: calendarMakeNumberOptions("7", [5, 6, 8, 9]),
+    answer: "7",
+    difficulty: 1,
+  };
+}
+
+function createCalendarMonthCountQuestion() {
+  return {
+    question: "How many months are in a year?",
+    options: calendarMakeNumberOptions("12", [10, 11, 13, 14]),
+    answer: "12",
+    difficulty: 1,
+  };
+}
+
+function createCalendarDayOffsetQuestion() {
+  const startIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const offset = calendarRandomInt(2, 6);
+  const answer = CALENDAR_DAY_NAMES[(startIndex + offset) % CALENDAR_DAY_NAMES.length];
+  return {
+    question: `If today is ${CALENDAR_DAY_NAMES[startIndex]}, what day will it be in ${offset} days?`,
+    options: calendarMakeDayOptions(answer),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createCalendarMonthRelationQuestion() {
+  const monthIndex = calendarRandomInt(1, CALENDAR_MONTHS.length - 2);
+  const direction = calendarRandomChoice(["before", "after"]);
+  const answerIndex = direction === "before" ? monthIndex - 1 : monthIndex + 1;
+  const answer = CALENDAR_MONTHS[answerIndex].name;
+  return {
+    question: `Which month comes ${direction} ${CALENDAR_MONTHS[monthIndex].name}?`,
+    options: calendarMakeMonthOptions(answer),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createCalendarYesterdayQuestion() {
+  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const answer = CALENDAR_DAY_NAMES[(dayIndex + CALENDAR_DAY_NAMES.length - 1) % CALENDAR_DAY_NAMES.length];
+  return {
+    question: `If today is ${CALENDAR_DAY_NAMES[dayIndex]}, what day was it yesterday?`,
+    options: calendarMakeDayOptions(answer),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createCalendarFebruaryQuestion() {
+  return {
+    question: "Which month has 28 or 29 days?",
+    options: calendarMakeMonthOptions("February"),
+    answer: "February",
+    difficulty: 2,
+  };
+}
+
+function createCalendarDaysBetweenDatesQuestion() {
+  const startMonth = calendarRandomInt(0, CALENDAR_MONTHS.length - 2);
+  const startDay = calendarRandomInt(1, Math.min(20, CALENDAR_MONTHS[startMonth].days - 1));
+  const endDay = startDay + calendarRandomInt(3, 7);
+  const answer = String(endDay - startDay);
+  return {
+    question: `If a trip starts on the ${startDay}th and ends on the ${endDay}th, how many days are between those dates?`,
+    options: calendarMakeNumberOptions(answer, calendarBuildNearbyNumbers(answer, 3, 1)),
+    answer,
+    difficulty: 3,
+  };
+}
+
+function createCalendarWeeksQuestion() {
+  const weeks = calendarRandomChoice([2, 3, 4, 5, 6, 8]);
+  const answer = String(weeks * 7);
+  return {
+    question: `How many days are in ${weeks} weeks?`,
+    options: calendarMakeNumberOptions(answer, calendarBuildNearbyNumbers(answer, 14, 7)),
+    answer,
+    difficulty: 3,
+  };
+}
+
+function createCalendarDateShiftQuestion() {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
+  const day = calendarRandomInt(1, Math.min(20, CALENDAR_MONTHS[monthIndex].days - 7));
+  const shift = calendarRandomChoice([3, 5, 7, 10, 14, 21]);
+  const answerDate = calendarAddDays(monthIndex, day, shift);
+  const answer = calendarFormatDate(answerDate.monthIndex, answerDate.day);
+  const options = calendarBuildDateOptions(answerDate.monthIndex, answerDate.day, [1, 2, 3, -1, -2, -3]);
+
+  return {
+    question: `What date is ${shift} days after ${CALENDAR_MONTHS[monthIndex].name} ${day}?`,
+    options,
+    answer,
+    difficulty: 3,
+  };
+}
+
+function createCalendarLeapYearQuestion() {
+  return {
+    question: "How many days are in February during a leap year?",
+    options: calendarMakeNumberOptions("29", [28, 30, 31, 32]),
+    answer: "29",
+    difficulty: 3,
+  };
+}
+
+function createCalendarMonthOffsetQuestion() {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
+  const offset = calendarRandomChoice([2, 3, 4, 5]);
+  const answer = CALENDAR_MONTHS[(monthIndex + offset) % CALENDAR_MONTHS.length].name;
+  return {
+    question: `Which month is ${offset} months after ${CALENDAR_MONTHS[monthIndex].name}?`,
+    options: calendarMakeMonthOptions(answer),
+    answer,
+    difficulty: 4,
+  };
+}
+
+function createCalendarCommonYearQuestion() {
+  return {
+    question: "How many days are in a common year?",
+    options: calendarMakeNumberOptions("365", [360, 364, 366, 370]),
+    answer: "365",
+    difficulty: 5,
+  };
+}
+
+function calendarMakeDayOptions(answer) {
+  return calendarBuildOptions(answer, CALENDAR_DAY_NAMES);
+}
+
+function calendarMakeMonthOptions(answer) {
+  return calendarBuildOptions(answer, CALENDAR_MONTHS.map((month) => month.name));
+}
+
+function calendarMakeNumberOptions(answer, candidates) {
+  return calendarBuildOptions(answer, candidates.map(String));
+}
+
+function calendarBuildNearbyNumbers(answer, spread, step) {
+  const value = Number(answer);
+  if (!Number.isFinite(value)) {
+    return [];
+  }
+
+  return [value - spread, value - step, value + step, value + spread]
+    .map((number) => String(Math.max(1, Math.round(number))))
+    .filter((option) => option !== String(answer));
+}
+
+function calendarBuildDateOptions(monthIndex, day, offsets) {
+  const answer = calendarFormatDate(monthIndex, day);
+  return calendarBuildOptions(
+    answer,
+    offsets.map((offset) => {
+      const date = calendarAddDays(monthIndex, day, offset);
+      return calendarFormatDate(date.monthIndex, date.day);
+    })
+  );
+}
+
+function calendarBuildOptions(answer, candidates) {
+  const options = [String(answer)];
+  const uniqueCandidates = Array.from(new Set(candidates.map(String))).filter((candidate) => candidate !== String(answer));
+  const shuffledCandidates = calendarShuffle(uniqueCandidates);
+
+  while (options.length < 4 && shuffledCandidates.length) {
+    options.push(shuffledCandidates.shift());
+  }
+
+  while (options.length < 4) {
+    const fallback = `${answer} ${options.length}`;
+    if (!options.includes(fallback)) {
+      options.push(fallback);
+    }
+  }
+
+  return calendarShuffle(options);
+}
+
+function calendarAddDays(monthIndex, day, delta) {
+  let currentMonth = monthIndex;
+  let currentDay = day + delta;
+
+  while (currentDay > CALENDAR_MONTHS[currentMonth].days) {
+    currentDay -= CALENDAR_MONTHS[currentMonth].days;
+    currentMonth = (currentMonth + 1) % CALENDAR_MONTHS.length;
+  }
+
+  while (currentDay < 1) {
+    currentMonth = (currentMonth - 1 + CALENDAR_MONTHS.length) % CALENDAR_MONTHS.length;
+    currentDay += CALENDAR_MONTHS[currentMonth].days;
+  }
+
+  return { monthIndex: currentMonth, day: currentDay };
+}
+
+function calendarFormatDate(monthIndex, day) {
+  return `${CALENDAR_MONTHS[monthIndex].name} ${day}`;
+}
+
+function calendarClampDifficulty(difficulty) {
+  const value = Number(difficulty);
+  if (!Number.isInteger(value)) {
+    return 1;
+  }
+
+  return Math.min(5, Math.max(1, value));
+}
+
+function calendarRandomChoice(values) {
+  return values[calendarRandomInt(0, values.length - 1)];
+}
+
+function calendarRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function calendarShuffle(values) {
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = calendarRandomInt(0, index);
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}

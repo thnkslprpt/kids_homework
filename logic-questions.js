@@ -1080,3 +1080,335 @@ const LOGIC_QUESTIONS = [
     difficulty: 5,
   },
 ];
+
+function createLogicGeneratedEntry(difficulty) {
+  const level = logicClampDifficulty(difficulty);
+  const generatorsByLevel = {
+    1: [
+      logicCreateSequenceQuestion,
+      logicCreateOrderQuestion,
+      logicCreateSimpleSyllogismQuestion,
+    ],
+    2: [
+      logicCreateLetterSequenceQuestion,
+      logicCreateEliminationQuestion,
+      logicCreateOddOneOutQuestion,
+    ],
+    3: [
+      logicCreateSequenceQuestion,
+      logicCreateOrderQuestion,
+      logicCreateTwoStepLogicQuestion,
+    ],
+    4: [
+      logicCreateLogicGridQuestion,
+      logicCreateEliminationQuestion,
+      logicCreateSequenceQuestion,
+    ],
+    5: [
+      logicCreateLogicGridQuestion,
+      logicCreateTwoStepLogicQuestion,
+      logicCreateOddOneOutQuestion,
+    ],
+  };
+
+  return logicRandomChoice(generatorsByLevel[level])();
+}
+
+function logicCreateSequenceQuestion() {
+  const templates = [
+    { start: 4, step: 4, options: ["12", "16", "18", "20"], answer: "16", difficulty: 1 },
+    { start: 1, step: 3, options: ["8", "9", "10", "11"], answer: "10", difficulty: 2 },
+    { start: 10, step: -2, options: ["2", "4", "6", "8"], answer: "4", difficulty: 3 },
+    { start: 3, step: 6, options: ["15", "18", "21", "24"], answer: "21", difficulty: 4 },
+    { start: 2, step: 4, options: ["14", "16", "18", "20"], answer: "18", difficulty: 5 },
+  ];
+  const pick = logicRandomChoice(templates);
+  const answerNumber = Number(pick.answer);
+  return {
+    question: `What comes next in the pattern: ${pick.start}, ${pick.start + pick.step}, ${pick.start + pick.step * 2}, ${pick.start + pick.step * 3}, __`,
+    options: logicShuffle(
+      pick.options.map(String).includes(String(answerNumber))
+        ? pick.options.map(String)
+        : logicBuildNumericOptions(String(answerNumber), pick.step)
+    ),
+    answer: String(answerNumber),
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateLetterSequenceQuestion() {
+  const templates = [
+    { letters: ["A", "C", "E", "G"], answer: "I", options: ["H", "I", "J", "K"], difficulty: 2 },
+    { letters: ["B", "D", "F", "H"], answer: "J", options: ["I", "J", "K", "L"], difficulty: 2 },
+    { letters: ["Z", "X", "V", "T"], answer: "R", options: ["R", "S", "U", "W"], difficulty: 3 },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: `Which letter comes next: ${pick.letters.join(", ")}, __`,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateOrderQuestion() {
+  const templates = [
+    {
+      question: "Mina is taller than Omar. Omar is taller than Lior. Who is tallest?",
+      options: ["Mina", "Omar", "Lior", "You cannot tell"],
+      answer: "Mina",
+      difficulty: 1,
+    },
+    {
+      question: "Sam finished before Lee. Lee finished before Noor. Who finished last?",
+      options: ["Sam", "Lee", "Noor", "They tied"],
+      answer: "Noor",
+      difficulty: 2,
+    },
+    {
+      question: "Gabriel is left of Noga. Noga is left of Eden. Who is in the middle?",
+      options: ["Gabriel", "Noga", "Eden", "No one"],
+      answer: "Noga",
+      difficulty: 2,
+    },
+    {
+      question: "Maya is shorter than Omar but taller than Lior. Who is tallest?",
+      options: ["Maya", "Omar", "Lior", "Maya and Omar"],
+      answer: "Omar",
+      difficulty: 5,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateSimpleSyllogismQuestion() {
+  const templates = [
+    {
+      question: "If every robin is a bird and this animal is a robin, what is it also?",
+      options: ["A fish", "A bird", "A reptile", "A mammal"],
+      answer: "A bird",
+      difficulty: 1,
+    },
+    {
+      question: "If every frog is an animal and this is a frog, what is it?",
+      options: ["A plant", "An animal", "A rock", "A toy"],
+      answer: "An animal",
+      difficulty: 1,
+    },
+    {
+      question: "If all tulips are flowers and all flowers are plants, what must be true?",
+      options: ["Tulips are trees", "Tulips are plants", "All plants are tulips", "Flowers are not plants"],
+      answer: "Tulips are plants",
+      difficulty: 3,
+    },
+    {
+      question: "If every rectangle has 4 sides and this shape is a rectangle, what must be true?",
+      options: ["It is a four-sided shape", "It is a triangle", "It is a circle", "It is not a shape"],
+      answer: "It is a four-sided shape",
+      difficulty: 5,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateEliminationQuestion() {
+  const templates = [
+    {
+      question: "The toy is not in the box. It is either on the shelf or under the bed. The bed is empty. Where is the toy?",
+      options: ["In the box", "On the shelf", "Under the bed", "In the closet"],
+      answer: "On the shelf",
+      difficulty: 4,
+    },
+    {
+      question: "The red coin is not in Box A. It is in Box B or Box C. Box C is empty. Where is the red coin?",
+      options: ["Box A", "Box B", "Box C", "It is missing"],
+      answer: "Box B",
+      difficulty: 4,
+    },
+    {
+      question: "The snack is not in the top drawer. The middle drawer is empty. Where is the snack?",
+      options: ["Top drawer", "Middle drawer", "Bottom drawer", "It is nowhere"],
+      answer: "Bottom drawer",
+      difficulty: 5,
+    },
+    {
+      question: "The gem is in box A, B, C, or D. It is not in A, C, or D. Where is it?",
+      options: ["A", "B", "C", "D"],
+      answer: "B",
+      difficulty: 5,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateOddOneOutQuestion() {
+  const templates = [
+    {
+      question: "Which number does not belong?",
+      options: ["2", "4", "6", "9"],
+      answer: "9",
+      difficulty: 1,
+    },
+    {
+      question: "Which does not belong?",
+      options: ["Elbow", "Knee", "Banana", "Ankle"],
+      answer: "Banana",
+      difficulty: 2,
+    },
+    {
+      question: "Which set follows the same rule as 2, 5, 8, 11?",
+      options: ["4, 7, 10, 13", "3, 6, 12, 24", "1, 4, 9, 16", "5, 9, 10, 18"],
+      answer: "4, 7, 10, 13",
+      difficulty: 4,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateTwoStepLogicQuestion() {
+  const templates = [
+    {
+      question: "If all bloops are razzies and all razzies are blue, what must be true about a bloop?",
+      options: ["It is blue", "It is red", "It is not a razzy", "It is a number"],
+      answer: "It is blue",
+      difficulty: 1,
+    },
+    {
+      question: "If no cats are dogs and Pip is a cat, what do we know?",
+      options: ["Pip is a dog", "Pip is not a dog", "Pip is a fish", "We know nothing"],
+      answer: "Pip is not a dog",
+      difficulty: 2,
+    },
+    {
+      question: "If every maple is a tree and every tree needs water, what must be true about a maple?",
+      options: ["It needs water", "It is a fish", "It has wheels", "It is a rock"],
+      answer: "It needs water",
+      difficulty: 5,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateLogicGridQuestion() {
+  const templates = [
+    {
+      question: "A code changes 2 to 5, 4 to 7, and 6 to 9. What should 8 change to?",
+      options: ["9", "10", "11", "12"],
+      answer: "11",
+      difficulty: 4,
+    },
+    {
+      question: "A machine changes 3 to 8, 4 to 10, and 5 to 12. What does 9 become?",
+      options: ["18", "19", "20", "21"],
+      answer: "20",
+      difficulty: 5,
+    },
+    {
+      question: "If the machine adds 4 and then doubles, what does 3 become?",
+      options: ["12", "13", "14", "15"],
+      answer: "14",
+      difficulty: 5,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicBuildNumericOptions(answer, step) {
+  const value = Number(answer);
+  const candidates = [
+    value - Math.abs(step || 1),
+    value - 2,
+    value + 2,
+    value + Math.abs(step || 1),
+  ]
+    .map((candidate) => String(candidate))
+    .filter((candidate) => candidate !== String(answer));
+  return logicBuildOptions(String(answer), candidates);
+}
+
+function logicBuildOptions(answer, candidates) {
+  const options = [String(answer)];
+  for (const candidate of logicShuffle(Array.from(new Set(candidates.map(String))))) {
+    if (!options.includes(candidate)) {
+      options.push(candidate);
+    }
+    if (options.length === 4) {
+      break;
+    }
+  }
+
+  while (options.length < 4) {
+    const fallback = `${answer} ${options.length}`;
+    if (!options.includes(fallback)) {
+      options.push(fallback);
+    }
+  }
+
+  return logicShuffle(options);
+}
+
+function logicClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function logicRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function logicShuffle(values) {
+  if (typeof shuffleArray === "function") {
+    return shuffleArray(values);
+  }
+
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}

@@ -485,3 +485,187 @@ MEASUREMENT_QUESTIONS.push(
     },
   ]
 );
+
+function createMeasurementGeneratedEntry(difficulty) {
+  const generators = {
+    1: [
+      () => {
+        const prompts = [
+          {
+            item: "pencil",
+            answer: "Centimeters",
+            options: ["Centimeters", "Kilograms", "Liters", "Hours"],
+          },
+          {
+            item: "apple",
+            answer: "Grams",
+            options: ["Grams", "Liters", "Meters", "Hours"],
+          },
+          {
+            item: "juice in a cup",
+            answer: "Milliliters",
+            options: ["Milliliters", "Kilometers", "Grams", "Hours"],
+          },
+          {
+            item: "classroom",
+            answer: "Meters",
+            options: ["Meters", "Grams", "Liters", "Seconds"],
+          },
+        ];
+        const pick = randomChoice(prompts);
+        return {
+          question: `Which unit is best for measuring the ${pick.item}?`,
+          options: shuffleArray([...pick.options]),
+          answer: pick.answer,
+          difficulty: 1,
+        };
+      },
+      () => {
+        const value = randomChoice([2, 3, 4, 5, 6]);
+        return {
+          question: `How many centimeters are in ${value} meters?`,
+          options: shuffleArray([
+            String(value * 10),
+            String(value * 100),
+            String(value * 1_000),
+            String(value * 10_000),
+          ]),
+          answer: String(value * 100),
+          difficulty: 1,
+        };
+      },
+    ],
+    2: [
+      () => {
+        const liters = randomChoice([1, 2, 3, 4]);
+        const answer = liters * 1_000;
+        return {
+          question: `How many grams are in ${liters} kilograms?`,
+          options: shuffleArray([
+            String(liters * 100),
+            String(liters * 500),
+            String(answer),
+            String(liters * 10_000),
+          ]),
+          answer: String(answer),
+          difficulty: 2,
+        };
+      },
+      () => {
+        const left = randomChoice([120, 150, 180, 200]);
+        const right = left - randomChoice([10, 20, 30, 40]);
+        const answer = `${left} centimeters`;
+        const question = `Which is longer: ${left} centimeters or ${right} centimeters?`;
+        return {
+          question,
+          options: shuffleArray([
+            `${left} centimeters`,
+            `${right} centimeters`,
+            "They are equal",
+            "It depends on the color",
+          ]),
+          answer,
+          difficulty: 2,
+        };
+      },
+    ],
+    3: [
+      () => {
+        const meters = randomChoice([2, 3, 4, 5]);
+        return {
+          question: `${meters} meters is the same as how many centimeters?`,
+          options: shuffleArray([
+            String(meters * 10),
+            String(meters * 100),
+            String(meters * 1_000),
+            String(meters * 10_000),
+          ]),
+          answer: String(meters * 100),
+          difficulty: 3,
+        };
+      },
+      () => {
+        const milliliters = randomChoice([250, 500, 750]);
+        const addend = 1_000 - milliliters;
+        return {
+          question: `${milliliters} milliliters plus ${addend} milliliters equals:`,
+          options: shuffleArray([
+            "500 milliliters",
+            "900 milliliters",
+            "1 liter",
+            "2 liters",
+          ]),
+          answer: "1 liter",
+          difficulty: 3,
+        };
+      },
+    ],
+    4: [
+      () => {
+        const milliliters = randomChoice([1_250, 1_500, 2_250]);
+        const answer = `${milliliters / 1_000} liters`;
+        return {
+          question: `${milliliters.toLocaleString()} milliliters is the same as:`,
+          options: shuffleArray([
+            answer,
+            `${milliliters / 100} liters`,
+            `${milliliters / 10} liters`,
+            `${milliliters / 1_000_000} liters`,
+          ]),
+          answer,
+          difficulty: 4,
+        };
+      },
+      () => {
+        const liters = randomChoice([2, 4, 6, 8]);
+        const answer = liters * 2;
+        return {
+          question: `A recipe needs ${liters} liters of water. How many 500-milliliter bottles is that?`,
+          options: shuffleArray([
+            String(answer - 1),
+            String(answer),
+            String(answer + 1),
+            String(answer + 2),
+          ].map((value) => `${value} bottles`)),
+          answer: `${answer} bottles`,
+          difficulty: 4,
+        };
+      },
+    ],
+    5: [
+      () => {
+        const grams = randomChoice([750, 1_500, 2_500, 6_000]);
+        const answer = `${grams / 1_000} kilograms`;
+        return {
+          question: `${grams.toLocaleString()} grams is the same as:`,
+          options: shuffleArray([
+            answer,
+            `${grams / 100} kilograms`,
+            `${grams / 10} kilograms`,
+            `${grams / 1_000_000} kilograms`,
+          ]),
+          answer,
+          difficulty: 5,
+        };
+      },
+      () => {
+        const meters = randomChoice([250, 500, 750]);
+        const answer = `${meters / 100} meters`;
+        return {
+          question: `${meters} centimeters is the same as:`,
+          options: shuffleArray([
+            answer,
+            `${meters / 10} meters`,
+            `${meters / 1_000} meters`,
+            `${meters * 10} meters`,
+          ]),
+          answer,
+          difficulty: 5,
+        };
+      },
+    ],
+  };
+
+  const level = generators[difficulty] ? difficulty : 1;
+  return randomChoice(generators[level])();
+}

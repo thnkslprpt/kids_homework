@@ -1473,3 +1473,218 @@ SCIENCE_QUESTIONS.push(
     }
   ]
 );
+
+const SCIENCE_PLANETS = [
+  {
+    question: "Which planet is known as the Red Planet?",
+    answer: "Mars",
+    options: ["Mars", "Venus", "Jupiter", "Mercury"],
+    difficulty: 1,
+  },
+  {
+    question: "Which planet is the largest in our Solar System?",
+    answer: "Jupiter",
+    options: ["Saturn", "Earth", "Jupiter", "Mars"],
+    difficulty: 1,
+  },
+  {
+    question: "Which planet is closest to the Sun?",
+    answer: "Mercury",
+    options: ["Earth", "Mercury", "Venus", "Mars"],
+    difficulty: 2,
+  },
+  {
+    question: "Which planet has rings?",
+    answer: "Saturn",
+    options: ["Mars", "Saturn", "Venus", "Neptune"],
+    difficulty: 2,
+  },
+];
+
+const SCIENCE_BODY = [
+  {
+    question: "Which organ pumps blood around the body?",
+    answer: "Heart",
+    options: ["Lungs", "Heart", "Brain", "Stomach"],
+    difficulty: 1,
+  },
+  {
+    question: "Which organ helps you breathe?",
+    answer: "Lungs",
+    options: ["Lungs", "Kidneys", "Bones", "Teeth"],
+    difficulty: 1,
+  },
+  {
+    question: "Which body part helps protect the brain?",
+    answer: "Skull",
+    options: ["Skull", "Skin", "Tongue", "Nails"],
+    difficulty: 2,
+  },
+  {
+    question: "What is the job of the skeleton?",
+    answer: "It supports the body",
+    options: [
+      "It makes sunlight",
+      "It supports the body",
+      "It digests food",
+      "It turns blood blue",
+    ],
+    difficulty: 2,
+  },
+];
+
+const SCIENCE_PLANTS = [
+  {
+    question: "What do roots mainly do?",
+    answer: "Take in water and hold the plant in place",
+    options: [
+      "Take in water and hold the plant in place",
+      "Make the leaves fall off",
+      "Turn into flowers",
+      "Make rocks grow",
+    ],
+    difficulty: 1,
+  },
+  {
+    question: "What do leaves mainly do?",
+    answer: "Make food for the plant",
+    options: [
+      "Make food for the plant",
+      "Pump blood",
+      "Hold the soil together",
+      "Make bones",
+    ],
+    difficulty: 1,
+  },
+  {
+    question: "What carries water up through a plant?",
+    answer: "The stem",
+    options: ["The stem", "The flower", "The seeds", "The fruit"],
+    difficulty: 2,
+  },
+  {
+    question: "What helps most leaves look green?",
+    answer: "Chlorophyll",
+    options: ["Chlorophyll", "Salt", "Stone", "Steam"],
+    difficulty: 2,
+  },
+];
+
+const SCIENCE_CLASSIFICATION = [
+  {
+    question: "Which animal is a mammal?",
+    answer: "Whale",
+    options: ["Whale", "Shark", "Eagle", "Frog"],
+    difficulty: 3,
+  },
+  {
+    question: "Which animal is a bird?",
+    answer: "Robin",
+    options: ["Robin", "Salmon", "Spider", "Frog"],
+    difficulty: 3,
+  },
+  {
+    question: "Which of these is a non-living thing?",
+    answer: "Rock",
+    options: ["Rock", "Tree", "Dog", "Flower"],
+    difficulty: 4,
+  },
+  {
+    question: "Which one is a type of plant?",
+    answer: "Fern",
+    options: ["Fern", "Whale", "Snake", "Ant"],
+    difficulty: 4,
+  },
+];
+
+const SCIENCE_FUNCTIONS = [
+  {
+    question: "What is the main job of lungs?",
+    answer: "To help you breathe",
+    options: ["To help you breathe", "To make bones", "To pump blood", "To make teeth"],
+    difficulty: 3,
+  },
+  {
+    question: "What is the main job of the brain?",
+    answer: "To control the body",
+    options: ["To control the body", "To make leaves green", "To hold water", "To grow hair"],
+    difficulty: 3,
+  },
+  {
+    question: "What is the main job of roots?",
+    answer: "To take in water and anchor the plant",
+    options: [
+      "To take in water and anchor the plant",
+      "To make blood",
+      "To turn into seeds",
+      "To make clouds",
+    ],
+    difficulty: 4,
+  },
+  {
+    question: "What is the main job of the flower on many plants?",
+    answer: "To help make seeds",
+    options: ["To help make seeds", "To pump blood", "To dig tunnels", "To cool the air"],
+    difficulty: 5,
+  },
+];
+
+function createScienceGeneratedEntry(difficulty) {
+  const level = scienceClampDifficulty(difficulty);
+  const generators = {
+    1: [sciencePickFromCollection(SCIENCE_PLANETS), sciencePickFromCollection(SCIENCE_BODY), sciencePickFromCollection(SCIENCE_PLANTS)],
+    2: [sciencePickFromCollection(SCIENCE_PLANETS), sciencePickFromCollection(SCIENCE_BODY), sciencePickFromCollection(SCIENCE_PLANTS)],
+    3: [sciencePickFromCollection(SCIENCE_CLASSIFICATION), sciencePickFromCollection(SCIENCE_FUNCTIONS), sciencePickFromCollection(SCIENCE_PLANTS)],
+    4: [sciencePickFromCollection(SCIENCE_CLASSIFICATION), sciencePickFromCollection(SCIENCE_FUNCTIONS), sciencePickFromCollection(SCIENCE_PLANETS)],
+    5: [sciencePickFromCollection(SCIENCE_FUNCTIONS), sciencePickFromCollection(SCIENCE_CLASSIFICATION), sciencePickFromCollection(SCIENCE_BODY)],
+  };
+
+  return {
+    ...scienceRandomChoice(generators[level])(),
+    difficulty: level,
+  };
+}
+
+function sciencePickFromCollection(collection) {
+  return () => {
+    const pool = collection.filter((entry) => entry.difficulty <= 5);
+    const entry = scienceRandomChoice(pool);
+    return {
+      question: entry.question,
+      options: scienceShuffle(entry.options),
+      answer: entry.answer,
+      difficulty: entry.difficulty,
+    };
+  };
+}
+
+function scienceClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function scienceRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function scienceShuffle(values) {
+  if (typeof shuffleArray === "function") {
+    return shuffleArray(values);
+  }
+
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}

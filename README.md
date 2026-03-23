@@ -39,26 +39,40 @@ Within math, the app uses both:
 - `Math`
   - addition and subtraction, including negative numbers down to `-20`
   - multiplication tables up to `10x10`
+  - division facts and missing-number equations
   - skip counting
   - number patterns
   - comparing numbers
+  - decimal operations and decimal comparison
+  - place value and rounding
+  - rectangle area and perimeter
+  - prime vs composite number identification
   - percentages with whole-number answers
   - money / shekel change questions
 - `Hebrew`
   - multiple-choice Hebrew word meaning questions
-  - includes nikud where helpful
+  - shows Hebrew words with nikud / vowel marks
+  - transliteration is available behind a `Show transliteration` toggle
 - `Science`
   - offline multiple-choice science bank
 - `Time`
   - questions like “In 15 minutes, what time will it be?”
 - `Statistics`
   - mean, median, mode, range, and simple data-reading questions
+- `Algebra`
+  - basic one-step equations, simple two-step equations, substitution, and function-table style prompts
+- `Visual Math`
+  - coordinate grids, number lines, angle reading, pictographs / line plots, and grid area/perimeter visuals
 - `Logic`
   - patterns, ordering, elimination, and deduction
 - `Rationality`
   - probability, evidence, fair testing, sampling, and careful conclusions
 - `General Knowledge`
   - useful ballpark facts and geography / Earth knowledge rather than obscure trivia
+- `Geography`
+  - continent identification from simple world maps
+  - country identification from shaded regional maps
+  - capital-city questions for a frozen top-50-by-population country set
 - `Population`
   - top 20 most populous countries
   - population answers rounded to the nearest `10 million`
@@ -79,14 +93,14 @@ Within math, the app uses both:
   - cardinal directions, map keys, relative position, and simple scale
 - `Digital Safety`
   - passwords, scams, private information, safe sharing, and suspicious links
-- `Media Literacy`
-  - fact vs opinion, ads, clickbait, source checking, and misleading graphs
 - `Health and First Aid`
   - basic safety, hydration, hygiene, minor first-aid basics, and emergency numbers
 - `Nutrition`
   - serving size, calories, added sugar, protein, fiber, and balanced food choices
 - `Household Problem Solving`
   - home safety, storage, laundry, cleaning labels, and simple practical tasks
+- `Fractions`
+  - visual fraction models, equivalent fractions, comparing fractions, and fractions of a set
 - `Fractions and Ratios`
   - fractions of a set, equivalent fractions, recipe scaling, and simple ratios
 - `Spatial Reasoning`
@@ -111,8 +125,9 @@ Hebrew uses a special rule:
 - A level `5` session can use Hebrew levels `1` through `5`.
 - Allowed Hebrew levels are spread evenly, instead of being weighted toward the chosen level.
 
-Math generators scale with the effective question difficulty. For example, percentage questions get
-broader and more varied as difficulty increases while still keeping answers as whole numbers.
+Math generators scale with the effective question difficulty. That now includes broader arithmetic,
+decimals, place value, and rectangle-measure questions in both typed-answer and multiple-choice
+formats.
 
 ## Previous Sessions
 
@@ -143,8 +158,11 @@ Important:
 - `hebrew-words.js`: bundled Hebrew vocabulary list
 - `science-questions.js`: bundled offline science bank
 - `general-knowledge-questions.js`: bundled offline general knowledge bank
+- `algebra-questions.js`: algebra bank and generator
+- `visual-math-questions.js`: visual math bank and generator
 - `logic-questions.js`: bundled offline logic bank
 - `rationality-questions.js`: bundled offline rationality bank
+- `geography-questions.js`: geography bank and generator
 - `population-questions.js`: top-population country bank
 - `financial-literacy-questions.js`: money skills bank
 - `measurement-questions.js`: units and measurement bank
@@ -154,10 +172,10 @@ Important:
 - `probability-questions.js`: probability bank
 - `maps-and-directions-questions.js`: map-skills bank
 - `digital-safety-questions.js`: online safety bank
-- `media-literacy-questions.js`: source/ad/media bank
 - `health-and-first-aid-questions.js`: health and first-aid bank
 - `nutrition-questions.js`: nutrition bank
 - `household-problem-solving-questions.js`: household skills bank
+- `fractions-questions.js`: fractions bank with visual models
 - `fractions-and-ratios-questions.js`: fractions and ratios bank
 - `spatial-reasoning-questions.js`: spatial reasoning bank
 
@@ -184,6 +202,7 @@ Some added fact-based questions were based on material from:
 The newer practical-skill banks were hand-authored for this app and informed by material from:
 
 - https://www.worldometers.info/geography/countries-of-the-world/
+- https://www.worldometers.info/world-population/population-by-country/
 - https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/teach/activities/exploring-saving-spending-game/
 - https://www.fda.gov/food/nutrition-facts-label/calories-nutrition-facts-label
 - https://consumer.ftc.gov/articles/heads-up

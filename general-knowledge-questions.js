@@ -551,6 +551,217 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   },
 ];
 
+function createGeneralKnowledgeGeneratedEntry(difficulty) {
+  const level = generalKnowledgeClampDifficulty(difficulty);
+  const generatorsByLevel = {
+    1: [
+      generalKnowledgeCreateContinentQuestion,
+      generalKnowledgeCreateOceanQuestion,
+      generalKnowledgeCreatePlanetQuestion,
+    ],
+    2: [
+      generalKnowledgeCreateMapVocabularyQuestion,
+      generalKnowledgeCreateContinentQuestion,
+      generalKnowledgeCreatePlanetQuestion,
+    ],
+    3: [
+      generalKnowledgeCreateMapVocabularyQuestion,
+      generalKnowledgeCreateOceanQuestion,
+      generalKnowledgeCreatePlanetQuestion,
+    ],
+    4: [
+      generalKnowledgeCreateCountryContinentQuestion,
+      generalKnowledgeCreateOceanQuestion,
+      generalKnowledgeCreatePlanetQuestion,
+    ],
+    5: [
+      generalKnowledgeCreateMapVocabularyQuestion,
+      generalKnowledgeCreateCountryContinentQuestion,
+      generalKnowledgeCreatePlanetQuestion,
+    ],
+  };
+
+  return generalKnowledgeRandomChoice(generatorsByLevel[level])();
+}
+
+function generalKnowledgeCreateContinentQuestion() {
+  const templates = [
+    {
+      question: "How many continents are there?",
+      options: ["Five", "Six", "Seven", "Eight"],
+      answer: "Seven",
+      difficulty: 1,
+    },
+    {
+      question: "Which continent has the most people?",
+      options: ["Africa", "Asia", "Europe", "South America"],
+      answer: "Asia",
+      difficulty: 2,
+    },
+    {
+      question: "Which continent is India in?",
+      options: ["Africa", "Asia", "Europe", "South America"],
+      answer: "Asia",
+      difficulty: 5,
+    },
+    {
+      question: "Which continent is the Sahara Desert mostly in?",
+      options: ["Africa", "Asia", "Europe", "Australia"],
+      answer: "Africa",
+      difficulty: 5,
+    },
+  ];
+
+  return generalKnowledgeRandomChoice(templates);
+}
+
+function generalKnowledgeCreateOceanQuestion() {
+  const templates = [
+    {
+      question: "Which ocean is the largest?",
+      options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+      answer: "Pacific Ocean",
+      difficulty: 1,
+    },
+    {
+      question: "Which ocean is between Africa, Asia, and Australia?",
+      options: ["Atlantic Ocean", "Arctic Ocean", "Pacific Ocean", "Indian Ocean"],
+      answer: "Indian Ocean",
+      difficulty: 3,
+    },
+    {
+      question: "Which ocean touches the west coast of South America?",
+      options: ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"],
+      answer: "Pacific Ocean",
+      difficulty: 4,
+    },
+    {
+      question: "Which ocean is closest to the North Pole?",
+      options: ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean", "Arctic Ocean"],
+      answer: "Arctic Ocean",
+      difficulty: 5,
+    },
+  ];
+
+  return generalKnowledgeRandomChoice(templates);
+}
+
+function generalKnowledgeCreateMapVocabularyQuestion() {
+  const templates = [
+    {
+      question: "Which map word tells how far north or south a place is?",
+      options: ["Latitude", "Longitude", "Legend", "Scale"],
+      answer: "Latitude",
+      difficulty: 3,
+    },
+    {
+      question: "Which tool helps you find north, south, east, and west?",
+      options: ["Thermometer", "Compass", "Ruler", "Scale"],
+      answer: "Compass",
+      difficulty: 3,
+    },
+    {
+      question: "What does the word 'hemisphere' mean?",
+      options: ["One map symbol", "One half of Earth", "A country border", "A weather report"],
+      answer: "One half of Earth",
+      difficulty: 4,
+    },
+    {
+      question: "What is the line of 0 degrees longitude called?",
+      options: ["Equator", "Prime Meridian", "Arctic Circle", "Tropic of Cancer"],
+      answer: "Prime Meridian",
+      difficulty: 5,
+    },
+  ];
+
+  return generalKnowledgeRandomChoice(templates);
+}
+
+function generalKnowledgeCreateCountryContinentQuestion() {
+  const templates = [
+    {
+      question: "Which continent is Egypt in?",
+      options: ["Africa", "Asia", "Europe", "South America"],
+      answer: "Africa",
+      difficulty: 4,
+    },
+    {
+      question: "Which continent is Brazil in?",
+      options: ["Africa", "Asia", "Europe", "South America"],
+      answer: "South America",
+      difficulty: 4,
+    },
+    {
+      question: "Which continent is Canada in?",
+      options: ["Africa", "Asia", "Europe", "North America"],
+      answer: "North America",
+      difficulty: 4,
+    },
+    {
+      question: "Which continent is India in?",
+      options: ["Africa", "Asia", "Europe", "South America"],
+      answer: "Asia",
+      difficulty: 5,
+    },
+  ];
+
+  return generalKnowledgeRandomChoice(templates);
+}
+
+function generalKnowledgeCreatePlanetQuestion() {
+  const templates = [
+    {
+      question: "What planet do we live on?",
+      options: ["Mars", "Venus", "Earth", "Jupiter"],
+      answer: "Earth",
+      difficulty: 1,
+    },
+    {
+      question: "Which planet is often called the Red Planet?",
+      options: ["Mercury", "Mars", "Saturn", "Neptune"],
+      answer: "Mars",
+      difficulty: 2,
+    },
+    {
+      question: "Which star gives Earth light and heat?",
+      options: ["The Moon", "The Sun", "Polaris", "Mars"],
+      answer: "The Sun",
+      difficulty: 3,
+    },
+    {
+      question: "How many planets are in our solar system?",
+      options: ["Six", "Seven", "Eight", "Nine"],
+      answer: "Eight",
+      difficulty: 4,
+    },
+    {
+      question: "Which planet is closest to the sun?",
+      options: ["Mercury", "Venus", "Earth", "Mars"],
+      answer: "Mercury",
+      difficulty: 5,
+    },
+  ];
+
+  return generalKnowledgeRandomChoice(templates);
+}
+
+function generalKnowledgeClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function generalKnowledgeRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
 GENERAL_KNOWLEDGE_QUESTIONS.push(
   ...[
     {

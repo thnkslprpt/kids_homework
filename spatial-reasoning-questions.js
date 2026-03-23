@@ -490,3 +490,374 @@ SPATIAL_REASONING_QUESTIONS.push(
     },
   ]
 );
+
+function createSpatialReasoningGeneratedEntry(difficulty) {
+  const level = spatialClampDifficulty(difficulty);
+  const generators = {
+    1: [
+      spatialCreateShapeCountQuestion,
+      spatialCreateShapeNameQuestion,
+      spatialCreateSimpleObjectQuestion,
+      spatialCreateSimpleFaceQuestion,
+    ],
+    2: [
+      spatialCreateTurnQuestion,
+      spatialCreateObjectMatchQuestion,
+      spatialCreateSidesQuestion,
+      spatialCreateCornersQuestion,
+    ],
+    3: [
+      spatialCreatePrismQuestion,
+      spatialCreateOrientationQuestion,
+      spatialCreateEdgesQuestion,
+      spatialCreateVerticesQuestion,
+    ],
+    4: [
+      spatialCreatePropertiesQuestion,
+      spatialCreatePrismQuestion,
+      spatialCreateCompositeQuestion,
+      spatialCreateRotationQuestion,
+    ],
+    5: [
+      spatialCreateRotationQuestion,
+      spatialCreateCompositeQuestion,
+      spatialCreateEdgesQuestion,
+      spatialCreateVerticesQuestion,
+    ],
+  };
+
+  return spatialRandomChoice(generators[level])(level);
+}
+
+function spatialCreateShapeCountQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which shape has 3 sides?",
+      answer: "Triangle",
+      options: ["Triangle", "Square", "Circle", "Rectangle"],
+      difficulty: 1,
+    },
+    {
+      question: "Which shape has 4 equal sides and 4 right angles?",
+      answer: "Square",
+      options: ["Triangle", "Square", "Oval", "Pentagon"],
+      difficulty: 1,
+    },
+    {
+      question: "Which shape has no corners?",
+      answer: "Circle",
+      options: ["Circle", "Triangle", "Square", "Rectangle"],
+      difficulty: 1,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateShapeNameQuestion(difficulty) {
+  const templates = [
+    {
+      question: "How many sides does a hexagon have?",
+      answer: "6",
+      options: ["5", "6", "7", "8"],
+      difficulty: 1,
+    },
+    {
+      question: "How many corners does a square have?",
+      answer: "4",
+      options: ["2", "3", "4", "5"],
+      difficulty: 1,
+    },
+    {
+      question: "How many vertices does a triangle have?",
+      answer: "3",
+      options: ["2", "3", "4", "6"],
+      difficulty: 5,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateSimpleObjectQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which everyday object looks like a cylinder?",
+      answer: "A soda can",
+      options: ["A soda can", "A soccer ball", "A pyramid", "A triangle"],
+      difficulty: 1,
+    },
+    {
+      question: "Which object is most like a cone?",
+      answer: "An ice-cream cone",
+      options: ["An ice-cream cone", "A book", "A box", "A coin"],
+      difficulty: 2,
+    },
+    {
+      question: "Which object is most like a rectangular prism?",
+      answer: "A cereal box",
+      options: ["A cereal box", "A basketball", "An ice-cream cone", "A coin"],
+      difficulty: 2,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateSimpleFaceQuestion() {
+  return {
+    question: "How many faces does a cube have?",
+    answer: "6",
+    options: spatialBuildOptions("6", ["4", "5", "8"]),
+    difficulty: 3,
+  };
+}
+
+function spatialCreateTurnQuestion(difficulty) {
+  const templates = [
+    {
+      question: "An arrow is pointing up. If it turns a quarter-turn to the right, which way will it point?",
+      answer: "Right",
+      options: ["Left", "Right", "Down", "Up"],
+      difficulty: 2,
+    },
+    {
+      question: "An arrow is pointing left. If it turns a half-turn, which way will it point?",
+      answer: "Right",
+      options: ["Up", "Down", "Left", "Right"],
+      difficulty: 2,
+    },
+    {
+      question: "If you are facing north and turn left, then left again, which direction are you facing now?",
+      answer: "South",
+      options: ["North", "East", "South", "West"],
+      difficulty: 5,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateObjectMatchQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which object is most like a sphere?",
+      answer: "A soccer ball",
+      options: ["A soccer ball", "A book", "A can", "A pencil"],
+      difficulty: 2,
+    },
+    {
+      question: "Which object is most like a cylinder?",
+      answer: "A can",
+      options: ["A can", "A triangle", "A pyramid", "A cube"],
+      difficulty: 2,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateSidesQuestion() {
+  return {
+    question: "How many sides does a pentagon have?",
+    answer: "5",
+    options: spatialBuildOptions("5", ["4", "6", "7"]),
+    difficulty: 3,
+  };
+}
+
+function spatialCreateCornersQuestion() {
+  return {
+    question: "How many corners are on a square?",
+    answer: "4",
+    options: spatialBuildOptions("4", ["2", "3", "5"]),
+    difficulty: 2,
+  };
+}
+
+function spatialCreatePrismQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which 3D shape has two triangular ends and three rectangular faces?",
+      answer: "Triangular prism",
+      options: ["Cube", "Cone", "Triangular prism", "Cylinder"],
+      difficulty: 3,
+    },
+    {
+      question: "Which 3D shape has one point at the top and a square base?",
+      answer: "Square pyramid",
+      options: ["Cone", "Sphere", "Square pyramid", "Cylinder"],
+      difficulty: 3,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateOrientationQuestion(difficulty) {
+  const templates = [
+    {
+      question: "If you face east and turn right, which direction are you facing?",
+      answer: "South",
+      options: ["North", "South", "East", "West"],
+      difficulty: 3,
+    },
+    {
+      question: "If you face south and turn right, then right again, which direction are you facing now?",
+      answer: "North",
+      options: ["North", "East", "West", "South"],
+      difficulty: 5,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateEdgesQuestion(difficulty) {
+  const templates = [
+    {
+      question: "How many edges does a cube have?",
+      answer: "12",
+      options: ["8", "10", "12", "14"],
+      difficulty: 5,
+    },
+    {
+      question: "How many faces does a rectangular prism have?",
+      answer: "6",
+      options: ["4", "5", "6", "8"],
+      difficulty: 4,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateVerticesQuestion(difficulty) {
+  const templates = [
+    {
+      question: "How many vertices does a cube have?",
+      answer: "8",
+      options: ["6", "8", "10", "12"],
+      difficulty: 5,
+    },
+    {
+      question: "How many vertices does a triangle have?",
+      answer: "3",
+      options: ["2", "3", "4", "6"],
+      difficulty: 5,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreatePropertiesQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which shape has opposite sides that are equal?",
+      answer: "Rectangle",
+      options: ["Rectangle", "Triangle", "Circle", "Oval"],
+      difficulty: 4,
+    },
+    {
+      question: "Which shape has all sides the same length and 4 right angles?",
+      answer: "Square",
+      options: ["Square", "Rectangle", "Triangle", "Circle"],
+      difficulty: 1,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateCompositeQuestion(difficulty) {
+  const templates = [
+    {
+      question: "If you cut a square from one corner to the opposite corner, what 2 shapes do you make?",
+      answer: "2 triangles",
+      options: ["2 circles", "2 triangles", "2 pentagons", "2 rectangles"],
+      difficulty: 4,
+    },
+    {
+      question: "Which shape has a flat square base and one point at the top?",
+      answer: "Square pyramid",
+      options: ["Cone", "Cube", "Square pyramid", "Sphere"],
+      difficulty: 3,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateRotationQuestion(difficulty) {
+  const templates = [
+    {
+      question: "You are facing north. If you turn left and then left again, which direction are you facing now?",
+      answer: "South",
+      options: ["North", "East", "South", "West"],
+      difficulty: 5,
+    },
+    {
+      question: "You are facing south. If you turn right and then right again, which direction are you facing now?",
+      answer: "North",
+      options: ["North", "East", "West", "South"],
+      difficulty: 5,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialBuildOptions(answer, candidates) {
+  const options = [String(answer), ...candidates.map(String)];
+  const unique = [];
+
+  for (const option of options) {
+    if (option && !unique.includes(option)) {
+      unique.push(option);
+    }
+  }
+
+  if (unique.length !== 4) {
+    throw new Error("Spatial generator produced invalid options");
+  }
+
+  return spatialShuffle(unique);
+}
+
+function spatialPickTemplate(difficulty, templates) {
+  const level = spatialClampDifficulty(difficulty);
+  const eligible = templates.filter((template) => template.difficulty <= level);
+  return spatialRandomChoice(eligible.length ? eligible : templates);
+}
+
+function spatialClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function spatialRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function spatialShuffle(values) {
+  if (typeof shuffleArray === "function") {
+    return shuffleArray(values);
+  }
+
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}

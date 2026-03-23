@@ -258,6 +258,344 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push({
   difficulty: 1,
 });
 
+function createFractionsAndRatiosGeneratedEntry(difficulty) {
+  const level = fractionsAndRatiosClampDifficulty(difficulty);
+  const generatorByLevel = {
+    1: [
+      fractionsAndRatiosCreateCompareFractionEntry,
+      fractionsAndRatiosCreateEquivalentFractionEntry,
+    ],
+    2: [
+      fractionsAndRatiosCreateFractionOfNumberEntry,
+      fractionsAndRatiosCreateFractionOfSetEntry,
+    ],
+    3: [
+      fractionsAndRatiosCreateDecimalMatchEntry,
+      fractionsAndRatiosCreateCompareFractionEntry,
+    ],
+    4: [
+      fractionsAndRatiosCreateSimplifyRatioEntry,
+      fractionsAndRatiosCreateEquivalentFractionEntry,
+    ],
+    5: [
+      fractionsAndRatiosCreateRatioPartEntry,
+      fractionsAndRatiosCreateRecipeScalingEntry,
+    ],
+  };
+
+  return {
+    ...fractionsAndRatiosRandomChoice(generatorByLevel[level])(level),
+    difficulty: level,
+  };
+}
+
+function fractionsAndRatiosCreateCompareFractionEntry(difficulty) {
+  const templates = [
+    {
+      question: "Which fraction is bigger?",
+      options: ["1/2", "1/4", "They are equal", "Neither is a fraction"],
+      answer: "1/2",
+      difficulty: 1,
+    },
+    {
+      question: "Which fraction is smaller?",
+      options: ["1/3", "1/2", "They are equal", "Neither"],
+      answer: "1/3",
+      difficulty: 1,
+    },
+    {
+      question: "Which fraction is greater?",
+      options: ["3/4", "2/4", "They are equal", "Neither"],
+      answer: "3/4",
+      difficulty: 1,
+    },
+    {
+      question: "Which fraction is closer to 1 whole?",
+      options: ["3/8", "5/8", "7/8", "1/8"],
+      answer: "7/8",
+      difficulty: 3,
+    },
+  ];
+
+  return fractionsAndRatiosRandomChoice(
+    templates.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateEquivalentFractionEntry(difficulty) {
+  const templates = [
+    {
+      question: "Which fraction is the same as 2 out of 8?",
+      options: ["1/2", "1/3", "1/4", "3/4"],
+      answer: "1/4",
+      difficulty: 1,
+    },
+    {
+      question: "Which fraction is the same as 3 out of 6?",
+      options: ["1/3", "1/2", "2/3", "3/4"],
+      answer: "1/2",
+      difficulty: 1,
+    },
+    {
+      question: "Which fraction is equal to 6/8?",
+      options: ["1/2", "2/3", "3/4", "4/5"],
+      answer: "3/4",
+      difficulty: 4,
+    },
+    {
+      question: "Which fraction is equal to 9/12?",
+      options: ["1/2", "2/3", "3/4", "4/5"],
+      answer: "3/4",
+      difficulty: 4,
+    },
+  ];
+
+  return fractionsAndRatiosRandomChoice(
+    templates.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateFractionOfNumberEntry(difficulty) {
+  const questions = [
+    {
+      fraction: "1/3",
+      whole: 12,
+      answer: "4",
+      options: ["3", "4", "6", "9"],
+      difficulty: 2,
+    },
+    {
+      fraction: "1/4",
+      whole: 20,
+      answer: "5",
+      options: ["4", "5", "10", "15"],
+      difficulty: 2,
+    },
+    {
+      fraction: "3/4",
+      whole: 20,
+      answer: "15",
+      options: ["5", "10", "15", "18"],
+      difficulty: 3,
+    },
+    {
+      fraction: "2/3",
+      whole: 12,
+      answer: "8",
+      options: ["4", "6", "8", "10"],
+      difficulty: 2,
+    },
+    {
+      fraction: "3/5",
+      whole: 20,
+      answer: "12",
+      options: ["10", "12", "15", "18"],
+      difficulty: 3,
+    },
+    {
+      fraction: "7/8",
+      whole: 24,
+      answer: "21",
+      options: ["18", "20", "21", "22"],
+      difficulty: 3,
+    },
+  ];
+  const pick = fractionsAndRatiosRandomChoice(
+    questions.filter((question) => question.difficulty <= difficulty)
+  );
+  return {
+    question: `What is ${pick.fraction} of ${pick.whole}?`,
+    options: fractionsAndRatiosShuffle(pick.options),
+    answer: pick.answer,
+    difficulty,
+  };
+}
+
+function fractionsAndRatiosCreateFractionOfSetEntry(difficulty) {
+  const questions = [
+    {
+      total: 6,
+      colored: 2,
+      answer: "2/6",
+      options: ["1/6", "2/6", "3/6", "4/6"],
+      difficulty: 2,
+    },
+    {
+      total: 8,
+      colored: 5,
+      answer: "5/8",
+      options: ["3/8", "4/8", "5/8", "6/8"],
+      difficulty: 2,
+    },
+    {
+      total: 12,
+      colored: 9,
+      answer: "3/4",
+      options: ["1/2", "2/3", "3/4", "5/6"],
+      difficulty: 3,
+    },
+  ];
+  const pick = fractionsAndRatiosRandomChoice(
+    questions.filter((question) => question.difficulty <= difficulty)
+  );
+  return {
+    question: `What fraction of the counters are colored? ${pick.colored} of ${pick.total}.`,
+    options: fractionsAndRatiosShuffle(pick.options),
+    answer: pick.answer,
+    difficulty,
+  };
+}
+
+function fractionsAndRatiosCreateDecimalMatchEntry(difficulty) {
+  const templates = [
+    {
+      question: "Which decimal is equal to 1/2?",
+      options: ["0.25", "0.5", "0.75", "1.5"],
+      answer: "0.5",
+      difficulty: 3,
+    },
+    {
+      question: "Which decimal is equal to 1/4?",
+      options: ["0.1", "0.2", "0.25", "0.5"],
+      answer: "0.25",
+      difficulty: 3,
+    },
+    {
+      question: "Which decimal is equal to 3/4?",
+      options: ["0.25", "0.5", "0.75", "1.25"],
+      answer: "0.75",
+      difficulty: 4,
+    },
+    {
+      question: "Which decimal is equal to 1/5?",
+      options: ["0.1", "0.2", "0.4", "0.5"],
+      answer: "0.2",
+      difficulty: 4,
+    },
+  ];
+
+  return fractionsAndRatiosRandomChoice(
+    templates.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateSimplifyRatioEntry(difficulty) {
+  const questions = [
+    {
+      question: "What is the ratio 4:6 in simplest form?",
+      options: ["1:2", "2:3", "3:2", "4:3"],
+      answer: "2:3",
+      difficulty: 4,
+    },
+    {
+      question: "What is the ratio 10:15 in simplest form?",
+      options: ["1:5", "2:3", "3:2", "5:2"],
+      answer: "2:3",
+      difficulty: 4,
+    },
+    {
+      question: "What is the ratio 12:8 in simplest form?",
+      options: ["6:4", "4:3", "3:2", "2:3"],
+      answer: "3:2",
+      difficulty: 5,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateRatioPartEntry(difficulty) {
+  const questions = [
+    {
+      question:
+        "A bag has red and blue marbles in the ratio 2:3. If there are 10 marbles altogether, how many are red and blue?",
+      options: [
+        "2 red and 8 blue",
+        "3 red and 7 blue",
+        "4 red and 6 blue",
+        "5 red and 5 blue",
+      ],
+      answer: "4 red and 6 blue",
+      difficulty: 4,
+    },
+    {
+      question:
+        "The ratio of girls to boys is 1:2. If there are 12 children altogether, how many are girls?",
+      options: ["3", "4", "6", "8"],
+      answer: "4",
+      difficulty: 3,
+    },
+    {
+      question:
+        "In a 2:3 paint mix with 15 parts total, how many of the parts are blue?",
+      options: ["5", "6", "8", "9"],
+      answer: "9",
+      difficulty: 5,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateRecipeScalingEntry(difficulty) {
+  const questions = [
+    {
+      question: "A recipe uses 1/2 cup of sugar two times. How much sugar is that altogether?",
+      options: ["1/2 cup", "3/4 cup", "1 cup", "2 cups"],
+      answer: "1 cup",
+      difficulty: 2,
+    },
+    {
+      question: "A recipe uses 3/4 cup of milk. If you double the recipe, how much milk do you need?",
+      options: ["1 cup", "1 1/4 cups", "1 1/2 cups", "2 cups"],
+      answer: "1 1/2 cups",
+      difficulty: 5,
+    },
+    {
+      question: "If you triple a recipe that uses 2/3 cup of oats, how much oats do you need?",
+      options: ["1 cup", "1 1/2 cups", "2 cups", "3 cups"],
+      answer: "2 cups",
+      difficulty: 4,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function fractionsAndRatiosRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function fractionsAndRatiosShuffle(values) {
+  if (typeof shuffleArray === "function") {
+    return shuffleArray(values);
+  }
+
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}
+
 FRACTIONS_AND_RATIOS_QUESTIONS.push(
   ...[
     {

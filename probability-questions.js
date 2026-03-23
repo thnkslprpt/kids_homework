@@ -515,6 +515,152 @@ PROBABILITY_QUESTIONS.push(
   ]
 );
 
+function createProbabilityGeneratedEntry(difficulty) {
+  function buildOptionSet(answer, distractors) {
+    return shuffleArray(Array.from(new Set([answer, ...distractors])));
+  }
+
+  function pickFraction(numerator, denominator) {
+    const divisor = greatestCommonDivisor(numerator, denominator);
+    return `${numerator / divisor}/${denominator / divisor}`;
+  }
+
+  const generators = {
+    1: [
+      () => {
+        const red = randomChoice([4, 5, 6, 7, 8]);
+        const blue = randomChoice([1, 2, 3]);
+        return {
+          question: `A bag has ${red} red marbles and ${blue} blue marble${blue === 1 ? "" : "s"}. Which color are you more likely to pick?`,
+          options: buildOptionSet("Red", ["Blue", "Both are equally likely", "Neither color can be picked"]),
+          answer: "Red",
+          difficulty: 1,
+        };
+      },
+      () => {
+        const spinnerParts = randomChoice([4, 6, 8]);
+        const coloredParts = 1;
+        const answer = pickFraction(coloredParts, spinnerParts);
+        const question = `A spinner has ${spinnerParts} equal parts and only 1 part is green. What is the chance of landing on green?`;
+        return {
+          question,
+          options: buildOptionSet(answer, [
+            pickFraction(1, 2),
+            pickFraction(1, 3),
+            pickFraction(1, spinnerParts + 1),
+          ]),
+          answer,
+          difficulty: 1,
+        };
+      },
+    ],
+    2: [
+      () => {
+        const impossibleNumbers = [0, 7, 8, 9];
+        const answer = String(randomChoice(impossibleNumbers));
+        return {
+          question: "Which result is impossible on a standard 6-sided die?",
+          options: buildOptionSet(answer, ["2", "4", "6"]),
+          answer,
+          difficulty: 2,
+        };
+      },
+      () => {
+        return {
+          question: "If you flip a fair coin once, what is true?",
+          options: buildOptionSet("Heads and tails are equally likely", [
+            "Heads is more likely",
+            "Tails is more likely",
+            "Neither heads nor tails can happen",
+          ]),
+          answer: "Heads and tails are equally likely",
+          difficulty: 2,
+        };
+      },
+    ],
+    3: [
+      () => {
+        const red = randomChoice([2, 3, 4]);
+        const blue = red;
+        const answer = "Apple and orange are equally likely";
+        return {
+          question: `A basket has ${red} apples and ${blue} oranges. Which is true if you pick 1 fruit without looking?`,
+          options: buildOptionSet(answer, [
+            "Apple is more likely",
+            "Orange is more likely",
+            "Neither fruit can be picked",
+          ]),
+          answer,
+          difficulty: 3,
+        };
+      },
+      () => {
+        const firstBlue = randomChoice([7, 8, 9]);
+        const firstRed = randomChoice([1, 2, 3]);
+        const secondBlue = randomChoice([4, 5, 6]);
+        const secondRed = randomChoice([4, 5, 6]);
+        const answer = "The first bag";
+        return {
+          question: `A bag has ${firstBlue} blue marbles and ${firstRed} red marbles. Another bag has ${secondBlue} blue marbles and ${secondRed} red marbles. Which bag is more likely to give you a blue marble?`,
+          options: buildOptionSet(answer, [
+            "The second bag",
+            "They are equally likely",
+            "Neither can happen",
+          ]),
+          answer,
+          difficulty: 3,
+        };
+      },
+    ],
+    4: [
+      () => {
+        const answer = "1/2";
+        return {
+          question: "What is the chance of rolling an even number on a standard 6-sided die?",
+          options: buildOptionSet(answer, ["1/6", "1/3", "2/3"]),
+          answer,
+          difficulty: 4,
+        };
+      },
+      () => {
+        return {
+          question: "A bag has only green marbles in it. Picking a green marble is:",
+          options: buildOptionSet("Certain", ["Impossible", "Unlikely", "Less than half likely"]),
+          answer: "Certain",
+          difficulty: 4,
+        };
+      },
+    ],
+    5: [
+      () => {
+        const answer = "4";
+        return {
+          question: "If you toss 2 coins, how many possible outcomes are there altogether?",
+          options: buildOptionSet(answer, ["2", "3", "6"]),
+          answer,
+          difficulty: 5,
+        };
+      },
+      () => {
+        const red = randomChoice([2, 3, 4]);
+        const blue = randomChoice([4, 5, 6]);
+        const green = randomChoice([6, 7, 8]);
+        const least = Math.min(red, blue, green);
+        const answer = least === red ? "Red" : least === blue ? "Blue" : "Green";
+        return {
+          question: `A bag has ${red} red marbles, ${blue} blue marbles, and ${green} green marbles. Which color is least likely to be picked?`,
+          options: buildOptionSet(answer, ["Red", "Blue", "Green", "All are equally likely"]),
+          answer,
+          difficulty: 5,
+        };
+      },
+    ],
+  };
+
+  const level = generators[difficulty] ? difficulty : 1;
+  return randomChoice(generators[level])();
+}
+
 PROBABILITY_QUESTIONS.push({
   question: "A spinner has 5 equal sections and only 1 section is red. What is the chance of landing on red?",
   options: ["1/2", "1/3", "1/4", "1/5"],

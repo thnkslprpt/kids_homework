@@ -653,3 +653,233 @@ HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS.push(
     difficulty: 2,
   }
 );
+
+const HOUSEHOLD_GENERATED_POOLS = {
+  1: [
+    {
+      question: "You see a wet kitchen floor. What is the safest thing to do?",
+      options: [
+        "Run across it quickly",
+        "Wipe it up or tell an adult",
+        "Pour more water on it",
+        "Slide on it for fun",
+      ],
+      answer: "Wipe it up or tell an adult",
+      difficulty: 1,
+    },
+    {
+      question: "What should you use to take a hot tray out of the oven?",
+      options: ["A paper towel", "A pencil", "Oven mitts", "Bare hands"],
+      answer: "Oven mitts",
+      difficulty: 1,
+    },
+    {
+      question: "What is the safest way to hold scissors while walking?",
+      options: ["Open and pointing forward", "Closed with the points down", "By one blade", "Spinning in your hand"],
+      answer: "Closed with the points down",
+      difficulty: 1,
+    },
+    {
+      question: "Before eating an apple, what should you do?",
+      options: ["Wash it", "Paint it", "Freeze it", "Tape it"],
+      answer: "Wash it",
+      difficulty: 1,
+    },
+    {
+      question: "Where should medicine be kept?",
+      options: ["On the floor", "Out of reach of children", "Next to candy", "On a pillow"],
+      answer: "Out of reach of children",
+      difficulty: 1,
+    },
+  ],
+  2: [
+    {
+      question: "You need to wash a red shirt and white socks. What is the best plan?",
+      options: [
+        "Wash them together in hot water",
+        "Wash similar colors together",
+        "Paint the socks red first",
+        "Soak them in juice",
+      ],
+      answer: "Wash similar colors together",
+      difficulty: 2,
+    },
+    {
+      question: "A glass breaks on the floor. What should a child do first?",
+      options: [
+        "Pick it up with bare hands",
+        "Step back and tell an adult",
+        "Kick the pieces under the table",
+        "Cover it with a towel and ignore it",
+      ],
+      answer: "Step back and tell an adult",
+      difficulty: 2,
+    },
+    {
+      question: "What should you do before opening a door to a stranger?",
+      options: ["Open it right away", "Check with an adult", "Leave it open all day", "Turn off the lights"],
+      answer: "Check with an adult",
+      difficulty: 2,
+    },
+    {
+      question: "If you see a sharp knife on the counter, what is the safest thing to do?",
+      options: [
+        "Play with it carefully",
+        "Move away and tell an adult",
+        "Hide it in your pocket",
+        "Drop it on the floor",
+      ],
+      answer: "Move away and tell an adult",
+      difficulty: 2,
+    },
+    {
+      question: "A rug corner is curled up. What is the safest thing to do?",
+      options: ["Trip over it carefully", "Flatten it or tell an adult", "Kick it higher", "Cover it with marbles"],
+      answer: "Flatten it or tell an adult",
+      difficulty: 2,
+    },
+  ],
+  3: [
+    {
+      question: "What is the best place for leftovers after dinner?",
+      options: ["In the refrigerator", "On the floor", "On the porch all night", "In a hot car"],
+      answer: "In the refrigerator",
+      difficulty: 3,
+    },
+    {
+      question: "If a clothing label says 'hand wash only,' what should you do?",
+      options: ["Wash it by hand", "Always wash it in a hot machine", "Dry it in the oven", "Throw it in with shoes"],
+      answer: "Wash it by hand",
+      difficulty: 3,
+    },
+    {
+      question: "What is the best way to clean up a small water spill?",
+      options: ["Leave it for later", "Use a towel or mop", "Add more water", "Cover it with books"],
+      answer: "Use a towel or mop",
+      difficulty: 3,
+    },
+    {
+      question: "A toy is blocking the hallway. What should you do?",
+      options: [
+        "Leave it there",
+        "Move it so people can walk safely",
+        "Kick it farther down the hall",
+        "Step over it every time",
+      ],
+      answer: "Move it so people can walk safely",
+      difficulty: 3,
+    },
+    {
+      question: "A recipe needs 1 cup of rice, but you only have a 1/2-cup measure. How many times should you fill it?",
+      options: ["1 time", "2 times", "3 times", "4 times"],
+      answer: "2 times",
+      difficulty: 3,
+    },
+  ],
+  4: [
+    {
+      question: "A cleaner label says 'Do not mix with bleach.' What should you do?",
+      options: ["Never mix it with bleach", "Mix just a little bleach in", "Add bleach only if it smells weak", "Use it only near food"],
+      answer: "Never mix it with bleach",
+      difficulty: 4,
+    },
+    {
+      question: "A smoke alarm keeps chirping because the battery is low. What should you do?",
+      options: [
+        "Take the battery out and hide it",
+        "Tell an adult right away",
+        "Ignore it for a week",
+        "Cover the alarm with a blanket",
+      ],
+      answer: "Tell an adult right away",
+      difficulty: 4,
+    },
+    {
+      question: "Where should food labeled 'keep frozen' be stored?",
+      options: ["In the freezer", "On the counter", "In a hot car", "Near the oven"],
+      answer: "In the freezer",
+      difficulty: 4,
+    },
+    {
+      question: "A flashlight will not turn on. What is a smart first thing to check?",
+      options: [
+        "Whether the batteries are in correctly",
+        "Whether it needs water",
+        "Whether the table is clean",
+        "Whether the room is noisy",
+      ],
+      answer: "Whether the batteries are in correctly",
+      difficulty: 4,
+    },
+    {
+      question: "Raw chicken juice got on a cutting board. What should happen before using it for fruit?",
+      options: [
+        "Wipe it with a dry paper",
+        "Rinse it with juice",
+        "Wash it well with soap and water",
+        "Use it right away",
+      ],
+      answer: "Wash it well with soap and water",
+      difficulty: 4,
+    },
+  ],
+  5: [
+    {
+      question: "An extension cord is stretched across a doorway. What is the safest fix?",
+      options: [
+        "Leave it there and jump over it",
+        "Ask an adult to move it out of the walkway",
+        "Put a rug over it and forget it",
+        "Add more cords across the doorway",
+      ],
+      answer: "Ask an adult to move it out of the walkway",
+      difficulty: 5,
+    },
+    {
+      question: "A toy needs 2 AA batteries, but you only have 1 AA battery and 1 AAA battery. What should you do?",
+      options: [
+        "Use the 2 different batteries anyway",
+        "Wait until you have 2 matching AA batteries",
+        "Use no batteries and pour water in instead",
+        "Cut the AAA battery to fit",
+      ],
+      answer: "Wait until you have 2 matching AA batteries",
+      difficulty: 5,
+    },
+    {
+      question: "What is the safest choice if too many things are plugged into one power strip?",
+      options: [
+        "Plug in even more things",
+        "Unplug some and tell an adult",
+        "Cover it with a blanket",
+        "Pour water near it",
+      ],
+      answer: "Unplug some and tell an adult",
+      difficulty: 5,
+    },
+    {
+      question: "What is the safest thing to do if a blanket is draped over a heater?",
+      options: ["Move away and tell an adult", "Add more blankets", "Sit on the heater", "Hide under it"],
+      answer: "Move away and tell an adult",
+      difficulty: 5,
+    },
+    {
+      question: "What should you do if a smoke alarm goes off and there is smoke?",
+      options: ["Get an adult and leave the area", "Sit and watch", "Cover your ears and stay there", "Open a toy box"],
+      answer: "Get an adult and leave the area",
+      difficulty: 5,
+    },
+  ],
+};
+
+function createHouseholdProblemSolvingGeneratedEntry(difficulty) {
+  const pool = HOUSEHOLD_GENERATED_POOLS[difficulty] || HOUSEHOLD_GENERATED_POOLS[3];
+  const entry = randomChoice(pool);
+
+  return {
+    question: entry.question,
+    options: shuffleArray([...entry.options]),
+    answer: entry.answer,
+    difficulty: entry.difficulty,
+  };
+}

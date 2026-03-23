@@ -245,3 +245,287 @@ POPULATION_QUESTIONS.push(
     },
   ]
 );
+
+const POPULATION_GENERATION_DATA = [
+  { country: "India", population: 1_430_000_000, label: "About 1.43 billion" },
+  { country: "China", population: 1_410_000_000, label: "About 1.41 billion" },
+  { country: "United States", population: 340_000_000, label: "About 340 million" },
+  { country: "Indonesia", population: 280_000_000, label: "About 280 million" },
+  { country: "Pakistan", population: 240_000_000, label: "About 240 million" },
+  { country: "Nigeria", population: 230_000_000, label: "About 230 million" },
+  { country: "Brazil", population: 215_000_000, label: "About 215 million" },
+  { country: "Bangladesh", population: 173_000_000, label: "About 173 million" },
+  { country: "Russia", population: 144_000_000, label: "About 144 million" },
+  { country: "Mexico", population: 129_000_000, label: "About 129 million" },
+  { country: "Japan", population: 123_000_000, label: "About 123 million" },
+  { country: "Ethiopia", population: 128_000_000, label: "About 128 million" },
+  { country: "Egypt", population: 112_000_000, label: "About 112 million" },
+  { country: "Philippines", population: 117_000_000, label: "About 117 million" },
+  { country: "DR Congo", population: 102_000_000, label: "About 102 million" },
+  { country: "Vietnam", population: 100_000_000, label: "About 100 million" },
+  { country: "Iran", population: 89_000_000, label: "About 89 million" },
+  { country: "Turkey", population: 85_000_000, label: "About 85 million" },
+  { country: "Germany", population: 83_000_000, label: "About 83 million" },
+  { country: "Tanzania", population: 67_000_000, label: "About 67 million" },
+  { country: "Myanmar", population: 54_000_000, label: "About 54 million" },
+  { country: "South Korea", population: 51_000_000, label: "About 51 million" },
+  { country: "Colombia", population: 52_000_000, label: "About 52 million" },
+  { country: "South Africa", population: 60_000_000, label: "About 60 million" },
+  { country: "Canada", population: 40_000_000, label: "About 40 million" },
+  { country: "Australia", population: 27_000_000, label: "About 27 million" },
+  { country: "Kenya", population: 55_000_000, label: "About 55 million" },
+  { country: "Iraq", population: 45_000_000, label: "About 45 million" },
+  { country: "Peru", population: 34_000_000, label: "About 34 million" },
+  { country: "Malaysia", population: 34_000_000, label: "About 34 million" },
+  { country: "Venezuela", population: 29_000_000, label: "About 29 million" },
+  { country: "Afghanistan", population: 42_000_000, label: "About 42 million" },
+  { country: "Yemen", population: 35_000_000, label: "About 35 million" },
+  { country: "Uganda", population: 49_000_000, label: "About 49 million" },
+  { country: "Sudan", population: 48_000_000, label: "About 48 million" },
+  { country: "Algeria", population: 46_000_000, label: "About 46 million" },
+  { country: "Poland", population: 38_000_000, label: "About 38 million" },
+  { country: "Morocco", population: 37_000_000, label: "About 37 million" },
+  { country: "Saudi Arabia", population: 36_000_000, label: "About 36 million" },
+  { country: "Uzbekistan", population: 36_000_000, label: "About 36 million" },
+];
+
+function createPopulationGeneratedEntry(difficulty) {
+  const level = clampDifficulty(difficulty);
+  const questionType = pickPopulationQuestionType(level);
+
+  if (questionType === "compare") {
+    return buildPopulationComparisonQuestion(level);
+  }
+
+  if (questionType === "largest") {
+    return buildPopulationRankingQuestion(level);
+  }
+
+  if (questionType === "closest") {
+    return buildPopulationClosestQuestion(level);
+  }
+
+  return buildPopulationEstimateQuestion(level);
+}
+
+function buildPopulationEstimateQuestion(difficulty) {
+  const entry = pickPopulationEntryByDifficulty(difficulty);
+  const options = buildPopulationEstimateOptions(entry, difficulty);
+  return {
+    question: `About how many people live in ${entry.country}?`,
+    options,
+    answer: entry.label,
+    difficulty,
+  };
+}
+
+function buildPopulationComparisonQuestion(difficulty) {
+  const [first, second] = pickTwoPopulationEntries(difficulty);
+  const bigger = first.population >= second.population ? first : second;
+  const smaller = bigger === first ? second : first;
+  return {
+    question: `Which country has more people, ${first.country} or ${second.country}?`,
+    options: shuffleLocal([
+      bigger.country,
+      smaller.country,
+      "They are equal",
+      "There is not enough information",
+    ]),
+    answer: bigger.country,
+    difficulty,
+  };
+}
+
+function buildPopulationRankingQuestion(difficulty) {
+  const countries = pickDistinctPopulationEntries(4, difficulty).sort(
+    (left, right) => right.population - left.population
+  );
+  return {
+    question: "Which country has the largest population?",
+    options: shuffleLocal(countries.map((entry) => entry.country)),
+    answer: countries[0].country,
+    difficulty,
+  };
+}
+
+function buildPopulationClosestQuestion(difficulty) {
+  const reference = pickPopulationEntryByDifficulty(difficulty);
+  const target = generateRoundedTarget(reference.population, difficulty);
+  const candidates = dedupePopulationEntries([
+    reference,
+    ...pickDistinctPopulationEntries(4, difficulty),
+  ]).sort((left, right) => Math.abs(left.population - target) - Math.abs(right.population - target));
+
+  return {
+    question: `Which country is closest to about ${formatPopulationTarget(target)} people?`,
+    options: shuffleLocal(candidates.slice(0, 4).map((entry) => entry.country)),
+    answer: candidates[0].country,
+    difficulty,
+  };
+}
+
+function buildPopulationEstimateOptions(entry, difficulty) {
+  const answerLabel = entry.label;
+  const pool = POPULATION_GENERATION_DATA
+    .filter((candidate) => candidate.country !== entry.country && candidate.label !== answerLabel)
+    .sort((left, right) => Math.abs(left.population - entry.population) - Math.abs(right.population - entry.population));
+
+  const distractors = [];
+  for (const candidate of pool) {
+    if (!distractors.includes(candidate.label)) {
+      distractors.push(candidate.label);
+    }
+    if (distractors.length === 3) {
+      break;
+    }
+  }
+
+  if (distractors.length < 3) {
+    for (const candidate of POPULATION_GENERATION_DATA) {
+      if (candidate.label !== answerLabel && !distractors.includes(candidate.label)) {
+        distractors.push(candidate.label);
+      }
+      if (distractors.length === 3) {
+        break;
+      }
+    }
+  }
+
+  return shuffleLocal([answerLabel, ...distractors.slice(0, 3)]);
+}
+
+function pickPopulationQuestionType(difficulty) {
+  if (difficulty <= 2) {
+    return randomChoiceLocal(["estimate", "compare", "estimate"]);
+  }
+
+  if (difficulty === 3) {
+    return randomChoiceLocal(["estimate", "compare", "closest"]);
+  }
+
+  return randomChoiceLocal(["estimate", "compare", "closest", "largest"]);
+}
+
+function pickPopulationEntryByDifficulty(difficulty) {
+  const pool = POPULATION_GENERATION_DATA.filter((entry) => difficultyMatchesPopulation(entry, difficulty));
+  return randomChoiceLocal(pool.length ? pool : POPULATION_GENERATION_DATA);
+}
+
+function pickDistinctPopulationEntries(count, difficulty) {
+  const pool = POPULATION_GENERATION_DATA.filter((entry) => difficultyMatchesPopulation(entry, difficulty));
+  const source = pool.length >= count ? pool : POPULATION_GENERATION_DATA;
+  return shuffleLocal(source).slice(0, count);
+}
+
+function pickTwoPopulationEntries(difficulty) {
+  const pool = POPULATION_GENERATION_DATA.filter((entry) => difficultyMatchesPopulation(entry, difficulty));
+  const source = pool.length >= 2 ? pool : POPULATION_GENERATION_DATA;
+  const shuffled = shuffleLocal(source);
+  return [shuffled[0], shuffled[1]];
+}
+
+function difficultyMatchesPopulation(entry, difficulty) {
+  if (difficulty <= 2) {
+    return entry.population >= 60_000_000;
+  }
+  if (difficulty === 3) {
+    return entry.population >= 30_000_000 && entry.population <= 160_000_000;
+  }
+  return entry.population <= 120_000_000;
+}
+
+function generateRoundedTarget(population, difficulty) {
+  const base = roundPopulationForDifficulty(population, difficulty);
+  const offset = randomChoiceLocal(getPopulationOffsets(difficulty));
+  return Math.max(1, base + offset);
+}
+
+function roundPopulationForDifficulty(population, difficulty) {
+  if (difficulty <= 1) {
+    return Math.round(population / 10_000_000) * 10_000_000;
+  }
+  if (difficulty === 2) {
+    return Math.round(population / 5_000_000) * 5_000_000;
+  }
+  if (difficulty === 3) {
+    return Math.round(population / 2_000_000) * 2_000_000;
+  }
+  if (difficulty === 4) {
+    return Math.round(population / 1_000_000) * 1_000_000;
+  }
+  return Math.round(population / 500_000) * 500_000;
+}
+
+function getPopulationOffsets(difficulty) {
+  if (difficulty <= 1) {
+    return [-20_000_000, -10_000_000, 10_000_000, 20_000_000];
+  }
+  if (difficulty === 2) {
+    return [-15_000_000, -5_000_000, 5_000_000, 15_000_000];
+  }
+  if (difficulty === 3) {
+    return [-8_000_000, -3_000_000, 3_000_000, 8_000_000];
+  }
+  if (difficulty === 4) {
+    return [-5_000_000, -2_000_000, 2_000_000, 5_000_000];
+  }
+  return [-3_000_000, -1_000_000, 1_000_000, 3_000_000];
+}
+
+function formatPopulationTarget(value) {
+  if (value >= 1_000_000_000) {
+    const billions = value / 1_000_000_000;
+    return `${billions % 1 === 0 ? billions.toFixed(0) : billions.toFixed(1)} billion`;
+  }
+  return `${Math.round(value / 1_000_000)} million`;
+}
+
+function formatPopulationValue(value) {
+  if (value >= 1_000_000_000) {
+    const billions = value / 1_000_000_000;
+    return `About ${billions % 1 === 0 ? billions.toFixed(0) : billions.toFixed(1)} billion`;
+  }
+  return `About ${Math.round(value / 1_000_000)} million`;
+}
+
+function dedupePopulationEntries(entries) {
+  const seen = new Set();
+  const unique = [];
+  for (const entry of entries) {
+    if (!entry || seen.has(entry.country)) {
+      continue;
+    }
+    seen.add(entry.country);
+    unique.push(entry);
+  }
+  return unique;
+}
+
+function dedupeStrings(values) {
+  return Array.from(new Set(values));
+}
+
+function shuffleLocal(values) {
+  const copy = [...values];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = randomIntLocal(0, index);
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+function randomChoiceLocal(values) {
+  return values[randomIntLocal(0, values.length - 1)];
+}
+
+function randomIntLocal(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function clampDifficulty(value) {
+  const numeric = Number(value);
+  if (!Number.isInteger(numeric)) {
+    return 3;
+  }
+  return Math.min(5, Math.max(1, numeric));
+}

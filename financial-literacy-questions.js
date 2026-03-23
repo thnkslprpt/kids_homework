@@ -612,11 +612,11 @@ FINANCIAL_LITERACY_QUESTIONS.push(
       answer: "41 shekels",
       difficulty: 2,
     },
-    {
-      question: "Which is the best deal for erasers?",
-      options: [
-        "3 erasers for 24 shekels",
-        "2 erasers for 18 shekels",
+  {
+    question: "Which is the best deal for erasers?",
+    options: [
+      "3 erasers for 24 shekels",
+      "2 erasers for 18 shekels",
         "1 eraser for 10 shekels",
         "5 erasers for 45 shekels",
       ],
@@ -625,3 +625,253 @@ FINANCIAL_LITERACY_QUESTIONS.push(
     },
   ]
 );
+
+const FINANCIAL_NEEDS = [
+  "a winter coat",
+  "school shoes",
+  "toothpaste",
+  "soap",
+  "a backpack",
+  "a lunch box",
+  "a bus card",
+];
+
+const FINANCIAL_WANTS = [
+  "a toy robot",
+  "extra candy",
+  "a game card",
+  "a plush toy",
+  "a poster",
+  "a sticker pack",
+];
+
+const FINANCIAL_VALUE_ITEMS = [
+  "pencils",
+  "apples",
+  "erasers",
+  "stickers",
+  "notebooks",
+  "yogurts",
+  "juice boxes",
+];
+
+const FINANCIAL_PURCHASE_TEMPLATES = [
+  {
+    items: ["a notebook", "markers"],
+    prices: [18, 12],
+  },
+  {
+    items: ["a book", "a puzzle"],
+    prices: [20, 15],
+  },
+  {
+    items: ["a lunch box", "a water bottle", "stickers"],
+    prices: [15, 10, 8],
+  },
+  {
+    items: ["pencils", "erasers", "stickers"],
+    prices: [12, 8, 10],
+  },
+  {
+    items: ["a ball", "a snack"],
+    prices: [24, 11],
+  },
+];
+
+function createFinancialLiteracyGeneratedEntry(difficulty) {
+  const generatorsByDifficulty = {
+    1: [
+      createFinancialNeedWantQuestion,
+      createFinancialSavingsQuestion,
+      createFinancialSpendingQuestion,
+      createFinancialBestValueQuestion,
+    ],
+    2: [
+      createFinancialNeedWantQuestion,
+      createFinancialSavingsQuestion,
+      createFinancialSpendingQuestion,
+      createFinancialBestValueQuestion,
+    ],
+    3: [
+      createFinancialSavingsQuestion,
+      createFinancialSpendingQuestion,
+      createFinancialBestValueQuestion,
+      createFinancialDiscountQuestion,
+    ],
+    4: [
+      createFinancialSpendingQuestion,
+      createFinancialBestValueQuestion,
+      createFinancialDiscountQuestion,
+      createFinancialPlanComparisonQuestion,
+    ],
+    5: [
+      createFinancialBestValueQuestion,
+      createFinancialDiscountQuestion,
+      createFinancialPlanComparisonQuestion,
+      createFinancialSpendingQuestion,
+    ],
+  };
+
+  const generators = generatorsByDifficulty[difficulty] || generatorsByDifficulty[3];
+  return randomChoice(generators)(difficulty);
+}
+
+function createFinancialNeedWantQuestion(difficulty) {
+  const answer = randomChoice(FINANCIAL_NEEDS);
+  const distractors = shuffleArray([...FINANCIAL_WANTS]).slice(0, 3);
+
+  return {
+    question: randomChoice([
+      "Which is more like a need than a want?",
+      "Which item is a need, not a want?",
+      "Which thing is something you really need?",
+    ]),
+    options: shuffleArray([answer, ...distractors]),
+    answer,
+    difficulty,
+  };
+}
+
+function createFinancialSavingsQuestion(difficulty) {
+  const weekly = randomChoice(
+    difficulty >= 4 ? [8, 10, 12, 15, 18, 20] : [5, 6, 8, 10, 12, 15]
+  );
+  const weeks = randomChoice(difficulty <= 2 ? [2, 3, 4] : difficulty === 3 ? [4, 5, 6] : [4, 6, 8]);
+  const answerValue = weekly * weeks;
+
+  return {
+    question: `If you save ${formatShekels(weekly)} each week for ${weeks} weeks, how much will you save?`,
+    options: buildFinancialOptions(
+      formatShekels(answerValue),
+      makeMoneyDistractors(answerValue, [weekly, weeks, weekly + weeks, weekly * 2])
+    ),
+    answer: formatShekels(answerValue),
+    difficulty,
+  };
+}
+
+function createFinancialSpendingQuestion(difficulty) {
+  const template = randomChoice(FINANCIAL_PURCHASE_TEMPLATES);
+  const reserve = randomChoice(difficulty >= 4 ? [12, 15, 18, 20, 25] : [10, 12, 15, 18, 20]);
+  const totalSpent = template.prices.reduce((sum, price) => sum + price, 0);
+  const totalMoney = totalSpent + reserve;
+  const purchases = template.items
+    .map((item, index) => `${item} for ${formatShekels(template.prices[index])}`)
+    .join(" and ");
+
+  return {
+    question: `You have ${formatShekels(totalMoney)}. You buy ${purchases}. How much money is left?`,
+    options: buildFinancialOptions(
+      formatShekels(reserve),
+      makeMoneyDistractors(reserve, [5, 10, 15, 20])
+    ),
+    answer: formatShekels(reserve),
+    difficulty,
+  };
+}
+
+function createFinancialBestValueQuestion(difficulty) {
+  const item = randomChoice(FINANCIAL_VALUE_ITEMS);
+  const counts = shuffleArray([2, 3, 4, 5]);
+  const unitPrices = shuffleArray(
+    difficulty >= 4 ? [4, 5, 6, 7] : difficulty === 3 ? [3, 4, 5, 6] : [2, 3, 4, 5]
+  );
+  const packs = counts.map((count, index) => {
+    const unitPrice = unitPrices[index];
+    const totalPrice = count * unitPrice;
+
+    return {
+      text: `${count} ${item} for ${formatShekels(totalPrice)}`,
+      unitPrice,
+    };
+  });
+
+  const answerPack = packs.reduce((best, pack) => (pack.unitPrice < best.unitPrice ? pack : best));
+
+  return {
+    question: `Which ${item} deal is the best value?`,
+    options: shuffleArray(packs.map((pack) => pack.text)),
+    answer: answerPack.text,
+    difficulty,
+  };
+}
+
+function createFinancialDiscountQuestion(difficulty) {
+  const discount = randomChoice(difficulty >= 4 ? [25, 50] : [25, 50]);
+  const originalPrice = randomChoice(
+    discount === 50 ? [20, 30, 40, 60, 80, 100, 120] : [40, 60, 80, 100, 120, 160]
+  );
+  const answerValue = (originalPrice * (100 - discount)) / 100;
+
+  return {
+    question: `A toy costs ${formatShekels(originalPrice)} and is ${discount}% off. What is the sale price?`,
+    options: buildFinancialOptions(
+      formatShekels(answerValue),
+      makeMoneyDistractors(answerValue, [5, 10, 15, -5])
+    ),
+    answer: formatShekels(answerValue),
+    difficulty,
+  };
+}
+
+function createFinancialPlanComparisonQuestion(difficulty) {
+  const answerWeekly = randomChoice([10, 12, 15, 18]);
+  const lowerWeekly = Math.max(5, answerWeekly - randomChoice([2, 3, 4]));
+  const everyTwoWeeks = Math.max(6, answerWeekly + randomChoice([2, 3, 4]));
+  const monthly = Math.max(8, answerWeekly * 2 - randomChoice([1, 2, 3, 4]));
+  const plans = [
+    { text: `Save ${answerWeekly} shekels each week`, total: answerWeekly * 4 },
+    { text: `Save ${lowerWeekly} shekels each week`, total: lowerWeekly * 4 },
+    { text: `Save ${everyTwoWeeks} shekels every 2 weeks`, total: everyTwoWeeks * 2 },
+    { text: `Save ${monthly} shekels each month`, total: monthly },
+  ];
+  const answerPlan = plans.reduce((best, plan) => (plan.total > best.total ? plan : best));
+
+  return {
+    question: "Which plan saves the most after 4 weeks?",
+    options: shuffleArray(plans.map((plan) => plan.text)),
+    answer: answerPlan.text,
+    difficulty,
+  };
+}
+
+function buildFinancialOptions(answer, distractors) {
+  const options = [answer, ...distractors].map(String);
+  const uniqueOptions = [];
+
+  for (const option of options) {
+    if (option && !uniqueOptions.includes(option)) {
+      uniqueOptions.push(option);
+    }
+  }
+
+  if (uniqueOptions.length !== 4) {
+    throw new Error("Financial generator produced invalid options");
+  }
+
+  return shuffleArray(uniqueOptions);
+}
+
+function makeMoneyDistractors(answerValue, preferredOffsets) {
+  const answer = formatShekels(answerValue);
+  const offsets = [...preferredOffsets, -10, -5, 5, 10, 12, 15, 20];
+  const distractors = [];
+
+  for (const offset of offsets) {
+    const candidateValue = answerValue + offset;
+    const candidate = formatShekels(candidateValue);
+    if (candidateValue > 0 && candidate !== answer && !distractors.includes(candidate)) {
+      distractors.push(candidate);
+    }
+
+    if (distractors.length === 3) {
+      break;
+    }
+  }
+
+  return distractors;
+}
+
+function formatShekels(value) {
+  return `${value} ${value === 1 ? "shekel" : "shekels"}`;
+}

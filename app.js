@@ -6,9 +6,12 @@ const NON_CORE_SESSION_CATEGORIES = [
   "science",
   "time",
   "statistics",
+  "algebra",
+  "visual-math",
   "logic",
   "rationality",
   "general-knowledge",
+  "geography",
   "population",
   "financial-literacy",
   "measurement",
@@ -18,10 +21,10 @@ const NON_CORE_SESSION_CATEGORIES = [
   "probability",
   "maps-and-directions",
   "digital-safety",
-  "media-literacy",
   "health-and-first-aid",
   "nutrition",
   "household-problem-solving",
+  "fractions",
   "fractions-and-ratios",
   "spatial-reasoning",
 ];
@@ -228,61 +231,94 @@ const CHART_TABLE_TEMPLATES = [
 ];
 
 const HEBREW_NIKKUD_OVERRIDES = {
+  "-ב": "-בְּ",
+  "-כ": "-כְּ",
+  "-מ": "-מִ",
+  "-ו": "-וְ",
   "אבא": "אַבָּא",
   "אדום": "אָדוֹם",
   "אוכל": "אוֹכֶל",
   "אחות": "אָחוֹת",
   "אח": "אָח",
+  "איך": "אֵיךְ",
   "אישה": "אִשָּׁה",
   "איש": "אִישׁ",
   "אמא": "אִמָּא",
+  "אני": "אֲנִי",
+  "את": "אַתְ",
+  "אתה": "אַתָּה",
+  "אתם": "אַתֶּם",
+  "אתן": "אַתֶּן",
+  "איפה": "אֵיפֹה",
   "בית": "בַּיִת",
   "ביצה": "בֵּיצָה",
   "בוקר": "בֹּקֶר",
+  "ביחד": "בְּיַחַד",
+  "בפנים": "בִּפְנִים",
+  "בבקשה": "בְּבַקָּשָׁה",
   "בן": "בֵּן",
   "בת": "בַּת",
   "דג": "דָּג",
   "דרך": "דֶּרֶךְ",
   "דלת": "דֶּלֶת",
   "דף": "דַּף",
+  "הבא": "הַבָּא",
+  "הוא": "הוּא",
+  "היא": "הִיא",
+  "היום": "הַיּוֹם",
   "הרים": "הָרִים",
   "וילון": "וִילוֹן",
   "זמן": "זְמַן",
   "חבר": "חָבֵר",
   "חתול": "חָתוּל",
+  "חולה": "חוֹלֶה",
   "ילד": "יֶלֶד",
   "ילדה": "יַלְדָּה",
   "ים": "יָם",
   "ירח": "יָרֵחַ",
+  "יש": "יֵשׁ",
+  "ישראל": "יִשְׂרָאֵל",
   "כדור": "כַּדּוּר",
   "כלב": "כֶּלֶב",
+  "כלום": "כְּלוּם",
   "כסא": "כִּסֵּא",
   "כסף": "כֶּסֶף",
+  "כן": "כֵּן",
   "לחם": "לֶחֶם",
   "לילה": "לַיְלָה",
+  "למה": "לָמָּה",
+  "מה": "מָה",
+  "מהר": "מַהֵר",
   "מים": "מַיִם",
+  "מי": "מִי",
   "מלך": "מֶלֶךְ",
   "מלכה": "מַלְכָּה",
   "מיטה": "מִטָּה",
   "מכונית": "מְכוֹנִית",
   "מפתח": "מַפְתֵּחַ",
   "מראה": "מַרְאָה",
+  "מתי": "מָתַי",
   "ספר": "סֵפֶר",
   "סלון": "סָלוֹן",
+  "סליחה": "סְלִיחָה",
   "עוגה": "עוּגָה",
   "עוף": "עוֹף",
   "עיר": "עִיר",
   "עין": "עַיִן",
   "עכבר": "עַכְבָּר",
   "עץ": "עֵץ",
+  "פה": "פֹּה",
   "פנים": "פָּנִים",
   "פרח": "פֶּרַח",
   "ציפור": "צִפּוֹר",
   "קפה": "קָפֶה",
+  "קצת": "קְצָת",
   "רגל": "רֶגֶל",
   "שולחן": "שֻׁלְחָן",
   "שלום": "שָׁלוֹם",
+  "שבוע": "שָׁבוּעַ",
   "שמש": "שֶׁמֶשׁ",
+  "שם": "שָׁם",
   "תודה": "תּוֹדָה",
 };
 
@@ -368,10 +404,22 @@ const staticChoiceBankSources = [
     category: "general-knowledge",
     entries: typeof GENERAL_KNOWLEDGE_QUESTIONS !== "undefined" ? GENERAL_KNOWLEDGE_QUESTIONS : [],
   },
+  {
+    category: "algebra",
+    entries: typeof ALGEBRA_QUESTIONS !== "undefined" ? ALGEBRA_QUESTIONS : [],
+  },
+  {
+    category: "visual-math",
+    entries: typeof VISUAL_MATH_QUESTIONS !== "undefined" ? VISUAL_MATH_QUESTIONS : [],
+  },
   { category: "logic", entries: typeof LOGIC_QUESTIONS !== "undefined" ? LOGIC_QUESTIONS : [] },
   {
     category: "rationality",
     entries: typeof RATIONALITY_QUESTIONS !== "undefined" ? RATIONALITY_QUESTIONS : [],
+  },
+  {
+    category: "geography",
+    entries: typeof GEOGRAPHY_QUESTIONS !== "undefined" ? GEOGRAPHY_QUESTIONS : [],
   },
   {
     category: "population",
@@ -410,10 +458,6 @@ const staticChoiceBankSources = [
     entries: typeof DIGITAL_SAFETY_QUESTIONS !== "undefined" ? DIGITAL_SAFETY_QUESTIONS : [],
   },
   {
-    category: "media-literacy",
-    entries: typeof MEDIA_LITERACY_QUESTIONS !== "undefined" ? MEDIA_LITERACY_QUESTIONS : [],
-  },
-  {
     category: "health-and-first-aid",
     entries:
       typeof HEALTH_AND_FIRST_AID_QUESTIONS !== "undefined"
@@ -430,6 +474,10 @@ const staticChoiceBankSources = [
       typeof HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS !== "undefined"
         ? HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS
         : [],
+  },
+  {
+    category: "fractions",
+    entries: typeof FRACTIONS_QUESTIONS !== "undefined" ? FRACTIONS_QUESTIONS : [],
   },
   {
     category: "fractions-and-ratios",
@@ -466,11 +514,131 @@ const choiceCategoryConfigs = {
     ])
   ),
 };
+const generatedChoiceCategoryConfigs = {
+  algebra: {
+    share: 0.85,
+    factory: typeof createAlgebraGeneratedEntry === "function" ? createAlgebraGeneratedEntry : null,
+  },
+  "visual-math": {
+    share: 0.85,
+    factory:
+      typeof createVisualMathGeneratedEntry === "function" ? createVisualMathGeneratedEntry : null,
+  },
+  "financial-literacy": {
+    share: 0.85,
+    factory:
+      typeof createFinancialLiteracyGeneratedEntry === "function"
+        ? createFinancialLiteracyGeneratedEntry
+        : null,
+  },
+  geography: {
+    share: 0.85,
+    factory: typeof createGeographyGeneratedEntry === "function" ? createGeographyGeneratedEntry : null,
+  },
+  population: {
+    share: 0.8,
+    factory: typeof createPopulationGeneratedEntry === "function" ? createPopulationGeneratedEntry : null,
+  },
+  measurement: {
+    share: 0.85,
+    factory:
+      typeof createMeasurementGeneratedEntry === "function" ? createMeasurementGeneratedEntry : null,
+  },
+  estimation: {
+    share: 0.85,
+    factory:
+      typeof createEstimationGeneratedEntry === "function" ? createEstimationGeneratedEntry : null,
+  },
+  probability: {
+    share: 0.85,
+    factory:
+      typeof createProbabilityGeneratedEntry === "function" ? createProbabilityGeneratedEntry : null,
+  },
+  logic: {
+    share: 0.6,
+    factory: typeof createLogicGeneratedEntry === "function" ? createLogicGeneratedEntry : null,
+  },
+  rationality: {
+    share: 0.7,
+    factory:
+      typeof createRationalityGeneratedEntry === "function" ? createRationalityGeneratedEntry : null,
+  },
+  "general-knowledge": {
+    share: 0.6,
+    factory:
+      typeof createGeneralKnowledgeGeneratedEntry === "function"
+        ? createGeneralKnowledgeGeneratedEntry
+        : null,
+  },
+  science: {
+    share: 0.45,
+    factory: typeof createScienceGeneratedEntry === "function" ? createScienceGeneratedEntry : null,
+  },
+  calendar: {
+    share: 0.9,
+    factory: typeof createCalendarGeneratedEntry === "function" ? createCalendarGeneratedEntry : null,
+  },
+  "fractions-and-ratios": {
+    share: 0.85,
+    factory:
+      typeof createFractionsAndRatiosGeneratedEntry === "function"
+        ? createFractionsAndRatiosGeneratedEntry
+        : null,
+  },
+  "maps-and-directions": {
+    share: 0.85,
+    factory:
+      typeof createMapsAndDirectionsGeneratedEntry === "function"
+        ? createMapsAndDirectionsGeneratedEntry
+        : null,
+  },
+  "digital-safety": {
+    share: 0.6,
+    factory:
+      typeof createDigitalSafetyGeneratedEntry === "function"
+        ? createDigitalSafetyGeneratedEntry
+        : null,
+  },
+  "health-and-first-aid": {
+    share: 0.4,
+    factory:
+      typeof createHealthAndFirstAidGeneratedEntry === "function"
+        ? createHealthAndFirstAidGeneratedEntry
+        : null,
+  },
+  nutrition: {
+    share: 0.55,
+    factory: typeof createNutritionGeneratedEntry === "function" ? createNutritionGeneratedEntry : null,
+  },
+  "household-problem-solving": {
+    share: 0.6,
+    factory:
+      typeof createHouseholdProblemSolvingGeneratedEntry === "function"
+        ? createHouseholdProblemSolvingGeneratedEntry
+        : null,
+  },
+  fractions: {
+    share: 0.8,
+    factory: typeof createFractionsGeneratedEntry === "function" ? createFractionsGeneratedEntry : null,
+  },
+  "spatial-reasoning": {
+    share: 0.85,
+    factory:
+      typeof createSpatialReasoningGeneratedEntry === "function"
+        ? createSpatialReasoningGeneratedEntry
+        : null,
+  },
+};
 
 const mathInputGenerators = [
   createAdditionInputQuestion,
   createSubtractionInputQuestion,
   createMultiplicationInputQuestion,
+  createDivisionInputQuestion,
+  createMissingNumberInputQuestion,
+  createDecimalOperationInputQuestion,
+  createPlaceValueInputQuestion,
+  createRectangleMeasureInputQuestion,
   createMoneyInputQuestion,
   createPercentageInputQuestion,
 ];
@@ -479,9 +647,17 @@ const mathChoiceGenerators = [
   createAdditionChoiceQuestion,
   createSubtractionChoiceQuestion,
   createMultiplicationChoiceQuestion,
+  createDivisionChoiceQuestion,
+  createMissingNumberChoiceQuestion,
   createSkipCountingChoiceQuestion,
   createNumberPatternChoiceQuestion,
   createComparisonChoiceQuestion,
+  createDecimalComparisonChoiceQuestion,
+  createDecimalOperationChoiceQuestion,
+  createPlaceValueChoiceQuestion,
+  createRoundingChoiceQuestion,
+  createRectangleMeasureChoiceQuestion,
+  createPrimeCompositeChoiceQuestion,
   createMoneyChoiceQuestion,
   createPercentageChoiceQuestion,
 ];
@@ -492,6 +668,20 @@ const statisticsGenerators = [
   createStatisticsModeQuestion,
   createStatisticsRangeQuestion,
   createStatisticsDataQuestion,
+];
+
+const PLACE_VALUE_NAMES = [
+  "ones",
+  "tens",
+  "hundreds",
+  "thousands",
+  "ten-thousands",
+  "hundred-thousands",
+];
+
+const PRIME_NUMBER_POOL = [
+  2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47,
+  53, 59, 61, 67, 71, 73, 79, 83, 89, 97,
 ];
 
 elements.startForm.addEventListener("submit", startSession);
@@ -526,13 +716,321 @@ function buildHebrewQuestionBank(entries) {
 
   const baseEntries = Array.from(groupedEntries.values()).map((entry) => ({
     hebrew: entry.hebrew,
-    hebrewDisplay: HEBREW_NIKKUD_OVERRIDES[entry.hebrew] || entry.hebrew,
+    hebrewDisplay: buildHebrewDisplay(entry.hebrew, entry.transliteration),
     english: Array.from(entry.englishSet).join(" / "),
     transliteration: entry.transliteration || "",
     difficulty: entry.difficulty,
   }));
 
   return baseEntries;
+}
+
+function buildHebrewDisplay(hebrew, transliteration) {
+  const rawHebrew = String(hebrew || "").trim();
+  if (!rawHebrew) {
+    return "";
+  }
+
+  if (HEBREW_NIKKUD_OVERRIDES[rawHebrew]) {
+    return HEBREW_NIKKUD_OVERRIDES[rawHebrew];
+  }
+
+  const transliterationWords = String(transliteration || "")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  const hebrewWords = rawHebrew.split(/\s+/).filter(Boolean);
+
+  if (hebrewWords.length && hebrewWords.length === transliterationWords.length) {
+    return hebrewWords
+      .map((word, index) => buildHebrewWordWithNikkud(word, transliterationWords[index]))
+      .join(" ");
+  }
+
+  return buildHebrewWordWithNikkud(rawHebrew, transliteration);
+}
+
+function buildHebrewWordWithNikkud(word, transliteration) {
+  const rawWord = String(word || "").trim();
+  if (!rawWord) {
+    return "";
+  }
+
+  if (HEBREW_NIKKUD_OVERRIDES[rawWord]) {
+    return HEBREW_NIKKUD_OVERRIDES[rawWord];
+  }
+
+  const letters = Array.from(rawWord);
+  const tokens = tokenizeHebrewTransliterationWord(transliteration);
+  if (!tokens.length) {
+    return rawWord;
+  }
+
+  const pointedLetters = [];
+  let tokenIndex = 0;
+
+  for (let index = 0; index < letters.length; index += 1) {
+    const letter = letters[index];
+    if (!isHebrewLetter(letter)) {
+      pointedLetters.push(letter);
+      continue;
+    }
+
+    const nextLetter = letters[index + 1] || "";
+    const currentToken = tokens[tokenIndex];
+    let renderedLetter = letter;
+
+    if (currentToken?.type === "c" && matchesHebrewConsonant(letter, currentToken.value)) {
+      tokenIndex += 1;
+    }
+
+    const vowelToken = tokens[tokenIndex];
+    const vowelInfo =
+      vowelToken?.type === "v" ? describeHebrewVowel(vowelToken.value, nextLetter) : null;
+
+    if (vowelInfo) {
+      renderedLetter += vowelInfo.mark || "";
+      pointedLetters.push(renderedLetter);
+
+      if (vowelInfo.consumeNext === "yod" && nextLetter === "י") {
+        pointedLetters.push("י");
+        index += 1;
+      } else if (vowelInfo.consumeNext === "vav" && nextLetter === "ו") {
+        pointedLetters.push(vowelInfo.nextLetterText || "ו");
+        index += 1;
+      }
+
+      tokenIndex += 1;
+      continue;
+    }
+
+    if (tokens[tokenIndex]?.type === "c" && nextLetter && shouldAddHebrewSheva(letter, nextLetter)) {
+      renderedLetter += "ְ";
+    }
+
+    pointedLetters.push(renderedLetter);
+  }
+
+  return pointedLetters.join("");
+}
+
+function tokenizeHebrewTransliterationWord(value) {
+  const normalized = String(value || "")
+    .split(",")[0]
+    .toLowerCase()
+    .replaceAll("’", "'")
+    .replaceAll("‘", "'")
+    .replaceAll("sch", "sh")
+    .replaceAll("tsh", "ch")
+    .replaceAll("-", " ")
+    .replaceAll("'", "")
+    .replace(/[^a-z\s]/g, " ")
+    .trim();
+
+  if (!normalized) {
+    return [];
+  }
+
+  const tokens = [];
+  const chunks = normalized.split(/\s+/).filter(Boolean);
+
+  chunks.forEach((chunk) => {
+    let index = 0;
+    while (index < chunk.length) {
+      if (isLatinVowel(chunk[index])) {
+        let vowelEnd = index + 1;
+        while (vowelEnd < chunk.length && isLatinVowel(chunk[vowelEnd])) {
+          vowelEnd += 1;
+        }
+        tokens.push({ type: "v", value: chunk.slice(index, vowelEnd) });
+        index = vowelEnd;
+        continue;
+      }
+
+      let consonantEnd = index + 1;
+      while (consonantEnd < chunk.length && !isLatinVowel(chunk[consonantEnd])) {
+        consonantEnd += 1;
+      }
+
+      splitHebrewConsonantRun(chunk.slice(index, consonantEnd)).forEach((cluster) => {
+        tokens.push({ type: "c", value: cluster });
+      });
+      index = consonantEnd;
+    }
+  });
+
+  return tokens;
+}
+
+function splitHebrewConsonantRun(value) {
+  const clusters = [];
+  let index = 0;
+  while (index < value.length) {
+    const remaining = value.slice(index);
+    if (remaining.startsWith("sh")) {
+      clusters.push("sh");
+      index += 2;
+      continue;
+    }
+    if (remaining.startsWith("kh")) {
+      clusters.push("kh");
+      index += 2;
+      continue;
+    }
+    if (remaining.startsWith("ch")) {
+      clusters.push("ch");
+      index += 2;
+      continue;
+    }
+    if (remaining.startsWith("ts")) {
+      clusters.push("ts");
+      index += 2;
+      continue;
+    }
+    if (remaining.startsWith("tz")) {
+      clusters.push("tz");
+      index += 2;
+      continue;
+    }
+
+    clusters.push(remaining[0]);
+    index += 1;
+  }
+
+  return clusters;
+}
+
+function isLatinVowel(character) {
+  return ["a", "e", "i", "o", "u"].includes(character);
+}
+
+function isHebrewLetter(value) {
+  return /^[\u05d0-\u05ea]$/.test(value);
+}
+
+function matchesHebrewConsonant(letter, cluster) {
+  const normalizedLetter = normalizeHebrewLetterForMatch(letter);
+  switch (normalizedLetter) {
+    case "א":
+    case "ע":
+      return false;
+    case "ב":
+      return cluster === "b" || cluster === "v";
+    case "ג":
+      return cluster === "g" || cluster === "j";
+    case "ד":
+      return cluster === "d";
+    case "ה":
+      return cluster === "h";
+    case "ו":
+      return cluster === "v" || cluster === "w";
+    case "ז":
+      return cluster === "z";
+    case "ח":
+      return cluster === "ch" || cluster === "kh" || cluster === "h";
+    case "ט":
+      return cluster === "t";
+    case "י":
+      return cluster === "y";
+    case "כ":
+      return cluster === "k" || cluster === "kh" || cluster === "ch";
+    case "ל":
+      return cluster === "l";
+    case "מ":
+      return cluster === "m";
+    case "נ":
+      return cluster === "n";
+    case "ס":
+      return cluster === "s";
+    case "פ":
+      return cluster === "p" || cluster === "f";
+    case "צ":
+      return cluster === "ts" || cluster === "tz" || cluster === "z";
+    case "ק":
+      return cluster === "k" || cluster === "q" || cluster === "c";
+    case "ר":
+      return cluster === "r";
+    case "ש":
+      return cluster === "sh" || cluster === "s";
+    case "ת":
+      return cluster === "t";
+    default:
+      return false;
+  }
+}
+
+function normalizeHebrewLetterForMatch(letter) {
+  switch (letter) {
+    case "ך":
+      return "כ";
+    case "ם":
+      return "מ";
+    case "ן":
+      return "נ";
+    case "ף":
+      return "פ";
+    case "ץ":
+      return "צ";
+    default:
+      return letter;
+  }
+}
+
+function describeHebrewVowel(value, nextLetter) {
+  const normalized = String(value || "").toLowerCase();
+  if (!normalized) {
+    return null;
+  }
+
+  if ((normalized.startsWith("ei") || normalized.startsWith("ey")) && nextLetter === "י") {
+    return { mark: "ֵ", consumeNext: "yod" };
+  }
+
+  if ((normalized.startsWith("ai") || normalized.startsWith("ay")) && nextLetter === "י") {
+    return { mark: "ַ", consumeNext: "yod" };
+  }
+
+  if ((normalized.startsWith("oi") || normalized.startsWith("oy")) && nextLetter === "י") {
+    return { mark: "ֹ", consumeNext: "yod" };
+  }
+
+  if (normalized.startsWith("o") && nextLetter === "ו") {
+    return { mark: "", consumeNext: "vav", nextLetterText: "וֹ" };
+  }
+
+  if (normalized.startsWith("u") && nextLetter === "ו") {
+    return { mark: "", consumeNext: "vav", nextLetterText: "וּ" };
+  }
+
+  if (normalized.startsWith("i") && nextLetter === "י") {
+    return { mark: "ִ", consumeNext: "yod" };
+  }
+
+  if (normalized.startsWith("a")) {
+    return { mark: "ַ" };
+  }
+
+  if (normalized.startsWith("e")) {
+    return { mark: "ֶ" };
+  }
+
+  if (normalized.startsWith("i")) {
+    return { mark: "ִ" };
+  }
+
+  if (normalized.startsWith("o")) {
+    return { mark: "ֹ" };
+  }
+
+  if (normalized.startsWith("u")) {
+    return { mark: "ֻ" };
+  }
+
+  return null;
+}
+
+function shouldAddHebrewSheva(letter, nextLetter) {
+  return isHebrewLetter(letter) && isHebrewLetter(nextLetter);
 }
 
 function buildScienceQuestionBank(entries) {
@@ -558,23 +1056,30 @@ function buildScienceQuestionBank(entries) {
 
 function buildStaticChoiceBank(entries, type) {
   return entries
-    .map((entry) => {
-      const difficulty = getEntryDifficulty(entry.difficulty);
-      const options = Array.from(new Set((entry.options || []).map(String)));
-      const answer = String(entry.answer || "");
-      if (difficulty === null || !answer || options.length !== 4 || !options.includes(answer)) {
-        return null;
-      }
-
-      return {
-        question: String(entry.question || ""),
-        options,
-        answer,
-        difficulty,
-        type,
-      };
-    })
+    .map((entry) => normalizeChoiceBankEntry(entry, type))
     .filter(Boolean);
+}
+
+function normalizeChoiceBankEntry(entry, type) {
+  const difficulty = getEntryDifficulty(entry?.difficulty);
+  const options = Array.from(new Set((entry?.options || []).map(String)));
+  const answer = String(entry?.answer || "");
+  if (difficulty === null || !answer || options.length !== 4 || !options.includes(answer)) {
+    return null;
+  }
+
+  return {
+    question: String(entry?.question || ""),
+    options,
+    answer,
+    difficulty,
+    type,
+    visualHtml: typeof entry?.visualHtml === "string" ? entry.visualHtml : "",
+    visualSummary: typeof entry?.visualSummary === "string" ? entry.visualSummary : "",
+    displayText: typeof entry?.displayText === "string" ? entry.displayText : "",
+    extraText: typeof entry?.extraText === "string" ? entry.extraText : "",
+    extraHtml: typeof entry?.extraHtml === "string" ? entry.extraHtml : "",
+  };
 }
 
 function getEntryDifficulty(value) {
@@ -711,6 +1216,11 @@ function buildSessionQuestions(totalQuestions, difficulty) {
     const categoryConfig = choiceCategoryConfigs[category];
     if (categoryConfig) {
       const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+      const generatedQuestion = createGeneratedCategoryQuestion(category, effectiveDifficulty);
+      if (generatedQuestion) {
+        return generatedQuestion;
+      }
+
       return categoryConfig.createQuestion(drawFromPool(resources[category], effectiveDifficulty));
     }
 
@@ -973,6 +1483,176 @@ function createMultiplicationChoiceQuestion(difficulty) {
     displayText: `${left} × ${right} =`,
     answer: left * right,
   });
+}
+
+function createDivisionInputQuestion(difficulty) {
+  const { dividend, divisor, quotient } = generateDivisionProblem(difficulty);
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty,
+    questionText: "",
+    displayText: `${dividend} ÷ ${divisor} =`,
+    answer: quotient,
+  });
+}
+
+function createDivisionChoiceQuestion(difficulty) {
+  const { dividend, divisor, quotient } = generateDivisionProblem(difficulty);
+  return createNumericChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "",
+    displayText: `${dividend} ÷ ${divisor} =`,
+    answer: quotient,
+  });
+}
+
+function createMissingNumberInputQuestion(difficulty) {
+  const problem = generateMissingNumberProblem(difficulty);
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty,
+    questionText: problem.questionText,
+    displayText: problem.displayText,
+    answer: problem.answer,
+  });
+}
+
+function createMissingNumberChoiceQuestion(difficulty) {
+  const problem = generateMissingNumberProblem(difficulty);
+  return createNumericChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: problem.questionText,
+    displayText: problem.displayText,
+    answer: problem.answer,
+  });
+}
+
+function createDecimalOperationInputQuestion(difficulty) {
+  const problem = generateDecimalOperationProblem(difficulty);
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty,
+    questionText: "Solve the decimal problem.",
+    displayText: `${problem.leftText} ${problem.operator} ${problem.rightText} =`,
+    answer: problem.answer,
+  });
+}
+
+function createDecimalOperationChoiceQuestion(difficulty) {
+  const problem = generateDecimalOperationProblem(difficulty);
+  return {
+    type: "math-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "Solve the decimal problem.",
+    displayText: `${problem.leftText} ${problem.operator} ${problem.rightText} =`,
+    extraText: "",
+    options: buildDecimalStringOptions(problem.answer, problem.digits),
+    answerValue: formatDecimalNumber(problem.answer, problem.digits),
+    answerLabel: formatDecimalNumber(problem.answer, problem.digits),
+    isHebrew: false,
+  };
+}
+
+function createPlaceValueInputQuestion(difficulty) {
+  const problem = generatePlaceValueProblem(difficulty);
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty,
+    questionText: `In ${problem.numberText}, what is the value of the digit ${problem.digit}?`,
+    displayText: "",
+    answer: problem.answer,
+  });
+}
+
+function createPlaceValueChoiceQuestion(difficulty) {
+  const problem = generatePlaceValueProblem(difficulty);
+  return {
+    type: "math-choice",
+    difficulty,
+    mode: "choice",
+    questionText: `In ${problem.numberText}, what is the value of the digit ${problem.digit}?`,
+    displayText: "",
+    extraText: "",
+    options: shuffleArray(problem.options.map(formatGroupedNumber)),
+    answerValue: formatGroupedNumber(problem.answer),
+    answerLabel: formatGroupedNumber(problem.answer),
+    isHebrew: false,
+  };
+}
+
+function createRoundingChoiceQuestion(difficulty) {
+  const problem = generateRoundingProblem(difficulty);
+  return {
+    type: "math-choice",
+    difficulty,
+    mode: "choice",
+    questionText: `Round ${formatGroupedNumber(problem.number)} to the nearest ${formatGroupedNumber(
+      problem.placeValue
+    )}.`,
+    displayText: "",
+    extraText: "",
+    options: buildRoundingOptions(problem.answer, problem.placeValue).map(formatGroupedNumber),
+    answerValue: formatGroupedNumber(problem.answer),
+    answerLabel: formatGroupedNumber(problem.answer),
+    isHebrew: false,
+  };
+}
+
+function createDecimalComparisonChoiceQuestion(difficulty) {
+  const problem = generateDecimalComparisonProblem(difficulty);
+  return {
+    type: "math-choice",
+    difficulty,
+    mode: "choice",
+    questionText: `Which decimal is ${problem.askFor}?`,
+    displayText: "",
+    extraText: "",
+    options: shuffleArray(problem.options),
+    answerValue: problem.answer,
+    answerLabel: problem.answer,
+    isHebrew: false,
+  };
+}
+
+function createRectangleMeasureInputQuestion(difficulty) {
+  const problem = generateRectangleMeasureProblem(difficulty);
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty,
+    questionText: problem.questionText,
+    displayText: "",
+    answer: problem.answer,
+  });
+}
+
+function createRectangleMeasureChoiceQuestion(difficulty) {
+  const problem = generateRectangleMeasureProblem(difficulty);
+  return createNumericChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: problem.questionText,
+    displayText: "",
+    answer: problem.answer,
+  });
+}
+
+function createPrimeCompositeChoiceQuestion(difficulty) {
+  const problem = generatePrimeCompositeProblem(difficulty);
+  return {
+    type: "math-choice",
+    difficulty,
+    mode: "choice",
+    questionText: `Which number is ${problem.askFor}?`,
+    displayText: "",
+    extraText: "",
+    options: shuffleArray(problem.options.map(String)),
+    answerValue: String(problem.answer),
+    answerLabel: String(problem.answer),
+    isHebrew: false,
+  };
 }
 
 function createSkipCountingChoiceQuestion(difficulty) {
@@ -1616,13 +2296,21 @@ function createHebrewChoiceQuestion(entry) {
     type: "hebrew-choice",
     difficulty: entry.difficulty,
     mode: "choice",
-    questionText: `What does "${entry.hebrewDisplay}" mean?`,
-    displayText: "",
-    extraText: entry.transliteration ? `Sounds like: ${entry.transliteration}` : "",
+    questionText: "What does this Hebrew word mean?",
+    displayText: entry.hebrewDisplay,
+    extraText: "",
+    extraHtml: entry.transliteration
+      ? `
+        <details class="transliteration-toggle">
+          <summary>Show transliteration</summary>
+          <div class="transliteration-content">Sounds like: ${escapeHtml(entry.transliteration)}</div>
+        </details>
+      `
+      : "",
     options: buildHebrewOptions(entry.english),
     answerValue: entry.english,
     answerLabel: entry.english,
-    isHebrew: false,
+    isHebrew: true,
   };
 }
 
@@ -1632,13 +2320,30 @@ function createBankChoiceQuestion(entry, type) {
     difficulty: entry.difficulty,
     mode: "choice",
     questionText: entry.question,
-    displayText: "",
-    extraText: "",
+    displayText: entry.displayText || "",
+    extraText: entry.extraText || "",
+    extraHtml: entry.extraHtml || "",
+    visualHtml: entry.visualHtml || "",
+    visualSummary: entry.visualSummary || "",
     options: shuffleArray([...entry.options]),
     answerValue: entry.answer,
     answerLabel: entry.answer,
     isHebrew: false,
   };
+}
+
+function createGeneratedCategoryQuestion(category, difficulty) {
+  const config = generatedChoiceCategoryConfigs[category];
+  if (!config?.factory || Math.random() >= config.share) {
+    return null;
+  }
+
+  try {
+    const normalizedEntry = normalizeChoiceBankEntry(config.factory(difficulty), `${category}-choice`);
+    return normalizedEntry ? createBankChoiceQuestion(normalizedEntry, `${category}-choice`) : null;
+  } catch {
+    return null;
+  }
 }
 
 function createTimeChoiceQuestion(difficulty) {
@@ -1751,8 +2456,13 @@ function renderCurrentQuestion() {
   elements.questionVisual.innerHTML = question.visualHtml || "";
   elements.questionVisual.hidden = !question.visualHtml;
 
-  elements.questionExtra.textContent = question.extraText;
-  elements.questionExtra.hidden = !question.extraText;
+  if (question.extraHtml) {
+    elements.questionExtra.innerHTML = question.extraHtml;
+    elements.questionExtra.hidden = false;
+  } else {
+    elements.questionExtra.textContent = question.extraText || "";
+    elements.questionExtra.hidden = !question.extraText;
+  }
 
   if (question.mode === "input") {
     elements.answerForm.hidden = false;
@@ -1814,14 +2524,14 @@ function submitTypedAnswer(event) {
   }
 
   const parsedValue = Number(typedValue);
-  if (!Number.isFinite(parsedValue) || !Number.isInteger(parsedValue)) {
-    state.feedbackMessage = "Please type a whole number.";
+  if (!Number.isFinite(parsedValue)) {
+    state.feedbackMessage = "Please type a number.";
     state.feedbackTone = "error";
     renderFeedback();
     return;
   }
 
-  handleAnswer(question, parsedValue === question.answerValue, typedValue);
+  handleAnswer(question, Math.abs(parsedValue - question.answerValue) < 0.000001, typedValue);
 }
 
 function handleAnswer(question, isCorrect, selectedValue = "") {
@@ -2466,13 +3176,257 @@ function generateMultiplicationValues(difficulty) {
   }
 }
 
+function generateDivisionProblem(difficulty) {
+  const config = {
+    1: { divisors: [2, 3, 4, 5], quotientMin: 1, quotientMax: 10 },
+    2: { divisors: [2, 3, 4, 5, 6, 10], quotientMin: 2, quotientMax: 12 },
+    3: { divisors: [2, 3, 4, 5, 6, 7, 8, 9, 10], quotientMin: 2, quotientMax: 15 },
+    4: { divisors: [3, 4, 5, 6, 7, 8, 9, 10, 12], quotientMin: 3, quotientMax: 18 },
+    5: { divisors: [4, 5, 6, 7, 8, 9, 10, 12], quotientMin: 4, quotientMax: 25 },
+  }[difficulty];
+
+  const divisor = randomChoice(config.divisors);
+  const quotient = randomInt(config.quotientMin, config.quotientMax);
+  return {
+    divisor,
+    dividend: divisor * quotient,
+    quotient,
+  };
+}
+
+function generateMissingNumberProblem(difficulty) {
+  const operation = randomChoice(
+    {
+      1: ["addition", "subtraction"],
+      2: ["addition", "subtraction"],
+      3: ["addition", "subtraction", "multiplication"],
+      4: ["addition", "subtraction", "multiplication", "division"],
+      5: ["addition", "subtraction", "multiplication", "division"],
+    }[difficulty]
+  );
+
+  if (operation === "addition") {
+    const [left, right, answer] = generateAdditionValues(Math.max(1, difficulty - 1));
+    if (Math.random() < 0.5) {
+      return {
+        questionText: "What number makes the equation true?",
+        displayText: `__ + ${formatSignedNumber(right)} = ${formatSignedNumber(answer)}`,
+        answer: left,
+      };
+    }
+
+    return {
+      questionText: "What number makes the equation true?",
+      displayText: `${formatSignedNumber(left)} + __ = ${formatSignedNumber(answer)}`,
+      answer: right,
+    };
+  }
+
+  if (operation === "subtraction") {
+    const [left, right, answer] = generateSubtractionValues(Math.max(1, difficulty - 1));
+    if (Math.random() < 0.5) {
+      return {
+        questionText: "What number makes the equation true?",
+        displayText: `__ - ${formatSignedNumber(right)} = ${formatSignedNumber(answer)}`,
+        answer: left,
+      };
+    }
+
+    return {
+      questionText: "What number makes the equation true?",
+      displayText: `${formatSignedNumber(left)} - __ = ${formatSignedNumber(answer)}`,
+      answer: right,
+    };
+  }
+
+  if (operation === "multiplication") {
+    const { left, right } = generateMultiplicationValues(difficulty);
+    if (Math.random() < 0.5) {
+      return {
+        questionText: "What number makes the equation true?",
+        displayText: `__ × ${right} = ${left * right}`,
+        answer: left,
+      };
+    }
+
+    return {
+      questionText: "What number makes the equation true?",
+      displayText: `${left} × __ = ${left * right}`,
+      answer: right,
+    };
+  }
+
+  const { dividend, divisor, quotient } = generateDivisionProblem(difficulty);
+  if (Math.random() < 0.5) {
+    return {
+      questionText: "What number makes the equation true?",
+      displayText: `__ ÷ ${divisor} = ${quotient}`,
+      answer: dividend,
+    };
+  }
+
+  return {
+    questionText: "What number makes the equation true?",
+    displayText: `${dividend} ÷ __ = ${quotient}`,
+    answer: divisor,
+  };
+}
+
+function generateDecimalOperationProblem(difficulty) {
+  const config = {
+    1: { digits: 1, maxWhole: 3, allowSubtraction: false },
+    2: { digits: 1, maxWhole: 8, allowSubtraction: true },
+    3: { digits: 2, maxWhole: 10, allowSubtraction: true },
+    4: { digits: 2, maxWhole: 20, allowSubtraction: true },
+    5: { digits: 2, maxWhole: 35, allowSubtraction: true },
+  }[difficulty];
+  const scale = 10 ** config.digits;
+  const operator = config.allowSubtraction && Math.random() < 0.45 ? "-" : "+";
+
+  while (true) {
+    const leftScaled = randomInt(scale, config.maxWhole * scale);
+    const rightScaled =
+      operator === "-"
+        ? randomInt(1, Math.max(1, leftScaled - 1))
+        : randomInt(1, config.maxWhole * scale);
+    const answerScaled = operator === "-" ? leftScaled - rightScaled : leftScaled + rightScaled;
+
+    if (answerScaled <= 0 || answerScaled > (config.maxWhole + 5) * scale) {
+      continue;
+    }
+
+    if (leftScaled % scale === 0 && rightScaled % scale === 0) {
+      continue;
+    }
+
+    return {
+      digits: config.digits,
+      operator,
+      leftText: formatDecimalNumber(leftScaled / scale, config.digits),
+      rightText: formatDecimalNumber(rightScaled / scale, config.digits),
+      answer: Number((answerScaled / scale).toFixed(config.digits)),
+    };
+  }
+}
+
+function generatePlaceValueProblem(difficulty) {
+  const digitCount = difficulty <= 2 ? 4 : difficulty === 3 ? 5 : 6;
+  const digits = buildUniqueDigitSequence(digitCount);
+  const validIndexes = digits
+    .map((digit, index) => (digit === 0 ? null : index))
+    .filter((value) => value !== null);
+  const targetIndex = randomChoice(validIndexes);
+  const targetDigit = digits[targetIndex];
+  const placePower = digitCount - targetIndex - 1;
+  const answer = targetDigit * 10 ** placePower;
+  const optionPowers = shuffleArray(
+    Array.from({ length: digitCount }, (_, power) => power).filter((power) => power !== placePower)
+  ).slice(0, 3);
+
+  return {
+    numberText: formatGroupedNumber(Number(digits.join(""))),
+    digit: targetDigit,
+    answer,
+    options: shuffleArray([placePower, ...optionPowers]).map((power) => targetDigit * 10 ** power),
+  };
+}
+
+function generateRoundingProblem(difficulty) {
+  const config = {
+    1: { placeValues: [10], min: 12, max: 95 },
+    2: { placeValues: [10], min: 25, max: 495 },
+    3: { placeValues: [10, 100], min: 120, max: 2495 },
+    4: { placeValues: [100], min: 250, max: 4995 },
+    5: { placeValues: [100, 1000], min: 1500, max: 99995 },
+  }[difficulty];
+
+  while (true) {
+    const placeValue = randomChoice(config.placeValues);
+    const number = randomInt(config.min, config.max);
+    if (number % placeValue === 0) {
+      continue;
+    }
+
+    return {
+      number,
+      placeValue,
+      answer: roundToNearest(number, placeValue),
+    };
+  }
+}
+
+function generateDecimalComparisonProblem(difficulty) {
+  const digits = difficulty <= 2 ? 1 : 2;
+  const scale = 10 ** digits;
+  const askFor = randomChoice(["greatest", "smallest"]);
+  const scaledValues = new Set();
+  const baseWhole = difficulty <= 2 ? randomInt(0, 9) : randomInt(1, 24);
+
+  while (scaledValues.size < 4) {
+    let wholePart = baseWhole;
+    if (difficulty >= 4 && Math.random() < 0.35) {
+      wholePart += randomChoice([-1, 1]);
+    }
+
+    const fractionalPart = randomInt(0, scale - 1);
+    const scaledValue = wholePart * scale + fractionalPart;
+    if (scaledValue >= 0) {
+      scaledValues.add(scaledValue);
+    }
+  }
+
+  const ordered = Array.from(scaledValues);
+  const answerScaled = askFor === "greatest" ? Math.max(...ordered) : Math.min(...ordered);
+
+  return {
+    askFor,
+    options: ordered.map((value) => formatDecimalNumber(value / scale, digits)),
+    answer: formatDecimalNumber(answerScaled / scale, digits),
+  };
+}
+
+function generateRectangleMeasureProblem(difficulty) {
+  const config = {
+    1: { min: 2, max: 6, measures: ["area"] },
+    2: { min: 2, max: 8, measures: ["area", "perimeter"] },
+    3: { min: 3, max: 10, measures: ["area", "perimeter"] },
+    4: { min: 4, max: 14, measures: ["area", "perimeter"] },
+    5: { min: 5, max: 20, measures: ["area", "perimeter"] },
+  }[difficulty];
+  const length = randomInt(config.min, config.max);
+  const width = randomInt(config.min, config.max);
+  const measure = randomChoice(config.measures);
+
+  return {
+    questionText: `A rectangle is ${length} units long and ${width} units wide. What is the ${measure}?`,
+    answer: measure === "area" ? length * width : 2 * (length + width),
+  };
+}
+
+function generatePrimeCompositeProblem(difficulty) {
+  const maxValue = difficulty <= 2 ? 25 : difficulty === 3 ? 40 : difficulty === 4 ? 60 : 90;
+  const values = Array.from({ length: maxValue - 1 }, (_, index) => index + 2);
+  const primes = values.filter(isPrime);
+  const composites = values.filter((value) => !isPrime(value));
+  const askFor = randomChoice(["prime", "composite"]);
+  const answerPool = askFor === "prime" ? primes : composites;
+  const distractorPool = askFor === "prime" ? composites : primes;
+  const answer = randomChoice(answerPool);
+
+  return {
+    askFor,
+    answer,
+    options: shuffleArray([answer, ...shuffleArray(distractorPool.filter((value) => value !== answer)).slice(0, 3)]),
+  };
+}
+
 function generateNumberPattern(difficulty) {
-  const arithmeticSteps = {
-    1: [2, 5, 10],
-    2: [3, 4, 6, -2],
-    3: [4, 5, 7, 8, -3],
-    4: [6, 8, 9, 12, -4],
-    5: [8, 10, 12, 15, -5],
+  const constantSteps = {
+    1: [1, 2, 5],
+    2: [2, 3, 4, 5, 10, -1],
+    3: [3, 4, 5, 6, 8, -2, -3],
+    4: [4, 6, 8, 10, -3, -4],
+    5: [5, 6, 8, 10, 12, -4, -5],
   }[difficulty];
 
   const multiplicativeSteps = {
@@ -2483,7 +3437,19 @@ function generateNumberPattern(difficulty) {
     5: [2, 3],
   }[difficulty];
 
-  if (multiplicativeSteps.length && Math.random() < 0.35) {
+  const advancedFactories = {
+    1: [],
+    2: [],
+    3: [],
+    4: [generateGrowingStepPattern, generateShrinkingStepPattern],
+    5: [generateGrowingStepPattern, generateShrinkingStepPattern, generateGrowingStepPattern],
+  }[difficulty];
+
+  if (advancedFactories.length && Math.random() < 0.45) {
+    return randomChoice(advancedFactories)(difficulty);
+  }
+
+  if (multiplicativeSteps.length && Math.random() < (difficulty >= 4 ? 0.25 : 0.35)) {
     const factor = randomChoice(multiplicativeSteps);
     const start = randomInt(1, factor === 2 ? 12 : 3);
     const sequence = [
@@ -2498,15 +3464,65 @@ function generateNumberPattern(difficulty) {
     };
   }
 
-  const step = randomChoice(arithmeticSteps);
+  const step = randomChoice(constantSteps);
   const start = randomInt(
     step > 0 ? 1 : Math.abs(step) * 4 + 5,
-    difficulty <= 2 ? 30 : difficulty <= 4 ? 60 : 100
+    difficulty <= 2 ? 20 : difficulty === 3 ? 45 : difficulty === 4 ? 70 : 100
   );
   const sequence = [start, start + step, start + step * 2, start + step * 3];
   return {
     sequence,
     answer: start + step * 4,
+  };
+}
+
+function generateGrowingStepPattern(difficulty) {
+  const stepGrowth = difficulty >= 5 ? randomChoice([2, 3]) : randomChoice([1, 2]);
+  const firstStep = difficulty >= 5 ? randomInt(3, 8) : randomInt(2, 6);
+  const direction = Math.random() < 0.7 ? 1 : -1;
+  const start = direction > 0 ? randomInt(1, difficulty >= 5 ? 35 : 25) : randomInt(35, 90);
+  const steps = [
+    direction * firstStep,
+    direction * (firstStep + stepGrowth),
+    direction * (firstStep + stepGrowth * 2),
+    direction * (firstStep + stepGrowth * 3),
+  ];
+  const sequence = [start];
+
+  for (let index = 0; index < 3; index += 1) {
+    sequence.push(sequence[sequence.length - 1] + steps[index]);
+  }
+
+  return {
+    sequence,
+    answer: sequence[sequence.length - 1] + steps[3],
+  };
+}
+
+function generateShrinkingStepPattern(difficulty) {
+  const stepChange = difficulty >= 5 ? randomChoice([2, 3]) : 1;
+  const baseStep = difficulty >= 5 ? randomInt(8, 14) : randomInt(5, 9);
+  const direction = Math.random() < 0.65 ? 1 : -1;
+  const steps = [
+    direction * baseStep,
+    direction * (baseStep - stepChange),
+    direction * (baseStep - stepChange * 2),
+    direction * (baseStep - stepChange * 3),
+  ];
+  const smallestMagnitude = Math.min(...steps.map((step) => Math.abs(step)));
+  const start =
+    direction > 0
+      ? randomInt(1, difficulty >= 5 ? 40 : 30)
+      : randomInt(20 + smallestMagnitude * 4, difficulty >= 5 ? 110 : 80);
+  const sequence = [start];
+
+  for (let index = 0; index < 3; index += 1) {
+    sequence.push(sequence[sequence.length - 1] + steps[index]);
+  }
+
+  return {
+    sequence,
+    answer: sequence[sequence.length - 1] + steps[3],
   };
 }
 
@@ -2655,6 +3671,36 @@ function buildNumberOptions(answer, min = answer - 12, max = answer + 12) {
   return shuffleArray(Array.from(options));
 }
 
+function buildDecimalStringOptions(answer, digits) {
+  const scale = 10 ** digits;
+  const answerScaled = Math.round(answer * scale);
+  const offsets = digits === 1 ? [1, 2, 4, 6, 10, 15] : [1, 2, 5, 10, 20, 25, 50];
+  const options = new Set([answerScaled]);
+
+  while (options.size < 4) {
+    const candidate = answerScaled + randomChoice([-1, 1]) * randomChoice(offsets);
+    if (candidate >= 0 && candidate !== answerScaled) {
+      options.add(candidate);
+    }
+  }
+
+  return shuffleArray(Array.from(options)).map((value) => formatDecimalNumber(value / scale, digits));
+}
+
+function buildRoundingOptions(answer, placeValue) {
+  const options = new Set([answer]);
+  const multipliers = [-2, -1, 1, 2, 3];
+
+  while (options.size < 4) {
+    const candidate = answer + randomChoice(multipliers) * placeValue;
+    if (candidate >= 0 && candidate !== answer) {
+      options.add(candidate);
+    }
+  }
+
+  return shuffleArray(Array.from(options));
+}
+
 function buildVisualNumberOptions(answer, difficulty, maxOverride = null) {
   const spread = difficulty <= 2 ? 4 : difficulty <= 4 ? 7 : 10;
   const min = Math.max(0, answer - spread);
@@ -2696,8 +3742,16 @@ function formatSignedNumber(value) {
   return value < 0 ? `(${value})` : String(value);
 }
 
+function formatDecimalNumber(value, digits) {
+  return Number(value).toFixed(digits);
+}
+
+function formatGroupedNumber(value) {
+  return Number(value).toLocaleString("en-US");
+}
+
 function escapeHtml(value) {
-  return value
+  return String(value)
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -2713,6 +3767,17 @@ function capitalize(value) {
   return value.charAt(0).toUpperCase() + value.slice(1);
 }
 
+function buildUniqueDigitSequence(count) {
+  const digits = shuffleArray([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, count);
+  if (digits[0] !== 0) {
+    return digits;
+  }
+
+  const swapIndex = digits.findIndex((digit) => digit !== 0);
+  [digits[0], digits[swapIndex]] = [digits[swapIndex], digits[0]];
+  return digits;
+}
+
 function greatestCommonDivisor(left, right) {
   let a = Math.abs(left);
   let b = Math.abs(right);
@@ -2726,6 +3791,24 @@ function greatestCommonDivisor(left, right) {
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
+}
+
+function roundToNearest(value, placeValue) {
+  return Math.round(value / placeValue) * placeValue;
+}
+
+function isPrime(value) {
+  if (value < 2) {
+    return false;
+  }
+
+  for (let factor = 2; factor * factor <= value; factor += 1) {
+    if (value % factor === 0) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 function randomInt(min, max) {

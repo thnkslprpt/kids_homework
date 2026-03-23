@@ -503,3 +503,354 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
     difficulty: 2,
   }
 );
+
+function createMapsAndDirectionsGeneratedEntry(difficulty) {
+  const level = mapsClampDifficulty(difficulty);
+  const generators = {
+    1: [
+      mapsCreateCardinalQuestion,
+      mapsCreateOppositeDirectionQuestion,
+      mapsCreateCompassQuestion,
+      mapsCreateFacingQuestion,
+    ],
+    2: [
+      mapsCreateLegendQuestion,
+      mapsCreateNearQuestion,
+      mapsCreateRoadMapQuestion,
+      mapsCreateSimpleChainQuestion,
+    ],
+    3: [
+      mapsCreateGridMovementQuestion,
+      mapsCreateScaleQuestion,
+      mapsCreateDirectionChainQuestion,
+      mapsCreateOppositeDiagonalQuestion,
+    ],
+    4: [
+      mapsCreateScaleQuestion,
+      mapsCreateLongChainQuestion,
+      mapsCreateRelativePositionQuestion,
+      mapsCreateOppositeDirectionQuestion,
+    ],
+    5: [
+      mapsCreateScaleQuestion,
+      mapsCreateMultiStepQuestion,
+      mapsCreateRelativePositionQuestion,
+      mapsCreateCompassQuestion,
+    ],
+  };
+
+  return mapsRandomChoice(generators[level])(level);
+}
+
+function mapsCreateCardinalQuestion(difficulty) {
+  const templates = [
+    {
+      question: "If north is at the top of a map, which direction is on the right side?",
+      answer: "East",
+      options: ["East", "West", "South", "North"],
+      difficulty: 1,
+    },
+    {
+      question: "If north is at the top of a map, which direction is at the bottom?",
+      answer: "South",
+      options: ["East", "West", "South", "North"],
+      difficulty: 1,
+    },
+    {
+      question: "If you face east, which way is behind you?",
+      answer: "West",
+      options: ["West", "North", "South", "East"],
+      difficulty: 1,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateOppositeDirectionQuestion(difficulty) {
+  const templates = [
+    { question: "Which direction is opposite west?", answer: "East", options: ["North", "East", "South", "West"], difficulty: 1 },
+    { question: "Which direction is opposite south?", answer: "North", options: ["North", "East", "West", "South"], difficulty: 1 },
+    { question: "Which direction is opposite northeast?", answer: "Southwest", options: ["Northwest", "Southeast", "Southwest", "East"], difficulty: 3 },
+    { question: "Which direction is opposite northwest?", answer: "Southeast", options: ["Northeast", "Southwest", "Southeast", "West"], difficulty: 4 },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateCompassQuestion() {
+  return {
+    question: "What tool helps you find north, south, east, and west?",
+    answer: "Compass",
+    options: mapsBuildOptions("Compass", ["Thermometer", "Stopwatch", "Calculator"]),
+    difficulty: 1,
+  };
+}
+
+function mapsCreateFacingQuestion(difficulty) {
+  const templates = [
+    {
+      question: "If you face north and turn right, which direction are you facing?",
+      answer: "East",
+      options: ["East", "West", "South", "North"],
+      difficulty: 1,
+    },
+    {
+      question: "If you face south and turn left, which direction are you facing?",
+      answer: "East",
+      options: ["North", "East", "West", "South"],
+      difficulty: 4,
+    },
+    {
+      question: "If you face east and turn left, which direction are you facing?",
+      answer: "North",
+      options: ["North", "South", "West", "East"],
+      difficulty: 2,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateLegendQuestion() {
+  return {
+    question: "What does a map key help you understand?",
+    answer: "What map symbols mean",
+    options: mapsBuildOptions("What map symbols mean", [
+      "How fast you are walking",
+      "What the weather will be",
+      "How old the map is",
+    ]),
+    difficulty: 2,
+  };
+}
+
+function mapsCreateNearQuestion() {
+  return {
+    question: "What does 'near' mean on a map?",
+    answer: "Close by",
+    options: mapsBuildOptions("Close by", ["Far away", "Above the clouds", "Inside the key"]),
+    difficulty: 2,
+  };
+}
+
+function mapsCreateRoadMapQuestion() {
+  return {
+    question: "Which type of map is best for finding streets and highways?",
+    answer: "Road map",
+    options: mapsBuildOptions("Road map", ["Weather map", "Star map", "Political map"]),
+    difficulty: 2,
+  };
+}
+
+function mapsCreateSimpleChainQuestion(difficulty) {
+  const templates = [
+    {
+      question: "A school is north of the park, and the park is north of the library. Where is the school compared with the library?",
+      answer: "North",
+      options: ["North", "South", "East", "West"],
+      difficulty: 2,
+    },
+    {
+      question: "A school is east of the library, and the library is east of the park. Where is the school compared with the park?",
+      answer: "East",
+      options: ["West", "East", "North", "South"],
+      difficulty: 2,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateGridMovementQuestion(difficulty) {
+  const templates = [
+    {
+      question: "If you walk 2 blocks east and then 1 block north, where are you from where you started?",
+      answer: "Northeast",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 3,
+    },
+    {
+      question: "If you walk 3 blocks west and then 2 blocks south, where are you from where you started?",
+      answer: "Southwest",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 3,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateScaleQuestion(difficulty) {
+  const templates = [
+    {
+      question: "A map scale says 1 centimeter = 5 kilometers. If two towns are 3 centimeters apart on the map, how far apart are they in real life?",
+      answer: "15 kilometers",
+      options: ["8 kilometers", "10 kilometers", "15 kilometers", "20 kilometers"],
+      difficulty: 3,
+    },
+    {
+      question: "A map scale says 1 centimeter = 2 miles. If two places are 8 centimeters apart, how far apart are they in real life?",
+      answer: "16 miles",
+      options: ["8 miles", "10 miles", "12 miles", "16 miles"],
+      difficulty: 3,
+    },
+    {
+      question: "A map scale says 1 inch = 4 miles. If two cities are 8 inches apart, how far apart are they in real life?",
+      answer: "32 miles",
+      options: ["24 miles", "28 miles", "32 miles", "36 miles"],
+      difficulty: 5,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateDirectionChainQuestion(difficulty) {
+  const templates = [
+    {
+      question: "The museum is east of the school. The school is south of the park. Where is the museum compared with the park?",
+      answer: "Southeast",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 3,
+    },
+    {
+      question: "The post office is north of the bank, and the bank is west of the store. Where is the post office compared with the store?",
+      answer: "Northwest",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 3,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateOppositeDiagonalQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which direction is opposite northeast?",
+      answer: "Southwest",
+      options: ["Northwest", "Southeast", "Southwest", "East"],
+      difficulty: 3,
+    },
+    {
+      question: "Which direction is opposite northwest?",
+      answer: "Southeast",
+      options: ["Northeast", "Southwest", "Southeast", "West"],
+      difficulty: 4,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateRelativePositionQuestion(difficulty) {
+  const templates = [
+    {
+      question: "The library is north of the shop, and the shop is east of the home. Where is the library compared with the home?",
+      answer: "Northeast",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 5,
+    },
+    {
+      question: "A park is east of the library, and the library is south of the mall. Where is the park compared with the mall?",
+      answer: "Southeast",
+      options: ["Northeast", "Northwest", "Southeast", "Southwest"],
+      difficulty: 4,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateLongChainQuestion(difficulty) {
+  const templates = [
+    {
+      question: "The river is west of the bridge, and the bridge is west of the school. Where is the river compared with the school?",
+      answer: "West",
+      options: ["East", "North", "South", "West"],
+      difficulty: 4,
+    },
+    {
+      question: "The store is west of the bank, and the bank is north of the park. Where is the store compared with the park?",
+      answer: "Northwest",
+      options: ["Northwest", "Northeast", "Southwest", "Southeast"],
+      difficulty: 5,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsCreateMultiStepQuestion(difficulty) {
+  const templates = [
+    {
+      question: "A camp is east of the lake, and the lake is south of the hill. Where is the camp compared with the hill?",
+      answer: "Southeast",
+      options: ["Northeast", "Northwest", "Southeast", "Southwest"],
+      difficulty: 5,
+    },
+    {
+      question: "A trail starts at the cabin. You walk south, then west, then north. Where are you compared with the cabin?",
+      answer: "West",
+      options: ["East", "West", "North", "South"],
+      difficulty: 5,
+    },
+  ];
+
+  return mapsPickTemplate(difficulty, templates);
+}
+
+function mapsBuildOptions(answer, distractors) {
+  const options = [String(answer), ...distractors.map(String)];
+  const unique = [];
+
+  for (const option of options) {
+    if (option && !unique.includes(option)) {
+      unique.push(option);
+    }
+  }
+
+  if (unique.length !== 4) {
+    throw new Error("Maps generator produced invalid options");
+  }
+
+  return mapsShuffle(unique);
+}
+
+function mapsPickTemplate(difficulty, templates) {
+  const level = mapsClampDifficulty(difficulty);
+  const eligible = templates.filter((template) => template.difficulty <= level);
+  return mapsRandomChoice(eligible.length ? eligible : templates);
+}
+
+function mapsClampDifficulty(value) {
+  const difficulty = Number(value);
+  if (!Number.isInteger(difficulty) || difficulty < 1) {
+    return 1;
+  }
+
+  return Math.min(5, difficulty);
+}
+
+function mapsRandomChoice(values) {
+  if (typeof randomChoice === "function") {
+    return randomChoice(values);
+  }
+
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function mapsShuffle(values) {
+  if (typeof shuffleArray === "function") {
+    return shuffleArray(values);
+  }
+
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+
+  return shuffled;
+}

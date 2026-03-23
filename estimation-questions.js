@@ -485,3 +485,234 @@ ESTIMATION_QUESTIONS.push(
     },
   ]
 );
+
+function createEstimationGeneratedEntry(difficulty) {
+  const level = clampEstimationDifficulty(difficulty);
+  const generators = {
+    1: [
+      createEstimationAdditionQuestion,
+      createEstimationSubtractionQuestion,
+      createEstimationDivisionQuestion,
+      createEstimationMultiplicationQuestion,
+    ],
+    2: [
+      createEstimationAdditionQuestion,
+      createEstimationMultiplicationQuestion,
+      createEstimationDivisionQuestion,
+      createEstimationNumberQuestion,
+    ],
+    3: [
+      createEstimationMultiplicationQuestion,
+      createEstimationPercentQuestion,
+      createEstimationAdditionQuestion,
+      createEstimationDivisionQuestion,
+    ],
+    4: [
+      createEstimationElapsedTimeQuestion,
+      createEstimationPercentQuestion,
+      createEstimationAdditionQuestion,
+      createEstimationMultiplicationQuestion,
+    ],
+    5: [
+      createEstimationLargeMultiplicationQuestion,
+      createEstimationPercentQuestion,
+      createEstimationElapsedTimeQuestion,
+      createEstimationDivisionQuestion,
+    ],
+  };
+
+  return estimationRandomChoice(generators[level])();
+}
+
+function createEstimationAdditionQuestion() {
+  const left = estimationRandomInt(12, 98);
+  const right = estimationRandomInt(12, 98);
+  const exact = left + right;
+  const answer = estimationFormatAbout(Math.round(exact / 10) * 10);
+  return {
+    question: `What is the best estimate for ${left} + ${right}?`,
+    options: estimationBuildAboutOptions(answer, [20, 30, 40, 60, 80, 100, 120, 150]),
+    answer,
+    difficulty: 1,
+  };
+}
+
+function createEstimationSubtractionQuestion() {
+  const left = estimationRandomInt(60, 240);
+  const right = estimationRandomInt(10, Math.min(90, left - 5));
+  const exact = left - right;
+  const rounded = Math.max(10, Math.round(exact / 10) * 10);
+  const answer = estimationFormatAbout(rounded);
+  return {
+    question: `Which is closest to ${left} - ${right}?`,
+    options: estimationBuildAboutOptions(answer, [20, 30, 40, 50, 60, 70, 80, 100]),
+    answer,
+    difficulty: 1,
+  };
+}
+
+function createEstimationDivisionQuestion() {
+  const divisor = estimationRandomChoice([5, 8, 9, 10, 12, 20]);
+  const quotient = estimationRandomChoice([5, 8, 10, 12, 15]);
+  const dividend = divisor * quotient + estimationRandomChoice([0, 1, 2, -1]);
+  const estimated = Math.max(1, Math.round(dividend / divisor));
+  const answer = estimationFormatAbout(estimated);
+  return {
+    question: `Which answer is most reasonable for ${dividend} divided by ${divisor}?`,
+    options: estimationBuildAboutOptions(answer, [5, 10, 20, 30, 40, 50, 80, 100].map(estimationFormatAbout)),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createEstimationMultiplicationQuestion() {
+  const left = estimationRandomChoice([3.1, 4.2, 5.8, 6.1, 7.4, 8.3]).toFixed(1);
+  const right = estimationRandomChoice([4, 5, 6, 7, 8, 9, 10]);
+  const product = Number(left) * right;
+  const answer = String(Math.round(product / 10) * 10);
+  return {
+    question: `Which number is closest to ${left} x ${right}?`,
+    options: estimationBuildNumericOptions(answer, 20),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createEstimationNumberQuestion() {
+  const first = estimationRandomInt(10, 30);
+  const second = estimationRandomInt(10, 30);
+  const exact = first * second;
+  const answer = String(Math.max(10, Math.round(exact / 10) * 10));
+  return {
+    question: `If ${first} children each get ${second} stickers, about how many stickers are needed?`,
+    options: estimationBuildNumericOptions(answer, 20, 40),
+    answer,
+    difficulty: 2,
+  };
+}
+
+function createEstimationPercentQuestion() {
+  const percent = estimationRandomChoice([18, 24, 49, 51, 62, 72]);
+  const whole = estimationRandomChoice([50, 80, 100, 150, 200, 250]);
+  const exact = (percent / 100) * whole;
+  const rounded = Math.round(exact / 10) * 10;
+  const answer = estimationFormatAbout(rounded);
+  return {
+    question: `What is the best estimate for ${percent}% of ${whole}?`,
+    options: estimationBuildAboutOptions(answer, [20, 30, 40, 50, 60, 70, 80, 100, 120, 150].map(estimationFormatAbout)),
+    answer,
+    difficulty: 3,
+  };
+}
+
+function createEstimationElapsedTimeQuestion() {
+  const left = estimationRandomInt(15, 70);
+  const right = estimationRandomInt(15, 70);
+  const total = left + right;
+  const answer = estimationFormatAbout(total <= 90 ? 60 : 120);
+  return {
+    question: `A walk takes ${left} minutes and a bus ride takes ${right} minutes. About how long is that altogether?`,
+    options: estimationBuildAboutOptions(answer, ["About 30 minutes", "About 1 hour", "About 2 hours", "About 3 hours"]),
+    answer,
+    difficulty: 4,
+  };
+}
+
+function createEstimationLargeMultiplicationQuestion() {
+  const left = estimationRandomInt(40, 150);
+  const right = estimationRandomChoice([4, 5, 6, 7, 8, 9]);
+  const product = left * right;
+  const rounded = Math.round(product / 100) * 100 || Math.round(product / 10) * 10;
+  const answer = String(rounded);
+  return {
+    question: `Which number is closest to ${left} x ${right}?`,
+    options: estimationBuildNumericOptions(answer, 100, 200),
+    answer,
+    difficulty: 5,
+  };
+}
+
+function estimationBuildAboutOptions(answer, candidates) {
+  const options = [String(answer)];
+  const uniqueCandidates = Array.from(new Set(candidates.map(String))).filter((candidate) => candidate !== String(answer));
+  const shuffled = estimationShuffle(uniqueCandidates);
+
+  while (options.length < 4 && shuffled.length) {
+    options.push(shuffled.shift());
+  }
+
+  while (options.length < 4) {
+    const fallback = `About ${options.length * 10}`;
+    if (!options.includes(fallback)) {
+      options.push(fallback);
+    }
+  }
+
+  return estimationShuffle(options);
+}
+
+function estimationBuildNumericOptions(answer, spread = 10, extra = 20) {
+  const value = Number(answer);
+  const candidates = [
+    value - extra * 2,
+    value - extra,
+    value - spread,
+    value + spread,
+    value + extra,
+    value + extra * 2,
+    Math.max(1, Math.round(value / 2)),
+    value * 2,
+  ]
+    .map((number) => String(Math.max(1, Math.round(number))))
+    .filter((option) => option !== String(answer));
+  return estimationBuildOptions(answer, candidates);
+}
+
+function estimationBuildOptions(answer, candidates) {
+  const options = [String(answer)];
+  const uniqueCandidates = Array.from(new Set(candidates.map(String))).filter((candidate) => candidate !== String(answer));
+  const shuffled = estimationShuffle(uniqueCandidates);
+
+  while (options.length < 4 && shuffled.length) {
+    options.push(shuffled.shift());
+  }
+
+  while (options.length < 4) {
+    const fallback = `${answer} ${options.length}`;
+    if (!options.includes(fallback)) {
+      options.push(fallback);
+    }
+  }
+
+  return estimationShuffle(options);
+}
+
+function estimationFormatAbout(value) {
+  return `About ${value}`;
+}
+
+function clampEstimationDifficulty(difficulty) {
+  const value = Number(difficulty);
+  if (!Number.isInteger(value)) {
+    return 1;
+  }
+
+  return Math.min(5, Math.max(1, value));
+}
+
+function estimationRandomChoice(values) {
+  return values[estimationRandomInt(0, values.length - 1)];
+}
+
+function estimationRandomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function estimationShuffle(values) {
+  const shuffled = [...values];
+  for (let index = shuffled.length - 1; index > 0; index -= 1) {
+    const swapIndex = estimationRandomInt(0, index);
+    [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
+  }
+  return shuffled;
+}
