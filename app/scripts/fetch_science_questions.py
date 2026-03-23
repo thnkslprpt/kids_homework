@@ -34,7 +34,8 @@ def decode_text(value: str) -> str:
 
 
 def main() -> int:
-    output_path = Path(sys.argv[1]) if len(sys.argv) > 1 else Path("science-questions.js")
+    default_output_path = Path(__file__).resolve().parents[1] / "science-questions.js"
+    output_path = Path(sys.argv[1]) if len(sys.argv) > 1 else default_output_path
 
     token_data = fetch_json(f"{BASE_URL}/api_token.php?command=request")
     token = token_data.get("token")

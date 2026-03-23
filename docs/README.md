@@ -1,7 +1,7 @@
 # Homework
 
 This is a plain offline homework app. Put the whole folder on a computer or Chromebook, then open
-[`index.html`](./index.html) in Chrome.
+[`homework.html`](../homework.html) in Chrome.
 
 ## Current Features
 
@@ -152,32 +152,34 @@ Important:
 
 ## Files
 
-- `index.html`: main page
-- `style.css`: visual design
-- `app.js`: quiz logic, storage, history screen, and confetti
-- `hebrew-words.js`: bundled Hebrew vocabulary list
-- `science-questions.js`: bundled offline science bank
-- `general-knowledge-questions.js`: bundled offline general knowledge bank
-- `algebra-questions.js`: algebra bank and generator
-- `visual-math-questions.js`: visual math bank and generator
-- `logic-questions.js`: bundled offline logic bank
-- `rationality-questions.js`: bundled offline rationality bank
-- `geography-questions.js`: geography bank and generator
-- `population-questions.js`: top-population country bank
-- `financial-literacy-questions.js`: money skills bank
-- `measurement-questions.js`: units and measurement bank
-- `charts-and-graphs-questions.js`: tables and graph-reading bank
-- `calendar-questions.js`: calendar and date bank
-- `estimation-questions.js`: estimation bank
-- `probability-questions.js`: probability bank
-- `maps-and-directions-questions.js`: map-skills bank
-- `digital-safety-questions.js`: online safety bank
-- `health-and-first-aid-questions.js`: health and first-aid bank
-- `nutrition-questions.js`: nutrition bank
-- `household-problem-solving-questions.js`: household skills bank
-- `fractions-questions.js`: fractions bank with visual models
-- `fractions-and-ratios-questions.js`: fractions and ratios bank
-- `spatial-reasoning-questions.js`: spatial reasoning bank
+- `homework.html`: main page
+- `app/style.css`: visual design
+- `app/app.js`: quiz logic, storage, history screen, and confetti
+- `app/hebrew-words.js`: bundled Hebrew vocabulary list
+- `app/science-questions.js`: bundled offline science bank
+- `app/general-knowledge-questions.js`: bundled offline general knowledge bank
+- `app/algebra-questions.js`: algebra bank and generator
+- `app/visual-math-questions.js`: visual math bank and generator
+- `app/logic-questions.js`: bundled offline logic bank
+- `app/rationality-questions.js`: bundled offline rationality bank
+- `app/geography-questions.js`: geography bank and generator
+- `app/population-questions.js`: top-population country bank
+- `app/financial-literacy-questions.js`: money skills bank
+- `app/measurement-questions.js`: units and measurement bank
+- `app/charts-and-graphs-questions.js`: tables and graph-reading bank
+- `app/calendar-questions.js`: calendar and date bank
+- `app/estimation-questions.js`: estimation bank
+- `app/probability-questions.js`: probability bank
+- `app/maps-and-directions-questions.js`: map-skills bank
+- `app/digital-safety-questions.js`: online safety bank
+- `app/health-and-first-aid-questions.js`: health and first-aid bank
+- `app/nutrition-questions.js`: nutrition bank
+- `app/household-problem-solving-questions.js`: household skills bank
+- `app/fractions-questions.js`: fractions bank with visual models
+- `app/fractions-and-ratios-questions.js`: fractions and ratios bank
+- `app/spatial-reasoning-questions.js`: spatial reasoning bank
+- `app/scripts/`: helper scripts
+- `app/logs/`: saved generator/import logs
 
 ## Sources
 
