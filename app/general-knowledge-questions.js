@@ -1149,7 +1149,7 @@ GENERAL_KNOWLEDGE_QUESTIONS.push(
       difficulty: 4,
     },
     {
-      question: "Which map feature helps compare distance?",
+      question: "Which map feature helps compare distances?",
       options: ["Scale", "Title", "Border", "Key"],
       answer: "Scale",
       difficulty: 4,

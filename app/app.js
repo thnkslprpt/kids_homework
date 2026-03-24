@@ -1,13 +1,23 @@
 const OPTION_LABELS = ["A", "B", "C", "D"];
-const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v1";
+const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
+const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
 const MAX_SAVED_SESSIONS = 10;
+const QUESTION_COUNT_OPTIONS = [20, 25, 30, 35, 40];
+const MAP_QUESTION_INTERVAL = 30;
+const RESERVED_MAP_CATEGORY = "geography-map";
+const LANGUAGE_DRAG_INTERVAL = 4;
+const REVIEW_FOCUS_SHARE = 0.2;
+const REVIEW_RECENCY_DECAY = 0.82;
 const CORE_SESSION_CATEGORIES = ["math", "hebrew"];
 const NON_CORE_SESSION_CATEGORIES = [
   "science",
+  "science-evidence",
   "time",
   "statistics",
   "algebra",
+  "applied-word-problems",
   "visual-math",
+  "visual-measurement",
   "logic",
   "rationality",
   "general-knowledge",
@@ -19,6 +29,8 @@ const NON_CORE_SESSION_CATEGORIES = [
   "calendar",
   "estimation",
   "probability",
+  "reading-comprehension",
+  "vocabulary-grammar",
   "maps-and-directions",
   "digital-safety",
   "health-and-first-aid",
@@ -30,12 +42,91 @@ const NON_CORE_SESSION_CATEGORIES = [
 ];
 const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_CATEGORIES];
 const CORE_CATEGORY_SHARE = 0.45;
+const USER_PROFILES = [
+  {
+    id: "noga",
+    name: "Noga",
+    defaultDifficulty: 3,
+    avatarStyle: "longHair",
+    palette: {
+      sky: "#fff1d2",
+      shirt: "#e28a63",
+      hair: "#e1be5a",
+      accent: "#8fb8ff",
+      eyes: "#3e8a57",
+    },
+  },
+  {
+    id: "gideon",
+    name: "Gideon",
+    defaultDifficulty: 4,
+    avatarStyle: "curlyHair",
+    palette: {
+      sky: "#e6f6ff",
+      shirt: "#4f92d8",
+      hair: "#3f2f2a",
+      accent: "#f4c869",
+      eyes: "#243649",
+    },
+  },
+  {
+    id: "gabriel",
+    name: "Gabriel",
+    defaultDifficulty: 2,
+    avatarStyle: "lightCurls",
+    palette: {
+      sky: "#ecf7ea",
+      shirt: "#5ea96f",
+      hair: "#9b7653",
+      accent: "#ff9a84",
+      eyes: "#3a4f63",
+    },
+  },
+];
+const CATEGORY_LABELS = {
+  math: "Math",
+  hebrew: "Hebrew",
+  science: "Science",
+  "science-evidence": "Science Evidence",
+  time: "Time",
+  statistics: "Statistics",
+  algebra: "Algebra",
+  "applied-word-problems": "Applied Word Problems",
+  "visual-math": "Visual Math",
+  "visual-measurement": "Visual Measurement",
+  logic: "Logic",
+  rationality: "Rationality",
+  "general-knowledge": "General Knowledge",
+  geography: "Geography",
+  "geography-map": "Geography Map",
+  population: "Population",
+  "financial-literacy": "Financial Literacy",
+  measurement: "Measurement",
+  "charts-and-graphs": "Charts and Graphs",
+  calendar: "Calendar",
+  estimation: "Estimation",
+  probability: "Probability",
+  "reading-comprehension": "Reading Comprehension",
+  "vocabulary-grammar": "Vocabulary / Grammar",
+  "maps-and-directions": "Maps and Directions",
+  "digital-safety": "Digital Safety",
+  "health-and-first-aid": "Health and First Aid",
+  nutrition: "Nutrition",
+  "household-problem-solving": "Household Problem Solving",
+  fractions: "Fractions",
+  "fractions-and-ratios": "Fractions and Ratios",
+  "spatial-reasoning": "Spatial Reasoning",
+};
+const USER_PROFILE_MAP = Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, profile]));
 const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   1: { 1: 1 },
   2: { 2: 0.75, 1: 0.25 },
   3: { 3: 0.7, 2: 0.2, 1: 0.1 },
   4: { 4: 0.6, 3: 0.25, 2: 0.1, 1: 0.05 },
   5: { 5: 0.7, 4: 0.2, 3: 0.05, 2: 0.05 },
+};
+const CATEGORY_MAX_DIFFICULTIES = {
+  population: 3,
 };
 const CHART_BAR_TEMPLATES = [
   {
@@ -120,6 +211,172 @@ const CHART_BAR_TEMPLATES = [
         `How many more ${larger.toLowerCase()} stickers are there than ${smaller.toLowerCase()}?`,
     },
     summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "sticker")}`,
+  },
+  {
+    title: "Favorite Ice Creams",
+    labels: ["Vanilla", "Chocolate", "Strawberry", "Mint"],
+    prompts: {
+      most: () => "Which ice cream got the most votes?",
+      secondMost: () => "Which ice cream got the second most votes?",
+      fewest: () => "Which ice cream got the fewest votes?",
+      exact: (label) => `How many votes did ${label.toLowerCase()} get?`,
+      total: () => "How many votes were there altogether?",
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger.toLowerCase()} get than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label} got ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Recess Games",
+    labels: ["Tag", "Soccer", "Hopscotch", "Four Square"],
+    prompts: {
+      most: () => "Which recess game got the most votes?",
+      secondMost: () => "Which recess game got the second most votes?",
+      fewest: () => "Which recess game got the fewest votes?",
+      exact: (label) => `How many votes did ${label.toLowerCase()} get?`,
+      total: () => "How many votes were there altogether?",
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger.toLowerCase()} get than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label} got ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Backpack Items",
+    labels: ["Pencils", "Crayons", "Markers", "Erasers"],
+    prompts: {
+      most: () => "Which backpack item appears the most?",
+      secondMost: () => "Which backpack item appears the second most?",
+      fewest: () => "Which backpack item appears the fewest times?",
+      exact: (label) => `How many ${label.toLowerCase()} are in the backpack?`,
+      total: () => "How many backpack items are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "item")}`,
+  },
+  {
+    title: "Garden Flowers",
+    labels: ["Roses", "Tulips", "Daisies", "Sunflowers"],
+    prompts: {
+      most: () => "Which flower has the most blooms?",
+      secondMost: () => "Which flower has the second most blooms?",
+      fewest: () => "Which flower has the fewest blooms?",
+      exact: (label) => `How many ${label.toLowerCase()} are in the garden?`,
+      total: () => "How many flowers are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} are in the garden than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "flower")}`,
+  },
+  {
+    title: "Lunch Orders",
+    labels: ["Pizza", "Pasta", "Salad", "Soup"],
+    prompts: {
+      most: () => "Which lunch got the most orders?",
+      secondMost: () => "Which lunch got the second most orders?",
+      fewest: () => "Which lunch got the fewest orders?",
+      exact: (label) => `How many ${label.toLowerCase()} lunches were ordered?`,
+      total: () => "How many lunches were ordered altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} lunches were ordered than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "order")}`,
+  },
+  {
+    title: "Craft Beads",
+    labels: ["Red", "Blue", "Green", "Gold"],
+    prompts: {
+      most: () => "Which bead color appears the most?",
+      secondMost: () => "Which bead color appears the second most?",
+      fewest: () => "Which bead color appears the fewest times?",
+      exact: (label) => `How many ${label.toLowerCase()} beads are there?`,
+      total: () => "How many beads are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} beads are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "bead")}`,
+  },
+  {
+    title: "Playground Climbs",
+    labels: ["Ava", "Leo", "Mia", "Noah"],
+    prompts: {
+      most: () => "Who climbed the ladder the most times?",
+      secondMost: () => "Who climbed the ladder the second most times?",
+      fewest: () => "Who climbed the ladder the fewest times?",
+      exact: (label) => `How many times did ${label} climb the ladder?`,
+      total: () => "How many climbs were there altogether?",
+      difference: (larger, smaller) => `How many more climbs did ${larger} have than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "climb")}`,
+  },
+  {
+    title: "Treasure Chest",
+    labels: ["Coins", "Gems", "Keys", "Maps"],
+    prompts: {
+      most: () => "Which treasure appears the most?",
+      secondMost: () => "Which treasure appears the second most?",
+      fewest: () => "Which treasure appears the fewest times?",
+      exact: (label) => `How many ${label.toLowerCase()} are in the treasure chest?`,
+      total: () => "How many treasures are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "treasure")}`,
+  },
+  {
+    title: "Favorite Instruments",
+    labels: ["Drums", "Piano", "Guitar", "Flute"],
+    prompts: {
+      most: () => "Which instrument got the most votes?",
+      secondMost: () => "Which instrument got the second most votes?",
+      fewest: () => "Which instrument got the fewest votes?",
+      exact: (label) => `How many votes did ${label.toLowerCase()} get?`,
+      total: () => "How many votes were there altogether?",
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger.toLowerCase()} get than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label} got ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Farm Animals",
+    labels: ["Cows", "Pigs", "Sheep", "Goats"],
+    prompts: {
+      most: () => "Which farm animal is shown the most?",
+      secondMost: () => "Which farm animal is shown the second most?",
+      fewest: () => "Which farm animal is shown the fewest times?",
+      exact: (label) => `How many ${label.toLowerCase()} are there?`,
+      total: () => "How many farm animals are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "animal")}`,
+  },
+  {
+    title: "Reading Corner Books",
+    labels: ["Space", "Animals", "Mystery", "Sports"],
+    prompts: {
+      most: () => "Which book bin has the most books?",
+      secondMost: () => "Which book bin has the second most books?",
+      fewest: () => "Which book bin has the fewest books?",
+      exact: (label) => `How many ${label.toLowerCase()} books are in the bin?`,
+      total: () => "How many books are there altogether?",
+      difference: (larger, smaller) =>
+        `How many more ${larger.toLowerCase()} books are there than ${smaller.toLowerCase()} books?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "book")}`,
+  },
+  {
+    title: "Block Towers",
+    labels: ["Tower A", "Tower B", "Tower C", "Tower D"],
+    prompts: {
+      most: () => "Which tower is tallest?",
+      secondMost: () => "Which tower is the second tallest?",
+      fewest: () => "Which tower is shortest?",
+      exact: (label) => `How many blocks tall is ${label}?`,
+      total: () => "How many blocks are there altogether?",
+      difference: (larger, smaller) => `How many more blocks tall is ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "block")} tall`,
   },
 ];
 const CHART_TABLE_TEMPLATES = [
@@ -227,6 +484,219 @@ const CHART_TABLE_TEMPLATES = [
         `How many centimeters taller is plant ${larger} than plant ${smaller}?`,
     },
     summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "centimeter")}`,
+  },
+  {
+    title: "Backyard Birds",
+    leftLabel: "Bird",
+    rightLabel: "Sightings",
+    labels: ["Robin", "Crow", "Sparrow", "Bluejay"],
+    prompts: {
+      most: () => "Which bird had the most sightings?",
+      secondMost: () => "Which bird had the second most sightings?",
+      fewest: () => "Which bird had the fewest sightings?",
+      exact: (label) => `How many times was a ${label.toLowerCase()} seen?`,
+      total: () => "How many bird sightings were there altogether?",
+      combined: (left, right) =>
+        `How many bird sightings were there for ${left.toLowerCase()} and ${right.toLowerCase()} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more sightings were there for ${larger.toLowerCase()} than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "sighting")}`,
+  },
+  {
+    title: "Homework Pages",
+    leftLabel: "Subject",
+    rightLabel: "Pages",
+    labels: ["Math", "Reading", "Science", "Writing"],
+    prompts: {
+      most: () => "Which subject had the most pages?",
+      secondMost: () => "Which subject had the second most pages?",
+      fewest: () => "Which subject had the fewest pages?",
+      exact: (label) => `How many pages were finished in ${label.toLowerCase()}?`,
+      total: () => "How many homework pages were finished altogether?",
+      combined: (left, right) =>
+        `How many homework pages were finished in ${left.toLowerCase()} and ${right.toLowerCase()} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more pages were finished in ${larger.toLowerCase()} than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "page")}`,
+  },
+  {
+    title: "Bus Stop Riders",
+    leftLabel: "Stop",
+    rightLabel: "Riders",
+    labels: ["Oak", "Pine", "Maple", "Lake"],
+    prompts: {
+      most: () => "Which stop had the most riders?",
+      secondMost: () => "Which stop had the second most riders?",
+      fewest: () => "Which stop had the fewest riders?",
+      exact: (label) => `How many riders got on at ${label} stop?`,
+      total: () => "How many riders were there altogether?",
+      combined: (left, right) =>
+        `How many riders got on at ${left} and ${right} stops altogether?`,
+      difference: (larger, smaller) =>
+        `How many more riders got on at ${larger} stop than ${smaller} stop?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "rider")}`,
+  },
+  {
+    title: "Chore Minutes",
+    leftLabel: "Chore",
+    rightLabel: "Minutes",
+    labels: ["Sweep", "Dust", "Wash", "Fold"],
+    prompts: {
+      most: () => "Which chore took the most minutes?",
+      secondMost: () => "Which chore took the second most minutes?",
+      fewest: () => "Which chore took the fewest minutes?",
+      exact: (label) => `How many minutes were spent on ${label.toLowerCase()}?`,
+      total: () => "How many chore minutes are shown altogether?",
+      combined: (left, right) =>
+        `How many minutes were spent on ${left.toLowerCase()} and ${right.toLowerCase()} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more minutes were spent on ${larger.toLowerCase()} than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "minute")}`,
+  },
+  {
+    title: "Cupcake Trays",
+    leftLabel: "Tray",
+    rightLabel: "Cupcakes",
+    labels: ["A", "B", "C", "D"],
+    prompts: {
+      most: () => "Which tray has the most cupcakes?",
+      secondMost: () => "Which tray has the second most cupcakes?",
+      fewest: () => "Which tray has the fewest cupcakes?",
+      exact: (label) => `How many cupcakes are on tray ${label}?`,
+      total: () => "How many cupcakes are there altogether?",
+      combined: (left, right) => `How many cupcakes are on trays ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more cupcakes are on tray ${larger} than tray ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "cupcake")}`,
+  },
+  {
+    title: "Can Collection",
+    leftLabel: "Team",
+    rightLabel: "Cans",
+    labels: ["Red", "Blue", "Green", "Gold"],
+    prompts: {
+      most: () => "Which team collected the most cans?",
+      secondMost: () => "Which team collected the second most cans?",
+      fewest: () => "Which team collected the fewest cans?",
+      exact: (label) => `How many cans did the ${label.toLowerCase()} team collect?`,
+      total: () => "How many cans were collected altogether?",
+      combined: (left, right) =>
+        `How many cans did the ${left.toLowerCase()} and ${right.toLowerCase()} teams collect altogether?`,
+      difference: (larger, smaller) =>
+        `How many more cans did the ${larger.toLowerCase()} team collect than the ${smaller.toLowerCase()} team?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "can")}`,
+  },
+  {
+    title: "Jump Rope Counts",
+    leftLabel: "Student",
+    rightLabel: "Jumps",
+    labels: ["Lia", "Omar", "Ruth", "Ben"],
+    prompts: {
+      most: () => "Which student had the most jumps?",
+      secondMost: () => "Which student had the second most jumps?",
+      fewest: () => "Which student had the fewest jumps?",
+      exact: (label) => `How many jumps did ${label} do?`,
+      total: () => "How many jumps were there altogether?",
+      combined: (left, right) => `How many jumps did ${left} and ${right} do altogether?`,
+      difference: (larger, smaller) =>
+        `How many more jumps did ${larger} do than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "jump")}`,
+  },
+  {
+    title: "Pencil Lengths",
+    leftLabel: "Pencil",
+    rightLabel: "Cm",
+    labels: ["Red", "Blue", "Green", "Yellow"],
+    prompts: {
+      most: () => "Which pencil is longest?",
+      secondMost: () => "Which pencil is the second longest?",
+      fewest: () => "Which pencil is shortest?",
+      exact: (label) => `How long is the ${label.toLowerCase()} pencil in centimeters?`,
+      total: () => "What is the total length of all the pencils in centimeters?",
+      combined: (left, right) =>
+        `What is the total length of the ${left.toLowerCase()} and ${right.toLowerCase()} pencils in centimeters?`,
+      difference: (larger, smaller) =>
+        `How many centimeters longer is the ${larger.toLowerCase()} pencil than the ${smaller.toLowerCase()} pencil?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "centimeter")}`,
+  },
+  {
+    title: "Zoo Gate Counts",
+    leftLabel: "Gate",
+    rightLabel: "Visitors",
+    labels: ["North", "South", "East", "West"],
+    prompts: {
+      most: () => "Which gate had the most visitors?",
+      secondMost: () => "Which gate had the second most visitors?",
+      fewest: () => "Which gate had the fewest visitors?",
+      exact: (label) => `How many visitors came through the ${label.toLowerCase()} gate?`,
+      total: () => "How many visitors came through all the gates altogether?",
+      combined: (left, right) =>
+        `How many visitors came through the ${left.toLowerCase()} and ${right.toLowerCase()} gates altogether?`,
+      difference: (larger, smaller) =>
+        `How many more visitors came through the ${larger.toLowerCase()} gate than the ${smaller.toLowerCase()} gate?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "visitor")}`,
+  },
+  {
+    title: "Soccer Practice Goals",
+    leftLabel: "Player",
+    rightLabel: "Goals",
+    labels: ["Ava", "Leo", "Mia", "Noah"],
+    prompts: {
+      most: () => "Which player scored the most goals?",
+      secondMost: () => "Which player scored the second most goals?",
+      fewest: () => "Which player scored the fewest goals?",
+      exact: (label) => `How many goals did ${label} score?`,
+      total: () => "How many goals were scored altogether?",
+      combined: (left, right) => `How many goals did ${left} and ${right} score altogether?`,
+      difference: (larger, smaller) =>
+        `How many more goals did ${larger} score than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "goal")}`,
+  },
+  {
+    title: "Snack Table",
+    leftLabel: "Snack",
+    rightLabel: "Pieces",
+    labels: ["Pretzels", "Carrots", "Crackers", "Cheese"],
+    prompts: {
+      most: () => "Which snack has the most pieces?",
+      secondMost: () => "Which snack has the second most pieces?",
+      fewest: () => "Which snack has the fewest pieces?",
+      exact: (label) => `How many pieces of ${label.toLowerCase()} are there?`,
+      total: () => "How many snack pieces are there altogether?",
+      combined: (left, right) =>
+        `How many pieces of ${left.toLowerCase()} and ${right.toLowerCase()} are there altogether?`,
+      difference: (larger, smaller) =>
+        `How many more pieces of ${larger.toLowerCase()} are there than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "piece")}`,
+  },
+  {
+    title: "Toy Car Distances",
+    leftLabel: "Car",
+    rightLabel: "Meters",
+    labels: ["Red", "Blue", "Green", "Yellow"],
+    prompts: {
+      most: () => "Which toy car rolled the farthest?",
+      secondMost: () => "Which toy car rolled the second farthest?",
+      fewest: () => "Which toy car rolled the shortest distance?",
+      exact: (label) => `How far did the ${label.toLowerCase()} car roll in meters?`,
+      total: () => "What is the total distance rolled by all the toy cars in meters?",
+      combined: (left, right) =>
+        `What is the total distance rolled by the ${left.toLowerCase()} and ${right.toLowerCase()} cars in meters?`,
+      difference: (larger, smaller) =>
+        `How many meters farther did the ${larger.toLowerCase()} car roll than the ${smaller.toLowerCase()} car?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "meter")}`,
   },
 ];
 
@@ -337,17 +807,21 @@ const SCIENCE_EXCLUDED_PATTERNS = [
 ];
 
 const state = {
+  currentUserId: USER_PROFILES[0].id,
   totalQuestions: 0,
   difficulty: 3,
   currentIndex: 0,
+  viewIndex: 0,
   answeredCount: 0,
   correctCount: 0,
   answerResults: [],
+  answerSelections: [],
   questions: [],
   sessionRecords: [],
   sessionStartedAt: null,
   feedbackMessage: "",
   feedbackTone: "",
+  dragState: null,
 };
 
 const confettiRuntime = {
@@ -367,12 +841,14 @@ const elements = {
   resultsScreen: document.getElementById("results-screen"),
   historyScreen: document.getElementById("history-screen"),
   startForm: document.getElementById("start-form"),
+  userSelector: document.getElementById("user-selector"),
   startFeedback: document.getElementById("start-feedback"),
   historyButton: document.getElementById("history-button"),
   historyBackButton: document.getElementById("history-back-button"),
   historyList: document.getElementById("history-list"),
   historyEmpty: document.getElementById("history-empty"),
   questionCount: document.getElementById("question-count"),
+  questionCountButtons: Array.from(document.querySelectorAll(".question-count-button")),
   difficultyLevel: document.getElementById("difficulty-level"),
   difficultyButtons: Array.from(document.querySelectorAll(".difficulty-button")),
   progressTracker: document.getElementById("progress-tracker"),
@@ -387,8 +863,15 @@ const elements = {
   inputArea: document.getElementById("input-area"),
   answerInput: document.getElementById("answer-input"),
   choicesArea: document.getElementById("choices-area"),
+  dragArea: document.getElementById("drag-area"),
+  quizBackButton: document.getElementById("quiz-back-button"),
+  quizForwardButton: document.getElementById("quiz-forward-button"),
   resultsTitle: document.getElementById("results-title"),
   resultsSummary: document.getElementById("results-summary"),
+  resultsCategorySummary: document.getElementById("results-category-summary"),
+  resultsReviewList: document.getElementById("results-review-list"),
+  resultsBackButton: document.getElementById("results-back-button"),
+  resultsForwardButton: document.getElementById("results-forward-button"),
   restartButton: document.getElementById("restart-button"),
 };
 
@@ -409,8 +892,32 @@ const staticChoiceBankSources = [
     entries: typeof ALGEBRA_QUESTIONS !== "undefined" ? ALGEBRA_QUESTIONS : [],
   },
   {
+    category: "applied-word-problems",
+    entries:
+      typeof APPLIED_WORD_PROBLEMS_QUESTIONS !== "undefined" ? APPLIED_WORD_PROBLEMS_QUESTIONS : [],
+  },
+  {
+    category: "reading-comprehension",
+    entries:
+      typeof READING_COMPREHENSION_QUESTIONS !== "undefined" ? READING_COMPREHENSION_QUESTIONS : [],
+  },
+  {
+    category: "science-evidence",
+    entries:
+      typeof SCIENCE_EVIDENCE_QUESTIONS !== "undefined" ? SCIENCE_EVIDENCE_QUESTIONS : [],
+  },
+  {
     category: "visual-math",
     entries: typeof VISUAL_MATH_QUESTIONS !== "undefined" ? VISUAL_MATH_QUESTIONS : [],
+  },
+  {
+    category: "visual-measurement",
+    entries: typeof VISUAL_MEASUREMENT_QUESTIONS !== "undefined" ? VISUAL_MEASUREMENT_QUESTIONS : [],
+  },
+  {
+    category: "vocabulary-grammar",
+    entries:
+      typeof VOCABULARY_GRAMMAR_QUESTIONS !== "undefined" ? VOCABULARY_GRAMMAR_QUESTIONS : [],
   },
   { category: "logic", entries: typeof LOGIC_QUESTIONS !== "undefined" ? LOGIC_QUESTIONS : [] },
   {
@@ -495,6 +1002,26 @@ const staticChoiceBanks = Object.fromEntries(
     buildStaticChoiceBank(entries, category),
   ])
 );
+const sentenceDragEnglishEntries =
+  typeof SENTENCE_DRAG_ENGLISH_QUESTIONS !== "undefined"
+    ? SENTENCE_DRAG_ENGLISH_QUESTIONS
+    : typeof SENTENCE_DRAG_QUESTIONS !== "undefined"
+      ? SENTENCE_DRAG_QUESTIONS.filter((entry) => !entry?.isHebrew)
+      : [];
+const sentenceDragHebrewEntries =
+  typeof SENTENCE_DRAG_HEBREW_QUESTIONS !== "undefined"
+    ? SENTENCE_DRAG_HEBREW_QUESTIONS
+    : typeof SENTENCE_DRAG_QUESTIONS !== "undefined"
+      ? SENTENCE_DRAG_QUESTIONS.filter((entry) => entry?.isHebrew)
+      : [];
+const sentenceDragEnglishQuestionBank = buildStaticDragQuestionBank(
+  sentenceDragEnglishEntries,
+  "vocabulary-grammar-drag"
+);
+const sentenceDragHebrewQuestionBank = buildStaticDragQuestionBank(
+  sentenceDragHebrewEntries,
+  "hebrew-drag"
+);
 const choiceCategoryConfigs = {
   hebrew: {
     bank: hebrewQuestionBank,
@@ -519,10 +1046,45 @@ const generatedChoiceCategoryConfigs = {
     share: 0.85,
     factory: typeof createAlgebraGeneratedEntry === "function" ? createAlgebraGeneratedEntry : null,
   },
+  "applied-word-problems": {
+    share: 0.85,
+    factory:
+      typeof createAppliedWordProblemGeneratedEntry === "function"
+        ? createAppliedWordProblemGeneratedEntry
+        : null,
+  },
+  "reading-comprehension": {
+    share: 0.85,
+    factory:
+      typeof createReadingComprehensionGeneratedEntry === "function"
+        ? createReadingComprehensionGeneratedEntry
+        : null,
+  },
+  "science-evidence": {
+    share: 0.85,
+    factory:
+      typeof createScienceEvidenceGeneratedEntry === "function"
+        ? createScienceEvidenceGeneratedEntry
+        : null,
+  },
   "visual-math": {
     share: 0.85,
     factory:
       typeof createVisualMathGeneratedEntry === "function" ? createVisualMathGeneratedEntry : null,
+  },
+  "visual-measurement": {
+    share: 0.85,
+    factory:
+      typeof createVisualMeasurementGeneratedEntry === "function"
+        ? createVisualMeasurementGeneratedEntry
+        : null,
+  },
+  "vocabulary-grammar": {
+    share: 0.85,
+    factory:
+      typeof createVocabularyGrammarGeneratedEntry === "function"
+        ? createVocabularyGrammarGeneratedEntry
+        : null,
   },
   "financial-literacy": {
     share: 0.85,
@@ -689,7 +1251,13 @@ elements.answerForm.addEventListener("submit", submitTypedAnswer);
 elements.restartButton.addEventListener("click", showStartScreen);
 elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
+elements.quizBackButton.addEventListener("click", showPreviousQuizQuestion);
+elements.quizForwardButton.addEventListener("click", showNextQuizQuestion);
+elements.resultsBackButton.addEventListener("click", showPreviousQuizQuestion);
+elements.resultsForwardButton.addEventListener("click", showNextQuizQuestion);
 
+initializeUserSelector();
+initializeQuestionCountButtons();
 initializeDifficultyButtons();
 
 function buildHebrewQuestionBank(entries) {
@@ -1039,13 +1607,18 @@ function buildScienceQuestionBank(entries) {
     .filter((entry) => !SCIENCE_EXCLUDED_PATTERNS.some((pattern) => pattern.test(entry.question)))
     .map((entry) => {
       const difficulty = getEntryDifficulty(entry.difficulty);
+      const options = shuffleArray([entry.correctAnswer, ...entry.incorrectAnswers]).map(String);
       if (difficulty === null) {
+        return null;
+      }
+
+      if (!hasDistinctChoiceMeanings(options)) {
         return null;
       }
 
       return {
         question: entry.question,
-        options: shuffleArray([entry.correctAnswer, ...entry.incorrectAnswers]),
+        options,
         answer: entry.correctAnswer,
         difficulty,
         type: "science-choice",
@@ -1060,11 +1633,23 @@ function buildStaticChoiceBank(entries, type) {
     .filter(Boolean);
 }
 
+function buildStaticDragQuestionBank(entries, type) {
+  return entries
+    .map((entry) => normalizeDragQuestionEntry(entry, type))
+    .filter(Boolean);
+}
+
 function normalizeChoiceBankEntry(entry, type) {
   const difficulty = getEntryDifficulty(entry?.difficulty);
   const options = Array.from(new Set((entry?.options || []).map(String)));
   const answer = String(entry?.answer || "");
-  if (difficulty === null || !answer || options.length !== 4 || !options.includes(answer)) {
+  if (
+    difficulty === null ||
+    !answer ||
+    options.length !== 4 ||
+    !options.includes(answer) ||
+    !hasDistinctChoiceMeanings(options)
+  ) {
     return null;
   }
 
@@ -1075,11 +1660,95 @@ function normalizeChoiceBankEntry(entry, type) {
     difficulty,
     type,
     visualHtml: typeof entry?.visualHtml === "string" ? entry.visualHtml : "",
-    visualSummary: typeof entry?.visualSummary === "string" ? entry.visualSummary : "",
+    visualSummary:
+      typeof entry?.visualSummary === "string"
+        ? entry.visualSummary
+        : typeof entry?.passage === "string"
+          ? entry.passage
+          : "",
     displayText: typeof entry?.displayText === "string" ? entry.displayText : "",
     extraText: typeof entry?.extraText === "string" ? entry.extraText : "",
     extraHtml: typeof entry?.extraHtml === "string" ? entry.extraHtml : "",
+    reviewText:
+      typeof entry?.reviewText === "string"
+        ? entry.reviewText
+        : typeof entry?.passage === "string"
+          ? entry.passage
+          : "",
   };
+}
+
+function normalizeDragQuestionEntry(entry, type) {
+  const difficulty = getEntryDifficulty(entry?.difficulty);
+  const templateParts = Array.isArray(entry?.templateParts)
+    ? entry.templateParts.map((item) => String(item))
+    : [];
+  const choices = Array.isArray(entry?.choices)
+    ? Array.from(new Set(entry.choices.map((item) => String(item))))
+    : [];
+  const answer = Array.isArray(entry?.answer) ? entry.answer.map((item) => String(item)) : [];
+  const reviewText =
+    typeof entry?.reviewText === "string"
+      ? entry.reviewText
+      : typeof entry?.displayText === "string"
+      ? entry.displayText
+      : buildDragTemplateText(templateParts);
+
+  if (
+    difficulty === null ||
+    !String(entry?.question || "").trim() ||
+    templateParts.length !== answer.length + 1 ||
+    answer.length < 1 ||
+    choices.length < answer.length ||
+    !answer.every((token) => choices.includes(token))
+  ) {
+    return null;
+  }
+
+  return {
+    question: String(entry.question),
+    difficulty,
+    type,
+    templateParts,
+    choices,
+    answer,
+    extraText: typeof entry?.extraText === "string" ? entry.extraText : "",
+    reviewText,
+    isHebrew: Boolean(entry?.isHebrew),
+  };
+}
+
+function hasDistinctChoiceMeanings(options) {
+  return new Set(options.map(getChoiceMeaningKey)).size === options.length;
+}
+
+function getChoiceMeaningKey(value) {
+  const normalized = String(value)
+    .trim()
+    .toLowerCase()
+    .replaceAll(",", "")
+    .replace(/\s+/g, " ");
+
+  const minutesMatch = normalized.match(/^(about )?(\d+) minutes?$/);
+  if (minutesMatch) {
+    return `duration:${Number(minutesMatch[2])}`;
+  }
+
+  const hoursMatch = normalized.match(/^(about )?(\d+) hours?$/);
+  if (hoursMatch) {
+    return `duration:${Number(hoursMatch[2]) * 60}`;
+  }
+
+  const halfHoursMatch = normalized.match(/^(about )?(\d+) and a half hours?$/);
+  if (halfHoursMatch) {
+    return `duration:${Number(halfHoursMatch[2]) * 60 + 30}`;
+  }
+
+  if (/^(about )?half an hour$/.test(normalized) || /^(about )?half hour$/.test(normalized)) {
+    return "duration:30";
+  }
+
+  return normalized;
 }
 
 function getEntryDifficulty(value) {
@@ -1089,6 +1758,167 @@ function getEntryDifficulty(value) {
   }
 
   return difficulty;
+}
+
+function initializeUserSelector() {
+  state.currentUserId = loadSelectedUserId();
+  applyUserDefaultDifficulty(state.currentUserId);
+  renderUserSelector();
+}
+
+function renderUserSelector() {
+  if (!elements.userSelector) {
+    return;
+  }
+
+  elements.userSelector.innerHTML = "";
+
+  USER_PROFILES.forEach((profile) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "user-card";
+    button.dataset.userId = profile.id;
+    button.setAttribute("aria-pressed", profile.id === state.currentUserId ? "true" : "false");
+    button.classList.toggle("active", profile.id === state.currentUserId);
+    button.innerHTML = `
+      <span class="user-card-avatar" aria-hidden="true">${buildUserAvatarMarkup(profile)}</span>
+      <span class="user-card-name">${escapeHtml(profile.name)}</span>
+    `;
+    button.addEventListener("click", () => selectUser(profile.id));
+    elements.userSelector.appendChild(button);
+  });
+}
+
+function selectUser(userId) {
+  if (!USER_PROFILES.some((profile) => profile.id === userId)) {
+    return;
+  }
+
+  state.currentUserId = userId;
+  writeSelectedUserId(userId);
+  applyUserDefaultDifficulty(userId);
+  renderUserSelector();
+
+  if (!elements.historyScreen.hidden) {
+    renderHistoryScreen();
+  }
+}
+
+function applyUserDefaultDifficulty(userId) {
+  const profile = USER_PROFILE_MAP[userId];
+  const difficulty = Number(profile?.defaultDifficulty);
+  elements.difficultyLevel.value =
+    Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= 5
+      ? String(difficulty)
+      : "3";
+  updateDifficultyButtons();
+}
+
+function loadSelectedUserId() {
+  const storage = getSessionStorage();
+  if (!storage) {
+    return USER_PROFILES[0].id;
+  }
+
+  try {
+    const rawValue = String(storage.getItem(SELECTED_USER_STORAGE_KEY) || "");
+    return USER_PROFILES.some((profile) => profile.id === rawValue) ? rawValue : USER_PROFILES[0].id;
+  } catch {
+    return USER_PROFILES[0].id;
+  }
+}
+
+function writeSelectedUserId(userId) {
+  const storage = getSessionStorage();
+  if (!storage) {
+    return;
+  }
+
+  try {
+    storage.setItem(SELECTED_USER_STORAGE_KEY, userId);
+  } catch {}
+}
+
+function getCurrentUserProfile() {
+  return USER_PROFILES.find((profile) => profile.id === state.currentUserId) || USER_PROFILES[0];
+}
+
+function buildUserAvatarMarkup(profile) {
+  const palette = profile.palette;
+  const hairMarkupByStyle = {
+    longHair: `
+      <path d="M22 36c0-14 9-24 22-24s22 10 22 24v19c-4 7-12 13-22 13S26 62 22 55z" fill="${palette.hair}" opacity="0.95"></path>
+      <path d="M24 36c2-12 10-21 20-21 11 0 19 7 21 18-4-4-10-6-17-6-9 0-16 4-24 9z" fill="${palette.hair}"></path>
+    `,
+    curlyHair: `
+      <g fill="${palette.hair}">
+        <circle cx="29" cy="24" r="6"></circle>
+        <circle cx="37" cy="20" r="7"></circle>
+        <circle cx="46" cy="19" r="7"></circle>
+        <circle cx="55" cy="21" r="6"></circle>
+        <circle cx="61" cy="27" r="5"></circle>
+        <circle cx="27" cy="30" r="5"></circle>
+      </g>
+      <path d="M25 37c2-9 9-15 19-15 10 0 18 6 20 16-5-4-10-6-17-6-9 0-15 2-22 5z" fill="${palette.hair}"></path>
+    `,
+    lightCurls: `
+      <g fill="${palette.hair}">
+        <circle cx="30" cy="24" r="5"></circle>
+        <circle cx="38" cy="20" r="6"></circle>
+        <circle cx="46" cy="19" r="6"></circle>
+        <circle cx="54" cy="21" r="5"></circle>
+        <circle cx="59" cy="27" r="4.5"></circle>
+        <circle cx="28" cy="29" r="4.5"></circle>
+        <circle cx="34" cy="17" r="4"></circle>
+      </g>
+      <path d="M26 37c2-10 9-16 18-16 10 0 18 6 19 16-4-3-10-5-17-5s-14 2-20 5z" fill="${palette.hair}"></path>
+    `,
+  };
+  const hairMarkup = hairMarkupByStyle[profile.avatarStyle] || hairMarkupByStyle.curlyHair;
+  return `
+    <svg viewBox="0 0 88 88" class="user-avatar-svg" role="img" aria-hidden="true">
+      <defs>
+        <linearGradient id="avatar-${profile.id}-bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="${palette.sky}"></stop>
+          <stop offset="100%" stop-color="#ffffff"></stop>
+        </linearGradient>
+      </defs>
+      <rect x="4" y="4" width="80" height="80" rx="24" fill="url(#avatar-${profile.id}-bg)"></rect>
+      ${hairMarkup}
+      <circle cx="44" cy="38" r="19" fill="#f4c9a8"></circle>
+      <circle cx="37" cy="39" r="2" fill="${palette.eyes}"></circle>
+      <circle cx="51" cy="39" r="2" fill="${palette.eyes}"></circle>
+      <path d="M38 48c2 3 10 3 12 0" fill="none" stroke="#9b5c4d" stroke-width="2" stroke-linecap="round"></path>
+      <path d="M24 70c4-12 13-18 20-18 8 0 17 6 20 18" fill="${palette.shirt}"></path>
+      <circle cx="67" cy="20" r="7" fill="${palette.accent}"></circle>
+    </svg>
+  `;
+}
+
+function initializeQuestionCountButtons() {
+  elements.questionCountButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const questionCount = button.dataset.questionCount;
+      if (!questionCount) {
+        return;
+      }
+
+      elements.questionCount.value = questionCount;
+      updateQuestionCountButtons();
+    });
+  });
+
+  updateQuestionCountButtons();
+}
+
+function updateQuestionCountButtons() {
+  const selectedCount = String(elements.questionCount.value || "30");
+
+  elements.questionCountButtons.forEach((button) => {
+    const isActive = button.dataset.questionCount === selectedCount;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
 }
 
 function initializeDifficultyButtons() {
@@ -1123,8 +1953,8 @@ function startSession(event) {
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
   const difficulty = Number.parseInt(elements.difficultyLevel.value, 10);
 
-  if (!Number.isFinite(totalQuestions) || totalQuestions < 1) {
-    showStartMessage("Please choose at least 1 question.", "error");
+  if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
+    showStartMessage("Please choose one of the question counts shown.", "error");
     return;
   }
 
@@ -1143,9 +1973,11 @@ function startSession(event) {
   state.totalQuestions = totalQuestions;
   state.difficulty = difficulty;
   state.currentIndex = 0;
+  state.viewIndex = 0;
   state.answeredCount = 0;
   state.correctCount = 0;
   state.answerResults = [];
+  state.answerSelections = [];
   state.sessionRecords = [];
   state.sessionStartedAt = new Date();
   state.feedbackMessage = "";
@@ -1157,75 +1989,349 @@ function startSession(event) {
 }
 
 function buildSessionQuestions(totalQuestions, difficulty) {
-  const categoryCounts = allocateCategoryCounts(totalQuestions);
-  const categorySequence = buildCategorySequence(totalQuestions, categoryCounts);
+  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions);
+  const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
+  const regularQuestionCount = Math.max(
+    0,
+    totalQuestions - reviewCategorySequence.length - mapQuestionCount
+  );
+  const categoryCounts = allocateCategoryCounts(regularQuestionCount);
+  const regularCategorySequence = buildCategorySequence(regularQuestionCount, categoryCounts);
+  const categorySequence = [
+    ...reviewCategorySequence,
+    ...insertReservedMapCategories(regularCategorySequence, mapQuestionCount),
+  ];
   const resources = Object.fromEntries(
     Object.entries(choiceCategoryConfigs).map(([category, config]) => [
       category,
       createPool(config.bank),
     ])
   );
+  resources.sentenceDragEnglish = createPool(sentenceDragEnglishQuestionBank);
+  resources.sentenceDragHebrew = createPool(sentenceDragHebrewQuestionBank);
+  const hebrewQuestionCount = categorySequence.filter((category) => category === "hebrew").length;
+  const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
   const nonHebrewDifficultyQueue = buildDifficultyQueue(
-    totalQuestions - (categoryCounts.hebrew || 0),
+    nonHebrewQuestionCount,
     NON_HEBREW_DIFFICULTY_WEIGHTS[difficulty] || { [difficulty]: 1 }
   );
   const hebrewDifficultyQueue = buildHebrewDifficultyQueue(
-    categoryCounts.hebrew || 0,
+    hebrewQuestionCount,
     difficulty,
     hebrewQuestionBank
   );
 
-  let mathModeIndex = 0;
+  const runtime = { mathModeIndex: 0, languageQuestionIndex: 0, mapCountries: new Set() };
 
-  return categorySequence.map((category) => {
-    if (category === "math") {
-      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
-      const question =
-        mathModeIndex % 2 === 0
-          ? createMathInputQuestion(effectiveDifficulty)
-          : createMathChoiceQuestion(effectiveDifficulty);
-      mathModeIndex += 1;
-      return question;
+  return categorySequence.map((category) =>
+    createSessionQuestionForCategory(category, difficulty, resources, nonHebrewDifficultyQueue, hebrewDifficultyQueue, runtime)
+  );
+}
+
+function hasGeographyMapSupport() {
+  return (
+    typeof createGeographyMapGeneratedEntry === "function" &&
+    Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES) &&
+    globalThis.GEOGRAPHY_MAP_COUNTRIES.length > 0
+  );
+}
+
+function getReservedMapQuestionCount(totalQuestions) {
+  if (!hasGeographyMapSupport() || totalQuestions <= 0) {
+    return 0;
+  }
+
+  return Math.max(1, Math.round(totalQuestions / MAP_QUESTION_INTERVAL));
+}
+
+function insertReservedMapCategories(sequence, mapQuestionCount) {
+  if (!mapQuestionCount) {
+    return sequence;
+  }
+
+  const result = sequence.slice();
+  const finalLength = sequence.length + mapQuestionCount;
+
+  for (let index = 0; index < mapQuestionCount; index += 1) {
+    const targetIndex = Math.max(
+      0,
+      Math.min(
+        result.length,
+        Math.round(((index + 1) * finalLength) / (mapQuestionCount + 1)) - 1
+      )
+    );
+    result.splice(targetIndex, 0, RESERVED_MAP_CATEGORY);
+  }
+
+  return result;
+}
+
+function createSessionQuestionForCategory(
+  category,
+  difficulty,
+  resources,
+  nonHebrewDifficultyQueue,
+  hebrewDifficultyQueue,
+  runtime
+) {
+  if (category === "math") {
+    const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+    const question =
+      runtime.mathModeIndex % 2 === 0
+        ? createMathInputQuestion(effectiveDifficulty)
+        : createMathChoiceQuestion(effectiveDifficulty);
+    runtime.mathModeIndex += 1;
+    return question;
+  }
+
+  if (category === "hebrew") {
+    const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, difficulty);
+    const dragQuestion = maybeCreateLanguageDragQuestion(category, resources, effectiveDifficulty, runtime);
+    if (dragQuestion) {
+      return dragQuestion;
     }
+    return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, effectiveDifficulty));
+  }
 
-    if (category === "hebrew") {
-      const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, difficulty);
-      return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, effectiveDifficulty));
-    }
+  const effectiveDifficulty = getEffectiveCategoryDifficulty(
+    category,
+    drawNextDifficulty(nonHebrewDifficultyQueue, difficulty)
+  );
 
-    if (category === "science") {
-      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+  if (category === RESERVED_MAP_CATEGORY) {
+    return createGeographyMapQuestion(effectiveDifficulty, runtime, resources);
+  }
+
+  const dragQuestion = maybeCreateLanguageDragQuestion(category, resources, effectiveDifficulty, runtime);
+  if (dragQuestion) {
+    return dragQuestion;
+  }
+
+  if (category === "time") {
+    return createTimeChoiceQuestion(effectiveDifficulty);
+  }
+
+  if (category === "statistics") {
+    return createStatisticsChoiceQuestion(effectiveDifficulty);
+  }
+
+  if (category === "charts-and-graphs") {
+    if (resources["charts-and-graphs"]?.entries.length && Math.random() >= 0.8) {
       return createBankChoiceQuestion(
-        drawFromPool(resources.science, effectiveDifficulty),
-        "science-choice"
+        drawFromPool(resources["charts-and-graphs"], effectiveDifficulty),
+        "charts-and-graphs-choice"
       );
     }
 
-    if (category === "time") {
-      return createTimeChoiceQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
+    return createChartsAndGraphsQuestion(effectiveDifficulty);
+  }
+
+  if (category === "science") {
+    const generatedQuestion = createGeneratedCategoryQuestion(category, effectiveDifficulty);
+    if (generatedQuestion) {
+      return generatedQuestion;
     }
 
-    if (category === "statistics") {
-      return createStatisticsChoiceQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
+    return createBankChoiceQuestion(drawFromPool(resources.science, effectiveDifficulty), "science-choice");
+  }
+
+  const categoryConfig = choiceCategoryConfigs[category];
+  if (categoryConfig) {
+    const generatedQuestion = createGeneratedCategoryQuestion(category, effectiveDifficulty);
+    if (generatedQuestion) {
+      return generatedQuestion;
     }
 
-    if (category === "charts-and-graphs") {
-      return createChartsAndGraphsQuestion(drawNextDifficulty(nonHebrewDifficultyQueue, difficulty));
-    }
+    return categoryConfig.createQuestion(drawFromPool(resources[category], effectiveDifficulty));
+  }
 
-    const categoryConfig = choiceCategoryConfigs[category];
-    if (categoryConfig) {
-      const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
-      const generatedQuestion = createGeneratedCategoryQuestion(category, effectiveDifficulty);
-      if (generatedQuestion) {
-        return generatedQuestion;
+  throw new Error(`Unknown session category: ${category}`);
+}
+
+function createGeographyMapQuestion(difficulty, runtime, resources) {
+  const excludedCountries = runtime?.mapCountries ? Array.from(runtime.mapCountries) : [];
+  const rawEntry =
+    typeof createGeographyMapGeneratedEntry === "function"
+      ? createGeographyMapGeneratedEntry(difficulty, excludedCountries)
+      : null;
+  const normalizedEntry = normalizeChoiceBankEntry(rawEntry, "geography-choice");
+
+  if (normalizedEntry) {
+    runtime?.mapCountries?.add(normalizedEntry.answer);
+    return createBankChoiceQuestion(normalizedEntry, "geography-choice");
+  }
+
+  const generatedQuestion = createGeneratedCategoryQuestion("geography", difficulty);
+  if (generatedQuestion) {
+    return generatedQuestion;
+  }
+
+  return choiceCategoryConfigs.geography.createQuestion(drawFromPool(resources.geography, difficulty));
+}
+
+function getEffectiveCategoryDifficulty(category, difficulty) {
+  const maxDifficulty = CATEGORY_MAX_DIFFICULTIES[category];
+  return typeof maxDifficulty === "number" ? Math.min(difficulty, maxDifficulty) : difficulty;
+}
+
+function maybeCreateLanguageDragQuestion(category, resources, difficulty, runtime) {
+  if (category !== "vocabulary-grammar" && category !== "hebrew") {
+    return null;
+  }
+
+  runtime.languageQuestionIndex += 1;
+  if (!LANGUAGE_DRAG_INTERVAL || runtime.languageQuestionIndex % LANGUAGE_DRAG_INTERVAL !== 0) {
+    return null;
+  }
+
+  const isHebrew = category === "hebrew";
+  return createLanguageDragQuestion(resources, difficulty, isHebrew);
+}
+
+function createLanguageDragQuestion(resources, difficulty, isHebrew) {
+  const type = isHebrew ? "hebrew-drag" : "vocabulary-grammar-drag";
+  const generatedEntry = isHebrew
+    ? createHebrewSentenceDragEntry(difficulty)
+    : createEnglishSentenceDragEntry(difficulty);
+
+  if (generatedEntry) {
+    return createBankDragQuestion(generatedEntry, type);
+  }
+
+  const pool = isHebrew ? resources.sentenceDragHebrew : resources.sentenceDragEnglish;
+  if (pool?.entries.length) {
+    return createBankDragQuestion(drawFromPool(pool, difficulty), type);
+  }
+
+  return null;
+}
+
+function createEnglishSentenceDragEntry(difficulty) {
+  if (typeof createEnglishSentenceDragGeneratedEntry !== "function") {
+    return null;
+  }
+
+  return normalizeDragQuestionEntry(
+    createEnglishSentenceDragGeneratedEntry(difficulty),
+    "vocabulary-grammar-drag"
+  );
+}
+
+function createHebrewSentenceDragEntry(difficulty) {
+  if (typeof createHebrewSentenceDragGeneratedEntry !== "function") {
+    return null;
+  }
+
+  return normalizeDragQuestionEntry(createHebrewSentenceDragGeneratedEntry(difficulty), "hebrew-drag");
+}
+
+function buildReviewCategorySequence(totalQuestions) {
+  const reviewQuestionCount = Math.min(
+    Math.max(0, totalQuestions - 1),
+    Math.max(0, Math.round(totalQuestions * REVIEW_FOCUS_SHARE))
+  );
+  if (!reviewQuestionCount) {
+    return [];
+  }
+
+  const weaknessEntries = getUserWeakCategoryEntries(loadSessionHistory()).slice(0, 3);
+  if (!weaknessEntries.length) {
+    return [];
+  }
+
+  const counts = allocateWeightedCategoryCounts(weaknessEntries, reviewQuestionCount);
+  const reviewCategories = weaknessEntries.flatMap((entry) =>
+    Array.from({ length: counts[entry.category] || 0 }, () => entry.category)
+  );
+
+  return interleaveReviewCategories(reviewCategories);
+}
+
+function getUserWeakCategoryEntries(sessionHistory) {
+  const stats = new Map();
+
+  sessionHistory.forEach((session, sessionIndex) => {
+    const sessionWeight = Math.pow(REVIEW_RECENCY_DECAY, sessionIndex);
+
+    (session.records || []).forEach((record) => {
+      const category = String(record?.category || "").trim();
+      if (!SESSION_CATEGORY_ORDER.includes(category)) {
+        return;
       }
 
-      return categoryConfig.createQuestion(drawFromPool(resources[category], effectiveDifficulty));
-    }
+      if (!stats.has(category)) {
+        stats.set(category, { category, attempts: 0, wrong: 0 });
+      }
 
-    throw new Error(`Unknown session category: ${category}`);
+      const entry = stats.get(category);
+      entry.attempts += sessionWeight;
+      if (!record.isCorrect) {
+        entry.wrong += sessionWeight;
+      }
+    });
   });
+
+  return Array.from(stats.values())
+    .filter((entry) => entry.wrong > 0)
+    .map((entry) => ({
+      category: entry.category,
+      score: entry.wrong / (entry.attempts + 1.5),
+      wrong: entry.wrong,
+    }))
+    .sort((left, right) => right.score - left.score || right.wrong - left.wrong);
+}
+
+function allocateWeightedCategoryCounts(entries, total) {
+  const counts = Object.fromEntries(entries.map((entry) => [entry.category, 0]));
+  const totalWeight = entries.reduce((sum, entry) => sum + entry.score, 0);
+  if (totalWeight <= 0) {
+    return counts;
+  }
+
+  let assigned = 0;
+  const ranked = entries.map((entry) => {
+    const exact = (entry.score / totalWeight) * total;
+    const whole = Math.floor(exact);
+    counts[entry.category] = whole;
+    assigned += whole;
+    return { category: entry.category, remainder: exact - whole };
+  });
+
+  ranked.sort((left, right) => right.remainder - left.remainder).forEach((entry) => {
+    if (assigned < total) {
+      counts[entry.category] += 1;
+      assigned += 1;
+    }
+  });
+
+  return counts;
+}
+
+function interleaveReviewCategories(categories) {
+  const remaining = categories.reduce((map, category) => {
+    map.set(category, (map.get(category) || 0) + 1);
+    return map;
+  }, new Map());
+  const sequence = [];
+  let previousCategory = "";
+
+  while (remaining.size) {
+    const nextCategory = Array.from(remaining.entries())
+      .sort((left, right) => right[1] - left[1] || left[0].localeCompare(right[0]))
+      .find(([category]) => category !== previousCategory)?.[0]
+      || Array.from(remaining.keys())[0];
+
+    sequence.push(nextCategory);
+    previousCategory = nextCategory;
+    const nextCount = (remaining.get(nextCategory) || 0) - 1;
+    if (nextCount > 0) {
+      remaining.set(nextCategory, nextCount);
+    } else {
+      remaining.delete(nextCategory);
+    }
+  }
+
+  return sequence;
 }
 
 function allocateCategoryCounts(totalQuestions) {
@@ -2310,6 +3416,7 @@ function createHebrewChoiceQuestion(entry) {
     options: buildHebrewOptions(entry.english),
     answerValue: entry.english,
     answerLabel: entry.english,
+    reviewText: entry.hebrewDisplay,
     isHebrew: true,
   };
 }
@@ -2325,10 +3432,31 @@ function createBankChoiceQuestion(entry, type) {
     extraHtml: entry.extraHtml || "",
     visualHtml: entry.visualHtml || "",
     visualSummary: entry.visualSummary || "",
+    reviewText: entry.reviewText || "",
     options: shuffleArray([...entry.options]),
     answerValue: entry.answer,
     answerLabel: entry.answer,
     isHebrew: false,
+  };
+}
+
+function createBankDragQuestion(entry, type) {
+  return {
+    type,
+    difficulty: entry.difficulty,
+    mode: "drag",
+    questionText: entry.question,
+    displayText: "",
+    extraText: entry.extraText || "",
+    dragTemplateParts: entry.templateParts,
+    dragChoices: shuffleArray(
+      entry.choices.map((text, index) => ({ id: `${type}-${entry.difficulty}-${index}-${text}`, text }))
+    ),
+    dragAnswerTokens: [...entry.answer],
+    reviewText: entry.reviewText || buildDragTemplateText(entry.templateParts),
+    answerValue: entry.answer.join(" | "),
+    answerLabel: buildFilledDragText(entry.templateParts, entry.answer),
+    isHebrew: entry.isHebrew,
   };
 }
 
@@ -2373,6 +3501,7 @@ function createTimeChoiceQuestion(difficulty) {
     questionText: `It's ${formatClockTime(startMinutes)}. In ${minutesToAdd} minutes, what time will it be?`,
     displayText: "",
     extraText: "",
+    reviewText: "",
     options: optionMinutes.map((value) => formatClockTime(value)),
     answerValue: correctTime,
     answerLabel: correctTime,
@@ -2388,6 +3517,7 @@ function createNumericInputQuestion({ type, difficulty, questionText, displayTex
     questionText,
     displayText,
     extraText: "",
+    reviewText: "",
     answerValue: answer,
     answerLabel: String(answer),
     isHebrew: false,
@@ -2402,6 +3532,7 @@ function createNumericChoiceQuestion({ type, difficulty, questionText, displayTe
     questionText,
     displayText,
     extraText: "",
+    reviewText: "",
     options: buildNumberOptions(answer).map(String),
     answerValue: String(answer),
     answerLabel: String(answer),
@@ -2426,6 +3557,7 @@ function createVisualChoiceQuestion({
     questionText,
     displayText: "",
     extraText: "",
+    reviewText: "",
     visualHtml,
     visualSummary,
     options,
@@ -2435,23 +3567,74 @@ function createVisualChoiceQuestion({
   };
 }
 
+function shouldUseCompactQuestionMain(question) {
+  if (question?.isHebrew) {
+    return false;
+  }
+
+  const text = String(question?.displayText || "").trim();
+  if (!text) {
+    return false;
+  }
+
+  const wordCount = text.split(/\s+/).filter(Boolean).length;
+  const looksLikeEquation = /^[\d\s+\-×÷=.__/()%:,]+$/.test(text);
+  const hasSentencePunctuation = /[.!?]/.test(text) || text.includes(":") || text.includes("\n");
+
+  if (looksLikeEquation) {
+    return false;
+  }
+
+  return wordCount >= 6 || (hasSentencePunctuation && wordCount >= 4) || text.length >= 40;
+}
+
+function buildDragTemplateText(templateParts) {
+  return templateParts
+    .map((part, index) => (index < templateParts.length - 1 ? `${part}_____` : part))
+    .join("");
+}
+
+function buildFilledDragText(templateParts, tokens) {
+  return templateParts
+    .map((part, index) => `${part}${index < tokens.length ? tokens[index] : ""}`)
+    .join("");
+}
+
 function renderCurrentQuestion() {
-  const question = state.questions[state.currentIndex];
+  if (isViewingResultsScreen()) {
+    renderResultsScreen();
+    return;
+  }
+
+  const question = state.questions[state.viewIndex];
   if (!question) {
+    if (hasCompletedSession()) {
+      state.viewIndex = state.totalQuestions;
+      renderResultsScreen();
+      return;
+    }
+
     void finishSession();
     return;
   }
 
-  updateStatusBar();
-  renderFeedback();
+  const reviewingPreviousQuestion = isViewingPreviousQuestion();
+  const answerSelection = state.answerSelections[state.viewIndex] || null;
 
-  elements.questionNumber.textContent = `Question ${state.currentIndex + 1}:`;
+  updateStatusBar();
+  updateQuizNavigation();
+  renderQuizFeedback();
+
+  elements.questionNumber.textContent = reviewingPreviousQuestion
+    ? `Question ${state.viewIndex + 1} (review):`
+    : `Question ${state.viewIndex + 1}:`;
   elements.questionPrompt.textContent = question.questionText;
   elements.questionPrompt.hidden = !question.questionText;
 
   elements.questionMain.textContent = question.displayText;
   elements.questionMain.hidden = !question.displayText;
   elements.questionMain.classList.toggle("hebrew", Boolean(question.isHebrew));
+  elements.questionMain.classList.toggle("compact", shouldUseCompactQuestionMain(question));
 
   elements.questionVisual.innerHTML = question.visualHtml || "";
   elements.questionVisual.hidden = !question.visualHtml;
@@ -2460,27 +3643,52 @@ function renderCurrentQuestion() {
     elements.questionExtra.innerHTML = question.extraHtml;
     elements.questionExtra.hidden = false;
   } else {
-    elements.questionExtra.textContent = question.extraText || "";
-    elements.questionExtra.hidden = !question.extraText;
+    const extraText =
+      reviewingPreviousQuestion && question.mode === "drag" ? "" : question.extraText || "";
+    elements.questionExtra.textContent = extraText;
+    elements.questionExtra.hidden = !extraText;
   }
 
   if (question.mode === "input") {
     elements.answerForm.hidden = false;
     elements.inputArea.hidden = false;
     elements.choicesArea.hidden = true;
+    elements.dragArea.hidden = true;
+    elements.answerInput.disabled = reviewingPreviousQuestion;
+    elements.answerInput.value = reviewingPreviousQuestion ? answerSelection?.value || "" : "";
+    if (!reviewingPreviousQuestion) {
+      focusAnswerInput();
+    }
+    return;
+  }
+
+  if (question.mode === "drag") {
     elements.answerInput.value = "";
-    focusAnswerInput();
+    elements.answerInput.disabled = false;
+    elements.answerForm.hidden = true;
+    elements.inputArea.hidden = true;
+    elements.choicesArea.hidden = true;
+    elements.dragArea.hidden = false;
+    renderDragQuestion(question, {
+      readOnly: reviewingPreviousQuestion,
+      selectedTokens: Array.isArray(answerSelection?.tokens) ? answerSelection.tokens : [],
+    });
     return;
   }
 
   elements.answerInput.value = "";
+  elements.answerInput.disabled = false;
   elements.answerForm.hidden = true;
   elements.inputArea.hidden = true;
   elements.choicesArea.hidden = false;
-  renderChoiceButtons(question);
+  elements.dragArea.hidden = true;
+  renderChoiceButtons(question, {
+    readOnly: reviewingPreviousQuestion,
+    selectedValue: answerSelection?.value || "",
+  });
 }
 
-function renderChoiceButtons(question) {
+function renderChoiceButtons(question, { readOnly = false, selectedValue = "" } = {}) {
   elements.choicesArea.innerHTML = "";
 
   question.options.forEach((option, index) => {
@@ -2488,10 +3696,182 @@ function renderChoiceButtons(question) {
     button.type = "button";
     button.className = "choice-button";
     button.dataset.value = option;
+    button.disabled = readOnly;
+
+    if (readOnly) {
+      if (option === question.answerValue) {
+        button.classList.add("is-correct");
+      } else if (option === selectedValue) {
+        button.classList.add("is-wrong");
+      }
+    }
+
     button.innerHTML = `<span class="choice-label">${OPTION_LABELS[index]})</span><span>${escapeHtml(option)}</span>`;
-    button.addEventListener("click", () => handleAnswer(question, option === question.answerValue, option));
+    if (!readOnly) {
+      button.addEventListener("click", () =>
+        handleAnswer(question, option === question.answerValue, option)
+      );
+    }
     elements.choicesArea.appendChild(button);
   });
+}
+
+function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } = {}) {
+  elements.dragArea.innerHTML = "";
+  const choiceLookup = new Map(question.dragChoices.map((token) => [token.id, token]));
+  const slotValues = Array.from({ length: question.dragTemplateParts.length - 1 }, (_, index) => {
+    if (!readOnly || !Array.isArray(selectedTokens)) {
+      return null;
+    }
+
+    const text = selectedTokens[index];
+    if (!text) {
+      return null;
+    }
+
+    return question.dragChoices.find((token) => token.text === text) || {
+      id: `review-${index}-${text}`,
+      text,
+    };
+  });
+
+  const placeToken = (slotIndex, tokenId) => {
+    if (readOnly) {
+      return;
+    }
+
+    const token = choiceLookup.get(tokenId);
+    if (!token) {
+      return;
+    }
+
+    const existingIndex = slotValues.findIndex((value) => value?.id === tokenId);
+    if (existingIndex !== -1) {
+      slotValues[existingIndex] = null;
+    }
+
+    slotValues[slotIndex] = token;
+    sync();
+  };
+
+  const placeTokenInFirstOpenSlot = (tokenId) => {
+    if (readOnly) {
+      return;
+    }
+
+    const emptyIndex = slotValues.findIndex((value) => value === null);
+    if (emptyIndex !== -1) {
+      placeToken(emptyIndex, tokenId);
+    }
+  };
+
+  const clearSlot = (slotIndex) => {
+    if (readOnly) {
+      return;
+    }
+
+    slotValues[slotIndex] = null;
+    sync();
+  };
+
+  const sync = () => {
+    elements.dragArea.innerHTML = "";
+
+    const board = document.createElement("div");
+    board.className = "drag-board";
+
+    const sentence = document.createElement("div");
+    sentence.className = `drag-sentence${question.isHebrew ? " hebrew" : ""}`;
+
+    question.dragTemplateParts.forEach((part, index) => {
+      if (part) {
+        const partSpan = document.createElement("span");
+        partSpan.className = "drag-text";
+        partSpan.textContent = part;
+        sentence.appendChild(partSpan);
+      }
+
+      if (index < slotValues.length) {
+        const slotButton = document.createElement("button");
+        slotButton.type = "button";
+        slotButton.className = `drag-slot${slotValues[index] ? " filled" : ""}`;
+        slotButton.textContent = slotValues[index]?.text || "Drop here";
+        slotButton.disabled = readOnly;
+        if (!readOnly) {
+          slotButton.addEventListener("click", () => {
+            if (slotValues[index]) {
+              clearSlot(index);
+            }
+          });
+          slotButton.addEventListener("dragover", (event) => {
+            event.preventDefault();
+          });
+          slotButton.addEventListener("drop", (event) => {
+            event.preventDefault();
+            const tokenId = event.dataTransfer?.getData("text/plain");
+            if (tokenId) {
+              placeToken(index, tokenId);
+            }
+          });
+        }
+        sentence.appendChild(slotButton);
+      }
+    });
+
+    board.appendChild(sentence);
+
+    if (!readOnly) {
+      const bank = document.createElement("div");
+      bank.className = "drag-bank";
+
+      question.dragChoices.forEach((token) => {
+        if (slotValues.some((value) => value?.id === token.id)) {
+          return;
+        }
+
+        const tokenButton = document.createElement("button");
+        tokenButton.type = "button";
+        tokenButton.className = "drag-token";
+        tokenButton.draggable = true;
+        tokenButton.textContent = token.text;
+        tokenButton.addEventListener("click", () => placeTokenInFirstOpenSlot(token.id));
+        tokenButton.addEventListener("dragstart", (event) => {
+          if (event.dataTransfer) {
+            event.dataTransfer.effectAllowed = "move";
+            event.dataTransfer.setData("text/plain", token.id);
+          }
+        });
+        bank.appendChild(tokenButton);
+      });
+
+      const checkButton = document.createElement("button");
+      checkButton.type = "button";
+      checkButton.className = "primary-button drag-check-button";
+      checkButton.textContent = "Check Answer";
+      checkButton.addEventListener("click", () => {
+        if (slotValues.some((value) => value === null)) {
+          state.feedbackMessage = "Fill every blank before checking your answer.";
+          state.feedbackTone = "error";
+          renderFeedback();
+          return;
+        }
+
+        const currentSelectedTokens = slotValues.map((value) => value.text);
+        const selectedValue = buildFilledDragText(question.dragTemplateParts, currentSelectedTokens);
+        const isCorrect = currentSelectedTokens.every(
+          (token, index) => token === question.dragAnswerTokens[index]
+        );
+        handleAnswer(question, isCorrect, selectedValue, { tokens: currentSelectedTokens });
+      });
+
+      board.appendChild(bank);
+      board.appendChild(checkButton);
+    }
+
+    elements.dragArea.appendChild(board);
+  };
+
+  sync();
 }
 
 function focusAnswerInput() {
@@ -2509,6 +3889,10 @@ function focusAnswerInput() {
 
 function submitTypedAnswer(event) {
   event.preventDefault();
+
+  if (state.viewIndex !== state.currentIndex) {
+    return;
+  }
 
   const question = state.questions[state.currentIndex];
   if (!question || question.mode !== "input") {
@@ -2534,25 +3918,36 @@ function submitTypedAnswer(event) {
   handleAnswer(question, Math.abs(parsedValue - question.answerValue) < 0.000001, typedValue);
 }
 
-function handleAnswer(question, isCorrect, selectedValue = "") {
+function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = null) {
   state.answeredCount += 1;
   if (isCorrect) {
     state.correctCount += 1;
   }
 
+  state.answerSelections[state.currentIndex] = {
+    value: selectedValue === "" ? "" : String(selectedValue),
+    ...(Array.isArray(selectedMeta?.tokens) ? { tokens: [...selectedMeta.tokens] } : {}),
+  };
   state.answerResults[state.currentIndex] = isCorrect;
-  state.sessionRecords.push(
-    buildSessionRecord(state.currentIndex + 1, question, selectedValue, isCorrect)
+  state.sessionRecords[state.currentIndex] = buildSessionRecord(
+    state.currentIndex + 1,
+    question,
+    selectedValue,
+    isCorrect,
+    selectedMeta
   );
   state.feedbackMessage = buildOutcomeMessage(question, isCorrect, selectedValue);
   state.feedbackTone = isCorrect ? "success" : "error";
 
   if (state.currentIndex === state.totalQuestions - 1) {
+    state.currentIndex = state.totalQuestions;
+    state.viewIndex = state.totalQuestions;
     void finishSession();
     return;
   }
 
   state.currentIndex += 1;
+  state.viewIndex = state.currentIndex;
   renderCurrentQuestion();
 }
 
@@ -2579,7 +3974,15 @@ function formatQuestionReview(question, selectedValue) {
     addLine(escapeHtml(question.displayText), "feedback-review-line");
   }
 
-  if (question.visualSummary) {
+  if (question.reviewText && question.reviewText !== question.displayText) {
+    addLine(escapeHtml(question.reviewText), "feedback-review-line");
+  }
+
+  if (
+    question.visualSummary &&
+    question.visualSummary !== question.displayText &&
+    question.visualSummary !== question.reviewText
+  ) {
     addLine(escapeHtml(question.visualSummary), "feedback-review-line");
   }
 
@@ -2625,28 +4028,106 @@ function formatQuestionReview(question, selectedValue) {
 }
 
 function finishSession() {
+  renderResultsScreen({ shouldPersist: true, shouldCelebrate: true });
+}
+
+function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } = {}) {
   switchScreen(elements.resultsScreen);
   const percentage = state.totalQuestions
     ? (state.correctCount / state.totalQuestions) * 100
     : 0;
   const roundedPercentage = Math.round(percentage);
+  const currentUser = getCurrentUserProfile();
 
   elements.resultsTitle.textContent = getResultsPraise(percentage);
   elements.resultsSummary.textContent =
-    `You got ${state.correctCount} out of ${state.totalQuestions} correct. That's ${roundedPercentage}%.`;
-  saveSessionHistory();
-  playConfetti(12000);
+    `${currentUser.name} got ${state.correctCount} out of ${state.totalQuestions} correct. That's ${roundedPercentage}%.`;
+  renderResultsDetails();
+  updateResultsNavigation();
+
+  if (shouldPersist) {
+    saveSessionHistory();
+  }
+
+  if (shouldCelebrate) {
+    playConfetti(12000);
+  }
+}
+
+function renderResultsDetails() {
+  const wrongRecords = state.sessionRecords.filter(Boolean).filter((record) => !record.isCorrect);
+  const wrongCounts = buildWrongCategoryCounts(wrongRecords);
+
+  if (!wrongRecords.length) {
+    elements.resultsCategorySummary.hidden = true;
+    elements.resultsReviewList.hidden = false;
+    elements.resultsReviewList.innerHTML = `
+      <div class="results-review-card results-review-card-clean">
+        <p class="results-review-empty">No wrong answers this time.</p>
+      </div>
+    `;
+    return;
+  }
+
+  elements.resultsCategorySummary.hidden = false;
+  elements.resultsCategorySummary.innerHTML = `
+    <div class="results-section-title">Categories To Review</div>
+    <table class="results-category-table">
+      <thead>
+        <tr>
+          <th>Category</th>
+          <th>Wrong Answers</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${wrongCounts
+          .map(
+            (entry) => `
+              <tr>
+                <th scope="row">${escapeHtml(entry.categoryLabel)}</th>
+                <td>${entry.count}</td>
+              </tr>
+            `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
+
+  elements.resultsReviewList.hidden = false;
+  elements.resultsReviewList.innerHTML = wrongRecords
+    .map(
+      (record) => `
+        <article class="results-review-card">
+          <p class="results-review-title">
+            Question ${record.questionNumber} · ${escapeHtml(record.categoryLabel)}
+          </p>
+          ${record.reviewHtml}
+        </article>
+      `
+    )
+    .join("");
 }
 
 function showStartScreen() {
   switchScreen(elements.startScreen);
   clearStartMessage();
   stopConfetti();
+  state.currentIndex = 0;
+  state.viewIndex = 0;
   state.answerResults = [];
+  state.answerSelections = [];
   state.sessionRecords = [];
   state.feedbackMessage = "";
   state.feedbackTone = "";
-  elements.questionCount.focus();
+  elements.resultsCategorySummary.innerHTML = "";
+  elements.resultsCategorySummary.hidden = true;
+  elements.resultsReviewList.innerHTML = "";
+  elements.resultsReviewList.hidden = true;
+  const activeCountButton = elements.questionCountButtons.find((button) =>
+    button.classList.contains("active")
+  );
+  activeCountButton?.focus();
 }
 
 function updateStatusBar() {
@@ -2667,8 +4148,57 @@ function renderProgressTracker() {
       box.classList.add("wrong");
     }
 
+    if (index === state.viewIndex) {
+      box.classList.add("current");
+    }
+
     elements.progressTracker.appendChild(box);
   }
+}
+
+function updateQuizNavigation() {
+  elements.quizBackButton.disabled = state.viewIndex <= 0;
+  elements.quizForwardButton.disabled = state.viewIndex >= state.currentIndex;
+}
+
+function updateResultsNavigation() {
+  const canReviewSession = hasCompletedSession() && state.totalQuestions > 0;
+  elements.resultsBackButton.disabled = !canReviewSession;
+  elements.resultsForwardButton.disabled = true;
+}
+
+function hasCompletedSession() {
+  return state.totalQuestions > 0 && state.currentIndex >= state.totalQuestions;
+}
+
+function isViewingResultsScreen() {
+  return hasCompletedSession() && state.viewIndex >= state.totalQuestions;
+}
+
+function isViewingPreviousQuestion() {
+  return state.viewIndex < state.currentIndex;
+}
+
+function getViewedSessionRecord() {
+  if (!isViewingPreviousQuestion()) {
+    return null;
+  }
+
+  return state.sessionRecords[state.viewIndex] || null;
+}
+
+function renderQuizFeedback() {
+  const reviewRecord = getViewedSessionRecord();
+  if (reviewRecord) {
+    elements.feedback.innerHTML = `
+      <div class="feedback-review-note">Reviewing a previous question. Answers are locked.</div>
+      ${reviewRecord.reviewHtml}
+    `;
+    elements.feedback.className = "feedback-banner review";
+    return;
+  }
+
+  renderFeedback();
 }
 
 function renderFeedback() {
@@ -2676,6 +4206,38 @@ function renderFeedback() {
   elements.feedback.className = state.feedbackMessage
     ? `feedback-banner ${state.feedbackTone}`
     : "feedback-banner";
+}
+
+function showPreviousQuizQuestion() {
+  if (isViewingResultsScreen()) {
+    if (state.totalQuestions <= 0) {
+      return;
+    }
+
+    state.viewIndex = state.totalQuestions - 1;
+    renderCurrentQuestion();
+    return;
+  }
+
+  if (state.viewIndex <= 0) {
+    return;
+  }
+
+  state.viewIndex -= 1;
+  renderCurrentQuestion();
+}
+
+function showNextQuizQuestion() {
+  if (isViewingResultsScreen()) {
+    return;
+  }
+
+  if (state.viewIndex >= state.currentIndex) {
+    return;
+  }
+
+  state.viewIndex += 1;
+  renderCurrentQuestion();
 }
 
 function switchScreen(activeScreen) {
@@ -2695,13 +4257,55 @@ function showStartMessage(message, tone) {
   elements.startFeedback.className = `feedback ${tone}`;
 }
 
-function buildSessionRecord(questionNumber, question, selectedValue, isCorrect) {
+function buildWrongCategoryCounts(records) {
+  const grouped = new Map();
+
+  records.forEach((record) => {
+    const key = record.category || "unknown";
+    if (!grouped.has(key)) {
+      grouped.set(key, { category: key, categoryLabel: record.categoryLabel, count: 0 });
+    }
+
+    grouped.get(key).count += 1;
+  });
+
+  return Array.from(grouped.values()).sort(
+    (left, right) => right.count - left.count || left.categoryLabel.localeCompare(right.categoryLabel)
+  );
+}
+
+function getQuestionCategoryKey(question) {
+  const type = String(question?.type || "").trim();
+  if (!type) {
+    return "general";
+  }
+
+  return type.replace(/-(choice|input|drag)$/, "");
+}
+
+function getCategoryLabel(category) {
+  if (CATEGORY_LABELS[category]) {
+    return CATEGORY_LABELS[category];
+  }
+
+  return String(category)
+    .split("-")
+    .map((part) => (part ? part[0].toUpperCase() + part.slice(1) : ""))
+    .join(" ");
+}
+
+function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, selectedMeta = null) {
+  const category = getQuestionCategoryKey(question);
   return {
     questionNumber,
+    category,
+    categoryLabel: getCategoryLabel(category),
     questionText: formatQuestionForLog(question),
     chosenAnswer: selectedValue === "" ? "(no answer)" : String(selectedValue),
+    ...(Array.isArray(selectedMeta?.tokens) ? { selectedTokens: [...selectedMeta.tokens] } : {}),
     correctAnswer: question.answerLabel,
     isCorrect,
+    reviewHtml: formatQuestionReview(question, selectedValue),
   };
 }
 
@@ -2716,7 +4320,15 @@ function formatQuestionForLog(question) {
     lines.push(question.displayText);
   }
 
-  if (question.visualSummary) {
+  if (question.reviewText && question.reviewText !== question.displayText) {
+    lines.push(question.reviewText);
+  }
+
+  if (
+    question.visualSummary &&
+    question.visualSummary !== question.displayText &&
+    question.visualSummary !== question.reviewText
+  ) {
     lines.push(question.visualSummary);
   }
 
@@ -2732,52 +4344,76 @@ function buildSessionHistoryEntry() {
   return {
     id: startedAt.toISOString(),
     startedAt: startedAt.toISOString(),
+    userId: state.currentUserId,
+    userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
-    records: state.sessionRecords.map((record) => ({ ...record })),
+    records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
   };
 }
 
 function saveSessionHistory() {
-  if (!state.sessionRecords.length) {
+  if (!state.sessionRecords.filter(Boolean).length) {
     return false;
   }
 
-  const sessionHistory = loadSessionHistory();
+  const historyByUser = loadAllSessionHistory();
+  const sessionHistory = historyByUser[state.currentUserId] || [];
   sessionHistory.unshift(buildSessionHistoryEntry());
   sessionHistory.splice(MAX_SAVED_SESSIONS);
+  historyByUser[state.currentUserId] = sessionHistory;
 
-  return writeSessionHistory(sessionHistory);
+  return writeSessionHistory(historyByUser);
 }
 
-function loadSessionHistory() {
+function loadAllSessionHistory() {
   const storage = getSessionStorage();
   if (!storage) {
-    return [];
+    return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
   }
 
   try {
     const rawValue = storage.getItem(SESSION_HISTORY_STORAGE_KEY);
     if (!rawValue) {
-      return [];
+      return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
     }
 
     const parsed = JSON.parse(rawValue);
-    return Array.isArray(parsed) ? parsed : [];
+    if (Array.isArray(parsed)) {
+      return Object.fromEntries(
+        USER_PROFILES.map((profile) => [profile.id, profile.id === USER_PROFILES[0].id ? parsed : []])
+      );
+    }
+
+    if (!parsed || typeof parsed !== "object") {
+      return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
+    }
+
+    return Object.fromEntries(
+      USER_PROFILES.map((profile) => [
+        profile.id,
+        Array.isArray(parsed[profile.id]) ? parsed[profile.id] : [],
+      ])
+    );
   } catch (error) {
-    return [];
+    return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
   }
 }
 
-function writeSessionHistory(sessionHistory) {
+function loadSessionHistory() {
+  const historyByUser = loadAllSessionHistory();
+  return Array.isArray(historyByUser[state.currentUserId]) ? historyByUser[state.currentUserId] : [];
+}
+
+function writeSessionHistory(historyByUser) {
   const storage = getSessionStorage();
   if (!storage) {
     return false;
   }
 
   try {
-    storage.setItem(SESSION_HISTORY_STORAGE_KEY, JSON.stringify(sessionHistory));
+    storage.setItem(SESSION_HISTORY_STORAGE_KEY, JSON.stringify(historyByUser));
     return true;
   } catch (error) {
     return false;
@@ -2799,11 +4435,12 @@ function showHistoryScreen() {
 
 function renderHistoryScreen() {
   const sessionHistory = loadSessionHistory();
+  const currentUser = getCurrentUserProfile();
   elements.historyList.innerHTML = "";
   elements.historyEmpty.hidden = sessionHistory.length > 0;
 
   if (!sessionHistory.length) {
-    elements.historyEmpty.textContent = "No previous sessions yet.";
+    elements.historyEmpty.textContent = `${currentUser.name} has no previous sessions yet.`;
     return;
   }
 
@@ -2834,25 +4471,25 @@ function createHistorySessionElement(session, shouldOpen) {
   body.className = "history-session-body";
 
   session.records.forEach((record) => {
-    body.appendChild(createHistoryQuestionElement(record));
+    body.appendChild(createHistoryQuestionElement(record, session.startedAt));
   });
 
   details.appendChild(body);
   return details;
 }
 
-function createHistoryQuestionElement(record) {
+function createHistoryQuestionElement(record, sessionStartedAt) {
   const wrapper = document.createElement("div");
   wrapper.className = "history-question";
 
   const title = document.createElement("p");
   title.className = "history-question-title";
-  title.textContent = `Question ${record.questionNumber}`;
+  title.textContent = `Question ${record.questionNumber} · ${record.categoryLabel || "Question"}`;
   wrapper.appendChild(title);
 
   const questionText = document.createElement("p");
   questionText.className = "history-question-text";
-  questionText.textContent = record.questionText;
+  questionText.textContent = formatHistoryQuestionText(record.questionText, sessionStartedAt);
   wrapper.appendChild(questionText);
 
   const chosenAnswer = document.createElement("p");
@@ -2873,6 +4510,19 @@ function createHistoryQuestionElement(record) {
   return wrapper;
 }
 
+function formatHistoryQuestionText(questionText, sessionStartedAt) {
+  const text = typeof questionText === "string" ? questionText : "";
+  const sessionTime = formatHistoryTime(sessionStartedAt);
+  if (!sessionTime) {
+    return text;
+  }
+
+  return text.replace(
+    /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/m,
+    `Snapshot date: $1, ${sessionTime}.`
+  );
+}
+
 function formatHistoryDate(value) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) {
@@ -2880,6 +4530,15 @@ function formatHistoryDate(value) {
   }
 
   return date.toLocaleString();
+}
+
+function formatHistoryTime(value) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) {
+    return "";
+  }
+
+  return date.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
 }
 
 function getResultsPraise(percentage) {

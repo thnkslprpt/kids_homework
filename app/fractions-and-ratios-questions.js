@@ -1,10 +1,29 @@
+function fractionsAndRatiosBuildPairComparisonQuestion({
+  comparisonWord,
+  leftFraction,
+  rightFraction,
+  answer,
+  difficulty,
+  equalOption = "They are equal",
+  fallbackOption = "Not enough information",
+}) {
+  return {
+    question: `Which is ${comparisonWord}: ${leftFraction} or ${rightFraction}?`,
+    options: [leftFraction, rightFraction, equalOption, fallbackOption],
+    answer,
+    difficulty,
+  };
+}
+
 const FRACTIONS_AND_RATIOS_QUESTIONS = [
-  {
-    question: "Which fraction is bigger?",
-    options: ["1/2", "1/4", "They are equal", "Neither is a fraction"],
+  fractionsAndRatiosBuildPairComparisonQuestion({
+    comparisonWord: "bigger",
+    leftFraction: "1/2",
+    rightFraction: "1/4",
     answer: "1/2",
     difficulty: 1,
-  },
+    fallbackOption: "Neither is a fraction",
+  }),
   {
     question: "Which fraction is the same as 2 out of 8?",
     options: ["1/2", "1/3", "1/4", "3/4"],
@@ -64,12 +83,14 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
     answer: "6",
     difficulty: 5,
   },
-  {
-    question: "Which fraction is smaller?",
-    options: ["1/3", "1/2", "They are equal", "Neither"],
+  fractionsAndRatiosBuildPairComparisonQuestion({
+    comparisonWord: "smaller",
+    leftFraction: "1/3",
+    rightFraction: "1/2",
     answer: "1/3",
     difficulty: 1,
-  },
+    fallbackOption: "Neither",
+  }),
   {
     question: "Which fraction is the same as 3 out of 6?",
     options: ["1/3", "1/2", "2/3", "3/4"],
@@ -82,12 +103,14 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
     answer: "5",
     difficulty: 2,
   },
-  {
-    question: "Which fraction is greater?",
-    options: ["2/5", "2/10", "They are equal", "Neither"],
+  fractionsAndRatiosBuildPairComparisonQuestion({
+    comparisonWord: "greater",
+    leftFraction: "2/5",
+    rightFraction: "2/10",
     answer: "2/5",
     difficulty: 2,
-  },
+    fallbackOption: "Neither",
+  }),
   {
     question: "A pizza is cut into 8 equal slices. If you eat 3 slices, what fraction of the pizza did you eat?",
     options: ["3/6", "3/7", "3/8", "5/8"],
@@ -128,12 +151,14 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
 
 FRACTIONS_AND_RATIOS_QUESTIONS.push(
   ...[
-    {
-      question: "Which fraction is larger?",
-      options: ["3/4", "2/4", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "larger",
+      leftFraction: "3/4",
+      rightFraction: "2/4",
       answer: "3/4",
       difficulty: 1,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "What is 1/2 of 8?",
       options: ["2", "3", "4", "6"],
@@ -146,24 +171,28 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       answer: "1/2",
       difficulty: 1,
     },
-    {
-      question: "Which fraction is lower?",
-      options: ["1/5", "1/2", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "lower",
+      leftFraction: "1/5",
+      rightFraction: "1/2",
       answer: "1/5",
       difficulty: 1,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "What is one-fifth of 20?",
       options: ["2", "4", "5", "10"],
       answer: "4",
       difficulty: 2,
     },
-    {
-      question: "Which fraction is the larger one?",
-      options: ["3/6", "2/6", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "larger",
+      leftFraction: "3/6",
+      rightFraction: "2/6",
       answer: "3/6",
       difficulty: 2,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "If 2 of 6 slices are eaten, what fraction was eaten?",
       options: ["1/2", "1/3", "2/5", "2/3"],
@@ -291,24 +320,30 @@ function createFractionsAndRatiosGeneratedEntry(difficulty) {
 
 function fractionsAndRatiosCreateCompareFractionEntry(difficulty) {
   const templates = [
-    {
-      question: "Which fraction is bigger?",
-      options: ["1/2", "1/4", "They are equal", "Neither is a fraction"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "bigger",
+      leftFraction: "1/2",
+      rightFraction: "1/4",
       answer: "1/2",
       difficulty: 1,
-    },
-    {
-      question: "Which fraction is smaller?",
-      options: ["1/3", "1/2", "They are equal", "Neither"],
+      fallbackOption: "Neither is a fraction",
+    }),
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "smaller",
+      leftFraction: "1/3",
+      rightFraction: "1/2",
       answer: "1/3",
       difficulty: 1,
-    },
-    {
-      question: "Which fraction is greater?",
-      options: ["3/4", "2/4", "They are equal", "Neither"],
+      fallbackOption: "Neither",
+    }),
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "greater",
+      leftFraction: "3/4",
+      rightFraction: "2/4",
       answer: "3/4",
       difficulty: 1,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "Which fraction is closer to 1 whole?",
       options: ["3/8", "5/8", "7/8", "1/8"],
@@ -598,12 +633,14 @@ function fractionsAndRatiosShuffle(values) {
 
 FRACTIONS_AND_RATIOS_QUESTIONS.push(
   ...[
-    {
-      question: "Which fraction is the greater one?",
-      options: ["1/2", "1/4", "They are equal", "Neither is a fraction"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "greater",
+      leftFraction: "1/2",
+      rightFraction: "1/4",
       answer: "1/2",
       difficulty: 1,
-    },
+      fallbackOption: "Neither is a fraction",
+    }),
     {
       question: "What fraction matches 3 out of 6?",
       options: ["1/2", "1/3", "2/3", "3/4"],
@@ -616,12 +653,14 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       answer: "7",
       difficulty: 1,
     },
-    {
-      question: "Which fraction is the smaller one?",
-      options: ["1/3", "1/2", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "smaller",
+      leftFraction: "1/3",
+      rightFraction: "1/2",
       answer: "1/3",
       difficulty: 1,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "What is 1/4 of 12?",
       options: ["2", "3", "4", "6"],
@@ -718,12 +757,14 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       answer: "28",
       difficulty: 5,
     },
-    {
-      question: "Which fraction is the lower one?",
-      options: ["2/5", "3/5", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "lower",
+      leftFraction: "2/5",
+      rightFraction: "3/5",
       answer: "2/5",
       difficulty: 1,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "What is 1/3 of 9?",
       options: ["2", "3", "4", "6"],
@@ -742,12 +783,14 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       answer: "4",
       difficulty: 2,
     },
-    {
-      question: "Which fraction is the bigger one?",
-      options: ["2/6", "3/6", "They are equal", "Neither"],
+    fractionsAndRatiosBuildPairComparisonQuestion({
+      comparisonWord: "bigger",
+      leftFraction: "2/6",
+      rightFraction: "3/6",
       answer: "3/6",
       difficulty: 2,
-    },
+      fallbackOption: "Neither",
+    }),
     {
       question: "If 2 of 6 slices are eaten, what fraction of the cake was eaten?",
       options: ["1/2", "1/3", "2/5", "2/3"],

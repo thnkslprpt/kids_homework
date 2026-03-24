@@ -535,7 +535,7 @@ function createMapsAndDirectionsGeneratedEntry(difficulty) {
       mapsCreateScaleQuestion,
       mapsCreateMultiStepQuestion,
       mapsCreateRelativePositionQuestion,
-      mapsCreateCompassQuestion,
+      mapsCreateLongChainQuestion,
     ],
   };
 
@@ -578,12 +578,12 @@ function mapsCreateOppositeDirectionQuestion(difficulty) {
   return mapsPickTemplate(difficulty, templates);
 }
 
-function mapsCreateCompassQuestion() {
+function mapsCreateCompassQuestion(difficulty = 1) {
   return {
     question: "What tool helps you find north, south, east, and west?",
     answer: "Compass",
     options: mapsBuildOptions("Compass", ["Thermometer", "Stopwatch", "Calculator"]),
-    difficulty: 1,
+    difficulty,
   };
 }
 
@@ -612,7 +612,7 @@ function mapsCreateFacingQuestion(difficulty) {
   return mapsPickTemplate(difficulty, templates);
 }
 
-function mapsCreateLegendQuestion() {
+function mapsCreateLegendQuestion(difficulty = 2) {
   return {
     question: "What does a map key help you understand?",
     answer: "What map symbols mean",
@@ -621,25 +621,25 @@ function mapsCreateLegendQuestion() {
       "What the weather will be",
       "How old the map is",
     ]),
-    difficulty: 2,
+    difficulty,
   };
 }
 
-function mapsCreateNearQuestion() {
+function mapsCreateNearQuestion(difficulty = 2) {
   return {
     question: "What does 'near' mean on a map?",
     answer: "Close by",
     options: mapsBuildOptions("Close by", ["Far away", "Above the clouds", "Inside the key"]),
-    difficulty: 2,
+    difficulty,
   };
 }
 
-function mapsCreateRoadMapQuestion() {
+function mapsCreateRoadMapQuestion(difficulty = 2) {
   return {
     question: "Which type of map is best for finding streets and highways?",
     answer: "Road map",
     options: mapsBuildOptions("Road map", ["Weather map", "Star map", "Political map"]),
-    difficulty: 2,
+    difficulty,
   };
 }
 
@@ -694,6 +694,12 @@ function mapsCreateScaleQuestion(difficulty) {
       answer: "16 miles",
       options: ["8 miles", "10 miles", "12 miles", "16 miles"],
       difficulty: 3,
+    },
+    {
+      question: "A map scale says 1 centimeter = 7 kilometers. If two towns are 4 centimeters apart on the map, how far apart are they in real life?",
+      answer: "28 kilometers",
+      options: ["21 kilometers", "24 kilometers", "28 kilometers", "32 kilometers"],
+      difficulty: 4,
     },
     {
       question: "A map scale says 1 inch = 4 miles. If two cities are 8 inches apart, how far apart are they in real life?",
@@ -820,7 +826,8 @@ function mapsBuildOptions(answer, distractors) {
 
 function mapsPickTemplate(difficulty, templates) {
   const level = mapsClampDifficulty(difficulty);
-  const eligible = templates.filter((template) => template.difficulty <= level);
+  const exact = templates.filter((template) => template.difficulty === level);
+  const eligible = exact.length ? exact : templates.filter((template) => template.difficulty <= level);
   return mapsRandomChoice(eligible.length ? eligible : templates);
 }
 

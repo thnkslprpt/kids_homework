@@ -14,20 +14,22 @@
 
       <section id="start-screen" class="card screen">
         <h2>Start A Homework Session</h2>
+        <div class="student-section">
+          <p class="student-heading">Choose Student</p>
+          <div id="user-selector" class="user-selector" role="group" aria-label="Student"></div>
+        </div>
         <form id="start-form" class="start-form">
           <div class="start-fields">
             <label class="field question-count-field">
               <span>How many questions?</span>
-              <input
-                id="question-count"
-                class="question-count-input"
-                name="questionCount"
-                type="number"
-                min="1"
-                max="150"
-                value="30"
-                required
-              >
+              <input id="question-count" name="questionCount" type="hidden" value="30">
+              <div class="question-count-selector" role="group" aria-label="Question count">
+                <button type="button" class="question-count-button" data-question-count="20" aria-pressed="false">20</button>
+                <button type="button" class="question-count-button" data-question-count="25" aria-pressed="false">25</button>
+                <button type="button" class="question-count-button active" data-question-count="30" aria-pressed="true">30</button>
+                <button type="button" class="question-count-button" data-question-count="35" aria-pressed="false">35</button>
+                <button type="button" class="question-count-button" data-question-count="40" aria-pressed="false">40</button>
+              </div>
             </label>
 
             <label class="field difficulty-field">
@@ -84,11 +86,22 @@
         </form>
 
         <div id="choices-area" class="choices-area" hidden></div>
+        <div id="drag-area" class="drag-area" hidden></div>
+        <div class="quiz-nav" aria-label="Question navigation">
+          <button id="quiz-back-button" type="button" class="secondary-button">Back</button>
+          <button id="quiz-forward-button" type="button" class="secondary-button">Forward</button>
+        </div>
       </section>
 
       <section id="results-screen" class="card screen" hidden>
         <h2 id="results-title">Session Finished</h2>
         <p id="results-summary" class="results-summary"></p>
+        <div id="results-category-summary" class="results-category-summary" hidden></div>
+        <div id="results-review-list" class="results-review-list" hidden></div>
+        <div class="quiz-nav results-nav" aria-label="Session review navigation">
+          <button id="results-back-button" type="button" class="secondary-button">Back</button>
+          <button id="results-forward-button" type="button" class="secondary-button">Forward</button>
+        </div>
         <button id="restart-button" type="button" class="secondary-button">Start Another Session</button>
       </section>
 
@@ -104,11 +117,16 @@
 
     <script src="app/hebrew-words.js"></script>
     <script src="app/science-questions.js"></script>
+    <script src="app/science-evidence-questions.js"></script>
     <script src="app/general-knowledge-questions.js"></script>
     <script src="app/algebra-questions.js"></script>
+    <script src="app/applied-word-problems-questions.js"></script>
     <script src="app/visual-math-questions.js"></script>
+    <script src="app/visual-measurement-questions.js"></script>
     <script src="app/logic-questions.js"></script>
     <script src="app/rationality-questions.js"></script>
+    <script src="app/geography-map-data.js"></script>
+    <script src="app/geography-map-questions.js"></script>
     <script src="app/geography-questions.js"></script>
     <script src="app/population-questions.js"></script>
     <script src="app/financial-literacy-questions.js"></script>
@@ -124,7 +142,12 @@
     <script src="app/household-problem-solving-questions.js"></script>
     <script src="app/fractions-questions.js"></script>
     <script src="app/fractions-and-ratios-questions.js"></script>
+    <script src="app/reading-comprehension-questions.js"></script>
     <script src="app/spatial-reasoning-questions.js"></script>
+    <script src="app/sentence-drag-english.js"></script>
+    <script src="app/sentence-drag-hebrew.js"></script>
+    <script src="app/sentence-drag-questions.js"></script>
+    <script src="app/vocabulary-grammar-questions.js"></script>
     <script src="app/app.js"></script>
   </body>
 </html>

@@ -521,23 +521,23 @@ function createEstimationGeneratedEntry(difficulty) {
     ],
   };
 
-  return estimationRandomChoice(generators[level])();
+  return estimationRandomChoice(generators[level])(level);
 }
 
-function createEstimationAdditionQuestion() {
+function createEstimationAdditionQuestion(difficulty = 1) {
   const left = estimationRandomInt(12, 98);
   const right = estimationRandomInt(12, 98);
   const exact = left + right;
   const answer = estimationFormatAbout(Math.round(exact / 10) * 10);
   return {
     question: `What is the best estimate for ${left} + ${right}?`,
-    options: estimationBuildAboutOptions(answer, [20, 30, 40, 60, 80, 100, 120, 150]),
+    options: estimationBuildAboutOptions(answer, [20, 30, 40, 60, 80, 100, 120, 150], exact),
     answer,
-    difficulty: 1,
+    difficulty,
   };
 }
 
-function createEstimationSubtractionQuestion() {
+function createEstimationSubtractionQuestion(difficulty = 1) {
   const left = estimationRandomInt(60, 240);
   const right = estimationRandomInt(10, Math.min(90, left - 5));
   const exact = left - right;
@@ -545,13 +545,13 @@ function createEstimationSubtractionQuestion() {
   const answer = estimationFormatAbout(rounded);
   return {
     question: `Which is closest to ${left} - ${right}?`,
-    options: estimationBuildAboutOptions(answer, [20, 30, 40, 50, 60, 70, 80, 100]),
+    options: estimationBuildAboutOptions(answer, [20, 30, 40, 50, 60, 70, 80, 100], exact),
     answer,
-    difficulty: 1,
+    difficulty,
   };
 }
 
-function createEstimationDivisionQuestion() {
+function createEstimationDivisionQuestion(difficulty = 2) {
   const divisor = estimationRandomChoice([5, 8, 9, 10, 12, 20]);
   const quotient = estimationRandomChoice([5, 8, 10, 12, 15]);
   const dividend = divisor * quotient + estimationRandomChoice([0, 1, 2, -1]);
@@ -561,11 +561,11 @@ function createEstimationDivisionQuestion() {
     question: `Which answer is most reasonable for ${dividend} divided by ${divisor}?`,
     options: estimationBuildAboutOptions(answer, [5, 10, 20, 30, 40, 50, 80, 100].map(estimationFormatAbout)),
     answer,
-    difficulty: 2,
+    difficulty,
   };
 }
 
-function createEstimationMultiplicationQuestion() {
+function createEstimationMultiplicationQuestion(difficulty = 2) {
   const left = estimationRandomChoice([3.1, 4.2, 5.8, 6.1, 7.4, 8.3]).toFixed(1);
   const right = estimationRandomChoice([4, 5, 6, 7, 8, 9, 10]);
   const product = Number(left) * right;
@@ -574,11 +574,11 @@ function createEstimationMultiplicationQuestion() {
     question: `Which number is closest to ${left} x ${right}?`,
     options: estimationBuildNumericOptions(answer, 20),
     answer,
-    difficulty: 2,
+    difficulty,
   };
 }
 
-function createEstimationNumberQuestion() {
+function createEstimationNumberQuestion(difficulty = 2) {
   const first = estimationRandomInt(10, 30);
   const second = estimationRandomInt(10, 30);
   const exact = first * second;
@@ -587,11 +587,11 @@ function createEstimationNumberQuestion() {
     question: `If ${first} children each get ${second} stickers, about how many stickers are needed?`,
     options: estimationBuildNumericOptions(answer, 20, 40),
     answer,
-    difficulty: 2,
+    difficulty,
   };
 }
 
-function createEstimationPercentQuestion() {
+function createEstimationPercentQuestion(difficulty = 3) {
   const percent = estimationRandomChoice([18, 24, 49, 51, 62, 72]);
   const whole = estimationRandomChoice([50, 80, 100, 150, 200, 250]);
   const exact = (percent / 100) * whole;
@@ -599,26 +599,40 @@ function createEstimationPercentQuestion() {
   const answer = estimationFormatAbout(rounded);
   return {
     question: `What is the best estimate for ${percent}% of ${whole}?`,
-    options: estimationBuildAboutOptions(answer, [20, 30, 40, 50, 60, 70, 80, 100, 120, 150].map(estimationFormatAbout)),
+    options: estimationBuildAboutOptions(
+      answer,
+      [20, 30, 40, 50, 60, 70, 80, 100, 120, 150].map(estimationFormatAbout),
+      exact
+    ),
     answer,
-    difficulty: 3,
+    difficulty,
   };
 }
 
-function createEstimationElapsedTimeQuestion() {
-  const left = estimationRandomInt(15, 70);
-  const right = estimationRandomInt(15, 70);
-  const total = left + right;
-  const answer = estimationFormatAbout(total <= 90 ? 60 : 120);
+function createEstimationElapsedTimeQuestion(difficulty = 4) {
+  const durationTargets = [30, 60, 90, 120];
+  const answerMinutes = estimationRandomChoice(durationTargets);
+  const targetOffsets = {
+    30: [0, 2, 4, 5, 6, 8],
+    60: [-8, -6, -5, -4, 0, 4, 5, 6, 8],
+    90: [-8, -6, -5, -4, 0, 4, 5, 6, 8],
+    120: [-8, -6, -5, -4, 0, 4, 5, 6, 8],
+  };
+  const total = answerMinutes + estimationRandomChoice(targetOffsets[answerMinutes]);
+  const minLeft = Math.max(15, total - 70);
+  const maxLeft = Math.min(70, total - 15);
+  const left = estimationRandomInt(minLeft, maxLeft);
+  const right = total - left;
+  const answer = estimationFormatAboutDuration(answerMinutes);
   return {
     question: `A walk takes ${left} minutes and a bus ride takes ${right} minutes. About how long is that altogether?`,
-    options: estimationBuildAboutOptions(answer, ["About 30 minutes", "About 1 hour", "About 2 hours", "About 3 hours"]),
+    options: estimationBuildAboutOptions(answer, durationTargets.map(estimationFormatAboutDuration)),
     answer,
-    difficulty: 4,
+    difficulty,
   };
 }
 
-function createEstimationLargeMultiplicationQuestion() {
+function createEstimationLargeMultiplicationQuestion(difficulty = 5) {
   const left = estimationRandomInt(40, 150);
   const right = estimationRandomChoice([4, 5, 6, 7, 8, 9]);
   const product = left * right;
@@ -628,13 +642,16 @@ function createEstimationLargeMultiplicationQuestion() {
     question: `Which number is closest to ${left} x ${right}?`,
     options: estimationBuildNumericOptions(answer, 100, 200),
     answer,
-    difficulty: 5,
+    difficulty,
   };
 }
 
-function estimationBuildAboutOptions(answer, candidates) {
+function estimationBuildAboutOptions(answer, candidates, exactValue = null) {
   const options = [String(answer)];
-  const uniqueCandidates = Array.from(new Set(candidates.map(String))).filter((candidate) => candidate !== String(answer));
+  const filteredCandidates = estimationFilterTiedEstimateCandidates(candidates, answer, exactValue);
+  const uniqueCandidates = Array.from(new Set(filteredCandidates.map(String))).filter(
+    (candidate) => candidate !== String(answer)
+  );
   const shuffled = estimationShuffle(uniqueCandidates);
 
   while (options.length < 4 && shuffled.length) {
@@ -649,6 +666,27 @@ function estimationBuildAboutOptions(answer, candidates) {
   }
 
   return estimationShuffle(options);
+}
+
+function estimationFilterTiedEstimateCandidates(candidates, answer, exactValue) {
+  if (!Number.isFinite(exactValue)) {
+    return candidates;
+  }
+
+  const answerValue = estimationParseComparableOptionValue(answer);
+  if (!Number.isFinite(answerValue)) {
+    return candidates;
+  }
+
+  const answerDistance = Math.abs(answerValue - exactValue);
+  return candidates.filter((candidate) => {
+    const candidateValue = estimationParseComparableOptionValue(candidate);
+    if (!Number.isFinite(candidateValue)) {
+      return true;
+    }
+
+    return Math.abs(Math.abs(candidateValue - exactValue) - answerDistance) > 1e-9;
+  });
 }
 
 function estimationBuildNumericOptions(answer, spread = 10, extra = 20) {
@@ -689,6 +727,31 @@ function estimationBuildOptions(answer, candidates) {
 
 function estimationFormatAbout(value) {
   return `About ${value}`;
+}
+
+function estimationParseComparableOptionValue(value) {
+  const match = String(value)
+    .replace(/,/g, "")
+    .match(/-?\d+(?:\.\d+)?/);
+  return match ? Number(match[0]) : Number.NaN;
+}
+
+function estimationFormatAboutDuration(minutes) {
+  if (minutes === 30) {
+    return "About half an hour";
+  }
+
+  if (minutes % 60 === 0) {
+    const hours = minutes / 60;
+    return `About ${hours} hour${hours === 1 ? "" : "s"}`;
+  }
+
+  if (minutes % 60 === 30 && minutes > 60) {
+    const hours = Math.floor(minutes / 60);
+    return `About ${hours} and a half hours`;
+  }
+
+  return `About ${minutes} minutes`;
 }
 
 function clampEstimationDifficulty(difficulty) {

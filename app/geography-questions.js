@@ -588,24 +588,7 @@ const GEOGRAPHY_QUESTIONS = (() => {
   }
 
   function generateQuestion(level) {
-    const family = pickGeneratedFamily(level);
-    if (family === "continent") {
-      return buildContinentQuestion(level);
-    }
-    if (family === "country") {
-      return buildCountryQuestion(level);
-    }
     return buildCapitalQuestion(level);
-  }
-
-  function pickGeneratedFamily(difficulty) {
-    if (difficulty <= 2) {
-      return randomChoice(["continent", "country", "country", "capital"]);
-    }
-    if (difficulty === 3) {
-      return randomChoice(["continent", "country", "capital", "capital"]);
-    }
-    return randomChoice(["country", "capital", "capital", "capital"]);
   }
 
   function buildGeneratedEntry(difficulty) {
@@ -616,63 +599,41 @@ const GEOGRAPHY_QUESTIONS = (() => {
   globalThis.createGeographyGeneratedEntry = buildGeneratedEntry;
 
   return [
-    makeStaticContinent(
-      "Which continent is shaded on the world map?",
-      "Africa",
-      ["Africa", "Asia", "Europe", "South America"],
-      1
-    ),
-    makeStaticContinent(
-      "Which continent is shaded on the world map?",
-      "Asia",
-      ["Asia", "Europe", "Africa", "North America"],
-      1
-    ),
-    makeStaticCountry(
-      "Which country is shaded on this map?",
-      "India",
-      ["India", "Pakistan", "Bangladesh", "Afghanistan"],
-      1,
-      "South Asia"
-    ),
-    makeStaticCountry(
-      "Which country is shaded on this map?",
-      "Brazil",
-      ["Brazil", "Argentina", "Colombia", "Peru"],
-      1,
-      "South America"
-    ),
     makeStaticCapital(
       "What is the capital city of Japan?",
       "Tokyo",
       ["Tokyo", "Beijing", "Seoul", "Bangkok"],
-      2
+      1
     ),
     makeStaticCapital(
       "What is the capital city of Canada?",
       "Ottawa",
       ["Ottawa", "Washington, D.C.", "Mexico City", "London"],
+      1
+    ),
+    makeStaticCapital(
+      "What is the capital city of Brazil?",
+      "Brasilia",
+      ["Brasilia", "Bogota", "Buenos Aires", "Lima"],
       2
     ),
-    makeStaticContinent(
-      "Which continent is shaded on the world map?",
-      "Antarctica",
-      ["Antarctica", "Africa", "Asia", "Australia"],
+    makeStaticCapital(
+      "What is the capital city of India?",
+      "New Delhi",
+      ["New Delhi", "Dhaka", "Islamabad", "Bangkok"],
+      2
+    ),
+    makeStaticCapital(
+      "Jakarta is the capital city of which country?",
+      "Indonesia",
+      ["Indonesia", "Malaysia", "Thailand", "Philippines"],
       3
     ),
-    makeStaticCountry(
-      "Which country is shaded on this map?",
-      "Nigeria",
-      ["Nigeria", "Ghana", "Algeria", "Egypt"],
-      3,
-      "North and West Africa"
-    ),
-    makeStaticCountry(
-      "Which country is shaded on this map?",
+    makeStaticCapital(
+      "Berlin is the capital city of which country?",
       "Germany",
-      ["Germany", "France", "Italy", "Poland"],
-      3,
-      "Europe"
+      ["Germany", "Poland", "France", "Italy"],
+      3
     ),
     makeStaticCapital(
       "Cairo is the capital city of which country?",
@@ -686,10 +647,28 @@ const GEOGRAPHY_QUESTIONS = (() => {
       ["Turkey", "Iraq", "Iran", "Saudi Arabia"],
       4
     ),
-    makeStaticContinent(
-      "Which continent is shaded on the world map?",
-      "South America",
-      ["South America", "North America", "Europe", "Africa"],
+    makeStaticCapital(
+      "What is the capital city of Mexico?",
+      "Mexico City",
+      ["Mexico City", "Ottawa", "Washington, D.C.", "London"],
+      4
+    ),
+    makeStaticCapital(
+      "London is the capital city of which country?",
+      "United Kingdom",
+      ["United Kingdom", "Canada", "France", "Germany"],
+      5
+    ),
+    makeStaticCapital(
+      "What is the capital city of Nigeria?",
+      "Abuja",
+      ["Abuja", "Accra", "Nairobi", "Addis Ababa"],
+      5
+    ),
+    makeStaticCapital(
+      "Seoul is the capital city of which country?",
+      "South Korea",
+      ["South Korea", "Japan", "China", "Vietnam"],
       5
     ),
   ];

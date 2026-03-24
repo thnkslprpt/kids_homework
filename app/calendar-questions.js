@@ -640,7 +640,7 @@ function createCalendarDaysBetweenDatesQuestion() {
   const endDay = startDay + calendarRandomInt(3, 7);
   const answer = String(endDay - startDay);
   return {
-    question: `If a trip starts on the ${startDay}th and ends on the ${endDay}th, how many days are between those dates?`,
+    question: `If a trip starts on the ${calendarFormatOrdinal(startDay)} and ends on the ${calendarFormatOrdinal(endDay)}, how many days are between those dates?`,
     options: calendarMakeNumberOptions(answer, calendarBuildNearbyNumbers(answer, 3, 1)),
     answer,
     difficulty: 3,
@@ -755,6 +755,21 @@ function calendarBuildOptions(answer, candidates) {
   }
 
   return calendarShuffle(options);
+}
+
+function calendarFormatOrdinal(day) {
+  const remainder100 = day % 100;
+  if (remainder100 >= 11 && remainder100 <= 13) {
+    return `${day}th`;
+  }
+
+  const suffixes = {
+    1: "st",
+    2: "nd",
+    3: "rd",
+  };
+
+  return `${day}${suffixes[day % 10] ?? "th"}`;
 }
 
 function calendarAddDays(monthIndex, day, delta) {

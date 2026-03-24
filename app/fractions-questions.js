@@ -283,6 +283,23 @@ const FRACTIONS_QUESTIONS = (() => {
     };
   }
 
+  function createDirectFractionComparisonQuestion({
+    comparisonWord,
+    leftFraction,
+    rightFraction,
+    answer,
+    difficulty,
+    equalOption = "They are equal",
+    fallbackOption = "Not enough information",
+  }) {
+    return {
+      question: `Which is ${comparisonWord}: ${leftFraction} or ${rightFraction}?`,
+      options: [leftFraction, rightFraction, equalOption, fallbackOption],
+      answer,
+      difficulty,
+    };
+  }
+
   const FRACTIONS_GENERATED_FACTORIES = {
     1: [
       () =>
@@ -469,12 +486,14 @@ const FRACTIONS_QUESTIONS = (() => {
       color: FILLED_ALT_COLOR,
       visualSummary: "2 of 6 counters are blue.",
     }),
-    {
-      question: "Which fraction is larger?",
-      options: ["1/2", "1/4", "They are equal", "Neither is a fraction"],
+    createDirectFractionComparisonQuestion({
+      comparisonWord: "larger",
+      leftFraction: "1/2",
+      rightFraction: "1/4",
       answer: "1/2",
       difficulty: 1,
-    },
+      fallbackOption: "Neither is a fraction",
+    }),
     {
       question: "Which fraction is the same as 2 out of 4?",
       options: ["1/2", "1/3", "2/3", "3/4"],
@@ -528,12 +547,14 @@ const FRACTIONS_QUESTIONS = (() => {
       title: "Granola bar pieces",
       label: "Bar pieces",
     }),
-    {
-      question: "Which fraction is greater?",
-      options: ["2/3", "2/6", "They are equal", "Neither"],
+    createDirectFractionComparisonQuestion({
+      comparisonWord: "greater",
+      leftFraction: "2/3",
+      rightFraction: "2/6",
       answer: "2/3",
       difficulty: 2,
-    },
+      fallbackOption: "Neither",
+    }),
     createPieQuestion({
       question: "Which fraction in simplest form matches the picture?",
       numerator: 6,
@@ -591,12 +612,13 @@ const FRACTIONS_QUESTIONS = (() => {
       title: "Shaded circle",
       visualSummary: "A circle is split into 12 equal parts and 8 are shaded.",
     }),
-    {
-      question: "Which fraction is larger?",
-      options: ["5/6", "3/4", "They are equal", "Need a picture"],
+    createDirectFractionComparisonQuestion({
+      comparisonWord: "larger",
+      leftFraction: "5/6",
+      rightFraction: "3/4",
       answer: "5/6",
       difficulty: 4,
-    },
+    }),
     createStripQuestion({
       question: "What decimal matches the shaded part of the strip?",
       numerator: 7,

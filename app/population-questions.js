@@ -288,9 +288,10 @@ const POPULATION_GENERATION_DATA = [
   { country: "Saudi Arabia", population: 36_000_000, label: "About 36 million" },
   { country: "Uzbekistan", population: 36_000_000, label: "About 36 million" },
 ];
+const POPULATION_MAX_DIFFICULTY = 3;
 
 function createPopulationGeneratedEntry(difficulty) {
-  const level = clampDifficulty(difficulty);
+  const level = Math.min(clampDifficulty(difficulty), POPULATION_MAX_DIFFICULTY);
   const questionType = pickPopulationQuestionType(level);
 
   if (questionType === "compare") {
