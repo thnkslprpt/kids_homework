@@ -3405,14 +3405,7 @@ function createHebrewChoiceQuestion(entry) {
     questionText: "What does this Hebrew word mean?",
     displayText: entry.hebrewDisplay,
     extraText: "",
-    extraHtml: entry.transliteration
-      ? `
-        <details class="transliteration-toggle">
-          <summary>Show transliteration</summary>
-          <div class="transliteration-content">Sounds like: ${escapeHtml(entry.transliteration)}</div>
-        </details>
-      `
-      : "",
+    extraHtml: "",
     options: buildHebrewOptions(entry.english),
     answerValue: entry.english,
     answerLabel: entry.english,

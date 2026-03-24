@@ -806,30 +806,6 @@ button:disabled {
   font-size: 0.98rem;
 }
 
-.transliteration-toggle {
-  display: inline-block;
-  padding: 10px 12px;
-  border: 1px solid rgba(39, 73, 114, 0.14);
-  border-radius: 14px;
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.transliteration-toggle summary {
-  cursor: pointer;
-  font-weight: 700;
-  color: var(--accent-dark);
-  list-style: none;
-}
-
-.transliteration-toggle summary::-webkit-details-marker {
-  display: none;
-}
-
-.transliteration-content {
-  margin-top: 8px;
-  color: var(--ink);
-}
-
 .answer-area {
   display: grid;
   gap: 14px;
