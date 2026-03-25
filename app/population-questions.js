@@ -12,9 +12,9 @@ const POPULATION_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "About how many people live in the United States?",
-    options: ["About 90 million", "About 180 million", "About 350 million", "About 700 million"],
-    answer: "About 350 million",
+    question: "About how many people live in Israel?",
+    options: ["About 1 million", "About 10 million", "About 50 million", "About 100 million"],
+    answer: "About 10 million",
     difficulty: 1,
   },
   {
@@ -249,7 +249,7 @@ POPULATION_QUESTIONS.push(
 const POPULATION_GENERATION_DATA = [
   { country: "India", population: 1_430_000_000, label: "About 1.43 billion" },
   { country: "China", population: 1_410_000_000, label: "About 1.41 billion" },
-  { country: "United States", population: 340_000_000, label: "About 340 million" },
+  { country: "Israel", population: 10_000_000, label: "About 10 million" },
   { country: "Indonesia", population: 280_000_000, label: "About 280 million" },
   { country: "Pakistan", population: 240_000_000, label: "About 240 million" },
   { country: "Nigeria", population: 230_000_000, label: "About 230 million" },
@@ -430,7 +430,7 @@ function difficultyMatchesPopulation(entry, difficulty) {
     return entry.population >= 60_000_000;
   }
   if (difficulty === 3) {
-    return entry.population >= 30_000_000 && entry.population <= 160_000_000;
+    return entry.population >= 10_000_000 && entry.population <= 160_000_000;
   }
   return entry.population <= 120_000_000;
 }

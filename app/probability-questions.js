@@ -515,6 +515,45 @@ PROBABILITY_QUESTIONS.push(
   ]
 );
 
+PROBABILITY_QUESTIONS.push(
+  {
+    question: "A box has 2 red balls and 1 blue ball. Which color is more likely to be picked?",
+    options: ["Red", "Blue", "They are equally likely", "Neither color can be picked"],
+    answer: "Red",
+    difficulty: 2,
+  },
+  {
+    question: "A box has 3 red balls and 1 blue ball. What fraction of the balls are blue?",
+    options: ["1/2", "1/3", "1/4", "3/4"],
+    answer: "1/4",
+    difficulty: 3,
+  },
+  {
+    question: "A box has 4 red balls and 1 blue ball. What percentage of the balls are blue?",
+    options: ["40%", "60%", "20%", "10%"],
+    answer: "20%",
+    difficulty: 4,
+  },
+  {
+    question: "A box has 3 red balls and 2 blue balls. What percentage of the balls are blue?",
+    options: ["20%", "30%", "40%", "60%"],
+    answer: "40%",
+    difficulty: 4,
+  },
+  {
+    question: "A box has 5 red balls, 3 blue balls, and 2 green balls. What percentage of the balls are blue?",
+    options: ["20%", "30%", "40%", "50%"],
+    answer: "30%",
+    difficulty: 5,
+  },
+  {
+    question: "A box has 4 red balls, 4 blue balls, and 2 yellow balls. What percentage of the balls are blue?",
+    options: ["20%", "30%", "40%", "50%"],
+    answer: "40%",
+    difficulty: 5,
+  }
+);
+
 function createProbabilityGeneratedEntry(difficulty) {
   function buildOptionSet(answer, distractors) {
     return shuffleArray(Array.from(new Set([answer, ...distractors])));
@@ -523,6 +562,14 @@ function createProbabilityGeneratedEntry(difficulty) {
   function pickFraction(numerator, denominator) {
     const divisor = greatestCommonDivisor(numerator, denominator);
     return `${numerator / divisor}/${denominator / divisor}`;
+  }
+
+  function pickPercent(numerator, denominator) {
+    return `${(numerator / denominator) * 100}%`;
+  }
+
+  function buildOptionsFromPool(answer, pool) {
+    return buildOptionSet(answer, shuffleArray(pool.filter((value) => value !== answer)).slice(0, 3));
   }
 
   const generators = {
@@ -577,6 +624,22 @@ function createProbabilityGeneratedEntry(difficulty) {
           difficulty: 2,
         };
       },
+      () => {
+        const setups = [
+          { red: 2, blue: 1 },
+          { red: 3, blue: 1 },
+          { red: 4, blue: 2 },
+          { red: 1, blue: 2 },
+        ];
+        const { red, blue } = randomChoice(setups);
+        const answer = red > blue ? "Red" : "Blue";
+        return {
+          question: `A box has ${red} red ball${red === 1 ? "" : "s"} and ${blue} blue ball${blue === 1 ? "" : "s"}. Which color is more likely to be picked?`,
+          options: buildOptionSet(answer, ["Red", "Blue", "They are equally likely", "Neither color can be picked"]),
+          answer,
+          difficulty: 2,
+        };
+      },
     ],
     3: [
       () => {
@@ -611,6 +674,22 @@ function createProbabilityGeneratedEntry(difficulty) {
           difficulty: 3,
         };
       },
+      () => {
+        const setups = [
+          { red: 3, blue: 1 },
+          { red: 4, blue: 2 },
+          { red: 3, blue: 2 },
+          { red: 2, blue: 3 },
+        ];
+        const { red, blue } = randomChoice(setups);
+        const answer = pickFraction(blue, red + blue);
+        return {
+          question: `A box has ${red} red balls and ${blue} blue ball${blue === 1 ? "" : "s"}. What fraction of the balls are blue?`,
+          options: buildOptionsFromPool(answer, ["1/2", "1/3", "1/4", "2/5", "3/5", "2/3"]),
+          answer,
+          difficulty: 3,
+        };
+      },
     ],
     4: [
       () => {
@@ -627,6 +706,22 @@ function createProbabilityGeneratedEntry(difficulty) {
           question: "A bag has only green marbles in it. Picking a green marble is:",
           options: buildOptionSet("Certain", ["Impossible", "Unlikely", "Less than half likely"]),
           answer: "Certain",
+          difficulty: 4,
+        };
+      },
+      () => {
+        const setups = [
+          { red: 4, blue: 1 },
+          { red: 3, blue: 2 },
+          { red: 7, blue: 3 },
+          { red: 6, blue: 4 },
+        ];
+        const { red, blue } = randomChoice(setups);
+        const answer = pickPercent(blue, red + blue);
+        return {
+          question: `A box has ${red} red balls and ${blue} blue ball${blue === 1 ? "" : "s"}. What percentage of the balls are blue?`,
+          options: buildOptionsFromPool(answer, ["10%", "20%", "30%", "40%", "50%", "60%"]),
+          answer,
           difficulty: 4,
         };
       },
@@ -650,6 +745,22 @@ function createProbabilityGeneratedEntry(difficulty) {
         return {
           question: `A bag has ${red} red marbles, ${blue} blue marbles, and ${green} green marbles. Which color is least likely to be picked?`,
           options: buildOptionSet(answer, ["Red", "Blue", "Green", "All are equally likely"]),
+          answer,
+          difficulty: 5,
+        };
+      },
+      () => {
+        const setups = [
+          { red: 5, blue: 3, green: 2 },
+          { red: 4, blue: 4, green: 2 },
+          { red: 6, blue: 2, green: 2 },
+          { red: 3, blue: 5, green: 2 },
+        ];
+        const { red, blue, green } = randomChoice(setups);
+        const answer = pickPercent(blue, red + blue + green);
+        return {
+          question: `A box has ${red} red balls, ${blue} blue balls, and ${green} green balls. What percentage of the balls are blue?`,
+          options: buildOptionsFromPool(answer, ["10%", "20%", "30%", "40%", "50%"]),
           answer,
           difficulty: 5,
         };

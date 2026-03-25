@@ -108,7 +108,7 @@ const CALENDAR_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "How many days are in a common year?",
+    question: "How many days are in a normal year?",
     options: ["360", "365", "366", "370"],
     answer: "365",
     difficulty: 5,
@@ -697,7 +697,7 @@ function createCalendarMonthOffsetQuestion() {
 
 function createCalendarCommonYearQuestion() {
   return {
-    question: "How many days are in a common year?",
+    question: "How many days are in a normal year?",
     options: calendarMakeNumberOptions("365", [360, 364, 366, 370]),
     answer: "365",
     difficulty: 5,

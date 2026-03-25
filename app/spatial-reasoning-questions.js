@@ -12,7 +12,7 @@ const SPATIAL_REASONING_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "An arrow is pointing up. If it turns a quarter-turn to the right, which way will it point?",
+    question: "An arrow is pointing up. If it turns a quarter-turn clockwise, which way will it point?",
     options: ["Left", "Right", "Down", "Up"],
     answer: "Right",
     difficulty: 2,
@@ -72,7 +72,7 @@ const SPATIAL_REASONING_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "An arrow is pointing left. If it turns a half-turn, which way will it point?",
+    question: "An arrow is pointing left. If it turns a half-turn clockwise, which way will it point?",
     options: ["Up", "Down", "Left", "Right"],
     answer: "Right",
     difficulty: 2,
@@ -137,7 +137,7 @@ const SPATIAL_REASONING_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "An arrow points down. If it turns a quarter-turn to the left, which way will it point?",
+    question: "An arrow points down. If it turns a quarter-turn counterclockwise, which way will it point?",
     options: ["Left", "Right", "Up", "Down"],
     answer: "Right",
     difficulty: 2,
@@ -197,7 +197,7 @@ const SPATIAL_REASONING_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "An arrow points right. If it turns a half-turn, which way will it point?",
+    question: "An arrow points right. If it turns a half-turn counterclockwise, which way will it point?",
     options: ["Up", "Down", "Left", "Right"],
     answer: "Left",
     difficulty: 2,
@@ -273,7 +273,7 @@ SPATIAL_REASONING_QUESTIONS.push(
       difficulty: 1,
     },
     {
-      question: "An arrow points up. If it turns a quarter-turn to the right, which way will it point?",
+      question: "An arrow points up. If it turns a quarter-turn clockwise, which way will it point?",
       options: ["Left", "Right", "Down", "Up"],
       answer: "Right",
       difficulty: 2,
@@ -381,7 +381,7 @@ SPATIAL_REASONING_QUESTIONS.push(
       difficulty: 1,
     },
     {
-      question: "An arrow points left. If it turns a half-turn, which way will it point?",
+      question: "An arrow points left. If it turns a half-turn clockwise, which way will it point?",
       options: ["Up", "Down", "Left", "Right"],
       answer: "Right",
       difficulty: 2,
@@ -441,7 +441,7 @@ SPATIAL_REASONING_QUESTIONS.push(
       difficulty: 1,
     },
     {
-      question: "An arrow points right. If it turns a quarter-turn to the left, which way will it point?",
+      question: "An arrow points right. If it turns a quarter-turn counterclockwise, which way will it point?",
       options: ["Up", "Down", "Left", "Right"],
       answer: "Up",
       difficulty: 2,
@@ -616,13 +616,13 @@ function spatialCreateSimpleFaceQuestion() {
 function spatialCreateTurnQuestion(difficulty) {
   const templates = [
     {
-      question: "An arrow is pointing up. If it turns a quarter-turn to the right, which way will it point?",
+      question: "An arrow is pointing up. If it turns a quarter-turn clockwise, which way will it point?",
       answer: "Right",
       options: ["Left", "Right", "Down", "Up"],
       difficulty: 2,
     },
     {
-      question: "An arrow is pointing left. If it turns a half-turn, which way will it point?",
+      question: "An arrow is pointing left. If it turns a half-turn clockwise, which way will it point?",
       answer: "Right",
       options: ["Up", "Down", "Left", "Right"],
       difficulty: 2,

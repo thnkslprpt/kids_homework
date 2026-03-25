@@ -17,9 +17,9 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "If there is a serious emergency and no adult is available, what number should you call in the United States?",
-    options: ["211", "411", "911", "999"],
-    answer: "911",
+    question: "If there is a serious medical emergency and no adult is available, what number should you call in Israel?",
+    options: ["100", "101", "102", "106"],
+    answer: "101",
     difficulty: 2,
   },
   {
@@ -57,14 +57,14 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "If someone may have swallowed poison in the United States, who should you call right away?",
+    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away?",
     options: [
-      "Poison Help: 1-800-222-1222",
+      "Israel Poison Information Center: 04-777-1900",
       "The pizza shop",
       "The school bus office",
       "The library desk",
     ],
-    answer: "Poison Help: 1-800-222-1222",
+    answer: "Israel Poison Information Center: 04-777-1900",
     difficulty: 4,
   },
   {
@@ -151,14 +151,14 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "If someone has a serious allergic reaction and trouble breathing, what should you do?",
+    question: "If someone has a serious allergic reaction and trouble breathing in Israel, what should you do?",
     options: [
       "Wait until tomorrow",
-      "Call 911 right away",
+      "Call 101 right away",
       "Give them candy",
       "Tell them to lie down and sleep",
     ],
-    answer: "Call 911 right away",
+    answer: "Call 101 right away",
     difficulty: 4,
   },
   {
@@ -173,14 +173,14 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "If someone may be poisoned, what is the correct action in the United States?",
+    question: "If someone may be poisoned in Israel but is awake and breathing normally, what is the correct action?",
     options: [
-      "Call Poison Help at 1-800-222-1222",
+      "Call the Israel Poison Information Center at 04-777-1900",
       "Call the toy store",
       "Wait an hour first",
       "Give them milk and leave them alone",
     ],
-    answer: "Call Poison Help at 1-800-222-1222",
+    answer: "Call the Israel Poison Information Center at 04-777-1900",
     difficulty: 5,
   },
   {
@@ -335,14 +335,14 @@ function healthCreateBandageQuestion() {
 
 function healthCreatePoisonQuestion() {
   return {
-    question: "If someone may have swallowed poison in the United States, who should you call right away?",
+    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away?",
     options: [
-      "Poison Help: 1-800-222-1222",
+      "Israel Poison Information Center: 04-777-1900",
       "The pizza shop",
       "The school bus office",
       "The library desk",
     ],
-    answer: "Poison Help: 1-800-222-1222",
+    answer: "Israel Poison Information Center: 04-777-1900",
     difficulty: 4,
   };
 }
@@ -377,9 +377,9 @@ function healthCreateThunderQuestion() {
 
 function healthCreateAllergyQuestion() {
   return {
-    question: "If someone has a serious allergic reaction and trouble breathing, what should you do?",
-    options: ["Wait until tomorrow", "Call 911 right away", "Give them candy", "Tell them to lie down and sleep"],
-    answer: "Call 911 right away",
+    question: "If someone has a serious allergic reaction and trouble breathing in Israel, what should you do?",
+    options: ["Wait until tomorrow", "Call 101 right away", "Give them candy", "Tell them to lie down and sleep"],
+    answer: "Call 101 right away",
     difficulty: 5,
   };
 }

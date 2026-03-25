@@ -160,9 +160,9 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "A map scale says 1 centimeter = 4 miles. If two towns are 5 centimeters apart, how far apart are they in real life?",
-    options: ["9 miles", "12 miles", "20 miles", "25 miles"],
-    answer: "20 miles",
+    question: "A map scale says 1 centimeter = 4 kilometers. If two towns are 5 centimeters apart, how far apart are they in real life?",
+    options: ["9 kilometers", "12 kilometers", "20 kilometers", "25 kilometers"],
+    answer: "20 kilometers",
     difficulty: 3,
   },
   {
@@ -184,9 +184,9 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "A map scale says 1 inch = 3 miles. If two places are 7 inches apart, how far apart are they in real life?",
-    options: ["10 miles", "18 miles", "21 miles", "24 miles"],
-    answer: "21 miles",
+    question: "A map scale says 1 centimeter = 3 kilometers. If two places are 7 centimeters apart, how far apart are they in real life?",
+    options: ["10 kilometers", "18 kilometers", "21 kilometers", "24 kilometers"],
+    answer: "21 kilometers",
     difficulty: 5,
   },
   {
@@ -225,9 +225,9 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "A map scale says 1 centimeter = 2 miles. If two parks are 8 centimeters apart, how far apart are they in real life?",
-    options: ["8 miles", "10 miles", "12 miles", "16 miles"],
-    answer: "16 miles",
+    question: "A map scale says 1 centimeter = 2 kilometers. If two parks are 8 centimeters apart, how far apart are they in real life?",
+    options: ["8 kilometers", "10 kilometers", "12 kilometers", "16 kilometers"],
+    answer: "16 kilometers",
     difficulty: 3,
   },
   {
@@ -319,9 +319,9 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       difficulty: 3,
     },
     {
-      question: "A map scale says 1 centimeter = 2 miles. If two parks are 5 centimeters apart, how far apart are they in real life?",
-      options: ["8 miles", "10 miles", "12 miles", "15 miles"],
-      answer: "10 miles",
+      question: "A map scale says 1 centimeter = 2 kilometers. If two parks are 5 centimeters apart, how far apart are they in real life?",
+      options: ["8 kilometers", "10 kilometers", "12 kilometers", "15 kilometers"],
+      answer: "10 kilometers",
       difficulty: 3,
     },
     {
@@ -337,9 +337,9 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       difficulty: 4,
     },
     {
-      question: "A map scale says 1 centimeter = 4 miles. If two towns are 6 centimeters apart, how far apart are they in real life?",
-      options: ["18 miles", "20 miles", "24 miles", "28 miles"],
-      answer: "24 miles",
+      question: "A map scale says 1 centimeter = 4 kilometers. If two towns are 6 centimeters apart, how far apart are they in real life?",
+      options: ["18 kilometers", "20 kilometers", "24 kilometers", "28 kilometers"],
+      answer: "24 kilometers",
       difficulty: 4,
     },
     {
@@ -361,7 +361,7 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       difficulty: 5,
     },
     {
-      question: "A map scale says 1 inch = 5 kilometers. If two villages are 7 inches apart, how far apart are they in real life?",
+      question: "A map scale says 1 centimeter = 5 kilometers. If two villages are 7 centimeters apart, how far apart are they in real life?",
       options: ["25 kilometers", "30 kilometers", "35 kilometers", "40 kilometers"],
       answer: "35 kilometers",
       difficulty: 5,
@@ -421,9 +421,9 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       difficulty: 3,
     },
     {
-      question: "A map scale says 1 centimeter = 2 miles. If two places are 8 centimeters apart, how far apart are they in real life?",
-      options: ["8 miles", "10 miles", "12 miles", "16 miles"],
-      answer: "16 miles",
+      question: "A map scale says 1 centimeter = 2 kilometers. If two places are 8 centimeters apart, how far apart are they in real life?",
+      options: ["8 kilometers", "10 kilometers", "12 kilometers", "16 kilometers"],
+      answer: "16 kilometers",
       difficulty: 3,
     },
     {
@@ -475,9 +475,9 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       difficulty: 5,
     },
     {
-      question: "A map scale says 1 inch = 4 miles. If two cities are 8 inches apart, how far apart are they in real life?",
-      options: ["24 miles", "28 miles", "32 miles", "36 miles"],
-      answer: "32 miles",
+      question: "A map scale says 1 centimeter = 4 kilometers. If two cities are 8 centimeters apart, how far apart are they in real life?",
+      options: ["24 kilometers", "28 kilometers", "32 kilometers", "36 kilometers"],
+      answer: "32 kilometers",
       difficulty: 5,
     },
     {
@@ -690,9 +690,9 @@ function mapsCreateScaleQuestion(difficulty) {
       difficulty: 3,
     },
     {
-      question: "A map scale says 1 centimeter = 2 miles. If two places are 8 centimeters apart, how far apart are they in real life?",
-      answer: "16 miles",
-      options: ["8 miles", "10 miles", "12 miles", "16 miles"],
+      question: "A map scale says 1 centimeter = 2 kilometers. If two places are 8 centimeters apart, how far apart are they in real life?",
+      answer: "16 kilometers",
+      options: ["8 kilometers", "10 kilometers", "12 kilometers", "16 kilometers"],
       difficulty: 3,
     },
     {
@@ -702,9 +702,9 @@ function mapsCreateScaleQuestion(difficulty) {
       difficulty: 4,
     },
     {
-      question: "A map scale says 1 inch = 4 miles. If two cities are 8 inches apart, how far apart are they in real life?",
-      answer: "32 miles",
-      options: ["24 miles", "28 miles", "32 miles", "36 miles"],
+      question: "A map scale says 1 centimeter = 4 kilometers. If two cities are 8 centimeters apart, how far apart are they in real life?",
+      answer: "32 kilometers",
+      options: ["24 kilometers", "28 kilometers", "32 kilometers", "36 kilometers"],
       difficulty: 5,
     },
   ];

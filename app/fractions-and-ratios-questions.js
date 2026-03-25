@@ -21,14 +21,14 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
     leftFraction: "1/2",
     rightFraction: "1/4",
     answer: "1/2",
-    difficulty: 1,
+    difficulty: 2,
     fallbackOption: "Neither is a fraction",
   }),
   {
     question: "Which fraction is the same as 2 out of 8?",
     options: ["1/2", "1/3", "1/4", "3/4"],
     answer: "1/4",
-    difficulty: 1,
+    difficulty: 2,
   },
   {
     question: "A recipe uses 1/2 cup of sugar two times. How much sugar is that altogether?",
@@ -88,14 +88,14 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
     leftFraction: "1/3",
     rightFraction: "1/2",
     answer: "1/3",
-    difficulty: 1,
+    difficulty: 2,
     fallbackOption: "Neither",
   }),
   {
     question: "Which fraction is the same as 3 out of 6?",
     options: ["1/3", "1/2", "2/3", "3/4"],
     answer: "1/2",
-    difficulty: 1,
+    difficulty: 2,
   },
   {
     question: "What is 1/4 of 20?",
@@ -156,7 +156,7 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       leftFraction: "3/4",
       rightFraction: "2/4",
       answer: "3/4",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     {
@@ -169,14 +169,14 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       question: "Which fraction is the same as 4 out of 8?",
       options: ["1/4", "1/2", "3/4", "2/3"],
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
     },
     fractionsAndRatiosBuildPairComparisonQuestion({
       comparisonWord: "lower",
       leftFraction: "1/5",
       rightFraction: "1/2",
       answer: "1/5",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     {
@@ -291,14 +291,18 @@ function createFractionsAndRatiosGeneratedEntry(difficulty) {
   const level = fractionsAndRatiosClampDifficulty(difficulty);
   const generatorByLevel = {
     1: [
-      fractionsAndRatiosCreateCompareFractionEntry,
-      fractionsAndRatiosCreateEquivalentFractionEntry,
+      fractionsAndRatiosCreateFractionOfNumberEntry,
+      fractionsAndRatiosCreateFractionOfSetEntry,
     ],
     2: [
       fractionsAndRatiosCreateFractionOfNumberEntry,
       fractionsAndRatiosCreateFractionOfSetEntry,
+      fractionsAndRatiosCreateCompareFractionEntry,
+      fractionsAndRatiosCreateEquivalentFractionEntry,
     ],
     3: [
+      fractionsAndRatiosCreateFractionOfNumberEntry,
+      fractionsAndRatiosCreateFractionOfSetEntry,
       fractionsAndRatiosCreateDecimalMatchEntry,
       fractionsAndRatiosCreateCompareFractionEntry,
     ],
@@ -325,7 +329,7 @@ function fractionsAndRatiosCreateCompareFractionEntry(difficulty) {
       leftFraction: "1/2",
       rightFraction: "1/4",
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither is a fraction",
     }),
     fractionsAndRatiosBuildPairComparisonQuestion({
@@ -333,7 +337,7 @@ function fractionsAndRatiosCreateCompareFractionEntry(difficulty) {
       leftFraction: "1/3",
       rightFraction: "1/2",
       answer: "1/3",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     fractionsAndRatiosBuildPairComparisonQuestion({
@@ -341,7 +345,7 @@ function fractionsAndRatiosCreateCompareFractionEntry(difficulty) {
       leftFraction: "3/4",
       rightFraction: "2/4",
       answer: "3/4",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     {
@@ -363,13 +367,13 @@ function fractionsAndRatiosCreateEquivalentFractionEntry(difficulty) {
       question: "Which fraction is the same as 2 out of 8?",
       options: ["1/2", "1/3", "1/4", "3/4"],
       answer: "1/4",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "Which fraction is the same as 3 out of 6?",
       options: ["1/3", "1/2", "2/3", "3/4"],
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "Which fraction is equal to 6/8?",
@@ -392,6 +396,27 @@ function fractionsAndRatiosCreateEquivalentFractionEntry(difficulty) {
 
 function fractionsAndRatiosCreateFractionOfNumberEntry(difficulty) {
   const questions = [
+    {
+      fraction: "1/2",
+      whole: 4,
+      answer: "2",
+      options: ["1", "2", "3", "4"],
+      difficulty: 1,
+    },
+    {
+      fraction: "1/2",
+      whole: 6,
+      answer: "3",
+      options: ["2", "3", "4", "5"],
+      difficulty: 1,
+    },
+    {
+      fraction: "1/3",
+      whole: 6,
+      answer: "2",
+      options: ["1", "2", "3", "4"],
+      difficulty: 1,
+    },
     {
       fraction: "1/3",
       whole: 12,
@@ -448,6 +473,20 @@ function fractionsAndRatiosCreateFractionOfNumberEntry(difficulty) {
 
 function fractionsAndRatiosCreateFractionOfSetEntry(difficulty) {
   const questions = [
+    {
+      total: 4,
+      colored: 1,
+      answer: "1/4",
+      options: ["1/4", "2/4", "3/4", "4/4"],
+      difficulty: 1,
+    },
+    {
+      total: 3,
+      colored: 1,
+      answer: "1/3",
+      options: ["1/2", "1/3", "1/4", "2/3"],
+      difficulty: 1,
+    },
     {
       total: 6,
       colored: 2,
@@ -638,14 +677,14 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       leftFraction: "1/2",
       rightFraction: "1/4",
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither is a fraction",
     }),
     {
       question: "What fraction matches 3 out of 6?",
       options: ["1/2", "1/3", "2/3", "3/4"],
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "What is 1/2 of 14?",
@@ -658,7 +697,7 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       leftFraction: "1/3",
       rightFraction: "1/2",
       answer: "1/3",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     {
@@ -762,7 +801,7 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       leftFraction: "2/5",
       rightFraction: "3/5",
       answer: "2/5",
-      difficulty: 1,
+      difficulty: 2,
       fallbackOption: "Neither",
     }),
     {
@@ -775,7 +814,7 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       question: "Which fraction is equal to 2/4?",
       options: ["1/2", "1/3", "3/4", "2/3"],
       answer: "1/2",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "What is 1/5 of 20?",

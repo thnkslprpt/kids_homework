@@ -1,10 +1,12 @@
+const THERMOMETER_DETAIL_TEXT = "Read the red line. Dark marks are 10°C. Light marks are 5°C.";
+
 const VISUAL_MEASUREMENT_QUESTIONS = [
   {
     question: "How long is the pencil shown on the ruler?",
     visualHtml: buildVisualMeasurementCard(
       "Ruler",
-      buildRulerSvg({ start: 1, end: 6 }),
-      "Measure from the start mark to the end mark."
+      buildRulerSvg({ start: -2, end: 3 }),
+      "The pencil starts at -2 cm."
     ),
     options: ["4 cm", "5 cm", "6 cm", "7 cm"],
     answer: "5 cm",
@@ -22,22 +24,11 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Which object is heavier?",
-    visualHtml: buildVisualMeasurementCard(
-      "Balance scale",
-      buildScaleSvg({ leftLabel: "Apple", rightLabel: "Feather", leftDown: true }),
-      "The lower side is heavier."
-    ),
-    options: ["Apple", "Feather", "They are equal", "The table"],
-    answer: "Apple",
-    difficulty: 1,
-  },
-  {
     question: "Which thermometer reading is closest to a cool day?",
     visualHtml: buildVisualMeasurementCard(
       "Thermometer",
       buildThermometerSvg({ temperature: 12 }),
-      "Read the red line."
+      THERMOMETER_DETAIL_TEXT
     ),
     options: ["About 5°C", "About 12°C", "About 25°C", "About 40°C"],
     answer: "About 12°C",
@@ -47,8 +38,8 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     question: "How long is the pencil shown on the ruler?",
     visualHtml: buildVisualMeasurementCard(
       "Ruler",
-      buildRulerSvg({ start: 2, end: 7.5 }),
-      "The pencil starts at 2 cm."
+      buildRulerSvg({ start: -2, end: 3.5 }),
+      "The pencil starts at -2 cm."
     ),
     options: ["4.5 cm", "5.5 cm", "6 cm", "7 cm"],
     answer: "5.5 cm",
@@ -86,7 +77,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     visualHtml: buildVisualMeasurementCard(
       "Thermometer",
       buildThermometerSvg({ temperature: 28 }),
-      "The red line shows the temperature."
+      THERMOMETER_DETAIL_TEXT
     ),
     options: ["About 18°C", "About 22°C", "About 28°C", "About 38°C"],
     answer: "About 28°C",
@@ -110,22 +101,11 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     question: "How many centimeters long is the line?",
     visualHtml: buildVisualMeasurementCard(
       "Ruler",
-      buildRulerSvg({ start: 0, end: 12 }),
-      "Use the full ruler marks."
+      buildRulerSvg({ start: -4, end: 8 }),
+      "The line begins at -4 cm."
     ),
     options: ["10 cm", "11 cm", "12 cm", "13 cm"],
     answer: "12 cm",
-    difficulty: 3,
-  },
-  {
-    question: "Which side is heavier on the scale?",
-    visualHtml: buildVisualMeasurementCard(
-      "Balance scale",
-      buildScaleSvg({ leftLabel: "Book", rightLabel: "Pencil", leftDown: false }),
-      "The lower side is heavier."
-    ),
-    options: ["Pencil", "Book", "Both are equal", "The rope"],
-    answer: "Pencil",
     difficulty: 3,
   },
   {
@@ -158,7 +138,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     visualHtml: buildVisualMeasurementCard(
       "Thermometer",
       buildThermometerSvg({ temperature: 34 }),
-      "Read the red line."
+      THERMOMETER_DETAIL_TEXT
     ),
     options: ["About 14°C", "About 24°C", "About 34°C", "About 44°C"],
     answer: "About 34°C",
@@ -179,8 +159,8 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     question: "How many centimeters long is the line?",
     visualHtml: buildVisualMeasurementCard(
       "Ruler",
-      buildRulerSvg({ start: 3, end: 9.5 }),
-      "The line begins at 3 cm."
+      buildRulerSvg({ start: -3, end: 3.5 }),
+      "The line begins at -3 cm."
     ),
     options: ["5.5 cm", "6 cm", "6.5 cm", "7 cm"],
     answer: "6.5 cm",
@@ -202,7 +182,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     visualHtml: buildVisualMeasurementCard(
       "Thermometer",
       buildThermometerSvg({ temperature: 41 }),
-      "The red line is high on the scale."
+      THERMOMETER_DETAIL_TEXT
     ),
     options: ["About 21°C", "About 31°C", "About 41°C", "About 51°C"],
     answer: "About 41°C",
@@ -213,10 +193,10 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
 function createVisualMeasurementGeneratedEntry(difficulty) {
   const level = clampVisualMeasurementDifficulty(difficulty);
   const generators = {
-    1: [createRulerQuestion, createClockQuestion, createScaleQuestion],
+    1: [createRulerQuestion, createClockQuestion],
     2: [createThermometerQuestion, createReflectionQuestion, createRulerQuestion],
-    3: [createReceiptQuestion, createClockQuestion, createScaleQuestion],
-    4: [createUnitPriceQuestion, createThermometerQuestion, createReflectionQuestion],
+    3: [createReceiptQuestion, createClockQuestion, createRulerQuestion],
+    4: [createUnitPriceQuestion, createThermometerQuestion, createReflectionQuestion, createRulerQuestion],
     5: [createTransformationQuestion, createRulerQuestion, createThermometerQuestion],
   }[level];
 
@@ -224,16 +204,29 @@ function createVisualMeasurementGeneratedEntry(difficulty) {
 }
 
 function createRulerQuestion(difficulty = 1) {
-  const start = visualMeasurementRandomInt(0, 3);
-  const length = visualMeasurementRandomChoice([4, 5, 6, 6.5, 7]);
+  const level = clampVisualMeasurementDifficulty(difficulty);
+  const config = {
+    1: { lengths: [3, 4, 5], minStart: -3 },
+    2: { lengths: [4, 5, 5.5, 6], minStart: -4 },
+    3: { lengths: [4.5, 5.5, 6, 6.5], minStart: -5 },
+    4: { lengths: [5, 6, 6.5, 7], minStart: -6 },
+    5: { lengths: [5.5, 6, 6.5, 7, 7.5], minStart: -7 },
+  }[level];
+  const length = visualMeasurementRandomChoice(config.lengths);
+  const startLowerBound = Math.max(config.minStart, Math.ceil(1 - length));
+  const start = visualMeasurementRandomInt(startLowerBound, -1);
   const end = start + length;
   const answer = `${length} cm`;
   return visualMeasurementBuildQuestion({
     question: "How long is the line shown on the ruler?",
-    visualHtml: buildVisualMeasurementCard("Ruler", buildRulerSvg({ start, end }), "Read the start and end marks."),
+    visualHtml: buildVisualMeasurementCard(
+      "Ruler",
+      buildRulerSvg({ start, end }),
+      `The line begins at ${start} cm.`
+    ),
     options: visualMeasurementBuildNumericOptions(answer, [answer, `${length + 1} cm`, `${Math.max(1, length - 1)} cm`, `${length + 2} cm`]),
     answer,
-    difficulty,
+    difficulty: level,
     visualSummary: `The line is ${answer}.`,
   });
 }
@@ -263,7 +256,7 @@ function createThermometerQuestion(difficulty = 2) {
   const answer = `About ${temperature}°C`;
   return visualMeasurementBuildQuestion({
     question: "What temperature is shown?",
-    visualHtml: buildVisualMeasurementCard("Thermometer", buildThermometerSvg({ temperature }), "Read the red line."),
+    visualHtml: buildVisualMeasurementCard("Thermometer", buildThermometerSvg({ temperature }), THERMOMETER_DETAIL_TEXT),
     options: visualMeasurementBuildNumericOptions(answer, [
       answer,
       `About ${temperature + 5}°C`,
@@ -273,25 +266,6 @@ function createThermometerQuestion(difficulty = 2) {
     answer,
     difficulty,
     visualSummary: `The temperature is ${answer}.`,
-  });
-}
-
-function createScaleQuestion(difficulty = 2) {
-  const heavier = visualMeasurementRandomChoice(["left", "right"]);
-  const leftLabel = heavier === "left" ? "Book" : "Pencil";
-  const rightLabel = heavier === "left" ? "Pencil" : "Book";
-  const answer = heavier === "left" ? "Book" : "Pencil";
-  return visualMeasurementBuildQuestion({
-    question: "Which side is heavier?",
-    visualHtml: buildVisualMeasurementCard(
-      "Balance scale",
-      buildScaleSvg({ leftLabel, rightLabel, leftDown: heavier === "left" }),
-      "The lower side is heavier."
-    ),
-    options: visualMeasurementBuildNumericOptions(answer, [answer, heavier === "left" ? "Pencil" : "Book", "Both are equal", "The stand"]),
-    answer,
-    difficulty,
-    visualSummary: `${answer} is heavier.`,
   });
 }
 
@@ -405,16 +379,18 @@ function buildVisualMeasurementCard(title, innerHtml, detailText = "") {
 }
 
 function buildRulerSvg({ start = 0, end = 5 } = {}) {
-  const maxMark = Math.max(8, Math.ceil(end));
-  const width = 20 + maxMark * 40 + 44;
+  const minMark = Math.min(-2, Math.floor(start) - 1);
+  const maxMark = Math.max(8, Math.ceil(end) + 1);
   const height = 92;
   const left = 20;
   const scale = 40;
-  const lineStart = left + start * scale;
-  const lineEnd = left + end * scale;
+  const rangeWidth = (maxMark - minMark) * scale;
+  const width = left + rangeWidth + 44;
+  const lineStart = left + (start - minMark) * scale;
+  const lineEnd = left + (end - minMark) * scale;
   const ticks = [];
-  for (let mark = 0; mark <= maxMark; mark += 1) {
-    const x = left + mark * scale;
+  for (let mark = minMark; mark <= maxMark; mark += 1) {
+    const x = left + (mark - minMark) * scale;
     const major = mark % 2 === 0;
     ticks.push(`
       <line x1="${x}" y1="36" x2="${x}" y2="${major ? 60 : 50}" stroke="#274972" stroke-width="2"></line>
@@ -432,23 +408,59 @@ function buildRulerSvg({ start = 0, end = 5 } = {}) {
 }
 
 function buildThermometerSvg({ temperature = 20 } = {}) {
-  const width = 110;
-  const height = 200;
-  const bulbY = 168;
-  const topY = 24;
-  const fillHeight = Math.max(20, Math.min(132, 168 - ((temperature - 0) / 50) * 132));
+  const width = 138;
+  const height = 216;
+  const labelRightX = 18;
+  const leftMajorGuideStartX = 30;
+  const leftMinorGuideStartX = 40;
+  const tubeX = 60;
+  const tubeY = 26;
+  const tubeWidth = 14;
+  const tubeHeight = 140;
+  const scaleTopY = 32;
+  const scaleBottomY = 160;
+  const bulbCx = tubeX + tubeWidth / 2;
+  const bulbY = 180;
+  const bulbRadius = 20;
+  const clampedTemperature = Math.max(0, Math.min(50, temperature));
+  const yForTemperature = (value) => scaleBottomY - (value / 50) * (scaleBottomY - scaleTopY);
+  const fillTopY = yForTemperature(clampedTemperature);
+  const guideLines = [];
+  const labels = [];
+
+  for (let value = 0; value <= 50; value += 10) {
+    const y = yForTemperature(value);
+    guideLines.push(`
+      <line x1="${leftMajorGuideStartX}" y1="${y}" x2="${tubeX - 8}" y2="${y}" stroke="#274972" stroke-width="2.25" stroke-linecap="round"></line>
+      <line x1="${tubeX + tubeWidth + 8}" y1="${y}" x2="${tubeX + tubeWidth + 16}" y2="${y}" stroke="#274972" stroke-width="2.25" stroke-linecap="round"></line>
+    `);
+    labels.push(`
+      <text x="${labelRightX}" y="${y}" text-anchor="end" font-size="12" fill="#274972" dominant-baseline="middle">${value}</text>
+    `);
+  }
+
+  for (let value = 5; value < 50; value += 10) {
+    const y = yForTemperature(value);
+    guideLines.push(`
+      <line x1="${leftMinorGuideStartX}" y1="${y}" x2="${tubeX - 10}" y2="${y}" stroke="#274972" stroke-opacity="0.32" stroke-width="1.5" stroke-linecap="round"></line>
+      <line x1="${tubeX + tubeWidth + 8}" y1="${y}" x2="${tubeX + tubeWidth + 13}" y2="${y}" stroke="#274972" stroke-opacity="0.32" stroke-width="1.5" stroke-linecap="round"></line>
+    `);
+  }
+
   return `
     <svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" role="img" aria-hidden="true">
-      <rect x="48" y="${topY}" width="14" height="132" rx="7" fill="#e7eef7" stroke="#274972" stroke-width="2"></rect>
-      <rect x="51" y="${fillHeight}" width="8" height="${132 - (fillHeight - topY)}" rx="4" fill="#f25f5c"></rect>
-      <circle cx="55" cy="${bulbY}" r="20" fill="#f25f5c" stroke="#274972" stroke-width="2"></circle>
-      <line x1="30" y1="160" x2="80" y2="160" stroke="#274972" stroke-width="2"></line>
-      <text x="10" y="40" font-size="12" fill="#274972">50</text>
-      <text x="10" y="70" font-size="12" fill="#274972">40</text>
-      <text x="10" y="100" font-size="12" fill="#274972">30</text>
-      <text x="10" y="130" font-size="12" fill="#274972">20</text>
-      <text x="10" y="160" font-size="12" fill="#274972">10</text>
-      <text x="10" y="188" font-size="12" fill="#274972">0</text>
+      ${guideLines.join("")}
+      ${labels.join("")}
+      <rect x="${tubeX}" y="${tubeY}" width="${tubeWidth}" height="${tubeHeight}" rx="7" fill="#e7eef7" stroke="#274972" stroke-width="2"></rect>
+      <rect
+        x="${tubeX + 3}"
+        y="${fillTopY}"
+        width="${tubeWidth - 6}"
+        height="${Math.max(8, scaleBottomY - fillTopY + 10)}"
+        rx="4"
+        fill="#f25f5c"
+      ></rect>
+      <circle cx="${bulbCx}" cy="${bulbY}" r="${bulbRadius}" fill="#f25f5c" stroke="#274972" stroke-width="2"></circle>
     </svg>
   `;
 }
@@ -477,23 +489,6 @@ function buildClockSvg({ hour = 3, minute = 0 } = {}) {
       ${hourHand}
       ${minuteHand}
       <circle cx="${cx}" cy="${cy}" r="6" fill="#f25f5c" stroke="#274972" stroke-width="2"></circle>
-    </svg>
-  `;
-}
-
-function buildScaleSvg({ leftLabel = "A", rightLabel = "B", leftDown = true } = {}) {
-  const leftY = leftDown ? 126 : 104;
-  const rightY = leftDown ? 104 : 126;
-  return `
-    <svg viewBox="0 0 260 160" width="260" height="160" role="img" aria-hidden="true">
-      <line x1="130" y1="25" x2="130" y2="126" stroke="#274972" stroke-width="4"></line>
-      <line x1="50" y1="46" x2="210" y2="46" stroke="#274972" stroke-width="4"></line>
-      <line x1="60" y1="${leftY}" x2="120" y2="60" stroke="#274972" stroke-width="4"></line>
-      <line x1="140" y1="60" x2="200" y2="${rightY}" stroke="#274972" stroke-width="4"></line>
-      <rect x="42" y="${leftY}" width="76" height="16" rx="8" fill="#dff0ff" stroke="#274972" stroke-width="2"></rect>
-      <rect x="142" y="${rightY}" width="76" height="16" rx="8" fill="#fff0ce" stroke="#274972" stroke-width="2"></rect>
-      <text x="80" y="${leftY + 12}" text-anchor="middle" font-size="12" fill="#274972">${visualMeasurementEscapeHtml(leftLabel)}</text>
-      <text x="180" y="${rightY + 12}" text-anchor="middle" font-size="12" fill="#274972">${visualMeasurementEscapeHtml(rightLabel)}</text>
     </svg>
   `;
 }

@@ -360,12 +360,12 @@ const READING_COMPREHENSION_QUESTIONS = [
       question: "What is the main idea of the passage?",
       lines: [
         "The science club made small boats from aluminum foil.",
-        "They tested which design could hold the most pennies before sinking.",
+        "They tested which design could hold the most coins before sinking.",
       ],
       options: [
         "The science club tested foil boat designs.",
         "The science club learned to sail on a lake.",
-        "The science club was collecting pennies for lunch.",
+        "The science club was collecting coins for lunch.",
         "The science club repaired a broken sink.",
       ],
       answer: "The science club tested foil boat designs.",

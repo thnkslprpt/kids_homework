@@ -2,12 +2,28 @@ const OPTION_LABELS = ["A", "B", "C", "D"];
 const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
 const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
 const MAX_SAVED_SESSIONS = 10;
-const QUESTION_COUNT_OPTIONS = [20, 25, 30, 35, 40];
+const QUESTION_COUNT_OPTIONS = [20, 30, 40];
+const DEFAULT_HEBREW_WRITING_TAIL_COUNT = 3;
+const HEBREW_ONLY_WRITING_TAIL_COUNT = 5;
 const MAP_QUESTION_INTERVAL = 30;
 const RESERVED_MAP_CATEGORY = "geography-map";
 const LANGUAGE_DRAG_INTERVAL = 4;
+const HEBREW_FINAL_LETTER_INTERVAL = 14;
+const HEBREW_IMAGE_DRAG_SHARE = 0.3;
+const GENERATED_CATEGORY_DRAG_SHARES = {
+  "reading-comprehension": 0.32,
+  fractions: 0.28,
+  "fractions-and-ratios": 0.24,
+  science: 0.2,
+  nutrition: 0.22,
+  estimation: 0.22,
+  measurement: 0.26,
+  "visual-measurement": 0.3,
+  "maps-and-directions": 0.3,
+};
 const REVIEW_FOCUS_SHARE = 0.2;
 const REVIEW_RECENCY_DECAY = 0.82;
+const SNAPSHOT_DATE_PATTERN = /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/;
 const CORE_SESSION_CATEGORIES = ["math", "hebrew"];
 const NON_CORE_SESSION_CATEGORIES = [
   "science",
@@ -40,6 +56,33 @@ const NON_CORE_SESSION_CATEGORIES = [
   "fractions-and-ratios",
   "spatial-reasoning",
 ];
+const RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES = {
+  "digital-safety": 1 / 50,
+  "health-and-first-aid": 1 / 50,
+  "household-problem-solving": 1 / 50,
+  "nutrition": 1 / 50,
+  "rationality": 1 / 50,
+};
+const REVIEW_FOCUS_ALLOWED_CATEGORIES = new Set([
+  "math",
+  "hebrew",
+  "time",
+  "statistics",
+  "algebra",
+  "applied-word-problems",
+  "visual-math",
+  "visual-measurement",
+  "measurement",
+  "charts-and-graphs",
+  "calendar",
+  "estimation",
+  "probability",
+  "vocabulary-grammar",
+  "maps-and-directions",
+  "fractions",
+  "fractions-and-ratios",
+  "spatial-reasoning",
+]);
 const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_CATEGORIES];
 const CORE_CATEGORY_SHARE = 0.45;
 const USER_PROFILES = [
@@ -86,6 +129,7 @@ const USER_PROFILES = [
 const CATEGORY_LABELS = {
   math: "Math",
   hebrew: "Hebrew",
+  "hebrew-writing": "Hebrew Writing",
   science: "Science",
   "science-evidence": "Science Evidence",
   time: "Time",
@@ -701,10 +745,12 @@ const CHART_TABLE_TEMPLATES = [
 ];
 
 const HEBREW_NIKKUD_OVERRIDES = {
-  "-ב": "-בְּ",
-  "-כ": "-כְּ",
-  "-מ": "-מִ",
-  "-ו": "-וְ",
+  "ב-": "בְּ-",
+  "כ-": "כְּ-",
+  "ל-": "לְ-",
+  "מ-": "מִ-",
+  "ו-": "וְ-",
+  "ה-": "הַ-",
   "אבא": "אַבָּא",
   "אדום": "אָדוֹם",
   "אוכל": "אוֹכֶל",
@@ -728,6 +774,7 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "בבקשה": "בְּבַקָּשָׁה",
   "בן": "בֵּן",
   "בת": "בַּת",
+  "דנה": "דָּנָה",
   "דג": "דָּג",
   "דרך": "דֶּרֶךְ",
   "דלת": "דֶּלֶת",
@@ -735,11 +782,14 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "הבא": "הַבָּא",
   "הוא": "הוּא",
   "היא": "הִיא",
+  "הם": "הֵם",
+  "הן": "הֵן",
   "היום": "הַיּוֹם",
   "הרים": "הָרִים",
   "וילון": "וִילוֹן",
   "זמן": "זְמַן",
   "חבר": "חָבֵר",
+  "חיות": "חַיּוֹת",
   "חתול": "חָתוּל",
   "חולה": "חוֹלֶה",
   "ילד": "יֶלֶד",
@@ -749,6 +799,7 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "יש": "יֵשׁ",
   "ישראל": "יִשְׂרָאֵל",
   "כדור": "כַּדּוּר",
+  "כולם": "כּוּלָּם",
   "כלב": "כֶּלֶב",
   "כלום": "כְּלוּם",
   "כסא": "כִּסֵּא",
@@ -765,18 +816,21 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "מלכה": "מַלְכָּה",
   "מיטה": "מִטָּה",
   "מכונית": "מְכוֹנִית",
+  "מעניין": "מְעַנְיֵן",
   "מפתח": "מַפְתֵּחַ",
   "מראה": "מַרְאָה",
   "מתי": "מָתַי",
   "ספר": "סֵפֶר",
   "סלון": "סָלוֹן",
   "סליחה": "סְלִיחָה",
+  "סיפור": "סִיפּוּר",
   "עוגה": "עוּגָה",
   "עוף": "עוֹף",
   "עיר": "עִיר",
   "עין": "עַיִן",
   "עכבר": "עַכְבָּר",
   "עץ": "עֵץ",
+  "צבעים": "צְבָעִים",
   "פה": "פֹּה",
   "פנים": "פָּנִים",
   "פרח": "פֶּרַח",
@@ -791,6 +845,578 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "שם": "שָׁם",
   "תודה": "תּוֹדָה",
 };
+
+// These forms appear in the Hebrew sentence-drag questions but are not covered by
+// the transliterated vocabulary bank.
+const HEBREW_SENTENCE_NIKKUD_OVERRIDES = {
+  "את": "אֶת",
+  "אוכלים": "אוֹכְלִים",
+  "אוטובוס": "אוֹטוֹבּוּס",
+  "אוהב": "אוֹהֵב",
+  "אופה": "אוֹפָה",
+  "אופים": "אוֹפִים",
+  "אורזת": "אוֹרֶזֶת",
+  "אותה": "אוֹתָהּ",
+  "אותם": "אוֹתָם",
+  "אחר": "אַחֵר",
+  "אחרי": "אַחֲרֵי",
+  "ארוחת": "אֲרוּחַת",
+  "בבוקר": "בַּבֹּקֶר",
+  "בגינה": "בַּגִּינָה",
+  "בודקת": "בּוֹדֶקֶת",
+  "בוחרת": "בּוֹחֶרֶת",
+  "בונה": "בּוֹנָה",
+  "בונים": "בּוֹנִים",
+  "בועט": "בּוֹעֵט",
+  "בזהירות": "בִּזְהִירוּת",
+  "באוטובוס": "בָּאוֹטוֹבּוּס",
+  "בחצר": "בֶּחָצֵר",
+  "בכיתה": "בַּכִּיתָה",
+  "במטבח": "בַּמִּטְבָּח",
+  "במפה": "בְּמַפָּה",
+  "במשפט": "בַּמִּשְׁפָּט",
+  "בננות": "בָּנָנוֹת",
+  "בספריה": "בַּסִּפְרִיָּה",
+  "בפארק": "בַּפַּארְק",
+  "בקצה": "בַּקָּצֶה",
+  "בשקט": "בְּשֶׁקֶט",
+  "בתוך": "בְּתוֹךְ",
+  "גררו": "גִּרְרוּ",
+  "האוכל": "הָאֹכֶל",
+  "הארוחה": "הָאֲרוּחָה",
+  "הדפים": "הַדַּפִּים",
+  "הדרך": "הַדֶּרֶךְ",
+  "ההוראות": "הַהוֹרָאוֹת",
+  "ההפסקה": "הַהַפְסָקָה",
+  "ההצגה": "הַהַצָּגָה",
+  "הווילון": "הַוִּילוֹן",
+  "הולכים": "הוֹלְכִים",
+  "הולכת": "הוֹלֶכֶת",
+  "הולכות": "הוֹלְכוֹת",
+  "החברות": "הַחֲבֵרוֹת",
+  "החברים": "הַחֲבֵרִים",
+  "החדש": "הֶחָדָשׁ",
+  "החוקר": "הַחוֹקֵר",
+  "החלון": "הַחַלּוֹן",
+  "החתול": "הֶחָתוּל",
+  "הטיול": "הַטִּיּוּל",
+  "הילד": "הַיֶּלֶד",
+  "הילדה": "הַיַּלְדָה",
+  "הילדים": "הַיְלָדִים",
+  "הכדור": "הַכַּדּוּר",
+  "הכוס": "הַכּוֹס",
+  "הכיסא": "הַכִּסֵּא",
+  "הכיסאות": "הַכִּסְאוֹת",
+  "הכלב": "הַכֶּלֶב",
+  "הלוח": "הַלּוּחַ",
+  "הלימודים": "הַלִּמּוּדִים",
+  "הלך": "הָלַךְ",
+  "המדף": "הַמַּדָּף",
+  "המורה": "הַמּוֹרָה",
+  "המילים": "הַמִּלִּים",
+  "המטבח": "הַמִּטְבָּח",
+  "המים": "הַמַּיִם",
+  "המסקנה": "הַמַּסְקָנָה",
+  "המפה": "הַמַּפָּה",
+  "המשפחה": "הַמִּשְׁפָּחָה",
+  "המשפט": "הַמִּשְׁפָּט",
+  "הנהר": "הַנָּהָר",
+  "הנכון": "הַנָּכוֹן",
+  "הנכונה": "הַנְּכוֹנָה",
+  "הספה": "הַסַּפָּה",
+  "הספר": "הַסֵּפֶר",
+  "הספרים": "הַסְּפָרִים",
+  "הקבוצה": "הַקְּבוּצָה",
+  "הקשיבה": "הִקְשִׁיבָה",
+  "הרצפה": "הָרִצְפָּה",
+  "השולחן": "הַשֻּׁלְחָן",
+  "השינה": "הַשֵּׁנָה",
+  "השיעור": "הַשִּׁעוּר",
+  "השלטים": "הַשְּׁלָטִים",
+  "השלימו": "הַשְׁלִימוּ",
+  "התוצאות": "הַתּוֹצָאוֹת",
+  "התיק": "הַתִּיק",
+  "התיקים": "הַתִּיקִים",
+  "התלמידים": "הַתַּלְמִידִים",
+  "ו": "וְ",
+  "ואז": "וְאָז",
+  "ובננות": "וּבָנָנוֹת",
+  "וגדעון": "וְגִדְעוֹן",
+  "ובוחרת": "וּבוֹחֶרֶת",
+  "וכתבה": "וְכָתְבָה",
+  "וכותב": "וְכוֹתֵב",
+  "ויושבים": "וְיוֹשְׁבִים",
+  "ולשים": "וְלָשִׂים",
+  "ומביאה": "וּמְבִיאָה",
+  "ומסבירה": "וּמַסְבִּירָה",
+  "ומוצאים": "וּמוֹצְאִים",
+  "ומטאטאים": "וּמְטַאֲטְאִים",
+  "ומניחה": "וּמַנִּיחָה",
+  "ומסדרים": "וּמְסַדְּרִים",
+  "זורק": "זוֹרֵק",
+  "זורקים": "זוֹרְקִים",
+  "זורקת": "זוֹרֶקֶת",
+  "חוזרים": "חוֹזְרִים",
+  "חוזר": "חוֹזֵר",
+  "חוזרת": "חוֹזֶרֶת",
+  "חוזרות": "חוֹזְרוֹת",
+  "חילקה": "חִלְּקָה",
+  "טובה": "טוֹבָה",
+  "טובים": "טוֹבִים",
+  "טסות": "טָסוֹת",
+  "טסים": "טָסִים",
+  "זה": "זֶה",
+  "ידיים": "יָדַיִם",
+  "יוצא": "יוֹצֵא",
+  "יושב": "יוֹשֵׁב",
+  "יושבים": "יוֹשְׁבִים",
+  "יחד": "יַחַד",
+  "ישב": "יָשַׁב",
+  "ישנים": "יְשֵׁנִים",
+  "כבדים": "כְּבֵדִים",
+  "כדאי": "כְּדַאי",
+  "כדי": "כְּדֵי",
+  "גדולה": "גְּדוֹלָה",
+  "גדולים": "גְּדוֹלִים",
+  "גדולות": "גְּדוֹלוֹת",
+  "כותב": "כּוֹתֵב",
+  "כותבת": "כּוֹתֶבֶת",
+  "כי": "כִּי",
+  "כתבה": "כָּתְבָה",
+  "לאכול": "לֶאֱכֹל",
+  "לאחיה": "לְאַחֶיהָ",
+  "לבית": "לְבֵית",
+  "הביתה": "הַבַּיְתָה",
+  "להרים": "לְהָרִים",
+  "לוקחת": "לוֹקַחַת",
+  "לטיול": "לְטִיּוּל",
+  "ליד": "לְיַד",
+  "לכיתה": "לַכִּיתָה",
+  "למקום": "לַמָּקוֹם",
+  "למצוא": "לִמְצֹא",
+  "לפארק": "לַפַּארְק",
+  "לצייר": "לְצַיֵּר",
+  "לקפוץ": "לִקְפֹּץ",
+  "לרוץ": "לָרוּץ",
+  "לשיעור": "לַשִּׁעוּר",
+  "לשיר": "לָשִׁיר",
+  "מביאה": "מְבִיאָה",
+  "מבשלים": "מְבַשְּׁלִים",
+  "מגלים": "מְגַלִּים",
+  "מדברים": "מְדַבְּרִים",
+  "מודד": "מוֹדֵד",
+  "מול": "מוּל",
+  "מוצאים": "מוֹצְאִים",
+  "מוצאת": "מוֹצֵאת",
+  "מטאטאים": "מְטַאֲטְאִים",
+  "מטפס": "מְטַפֵּס",
+  "מטפסת": "מְטַפֶּסֶת",
+  "מכבסים": "מְכַבְּסִים",
+  "מכין": "מֵכִין",
+  "מכינה": "מְכִינָה",
+  "מכינים": "מְכִינִים",
+  "מניחה": "מַנִּיחָה",
+  "מנפחת": "מְנַפַּחַת",
+  "מנקה": "מְנַקָּה",
+  "מנקים": "מְנַקִּים",
+  "מסדרים": "מְסַדְּרִים",
+  "מספרת": "מְסַפֶּרֶת",
+  "מסתירה": "מַסְתִּירָה",
+  "מעלים": "מַעֲלִים",
+  "מצחצחים": "מְצַחְצְחִים",
+  "מצייר": "מְצַיֵּר",
+  "מציירות": "מְצַיְּרוֹת",
+  "מציירים": "מְצַיְּרִים",
+  "מציירת": "מְצַיֶּרֶת",
+  "מקשיבים": "מַקְשִׁיבִים",
+  "מרימה": "מְרִימָה",
+  "מרימות": "מְרִימוֹת",
+  "מרימים": "מְרִימִים",
+  "משאירה": "מַשְׁאִירָה",
+  "משחקים": "מְשַׂחֲקִים",
+  "משתמשים": "מִשְׁתַּמְּשִׁים",
+  "מתחת": "מִתַּחַת",
+  "נוגה": "נוֹגָהּ",
+  "נוסעים": "נוֹסְעִים",
+  "נועה": "נוֹעָה",
+  "נכנסים": "נִכְנָסִים",
+  "נמצא": "נִמְצָא",
+  "סוגר": "סוֹגֵר",
+  "סוגרת": "סוֹגֶרֶת",
+  "עובדים": "עוֹבְדִים",
+  "עושים": "עוֹשִׂים",
+  "עם": "עִם",
+  "פותח": "פּוֹתֵחַ",
+  "פותחת": "פּוֹתַחַת",
+  "פתרון": "פִּתְרוֹן",
+  "צובעים": "צוֹבְעִים",
+  "צלחת": "צַלַּחַת",
+  "ציירה": "צִיְּרָה",
+  "קוטפת": "קוֹטֶפֶת",
+  "קונה": "קוֹנָה",
+  "קופץ": "קוֹפֵץ",
+  "קופצים": "קוֹפְצִים",
+  "קופצת": "קוֹפֶצֶת",
+  "קורא": "קוֹרֵא",
+  "קוראים": "קוֹרְאִים",
+  "קוראת": "קוֹרֵאת",
+  "קוראות": "קוֹרְאוֹת",
+  "קרה": "קָרָה",
+  "קפץ": "קָפַץ",
+  "קראה": "קָרְאָה",
+  "קרים": "קָרִים",
+  "רוקדים": "רוֹקְדִים",
+  "רושם": "רוֹשֵׁם",
+  "רעיונות": "רַעְיוֹנוֹת",
+  "רעש": "רַעַשׁ",
+  "רץ": "רָץ",
+  "רצים": "רָצִים",
+  "שהמשימה": "שֶׁהַמְּשִׂימָה",
+  "שהתברר": "שֶׁהִתְבָּרֵר",
+  "שובר": "שׁוֹבֵר",
+  "שוברות": "שׁוֹבְרוֹת",
+  "שוברים": "שׁוֹבְרִים",
+  "שוברת": "שׁוֹבֶרֶת",
+  "שוחה": "שָׂחָה",
+  "שוחים": "שָׂחִים",
+  "שוטף": "שׁוֹטֵף",
+  "שוטפים": "שׁוֹטְפִים",
+  "שומע": "שׁוֹמֵעַ",
+  "שומעת": "שׁוֹמַעַת",
+  "שרות": "שָׁרוֹת",
+  "שורק": "שׁוֹרֵק",
+  "שותה": "שׁוֹתָה",
+  "שלו": "שֶׁלּוֹ",
+  "שלנו": "שֶׁלָּנוּ",
+  "שמעה": "שָׁמְעָה",
+  "שמח": "שָׂמֵחַ",
+  "שמחה": "שְׂמֵחָה",
+  "שמחים": "שְׂמֵחִים",
+  "שמחות": "שְׂמֵחוֹת",
+  "שקטה": "שְׁקֵטָה",
+  "שרים": "שָׁרִים",
+  "תולים": "תּוֹלִים",
+  "תפוחים": "תַּפּוּחִים",
+};
+
+const HEBREW_WRITING_LETTERS = [
+  "א",
+  "ב",
+  "ג",
+  "ד",
+  "ה",
+  "ו",
+  "ז",
+  "ח",
+  "ט",
+  "י",
+  "כ",
+  "ל",
+  "מ",
+  "נ",
+  "ס",
+  "ע",
+  "פ",
+  "צ",
+  "ק",
+  "ר",
+  "ש",
+  "ת",
+];
+
+const HEBREW_WRITING_WORD_FALLBACKS = [
+  "אמא",
+  "אבא",
+  "בית",
+  "מים",
+  "שלום",
+  "חתול",
+  "כלב",
+  "ספר",
+  "חבר",
+  "ילדה",
+  "ילד",
+  "כדור",
+  "חלון",
+  "דלת",
+  "שולחן",
+  "משפחה",
+];
+
+const HEBREW_WRITING_SHORT_SENTENCES = [
+  "אני אוהב לקרוא ספר.",
+  "הילדה שותה מים.",
+  "אמא מכינה ארוחת ערב.",
+  "הילדים משחקים בחצר.",
+  "המורה כותבת על הלוח.",
+  "הכלב ישן ליד הדלת.",
+  "אנחנו הולכים לבית הספר.",
+  "החתול קופץ על הכיסא.",
+];
+
+const HEBREW_WRITING_LONG_SENTENCES = [
+  "בתחילת השיעור הילדים מסדרים את המחברות על השולחן.",
+  "לפני הארוחה אנחנו שוטפים ידיים ומכינים את הצלחות.",
+  "התלמידים מקשיבים להוראות ואז מתחילים לפתור את המשימה.",
+  "גבריאל בודק את המפה כדי למצוא את הדרך הקצרה לפארק.",
+  "המשפחה נסעה לטיול קצר וראתה ציפורים ליד הנהר.",
+  "נוגה קוראת סיפור מעניין ומסבירה לאחיה מה קרה.",
+  "החברים אוספים מידע חדש וכותבים יחד מסקנה ברורה.",
+  "המורה ביקשה מהתלמידים לענות במשפט מלא ומדויק.",
+];
+
+const HEBREW_AGREEMENT_BLUEPRINTS = [
+  {
+    difficulty: 1,
+    displayText: "הילד קטן. ___ שמח.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "הוא",
+    reviewText: "הילד קטן. הוא שמח.",
+  },
+  {
+    difficulty: 1,
+    displayText: "הילדה קוראת. ___ שקטה.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "היא",
+    reviewText: "הילדה קוראת. היא שקטה.",
+  },
+  {
+    difficulty: 1,
+    displayText: "הילד ___.",
+    options: ["גדול", "גדולה", "גדולים", "גדולות"],
+    answer: "גדול",
+    reviewText: "הילד גדול.",
+  },
+  {
+    difficulty: 1,
+    displayText: "הילדה ___.",
+    options: ["גדול", "גדולה", "גדולים", "גדולות"],
+    answer: "גדולה",
+    reviewText: "הילדה גדולה.",
+  },
+  {
+    difficulty: 2,
+    displayText: "אבא ___ לבית.",
+    options: ["הולך", "הולכת", "הולכים", "הולכות"],
+    answer: "הולך",
+    reviewText: "אבא הולך לבית.",
+  },
+  {
+    difficulty: 2,
+    displayText: "אמא ___ ספר.",
+    options: ["קורא", "קוראת", "קוראים", "קוראות"],
+    answer: "קוראת",
+    reviewText: "אמא קוראת ספר.",
+  },
+  {
+    difficulty: 2,
+    displayText: "הילדים ___.",
+    options: ["גדול", "גדולה", "גדולים", "גדולות"],
+    answer: "גדולים",
+    reviewText: "הילדים גדולים.",
+  },
+  {
+    difficulty: 2,
+    displayText: "הילדות ___.",
+    options: ["גדול", "גדולה", "גדולים", "גדולות"],
+    answer: "גדולות",
+    reviewText: "הילדות גדולות.",
+  },
+  {
+    difficulty: 3,
+    displayText: "הילדים ___ לבית הספר.",
+    options: ["הולך", "הולכת", "הולכים", "הולכות"],
+    answer: "הולכים",
+    reviewText: "הילדים הולכים לבית הספר.",
+  },
+  {
+    difficulty: 3,
+    displayText: "הילדות ___ לבית.",
+    options: ["הולך", "הולכת", "הולכים", "הולכות"],
+    answer: "הולכות",
+    reviewText: "הילדות הולכות לבית.",
+  },
+  {
+    difficulty: 3,
+    displayText: "הבנים ___ ספר.",
+    options: ["קורא", "קוראת", "קוראים", "קוראות"],
+    answer: "קוראים",
+    reviewText: "הבנים קוראים ספר.",
+  },
+  {
+    difficulty: 3,
+    displayText: "הבנות ___ ספר.",
+    options: ["קורא", "קוראת", "קוראים", "קוראות"],
+    answer: "קוראות",
+    reviewText: "הבנות קוראות ספר.",
+  },
+  {
+    difficulty: 4,
+    displayText: "דני ויוסי ___ לשיעור.",
+    options: ["חוזר", "חוזרת", "חוזרים", "חוזרות"],
+    answer: "חוזרים",
+    reviewText: "דני ויוסי חוזרים לשיעור.",
+  },
+  {
+    difficulty: 4,
+    displayText: "נועה ויעל ___ הביתה.",
+    options: ["חוזר", "חוזרת", "חוזרים", "חוזרות"],
+    answer: "חוזרות",
+    reviewText: "נועה ויעל חוזרות הביתה.",
+  },
+  {
+    difficulty: 5,
+    displayText: "הילדים משחקים. ___ שמחים.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "הם",
+    reviewText: "הילדים משחקים. הם שמחים.",
+  },
+  {
+    difficulty: 5,
+    displayText: "הילדות שרות. ___ שמחות.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "הן",
+    reviewText: "הילדות שרות. הן שמחות.",
+  },
+];
+
+const HEBREW_CATEGORY_SORT_GROUPS = [
+  { label: "אוכל", words: ["תפוח", "לחם", "בננה", "חלב", "עוגה", "גבינה", "אורז", "עגבניה", "לימון", "תה"] },
+  { label: "חיות", words: ["כלב", "חתול", "ציפור", "דג", "נמלה", "עכביש", "יתוש"] },
+  { label: "בית ספר", words: ["ספר", "מחברת", "עט", "עפרון", "כיסא", "כיתה", "מורה", "שולחן"] },
+  { label: "צבעים", words: ["כחול", "אדום", "צהוב", "כתום", "שחור", "לבן"] },
+  { label: "מטבח", words: ["כף", "צלחת", "כוס", "מקרר", "תנור", "קערה", "סכין"] },
+];
+
+const HEBREW_CATEGORY_SORT_LEVEL_CONFIG = {
+  1: { labels: ["אוכל", "חיות"], itemsPerBucket: 2 },
+  2: { labels: ["אוכל", "חיות", "בית ספר"], itemsPerBucket: 2 },
+  3: { labels: ["אוכל", "חיות", "צבעים"], itemsPerBucket: 2 },
+  4: { labels: ["אוכל", "חיות", "בית ספר", "מטבח"], itemsPerBucket: 2 },
+  5: { labels: ["אוכל", "חיות", "בית ספר", "צבעים", "מטבח"], itemsPerBucket: 2 },
+};
+
+const HEBREW_FINAL_LETTER_DRILLS = [
+  { difficulty: 1, middleLetter: "כ", finalLetter: "ך", middleWord: "מכונית", finalWord: "נמוך" },
+  { difficulty: 1, middleLetter: "מ", finalLetter: "ם", middleWord: "ימינה", finalWord: "לחם" },
+  { difficulty: 1, middleLetter: "נ", finalLetter: "ן", middleWord: "בננה", finalWord: "קטן" },
+  { difficulty: 1, middleLetter: "פ", finalLetter: "ף", middleWord: "ציפור", finalWord: "חוף" },
+  { difficulty: 1, middleLetter: "צ", finalLetter: "ץ", middleWord: "ביצה", finalWord: "עץ" },
+  { difficulty: 2, middleLetter: "כ", finalLetter: "ך", middleWord: "מכתב", finalWord: "מלך" },
+  { difficulty: 2, middleLetter: "מ", finalLetter: "ם", middleWord: "למעלה", finalWord: "אדום" },
+  { difficulty: 2, middleLetter: "נ", finalLetter: "ן", middleWord: "גבינה", finalWord: "שעון" },
+  { difficulty: 2, middleLetter: "פ", finalLetter: "ף", middleWord: "מלפפון", finalWord: "כסף" },
+  { difficulty: 2, middleLetter: "צ", finalLetter: "ץ", middleWord: "חצי", finalWord: "מיץ" },
+  { difficulty: 3, middleLetter: "כ", finalLetter: "ך", middleWord: "ברכה", finalWord: "דרך" },
+  { difficulty: 3, middleLetter: "מ", finalLetter: "ם", middleWord: "שמאלה", finalWord: "חם" },
+  { difficulty: 3, middleLetter: "נ", finalLetter: "ן", middleWord: "ענבים", finalWord: "לבן" },
+  { difficulty: 3, middleLetter: "פ", finalLetter: "ף", middleWord: "מאפייה", finalWord: "אף" },
+  { difficulty: 3, middleLetter: "צ", finalLetter: "ץ", middleWord: "קבוצה", finalWord: "קיץ" },
+];
+
+const HEBREW_READING_BLUEPRINTS = [
+  {
+    difficulty: 1,
+    lines: ["דנה אוכלת תפוח."],
+    question: "מה דנה אוכלת?",
+    options: ["תפוח", "ספר", "כדור", "מים"],
+    answer: "תפוח",
+    images: [{ asset: "apple.svg", alt: "תפוח" }],
+  },
+  {
+    difficulty: 1,
+    lines: ["הכלב רץ."],
+    question: "מי רץ?",
+    options: ["הכלב", "החתול", "הילד", "הספר"],
+    answer: "הכלב",
+    images: [{ asset: "dog.svg", alt: "כלב" }],
+  },
+  {
+    difficulty: 2,
+    lines: ["נועם שותה חלב.", "הכוס על השולחן."],
+    question: "מה נועם שותה?",
+    options: ["חלב", "מיץ", "מים", "תה"],
+    answer: "חלב",
+    images: [{ asset: "milk.svg", alt: "חלב" }],
+  },
+  {
+    difficulty: 2,
+    lines: ["מיה קוראת ספר.", "הספר חדש."],
+    question: "מה מיה קוראת?",
+    options: ["ספר", "עוגה", "כדור", "מיטה"],
+    answer: "ספר",
+    images: [{ asset: "book.svg", alt: "ספר" }],
+  },
+  {
+    difficulty: 3,
+    lines: ["אורי משחק בכדור.", "הכדור אדום."],
+    question: "במה אורי משחק?",
+    options: ["כדור", "ספר", "כיסא", "לחם"],
+    answer: "כדור",
+    images: [{ asset: "ball.svg", alt: "כדור" }],
+  },
+  {
+    difficulty: 3,
+    lines: ["יעל רואה חתול.", "החתול יושב על כיסא."],
+    question: "איפה החתול יושב?",
+    options: ["על כיסא", "במיטה", "במכונית", "על ספר"],
+    answer: "על כיסא",
+    images: [
+      { asset: "cat.svg", alt: "חתול" },
+      { asset: "chair.svg", alt: "כיסא" },
+    ],
+  },
+  {
+    difficulty: 4,
+    lines: ["אמא מכינה עוגה.", "דנה מביאה צלחת.", "כולם יושבים במטבח."],
+    question: "איפה כולם יושבים?",
+    options: ["במטבח", "בחצר", "בכיתה", "באוטובוס"],
+    answer: "במטבח",
+    images: [{ asset: "cake.svg", alt: "עוגה" }],
+  },
+  {
+    difficulty: 4,
+    lines: ["יונתן לוקח ספר.", "הוא הולך לכיסא.", "אחר כך הוא קורא בשקט."],
+    question: "מה יונתן לוקח?",
+    options: ["ספר", "תפוח", "כדור", "דלת"],
+    answer: "ספר",
+    images: [
+      { asset: "book.svg", alt: "ספר" },
+      { asset: "chair.svg", alt: "כיסא" },
+    ],
+  },
+  {
+    difficulty: 5,
+    lines: [
+      "תמר יוצאת לבית הספר עם תיק וספר.",
+      "בדרך היא רואה אוטובוס גדול.",
+      "בכיתה היא מוציאה מחברת ועפרון.",
+    ],
+    question: "מה תמר מוציאה בכיתה?",
+    options: ["מחברת ועפרון", "חלב ולחם", "כדור וכיסא", "עוגה ומיץ"],
+    answer: "מחברת ועפרון",
+    images: [
+      { asset: "bag.svg", alt: "תיק" },
+      { asset: "book.svg", alt: "ספר" },
+      { asset: "notebook.svg", alt: "מחברת" },
+    ],
+  },
+  {
+    difficulty: 5,
+    lines: [
+      "אדם ואחותו הולכים למטבח אחרי המשחק.",
+      "הם שותים מים ואוכלים תפוח.",
+      "אחר כך הם חוזרים לחדר עם הספר החדש.",
+    ],
+    question: "מה הם עושים במטבח?",
+    options: ["שותים מים ואוכלים תפוח", "נוסעים באוטובוס", "כותבים במחברת", "ישנים במיטה"],
+    answer: "שותים מים ואוכלים תפוח",
+    images: [
+      { asset: "apple.svg", alt: "תפוח" },
+      { asset: "book.svg", alt: "ספר" },
+    ],
+  },
+];
 
 const SCIENCE_EXCLUDED_PATTERNS = [
   /north celestial pole/i,
@@ -810,6 +1436,7 @@ const state = {
   currentUserId: USER_PROFILES[0].id,
   totalQuestions: 0,
   difficulty: 3,
+  hebrewOnly: false,
   currentIndex: 0,
   viewIndex: 0,
   answeredCount: 0,
@@ -849,6 +1476,8 @@ const elements = {
   historyEmpty: document.getElementById("history-empty"),
   questionCount: document.getElementById("question-count"),
   questionCountButtons: Array.from(document.querySelectorAll(".question-count-button")),
+  hebrewOnly: document.getElementById("hebrew-only"),
+  hebrewOnlyButton: document.getElementById("hebrew-only-button"),
   difficultyLevel: document.getElementById("difficulty-level"),
   difficultyButtons: Array.from(document.querySelectorAll(".difficulty-button")),
   progressTracker: document.getElementById("progress-tracker"),
@@ -875,10 +1504,18 @@ const elements = {
   restartButton: document.getElementById("restart-button"),
 };
 
-const hebrewQuestionBank = buildHebrewQuestionBank(
-  typeof HEBREW_WORDS !== "undefined" ? HEBREW_WORDS : []
+const rawHebrewWordEntries = typeof HEBREW_WORDS !== "undefined" ? HEBREW_WORDS : [];
+const hebrewQuestionBank = buildHebrewQuestionBank(rawHebrewWordEntries);
+const hebrewReverseQuestionBank = buildHebrewReverseQuestionBank(rawHebrewWordEntries);
+const hebrewHomographQuestionBank = buildHebrewHomographQuestionBank(rawHebrewWordEntries);
+const hebrewImageQuestionBank = buildHebrewImageQuestionBank(
+  typeof HEBREW_IMAGE_WORD_BANK !== "undefined" ? HEBREW_IMAGE_WORD_BANK : [],
+  hebrewQuestionBank
 );
 const hebrewMeanings = hebrewQuestionBank.map((entry) => entry.english);
+const HEBREW_POINTED_WORD_LOOKUP = new Map(
+  hebrewQuestionBank.map((entry) => [entry.hebrew, entry.hebrewDisplay])
+);
 const scienceQuestionBank = buildScienceQuestionBank(
   typeof SCIENCE_QUESTIONS !== "undefined" ? SCIENCE_QUESTIONS : []
 );
@@ -1224,13 +1861,40 @@ const mathChoiceGenerators = [
   createPercentageChoiceQuestion,
 ];
 
-const statisticsGenerators = [
-  createStatisticsMeanQuestion,
-  createStatisticsMedianQuestion,
-  createStatisticsModeQuestion,
-  createStatisticsRangeQuestion,
-  createStatisticsDataQuestion,
-];
+const statisticsGeneratorsByDifficulty = {
+  1: [
+    createStatisticsMiddleNumberQuestion,
+    createStatisticsHighestNumberQuestion,
+    createStatisticsLowestNumberQuestion,
+  ],
+  2: [
+    createStatisticsMiddleNumberQuestion,
+    createStatisticsHighestNumberQuestion,
+    createStatisticsLowestNumberQuestion,
+  ],
+  3: [
+    createStatisticsMiddleNumberQuestion,
+    createStatisticsHighestNumberQuestion,
+    createStatisticsLowestNumberQuestion,
+    createStatisticsMeanQuestion,
+    createStatisticsRangeQuestion,
+    createStatisticsDataQuestion,
+  ],
+  4: [
+    createStatisticsMeanQuestion,
+    createStatisticsMedianQuestion,
+    createStatisticsModeQuestion,
+    createStatisticsRangeQuestion,
+    createStatisticsDataQuestion,
+  ],
+  5: [
+    createStatisticsMeanQuestion,
+    createStatisticsMedianQuestion,
+    createStatisticsModeQuestion,
+    createStatisticsRangeQuestion,
+    createStatisticsDataQuestion,
+  ],
+};
 
 const PLACE_VALUE_NAMES = [
   "ones",
@@ -1258,6 +1922,7 @@ elements.resultsForwardButton.addEventListener("click", showNextQuizQuestion);
 
 initializeUserSelector();
 initializeQuestionCountButtons();
+initializeHebrewOnlyButton();
 initializeDifficultyButtons();
 
 function buildHebrewQuestionBank(entries) {
@@ -1293,10 +1958,161 @@ function buildHebrewQuestionBank(entries) {
   return baseEntries;
 }
 
+function buildHebrewReverseQuestionBank(entries) {
+  const groupedEntries = new Map();
+
+  for (const entry of entries) {
+    const english = String(entry?.english || "").trim();
+    const hebrew = String(entry?.hebrew || "").trim();
+    const difficulty = getEntryDifficulty(entry?.difficulty);
+    if (!english || !hebrew || difficulty === null) {
+      continue;
+    }
+
+    const englishKey = english.toLowerCase();
+    if (!groupedEntries.has(englishKey)) {
+      groupedEntries.set(englishKey, {
+        english,
+        forms: new Map(),
+        difficulty,
+      });
+    }
+
+    const group = groupedEntries.get(englishKey);
+    if (!group.forms.has(hebrew)) {
+      group.forms.set(hebrew, {
+        hebrew,
+        transliteration: String(entry?.transliteration || "").trim(),
+        difficulty,
+      });
+    }
+    group.difficulty = Math.min(group.difficulty, difficulty);
+  }
+
+  return Array.from(groupedEntries.values())
+    .filter((group) => group.forms.size === 1)
+    .map((group) => {
+      const [onlyForm] = Array.from(group.forms.values());
+      return {
+        english: group.english,
+        hebrew: onlyForm.hebrew,
+        hebrewDisplay: buildHebrewDisplay(onlyForm.hebrew, onlyForm.transliteration),
+        transliteration: onlyForm.transliteration,
+        difficulty: group.difficulty,
+      };
+    })
+    .filter((entry) => entry.hebrewDisplay);
+}
+
+function buildHebrewHomographQuestionBank(entries) {
+  const groupedEntries = new Map();
+
+  for (const entry of entries) {
+    const english = String(entry?.english || "").trim();
+    const hebrew = String(entry?.hebrew || "").trim();
+    const difficulty = getEntryDifficulty(entry?.difficulty);
+    if (!english || !hebrew || difficulty === null) {
+      continue;
+    }
+
+    const strippedHebrew = stripHebrewDiacritics(hebrew).trim();
+    if (!strippedHebrew) {
+      continue;
+    }
+
+    if (!groupedEntries.has(strippedHebrew)) {
+      groupedEntries.set(strippedHebrew, []);
+    }
+
+    groupedEntries.get(strippedHebrew).push({
+      strippedHebrew,
+      english,
+      hebrew,
+      hebrewDisplay: buildHebrewDisplay(hebrew, entry?.transliteration || ""),
+      difficulty,
+    });
+  }
+
+  return Array.from(groupedEntries.values()).flatMap((entriesForWord) => {
+    const uniqueEntries = [];
+    const seen = new Set();
+
+    entriesForWord.forEach((entry) => {
+      const identity = `${entry.hebrewDisplay}||${entry.english}`;
+      if (seen.has(identity)) {
+        return;
+      }
+
+      seen.add(identity);
+      uniqueEntries.push(entry);
+    });
+
+    if (new Set(uniqueEntries.map((entry) => entry.hebrewDisplay)).size < 2) {
+      return [];
+    }
+
+    const family = uniqueEntries.map((entry) => ({
+      strippedHebrew: entry.strippedHebrew,
+      english: entry.english,
+      hebrewDisplay: entry.hebrewDisplay,
+      difficulty: entry.difficulty,
+    }));
+
+    return uniqueEntries.map((entry) => ({
+      strippedHebrew: entry.strippedHebrew,
+      english: entry.english,
+      hebrewDisplay: entry.hebrewDisplay,
+      difficulty: entry.difficulty,
+      family,
+    }));
+  });
+}
+
+function buildHebrewImageQuestionBank(entries, hebrewEntries) {
+  const hebrewLookup = new Map(
+    hebrewEntries.map((entry) => [buildHebrewImageWordKey(entry.hebrew, entry.english), entry])
+  );
+
+  return entries
+    .map((entry) => {
+      const hebrew = String(entry?.hebrew || "").trim();
+      const english = String(entry?.english || "").trim();
+      const asset = String(entry?.asset || "").trim();
+      const imageAlt = String(entry?.alt || english).trim() || english;
+      if (!hebrew || !english || !asset) {
+        return null;
+      }
+
+      const match = hebrewLookup.get(buildHebrewImageWordKey(hebrew, english));
+      if (!match) {
+        return null;
+      }
+
+      return {
+        ...match,
+        imageSrc: `app/assets/hebrew-images/${asset}`,
+        imageAlt,
+      };
+    })
+    .filter(Boolean);
+}
+
+function buildHebrewImageWordKey(hebrew, english) {
+  return `${stripHebrewDiacritics(hebrew).trim()}||${String(english || "").trim()}`;
+}
+
+function stripHebrewDiacritics(value) {
+  return String(value || "").replace(/[\u0591-\u05C7]/g, "");
+}
+
 function buildHebrewDisplay(hebrew, transliteration) {
   const rawHebrew = String(hebrew || "").trim();
   if (!rawHebrew) {
     return "";
+  }
+
+  if (/[\u0591-\u05C7]/.test(rawHebrew)) {
+    return rawHebrew;
   }
 
   if (HEBREW_NIKKUD_OVERRIDES[rawHebrew]) {
@@ -1599,6 +2415,59 @@ function describeHebrewVowel(value, nextLetter) {
 
 function shouldAddHebrewSheva(letter, nextLetter) {
   return isHebrewLetter(letter) && isHebrewLetter(nextLetter);
+}
+
+function applyHebrewSentenceNikkud(value) {
+  const rawText = String(value || "");
+  if (!rawText || /[\u0591-\u05C7]/.test(rawText) || !/[\u05D0-\u05EA]/.test(rawText)) {
+    return rawText;
+  }
+
+  if (HEBREW_SENTENCE_NIKKUD_OVERRIDES[rawText]) {
+    return HEBREW_SENTENCE_NIKKUD_OVERRIDES[rawText];
+  }
+
+  if (HEBREW_POINTED_WORD_LOOKUP.has(rawText)) {
+    return HEBREW_POINTED_WORD_LOOKUP.get(rawText);
+  }
+
+  if (HEBREW_NIKKUD_OVERRIDES[rawText]) {
+    return HEBREW_NIKKUD_OVERRIDES[rawText];
+  }
+
+  return rawText.replace(/[\u05D0-\u05EA]+/g, (word) => {
+    if (HEBREW_SENTENCE_NIKKUD_OVERRIDES[word]) {
+      return HEBREW_SENTENCE_NIKKUD_OVERRIDES[word];
+    }
+
+    if (HEBREW_POINTED_WORD_LOOKUP.has(word)) {
+      return HEBREW_POINTED_WORD_LOOKUP.get(word);
+    }
+
+    if (HEBREW_NIKKUD_OVERRIDES[word]) {
+      return HEBREW_NIKKUD_OVERRIDES[word];
+    }
+
+    return word;
+  });
+}
+
+function applyHebrewSentenceNikkudList(values) {
+  return Array.isArray(values) ? values.map((value) => applyHebrewSentenceNikkud(value)) : [];
+}
+
+function shouldHideHebrewDragPrompt(questionText) {
+  const normalized = String(questionText || "").trim();
+  if (!normalized) {
+    return false;
+  }
+
+  return [
+    "השלימו את המשפט.",
+    "הַשְׁלִימוּ אֶת הַמִּשְׁפָּט.",
+    "גררו את המילים למקום הנכון במשפט.",
+    "גִּרְרוּ אֶת הַמִּלִּים לַמָּקוֹם הַנָּכוֹן בַּמִּשְׁפָּט.",
+  ].includes(normalized);
 }
 
 function buildScienceQuestionBank(entries) {
@@ -1937,6 +2806,15 @@ function initializeDifficultyButtons() {
   updateDifficultyButtons();
 }
 
+function initializeHebrewOnlyButton() {
+  elements.hebrewOnlyButton?.addEventListener("click", () => {
+    elements.hebrewOnly.value = String(!isHebrewOnlySelected());
+    updateHebrewOnlyButton();
+  });
+
+  updateHebrewOnlyButton();
+}
+
 function updateDifficultyButtons() {
   const selectedDifficulty = String(elements.difficultyLevel.value || "3");
 
@@ -1947,11 +2825,22 @@ function updateDifficultyButtons() {
   });
 }
 
+function isHebrewOnlySelected() {
+  return String(elements.hebrewOnly?.value || "").toLowerCase() === "true";
+}
+
+function updateHebrewOnlyButton() {
+  const isActive = isHebrewOnlySelected();
+  elements.hebrewOnlyButton?.classList.toggle("active", isActive);
+  elements.hebrewOnlyButton?.setAttribute("aria-pressed", isActive ? "true" : "false");
+}
+
 function startSession(event) {
   event.preventDefault();
 
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
   const difficulty = Number.parseInt(elements.difficultyLevel.value, 10);
+  const hebrewOnly = isHebrewOnlySelected();
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
@@ -1963,8 +2852,14 @@ function startSession(event) {
     return;
   }
 
-  if (Object.values(choiceCategoryConfigs).some(({ bank }) => !bank.length)) {
-    showStartMessage("One of the offline question files is missing.", "error");
+  const requiredChoiceBanks = hebrewOnly
+    ? [choiceCategoryConfigs.hebrew]
+    : Object.values(choiceCategoryConfigs);
+  if (requiredChoiceBanks.some(({ bank }) => !bank.length)) {
+    showStartMessage(
+      hebrewOnly ? "The Hebrew question bank is missing." : "One of the offline question files is missing.",
+      "error"
+    );
     return;
   }
 
@@ -1972,6 +2867,7 @@ function startSession(event) {
   stopConfetti();
   state.totalQuestions = totalQuestions;
   state.difficulty = difficulty;
+  state.hebrewOnly = hebrewOnly;
   state.currentIndex = 0;
   state.viewIndex = 0;
   state.answeredCount = 0;
@@ -1982,25 +2878,21 @@ function startSession(event) {
   state.sessionStartedAt = new Date();
   state.feedbackMessage = "";
   state.feedbackTone = "";
-  state.questions = buildSessionQuestions(totalQuestions, difficulty);
+  state.questions = injectHebrewWritingPracticeTail(
+    buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly }),
+    difficulty,
+    { hebrewOnly }
+  );
 
   switchScreen(elements.quizScreen);
   renderCurrentQuestion();
 }
 
-function buildSessionQuestions(totalQuestions, difficulty) {
-  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions);
-  const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
-  const regularQuestionCount = Math.max(
-    0,
-    totalQuestions - reviewCategorySequence.length - mapQuestionCount
-  );
-  const categoryCounts = allocateCategoryCounts(regularQuestionCount);
-  const regularCategorySequence = buildCategorySequence(regularQuestionCount, categoryCounts);
-  const categorySequence = [
-    ...reviewCategorySequence,
-    ...insertReservedMapCategories(regularCategorySequence, mapQuestionCount),
-  ];
+function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
+  const hebrewOnly = Boolean(options.hebrewOnly);
+  const categorySequence = hebrewOnly
+    ? Array.from({ length: totalQuestions }, () => "hebrew")
+    : buildDefaultSessionCategorySequence(totalQuestions);
   const resources = Object.fromEntries(
     Object.entries(choiceCategoryConfigs).map(([category, config]) => [
       category,
@@ -2009,6 +2901,9 @@ function buildSessionQuestions(totalQuestions, difficulty) {
   );
   resources.sentenceDragEnglish = createPool(sentenceDragEnglishQuestionBank);
   resources.sentenceDragHebrew = createPool(sentenceDragHebrewQuestionBank);
+  resources.hebrewImage = createPool(hebrewImageQuestionBank);
+  resources.hebrewReverse = createPool(hebrewReverseQuestionBank);
+  resources.hebrewHomograph = createPool(hebrewHomographQuestionBank);
   const hebrewQuestionCount = categorySequence.filter((category) => category === "hebrew").length;
   const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
   const nonHebrewDifficultyQueue = buildDifficultyQueue(
@@ -2021,11 +2916,116 @@ function buildSessionQuestions(totalQuestions, difficulty) {
     hebrewQuestionBank
   );
 
-  const runtime = { mathModeIndex: 0, languageQuestionIndex: 0, mapCountries: new Set() };
+  const runtime = {
+    mathModeIndex: 0,
+    languageQuestionIndex: 0,
+    hebrewQuestionIndex: 0,
+    hebrewStandardQuestionIndex: 0,
+    mapCountries: new Set(),
+  };
 
   return categorySequence.map((category) =>
     createSessionQuestionForCategory(category, difficulty, resources, nonHebrewDifficultyQueue, hebrewDifficultyQueue, runtime)
   );
+}
+
+function injectHebrewWritingPracticeTail(questions, difficulty, options = {}) {
+  const requestedTailCount = Math.min(
+    questions.length,
+    options.hebrewOnly ? HEBREW_ONLY_WRITING_TAIL_COUNT : DEFAULT_HEBREW_WRITING_TAIL_COUNT
+  );
+  const practiceCount = Math.min(requestedTailCount, Math.max(0, questions.length - 1));
+  const readingQuestion =
+    questions.length > 0 ? createHebrewReadingComprehensionQuestion(difficulty) : null;
+  if (!practiceCount && !readingQuestion) {
+    return questions;
+  }
+
+  const practiceQuestions = buildHebrewWritingPracticeQuestions(practiceCount, difficulty);
+  const prefixCount = Math.max(
+    0,
+    questions.length - practiceQuestions.length - (readingQuestion ? 1 : 0)
+  );
+
+  return [
+    ...questions.slice(0, prefixCount),
+    ...(readingQuestion ? [readingQuestion] : []),
+    ...practiceQuestions,
+  ];
+}
+
+function buildHebrewWritingPracticeQuestions(totalCount, difficulty) {
+  const normalizedDifficulty = Math.max(2, Math.min(5, Number(difficulty) || 2));
+  if (normalizedDifficulty <= 2) {
+    return takeRepeatedRandomItems(HEBREW_WRITING_LETTERS, totalCount).map((letter) =>
+      createHebrewWritingPracticeQuestion(letter, normalizedDifficulty, "letter")
+    );
+  }
+
+  if (normalizedDifficulty === 3) {
+    return takeRepeatedRandomItems(buildHebrewWritingWordPool(), totalCount).map((word) =>
+      createHebrewWritingPracticeQuestion(word, normalizedDifficulty, "word")
+    );
+  }
+
+  if (normalizedDifficulty === 4) {
+    return takeRepeatedRandomItems(HEBREW_WRITING_SHORT_SENTENCES, totalCount).map((sentence) =>
+      createHebrewWritingPracticeQuestion(sentence, normalizedDifficulty, "short-sentence")
+    );
+  }
+
+  return takeRepeatedRandomItems(HEBREW_WRITING_LONG_SENTENCES, totalCount).map((sentence) =>
+    createHebrewWritingPracticeQuestion(sentence, normalizedDifficulty, "long-sentence")
+  );
+}
+
+function buildHebrewWritingWordPool() {
+  const seen = new Set();
+  const bankWords = hebrewQuestionBank
+    .map((entry) => stripHebrewDiacritics(entry.hebrew))
+    .filter((word) => /^[\u05D0-\u05EA]{2,7}$/.test(word))
+    .filter((word) => !seen.has(word) && seen.add(word));
+
+  if (bankWords.length >= 12) {
+    return bankWords;
+  }
+
+  return Array.from(new Set([...bankWords, ...HEBREW_WRITING_WORD_FALLBACKS]));
+}
+
+function takeRepeatedRandomItems(values, count) {
+  if (!Array.isArray(values) || !values.length || count <= 0) {
+    return [];
+  }
+
+  const result = [];
+  let pool = [];
+
+  while (result.length < count) {
+    if (!pool.length) {
+      pool = shuffleArray([...values]);
+    }
+
+    result.push(pool.pop());
+  }
+
+  return result;
+}
+
+function buildDefaultSessionCategorySequence(totalQuestions) {
+  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions);
+  const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
+  const regularQuestionCount = Math.max(
+    0,
+    totalQuestions - reviewCategorySequence.length - mapQuestionCount
+  );
+  const categoryCounts = allocateCategoryCounts(regularQuestionCount);
+  const regularCategorySequence = buildCategorySequence(regularQuestionCount, categoryCounts);
+
+  return [
+    ...reviewCategorySequence,
+    ...insertReservedMapCategories(regularCategorySequence, mapQuestionCount),
+  ];
 }
 
 function hasGeographyMapSupport() {
@@ -2086,11 +3086,23 @@ function createSessionQuestionForCategory(
 
   if (category === "hebrew") {
     const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, difficulty);
-    const dragQuestion = maybeCreateLanguageDragQuestion(category, resources, effectiveDifficulty, runtime);
+    const hebrewQuestionIndex = Number(runtime?.hebrewQuestionIndex || 0);
+    if (runtime) {
+      runtime.hebrewQuestionIndex = hebrewQuestionIndex + 1;
+    }
+
+    if (shouldCreateHebrewFinalLetterQuestion(hebrewQuestionIndex)) {
+      const finalLetterQuestion = createHebrewFinalLetterQuestion(effectiveDifficulty);
+      if (finalLetterQuestion) {
+        return finalLetterQuestion;
+      }
+    }
+
+    const dragQuestion = maybeCreateSessionDragQuestion(category, resources, effectiveDifficulty, runtime);
     if (dragQuestion) {
       return dragQuestion;
     }
-    return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, effectiveDifficulty));
+    return createHebrewSessionQuestion(resources, effectiveDifficulty, runtime);
   }
 
   const effectiveDifficulty = getEffectiveCategoryDifficulty(
@@ -2102,7 +3114,7 @@ function createSessionQuestionForCategory(
     return createGeographyMapQuestion(effectiveDifficulty, runtime, resources);
   }
 
-  const dragQuestion = maybeCreateLanguageDragQuestion(category, resources, effectiveDifficulty, runtime);
+  const dragQuestion = maybeCreateSessionDragQuestion(category, resources, effectiveDifficulty, runtime);
   if (dragQuestion) {
     return dragQuestion;
   }
@@ -2188,6 +3200,29 @@ function maybeCreateLanguageDragQuestion(category, resources, difficulty, runtim
   return createLanguageDragQuestion(resources, difficulty, isHebrew);
 }
 
+function maybeCreateSessionDragQuestion(category, resources, difficulty, runtime) {
+  const languageDragQuestion = maybeCreateLanguageDragQuestion(category, resources, difficulty, runtime);
+  if (languageDragQuestion) {
+    return languageDragQuestion;
+  }
+
+  return maybeCreateGeneratedCategoryDragQuestion(category, difficulty);
+}
+
+function maybeCreateGeneratedCategoryDragQuestion(category, difficulty) {
+  const share = GENERATED_CATEGORY_DRAG_SHARES[category];
+  if (!share || typeof createCategoryGeneratedDragQuestion !== "function" || Math.random() >= share) {
+    return null;
+  }
+
+  try {
+    const question = createCategoryGeneratedDragQuestion(category, difficulty);
+    return question?.mode === "drag" ? question : null;
+  } catch {
+    return null;
+  }
+}
+
 function createLanguageDragQuestion(resources, difficulty, isHebrew) {
   const type = isHebrew ? "hebrew-drag" : "vocabulary-grammar-drag";
   const generatedEntry = isHebrew
@@ -2225,6 +3260,32 @@ function createHebrewSentenceDragEntry(difficulty) {
   return normalizeDragQuestionEntry(createHebrewSentenceDragGeneratedEntry(difficulty), "hebrew-drag");
 }
 
+function maybeCreateHebrewImageQuestion(resources, difficulty) {
+  if (!resources?.hebrewImage?.entries.length || Math.random() >= HEBREW_IMAGE_DRAG_SHARE) {
+    return null;
+  }
+
+  const entries = drawHebrewImageEntries(resources.hebrewImage, difficulty, 3);
+  return entries.length === 3 ? createHebrewImageDragQuestion(entries, difficulty) : null;
+}
+
+function drawHebrewImageEntries(pool, difficulty, count) {
+  if (!pool?.entries?.length || count <= 0) {
+    return [];
+  }
+
+  const exactEntries = pool.entriesByDifficulty.get(difficulty) || [];
+  const eligibleEntries = pool.entries.filter((entry) => entry.difficulty <= difficulty);
+  const source =
+    exactEntries.length >= count
+      ? exactEntries
+      : eligibleEntries.length >= count
+        ? eligibleEntries
+        : pool.entries;
+
+  return shuffleArray([...source]).slice(0, count);
+}
+
 function buildReviewCategorySequence(totalQuestions) {
   const reviewQuestionCount = Math.min(
     Math.max(0, totalQuestions - 1),
@@ -2255,7 +3316,7 @@ function getUserWeakCategoryEntries(sessionHistory) {
 
     (session.records || []).forEach((record) => {
       const category = String(record?.category || "").trim();
-      if (!SESSION_CATEGORY_ORDER.includes(category)) {
+      if (!SESSION_CATEGORY_ORDER.includes(category) || !REVIEW_FOCUS_ALLOWED_CATEGORIES.has(category)) {
         return;
       }
 
@@ -2340,8 +3401,53 @@ function allocateCategoryCounts(totalQuestions) {
 
   return {
     ...allocateEvenCounts(CORE_SESSION_CATEGORIES, coreTotal),
-    ...allocateEvenCounts(NON_CORE_SESSION_CATEGORIES, otherTotal),
+    ...allocateNonCoreCategoryCounts(otherTotal),
   };
+}
+
+function allocateNonCoreCategoryCounts(total) {
+  const counts = Object.fromEntries(NON_CORE_SESSION_CATEGORIES.map((category) => [category, 0]));
+  if (total <= 0) {
+    return counts;
+  }
+
+  const rareCounts = allocateRareNonCoreCategoryCounts(total);
+  const rareTotal = Object.values(rareCounts).reduce((sum, count) => sum + count, 0);
+  const standardCategories = NON_CORE_SESSION_CATEGORIES.filter(
+    (category) =>
+      !Object.prototype.hasOwnProperty.call(RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES, category)
+  );
+
+  Object.assign(counts, allocateEvenCounts(standardCategories, Math.max(0, total - rareTotal)));
+  Object.entries(rareCounts).forEach(([category, count]) => {
+    counts[category] = count;
+  });
+
+  return counts;
+}
+
+function allocateRareNonCoreCategoryCounts(total) {
+  return Object.fromEntries(
+    Object.entries(RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES).map(([category, overallShare]) => [
+      category,
+      sampleRareCategoryCount(total, overallShare),
+    ])
+  );
+}
+
+function sampleRareCategoryCount(total, overallShare) {
+  const nonCoreShare = 1 - CORE_CATEGORY_SHARE;
+  const probability = nonCoreShare > 0 ? overallShare / nonCoreShare : 0;
+  const clampedProbability = Math.max(0, Math.min(1, probability));
+  let count = 0;
+
+  for (let index = 0; index < total; index += 1) {
+    if (Math.random() < clampedProbability) {
+      count += 1;
+    }
+  }
+
+  return count;
 }
 
 function allocateEvenCounts(categories, total) {
@@ -2522,6 +3628,10 @@ function createMathInputQuestion(difficulty) {
 }
 
 function createMathChoiceQuestion(difficulty) {
+  if (difficulty <= 2 && Math.random() < 0.28) {
+    return createComparisonDragQuestion(difficulty);
+  }
+
   return randomChoice(mathChoiceGenerators)(difficulty);
 }
 
@@ -2670,6 +3780,7 @@ function createPlaceValueInputQuestion(difficulty) {
     questionText: `In ${problem.numberText}, what is the value of the digit ${problem.digit}?`,
     displayText: "",
     answer: problem.answer,
+    answerLabel: formatGroupedNumber(problem.answer),
   });
 }
 
@@ -2731,6 +3842,14 @@ function createRectangleMeasureInputQuestion(difficulty) {
     questionText: problem.questionText,
     displayText: "",
     answer: problem.answer,
+    answerLabel:
+      problem.measure === "area"
+        ? formatUnitCount(problem.answer, "square unit")
+        : formatUnitCount(problem.answer, "unit"),
+    acceptedAnswerSuffixes:
+      problem.measure === "area"
+        ? ["square unit", "square units", "unit squared", "units squared", "sq unit", "sq units"]
+        : ["unit", "units"],
   });
 }
 
@@ -2823,6 +3942,37 @@ function createComparisonChoiceQuestion(difficulty) {
   };
 }
 
+function createComparisonDragQuestion(difficulty) {
+  const { left, right, answer } = generateComparisonDragProblem(difficulty);
+  const leftText = formatGroupedNumber(left);
+  const rightText = formatGroupedNumber(right);
+
+  return {
+    type: "math-drag",
+    difficulty,
+    mode: "drag",
+    questionText: "Compare the numbers. Drag < or > into the middle bubble.",
+    displayText: "",
+    extraText: "",
+    dragLayout: "comparison",
+    dragPlaceholderText: "?",
+    dragComparisonLeftText: leftText,
+    dragComparisonRightText: rightText,
+    dragTemplateParts: [`${leftText} `, ` ${rightText}`],
+    dragChoices: shuffleArray(
+      ["<", ">"].map((text, index) => ({
+        id: `math-drag-${difficulty}-${index}-${text === "<" ? "lt" : "gt"}`,
+        text,
+      }))
+    ),
+    dragAnswerTokens: [answer],
+    reviewText: `${leftText} ${answer} ${rightText}`,
+    answerValue: answer,
+    answerLabel: `${leftText} ${answer} ${rightText}`,
+    isHebrew: false,
+  };
+}
+
 function createMoneyInputQuestion(difficulty) {
   const { amount, price, answer } = generateMoneyProblem(difficulty);
   return createNumericInputQuestion({
@@ -2831,6 +3981,9 @@ function createMoneyInputQuestion(difficulty) {
     questionText: `You have ${amount} shekels. You buy something for ${price} shekels. How much change should you get?`,
     displayText: "",
     answer,
+    answerLabel: `${answer} shekels`,
+    acceptedAnswerPrefixes: ["₪"],
+    acceptedAnswerSuffixes: ["shekel", "shekels"],
   });
 }
 
@@ -2878,7 +4031,61 @@ function createPercentageChoiceQuestion(difficulty) {
 }
 
 function createStatisticsChoiceQuestion(difficulty) {
-  return randomChoice(statisticsGenerators)(difficulty);
+  const generators = statisticsGeneratorsByDifficulty[difficulty] || statisticsGeneratorsByDifficulty[3];
+  return randomChoice(generators)(difficulty);
+}
+
+function createStatisticsMiddleNumberQuestion(difficulty) {
+  const config = {
+    1: { count: 3, min: 1, max: 10, minGap: 1 },
+    2: { count: 5, min: 1, max: 15, minGap: 1 },
+    3: { count: 5, min: 2, max: 20, minGap: 1 },
+    4: { count: 7, min: 3, max: 30, minGap: 2 },
+    5: { count: 7, min: 5, max: 40, minGap: 3 },
+  }[difficulty];
+
+  const ordered = buildDistinctNumberList(config.count, config.min, config.max, config.minGap).sort(
+    (left, right) => left - right
+  );
+  const answer = ordered[Math.floor(ordered.length / 2)];
+  const shuffled = shuffleArray(ordered);
+
+  return createNumericChoiceQuestion({
+    type: "statistics-choice",
+    difficulty,
+    questionText: `The numbers are ${shuffled.join(", ")}. When you put them in order, what is the middle number?`,
+    displayText: "",
+    answer,
+  });
+}
+
+function createStatisticsHighestNumberQuestion(difficulty) {
+  return createStatisticsExtremeValueQuestion(difficulty, "highest");
+}
+
+function createStatisticsLowestNumberQuestion(difficulty) {
+  return createStatisticsExtremeValueQuestion(difficulty, "lowest");
+}
+
+function createStatisticsExtremeValueQuestion(difficulty, kind) {
+  const config = {
+    1: { count: 3, min: 1, max: 10, minGap: 1 },
+    2: { count: 4, min: 1, max: 15, minGap: 1 },
+    3: { count: 5, min: 2, max: 20, minGap: 1 },
+    4: { count: 5, min: 3, max: 30, minGap: 2 },
+    5: { count: 6, min: 5, max: 40, minGap: 2 },
+  }[difficulty];
+
+  const values = buildDistinctNumberList(config.count, config.min, config.max, config.minGap);
+  const answer = kind === "highest" ? Math.max(...values) : Math.min(...values);
+
+  return createNumericChoiceQuestion({
+    type: "statistics-choice",
+    difficulty,
+    questionText: `The numbers are ${shuffleArray(values).join(", ")}. What is the ${kind} number?`,
+    displayText: "",
+    answer,
+  });
 }
 
 function createStatisticsMeanQuestion(difficulty) {
@@ -3414,6 +4621,668 @@ function createHebrewChoiceQuestion(entry) {
   };
 }
 
+function shouldCreateHebrewFinalLetterQuestion(hebrewQuestionIndex) {
+  return HEBREW_FINAL_LETTER_INTERVAL > 0 && (hebrewQuestionIndex + 1) % HEBREW_FINAL_LETTER_INTERVAL === 0;
+}
+
+function createHebrewSessionQuestion(resources, difficulty, runtime) {
+  const startIndex = Number(runtime?.hebrewStandardQuestionIndex || 0);
+  if (runtime) {
+    runtime.hebrewStandardQuestionIndex = startIndex + 1;
+  }
+
+  const factories = [
+    () => createHebrewReverseChoiceQuestion(resources, difficulty),
+    () => createHebrewAgreementQuestion(difficulty),
+    () => createHebrewCategorySortQuestion(difficulty),
+    () => createHebrewNikkudContrastQuestion(resources, difficulty),
+    () => maybeCreateHebrewImageQuestion(resources, difficulty),
+    () => createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty)),
+  ];
+
+  for (let offset = 0; offset < factories.length; offset += 1) {
+    const question = factories[(startIndex + offset) % factories.length]();
+    if (question) {
+      return question;
+    }
+  }
+
+  return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty));
+}
+
+function createHebrewChoiceModeQuestion({
+  difficulty,
+  questionText,
+  displayText = "",
+  extraText = "",
+  visualHtml = "",
+  visualSummary = "",
+  options,
+  answer,
+  answerLabel = answer,
+  reviewText = "",
+  forceCompactMain = false,
+  isHebrewMain = false,
+}) {
+  const normalizedOptions = Array.from(new Set((options || []).map((option) => String(option).trim()))).filter(Boolean);
+  const normalizedAnswer = String(answer || "").trim();
+  if (normalizedOptions.length !== 4 || !normalizedAnswer || !normalizedOptions.includes(normalizedAnswer)) {
+    return null;
+  }
+
+  return {
+    type: "hebrew-choice",
+    difficulty,
+    mode: "choice",
+    questionText,
+    displayText,
+    extraText,
+    extraHtml: "",
+    visualHtml,
+    visualSummary,
+    reviewText,
+    options: shuffleArray([...normalizedOptions]),
+    answerValue: normalizedAnswer,
+    answerLabel: String(answerLabel || normalizedAnswer),
+    forceCompactMain,
+    isHebrew: Boolean(isHebrewMain),
+  };
+}
+
+function createHebrewTargetsDragQuestion({
+  difficulty,
+  questionText,
+  extraText = "",
+  visualSummary = "",
+  targets,
+  answer,
+  choices,
+  reviewText = "",
+  answerLabel = "",
+  dragPlaceholderText = "",
+}) {
+  const normalizedTargets = Array.isArray(targets)
+    ? targets
+        .map((target) => ({
+          html: typeof target?.html === "string" ? target.html : "",
+          reviewLabel: applyHebrewSentenceNikkud(String(target?.reviewLabel || "").trim()),
+        }))
+        .filter((target) => target.html || target.reviewLabel)
+    : [];
+  const normalizedAnswer = Array.isArray(answer)
+    ? answer
+        .map((item) => applyHebrewSentenceNikkud(String(item).trim()))
+        .filter(Boolean)
+    : [];
+  const normalizedChoices = Array.from(
+    new Set([...(choices || []).map((item) => applyHebrewSentenceNikkud(String(item).trim())), ...normalizedAnswer])
+  ).filter(Boolean);
+
+  if (
+    !questionText ||
+    normalizedTargets.length !== normalizedAnswer.length ||
+    normalizedChoices.length < normalizedAnswer.length
+  ) {
+    return null;
+  }
+
+  return {
+    type: "hebrew-drag",
+    difficulty,
+    mode: "drag",
+    questionText: applyHebrewSentenceNikkud(questionText),
+    displayText: "",
+    extraText: applyHebrewSentenceNikkud(extraText),
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary,
+    dragLayout: "targets",
+    dragTargetArrangement: "rows",
+    dragTargets: normalizedTargets,
+    dragChoices: shuffleArray(
+      normalizedChoices.map((text, index) => ({
+        id: `hebrew-targets-${difficulty}-${index}-${text}`,
+        text,
+      }))
+    ),
+    dragAnswerTokens: normalizedAnswer,
+    dragPlaceholderText: applyHebrewSentenceNikkud(dragPlaceholderText),
+    reviewText: applyHebrewSentenceNikkud(reviewText),
+    answerValue: normalizedAnswer.join(" | "),
+    answerLabel:
+      applyHebrewSentenceNikkud(answerLabel) ||
+      normalizedTargets
+        .map((target, index) => `${target.reviewLabel || `Word ${index + 1}`}: ${normalizedAnswer[index]}`)
+        .join(" | "),
+    isHebrew: true,
+  };
+}
+
+function createHebrewBucketsDragQuestion({
+  difficulty,
+  questionText,
+  extraText = "",
+  visualSummary = "",
+  buckets,
+  reviewText = "",
+  dragPlaceholderText = "",
+}) {
+  const normalizedBuckets = Array.isArray(buckets)
+    ? buckets
+        .map((bucket) => ({
+          label: applyHebrewSentenceNikkud(String(bucket?.label || "").trim()),
+          answers: Array.isArray(bucket?.answers)
+            ? bucket.answers.map((item) => applyHebrewSentenceNikkud(String(item).trim())).filter(Boolean)
+            : [],
+        }))
+        .filter((bucket) => bucket.label && bucket.answers.length)
+    : [];
+  const flatAnswers = normalizedBuckets.flatMap((bucket) => bucket.answers);
+
+  if (!questionText || !normalizedBuckets.length || !flatAnswers.length) {
+    return null;
+  }
+
+  return {
+    type: "hebrew-drag",
+    difficulty,
+    mode: "drag",
+    questionText: applyHebrewSentenceNikkud(questionText),
+    displayText: "",
+    extraText: applyHebrewSentenceNikkud(extraText),
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary,
+    dragLayout: "buckets",
+    dragBucketColumns: normalizedBuckets,
+    dragChoices: shuffleArray(
+      flatAnswers.map((text, index) => ({
+        id: `hebrew-bucket-${difficulty}-${index}-${text}`,
+        text,
+      }))
+    ),
+    dragAnswerTokens: flatAnswers,
+    dragPlaceholderText: applyHebrewSentenceNikkud(dragPlaceholderText),
+    reviewText: applyHebrewSentenceNikkud(reviewText),
+    answerValue: flatAnswers.join(" | "),
+    answerLabel: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
+    isHebrew: true,
+  };
+}
+
+function getEntriesAtOrBelowDifficulty(entries, difficulty) {
+  const exact = entries.filter((entry) => entry.difficulty === difficulty);
+  if (exact.length) {
+    return exact;
+  }
+
+  const eligible = entries.filter((entry) => entry.difficulty <= difficulty);
+  return eligible.length ? eligible : entries;
+}
+
+function getPoolEntriesAtOrBelowDifficulty(pool, difficulty) {
+  const exact = pool?.entriesByDifficulty?.get(difficulty) || [];
+  if (exact.length) {
+    return exact;
+  }
+
+  const eligible = (pool?.entries || []).filter((entry) => entry.difficulty <= difficulty);
+  return eligible.length ? eligible : pool?.entries || [];
+}
+
+function drawPoolEntryAtOrBelowDifficulty(pool, difficulty, queueKeyPrefix) {
+  const source = getPoolEntriesAtOrBelowDifficulty(pool, difficulty);
+  if (!source.length) {
+    return null;
+  }
+
+  const queueKey = `${queueKeyPrefix}-${difficulty}`;
+  let queue = pool.queuesByDifficulty.get(queueKey);
+  if (!queue || !queue.length) {
+    queue = shuffleArray([...source]);
+    pool.queuesByDifficulty.set(queueKey, queue);
+  }
+
+  return queue.pop() || null;
+}
+
+function getHebrewDisplayWord(word) {
+  const rawWord = String(word || "").trim();
+  if (!rawWord) {
+    return "";
+  }
+
+  if (HEBREW_POINTED_WORD_LOOKUP.has(rawWord)) {
+    return HEBREW_POINTED_WORD_LOOKUP.get(rawWord);
+  }
+
+  return rawWord;
+}
+
+function createHebrewReverseChoiceQuestion(resources, difficulty) {
+  const entry = drawPoolEntryAtOrBelowDifficulty(resources?.hebrewReverse, difficulty, "hebrew-reverse");
+  if (!entry) {
+    return null;
+  }
+
+  const options = buildHebrewReverseOptions(entry, resources?.hebrewReverse, difficulty);
+  return createHebrewChoiceModeQuestion({
+    difficulty: entry.difficulty,
+    questionText: "Which Hebrew word matches this English word?",
+    displayText: entry.english,
+    options,
+    answer: entry.hebrewDisplay,
+    answerLabel: entry.hebrewDisplay,
+    reviewText: `${entry.english}: ${entry.hebrewDisplay}`,
+  });
+}
+
+function buildHebrewReverseOptions(correctEntry, pool, difficulty) {
+  const options = [correctEntry.hebrewDisplay];
+  const seenDisplays = new Set(options);
+  const seenMeanings = new Set([getChoiceMeaningKey(correctEntry.english)]);
+  const candidateLists = [
+    getPoolEntriesAtOrBelowDifficulty(pool, difficulty),
+    (pool?.entries || []).filter((entry) => entry.difficulty <= difficulty),
+    pool?.entries || [],
+  ];
+
+  candidateLists.forEach((candidateList) => {
+    shuffleArray([...candidateList]).forEach((entry) => {
+      if (options.length >= 4) {
+        return;
+      }
+
+      const meaningKey = getChoiceMeaningKey(entry.english);
+      if (seenDisplays.has(entry.hebrewDisplay) || seenMeanings.has(meaningKey)) {
+        return;
+      }
+
+      seenDisplays.add(entry.hebrewDisplay);
+      seenMeanings.add(meaningKey);
+      options.push(entry.hebrewDisplay);
+    });
+  });
+
+  return options.length === 4 ? options : null;
+}
+
+function createHebrewNikkudContrastQuestion(resources, difficulty) {
+  const entry = drawPoolEntryAtOrBelowDifficulty(resources?.hebrewHomograph, difficulty, "hebrew-homograph");
+  if (!entry) {
+    return null;
+  }
+
+  const options = buildHebrewNikkudOptions(entry, resources?.hebrewHomograph, difficulty);
+  return createHebrewChoiceModeQuestion({
+    difficulty: entry.difficulty,
+    questionText: `Which pointed Hebrew word means "${entry.english}"?`,
+    displayText: entry.strippedHebrew,
+    extraText: "The same letters can change meaning when the nikkud changes.",
+    options,
+    answer: entry.hebrewDisplay,
+    answerLabel: entry.hebrewDisplay,
+    reviewText: `${entry.strippedHebrew}: ${entry.hebrewDisplay} = ${entry.english}`,
+    isHebrewMain: true,
+  });
+}
+
+function buildHebrewNikkudOptions(correctEntry, pool, difficulty) {
+  const options = [correctEntry.hebrewDisplay];
+  const seen = new Set(options);
+  const siblingOptions = correctEntry.family
+    .filter((entry) => entry.hebrewDisplay !== correctEntry.hebrewDisplay)
+    .map((entry) => entry.hebrewDisplay);
+
+  siblingOptions.forEach((option) => {
+    if (!seen.has(option) && options.length < 4) {
+      seen.add(option);
+      options.push(option);
+    }
+  });
+
+  const candidateLists = [
+    getPoolEntriesAtOrBelowDifficulty(pool, difficulty).filter(
+      (entry) => entry.strippedHebrew !== correctEntry.strippedHebrew
+    ),
+    (pool?.entries || []).filter((entry) => entry.strippedHebrew !== correctEntry.strippedHebrew),
+  ];
+
+  candidateLists.forEach((candidateList) => {
+    shuffleArray([...candidateList]).forEach((entry) => {
+      if (options.length >= 4 || seen.has(entry.hebrewDisplay)) {
+        return;
+      }
+
+      seen.add(entry.hebrewDisplay);
+      options.push(entry.hebrewDisplay);
+    });
+  });
+
+  return options.length === 4 ? options : null;
+}
+
+function createHebrewAgreementQuestion(difficulty) {
+  const blueprint = randomChoice(getEntriesAtOrBelowDifficulty(HEBREW_AGREEMENT_BLUEPRINTS, difficulty));
+  if (!blueprint) {
+    return null;
+  }
+
+  const displayText = applyHebrewSentenceNikkud(blueprint.displayText);
+  const options = blueprint.options.map((option) => applyHebrewSentenceNikkud(option));
+  const answer = applyHebrewSentenceNikkud(blueprint.answer);
+
+  return createHebrewChoiceModeQuestion({
+    difficulty: blueprint.difficulty,
+    questionText: "Choose the Hebrew word that completes the sentence.",
+    displayText,
+    options,
+    answer,
+    answerLabel: answer,
+    reviewText: applyHebrewSentenceNikkud(blueprint.reviewText),
+    forceCompactMain: true,
+    isHebrewMain: true,
+  });
+}
+
+function createHebrewCategorySortQuestion(difficulty) {
+  const config = HEBREW_CATEGORY_SORT_LEVEL_CONFIG[difficulty] || HEBREW_CATEGORY_SORT_LEVEL_CONFIG[3];
+  const buckets = config.labels
+    .map((label) => HEBREW_CATEGORY_SORT_GROUPS.find((group) => group.label === label))
+    .filter(Boolean)
+    .map((group) => ({
+      label: group.label,
+      answers: shuffleArray(group.words.map((word) => getHebrewDisplayWord(word))).slice(
+        0,
+        config.itemsPerBucket
+      ),
+    }));
+
+  return createHebrewBucketsDragQuestion({
+    difficulty,
+    questionText: "Sort the Hebrew words into the correct categories.",
+    extraText: "Each bucket is a Hebrew category.",
+    visualSummary: buckets.map((bucket) => bucket.label).join(", "),
+    buckets,
+    reviewText: "Sort the Hebrew words by category.",
+    dragPlaceholderText: "גררו לכאן",
+  });
+}
+
+function createHebrewFinalLetterQuestion(difficulty) {
+  const drill = randomChoice(getEntriesAtOrBelowDifficulty(HEBREW_FINAL_LETTER_DRILLS, difficulty));
+  if (!drill) {
+    return null;
+  }
+
+  const middleMaskedWord = buildMaskedHebrewWord(drill.middleWord, drill.middleLetter, false);
+  const finalMaskedWord = buildMaskedHebrewWord(drill.finalWord, drill.finalLetter, true);
+  if (!middleMaskedWord || !finalMaskedWord) {
+    return null;
+  }
+
+  return createHebrewTargetsDragQuestion({
+    difficulty: drill.difficulty,
+    questionText: "Drag the correct Hebrew letter to each word.",
+    extraText: `${drill.middleLetter} belongs in the middle of a word. ${drill.finalLetter} belongs at the end.`,
+    visualSummary: `${getHebrewDisplayWord(drill.middleWord)} | ${getHebrewDisplayWord(drill.finalWord)}`,
+    targets: [
+      {
+        html: buildHebrewLetterTargetHtml(middleMaskedWord, "באמצע"),
+        reviewLabel: getHebrewDisplayWord(drill.middleWord),
+      },
+      {
+        html: buildHebrewLetterTargetHtml(finalMaskedWord, "בסוף"),
+        reviewLabel: getHebrewDisplayWord(drill.finalWord),
+      },
+    ],
+    answer: [drill.middleLetter, drill.finalLetter],
+    choices: [drill.middleLetter, drill.finalLetter],
+    reviewText: `${getHebrewDisplayWord(drill.middleWord)} | ${getHebrewDisplayWord(drill.finalWord)}`,
+    answerLabel: `${getHebrewDisplayWord(drill.middleWord)} | ${getHebrewDisplayWord(drill.finalWord)}`,
+    dragPlaceholderText: "אות",
+  });
+}
+
+function buildMaskedHebrewWord(word, expectedLetter, useFinalPosition) {
+  const letters = Array.from(String(word || "").trim());
+  if (!letters.length) {
+    return "";
+  }
+
+  if (useFinalPosition) {
+    const lastIndex = letters.length - 1;
+    if (letters[lastIndex] !== expectedLetter) {
+      return "";
+    }
+
+    letters[lastIndex] = "□";
+    return letters.join("");
+  }
+
+  const maskIndex = findHebrewLetterMaskIndex(letters, expectedLetter);
+  if (maskIndex === -1) {
+    return "";
+  }
+
+  letters[maskIndex] = "□";
+  return letters.join("");
+}
+
+function findHebrewLetterMaskIndex(letters, expectedLetter) {
+  const innerIndexes = [];
+  const fallbackIndexes = [];
+
+  letters.forEach((letter, index) => {
+    if (letter !== expectedLetter) {
+      return;
+    }
+
+    if (index > 0 && index < letters.length - 1) {
+      innerIndexes.push(index);
+    } else if (index < letters.length - 1) {
+      fallbackIndexes.push(index);
+    }
+  });
+
+  if (innerIndexes.length) {
+    return innerIndexes[Math.floor(innerIndexes.length / 2)];
+  }
+
+  return fallbackIndexes.length ? fallbackIndexes[0] : -1;
+}
+
+function buildHebrewLetterTargetHtml(maskedWord, hintLabel) {
+  return `
+    <div class="hebrew-letter-target">
+      <div class="hebrew-letter-target-word" dir="rtl">${escapeHtml(maskedWord)}</div>
+      <div class="hebrew-letter-target-hint">${escapeHtml(hintLabel)}</div>
+    </div>
+  `;
+}
+
+function createHebrewReadingComprehensionQuestion(difficulty) {
+  const blueprint = randomChoice(getEntriesAtOrBelowDifficulty(HEBREW_READING_BLUEPRINTS, difficulty));
+  if (!blueprint) {
+    return null;
+  }
+
+  const pointedLines = applyHebrewSentenceNikkudList(blueprint.lines);
+  const pointedPassage = pointedLines.join(" ");
+  const pointedOptions = blueprint.options.map((option) => applyHebrewSentenceNikkud(option));
+  const pointedAnswer = applyHebrewSentenceNikkud(blueprint.answer);
+  return createHebrewChoiceModeQuestion({
+    difficulty: blueprint.difficulty,
+    questionText: applyHebrewSentenceNikkud(blueprint.question),
+    visualHtml: buildHebrewReadingCard(pointedLines, blueprint.images),
+    visualSummary: pointedPassage,
+    options: pointedOptions,
+    answer: pointedAnswer,
+    answerLabel: pointedAnswer,
+    reviewText: pointedPassage,
+  });
+}
+
+function buildHebrewReadingCard(lines, images = []) {
+  const pointedLines = applyHebrewSentenceNikkudList(lines);
+  const paragraphs = pointedLines
+    .map((line) => `<p class="hebrew-reading-line">${escapeHtml(line)}</p>`)
+    .join("");
+  const imageStrip = Array.isArray(images) && images.length ? buildHebrewReadingImagesHtml(images) : "";
+
+  return `
+    <div class="hebrew-reading-card">
+      <div class="hebrew-reading-title">קטע קריאה</div>
+      <div class="hebrew-reading-lines" dir="rtl">${paragraphs}</div>
+      ${imageStrip}
+    </div>
+  `;
+}
+
+function buildHebrewReadingImagesHtml(images) {
+  const cards = images
+    .map((image) => {
+      const asset = String(image?.asset || "").trim();
+      if (!asset) {
+        return "";
+      }
+
+      return `
+        <div class="hebrew-reading-image-chip">
+          <img
+            class="hebrew-reading-image"
+            src="app/assets/hebrew-images/${escapeHtml(asset)}"
+            alt="${escapeHtml(String(image?.alt || ""))}"
+            loading="lazy"
+            decoding="async"
+          >
+        </div>
+      `;
+    })
+    .filter(Boolean)
+    .join("");
+
+  return cards ? `<div class="hebrew-reading-images">${cards}</div>` : "";
+}
+
+function createHebrewWritingPracticeQuestion(targetText, difficulty, variant) {
+  const rawText = String(targetText || "").trim();
+  const displayText = applyHebrewSentenceNikkud(rawText);
+  const visualText = stripHebrewDiacritics(rawText).trim();
+  const variantLabelMap = {
+    letter: "letter",
+    word: "word",
+    "short-sentence": "sentence",
+    "long-sentence": "sentence",
+  };
+  const label = variantLabelMap[variant] || "text";
+
+  return {
+    type: "hebrew-writing",
+    difficulty,
+    mode: "practice",
+    questionText: `Write this Hebrew ${label} in cursive / ktav yad.`,
+    displayText,
+    extraText: "",
+    extraHtml: "",
+    visualHtml: buildHebrewWritingPracticeVisual(visualText, variant),
+    visualSummary: `Ktav yad practice target: ${visualText}`,
+    reviewText: displayText,
+    answerValue: "done",
+    answerLabel: "Parents must check your writing.",
+    completionValue: "Done",
+    actionLabel: "Mark Done",
+    successMessage: "Marked done. Parents must check your writing.",
+    forceCompactMain: variant === "short-sentence" || variant === "long-sentence",
+    isHebrew: true,
+  };
+}
+
+function buildHebrewWritingPracticeVisual(targetText, variant) {
+  if (variant === "letter") {
+    return `
+      <div class="ktav-yad-card letter">
+        <div class="ktav-yad-heading">Ktav yad example</div>
+        <div class="ktav-yad-comparison">
+          <div class="ktav-yad-chip">
+            <div class="ktav-yad-chip-label">Print</div>
+            <div class="ktav-yad-chip-value print" dir="rtl">${escapeHtml(targetText)}</div>
+          </div>
+          <div class="ktav-yad-chip">
+            <div class="ktav-yad-chip-label">Ktav yad</div>
+            <div class="ktav-yad-chip-value script" dir="rtl">${escapeHtml(targetText)}</div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="ktav-yad-card">
+      <div class="ktav-yad-heading">Ktav yad example</div>
+      <div class="ktav-yad-script${variant === "long-sentence" ? " long" : ""}" dir="rtl">
+        ${escapeHtml(targetText)}
+      </div>
+    </div>
+  `;
+}
+
+function createHebrewImageDragQuestion(entries, difficulty) {
+  const selectedEntries = Array.isArray(entries) ? entries.slice(0, 3) : [];
+  if (selectedEntries.length !== 3) {
+    return null;
+  }
+
+  const answerTokens = selectedEntries.map((entry) => entry.hebrewDisplay);
+  const answerLabel = selectedEntries
+    .map((entry) => `${entry.english}: ${entry.hebrewDisplay}`)
+    .join(" | ");
+
+  return {
+    type: "hebrew-drag",
+    difficulty,
+    mode: "drag",
+    questionText: "Drag each Hebrew word to the matching picture.",
+    displayText: "",
+    extraText: "",
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: `Pictures: ${selectedEntries.map((entry) => entry.english).join(", ")}`,
+    dragLayout: "targets",
+    dragTargetArrangement: "rows",
+    dragTargets: selectedEntries.map((entry) => ({
+      html: buildHebrewImageTargetHtml(entry),
+      reviewLabel: entry.english,
+    })),
+    dragChoices: shuffleArray(
+      selectedEntries.map((entry, index) => ({
+        id: `hebrew-image-${difficulty}-${index}-${stripHebrewDiacritics(entry.hebrew)}`,
+        text: entry.hebrewDisplay,
+      }))
+    ),
+    dragAnswerTokens: answerTokens,
+    dragPlaceholderText: "Drop word here",
+    reviewText: answerLabel,
+    answerValue: answerTokens.join(" | "),
+    answerLabel,
+    isHebrew: true,
+  };
+}
+
+function buildHebrewImageTargetHtml(entry) {
+  return `
+    <div class="hebrew-image-target">
+      <img
+        class="hebrew-image-target-image"
+        src="${escapeHtml(entry.imageSrc)}"
+        alt="${escapeHtml(entry.imageAlt)}"
+        loading="lazy"
+        decoding="async"
+      >
+    </div>
+  `;
+}
+
 function createBankChoiceQuestion(entry, type) {
   return {
     type,
@@ -3434,22 +5303,36 @@ function createBankChoiceQuestion(entry, type) {
 }
 
 function createBankDragQuestion(entry, type) {
+  const isHebrew = Boolean(entry.isHebrew);
+  const questionText = isHebrew ? applyHebrewSentenceNikkud(entry.question) : entry.question;
+  const dragTemplateParts = isHebrew
+    ? applyHebrewSentenceNikkudList(entry.templateParts)
+    : [...entry.templateParts];
+  const dragAnswerTokens = isHebrew
+    ? applyHebrewSentenceNikkudList(entry.answer)
+    : [...entry.answer];
+
   return {
     type,
     difficulty: entry.difficulty,
     mode: "drag",
-    questionText: entry.question,
+    questionText: isHebrew && shouldHideHebrewDragPrompt(questionText) ? "" : questionText,
     displayText: "",
-    extraText: entry.extraText || "",
-    dragTemplateParts: entry.templateParts,
+    extraText: isHebrew ? applyHebrewSentenceNikkud(entry.extraText || "") : entry.extraText || "",
+    dragTemplateParts,
     dragChoices: shuffleArray(
-      entry.choices.map((text, index) => ({ id: `${type}-${entry.difficulty}-${index}-${text}`, text }))
+      entry.choices.map((text, index) => ({
+        id: `${type}-${entry.difficulty}-${index}-${text}`,
+        text: isHebrew ? applyHebrewSentenceNikkud(text) : text,
+      }))
     ),
-    dragAnswerTokens: [...entry.answer],
-    reviewText: entry.reviewText || buildDragTemplateText(entry.templateParts),
-    answerValue: entry.answer.join(" | "),
-    answerLabel: buildFilledDragText(entry.templateParts, entry.answer),
-    isHebrew: entry.isHebrew,
+    dragAnswerTokens,
+    reviewText: isHebrew
+      ? buildFilledDragText(dragTemplateParts, dragAnswerTokens)
+      : entry.reviewText || buildDragTemplateText(entry.templateParts),
+    answerValue: dragAnswerTokens.join(" | "),
+    answerLabel: buildFilledDragText(dragTemplateParts, dragAnswerTokens),
+    isHebrew,
   };
 }
 
@@ -3502,7 +5385,16 @@ function createTimeChoiceQuestion(difficulty) {
   };
 }
 
-function createNumericInputQuestion({ type, difficulty, questionText, displayText, answer }) {
+function createNumericInputQuestion({
+  type,
+  difficulty,
+  questionText,
+  displayText,
+  answer,
+  answerLabel = null,
+  acceptedAnswerPrefixes = [],
+  acceptedAnswerSuffixes = [],
+}) {
   return {
     type,
     difficulty,
@@ -3512,7 +5404,13 @@ function createNumericInputQuestion({ type, difficulty, questionText, displayTex
     extraText: "",
     reviewText: "",
     answerValue: answer,
-    answerLabel: String(answer),
+    answerLabel: answerLabel ?? String(answer),
+    acceptedAnswerPrefixes: Array.isArray(acceptedAnswerPrefixes)
+      ? acceptedAnswerPrefixes.map(String).filter(Boolean)
+      : [],
+    acceptedAnswerSuffixes: Array.isArray(acceptedAnswerSuffixes)
+      ? acceptedAnswerSuffixes.map(String).filter(Boolean)
+      : [],
     isHebrew: false,
   };
 }
@@ -3561,11 +5459,16 @@ function createVisualChoiceQuestion({
 }
 
 function shouldUseCompactQuestionMain(question) {
-  if (question?.isHebrew) {
+  if (question?.forceCompactMain) {
+    return true;
+  }
+
+  const displayText = String(question?.displayText || "").trim();
+  if (question?.isHebrew || containsHebrewText(displayText)) {
     return false;
   }
 
-  const text = String(question?.displayText || "").trim();
+  const text = displayText;
   if (!text) {
     return false;
   }
@@ -3591,6 +5494,114 @@ function buildFilledDragText(templateParts, tokens) {
   return templateParts
     .map((part, index) => `${part}${index < tokens.length ? tokens[index] : ""}`)
     .join("");
+}
+
+function getDragSlotCount(question) {
+  if (question.dragLayout === "buckets") {
+    return (question.dragBucketColumns || []).reduce(
+      (total, bucket) => total + ((bucket?.answers && bucket.answers.length) || 0),
+      0
+    );
+  }
+
+  if (question.dragLayout === "targets") {
+    return Array.isArray(question.dragTargets) ? question.dragTargets.length : 0;
+  }
+
+  if (Array.isArray(question.dragAnswerTokens) && question.dragAnswerTokens.length) {
+    return question.dragAnswerTokens.length;
+  }
+
+  return Math.max(0, (question.dragTemplateParts?.length || 0) - 1);
+}
+
+function getDragTargetReviewLabel(target, index) {
+  if (typeof target?.reviewLabel === "string" && target.reviewLabel.trim()) {
+    return target.reviewLabel.trim();
+  }
+
+  if (typeof target?.text === "string" && target.text.trim()) {
+    return target.text.trim();
+  }
+
+  if (typeof target?.position === "string" && target.position.trim()) {
+    return capitalize(target.position);
+  }
+
+  return `Target ${index + 1}`;
+}
+
+function buildDragTargetsSelectionText(question, tokens) {
+  return (question.dragTargets || [])
+    .map((target, index) => `${getDragTargetReviewLabel(target, index)}: ${tokens[index]}`)
+    .join(" | ");
+}
+
+function buildDragBucketSelectionText(question, tokens) {
+  let offset = 0;
+
+  return (question.dragBucketColumns || [])
+    .map((bucket) => {
+      const count = bucket?.answers?.length || 0;
+      const bucketTokens = tokens.slice(offset, offset + count);
+      offset += count;
+      return `${bucket.label}: ${bucketTokens.join(", ")}`;
+    })
+    .join(" | ");
+}
+
+function buildDragSelectionText(question, tokens) {
+  if (question.dragLayout === "buckets") {
+    return buildDragBucketSelectionText(question, tokens);
+  }
+
+  if (question.dragLayout === "targets") {
+    return buildDragTargetsSelectionText(question, tokens);
+  }
+
+  if (Array.isArray(question.dragTemplateParts) && question.dragTemplateParts.length) {
+    return buildFilledDragText(question.dragTemplateParts, tokens);
+  }
+
+  return tokens.join(" | ");
+}
+
+function isDragSelectionCorrect(question, tokens) {
+  if (question.dragLayout === "buckets") {
+    let offset = 0;
+
+    return (question.dragBucketColumns || []).every((bucket) => {
+      const answers = Array.isArray(bucket?.answers) ? bucket.answers : [];
+      const bucketTokens = tokens.slice(offset, offset + answers.length);
+      offset += answers.length;
+
+      return (
+        bucketTokens.length === answers.length &&
+        bucketTokens.every((token) => answers.includes(token)) &&
+        answers.every((token) => bucketTokens.includes(token))
+      );
+    });
+  }
+
+  return tokens.every((token, index) => token === question.dragAnswerTokens[index]);
+}
+
+function getVisibleQuestionExtraText(question) {
+  const extraText = typeof question?.extraText === "string" ? question.extraText : "";
+  if (!extraText) {
+    return "";
+  }
+
+  return extraText
+    .split("\n")
+    .map((line) => line.trimEnd())
+    .filter((line) => !SNAPSHOT_DATE_PATTERN.test(line.trim()))
+    .join("\n")
+    .trim();
+}
+
+function containsHebrewText(value) {
+  return /[\u0590-\u05FF]/.test(String(value || ""));
 }
 
 function renderCurrentQuestion() {
@@ -3621,12 +5632,15 @@ function renderCurrentQuestion() {
   elements.questionNumber.textContent = reviewingPreviousQuestion
     ? `Question ${state.viewIndex + 1} (review):`
     : `Question ${state.viewIndex + 1}:`;
+  const questionPromptIsHebrew = containsHebrewText(question.questionText);
+  const questionMainIsHebrew = Boolean(question.isHebrew) || containsHebrewText(question.displayText);
   elements.questionPrompt.textContent = question.questionText;
   elements.questionPrompt.hidden = !question.questionText;
+  elements.questionPrompt.classList.toggle("hebrew", questionPromptIsHebrew);
 
   elements.questionMain.textContent = question.displayText;
   elements.questionMain.hidden = !question.displayText;
-  elements.questionMain.classList.toggle("hebrew", Boolean(question.isHebrew));
+  elements.questionMain.classList.toggle("hebrew", questionMainIsHebrew);
   elements.questionMain.classList.toggle("compact", shouldUseCompactQuestionMain(question));
 
   elements.questionVisual.innerHTML = question.visualHtml || "";
@@ -3635,11 +5649,16 @@ function renderCurrentQuestion() {
   if (question.extraHtml) {
     elements.questionExtra.innerHTML = question.extraHtml;
     elements.questionExtra.hidden = false;
+    elements.questionExtra.classList.toggle("hebrew", Boolean(question.isHebrew));
   } else {
     const extraText =
-      reviewingPreviousQuestion && question.mode === "drag" ? "" : question.extraText || "";
+      reviewingPreviousQuestion && question.mode === "drag" ? "" : getVisibleQuestionExtraText(question);
     elements.questionExtra.textContent = extraText;
     elements.questionExtra.hidden = !extraText;
+    elements.questionExtra.classList.toggle(
+      "hebrew",
+      Boolean(question.isHebrew) || containsHebrewText(extraText)
+    );
   }
 
   if (question.mode === "input") {
@@ -3669,6 +5688,20 @@ function renderCurrentQuestion() {
     return;
   }
 
+  if (question.mode === "practice") {
+    elements.answerInput.value = "";
+    elements.answerInput.disabled = false;
+    elements.answerForm.hidden = true;
+    elements.inputArea.hidden = true;
+    elements.choicesArea.hidden = false;
+    elements.dragArea.hidden = true;
+    renderPracticeButtons(question, {
+      readOnly: reviewingPreviousQuestion,
+      selectedValue: answerSelection?.value || "",
+    });
+    return;
+  }
+
   elements.answerInput.value = "";
   elements.answerInput.disabled = false;
   elements.answerForm.hidden = true;
@@ -3685,34 +5718,93 @@ function renderChoiceButtons(question, { readOnly = false, selectedValue = "" } 
   elements.choicesArea.innerHTML = "";
 
   question.options.forEach((option, index) => {
+    const optionText = String(option);
+    const optionIsHebrew = containsHebrewText(optionText);
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "choice-button";
-    button.dataset.value = option;
+    button.className = `choice-button${optionIsHebrew ? " hebrew" : ""}`;
+    button.dataset.value = optionText;
     button.disabled = readOnly;
 
     if (readOnly) {
-      if (option === question.answerValue) {
+      if (optionText === question.answerValue) {
         button.classList.add("is-correct");
-      } else if (option === selectedValue) {
+      } else if (optionText === selectedValue) {
         button.classList.add("is-wrong");
       }
     }
 
-    button.innerHTML = `<span class="choice-label">${OPTION_LABELS[index]})</span><span>${escapeHtml(option)}</span>`;
+    const labelSpan = document.createElement("span");
+    labelSpan.className = "choice-label";
+    labelSpan.textContent = `${OPTION_LABELS[index]})`;
+
+    const textSpan = document.createElement("span");
+    textSpan.className = `choice-text${optionIsHebrew ? " hebrew" : ""}`;
+    textSpan.textContent = optionText;
+    if (optionIsHebrew) {
+      textSpan.setAttribute("dir", "rtl");
+    }
+
+    button.appendChild(labelSpan);
+    button.appendChild(textSpan);
     if (!readOnly) {
       button.addEventListener("click", () =>
-        handleAnswer(question, option === question.answerValue, option)
+        handleAnswer(question, optionText === question.answerValue, optionText)
       );
     }
     elements.choicesArea.appendChild(button);
   });
 }
 
+function renderPracticeButtons(question, { readOnly = false, selectedValue = "" } = {}) {
+  elements.choicesArea.innerHTML = "";
+
+  const actions = document.createElement("div");
+  actions.className = "practice-actions";
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "primary-button practice-button";
+  button.textContent = readOnly
+    ? selectedValue || question.completionValue || "Done"
+    : question.actionLabel || "Mark Done";
+  button.disabled = readOnly;
+
+  if (!readOnly) {
+    button.addEventListener("click", () =>
+      handleAnswer(question, true, question.completionValue || "Done")
+    );
+  }
+
+  actions.appendChild(button);
+  elements.choicesArea.appendChild(actions);
+}
+
 function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } = {}) {
   elements.dragArea.innerHTML = "";
+  const dragLayout = question.dragLayout || "sentence";
   const choiceLookup = new Map(question.dragChoices.map((token) => [token.id, token]));
-  const slotValues = Array.from({ length: question.dragTemplateParts.length - 1 }, (_, index) => {
+  const isComparisonLayout = dragLayout === "comparison";
+  const isTargetsLayout = dragLayout === "targets";
+  const isBucketLayout = dragLayout === "buckets";
+  const dragQuestionIsHebrew =
+    Boolean(question.isHebrew) ||
+    containsHebrewText(question.questionText) ||
+    containsHebrewText(question.displayText) ||
+    (question.dragChoices || []).some((token) => containsHebrewText(token?.text)) ||
+    (question.dragTemplateParts || []).some((part) => containsHebrewText(part)) ||
+    (question.dragTargets || []).some(
+      (target) =>
+        containsHebrewText(target?.text) ||
+        containsHebrewText(target?.reviewLabel) ||
+        containsHebrewText(target?.html)
+    ) ||
+    (question.dragBucketColumns || []).some(
+      (bucket) =>
+        containsHebrewText(bucket?.label) ||
+        (bucket?.answers || []).some((answer) => containsHebrewText(answer))
+    );
+  const slotValues = Array.from({ length: getDragSlotCount(question) }, (_, index) => {
     if (!readOnly || !Array.isArray(selectedTokens)) {
       return null;
     }
@@ -3767,14 +5859,52 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
     sync();
   };
 
-  const sync = () => {
-    elements.dragArea.innerHTML = "";
+  function createSlotButton(slotIndex, { placeholderText = "Drop here", comparison = false, extraClass = "" } = {}) {
+    const slotButton = document.createElement("button");
+    slotButton.type = "button";
+    slotButton.className = [
+      "drag-slot",
+      dragQuestionIsHebrew ? "hebrew" : "",
+      comparison ? "comparison" : "",
+      extraClass,
+      slotValues[slotIndex] ? "filled" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    slotButton.textContent = slotValues[slotIndex]?.text || placeholderText || "\u00a0";
+    slotButton.disabled = readOnly;
+    if (!readOnly) {
+      slotButton.addEventListener("click", () => {
+        if (slotValues[slotIndex]) {
+          clearSlot(slotIndex);
+        }
+      });
+      slotButton.addEventListener("dragover", (event) => {
+        event.preventDefault();
+      });
+      slotButton.addEventListener("drop", (event) => {
+        event.preventDefault();
+        const tokenId = event.dataTransfer?.getData("text/plain");
+        if (tokenId) {
+          placeToken(slotIndex, tokenId);
+        }
+      });
+    }
+    return slotButton;
+  }
 
-    const board = document.createElement("div");
-    board.className = "drag-board";
+  function fillTargetPrompt(prompt, target, index) {
+    if (target?.html) {
+      prompt.innerHTML = target.html;
+      return;
+    }
 
+    prompt.textContent = target?.text || getDragTargetReviewLabel(target, index);
+  }
+
+  function createSentenceLayout() {
     const sentence = document.createElement("div");
-    sentence.className = `drag-sentence${question.isHebrew ? " hebrew" : ""}`;
+    sentence.className = `drag-sentence${dragQuestionIsHebrew ? " hebrew" : ""}`;
 
     question.dragTemplateParts.forEach((part, index) => {
       if (part) {
@@ -3785,84 +5915,320 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       }
 
       if (index < slotValues.length) {
-        const slotButton = document.createElement("button");
-        slotButton.type = "button";
-        slotButton.className = `drag-slot${slotValues[index] ? " filled" : ""}`;
-        slotButton.textContent = slotValues[index]?.text || "Drop here";
-        slotButton.disabled = readOnly;
-        if (!readOnly) {
-          slotButton.addEventListener("click", () => {
-            if (slotValues[index]) {
-              clearSlot(index);
-            }
-          });
-          slotButton.addEventListener("dragover", (event) => {
-            event.preventDefault();
-          });
-          slotButton.addEventListener("drop", (event) => {
-            event.preventDefault();
-            const tokenId = event.dataTransfer?.getData("text/plain");
-            if (tokenId) {
-              placeToken(index, tokenId);
-            }
-          });
-        }
-        sentence.appendChild(slotButton);
+        sentence.appendChild(createSlotButton(index));
       }
     });
 
-    board.appendChild(sentence);
+    return sentence;
+  }
+
+  function createComparisonLayout() {
+    const comparison = document.createElement("div");
+    comparison.className = "drag-comparison";
+
+    const leftNumber = document.createElement("div");
+    leftNumber.className = "drag-compare-number";
+    leftNumber.textContent = question.dragComparisonLeftText || question.dragTemplateParts[0].trim();
+
+    const rightNumber = document.createElement("div");
+    rightNumber.className = "drag-compare-number";
+    rightNumber.textContent = question.dragComparisonRightText || question.dragTemplateParts[1].trim();
+
+    comparison.appendChild(leftNumber);
+    comparison.appendChild(
+      createSlotButton(0, {
+        placeholderText: question.dragPlaceholderText || "?",
+        comparison: true,
+      })
+    );
+    comparison.appendChild(rightNumber);
+
+    return comparison;
+  }
+
+  function createTargetsRowsLayout() {
+    const targets = document.createElement("div");
+    targets.className = "drag-targets rows";
+
+    question.dragTargets.forEach((target, index) => {
+      const row = document.createElement("div");
+      row.className = "drag-target-row";
+
+      const prompt = document.createElement("div");
+      const promptIsHebrew =
+        dragQuestionIsHebrew ||
+        containsHebrewText(target?.text) ||
+        containsHebrewText(target?.reviewLabel) ||
+        containsHebrewText(target?.html);
+      prompt.className = `drag-target-prompt${target?.html ? " visual" : ""}${promptIsHebrew ? " hebrew" : ""}`;
+      fillTargetPrompt(prompt, target, index);
+
+      row.appendChild(prompt);
+      row.appendChild(
+        createSlotButton(index, {
+          placeholderText: question.dragPlaceholderText || "Drop here",
+          extraClass: "target",
+        })
+      );
+      targets.appendChild(row);
+    });
+
+    return targets;
+  }
+
+  function createTargetsLineLayout() {
+    const shell = document.createElement("div");
+    shell.className = "drag-line-shell";
+
+    const line = document.createElement("div");
+    line.className = "drag-targets line";
+
+    question.dragTargets.forEach((target, index) => {
+      const item = document.createElement("div");
+      item.className = "drag-line-target";
+      item.appendChild(
+        createSlotButton(index, {
+          placeholderText: question.dragPlaceholderText || "\u00a0",
+          extraClass: "target line",
+        })
+      );
+
+      const tick = document.createElement("div");
+      tick.className = "drag-line-tick";
+      item.appendChild(tick);
+
+      if (question.dragShowTargetLabels !== false) {
+        const labelText = target?.text || target?.reviewLabel || "";
+        if (labelText) {
+          const label = document.createElement("div");
+          label.className = `drag-line-label${containsHebrewText(labelText) ? " hebrew" : ""}`;
+          label.textContent = labelText;
+          item.appendChild(label);
+        }
+      }
+
+      line.appendChild(item);
+    });
+
+    shell.appendChild(line);
+
+    if (question.dragLineStartLabel || question.dragLineEndLabel) {
+      const edgeLabels = document.createElement("div");
+      edgeLabels.className = "drag-line-edge-labels";
+
+      const startLabel = document.createElement("span");
+      startLabel.className = "drag-line-edge-label";
+      startLabel.textContent = question.dragLineStartLabel || "";
+
+      const endLabel = document.createElement("span");
+      endLabel.className = "drag-line-edge-label";
+      endLabel.textContent = question.dragLineEndLabel || "";
+
+      edgeLabels.appendChild(startLabel);
+      edgeLabels.appendChild(endLabel);
+      shell.appendChild(edgeLabels);
+    }
+
+    return shell;
+  }
+
+  function createTargetsCompassLayout() {
+    const compass = document.createElement("div");
+    compass.className = "drag-targets compass";
+    const targetLookup = new Map(
+      (question.dragTargets || []).map((target, index) => [target?.position, { target, index }])
+    );
+    const positions = [
+      "northwest",
+      "north",
+      "northeast",
+      "west",
+      "center",
+      "east",
+      "southwest",
+      "south",
+      "southeast",
+    ];
+
+    positions.forEach((position) => {
+      if (position === "center") {
+        const center = document.createElement("div");
+        center.className = "drag-compass-center";
+        center.textContent = question.dragCompassCenterLabel || "Compass";
+        compass.appendChild(center);
+        return;
+      }
+
+      const cell = document.createElement("div");
+      cell.className = `drag-compass-cell ${position}`;
+      const match = targetLookup.get(position);
+      if (match) {
+        cell.appendChild(
+          createSlotButton(match.index, {
+            placeholderText: question.dragPlaceholderText || "\u00a0",
+            extraClass: "target compass",
+          })
+        );
+      } else {
+        cell.classList.add("empty");
+      }
+      compass.appendChild(cell);
+    });
+
+    return compass;
+  }
+
+  function createTargetsLayout() {
+    if (question.dragTargetArrangement === "line") {
+      return createTargetsLineLayout();
+    }
+
+    if (question.dragTargetArrangement === "compass") {
+      return createTargetsCompassLayout();
+    }
+
+    return createTargetsRowsLayout();
+  }
+
+  function createBucketsLayout() {
+    const buckets = document.createElement("div");
+    buckets.className = "drag-buckets";
+    let slotIndex = 0;
+
+    (question.dragBucketColumns || []).forEach((bucket) => {
+      const column = document.createElement("div");
+      column.className = "drag-bucket";
+
+      const label = document.createElement("div");
+      label.className = `drag-bucket-label${dragQuestionIsHebrew || containsHebrewText(bucket.label) ? " hebrew" : ""}`;
+      label.textContent = bucket.label;
+
+      const slots = document.createElement("div");
+      slots.className = "drag-bucket-slots";
+
+      for (let index = 0; index < (bucket?.answers?.length || 0); index += 1) {
+        slots.appendChild(
+          createSlotButton(slotIndex, {
+            placeholderText: question.dragPlaceholderText || "\u00a0",
+            extraClass: "bucket",
+          })
+        );
+        slotIndex += 1;
+      }
+
+      column.appendChild(label);
+      column.appendChild(slots);
+      buckets.appendChild(column);
+    });
+
+    return buckets;
+  }
+
+  function createBank() {
+    const bank = document.createElement("div");
+    bank.className = [
+      "drag-bank",
+      dragQuestionIsHebrew ? "hebrew" : "",
+      isComparisonLayout ? "comparison" : "",
+      isTargetsLayout ? "targets" : "",
+      isBucketLayout ? "buckets" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    question.dragChoices.forEach((token) => {
+      if (slotValues.some((value) => value?.id === token.id)) {
+        return;
+      }
+
+      const tokenButton = document.createElement("button");
+      tokenButton.type = "button";
+      tokenButton.className = [
+        "drag-token",
+        dragQuestionIsHebrew ? "hebrew" : "",
+        isComparisonLayout ? "comparison" : "",
+        isTargetsLayout ? "targets" : "",
+        isBucketLayout ? "buckets" : "",
+      ]
+        .filter(Boolean)
+        .join(" ");
+      tokenButton.draggable = true;
+      tokenButton.textContent = token.text;
+      tokenButton.addEventListener("click", () => placeTokenInFirstOpenSlot(token.id));
+      tokenButton.addEventListener("dragstart", (event) => {
+        if (event.dataTransfer) {
+          event.dataTransfer.effectAllowed = "move";
+          event.dataTransfer.setData("text/plain", token.id);
+        }
+      });
+      bank.appendChild(tokenButton);
+    });
+
+    return bank;
+  }
+
+  function createCheckButton() {
+    const checkButton = document.createElement("button");
+    checkButton.type = "button";
+    checkButton.className = [
+      "primary-button",
+      "drag-check-button",
+      isComparisonLayout ? "comparison" : "",
+      isTargetsLayout || isBucketLayout ? "centered" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    checkButton.textContent = "Check Answer";
+    checkButton.addEventListener("click", () => {
+      if (slotValues.some((value) => value === null)) {
+        state.feedbackMessage =
+          isTargetsLayout || isBucketLayout
+            ? "Fill every spot before checking your answer."
+            : "Fill every blank before checking your answer.";
+        state.feedbackTone = "error";
+        renderFeedback();
+        return;
+      }
+
+      const currentSelectedTokens = slotValues.map((value) => value.text);
+      const selectedValue = buildDragSelectionText(question, currentSelectedTokens);
+      const isCorrect = isDragSelectionCorrect(question, currentSelectedTokens);
+      handleAnswer(question, isCorrect, selectedValue, { tokens: currentSelectedTokens });
+    });
+
+    return checkButton;
+  }
+
+  function sync() {
+    elements.dragArea.innerHTML = "";
+
+    const board = document.createElement("div");
+    board.className = [
+      "drag-board",
+      isComparisonLayout ? "comparison" : "",
+      isTargetsLayout ? "targets" : "",
+      isBucketLayout ? "buckets" : "",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    if (isComparisonLayout) {
+      board.appendChild(createComparisonLayout());
+    } else if (isTargetsLayout) {
+      board.appendChild(createTargetsLayout());
+    } else if (isBucketLayout) {
+      board.appendChild(createBucketsLayout());
+    } else {
+      board.appendChild(createSentenceLayout());
+    }
 
     if (!readOnly) {
-      const bank = document.createElement("div");
-      bank.className = "drag-bank";
-
-      question.dragChoices.forEach((token) => {
-        if (slotValues.some((value) => value?.id === token.id)) {
-          return;
-        }
-
-        const tokenButton = document.createElement("button");
-        tokenButton.type = "button";
-        tokenButton.className = "drag-token";
-        tokenButton.draggable = true;
-        tokenButton.textContent = token.text;
-        tokenButton.addEventListener("click", () => placeTokenInFirstOpenSlot(token.id));
-        tokenButton.addEventListener("dragstart", (event) => {
-          if (event.dataTransfer) {
-            event.dataTransfer.effectAllowed = "move";
-            event.dataTransfer.setData("text/plain", token.id);
-          }
-        });
-        bank.appendChild(tokenButton);
-      });
-
-      const checkButton = document.createElement("button");
-      checkButton.type = "button";
-      checkButton.className = "primary-button drag-check-button";
-      checkButton.textContent = "Check Answer";
-      checkButton.addEventListener("click", () => {
-        if (slotValues.some((value) => value === null)) {
-          state.feedbackMessage = "Fill every blank before checking your answer.";
-          state.feedbackTone = "error";
-          renderFeedback();
-          return;
-        }
-
-        const currentSelectedTokens = slotValues.map((value) => value.text);
-        const selectedValue = buildFilledDragText(question.dragTemplateParts, currentSelectedTokens);
-        const isCorrect = currentSelectedTokens.every(
-          (token, index) => token === question.dragAnswerTokens[index]
-        );
-        handleAnswer(question, isCorrect, selectedValue, { tokens: currentSelectedTokens });
-      });
-
-      board.appendChild(bank);
-      board.appendChild(checkButton);
+      board.appendChild(createBank());
+      board.appendChild(createCheckButton());
     }
 
     elements.dragArea.appendChild(board);
-  };
+  }
 
   sync();
 }
@@ -3878,6 +6244,132 @@ function focusAnswerInput() {
   }
 
   focusInput();
+}
+
+function buildNumericAnswerCandidates(rawValue, question) {
+  const strippedValue = stripAcceptedNumericAffixes(rawValue, question);
+  if (!strippedValue) {
+    return [];
+  }
+
+  return Array.from(parseFlexibleNumberCandidates(strippedValue));
+}
+
+function stripAcceptedNumericAffixes(rawValue, question) {
+  let value = normalizeFlexibleNumericInput(rawValue);
+  if (!value) {
+    return "";
+  }
+
+  value = value.replace(/[.!?]+$/g, "").trim();
+  value = stripAcceptedNumericPrefix(value, question?.acceptedAnswerPrefixes);
+  value = stripAcceptedNumericSuffix(value, question?.acceptedAnswerSuffixes);
+
+  return value.trim();
+}
+
+function stripAcceptedNumericPrefix(value, affixes) {
+  const options = Array.isArray(affixes)
+    ? [...affixes].map((affix) => String(affix).trim()).filter(Boolean).sort((left, right) => right.length - left.length)
+    : [];
+
+  for (const affix of options) {
+    const pattern = new RegExp(`^${escapeRegExp(affix)}\\s*`, "i");
+    if (pattern.test(value)) {
+      return value.replace(pattern, "").trimStart();
+    }
+  }
+
+  return value;
+}
+
+function stripAcceptedNumericSuffix(value, affixes) {
+  const options = Array.isArray(affixes)
+    ? [...affixes].map((affix) => String(affix).trim()).filter(Boolean).sort((left, right) => right.length - left.length)
+    : [];
+
+  for (const affix of options) {
+    const pattern = new RegExp(`\\s*${escapeRegExp(affix)}$`, "i");
+    if (pattern.test(value)) {
+      return value.replace(pattern, "").trimEnd();
+    }
+  }
+
+  return value;
+}
+
+function parseFlexibleNumberCandidates(rawValue) {
+  const candidates = new Set();
+  const normalized = normalizeFlexibleNumericInput(rawValue);
+  if (!normalized) {
+    return candidates;
+  }
+
+  const variants = new Set([normalized]);
+  const parenthesizedMatch = normalized.match(/^\(\s*(.+?)\s*\)$/);
+  if (parenthesizedMatch) {
+    const innerValue = parenthesizedMatch[1].trim();
+    if (innerValue) {
+      variants.add(innerValue);
+      if (!/^[+-]/.test(innerValue)) {
+        variants.add(`-${innerValue}`);
+      }
+    }
+  }
+
+  variants.forEach((variant) => {
+    const compactValue = variant.replace(/([+-])\s+/g, "$1").trim();
+    const directValue = Number(compactValue);
+    if (Number.isFinite(directValue)) {
+      candidates.add(directValue);
+    }
+
+    buildNormalizedFlexibleNumberStrings(compactValue).forEach((candidateText) => {
+      const parsedValue = Number(candidateText);
+      if (Number.isFinite(parsedValue)) {
+        candidates.add(parsedValue);
+      }
+    });
+  });
+
+  return candidates;
+}
+
+function buildNormalizedFlexibleNumberStrings(value) {
+  const candidates = new Set();
+  const compactValue = value.replace(/(?<=\d)[\s_'’](?=\d)/g, "");
+  const addCandidate = (candidateText) => {
+    if (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(candidateText)) {
+      candidates.add(candidateText);
+    }
+  };
+
+  addCandidate(compactValue);
+
+  if (/^[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?$/.test(compactValue)) {
+    addCandidate(compactValue.replace(/,/g, ""));
+  }
+
+  if (/^[+-]?\d{1,3}(?:\.\d{3})+(?:,\d+)?$/.test(compactValue)) {
+    addCandidate(compactValue.replace(/\./g, "").replace(",", "."));
+  }
+
+  if (/^[+-]?\d+,\d{1,2}$/.test(compactValue)) {
+    addCandidate(compactValue.replace(",", "."));
+  }
+
+  return candidates;
+}
+
+function normalizeFlexibleNumericInput(value) {
+  return String(value ?? "")
+    .replace(/[\u00a0\u202f]/g, " ")
+    .replace(/[−–—]/g, "-")
+    .trim();
+}
+
+function numericAnswersMatch(left, right) {
+  return Number.isFinite(left) && Number.isFinite(right) && Math.abs(left - right) < 0.000001;
 }
 
 function submitTypedAnswer(event) {
@@ -3900,15 +6392,17 @@ function submitTypedAnswer(event) {
     return;
   }
 
-  const parsedValue = Number(typedValue);
-  if (!Number.isFinite(parsedValue)) {
-    state.feedbackMessage = "Please type a number.";
+  const parsedCandidates = buildNumericAnswerCandidates(typedValue, question);
+  if (!parsedCandidates.length) {
+    state.feedbackMessage = "Please type one number. Formats like 4,000 and 5.5 are okay.";
     state.feedbackTone = "error";
     renderFeedback();
     return;
   }
 
-  handleAnswer(question, Math.abs(parsedValue - question.answerValue) < 0.000001, typedValue);
+  const correctAnswer = Number(question.answerValue);
+  const isCorrect = parsedCandidates.some((candidate) => numericAnswersMatch(candidate, correctAnswer));
+  handleAnswer(question, isCorrect, typedValue);
 }
 
 function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = null) {
@@ -3946,7 +6440,7 @@ function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = nu
 
 function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
   if (isCorrect) {
-    return "Correct!";
+    return question?.successMessage ? escapeHtml(String(question.successMessage)) : "Correct!";
   }
 
   return formatQuestionReview(question, selectedValue);
@@ -4340,6 +6834,7 @@ function buildSessionHistoryEntry() {
     userId: state.currentUserId,
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
+    hebrewOnly: Boolean(state.hebrewOnly),
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
     records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
@@ -4454,7 +6949,7 @@ function createHistorySessionElement(session, shouldOpen) {
   const meta = document.createElement("span");
   meta.className = "history-session-meta";
   meta.textContent =
-    `${session.correctCount}/${session.totalQuestions} correct | Difficulty ${session.difficulty}`;
+    `${session.correctCount}/${session.totalQuestions} correct | Difficulty ${session.difficulty}${session.hebrewOnly ? " | Hebrew Only" : ""}`;
 
   summary.appendChild(title);
   summary.appendChild(meta);
@@ -4511,7 +7006,7 @@ function formatHistoryQuestionText(questionText, sessionStartedAt) {
   }
 
   return text.replace(
-    /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/m,
+    new RegExp(SNAPSHOT_DATE_PATTERN.source, "m"),
     `Snapshot date: $1, ${sessionTime}.`
   );
 }
@@ -4961,6 +7456,27 @@ function generateDecimalOperationProblem(difficulty) {
   }
 }
 
+function generateComparisonDragProblem(difficulty) {
+  const config = {
+    1: { min: 10, max: 99, minGap: 4 },
+    2: { min: 100, max: 999, minGap: 10 },
+  }[Math.min(2, Math.max(1, difficulty))];
+
+  while (true) {
+    const left = randomInt(config.min, config.max);
+    const right = randomInt(config.min, config.max);
+    if (Math.abs(left - right) < config.minGap) {
+      continue;
+    }
+
+    return {
+      left,
+      right,
+      answer: left < right ? "<" : ">",
+    };
+  }
+}
+
 function generatePlaceValueProblem(difficulty) {
   const digitCount = difficulty <= 2 ? 4 : difficulty === 3 ? 5 : 6;
   const digits = buildUniqueDigitSequence(digitCount);
@@ -5046,11 +7562,15 @@ function generateRectangleMeasureProblem(difficulty) {
     5: { min: 5, max: 20, measures: ["area", "perimeter"] },
   }[difficulty];
   const length = randomInt(config.min, config.max);
-  const width = randomInt(config.min, config.max);
+  let width = randomInt(config.min, config.max);
+  while (width === length) {
+    width = randomInt(config.min, config.max);
+  }
   const measure = randomChoice(config.measures);
 
   return {
     questionText: `A rectangle is ${length} units long and ${width} units wide. What is the ${measure}?`,
+    measure,
     answer: measure === "area" ? length * width : 2 * (length + width),
   };
 }
@@ -5400,6 +7920,10 @@ function formatDecimalNumber(value, digits) {
 
 function formatGroupedNumber(value) {
   return Number(value).toLocaleString("en-US");
+}
+
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function escapeHtml(value) {

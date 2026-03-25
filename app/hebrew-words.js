@@ -1,5 +1,5 @@
 // Generated from eHebrew common-words source.
-const HEBREW_WORDS = [
+const RAW_HEBREW_WORDS = [
   {
     "category": "Adjectives, Adverbs",
     "english": "A little",
@@ -760,7 +760,7 @@ const HEBREW_WORDS = [
     "category": "Conjunctions, prepositions",
     "english": "And",
     "transliteration": "Ve",
-    "hebrew": "-ו",
+    "hebrew": "ו-",
     "difficulty": 2
   },
   {
@@ -788,7 +788,7 @@ const HEBREW_WORDS = [
     "category": "Conjunctions, prepositions",
     "english": "From",
     "transliteration": "Me",
-    "hebrew": "-מ",
+    "hebrew": "מ-",
     "difficulty": 2
   },
   {
@@ -802,14 +802,14 @@ const HEBREW_WORDS = [
     "category": "Conjunctions, prepositions",
     "english": "In, at",
     "transliteration": "Be, ba",
-    "hebrew": "-ב",
+    "hebrew": "ב-",
     "difficulty": 2
   },
   {
     "category": "Conjunctions, prepositions",
     "english": "Like/ as",
     "transliteration": "Ke",
-    "hebrew": "-כ",
+    "hebrew": "כ-",
     "difficulty": 3
   },
   {
@@ -879,7 +879,7 @@ const HEBREW_WORDS = [
     "category": "Conjunctions, prepositions",
     "english": "The",
     "transliteration": "Ha",
-    "hebrew": "-ה",
+    "hebrew": "ה-",
     "difficulty": 2
   },
   {
@@ -893,7 +893,7 @@ const HEBREW_WORDS = [
     "category": "Conjunctions, prepositions",
     "english": "To, for",
     "transliteration": "Le",
-    "hebrew": "-ל",
+    "hebrew": "ל-",
     "difficulty": 2
   },
   {
@@ -3536,3 +3536,251 @@ const HEBREW_WORDS = [
     "difficulty": 5
   }
 ];
+
+const HEBREW_SUPPLEMENTAL_WORDS = [
+  { category: "Numbers", english: "One", transliteration: "", hebrew: "אֶחָד", difficulty: 1 },
+  { category: "Numbers", english: "Two", transliteration: "", hebrew: "שְׁנַיִם", difficulty: 1 },
+  { category: "Numbers", english: "Three", transliteration: "", hebrew: "שְׁלוֹשָׁה", difficulty: 1 },
+  { category: "Numbers", english: "Four", transliteration: "", hebrew: "אַרְבָּעָה", difficulty: 1 },
+  { category: "Numbers", english: "Five", transliteration: "", hebrew: "חֲמִישָּׁה", difficulty: 1 },
+  { category: "Numbers", english: "Six", transliteration: "", hebrew: "שִׁשָּׁה", difficulty: 1 },
+  { category: "Numbers", english: "Seven", transliteration: "", hebrew: "שִׁבְעָה", difficulty: 1 },
+  { category: "Numbers", english: "Eight", transliteration: "", hebrew: "שְׁמוֹנָה", difficulty: 1 },
+  { category: "Numbers", english: "Nine", transliteration: "", hebrew: "תִּשְׁעָה", difficulty: 1 },
+  { category: "Numbers", english: "Ten", transliteration: "", hebrew: "עֲשָׂרָה", difficulty: 1 },
+  { category: "Numbers", english: "Twenty", transliteration: "", hebrew: "עֶשְׂרִים", difficulty: 2 },
+  { category: "Numbers", english: "Thirty", transliteration: "", hebrew: "שְׁלוֹשִׁים", difficulty: 2 },
+  { category: "Numbers", english: "Forty", transliteration: "", hebrew: "אַרְבָּעִים", difficulty: 2 },
+  { category: "Numbers", english: "Fifty", transliteration: "", hebrew: "חֲמִישִּׁים", difficulty: 2 },
+  { category: "Numbers", english: "Sixty", transliteration: "", hebrew: "שִׁשִּׁים", difficulty: 2 },
+  { category: "Numbers", english: "Seventy", transliteration: "", hebrew: "שִׁבְעִים", difficulty: 2 },
+  { category: "Numbers", english: "Eighty", transliteration: "", hebrew: "שְׁמוֹנִים", difficulty: 2 },
+  { category: "Numbers", english: "Ninety", transliteration: "", hebrew: "תִּשְׁעִים", difficulty: 2 },
+  { category: "Numbers", english: "Hundred", transliteration: "", hebrew: "מֵאָה", difficulty: 2 },
+];
+
+const HEBREW_WORD_REMOVALS = new Set([
+  buildHebrewWordKey("אצבע", "Toe"),
+]);
+
+const HEBREW_WORD_OVERRIDES = new Map([
+  [buildHebrewWordKey("פיקח", "Smart"), { english: "Clever" }],
+  [buildHebrewWordKey("יד", "Arm"), { remove: true }],
+  [buildHebrewWordKey("פה", "Here"), { hebrew: "פֹּה", transliteration: "" }],
+  [buildHebrewWordKey("פה", "Mouth"), { hebrew: "פֶּה", transliteration: "" }],
+  [buildHebrewWordKey("שם", "There"), { hebrew: "שָׁם", transliteration: "" }],
+  [buildHebrewWordKey("שם", "Name"), { hebrew: "שֵׁם", transliteration: "" }],
+  [buildHebrewWordKey("שמן", "Fat"), { hebrew: "שָׁמֵן", transliteration: "" }],
+  [buildHebrewWordKey("שמן", "Oil"), { hebrew: "שֶׁמֶן", transliteration: "" }],
+  [buildHebrewWordKey("שער", "Gate"), { hebrew: "שַׁעַר", transliteration: "" }],
+  [buildHebrewWordKey("שער", "Hair"), { hebrew: "שֵׂעָר", transliteration: "" }],
+]);
+
+const HEBREW_LEVEL_1_KEYS = new Set(
+  [
+    ["טוב", "Good"],
+    ["רע", "Bad"],
+    ["גדול", "Big"],
+    ["קטן", "Small"],
+    ["חדש", "New"],
+    ["ישן", "Old (thing)"],
+    ["יפה", "Beautiful"],
+    ["חם", "Hot"],
+    ["קר", "Cold"],
+    ["נקי", "Clean"],
+    ["פתוח", "Open"],
+    ["סגור", "Closed"],
+    ["אדום", "Red"],
+    ["כחול", "Blue"],
+    ["ירוק", "Green"],
+    ["צהוב", "Yellow"],
+    ["שחור", "Black"],
+    ["לבן", "White"],
+    ["כתום", "Orange (color)"],
+    ["שלום", "Hello"],
+    ["תודה", "Thank you"],
+    ["בבקשה", "Please"],
+    ["סליחה", "Excuse me"],
+    ["כן", "Yes"],
+    ["לא", "No"],
+    ["זה", "This"],
+    ["מה", "What"],
+    ["מי", "Who"],
+    ["איפה", "Where"],
+    ["יש", "There is/are"],
+    ["אין", "There isn’t/aren’t"],
+    ["אני", "I"],
+    ["הוא", "He"],
+    ["אבא", "Dad"],
+    ["אימא", "Mom"],
+    ["ילד", "Boy"],
+    ["ילדה", "Girl"],
+    ["בית", "House"],
+    ["מים", "Water"],
+    ["לחם", "Bread"],
+    ["חלב", "Milk"],
+    ["תפוח", "Apple"],
+    ["בננה", "Banana"],
+    ["חתול", "Cat"],
+    ["כלב", "Dog"],
+    ["ספר", "Book"],
+    ["תיק", "Bag"],
+    ["כיסא", "Chair"],
+    ["שולחן", "Table"],
+    ["דלת", "Door"],
+    ["חלון", "Window"],
+    ["מיטה", "Bed"],
+    ["כוס", "Glass, cup"],
+    ["צלחת", "Plate"],
+    ["היום", "Today"],
+    ["מחר", "Tomorrow"],
+    ["כל", "All"],
+    ["גם", "Also"],
+    ["אֶחָד", "One"],
+    ["שְׁנַיִם", "Two"],
+    ["שְׁלוֹשָׁה", "Three"],
+    ["אַרְבָּעָה", "Four"],
+    ["חֲמִישָּׁה", "Five"],
+    ["שִׁשָּׁה", "Six"],
+    ["שִׁבְעָה", "Seven"],
+    ["שְׁמוֹנָה", "Eight"],
+    ["תִּשְׁעָה", "Nine"],
+    ["עֲשָׂרָה", "Ten"],
+  ].map(([hebrew, english]) => buildHebrewWordKey(hebrew, english))
+);
+
+const HEBREW_LEVEL_2_KEYS = new Set(
+  [
+    ["איך", "How"],
+    ["כמה", "How much"],
+    ["מתי", "When"],
+    ["למה", "Why"],
+    ["איזה", "Which"],
+    ["עכשיו", "Now"],
+    ["אתמול", "Yesterday"],
+    ["לפני", "Before"],
+    ["שוב", "Again"],
+    ["ביחד", "Together"],
+    ["או", "Or"],
+    ["אבל", "But"],
+    ["של", "Of"],
+    ["על", "On, about"],
+    ["ראשון", "First"],
+    ["הבא", "Next"],
+    ["מהר", "Quickly"],
+    ["לאט", "Slowly"],
+    ["מהיר", "Fast"],
+    ["פשוט", "Simple"],
+    ["חזק", "Strong"],
+    ["חלש", "Weak"],
+    ["סגול", "Purple"],
+    ["חום", "Brown"],
+    ["מטבח", "Kitchen"],
+    ["חדר", "Room"],
+    ["בית ספר", "School"],
+    ["בקבוק", "Bottle"],
+    ["כדור", "Ball"],
+    ["שעון", "Clock"],
+    ["עט", "Pen"],
+    ["עפרון", "Pencil"],
+    ["כף", "Spoon"],
+    ["מזלג", "Fork"],
+    ["סכין", "Knife"],
+    ["כיתה", "Classroom"],
+    ["מחשב", "Computer"],
+    ["גבינה", "Cheese"],
+    ["עוגה", "Cake"],
+    ["קפה", "Coffee"],
+    ["שוקולד", "Chocolate"],
+    ["ביצה", "Egg"],
+    ["דג", "Fish"],
+    ["פרי", "Fruit"],
+    ["משפחה", "Family"],
+    ["יום", "Day"],
+    ["שעה", "Hour"],
+    ["חבר", "Friend"],
+    ["ראש", "Head"],
+    ["יד", "Hand"],
+    ["עין", "Eye"],
+    ["אוזן", "Ear"],
+    ["פֶּה", "Mouth"],
+    ["פֹּה", "Here"],
+    ["שֵׁם", "Name"],
+    ["שָׁם", "There"],
+    ["עֶשְׂרִים", "Twenty"],
+    ["שְׁלוֹשִׁים", "Thirty"],
+    ["אַרְבָּעִים", "Forty"],
+    ["חֲמִישִּׁים", "Fifty"],
+    ["שִׁשִּׁים", "Sixty"],
+    ["שִׁבְעִים", "Seventy"],
+    ["שְׁמוֹנִים", "Eighty"],
+    ["תִּשְׁעִים", "Ninety"],
+    ["מֵאָה", "Hundred"],
+  ].map(([hebrew, english]) => buildHebrewWordKey(hebrew, english))
+);
+
+const HEBREW_WORDS = buildCuratedHebrewWords(RAW_HEBREW_WORDS);
+
+function buildHebrewWordKey(hebrew, english) {
+  return `${String(hebrew || "").trim()}||${String(english || "").trim()}`;
+}
+
+function applyHebrewWordOverride(entry) {
+  const override = HEBREW_WORD_OVERRIDES.get(buildHebrewWordKey(entry.hebrew, entry.english));
+  if (!override) {
+    return entry;
+  }
+
+  return { ...entry, ...override };
+}
+
+function getCuratedHebrewDifficulty(entry, originalDifficulty) {
+  const key = buildHebrewWordKey(entry.hebrew, entry.english);
+  if (HEBREW_LEVEL_1_KEYS.has(key)) {
+    return 1;
+  }
+  if (HEBREW_LEVEL_2_KEYS.has(key)) {
+    return 2;
+  }
+
+  const difficulty = Number(originalDifficulty);
+  if (!Number.isFinite(difficulty)) {
+    return 3;
+  }
+
+  return difficulty <= 2 ? 3 : Math.max(3, Math.min(5, difficulty));
+}
+
+function buildCuratedHebrewWords(words) {
+  const seen = new Set();
+  const curatedWords = [];
+
+  [...words, ...HEBREW_SUPPLEMENTAL_WORDS].forEach((rawEntry) => {
+    if (HEBREW_WORD_REMOVALS.has(buildHebrewWordKey(rawEntry.hebrew, rawEntry.english))) {
+      return;
+    }
+
+    const entry = applyHebrewWordOverride(rawEntry);
+    if (entry.remove) {
+      return;
+    }
+
+    const curatedEntry = {
+      category: entry.category,
+      english: String(entry.english || "").trim(),
+      transliteration: String(entry.transliteration || "").trim(),
+      hebrew: String(entry.hebrew || "").trim(),
+      difficulty: getCuratedHebrewDifficulty(entry, rawEntry.difficulty),
+    };
+
+    const identity = buildHebrewWordKey(curatedEntry.hebrew, curatedEntry.english);
+    if (!curatedEntry.hebrew || !curatedEntry.english || seen.has(identity)) {
+      return;
+    }
+
+    seen.add(identity);
+    curatedWords.push(curatedEntry);
+  });
+
+  return curatedWords;
+}

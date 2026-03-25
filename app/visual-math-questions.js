@@ -161,12 +161,16 @@ const VISUAL_MATH_QUESTIONS = (() => {
         const yPos = top + (heightCells - point.y) * cellSize;
         const fill = point.fill || COLORS.dot;
         const label = point.label || String.fromCharCode(65 + index);
-        const labelDx = point.labelDx || 11;
-        const labelDy = point.labelDy || -10;
+        const labelWidth = Math.max(10, label.length * 7);
+        const autoLabelDx = xPos + 11 + labelWidth > width - 6 ? -11 : 11;
+        const autoLabelDy = yPos - 10 < top + 10 ? 18 : -10;
+        const labelDx = point.labelDx ?? autoLabelDx;
+        const labelDy = point.labelDy ?? autoLabelDy;
+        const labelAnchor = point.labelAnchor || (labelDx < 0 ? "end" : "start");
 
         return `
           <circle cx="${xPos}" cy="${yPos}" r="7.5" fill="${fill}" stroke="${COLORS.ink}" stroke-width="2"></circle>
-          <text x="${xPos + labelDx}" y="${yPos + labelDy}" font-size="12" font-weight="700" fill="${COLORS.ink}">${escapeHtml(label)}</text>
+          <text x="${xPos + labelDx}" y="${yPos + labelDy}" text-anchor="${labelAnchor}" font-size="12" font-weight="700" fill="${COLORS.ink}">${escapeHtml(label)}</text>
         `;
       })
       .join("");

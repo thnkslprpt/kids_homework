@@ -90,9 +90,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "About how many people live in the United States?",
-    options: ["About 34 million", "About 340 million", "About 3.4 billion", "About 34 billion"],
-    answer: "About 340 million",
+    question: "About how many people live in Israel today?",
+    options: ["About 1 million", "About 10 million", "About 100 million", "About 1 billion"],
+    answer: "About 10 million",
     difficulty: 4,
   },
   {
@@ -167,7 +167,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Which type of map mainly shows countries, states, and borders?",
+    question: "Which type of map mainly shows countries, regions, and borders?",
     options: ["Political map", "Weather map", "Road map", "Star map"],
     answer: "Political map",
     difficulty: 2,
@@ -287,9 +287,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Which continent is the United States in?",
+    question: "Which continent is Israel in?",
     options: ["Africa", "Asia", "North America", "Europe"],
-    answer: "North America",
+    answer: "Asia",
     difficulty: 1,
   },
   {
@@ -335,9 +335,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Which country is north of the United States?",
-    options: ["Mexico", "Canada", "Brazil", "Chile"],
-    answer: "Canada",
+    question: "Which country is north of Israel?",
+    options: ["Egypt", "Lebanon", "Jordan", "Saudi Arabia"],
+    answer: "Lebanon",
     difficulty: 2,
   },
   {
@@ -1178,9 +1178,9 @@ GENERAL_KNOWLEDGE_QUESTIONS.push(
       difficulty: 4,
     },
     {
-      question: "What is the emergency number in the US?",
-      options: ["112", "911", "999", "123"],
-      answer: "911",
+      question: "What number is used to call Magen David Adom in Israel?",
+      options: ["100", "101", "102", "106"],
+      answer: "101",
       difficulty: 4,
     },
     {

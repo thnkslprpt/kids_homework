@@ -1,0 +1,3 @@
+Hebrew picture-match SVG assets are from Twemoji 15.1.0.
+Source: https://github.com/jdecked/twemoji
+License: CC-BY 4.0
