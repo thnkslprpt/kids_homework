@@ -5169,6 +5169,7 @@ function createHebrewWritingPracticeQuestion(targetText, difficulty, variant) {
   const rawText = String(targetText || "").trim();
   const displayText = applyHebrewSentenceNikkud(rawText);
   const visualText = stripHebrewDiacritics(rawText).trim();
+  const showKtavYadExample = Number(difficulty) <= 3;
   const variantLabelMap = {
     letter: "letter",
     word: "word",
@@ -5185,8 +5186,8 @@ function createHebrewWritingPracticeQuestion(targetText, difficulty, variant) {
     displayText,
     extraText: "",
     extraHtml: "",
-    visualHtml: buildHebrewWritingPracticeVisual(visualText, variant),
-    visualSummary: `Ktav yad practice target: ${visualText}`,
+    visualHtml: showKtavYadExample ? buildHebrewWritingPracticeVisual(visualText, variant) : "",
+    visualSummary: showKtavYadExample ? `Ktav yad practice target: ${visualText}` : "",
     reviewText: displayText,
     answerValue: "done",
     answerLabel: "Parents must check your writing.",

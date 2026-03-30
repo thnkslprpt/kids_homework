@@ -289,6 +289,23 @@ const POPULATION_GENERATION_DATA = [
   { country: "Uzbekistan", population: 36_000_000, label: "About 36 million" },
 ];
 const POPULATION_MAX_DIFFICULTY = 3;
+const POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO = 0.25;
+const POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS = [
+  0.08,
+  0.12,
+  0.18,
+  0.28,
+  0.42,
+  0.58,
+  0.75,
+  1.25,
+  1.6,
+  2.1,
+  2.8,
+  3.8,
+  5.2,
+  7,
+];
 
 function createPopulationGeneratedEntry(difficulty) {
   const level = Math.min(clampDifficulty(difficulty), POPULATION_MAX_DIFFICULTY);
@@ -366,33 +383,136 @@ function buildPopulationClosestQuestion(difficulty) {
 }
 
 function buildPopulationEstimateOptions(entry, difficulty) {
-  const answerLabel = entry.label;
-  const pool = POPULATION_GENERATION_DATA
-    .filter((candidate) => candidate.country !== entry.country && candidate.label !== answerLabel)
-    .sort((left, right) => Math.abs(left.population - entry.population) - Math.abs(right.population - entry.population));
+  return buildPopulationEstimateOptionsForValue(entry.population, entry.label, difficulty);
+}
 
-  const distractors = [];
-  for (const candidate of pool) {
-    if (!distractors.includes(candidate.label)) {
-      distractors.push(candidate.label);
+function buildPopulationEstimateOptionsForValue(answerPopulation, answerLabel, difficulty) {
+  const selected = [{ label: answerLabel, population: answerPopulation }];
+  const candidates = buildPopulationEstimateCandidatePool(answerPopulation, answerLabel, difficulty);
+
+  for (const candidate of candidates) {
+    if (selected.every((option) => hasPopulationOptionMinimumGap(option.population, candidate.population))) {
+      selected.push(candidate);
     }
-    if (distractors.length === 3) {
+    if (selected.length === 4) {
       break;
     }
   }
 
-  if (distractors.length < 3) {
-    for (const candidate of POPULATION_GENERATION_DATA) {
-      if (candidate.label !== answerLabel && !distractors.includes(candidate.label)) {
-        distractors.push(candidate.label);
-      }
-      if (distractors.length === 3) {
-        break;
-      }
+  return shuffleLocal(selected.slice(0, 4).map((option) => option.label));
+}
+
+function buildPopulationEstimateCandidatePool(answerPopulation, answerLabel, difficulty) {
+  const candidates = [];
+  const sameDifficultyPool = POPULATION_GENERATION_DATA.filter(
+    (entry) =>
+      difficultyMatchesPopulation(entry, difficulty) &&
+      entry.label !== answerLabel &&
+      entry.population !== answerPopulation
+  );
+  const fullPool = POPULATION_GENERATION_DATA.filter(
+    (entry) => entry.label !== answerLabel && entry.population !== answerPopulation
+  );
+
+  sameDifficultyPool.forEach((entry) => {
+    candidates.push({
+      label: entry.label,
+      population: entry.population,
+      distance: Math.abs(entry.population - answerPopulation),
+      priority: 0,
+    });
+  });
+
+  fullPool.forEach((entry) => {
+    candidates.push({
+      label: entry.label,
+      population: entry.population,
+      distance: Math.abs(entry.population - answerPopulation),
+      priority: 1,
+    });
+  });
+
+  POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS.forEach((multiplier) => {
+    const population = roundPopulationEstimateCandidate(answerPopulation * multiplier);
+    const label = formatPopulationValue(population);
+    if (label === answerLabel || population === answerPopulation) {
+      return;
     }
+    candidates.push({
+      label,
+      population,
+      distance: Math.abs(population - answerPopulation),
+      priority: 2,
+    });
+  });
+
+  return dedupePopulationEstimateCandidates(candidates).sort((left, right) => {
+    if (left.priority !== right.priority) {
+      return left.priority - right.priority;
+    }
+    return left.distance - right.distance;
+  });
+}
+
+function dedupePopulationEstimateCandidates(candidates) {
+  const seen = new Set();
+  const unique = [];
+
+  for (const candidate of candidates) {
+    if (!candidate || !candidate.label || candidate.population <= 0 || seen.has(candidate.label)) {
+      continue;
+    }
+    seen.add(candidate.label);
+    unique.push(candidate);
   }
 
-  return shuffleLocal([answerLabel, ...distractors.slice(0, 3)]);
+  return unique;
+}
+
+function hasPopulationOptionMinimumGap(firstPopulation, secondPopulation) {
+  const smaller = Math.min(firstPopulation, secondPopulation);
+  const larger = Math.max(firstPopulation, secondPopulation);
+  return (larger - smaller) / smaller >= POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO;
+}
+
+function parsePopulationApproximateLabel(label) {
+  const match = String(label).trim().match(/^About\s+([\d.]+)\s+(million|billion)$/i);
+  if (!match) {
+    return null;
+  }
+
+  const value = Number(match[1]);
+  if (!Number.isFinite(value) || value <= 0) {
+    return null;
+  }
+
+  return match[2].toLowerCase() === "billion" ? value * 1_000_000_000 : value * 1_000_000;
+}
+
+function roundPopulationEstimateCandidate(value) {
+  if (!Number.isFinite(value) || value <= 0) {
+    return 1_000_000;
+  }
+
+  if (value >= 1_000_000_000) {
+    return Math.max(100_000_000, Math.round(value / 100_000_000) * 100_000_000);
+  }
+
+  return Math.max(1_000_000, Math.round(value / 1_000_000) * 1_000_000);
+}
+
+function normalizePopulationEstimateQuestionSet() {
+  POPULATION_QUESTIONS.forEach((entry) => {
+    const answerPopulation = parsePopulationApproximateLabel(entry.answer);
+    if (!answerPopulation) {
+      return;
+    }
+    entry.options = buildPopulationEstimateOptionsForValue(
+      answerPopulation,
+      entry.answer,
+      clampDifficulty(entry.difficulty)
+    );
+  });
 }
 
 function pickPopulationQuestionType(difficulty) {
@@ -488,6 +608,8 @@ function formatPopulationValue(value) {
   }
   return `About ${Math.round(value / 1_000_000)} million`;
 }
+
+normalizePopulationEstimateQuestionSet();
 
 function dedupePopulationEntries(entries) {
   const seen = new Set();

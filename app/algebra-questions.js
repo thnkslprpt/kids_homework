@@ -85,11 +85,12 @@ const ALGEBRA_QUESTIONS = (() => {
 
   function buildSubtractEquation(difficulty) {
     const variable = randomChoice(["x", "n", "m"]);
-    const answer = randomInt(difficulty <= 4 ? 2 : 3, difficulty <= 4 ? 12 : 18);
+    const result = randomInt(difficulty <= 4 ? 2 : 3, difficulty <= 4 ? 12 : 18);
     const subtrahend = randomInt(2, difficulty <= 4 ? 8 : 12);
+    const answer = result + subtrahend;
 
     return buildGeneratedEntry({
-      question: `What is ${variable} if ${variable} - ${subtrahend} = ${answer}?`,
+      question: `What is ${variable} if ${variable} - ${subtrahend} = ${result}?`,
       answer,
       distractors: [answer - 1, answer + 1, answer + 3],
       difficulty,
@@ -171,10 +172,11 @@ const ALGEBRA_QUESTIONS = (() => {
   function buildDivideEquation(difficulty) {
     const variable = randomChoice(["x", "n", "m"]);
     const divisor = randomChoice([2, 3, 4, 5, 6]);
-    const answer = randomInt(2, difficulty <= 4 ? 8 : 12);
+    const quotient = randomInt(2, difficulty <= 4 ? 8 : 12);
+    const answer = quotient * divisor;
 
     return buildGeneratedEntry({
-      question: `What is ${variable} if ${variable} / ${divisor} = ${answer}?`,
+      question: `What is ${variable} if ${variable} / ${divisor} = ${quotient}?`,
       answer,
       distractors: [answer - 1, answer + 1, answer + divisor],
       difficulty,
