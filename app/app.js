@@ -115,7 +115,7 @@ const USER_PROFILES = [
   {
     id: "gabriel",
     name: "Gabriel",
-    defaultDifficulty: 2,
+    defaultDifficulty: 1,
     avatarStyle: "lightCurls",
     palette: {
       sky: "#ecf7ea",
