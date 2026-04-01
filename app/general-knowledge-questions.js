@@ -891,12 +891,6 @@ GENERAL_KNOWLEDGE_QUESTIONS.push(
       difficulty: 2,
     },
     {
-      question: "What is a map key used for?",
-      options: ["Showing symbols on a map", "Measuring temperature", "Finding the weather", "Counting people"],
-      answer: "Showing symbols on a map",
-      difficulty: 2,
-    },
-    {
       question: "What does recycling mean?",
       options: ["Using things again", "Throwing everything away", "Making things disappear", "Buying more things"],
       answer: "Using things again",
@@ -1050,12 +1044,6 @@ GENERAL_KNOWLEDGE_QUESTIONS.push(
       question: "What does weather describe?",
       options: ["The short-term conditions outside", "The long-term pattern in a place", "The shape of clouds only", "The direction of a river"],
       answer: "The short-term conditions outside",
-      difficulty: 3,
-    },
-    {
-      question: "What does a legend on a map tell you?",
-      options: ["What symbols mean", "Who drew the map", "How old the map is", "Where the compass points"],
-      answer: "What symbols mean",
       difficulty: 3,
     },
     {

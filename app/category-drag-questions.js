@@ -557,17 +557,6 @@
         choices: ["quarter", "equal parts", "numerator", "denominator"],
       },
       {
-        minDifficulty: 2,
-        maxDifficulty: 3,
-        templateParts: [
-          "Fractions can show ",
-          " of a whole, and one of three equal parts is called a ",
-          ".",
-        ],
-        answer: ["equal parts", "third"],
-        choices: ["equal parts", "third", "numerator", "denominator"],
-      },
-      {
         minDifficulty: 4,
         maxDifficulty: 5,
         templateParts: [

@@ -150,17 +150,6 @@ const DIGITAL_SAFETY_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Why is two-factor authentication useful?",
-    options: [
-      "It adds another check before login",
-      "It makes passwords disappear",
-      "It turns off the computer",
-      "It hides the screen color",
-    ],
-    answer: "It adds another check before login",
-    difficulty: 3,
-  },
-  {
     question: "What is the safest choice if an app asks for your microphone but does not need sound?",
     options: [
       "Allow it anyway",
@@ -216,13 +205,11 @@ function createDigitalSafetyGeneratedEntry(difficulty) {
     ],
     3: [
       digitalSafetyCreateSharedDeviceQuestion,
-      digitalSafetyCreateTwoFactorQuestion,
       digitalSafetyCreatePermissionQuestion,
     ],
     4: [
       digitalSafetyCreatePhotoPermissionQuestion,
       digitalSafetyCreateRushingMessageQuestion,
-      digitalSafetyCreateTwoFactorQuestion,
     ],
     5: [
       digitalSafetyCreateScamPrizeQuestion,
@@ -336,20 +323,6 @@ function digitalSafetyCreateSharedDeviceQuestion() {
     ],
     answer: "Closes your account on that device",
     difficulty: 2,
-  };
-}
-
-function digitalSafetyCreateTwoFactorQuestion() {
-  return {
-    question: "Why is two-factor authentication useful?",
-    options: [
-      "It adds another check before login",
-      "It makes passwords disappear",
-      "It turns off the computer",
-      "It hides the screen color",
-    ],
-    answer: "It adds another check before login",
-    difficulty: 3,
   };
 }
 

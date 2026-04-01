@@ -18,17 +18,6 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "What does a map key help you understand?",
-    options: [
-      "What map symbols mean",
-      "How fast you are walking",
-      "What the weather will be",
-      "How old the map is",
-    ],
-    answer: "What map symbols mean",
-    difficulty: 2,
-  },
-  {
     question: "If you walk 2 blocks east and then 1 block north, where are you from where you started?",
     options: ["Northwest", "Northeast", "Southwest", "Southeast"],
     answer: "Northeast",
@@ -135,17 +124,6 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     options: ["North", "South", "East", "West"],
     answer: "North",
     difficulty: 1,
-  },
-  {
-    question: "What does a map legend do?",
-    options: [
-      "Explains symbols on the map",
-      "Shows your age",
-      "Tells the time",
-      "Counts the clouds",
-    ],
-    answer: "Explains symbols on the map",
-    difficulty: 2,
   },
   {
     question: "On a street map, which symbol usually shows a hospital?",
@@ -286,12 +264,6 @@ MAPS_AND_DIRECTIONS_QUESTIONS.push(
       question: "What information does a compass rose show?",
       options: ["Directions", "Temperatures", "Prices", "Rainfall"],
       answer: "Directions",
-      difficulty: 2,
-    },
-    {
-      question: "What does a map legend help you understand?",
-      options: ["Map symbols", "Map age", "Weather", "Distance in minutes"],
-      answer: "Map symbols",
       difficulty: 2,
     },
     {
@@ -514,7 +486,6 @@ function createMapsAndDirectionsGeneratedEntry(difficulty) {
       mapsCreateFacingQuestion,
     ],
     2: [
-      mapsCreateLegendQuestion,
       mapsCreateNearQuestion,
       mapsCreateRoadMapQuestion,
       mapsCreateSimpleChainQuestion,
@@ -610,19 +581,6 @@ function mapsCreateFacingQuestion(difficulty) {
   ];
 
   return mapsPickTemplate(difficulty, templates);
-}
-
-function mapsCreateLegendQuestion(difficulty = 2) {
-  return {
-    question: "What does a map key help you understand?",
-    answer: "What map symbols mean",
-    options: mapsBuildOptions("What map symbols mean", [
-      "How fast you are walking",
-      "What the weather will be",
-      "How old the map is",
-    ]),
-    difficulty,
-  };
 }
 
 function mapsCreateNearQuestion(difficulty = 2) {
