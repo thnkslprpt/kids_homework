@@ -768,6 +768,8 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "אתן": "אַתֶּן",
   "איפה": "אֵיפֹה",
   "בית": "בַּיִת",
+  "בית ספר": "בֵּית סֵפֶר",
+  "בגדים": "בְּגָדִים",
   "ביצה": "בֵּיצָה",
   "בוקר": "בֹּקֶר",
   "ביחד": "בְּיַחַד",
@@ -793,7 +795,9 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "וילון": "וִילוֹן",
   "זמן": "זְמַן",
   "חבר": "חָבֵר",
+  "חדר אמבטיה": "חֲדַר אַמְבַּטְיָה",
   "חיות": "חַיּוֹת",
+  "חלקי גוף": "חֶלְקֵי גּוּף",
   "חתול": "חָתוּל",
   "חולה": "חוֹלֶה",
   "ילד": "יֶלֶד",
@@ -823,8 +827,11 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "מעניין": "מְעַנְיֵן",
   "מפתח": "מַפְתֵּחַ",
   "מראה": "מַרְאָה",
+  "מזג אוויר": "מֶזֶג אֲוִיר",
+  "מטבח": "מִטְבָּח",
   "מתי": "מָתַי",
   "מיה": "מִיָה",
+  "משפחה": "מִשְׁפָּחָה",
   "נועם": "נוֹעַם",
   "ספר": "סֵפֶר",
   "סלון": "סָלוֹן",
@@ -837,6 +844,7 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "עכבר": "עַכְבָּר",
   "עץ": "עֵץ",
   "צבעים": "צְבָעִים",
+  "צעצועים": "צַעֲצוּעִים",
   "פה": "פֹּה",
   "פנים": "פָּנִים",
   "פרח": "פֶּרַח",
@@ -850,6 +858,8 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "שמש": "שֶׁמֶשׁ",
   "שם": "שָׁם",
   "תודה": "תּוֹדָה",
+  "טבע": "טֶבַע",
+  "תחבורה": "תַּחְבּוּרָה",
 };
 
 // These forms appear in the Hebrew sentence-drag questions but are not covered by
@@ -1356,19 +1366,103 @@ const HEBREW_AGREEMENT_BLUEPRINTS = [
 ];
 
 const HEBREW_CATEGORY_SORT_GROUPS = [
-  { label: "אוכל", words: ["תפוח", "לחם", "בננה", "חלב", "עוגה", "גבינה", "אורז", "עגבניה", "לימון", "תה"] },
-  { label: "חיות", words: ["כלב", "חתול", "ציפור", "דג", "נמלה", "עכביש", "יתוש"] },
-  { label: "בית ספר", words: ["ספר", "מחברת", "עט", "עפרון", "כיסא", "כיתה", "מורה", "שולחן"] },
-  { label: "צבעים", words: ["כחול", "אדום", "צהוב", "כתום", "שחור", "לבן"] },
-  { label: "מטבח", words: ["כף", "צלחת", "כוס", "מקרר", "תנור", "קערה", "סכין"] },
+  {
+    label: "אוכל",
+    words: ["תַּפּוּחַ", "לֶחֶם", "בָּנָנָה", "חָלָב", "עוּגָה", "גְּבִינָה", "אוֹרֶז", "עַגְבָנִיָּה", "לִימוֹן", "תֵּה"],
+  },
+  {
+    label: "חיות",
+    words: ["כֶּלֶב", "חָתוּל", "צִפּוֹר", "דָּג", "נְמָלָה", "עַכָּבִישׁ", "יַתּוּשׁ", "סוּס", "פָּרָה", "אַרְנָב"],
+  },
+  {
+    label: "בית ספר",
+    words: ["סֵפֶר", "מַחְבֶּרֶת", "עֵט", "עִפָּרוֹן", "כִּסֵּא", "כִּיתָּה", "מוֹרָה", "שֻׁלְחָן", "יַלְקוּט", "לוּחַ"],
+  },
+  {
+    label: "צבעים",
+    words: ["כָּחוֹל", "אָדוֹם", "צָהוֹב", "כָּתוֹם", "שָׁחֹר", "לָבָן", "יָרוֹק", "וָרוֹד", "סָגוֹל", "חוּם"],
+  },
+  {
+    label: "מטבח",
+    words: ["כַּף", "צַלַּחַת", "כּוֹס", "מְקָרֵר", "תַּנּוּר", "קְעָרָה", "סַכִּין", "מַזְלֵג", "סִיר", "מַפִּית"],
+  },
+  {
+    label: "בגדים",
+    words: ["חוּלְצָה", "מִכְנָסַיִם", "נַעֲלַיִם", "כּוֹבַע", "גַּרְבַּיִם", "מְעִיל", "שִׂמְלָה", "חֲצָאִית", "חֲגוֹרָה", "סַנְדָּל"],
+  },
+  {
+    label: "חלקי גוף",
+    words: ["רֹאשׁ", "יָד", "רֶגֶל", "עַיִן", "אַף", "פֶּה", "אֹזֶן", "בֶּטֶן", "לֵב", "שֵׂעָר"],
+  },
+  {
+    label: "תחבורה",
+    words: ["מְכוֹנִית", "אוֹטוֹבּוּס", "רַכֶּבֶת", "אוֹפַנַּיִם", "מָטוֹס", "סְפִינָה", "מַשָּׂאִית", "מוֹנִית", "טְרַקְטוֹר", "אֶמְבּוּלַנְס"],
+  },
+  {
+    label: "מזג אוויר",
+    words: ["שֶׁמֶשׁ", "גֶּשֶׁם", "רוּחַ", "עָנָן", "שֶׁלֶג", "בָּרָק", "קֶשֶׁת", "חוֹם", "קוֹר", "סְעָרָה"],
+  },
+  {
+    label: "טבע",
+    words: ["עֵץ", "פֶּרַח", "דֶּשֶׁא", "עָלֶה", "אֶבֶן", "הַר", "נָהָר", "יָם", "חוֹל", "יָעַר"],
+  },
+  {
+    label: "צעצועים",
+    words: ["כַּדּוּר", "בּוּבָּה", "פָּאזֶל", "קֻבִּיָּה", "דּוּבִּי", "עֲפִיפוֹן", "בַּלּוֹן", "תּוֹף", "רוֹבּוֹט", "קַלָּפִים"],
+  },
+  {
+    label: "משפחה",
+    words: ["אִמָּא", "אַבָּא", "אָח", "אָחוֹת", "סַבָּא", "סָבְתָּא", "תִּינוֹק", "דּוֹד", "דּוֹדָה", "יֶלֶד", "יַלְדָּה"],
+  },
+  {
+    label: "חדר אמבטיה",
+    words: [
+      "סַבּוֹן",
+      "מַגֶּבֶת",
+      "מִבְרֶשֶׁת שִׁנַּיִם",
+      "שַׁמְפּוֹ",
+      "כִּיּוֹר",
+      "אַמְבַּטְיָה",
+      "מַרְאָה",
+      "בְּרָז",
+      "אַסְלָה",
+      "מִשְׁחַת שִׁנַּיִם",
+    ],
+  },
 ];
 
 const HEBREW_CATEGORY_SORT_LEVEL_CONFIG = {
-  1: { labels: ["אוכל", "חיות"], itemsPerBucket: 2 },
-  2: { labels: ["אוכל", "חיות", "בית ספר"], itemsPerBucket: 2 },
-  3: { labels: ["אוכל", "חיות", "צבעים"], itemsPerBucket: 2 },
-  4: { labels: ["אוכל", "חיות", "בית ספר", "מטבח"], itemsPerBucket: 2 },
-  5: { labels: ["אוכל", "חיות", "בית ספר", "צבעים", "מטבח"], itemsPerBucket: 2 },
+  1: { labelPool: ["אוכל", "חיות", "צבעים", "צעצועים"], bucketCount: 2, itemsPerBucket: 2 },
+  2: { labelPool: ["אוכל", "חיות", "בית ספר", "צבעים", "מטבח", "בגדים", "משפחה"], bucketCount: 3, itemsPerBucket: 2 },
+  3: {
+    labelPool: ["אוכל", "חיות", "בית ספר", "צבעים", "מטבח", "בגדים", "חלקי גוף", "משפחה", "צעצועים", "טבע"],
+    bucketCount: 3,
+    itemsPerBucket: 2,
+  },
+  4: {
+    labelPool: ["אוכל", "חיות", "בית ספר", "צבעים", "מטבח", "בגדים", "חלקי גוף", "תחבורה", "מזג אוויר", "טבע", "צעצועים", "משפחה"],
+    bucketCount: 4,
+    itemsPerBucket: 2,
+  },
+  5: {
+    labelPool: [
+      "אוכל",
+      "חיות",
+      "בית ספר",
+      "צבעים",
+      "מטבח",
+      "בגדים",
+      "חלקי גוף",
+      "תחבורה",
+      "מזג אוויר",
+      "טבע",
+      "צעצועים",
+      "משפחה",
+      "חדר אמבטיה",
+    ],
+    bucketCount: 5,
+    itemsPerBucket: 2,
+  },
 };
 
 const HEBREW_FINAL_LETTER_DRILLS = [
@@ -5062,7 +5156,13 @@ function createHebrewAgreementQuestion(difficulty) {
 
 function createHebrewCategorySortQuestion(difficulty) {
   const config = HEBREW_CATEGORY_SORT_LEVEL_CONFIG[difficulty] || HEBREW_CATEGORY_SORT_LEVEL_CONFIG[3];
-  const buckets = config.labels
+  const selectedLabels = Array.isArray(config.labels) && config.labels.length
+    ? config.labels
+    : shuffleArray([...(config.labelPool || [])]).slice(
+        0,
+        Math.min(config.bucketCount || (config.labelPool || []).length, (config.labelPool || []).length)
+      );
+  const buckets = selectedLabels
     .map((label) => HEBREW_CATEGORY_SORT_GROUPS.find((group) => group.label === label))
     .filter(Boolean)
     .map((group) => ({
@@ -5073,11 +5173,15 @@ function createHebrewCategorySortQuestion(difficulty) {
       ),
     }));
 
+  if (!buckets.length) {
+    return null;
+  }
+
   return createHebrewBucketsDragQuestion({
     difficulty,
     questionText: "Sort the Hebrew words into the correct categories.",
     extraText: "Each bucket is a Hebrew category.",
-    visualSummary: buckets.map((bucket) => bucket.label).join(", "),
+    visualSummary: buckets.map((bucket) => applyHebrewSentenceNikkud(bucket.label)).join(", "),
     buckets,
     reviewText: "Sort the Hebrew words by category.",
     dragPlaceholderText: "גררו לכאן",
@@ -5642,6 +5746,56 @@ function buildDragSelectionText(question, tokens) {
   return tokens.join(" | ");
 }
 
+function buildDragNumericCandidates(value) {
+  const normalizedValue = normalizeFlexibleNumericInput(value);
+  if (!normalizedValue) {
+    return [];
+  }
+
+  const variants = new Set([normalizedValue, normalizedValue.replace(/([+-])\s+/g, "$1")]);
+  const candidates = new Set();
+
+  variants.forEach((variant) => {
+    const directValue = Number(variant);
+    if (Number.isFinite(directValue)) {
+      candidates.add(directValue);
+    }
+
+    buildNormalizedFlexibleNumberStrings(variant).forEach((candidateText) => {
+      const parsedValue = Number(candidateText);
+      if (Number.isFinite(parsedValue)) {
+        candidates.add(parsedValue);
+      }
+    });
+  });
+
+  return Array.from(candidates);
+}
+
+function dragTokensMatch(question, selectedToken, answerToken) {
+  const normalizedSelected = normalizeFlexibleNumericInput(selectedToken);
+  const normalizedAnswer = normalizeFlexibleNumericInput(answerToken);
+
+  if (normalizedSelected === normalizedAnswer) {
+    return true;
+  }
+
+  if (question?.dragTargetArrangement !== "line") {
+    return false;
+  }
+
+  const selectedCandidates = buildDragNumericCandidates(normalizedSelected);
+  const answerCandidates = buildDragNumericCandidates(normalizedAnswer);
+
+  return (
+    selectedCandidates.length > 0 &&
+    answerCandidates.length > 0 &&
+    selectedCandidates.some((selectedValue) =>
+      answerCandidates.some((answerValue) => numericAnswersMatch(selectedValue, answerValue))
+    )
+  );
+}
+
 function isDragSelectionCorrect(question, tokens) {
   if (question.dragLayout === "buckets") {
     let offset = 0;
@@ -5659,7 +5813,10 @@ function isDragSelectionCorrect(question, tokens) {
     });
   }
 
-  return tokens.every((token, index) => token === question.dragAnswerTokens[index]);
+  return (
+    tokens.length === question.dragAnswerTokens.length &&
+    tokens.every((token, index) => dragTokensMatch(question, token, question.dragAnswerTokens[index]))
+  );
 }
 
 function getVisibleQuestionExtraText(question) {
@@ -6519,10 +6676,10 @@ function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
     return question?.successMessage ? escapeHtml(String(question.successMessage)) : "Correct!";
   }
 
-  return formatQuestionReview(question, selectedValue);
+  return formatQuestionReview(question, selectedValue, { isCorrect });
 }
 
-function formatQuestionReview(question, selectedValue) {
+function formatQuestionReview(question, selectedValue, { isCorrect = false } = {}) {
   const lines = [];
   const addLine = (content, className = "") => {
     const classAttribute = className ? ` class="${className}"` : "";
@@ -6566,18 +6723,25 @@ function formatQuestionReview(question, selectedValue) {
       );
     });
   } else if (selectedValue !== "") {
+    const selectedAnswerText = String(selectedValue);
+    const canonicalAnswerText = String(question.answerLabel);
+    const matchesCanonicalAnswer = selectedAnswerText === canonicalAnswerText;
+    const selectedAnswerClass = isCorrect || matchesCanonicalAnswer ? "correct" : "selected";
+    const shouldShowCanonicalAnswer = !isCorrect && !matchesCanonicalAnswer;
     lines.push('<div class="feedback-review-spacer"></div>');
     addLine(
       `<span class="feedback-review-label">Your answer:</span> ` +
-        `<span class="feedback-review-answer selected">${escapeHtml(String(selectedValue))}</span>`,
+        `<span class="feedback-review-answer ${selectedAnswerClass}">${escapeHtml(selectedAnswerText)}</span>`,
       "feedback-review-line"
     );
-    lines.push('<div class="feedback-review-spacer"></div>');
-    addLine(
-      `<span class="feedback-review-label">Correct answer:</span> ` +
-        `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
-      "feedback-review-line"
-    );
+    if (shouldShowCanonicalAnswer) {
+      lines.push('<div class="feedback-review-spacer"></div>');
+      addLine(
+        `<span class="feedback-review-label">Correct answer:</span> ` +
+          `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
+        "feedback-review-line"
+      );
+    }
   } else {
     lines.push('<div class="feedback-review-spacer"></div>');
     addLine(
@@ -6868,7 +7032,7 @@ function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, 
     ...(Array.isArray(selectedMeta?.tokens) ? { selectedTokens: [...selectedMeta.tokens] } : {}),
     correctAnswer: question.answerLabel,
     isCorrect,
-    reviewHtml: formatQuestionReview(question, selectedValue),
+    reviewHtml: formatQuestionReview(question, selectedValue, { isCorrect }),
   };
 }
 
