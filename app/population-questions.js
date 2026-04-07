@@ -246,48 +246,53 @@ POPULATION_QUESTIONS.push(
   ]
 );
 
+// Population estimates aligned to the 2026-03-24 Worldometer snapshot
+// (based on U.N. World Population Prospects 2024 Revision data).
 const POPULATION_GENERATION_DATA = [
-  { country: "India", population: 1_430_000_000, label: "About 1.43 billion" },
-  { country: "China", population: 1_410_000_000, label: "About 1.41 billion" },
-  { country: "Israel", population: 10_000_000, label: "About 10 million" },
-  { country: "Indonesia", population: 280_000_000, label: "About 280 million" },
-  { country: "Pakistan", population: 240_000_000, label: "About 240 million" },
-  { country: "Nigeria", population: 230_000_000, label: "About 230 million" },
-  { country: "Brazil", population: 215_000_000, label: "About 215 million" },
-  { country: "Bangladesh", population: 173_000_000, label: "About 173 million" },
-  { country: "Russia", population: 144_000_000, label: "About 144 million" },
-  { country: "Mexico", population: 129_000_000, label: "About 129 million" },
-  { country: "Japan", population: 123_000_000, label: "About 123 million" },
-  { country: "Ethiopia", population: 128_000_000, label: "About 128 million" },
-  { country: "Egypt", population: 112_000_000, label: "About 112 million" },
-  { country: "Philippines", population: 117_000_000, label: "About 117 million" },
-  { country: "DR Congo", population: 102_000_000, label: "About 102 million" },
-  { country: "Vietnam", population: 100_000_000, label: "About 100 million" },
-  { country: "Iran", population: 89_000_000, label: "About 89 million" },
-  { country: "Turkey", population: 85_000_000, label: "About 85 million" },
-  { country: "Germany", population: 83_000_000, label: "About 83 million" },
-  { country: "Tanzania", population: 67_000_000, label: "About 67 million" },
-  { country: "Myanmar", population: 54_000_000, label: "About 54 million" },
-  { country: "South Korea", population: 51_000_000, label: "About 51 million" },
-  { country: "Colombia", population: 52_000_000, label: "About 52 million" },
-  { country: "South Africa", population: 60_000_000, label: "About 60 million" },
-  { country: "Canada", population: 40_000_000, label: "About 40 million" },
-  { country: "Australia", population: 27_000_000, label: "About 27 million" },
-  { country: "Kenya", population: 55_000_000, label: "About 55 million" },
-  { country: "Iraq", population: 45_000_000, label: "About 45 million" },
-  { country: "Peru", population: 34_000_000, label: "About 34 million" },
-  { country: "Malaysia", population: 34_000_000, label: "About 34 million" },
-  { country: "Venezuela", population: 29_000_000, label: "About 29 million" },
-  { country: "Afghanistan", population: 42_000_000, label: "About 42 million" },
-  { country: "Yemen", population: 35_000_000, label: "About 35 million" },
-  { country: "Uganda", population: 49_000_000, label: "About 49 million" },
-  { country: "Sudan", population: 48_000_000, label: "About 48 million" },
-  { country: "Algeria", population: 46_000_000, label: "About 46 million" },
-  { country: "Poland", population: 38_000_000, label: "About 38 million" },
-  { country: "Morocco", population: 37_000_000, label: "About 37 million" },
-  { country: "Saudi Arabia", population: 36_000_000, label: "About 36 million" },
-  { country: "Uzbekistan", population: 36_000_000, label: "About 36 million" },
+  { country: "India", population: 1_476_625_576 },
+  { country: "China", population: 1_412_914_089 },
+  { country: "Israel", population: 9_647_689 },
+  { country: "Indonesia", population: 287_886_782 },
+  { country: "Pakistan", population: 259_299_791 },
+  { country: "Nigeria", population: 242_431_832 },
+  { country: "Brazil", population: 213_562_666 },
+  { country: "Bangladesh", population: 177_818_044 },
+  { country: "Russia", population: 143_394_458 },
+  { country: "Mexico", population: 132_997_658 },
+  { country: "Japan", population: 122_427_731 },
+  { country: "Ethiopia", population: 138_902_185 },
+  { country: "Egypt", population: 120_101_175 },
+  { country: "Philippines", population: 117_724_471 },
+  { country: "DR Congo", population: 116_452_162 },
+  { country: "Vietnam", population: 102_177_431 },
+  { country: "Iran", population: 93_168_497 },
+  { country: "Turkey", population: 87_926_082 },
+  { country: "Germany", population: 83_644_258 },
+  { country: "Tanzania", population: 72_563_780 },
+  { country: "Myanmar", population: 55_184_819 },
+  { country: "South Korea", population: 51_600_388 },
+  { country: "Colombia", population: 53_936_226 },
+  { country: "South Africa", population: 65_453_084 },
+  { country: "Canada", population: 40_467_728 },
+  { country: "Australia", population: 27_227_096 },
+  { country: "Kenya", population: 58_636_412 },
+  { country: "Iraq", population: 48_007_437 },
+  { country: "Peru", population: 34_922_148 },
+  { country: "Malaysia", population: 36_385_115 },
+  { country: "Venezuela", population: 28_633_711 },
+  { country: "Afghanistan", population: 45_047_069 },
+  { country: "Yemen", population: 42_961_653 },
+  { country: "Uganda", population: 52_761_469 },
+  { country: "Sudan", population: 53_282_719 },
+  { country: "Algeria", population: 48_028_334 },
+  { country: "Poland", population: 37_843_188 },
+  { country: "Morocco", population: 38_762_441 },
+  { country: "Saudi Arabia", population: 35_165_787 },
+  { country: "Uzbekistan", population: 37_724_223 },
 ];
+const POPULATION_QUESTION_COUNTRY_ALIASES = {
+  "democratic republic of the congo": "DR Congo",
+};
 const POPULATION_MAX_DIFFICULTY = 3;
 const POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO = 0.25;
 const POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS = [
@@ -368,18 +373,34 @@ function buildPopulationRankingQuestion(difficulty) {
 
 function buildPopulationClosestQuestion(difficulty) {
   const reference = pickPopulationEntryByDifficulty(difficulty);
-  const target = generateRoundedTarget(reference.population, difficulty);
-  const candidates = dedupePopulationEntries([
-    reference,
-    ...pickDistinctPopulationEntries(4, difficulty),
-  ]).sort((left, right) => Math.abs(left.population - target) - Math.abs(right.population - target));
+  const target = roundPopulationForDifficulty(reference.population, difficulty);
+  const answerDistance = Math.abs(reference.population - target);
+  const distractors = buildPopulationClosestDistractors(reference, target, answerDistance, difficulty);
 
   return {
     question: `Which country is closest to about ${formatPopulationTarget(target)} people?`,
-    options: shuffleLocal(candidates.slice(0, 4).map((entry) => entry.country)),
-    answer: candidates[0].country,
+    options: shuffleLocal([reference.country, ...distractors.map((entry) => entry.country)]),
+    answer: reference.country,
     difficulty,
   };
+}
+
+function buildPopulationClosestDistractors(reference, target, answerDistance, difficulty) {
+  const preferredPool = POPULATION_GENERATION_DATA.filter(
+    (entry) =>
+      entry.country !== reference.country &&
+      difficultyMatchesPopulation(entry, difficulty) &&
+      Math.abs(entry.population - target) > answerDistance
+  );
+  const fallbackPool = POPULATION_GENERATION_DATA.filter(
+    (entry) => entry.country !== reference.country && Math.abs(entry.population - target) > answerDistance
+  );
+
+  return dedupePopulationEntries([...preferredPool, ...fallbackPool])
+    .sort(
+      (left, right) => Math.abs(left.population - target) - Math.abs(right.population - target)
+    )
+    .slice(0, 3);
 }
 
 function buildPopulationEstimateOptions(entry, difficulty) {
@@ -555,12 +576,6 @@ function difficultyMatchesPopulation(entry, difficulty) {
   return entry.population <= 120_000_000;
 }
 
-function generateRoundedTarget(population, difficulty) {
-  const base = roundPopulationForDifficulty(population, difficulty);
-  const offset = randomChoiceLocal(getPopulationOffsets(difficulty));
-  return Math.max(1, base + offset);
-}
-
 function roundPopulationForDifficulty(population, difficulty) {
   if (difficulty <= 1) {
     return Math.round(population / 10_000_000) * 10_000_000;
@@ -575,22 +590,6 @@ function roundPopulationForDifficulty(population, difficulty) {
     return Math.round(population / 1_000_000) * 1_000_000;
   }
   return Math.round(population / 500_000) * 500_000;
-}
-
-function getPopulationOffsets(difficulty) {
-  if (difficulty <= 1) {
-    return [-20_000_000, -10_000_000, 10_000_000, 20_000_000];
-  }
-  if (difficulty === 2) {
-    return [-15_000_000, -5_000_000, 5_000_000, 15_000_000];
-  }
-  if (difficulty === 3) {
-    return [-8_000_000, -3_000_000, 3_000_000, 8_000_000];
-  }
-  if (difficulty === 4) {
-    return [-5_000_000, -2_000_000, 2_000_000, 5_000_000];
-  }
-  return [-3_000_000, -1_000_000, 1_000_000, 3_000_000];
 }
 
 function formatPopulationTarget(value) {
@@ -609,6 +608,41 @@ function formatPopulationValue(value) {
   return `About ${Math.round(value / 1_000_000)} million`;
 }
 
+function normalizePopulationGenerationData() {
+  POPULATION_GENERATION_DATA.forEach((entry) => {
+    entry.label = formatPopulationValue(entry.population);
+  });
+}
+
+function normalizePopulationCountryName(value) {
+  return String(value).toLowerCase().replace(/\./g, "").replace(/\s+/g, " ").trim();
+}
+
+function syncPopulationEstimateQuestionAnswers() {
+  const generationDataByCountry = new Map(
+    POPULATION_GENERATION_DATA.map((entry) => [normalizePopulationCountryName(entry.country), entry])
+  );
+
+  POPULATION_QUESTIONS.forEach((entry) => {
+    const match = String(entry.question).match(/^About how many people live in (.+)\?$/);
+    if (!match) {
+      return;
+    }
+
+    const rawCountry = normalizePopulationCountryName(match[1]).replace(/^the\s+/, "");
+    const countryKey = normalizePopulationCountryName(
+      POPULATION_QUESTION_COUNTRY_ALIASES[rawCountry] || rawCountry
+    );
+    const currentEntry = generationDataByCountry.get(countryKey);
+
+    if (currentEntry) {
+      entry.answer = currentEntry.label;
+    }
+  });
+}
+
+normalizePopulationGenerationData();
+syncPopulationEstimateQuestionAnswers();
 normalizePopulationEstimateQuestionSet();
 
 function dedupePopulationEntries(entries) {
