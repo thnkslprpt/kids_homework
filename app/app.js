@@ -10,6 +10,9 @@ const RESERVED_MAP_CATEGORY = "geography-map";
 const LANGUAGE_DRAG_INTERVAL = 4;
 const HEBREW_FINAL_LETTER_INTERVAL = 14;
 const HEBREW_IMAGE_DRAG_SHARE = 0.3;
+const HEBREW_MATCHING_PAIR_COUNT = 4;
+const HEBREW_OPPOSITES_PAIR_COUNT = 2;
+const HEBREW_MATCH_SNAP_DISTANCE = 140;
 const GENERATED_CATEGORY_DRAG_SHARES = {
   "reading-comprehension": 0.32,
   fractions: 0.28,
@@ -21,6 +24,34 @@ const GENERATED_CATEGORY_DRAG_SHARES = {
   "visual-measurement": 0.3,
   "maps-and-directions": 0.3,
 };
+const HEBREW_OPPOSITE_PAIR_DEFINITIONS = [
+  { leftEnglish: "A lot", rightEnglish: "A little", leftDisplay: "הַרְבֵּה", rightDisplay: "קְצָת" },
+  { leftEnglish: "Good", rightEnglish: "Bad", leftDisplay: "טוֹב", rightDisplay: "רַע" },
+  { leftEnglish: "Black", rightEnglish: "White", leftDisplay: "שָׁחוֹר", rightDisplay: "לָבָן" },
+  { leftEnglish: "Hot", rightEnglish: "Cold", leftDisplay: "חַם", rightDisplay: "קַר" },
+  { leftEnglish: "Up", rightEnglish: "Down", leftDisplay: "לְמַעְלָה", rightDisplay: "לְמַטָּה" },
+  { leftEnglish: "Big", rightEnglish: "Small", leftDisplay: "גָּדוֹל", rightDisplay: "קָטָן" },
+  { leftEnglish: "Cheap", rightEnglish: "Expensive", leftDisplay: "זוֹל", rightDisplay: "יָקָר" },
+  { leftEnglish: "Open", rightEnglish: "Closed", leftDisplay: "פָּתוּחַ", rightDisplay: "סָגוּר" },
+  { leftEnglish: "Fast", rightEnglish: "Slow", leftDisplay: "מָהִיר", rightDisplay: "אִטִּי" },
+  { leftEnglish: "Healthy", rightEnglish: "Sick", leftDisplay: "בָּרִיא", rightDisplay: "חוֹלֶה" },
+  { leftEnglish: "High", rightEnglish: "Low", leftDisplay: "גָּבוֹהַ", rightDisplay: "נָמוּךְ" },
+  { leftEnglish: "Inside", rightEnglish: "Outside", leftDisplay: "בִּפְנִים", rightDisplay: "בַּחוּץ" },
+  { leftEnglish: "New", rightEnglish: "Old (thing)", leftDisplay: "חָדָשׁ", rightDisplay: "יָשָׁן" },
+  { leftEnglish: "Rich", rightEnglish: "Poor", leftDisplay: "עָשִׁיר", rightDisplay: "עָנִי" },
+  {
+    leftEnglish: "Right (direction)",
+    rightEnglish: "Left (direction)",
+    leftDisplay: "יָמִינָה",
+    rightDisplay: "שְׂמֹאלָה",
+  },
+  { leftEnglish: "Strong", rightEnglish: "Weak", leftDisplay: "חָזָק", rightDisplay: "חַלָשׁ" },
+  { leftEnglish: "Beautiful", rightEnglish: "Ugly", leftDisplay: "יָפֶה", rightDisplay: "מְכֹעָר" },
+  { leftEnglish: "Here", rightEnglish: "There", leftDisplay: "פֹּה", rightDisplay: "שָׁם" },
+  { leftEnglish: "Early", rightEnglish: "Late", leftDisplay: "מוּקְדָּם", rightDisplay: "מְאֻחָר" },
+  { leftEnglish: "Easy", rightEnglish: "Difficult", leftDisplay: "קַל", rightDisplay: "קָשֶׁה" },
+  { leftEnglish: "First", rightEnglish: "Last, final", leftDisplay: "רִאשׁוֹן", rightDisplay: "אַחֲרוֹן" },
+];
 const REVIEW_FOCUS_SHARE = 0.2;
 const REVIEW_RECENCY_DECAY = 0.82;
 const SNAPSHOT_DATE_PATTERN = /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/;
@@ -1767,9 +1798,18 @@ const elements = {
   restartButton: document.getElementById("restart-button"),
 };
 
+function cleanupInteractiveDragState() {
+  if (typeof state.dragState?.cleanup === "function") {
+    state.dragState.cleanup();
+  }
+
+  state.dragState = null;
+}
+
 const rawHebrewWordEntries = typeof HEBREW_WORDS !== "undefined" ? HEBREW_WORDS : [];
 const hebrewQuestionBank = buildHebrewQuestionBank(rawHebrewWordEntries);
 const hebrewReverseQuestionBank = buildHebrewReverseQuestionBank(rawHebrewWordEntries);
+const hebrewOppositeQuestionBank = buildHebrewOppositeQuestionBank(hebrewReverseQuestionBank);
 const hebrewHomographQuestionBank = buildHebrewHomographQuestionBank(rawHebrewWordEntries);
 const hebrewImageQuestionBank = buildHebrewImageQuestionBank(
   typeof HEBREW_IMAGE_WORD_BANK !== "undefined" ? HEBREW_IMAGE_WORD_BANK : [],
@@ -2267,6 +2307,42 @@ function buildHebrewReverseQuestionBank(entries) {
     .filter((entry) => entry.hebrewDisplay);
 }
 
+function buildHebrewOppositeQuestionBank(entries) {
+  const entriesByEnglish = new Map(
+    (entries || []).map((entry) => [String(entry?.english || "").trim().toLowerCase(), entry])
+  );
+
+  return HEBREW_OPPOSITE_PAIR_DEFINITIONS.flatMap((definition) => {
+    const leftEntry = entriesByEnglish.get(definition.leftEnglish.toLowerCase());
+    const rightEntry = entriesByEnglish.get(definition.rightEnglish.toLowerCase());
+    if (!leftEntry || !rightEntry) {
+      return [];
+    }
+
+    const leftDisplay = String(definition.leftDisplay || leftEntry.hebrewDisplay || "").trim();
+    const rightDisplay = String(definition.rightDisplay || rightEntry.hebrewDisplay || "").trim();
+    if (
+      !leftDisplay ||
+      !rightDisplay ||
+      !hasHebrewNikkud(leftDisplay) ||
+      !hasHebrewNikkud(rightDisplay) ||
+      leftDisplay === rightDisplay
+    ) {
+      return [];
+    }
+
+    return [
+      {
+        leftEnglish: definition.leftEnglish,
+        rightEnglish: definition.rightEnglish,
+        leftDisplay,
+        rightDisplay,
+        difficulty: Math.max(leftEntry.difficulty, rightEntry.difficulty),
+      },
+    ];
+  });
+}
+
 function buildHebrewHomographQuestionBank(entries) {
   const groupedEntries = new Map();
 
@@ -2366,6 +2442,10 @@ function buildHebrewImageWordKey(hebrew, english) {
 
 function stripHebrewDiacritics(value) {
   return String(value || "").replace(/[\u0591-\u05C7]/g, "");
+}
+
+function hasHebrewNikkud(value) {
+  return /[\u0591-\u05C7]/.test(String(value || ""));
 }
 
 function buildHebrewDisplay(hebrew, transliteration) {
@@ -3184,6 +3264,7 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   resources.sentenceDragHebrew = createPool(sentenceDragHebrewQuestionBank);
   resources.hebrewImage = createPool(hebrewImageQuestionBank);
   resources.hebrewReverse = createPool(hebrewReverseQuestionBank);
+  resources.hebrewOpposites = createPool(hebrewOppositeQuestionBank);
   resources.hebrewHomograph = createPool(hebrewHomographQuestionBank);
   const hebrewQuestionCount = categorySequence.filter((category) => category === "hebrew").length;
   const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
@@ -4914,6 +4995,9 @@ function createHebrewSessionQuestion(resources, difficulty, runtime) {
 
   const factories = [
     () => createHebrewReverseChoiceQuestion(resources, difficulty),
+    () => createHebrewMatchingQuestion(resources, difficulty),
+    () => createHebrewOppositesQuestion(resources, difficulty),
+    () => createHebrewOppositeSinglePromptQuestion(resources, difficulty),
     () => createHebrewAgreementQuestion(difficulty),
     () => createHebrewCategorySortQuestion(difficulty),
     () => createHebrewNikkudContrastQuestion(resources, difficulty),
@@ -5186,6 +5270,203 @@ function buildHebrewReverseOptions(correctEntry, pool, difficulty) {
   });
 
   return options.length === 4 ? options : null;
+}
+
+function createHebrewMatchingQuestion(resources, difficulty) {
+  const entries = buildHebrewMatchingEntries(resources?.hebrewReverse, difficulty, HEBREW_MATCHING_PAIR_COUNT);
+  if (entries.length !== HEBREW_MATCHING_PAIR_COUNT) {
+    return null;
+  }
+
+  const rightEntries = shuffleArray([...entries]);
+  const answerTokens = entries.map((entry) => entry.hebrewDisplay);
+  const answerLabel = buildHebrewMatchingAnswerText(entries, answerTokens);
+
+  return {
+    type: "hebrew-drag",
+    difficulty: Math.max(...entries.map((entry) => entry.difficulty)),
+    mode: "drag",
+    questionText: "Draw a line from each English word to the matching Hebrew word.",
+    displayText: "",
+    extraText: "Start at the circle by the English word and drag toward the matching Hebrew word.",
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: entries.map((entry) => entry.english).join(", "),
+    dragLayout: "matching",
+    dragChoices: [],
+    dragAnswerTokens: answerTokens,
+    matchLeftItems: entries.map((entry, index) => ({
+      id: `hebrew-match-left-${difficulty}-${index}`,
+      text: entry.english,
+    })),
+    matchRightItems: rightEntries.map((entry, index) => ({
+      id: `hebrew-match-right-${difficulty}-${index}-${stripHebrewDiacritics(entry.hebrew)}`,
+      text: entry.hebrewDisplay,
+    })),
+    matchSnapDistance: HEBREW_MATCH_SNAP_DISTANCE,
+    reviewText: answerLabel,
+    answerValue: answerTokens.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function createHebrewOppositesQuestion(resources, difficulty) {
+  const pairs = buildHebrewOppositeEntries(resources?.hebrewOpposites, difficulty, HEBREW_OPPOSITES_PAIR_COUNT);
+  if (pairs.length !== HEBREW_OPPOSITES_PAIR_COUNT) {
+    return null;
+  }
+
+  const entries = pairs.map((pair) => {
+    const useForwardOrder = Math.random() < 0.5;
+    return {
+      text: useForwardOrder ? pair.leftDisplay : pair.rightDisplay,
+      oppositeText: useForwardOrder ? pair.rightDisplay : pair.leftDisplay,
+      difficulty: pair.difficulty,
+    };
+  });
+  const rightEntries = shuffleArray([...entries]);
+  const answerTokens = entries.map((entry) => entry.oppositeText);
+  const answerLabel = buildHebrewMatchingAnswerText(entries, answerTokens);
+
+  return {
+    type: "hebrew-drag",
+    difficulty: Math.max(...entries.map((entry) => entry.difficulty)),
+    mode: "drag",
+    questionText: "Draw a line from each Hebrew word to its opposite.",
+    displayText: "",
+    extraText: "Match each word to the Hebrew word with the opposite meaning.",
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: pairs.map((pair) => `${pair.leftEnglish}/${pair.rightEnglish}`).join(", "),
+    dragLayout: "matching",
+    dragChoices: [],
+    dragAnswerTokens: answerTokens,
+    matchLeftItems: entries.map((entry, index) => ({
+      id: `hebrew-opposites-left-${difficulty}-${index}-${stripHebrewDiacritics(entry.text)}`,
+      text: entry.text,
+    })),
+    matchRightItems: rightEntries.map((entry, index) => ({
+      id: `hebrew-opposites-right-${difficulty}-${index}-${stripHebrewDiacritics(entry.oppositeText)}`,
+      text: entry.oppositeText,
+    })),
+    matchSnapDistance: HEBREW_MATCH_SNAP_DISTANCE,
+    reviewText: answerLabel,
+    answerValue: answerTokens.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function createHebrewOppositeSinglePromptQuestion(resources, difficulty) {
+  const pair = drawPoolEntryAtOrBelowDifficulty(resources?.hebrewOpposites, difficulty, "hebrew-opposite-single");
+  if (!pair) {
+    return null;
+  }
+
+  const leftItems = [
+    { text: pair.leftEnglish, oppositeText: pair.rightDisplay },
+    { text: pair.rightEnglish, oppositeText: pair.leftDisplay },
+  ];
+  const rightItems = shuffleArray([pair.leftDisplay, pair.rightDisplay]);
+  const answerTokens = leftItems.map((item) => item.oppositeText);
+  const answerLabel = buildHebrewMatchingAnswerText(leftItems, answerTokens);
+
+  return {
+    type: "hebrew-drag",
+    difficulty: pair.difficulty,
+    mode: "drag",
+    questionText: "Draw a line from each English word to the Hebrew word with the opposite meaning.",
+    displayText: "",
+    extraText: "Match each English word to the Hebrew opposite.",
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: `${pair.leftEnglish}/${pair.rightEnglish}`,
+    dragLayout: "matching",
+    dragChoices: [],
+    dragAnswerTokens: answerTokens,
+    matchLeftItems: leftItems.map((item, index) => ({
+      id: `hebrew-opposite-single-left-${difficulty}-${index}-${item.text.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`,
+      text: item.text,
+    })),
+    matchRightItems: rightItems.map((text, index) => ({
+      id: `hebrew-opposite-single-right-${difficulty}-${index}-${stripHebrewDiacritics(text)}`,
+      text,
+    })),
+    matchSnapDistance: HEBREW_MATCH_SNAP_DISTANCE,
+    reviewText: answerLabel,
+    answerValue: answerTokens.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function buildHebrewMatchingEntries(pool, difficulty, count) {
+  const candidateLists = [
+    getPoolEntriesAtOrBelowDifficulty(pool, difficulty),
+    (pool?.entries || []).filter((entry) => entry.difficulty <= difficulty),
+    pool?.entries || [],
+  ];
+
+  for (const candidateList of candidateLists) {
+    const selected = pickHebrewMatchingEntries(candidateList, count);
+    if (selected.length === count) {
+      return selected;
+    }
+  }
+
+  return [];
+}
+
+function buildHebrewOppositeEntries(pool, difficulty, count) {
+  const candidateLists = [
+    getPoolEntriesAtOrBelowDifficulty(pool, difficulty),
+    (pool?.entries || []).filter((entry) => entry.difficulty <= difficulty),
+    pool?.entries || [],
+  ];
+
+  for (const candidateList of candidateLists) {
+    if (candidateList.length >= count) {
+      return shuffleArray([...candidateList]).slice(0, count);
+    }
+  }
+
+  return [];
+}
+
+function pickHebrewMatchingEntries(entries, count) {
+  const selected = [];
+  const seenMeanings = new Set();
+  const seenDisplays = new Set();
+
+  shuffleArray([...(entries || [])]).forEach((entry) => {
+    if (selected.length >= count) {
+      return;
+    }
+
+    const english = String(entry?.english || "").trim();
+    const display = String(entry?.hebrewDisplay || "").trim();
+    if (!english || !display || !hasHebrewNikkud(display)) {
+      return;
+    }
+
+    const meaningKey = getChoiceMeaningKey(english);
+    if (seenMeanings.has(meaningKey) || seenDisplays.has(display)) {
+      return;
+    }
+
+    seenMeanings.add(meaningKey);
+    seenDisplays.add(display);
+    selected.push(entry);
+  });
+
+  return selected;
+}
+
+function buildHebrewMatchingAnswerText(entries, tokens) {
+  return (entries || [])
+    .map((entry, index) => `${entry.text || entry.english}: ${String(tokens?.[index] || "").trim()}`)
+    .join(" | ");
 }
 
 function createHebrewNikkudContrastQuestion(resources, difficulty) {
@@ -5843,6 +6124,10 @@ function buildDragBucketSelectionText(question, tokens) {
 }
 
 function buildDragSelectionText(question, tokens) {
+  if (question.dragLayout === "matching") {
+    return buildHebrewMatchingAnswerText(question.matchLeftItems || [], tokens);
+  }
+
   if (question.dragLayout === "buckets") {
     return buildDragBucketSelectionText(question, tokens);
   }
@@ -5950,6 +6235,8 @@ function containsHebrewText(value) {
 }
 
 function renderCurrentQuestion() {
+  cleanupInteractiveDragState();
+
   if (isViewingResultsScreen()) {
     renderResultsScreen();
     return;
@@ -6127,6 +6414,11 @@ function renderPracticeButtons(question, { readOnly = false, selectedValue = "" 
 
 function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } = {}) {
   elements.dragArea.innerHTML = "";
+  if (question.dragLayout === "matching") {
+    renderMatchingDragQuestion(question, { readOnly, selectedTokens });
+    return;
+  }
+
   const dragLayout = question.dragLayout || "sentence";
   const choiceLookup = new Map(question.dragChoices.map((token) => [token.id, token]));
   const isComparisonLayout = dragLayout === "comparison";
@@ -6578,6 +6870,350 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
   sync();
 }
 
+function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens = [] } = {}) {
+  const leftItems = Array.isArray(question.matchLeftItems) ? question.matchLeftItems : [];
+  const rightItems = Array.isArray(question.matchRightItems) ? question.matchRightItems : [];
+  if (!leftItems.length || !rightItems.length || rightItems.length < leftItems.length) {
+    return;
+  }
+
+  const rightIndexByText = new Map(rightItems.map((item, index) => [item.text, index]));
+  const connections = leftItems.map((_, index) => {
+    const token = String(selectedTokens?.[index] || "").trim();
+    return token && rightIndexByText.has(token) ? rightIndexByText.get(token) : null;
+  });
+
+  const board = document.createElement("div");
+  board.className = "drag-board matching";
+
+  const stage = document.createElement("div");
+  stage.className = "matching-stage";
+  board.appendChild(stage);
+
+  const lines = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  lines.setAttribute("class", "matching-lines");
+  lines.setAttribute("aria-hidden", "true");
+  stage.appendChild(lines);
+
+  const leftColumn = document.createElement("div");
+  leftColumn.className = "matching-column left";
+  const rightColumn = document.createElement("div");
+  rightColumn.className = "matching-column right";
+  stage.appendChild(leftColumn);
+  stage.appendChild(rightColumn);
+
+  const leftRows = [];
+  const rightRows = [];
+  const leftAnchors = [];
+  const rightAnchors = [];
+  let activeDrag = null;
+  let resizeObserver = null;
+
+  function getAnchorCenter(anchor) {
+    const stageRect = stage.getBoundingClientRect();
+    const anchorRect = anchor.getBoundingClientRect();
+    return {
+      x: anchorRect.left - stageRect.left + anchorRect.width / 2,
+      y: anchorRect.top - stageRect.top + anchorRect.height / 2,
+    };
+  }
+
+  function appendLine(start, end, className) {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", String(start.x));
+    line.setAttribute("y1", String(start.y));
+    line.setAttribute("x2", String(end.x));
+    line.setAttribute("y2", String(end.y));
+    line.setAttribute("class", className);
+    lines.appendChild(line);
+  }
+
+  function updateAnchorState() {
+    leftAnchors.forEach((anchor, index) => {
+      const isConnected = connections[index] !== null;
+      const isActive = activeDrag?.leftIndex === index;
+      anchor.classList.toggle("connected", isConnected);
+      anchor.classList.toggle("active", isActive);
+      leftRows[index]?.classList.toggle("connected", isConnected);
+      leftRows[index]?.classList.toggle("active", isActive);
+    });
+
+    rightAnchors.forEach((anchor, index) => {
+      const isConnected = connections.includes(index);
+      const isSnapTarget = activeDrag?.snappedRightIndex === index;
+      anchor.classList.toggle("connected", isConnected);
+      anchor.classList.toggle("occupied", isConnected);
+      anchor.classList.toggle("snap-target", isSnapTarget);
+      rightRows[index]?.classList.toggle("connected", isConnected);
+      rightRows[index]?.classList.toggle("active", isSnapTarget);
+    });
+  }
+
+  function renderLines() {
+    const width = Math.max(stage.clientWidth, 1);
+    const height = Math.max(stage.clientHeight, 1);
+    lines.setAttribute("viewBox", `0 0 ${width} ${height}`);
+    lines.innerHTML = "";
+
+    connections.forEach((rightIndex, leftIndex) => {
+      if (rightIndex === null || activeDrag?.leftIndex === leftIndex) {
+        return;
+      }
+
+      appendLine(getAnchorCenter(leftAnchors[leftIndex]), getAnchorCenter(rightAnchors[rightIndex]), "matching-line");
+    });
+
+    if (activeDrag) {
+      const start = getAnchorCenter(leftAnchors[activeDrag.leftIndex]);
+      const stageRect = stage.getBoundingClientRect();
+      const end =
+        activeDrag.snappedRightIndex !== null
+          ? getAnchorCenter(rightAnchors[activeDrag.snappedRightIndex])
+          : {
+              x: activeDrag.clientX - stageRect.left,
+              y: activeDrag.clientY - stageRect.top,
+            };
+      appendLine(
+        start,
+        end,
+        activeDrag.snappedRightIndex !== null ? "matching-line preview snapped" : "matching-line preview"
+      );
+    }
+
+    updateAnchorState();
+  }
+
+  function sync() {
+    if (typeof requestAnimationFrame === "function") {
+      requestAnimationFrame(renderLines);
+      return;
+    }
+
+    renderLines();
+  }
+
+  function findSnapTarget(clientX, clientY) {
+    const stageWidth = Math.max(stage.clientWidth, 1);
+    const snapDistance = Math.max(
+      Number(question.matchSnapDistance) || HEBREW_MATCH_SNAP_DISTANCE,
+      stageWidth * 0.16
+    );
+    const stageRect = stage.getBoundingClientRect();
+    let bestIndex = null;
+    let bestDistance = snapDistance;
+
+    rightAnchors.forEach((anchor, index) => {
+      const center = getAnchorCenter(anchor);
+      const distance = Math.hypot(center.x - (clientX - stageRect.left), center.y - (clientY - stageRect.top));
+      if (distance <= bestDistance) {
+        bestDistance = distance;
+        bestIndex = index;
+      }
+    });
+
+    return bestIndex;
+  }
+
+  function connect(leftIndex, rightIndex) {
+    if (rightIndex === null) {
+      return;
+    }
+
+    const occupiedLeftIndex = connections.findIndex(
+      (currentRightIndex, index) => index !== leftIndex && currentRightIndex === rightIndex
+    );
+    if (occupiedLeftIndex !== -1) {
+      connections[occupiedLeftIndex] = null;
+    }
+
+    connections[leftIndex] = rightIndex;
+  }
+
+  function stopDragging() {
+    window.removeEventListener("pointermove", handlePointerMove);
+    window.removeEventListener("pointerup", handlePointerUp);
+    window.removeEventListener("pointercancel", handlePointerCancel);
+  }
+
+  function finishDrag() {
+    if (!activeDrag) {
+      return;
+    }
+
+    if (activeDrag.snappedRightIndex !== null) {
+      connect(activeDrag.leftIndex, activeDrag.snappedRightIndex);
+    } else if (activeDrag.originalRightIndex !== null) {
+      connections[activeDrag.leftIndex] = activeDrag.originalRightIndex;
+    }
+
+    activeDrag = null;
+    stopDragging();
+    sync();
+  }
+
+  function cancelDrag() {
+    if (!activeDrag) {
+      return;
+    }
+
+    if (activeDrag.originalRightIndex !== null) {
+      connections[activeDrag.leftIndex] = activeDrag.originalRightIndex;
+    }
+
+    activeDrag = null;
+    stopDragging();
+    sync();
+  }
+
+  function handlePointerMove(event) {
+    if (!activeDrag) {
+      return;
+    }
+
+    activeDrag.clientX = event.clientX;
+    activeDrag.clientY = event.clientY;
+    activeDrag.snappedRightIndex = findSnapTarget(event.clientX, event.clientY);
+    sync();
+  }
+
+  function handlePointerUp() {
+    finishDrag();
+  }
+
+  function handlePointerCancel() {
+    cancelDrag();
+  }
+
+  function beginDrag(leftIndex, event) {
+    if (readOnly) {
+      return;
+    }
+
+    event.preventDefault();
+    const originalRightIndex = connections[leftIndex];
+    connections[leftIndex] = null;
+    activeDrag = {
+      leftIndex,
+      originalRightIndex,
+      clientX: event.clientX,
+      clientY: event.clientY,
+      snappedRightIndex: originalRightIndex,
+    };
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
+    window.addEventListener("pointercancel", handlePointerCancel);
+    sync();
+  }
+
+  leftItems.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "matching-row left";
+
+    const card = document.createElement("div");
+    card.className = `matching-card${containsHebrewText(item?.text) ? " hebrew" : " english"}`;
+    card.textContent = item.text;
+
+    const anchor = document.createElement("button");
+    anchor.type = "button";
+    anchor.className = "matching-anchor left";
+    anchor.setAttribute("aria-label", `Connect ${item.text}`);
+    anchor.setAttribute("aria-disabled", readOnly ? "true" : "false");
+    anchor.tabIndex = readOnly ? -1 : 0;
+    if (!readOnly) {
+      anchor.addEventListener("pointerdown", (event) => beginDrag(index, event));
+    }
+
+    row.appendChild(card);
+    row.appendChild(anchor);
+    leftColumn.appendChild(row);
+    leftRows.push(row);
+    leftAnchors.push(anchor);
+  });
+
+  rightItems.forEach((item, index) => {
+    const row = document.createElement("div");
+    row.className = "matching-row right";
+
+    const anchor = document.createElement("button");
+    anchor.type = "button";
+    anchor.className = "matching-anchor right";
+    anchor.setAttribute("aria-label", `Target ${item.text}`);
+    anchor.setAttribute("aria-disabled", "true");
+    anchor.tabIndex = -1;
+
+    const card = document.createElement("div");
+    card.className = `matching-card${containsHebrewText(item?.text) ? " hebrew" : " english"}`;
+    card.textContent = item.text;
+
+    row.appendChild(anchor);
+    row.appendChild(card);
+    rightColumn.appendChild(row);
+    rightRows.push(row);
+    rightAnchors.push(anchor);
+  });
+
+  if (!readOnly) {
+    const actions = document.createElement("div");
+    actions.className = "matching-actions";
+
+    const clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "secondary-button";
+    clearButton.textContent = "Clear Lines";
+    clearButton.addEventListener("click", () => {
+      connections.fill(null);
+      activeDrag = null;
+      stopDragging();
+      sync();
+    });
+
+    const checkButton = document.createElement("button");
+    checkButton.type = "button";
+    checkButton.className = "primary-button drag-check-button centered";
+    checkButton.textContent = "Check Answer";
+    checkButton.addEventListener("click", () => {
+      if (activeDrag) {
+        finishDrag();
+      }
+
+      if (connections.some((value) => value === null)) {
+        state.feedbackMessage = "Connect every item before checking your answer.";
+        state.feedbackTone = "error";
+        renderFeedback();
+        return;
+      }
+
+      const currentSelectedTokens = connections.map((rightIndex) => rightItems[rightIndex].text);
+      const selectedValue = buildDragSelectionText(question, currentSelectedTokens);
+      const isCorrect = isDragSelectionCorrect(question, currentSelectedTokens);
+      handleAnswer(question, isCorrect, selectedValue, { tokens: currentSelectedTokens });
+    });
+
+    actions.appendChild(clearButton);
+    actions.appendChild(checkButton);
+    board.appendChild(actions);
+  }
+
+  elements.dragArea.appendChild(board);
+
+  const handleResize = () => sync();
+  window.addEventListener("resize", handleResize);
+  if (typeof ResizeObserver === "function") {
+    resizeObserver = new ResizeObserver(() => sync());
+    resizeObserver.observe(stage);
+  }
+
+  state.dragState = {
+    cleanup() {
+      cancelDrag();
+      window.removeEventListener("resize", handleResize);
+      resizeObserver?.disconnect();
+    },
+  };
+
+  sync();
+}
+
 function focusAnswerInput() {
   const focusInput = () => {
     elements.answerInput.focus();
@@ -6871,6 +7507,7 @@ function finishSession() {
 }
 
 function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } = {}) {
+  cleanupInteractiveDragState();
   switchScreen(elements.resultsScreen);
   const percentage = state.totalQuestions
     ? (state.correctCount / state.totalQuestions) * 100
@@ -6949,6 +7586,7 @@ function renderResultsDetails() {
 }
 
 function showStartScreen() {
+  cleanupInteractiveDragState();
   switchScreen(elements.startScreen);
   clearStartMessage();
   stopConfetti();

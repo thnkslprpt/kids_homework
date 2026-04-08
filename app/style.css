@@ -975,6 +975,192 @@ button:disabled {
   gap: 20px;
 }
 
+.drag-board.matching {
+  gap: 20px;
+}
+
+.matching-stage {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(24px, 6vw, 72px);
+  align-items: start;
+  padding: 8px 4px;
+  user-select: none;
+  touch-action: none;
+}
+
+.matching-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: visible;
+}
+
+.matching-line {
+  stroke: rgba(20, 108, 148, 0.88);
+  stroke-width: 6;
+  stroke-linecap: round;
+}
+
+.matching-line.preview {
+  stroke: rgba(20, 108, 148, 0.42);
+  stroke-dasharray: 12 10;
+}
+
+.matching-line.preview.snapped {
+  stroke: rgba(20, 108, 148, 0.7);
+  stroke-dasharray: none;
+}
+
+.matching-column {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 14px;
+}
+
+.matching-column.left {
+  justify-items: start;
+}
+
+.matching-column.right {
+  justify-items: end;
+}
+
+.matching-row {
+  display: grid;
+  align-items: center;
+  gap: 12px;
+}
+
+.matching-row.left {
+  grid-template-columns: minmax(0, 1fr) auto;
+  width: min(100%, 328px);
+  justify-self: start;
+}
+
+.matching-row.right {
+  grid-template-columns: auto minmax(0, 1fr);
+  width: min(100%, 276px);
+  justify-self: end;
+}
+
+.matching-card {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(39, 73, 114, 0.1);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.48);
+  color: var(--ink);
+  font-weight: 800;
+  line-height: 1.4;
+}
+
+.matching-card.english {
+  justify-content: flex-start;
+  text-align: left;
+}
+
+.matching-card.hebrew {
+  width: 100%;
+  direction: rtl;
+  justify-content: flex-end;
+  text-align: right;
+  font-family: "Arial Hebrew", "Noto Sans Hebrew", "Segoe UI", sans-serif;
+  font-size: clamp(1.55rem, 3.1vw, 1.95rem);
+  line-height: 1.55;
+}
+
+.matching-row.connected .matching-card {
+  border-color: rgba(20, 108, 148, 0.24);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(223, 241, 248, 0.78));
+}
+
+.matching-row.active .matching-card {
+  border-color: rgba(20, 108, 148, 0.42);
+  box-shadow: 0 0 0 4px rgba(20, 108, 148, 0.12);
+}
+
+.matching-anchor {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  min-height: 30px;
+  padding: 0;
+  border-radius: 999px;
+  border: 4px solid rgba(20, 108, 148, 0.38);
+  background: #fffdf7;
+  box-shadow: 0 6px 14px rgba(24, 48, 76, 0.12);
+  touch-action: none;
+}
+
+.matching-anchor.left {
+  cursor: grab;
+}
+
+.matching-anchor.left.active {
+  cursor: grabbing;
+}
+
+.matching-anchor.right {
+  cursor: default;
+}
+
+.matching-anchor::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: 6px auto 0;
+  border-radius: 999px;
+  background: rgba(20, 108, 148, 0.18);
+  transition: transform 120ms ease, background-color 120ms ease;
+}
+
+.matching-anchor:hover:not(:disabled),
+.matching-anchor.active,
+.matching-anchor.connected,
+.matching-anchor.snap-target {
+  transform: none;
+  border-color: rgba(20, 108, 148, 0.72);
+}
+
+.matching-anchor.active,
+.matching-anchor.snap-target {
+  transform: scale(1.06);
+}
+
+.matching-anchor.connected {
+  background: #eef8fd;
+}
+
+.matching-anchor.connected::after,
+.matching-anchor.active::after,
+.matching-anchor.snap-target::after {
+  transform: scale(1.15);
+  background: rgba(20, 108, 148, 0.48);
+}
+
+.matching-anchor.snap-target {
+  box-shadow:
+    0 0 0 8px rgba(20, 108, 148, 0.12),
+    0 8px 16px rgba(24, 48, 76, 0.16);
+}
+
+.matching-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
 .drag-sentence {
   display: flex;
   flex-wrap: wrap;
@@ -1766,6 +1952,47 @@ button:disabled {
 
   .drag-board.comparison {
     padding: 18px 14px;
+  }
+
+  .matching-stage {
+    gap: 14px;
+    padding: 4px 0;
+  }
+
+  .matching-column {
+    gap: 12px;
+  }
+
+  .matching-row {
+    gap: 8px;
+  }
+
+  .matching-card {
+    min-height: 58px;
+    padding: 10px 12px;
+    font-size: 0.96rem;
+  }
+
+  .matching-card.hebrew {
+    font-size: clamp(1.2rem, 4.7vw, 1.55rem);
+  }
+
+  .matching-anchor {
+    width: 26px;
+    height: 26px;
+    min-width: 26px;
+    min-height: 26px;
+    border-width: 3px;
+  }
+
+  .matching-anchor::after {
+    width: 8px;
+    height: 8px;
+    margin-top: 6px;
+  }
+
+  .matching-line {
+    stroke-width: 4.5;
   }
 
   .drag-sentence {
