@@ -27,6 +27,7 @@
             </label>
 
             <label class="field session-mode-field" aria-label="Session mode">
+              <span id="session-mode-label">Session Mode</span>
               <input id="hebrew-only" name="hebrewOnly" type="hidden" value="false">
               <div class="session-mode-selector" role="group" aria-label="Session mode">
                 <button
@@ -41,7 +42,7 @@
             </label>
 
             <label class="field difficulty-field">
-              <span>Difficulty</span>
+              <span id="difficulty-label">Difficulty</span>
               <input id="difficulty-level" name="difficultyLevel" type="hidden" value="3">
               <div class="difficulty-selector" role="group" aria-label="Difficulty">
                 <button type="button" class="difficulty-button level-1" data-difficulty="1" aria-pressed="false">1</button>
@@ -158,6 +159,7 @@
     <script src="app/sentence-drag-hebrew.js"></script>
     <script src="app/sentence-drag-questions.js"></script>
     <script src="app/vocabulary-grammar-questions.js"></script>
+    <script src="app/adult-hebrew-module.js"></script>
     <script src="app/app.js"></script>
   </body>
 </html>
