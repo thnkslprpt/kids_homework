@@ -49,8 +49,13 @@ const RATIONALITY_QUESTIONS = [
   },
   {
     question: "Noga says, \"I studied and got 100, so studying always gives 100.\" What is the best response?",
-    options: ["One example is not enough to prove always", "Noga is always right", "Studying never helps", "Tests are all the same"],
-    answer: "One example is not enough to prove always",
+    options: [
+      "One example is not enough to prove it always happens",
+      "Noga is always right",
+      "Studying never helps",
+      "Tests are all the same",
+    ],
+    answer: "One example is not enough to prove it always happens",
     difficulty: 2,
   },
   {
@@ -250,8 +255,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "If a claim is based on one example, what should you remember?",
-      options: ["One example may not prove it", "It must be true", "It is always false", "The example does not count"],
-      answer: "One example may not prove it",
+      options: [
+        "One example may not prove the claim is true",
+        "It must be true",
+        "It is always false",
+        "The example does not count",
+      ],
+      answer: "One example may not prove the claim is true",
       difficulty: 1,
     },
     {
@@ -298,8 +308,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "If two things happen together, does that prove one caused the other?",
-      options: ["No", "Yes", "Only on Mondays", "Only if they are loud"],
-      answer: "No",
+      options: [
+        "No. It only shows they happened together",
+        "Yes. It proves one caused the other",
+        "Only on Mondays",
+        "Only if they are loud",
+      ],
+      answer: "No. It only shows they happened together",
       difficulty: 2,
     },
     {
@@ -322,8 +337,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "If a survey only asks the loudest kids, what is the problem?",
-      options: ["Biased sample", "Perfect sample", "Random sample", "Large sample"],
-      answer: "Biased sample",
+      options: [
+        "The sample is biased because it leaves many students out",
+        "It is a perfect sample",
+        "It is a random sample",
+        "It is a large sample",
+      ],
+      answer: "The sample is biased because it leaves many students out",
       difficulty: 3,
     },
     {
@@ -340,14 +360,24 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "What does a control group do?",
-      options: ["Gives a comparison", "Changes everything", "Makes the answer automatic", "Stops the experiment forever"],
-      answer: "Gives a comparison",
+      options: [
+        "It gives you a comparison group",
+        "It changes everything",
+        "It makes the answer automatic",
+        "It stops the experiment forever",
+      ],
+      answer: "It gives you a comparison group",
       difficulty: 3,
     },
     {
       question: "If a study says a snack is popular but only tested one class, what is the main problem?",
-      options: ["Sample too small", "Too many classes", "The snack is too tasty", "The study was too colorful"],
-      answer: "Sample too small",
+      options: [
+        "The sample is too small to represent everyone",
+        "Too many classes were tested",
+        "The snack is too tasty",
+        "The study was too colorful",
+      ],
+      answer: "The sample is too small to represent everyone",
       difficulty: 4,
     },
     {
@@ -370,8 +400,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "If a graph only shows a few people, what should you be careful about?",
-      options: ["Big conclusions", "The title", "The colors", "The paper size"],
-      answer: "Big conclusions",
+      options: [
+        "Do not make big conclusions about everyone",
+        "The title",
+        "The colors",
+        "The paper size",
+      ],
+      answer: "Do not make big conclusions about everyone",
       difficulty: 4,
     },
     {
@@ -388,8 +423,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "If a website says a trick \"always works\" but a test shows it fails sometimes, what does that prove?",
-      options: ["Always is false", "The test must be wrong", "The trick works better now", "The website cannot be checked"],
-      answer: "Always is false",
+      options: [
+        "The word \"always\" cannot be right",
+        "The test must be wrong",
+        "The trick works better now",
+        "The website cannot be checked",
+      ],
+      answer: "The word \"always\" cannot be right",
       difficulty: 5,
     },
     {
@@ -400,8 +440,13 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "What is the problem with asking only people who already like a product?",
-      options: ["Biased sample", "Too many opinions", "Perfect fairness", "No opinions at all"],
-      answer: "Biased sample",
+      options: [
+        "The sample is biased because it only includes people who already like it",
+        "There are too many opinions",
+        "The sample is perfectly fair",
+        "There are no opinions at all",
+      ],
+      answer: "The sample is biased because it only includes people who already like it",
       difficulty: 5,
     },
     {
@@ -412,14 +457,24 @@ RATIONALITY_QUESTIONS.push(
     },
     {
       question: "Which is the best response to a claim based on one exciting example?",
-      options: ["Ask for more evidence", "Believe it immediately", "Ignore the claim forever", "Repeat the story louder"],
-      answer: "Ask for more evidence",
+      options: [
+        "Ask for more evidence before believing it",
+        "Believe it immediately",
+        "Ignore the claim forever",
+        "Repeat the story louder",
+      ],
+      answer: "Ask for more evidence before believing it",
       difficulty: 5,
     },
     {
       question: "If a study uses a tiny sample, what is the safest conclusion?",
-      options: ["Only about that small group", "About everyone everywhere", "The answer is certain", "The result is meaningless"],
-      answer: "Only about that small group",
+      options: [
+        "The result only tells us about that small group",
+        "The result tells us about everyone everywhere",
+        "The answer is certain",
+        "The result is meaningless",
+      ],
+      answer: "The result only tells us about that small group",
       difficulty: 5,
     },
     {
@@ -577,8 +632,13 @@ function rationalityCreateOneExampleQuestion() {
     },
     {
       question: "Noga says, 'I studied and got 100, so studying always gives 100.' What is the best response?",
-      options: ["One example is not enough to prove always", "Noga is always right", "Studying never helps", "Tests are all the same"],
-      answer: "One example is not enough to prove always",
+      options: [
+        "One example is not enough to prove it always happens",
+        "Noga is always right",
+        "Studying never helps",
+        "Tests are all the same",
+      ],
+      answer: "One example is not enough to prove it always happens",
       difficulty: 2,
     },
     {
@@ -627,8 +687,13 @@ function rationalityCreateSampleQuestion() {
     },
     {
       question: "What is the problem with asking only people who already like a product?",
-      options: ["Biased sample", "Too many opinions", "Perfect fairness", "No opinions at all"],
-      answer: "Biased sample",
+      options: [
+        "The sample is biased because it only includes people who already like it",
+        "There are too many opinions",
+        "The sample is perfectly fair",
+        "There are no opinions at all",
+      ],
+      answer: "The sample is biased because it only includes people who already like it",
       difficulty: 5,
     },
   ];
@@ -652,8 +717,13 @@ function rationalityCreateEvidenceQuestion() {
     },
     {
       question: "Which is the best response to a claim based on one exciting example?",
-      options: ["Ask for more evidence", "Believe it immediately", "Ignore the claim forever", "Repeat the story louder"],
-      answer: "Ask for more evidence",
+      options: [
+        "Ask for more evidence before believing it",
+        "Believe it immediately",
+        "Ignore the claim forever",
+        "Repeat the story louder",
+      ],
+      answer: "Ask for more evidence before believing it",
       difficulty: 5,
     },
   ];
@@ -727,8 +797,13 @@ function rationalityCreateBestConclusionQuestion() {
     },
     {
       question: "If a study uses a tiny sample, what is the safest conclusion?",
-      options: ["Only about that small group", "About everyone everywhere", "The answer is certain", "The result is meaningless"],
-      answer: "Only about that small group",
+      options: [
+        "The result only tells us about that small group",
+        "The result tells us about everyone everywhere",
+        "The answer is certain",
+        "The result is meaningless",
+      ],
+      answer: "The result only tells us about that small group",
       difficulty: 5,
     },
   ];
@@ -784,8 +859,13 @@ function rationalityCreateOverclaimQuestion() {
   const templates = [
     {
       question: "Noga says, 'I studied and got 100, so studying always gives 100.' What is the best response?",
-      options: ["One example is not enough to prove always", "Noga is always right", "Studying never helps", "Tests are all the same"],
-      answer: "One example is not enough to prove always",
+      options: [
+        "One example is not enough to prove it always happens",
+        "Noga is always right",
+        "Studying never helps",
+        "Tests are all the same",
+      ],
+      answer: "One example is not enough to prove it always happens",
       difficulty: 2,
     },
     {

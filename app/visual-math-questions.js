@@ -281,20 +281,23 @@ const VISUAL_MATH_QUESTIONS = (() => {
     symbolColor = COLORS.chart,
     title = "",
     keyText = "",
+    xAxisLabel = "Category",
+    yAxisLabel = "Count",
     yMax = 5,
     yTickStep = 1,
     valuePerSymbol = 1,
   } = {}) {
     const width = 360;
-    const height = 240;
-    const left = 42;
+    const height = 252;
+    const left = 46;
     const right = 18;
     const top = 20;
-    const bottom = 48;
+    const bottom = 58;
     const innerWidth = width - left - right;
     const innerHeight = height - top - bottom;
     const spacing = categories.length > 1 ? innerWidth / (categories.length - 1) : innerWidth;
     const baselineY = top + innerHeight;
+    const plotCenterY = top + innerHeight / 2;
 
     const yTicks = [];
     for (let value = 0; value <= yMax; value += yTickStep) {
@@ -334,6 +337,16 @@ const VISUAL_MATH_QUESTIONS = (() => {
           <line x1="${left}" y1="${baselineY}" x2="${width - right}" y2="${baselineY}" stroke="${COLORS.axis}" stroke-width="2.5"></line>
           ${yTicks.join("")}
           ${dots}
+          <text x="${left + innerWidth / 2}" y="${height - 10}" text-anchor="middle" font-size="12" font-weight="700" fill="${COLORS.axis}">${escapeHtml(xAxisLabel)}</text>
+          <text
+            x="16"
+            y="${plotCenterY}"
+            text-anchor="middle"
+            font-size="12"
+            font-weight="700"
+            fill="${COLORS.axis}"
+            transform="rotate(-90 16 ${plotCenterY})"
+          >${escapeHtml(yAxisLabel)}</text>
         </svg>
       `
     );
@@ -720,6 +733,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
           counts,
           title: "Line plot: books read",
           keyText: "Each dot means 1 student.",
+          xAxisLabel: "Books read",
+          yAxisLabel: "Students",
           yMax: 4,
         }),
         visualSummary: "There are 3 dots above 2 books, so 3 students read 2 books.",
@@ -739,6 +754,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
           counts,
           title: "Line plot: books read",
           keyText: "Each dot means 1 student.",
+          xAxisLabel: "Books read",
+          yAxisLabel: "Students",
           yMax: 4,
         }),
         visualSummary: "The line plot shows 2 + 1 + 3 + 2 = 8 students.",
@@ -758,6 +775,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
           counts,
           title: "Pictograph: favorite pets",
           keyText: "Each symbol means 2 snacks.",
+          xAxisLabel: "Pet",
+          yAxisLabel: "Snacks",
           yMax: 10,
           yTickStep: 2,
           valuePerSymbol: 2,
@@ -780,6 +799,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
           counts,
           title: "Line plot: books read",
           keyText: "Each dot means 1 student.",
+          xAxisLabel: "Books read",
+          yAxisLabel: "Students",
           yMax: 4,
         }),
         visualSummary: "The tallest stack is above 1 book, with 4 dots.",
@@ -798,6 +819,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
         counts,
         title: "Pictograph: classroom stickers",
         keyText: "Each symbol means 1 sticker.",
+        xAxisLabel: "Row",
+        yAxisLabel: "Stickers",
         yMax: 4,
         symbolColor: COLORS.accent,
       }),
@@ -998,6 +1021,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
         counts: [1, 2, 3, 1],
         title: "Line plot: books read",
         keyText: "Each dot means 1 student.",
+        xAxisLabel: "Books read",
+        yAxisLabel: "Students",
         yMax: 4,
       }),
       visualSummary: "There are 3 dots above 2 books, so 3 students read 2 books.",
@@ -1012,6 +1037,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
         counts: [1, 2, 3, 1],
         title: "Line plot: books read",
         keyText: "Each dot means 1 student.",
+        xAxisLabel: "Books read",
+        yAxisLabel: "Students",
         yMax: 4,
       }),
       visualSummary: "The line plot shows 1 + 2 + 3 + 1 = 7 students.",
@@ -1026,6 +1053,8 @@ const VISUAL_MATH_QUESTIONS = (() => {
         counts: [3, 5, 2, 4],
         title: "Pictograph: favorite pets",
         keyText: "Each symbol means 2 snacks.",
+        xAxisLabel: "Pet",
+        yAxisLabel: "Snacks",
         yMax: 10,
         yTickStep: 2,
         valuePerSymbol: 2,

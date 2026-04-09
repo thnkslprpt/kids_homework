@@ -782,6 +782,37 @@ button:disabled {
   color: var(--accent-dark);
 }
 
+.visual-bar-frame {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 12px;
+  align-items: stretch;
+}
+
+.visual-bar-plot {
+  min-width: 0;
+}
+
+.visual-bar-axis-label {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--accent-dark);
+}
+
+.visual-bar-axis-label-y {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  text-align: center;
+}
+
+.visual-bar-axis-label-x {
+  margin-top: 10px;
+  text-align: center;
+}
+
 .visual-bar-chart {
   display: grid;
   gap: 12px;

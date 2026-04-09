@@ -206,6 +206,8 @@ const CATEGORY_MAX_DIFFICULTIES = {
 const CHART_BAR_TEMPLATES = [
   {
     title: "Favorite Fruits",
+    xAxisLabel: "Votes",
+    yAxisLabel: "Fruit",
     labels: ["Apples", "Bananas", "Grapes", "Oranges"],
     prompts: {
       most: () => "Which fruit got the most votes?",
@@ -220,6 +222,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Pet Votes",
+    xAxisLabel: "Votes",
+    yAxisLabel: "Pet",
     labels: ["Dogs", "Cats", "Fish", "Birds"],
     prompts: {
       most: () => "Which pet got the most votes?",
@@ -234,6 +238,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Toy Boxes",
+    xAxisLabel: "Pieces",
+    yAxisLabel: "Toy type",
     labels: ["Blocks", "Cars", "Balls", "Dolls"],
     prompts: {
       most: () => "Which toy type has the most pieces?",
@@ -248,6 +254,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Snack Sales",
+    xAxisLabel: "Snacks sold",
+    yAxisLabel: "Snack",
     labels: ["Crackers", "Yogurt", "Cheese", "Apples"],
     prompts: {
       most: () => "Which snack sold the most?",
@@ -262,6 +270,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Books Read",
+    xAxisLabel: "Books read",
+    yAxisLabel: "Student",
     labels: ["Noga", "Gideon", "Gabriel", "Eden"],
     prompts: {
       most: () => "Who read the most books?",
@@ -275,6 +285,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Sticker Colors",
+    xAxisLabel: "Stickers",
+    yAxisLabel: "Color",
     labels: ["Red", "Blue", "Green", "Yellow"],
     prompts: {
       most: () => "Which color has the most stickers?",
@@ -289,6 +301,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Favorite Ice Creams",
+    xAxisLabel: "Votes",
+    yAxisLabel: "Ice cream",
     labels: ["Vanilla", "Chocolate", "Strawberry", "Mint"],
     prompts: {
       most: () => "Which ice cream got the most votes?",
@@ -303,6 +317,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Recess Games",
+    xAxisLabel: "Votes",
+    yAxisLabel: "Game",
     labels: ["Tag", "Soccer", "Hopscotch", "Four Square"],
     prompts: {
       most: () => "Which recess game got the most votes?",
@@ -317,6 +333,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Backpack Items",
+    xAxisLabel: "Items",
+    yAxisLabel: "Backpack item",
     labels: ["Pencils", "Crayons", "Markers", "Erasers"],
     prompts: {
       most: () => "Which backpack item appears the most?",
@@ -331,6 +349,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Garden Flowers",
+    xAxisLabel: "Flowers",
+    yAxisLabel: "Flower",
     labels: ["Roses", "Tulips", "Daisies", "Sunflowers"],
     prompts: {
       most: () => "Which flower has the most blooms?",
@@ -345,6 +365,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Lunch Orders",
+    xAxisLabel: "Orders",
+    yAxisLabel: "Lunch",
     labels: ["Pizza", "Pasta", "Salad", "Soup"],
     prompts: {
       most: () => "Which lunch got the most orders?",
@@ -359,6 +381,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Craft Beads",
+    xAxisLabel: "Beads",
+    yAxisLabel: "Bead color",
     labels: ["Red", "Blue", "Green", "Gold"],
     prompts: {
       most: () => "Which bead color appears the most?",
@@ -373,6 +397,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Playground Climbs",
+    xAxisLabel: "Climbs",
+    yAxisLabel: "Student",
     labels: ["Ava", "Leo", "Mia", "Noah"],
     prompts: {
       most: () => "Who climbed the ladder the most times?",
@@ -386,6 +412,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Treasure Chest",
+    xAxisLabel: "Treasures",
+    yAxisLabel: "Treasure type",
     labels: ["Coins", "Gems", "Keys", "Maps"],
     prompts: {
       most: () => "Which treasure appears the most?",
@@ -400,6 +428,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Favorite Instruments",
+    xAxisLabel: "Votes",
+    yAxisLabel: "Instrument",
     labels: ["Drums", "Piano", "Guitar", "Flute"],
     prompts: {
       most: () => "Which instrument got the most votes?",
@@ -414,6 +444,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Farm Animals",
+    xAxisLabel: "Animals",
+    yAxisLabel: "Animal",
     labels: ["Cows", "Pigs", "Sheep", "Goats"],
     prompts: {
       most: () => "Which farm animal is shown the most?",
@@ -428,6 +460,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Reading Corner Books",
+    xAxisLabel: "Books",
+    yAxisLabel: "Book bin",
     labels: ["Space", "Animals", "Mystery", "Sports"],
     prompts: {
       most: () => "Which book bin has the most books?",
@@ -442,6 +476,8 @@ const CHART_BAR_TEMPLATES = [
   },
   {
     title: "Block Towers",
+    xAxisLabel: "Blocks",
+    yAxisLabel: "Tower",
     labels: ["Tower A", "Tower B", "Tower C", "Tower D"],
     prompts: {
       most: () => "Which tower is tallest?",
@@ -4914,6 +4950,8 @@ function buildChartSummary(template, items) {
 }
 
 function renderBarChartVisual(dataset) {
+  const xAxisLabel = escapeHtml(dataset.xAxisLabel || "Count");
+  const yAxisLabel = escapeHtml(dataset.yAxisLabel || "Category");
   const maxValue = Math.max(...dataset.items.map((item) => item.value));
   const rows = dataset.items
     .map((item, index) => {
@@ -4933,7 +4971,13 @@ function renderBarChartVisual(dataset) {
   return `
     <div class="visual-card">
       <div class="visual-card-title">${escapeHtml(dataset.title)}</div>
-      <div class="visual-bar-chart">${rows}</div>
+      <div class="visual-bar-frame">
+        <div class="visual-bar-axis-label visual-bar-axis-label-y">${yAxisLabel}</div>
+        <div class="visual-bar-plot">
+          <div class="visual-bar-chart">${rows}</div>
+          <div class="visual-bar-axis-label visual-bar-axis-label-x">${xAxisLabel}</div>
+        </div>
+      </div>
     </div>
   `;
 }
