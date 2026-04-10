@@ -6,6 +6,9 @@ const QUESTION_COUNT_OPTIONS = [20, 30, 40];
 const ADULT_USER_ID = "adult";
 const ADULT_SESSION_DEFAULT_QUESTION_COUNT = 30;
 const ADULT_SESSION_INTERNAL_DIFFICULTY = 3;
+const ADULT_MATH_INTERVAL = 2;
+const ADULT_GEOGRAPHY_SHARE = 1 / 8;
+const ADULT_MAX_HARD_QUESTION_DIFFICULTY = 5;
 const DEFAULT_HEBREW_WRITING_TAIL_COUNT = 3;
 const HEBREW_ONLY_WRITING_TAIL_COUNT = 5;
 const MAP_QUESTION_INTERVAL = 30;
@@ -907,6 +910,7 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "חולה": "חוֹלֶה",
   "חזק": "חָזָק",
   "חלב": "חָלָב",
+  "חלב אם": "חֲלֵב אֵם",
   "חלש": "חַלָשׁ",
   "ילד": "יֶלֶד",
   "ילדה": "יַלְדָּה",
@@ -1021,6 +1025,7 @@ const HEBREW_NIKKUD_OVERRIDES = {
   "שוקולד": "שׁוֹקוֹלָד",
   "שבוע": "שָׁבוּעַ",
   "שעה": "שָׁעָה",
+  "שאיבת חלב אם": "שְׁאִיבַת חֲלֵב אֵם",
   "שמש": "שֶׁמֶשׁ",
   "שם": "שָׁם",
   "טלפון": "טֵלֵפוֹן",
@@ -1360,6 +1365,14 @@ const HEBREW_SENTENCE_NIKKUD_OVERRIDES = {
   "רואה": "רוֹאָה",
   "שותים": "שׁוֹתִים",
 };
+
+const HEBREW_MULTI_WORD_NIKKUD_OVERRIDES = Array.from(
+  new Map(
+    [...Object.entries(HEBREW_NIKKUD_OVERRIDES), ...Object.entries(HEBREW_SENTENCE_NIKKUD_OVERRIDES)].filter(
+      ([source]) => /\s/.test(source)
+    )
+  ).entries()
+).sort((left, right) => right[0].length - left[0].length);
 
 const HEBREW_WRITING_LETTERS = [
   "א",
@@ -2874,7 +2887,13 @@ function applyHebrewSentenceNikkud(value) {
     return HEBREW_NIKKUD_OVERRIDES[rawText];
   }
 
-  return rawText.replace(/[\u05D0-\u05EA]+/g, (word) => {
+  let pointedText = rawText;
+  HEBREW_MULTI_WORD_NIKKUD_OVERRIDES.forEach(([source, target]) => {
+    const pattern = new RegExp(`(^|[^\\u05D0-\\u05EA])${escapeRegExp(source)}(?=$|[^\\u05D0-\\u05EA])`, "g");
+    pointedText = pointedText.replace(pattern, (match, prefix) => `${prefix}${target}`);
+  });
+
+  return pointedText.replace(/[\u05D0-\u05EA]+/g, (word) => {
     if (HEBREW_SENTENCE_NIKKUD_OVERRIDES[word]) {
       return HEBREW_SENTENCE_NIKKUD_OVERRIDES[word];
     }
@@ -3236,18 +3255,22 @@ function updateStartControlsForCurrentUser() {
   }
 
   if (elements.sessionModeLabel) {
-    elements.sessionModeLabel.textContent = isAdult ? "Session Mode (Adult is Hebrew only)" : "Session Mode";
+    elements.sessionModeLabel.textContent = isAdult
+      ? "Session Mode (Adult mix is fixed)"
+      : "Session Mode";
   }
 
   if (elements.difficultyLabel) {
-    elements.difficultyLabel.textContent = isAdult ? "Difficulty (ignored for Adult)" : "Difficulty";
+    elements.difficultyLabel.textContent = isAdult ? "Difficulty (Adult mix is fixed)" : "Difficulty";
   }
 
   if (elements.hebrewOnlyButton) {
     elements.hebrewOnlyButton.disabled = isAdult;
-    elements.hebrewOnlyButton.title = isAdult ? "Adult sessions always use Hebrew." : "";
+    elements.hebrewOnlyButton.title = isAdult
+      ? "Adult sessions use a fixed mix of Hebrew, hard math, and geography."
+      : "";
     if (isAdult) {
-      setButtonPressedState(elements.hebrewOnlyButton, true);
+      setButtonPressedState(elements.hebrewOnlyButton, false);
     } else {
       updateHebrewOnlyButton();
     }
@@ -3255,7 +3278,9 @@ function updateStartControlsForCurrentUser() {
 
   elements.difficultyButtons.forEach((button) => {
     button.disabled = isAdult;
-    button.title = isAdult ? "Adult sessions use the full adult Hebrew bank." : "";
+    button.title = isAdult
+      ? "Adult sessions use adult Hebrew plus the hardest math and geography questions."
+      : "";
     if (isAdult) {
       setButtonPressedState(button, false);
     }
@@ -3357,7 +3382,7 @@ function startSession(event) {
   const selectedHebrewOnly = isHebrewOnlySelected();
   const isAdult = isAdultUserSelected();
   const difficulty = isAdult ? ADULT_SESSION_INTERNAL_DIFFICULTY : selectedDifficulty;
-  const hebrewOnly = isAdult ? true : selectedHebrewOnly;
+  const hebrewOnly = isAdult ? false : selectedHebrewOnly;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
@@ -3420,18 +3445,82 @@ function buildAdultSessionQuestions(totalQuestions) {
     adultReverse: createPool(adultHebrewReverseQuestionBank),
     adultContext: createPool(adultContextQuestionBank),
     adultSentenceDrag: createPool(adultSentenceDragQuestionBank),
+    algebra: createPool(choiceCategoryConfigs.algebra.bank),
+    estimation: createPool(choiceCategoryConfigs.estimation.bank),
+    fractions: createPool(choiceCategoryConfigs.fractions.bank),
+    "fractions-and-ratios": createPool(choiceCategoryConfigs["fractions-and-ratios"].bank),
+    geography: createPool(choiceCategoryConfigs.geography.bank),
+    measurement: createPool(choiceCategoryConfigs.measurement.bank),
+    population: createPool(choiceCategoryConfigs.population.bank),
   };
   const runtime = {
-    adultQuestionIndex: 0,
+    adultGeographyQuestionIndex: 0,
+    adultHebrewQuestionIndex: 0,
+    adultMathQuestionIndex: 0,
+    adultWritingPromptQueue: [],
+    mapCountries: new Set(),
   };
-  const questions = Array.from({ length: totalQuestions }, () => createAdultSessionQuestion(resources, runtime));
-  return injectAdultWritingPracticeTail(questions);
+  const categorySequence = buildAdultSessionCategorySequence(totalQuestions);
+  return categorySequence.map((category) => createAdultSessionQuestion(category, resources, runtime));
 }
 
-function createAdultSessionQuestion(resources, runtime) {
-  const startIndex = Number(runtime?.adultQuestionIndex || 0);
+function buildAdultSessionCategorySequence(totalQuestions) {
+  if (totalQuestions <= 0) {
+    return [];
+  }
+
+  const sequence = Array.from({ length: totalQuestions }, (_, index) =>
+    (index + 1) % ADULT_MATH_INTERVAL === 0 ? "adult-math" : "adult-hebrew"
+  );
+  const hebrewSlotIndexes = sequence
+    .map((category, index) => (category === "adult-hebrew" ? index : -1))
+    .filter((index) => index !== -1);
+  const geographyQuestionCount = Math.min(
+    hebrewSlotIndexes.length,
+    Math.max(1, Math.round(totalQuestions * ADULT_GEOGRAPHY_SHARE))
+  );
+  pickDistributedIndexes(hebrewSlotIndexes.length, geographyQuestionCount)
+    .map((slotIndex) => hebrewSlotIndexes[slotIndex])
+    .forEach((questionIndex) => {
+      sequence[questionIndex] = "adult-geography";
+    });
+
+  return sequence;
+}
+
+function pickDistributedIndexes(totalCount, selectionCount) {
+  if (totalCount <= 0 || selectionCount <= 0) {
+    return [];
+  }
+
+  const cappedSelectionCount = Math.min(totalCount, selectionCount);
+  const indexes = [];
+
+  for (let index = 0; index < cappedSelectionCount; index += 1) {
+    indexes.push(
+      Math.min(totalCount - 1, Math.floor(((index + 0.5) * totalCount) / cappedSelectionCount))
+    );
+  }
+
+  return Array.from(new Set(indexes));
+}
+
+function createAdultSessionQuestion(category, resources, runtime) {
+  if (category === "adult-math") {
+    return createAdultHardMathQuestion(resources, runtime);
+  }
+
+  if (category === "adult-geography") {
+    return createAdultGeographyQuestion(resources, runtime);
+  }
+
+  return createAdultHebrewSessionQuestion(resources, runtime);
+}
+
+function createAdultHebrewSessionQuestion(resources, runtime) {
+  const startIndex = Number(runtime?.adultHebrewQuestionIndex || 0);
   if (runtime) {
-    runtime.adultQuestionIndex = startIndex + 1;
+    runtime.adultHebrewQuestionIndex = startIndex + 1;
   }
 
   const factories = [
@@ -3441,6 +3530,8 @@ function createAdultSessionQuestion(resources, runtime) {
     () => createAdultCategorySortQuestion(),
     () => createAdultContextChoiceQuestion(resources),
     () => createAdultSentenceDragQuestion(resources),
+    () => createAdultReadingComprehensionQuestion(),
+    () => createAdultWritingPracticeQuestionFromRuntime(runtime),
   ];
 
   for (let offset = 0; offset < factories.length; offset += 1) {
@@ -3451,6 +3542,105 @@ function createAdultSessionQuestion(resources, runtime) {
   }
 
   return createAdultHebrewChoiceQuestion(drawHebrewEntry(resources.adultWords, 1));
+}
+
+function createAdultHardMathQuestion(resources, runtime) {
+  const difficulty = ADULT_MAX_HARD_QUESTION_DIFFICULTY;
+  const startIndex = Number(runtime?.adultMathQuestionIndex || 0);
+  if (runtime) {
+    runtime.adultMathQuestionIndex = startIndex + 1;
+  }
+
+  const factories = [
+    () => createMathChoiceQuestion(difficulty),
+    () => createMathInputQuestion(difficulty),
+    () => createStatisticsChoiceQuestion(difficulty),
+    () => createAdultForcedCategoryQuestion("algebra", difficulty, resources),
+    () => createAdultForcedCategoryQuestion("estimation", difficulty, resources),
+    () => createAdultForcedCategoryQuestion("fractions", difficulty, resources),
+    () => createAdultForcedCategoryQuestion("fractions-and-ratios", difficulty, resources),
+    () => createAdultForcedCategoryQuestion("measurement", difficulty, resources),
+    () => createPercentageChoiceQuestion(difficulty),
+  ];
+
+  for (let offset = 0; offset < factories.length; offset += 1) {
+    const question = factories[(startIndex + offset) % factories.length]();
+    if (question) {
+      return question;
+    }
+  }
+
+  return createMathChoiceQuestion(difficulty);
+}
+
+function createAdultGeographyQuestion(resources, runtime) {
+  const difficulty = ADULT_MAX_HARD_QUESTION_DIFFICULTY;
+  const startIndex = Number(runtime?.adultGeographyQuestionIndex || 0);
+  if (runtime) {
+    runtime.adultGeographyQuestionIndex = startIndex + 1;
+  }
+
+  const categories = hasGeographyMapSupport()
+    ? [RESERVED_MAP_CATEGORY, "population", "geography"]
+    : ["population", "geography"];
+
+  for (let offset = 0; offset < categories.length; offset += 1) {
+    const category = categories[(startIndex + offset) % categories.length];
+    const question =
+      category === RESERVED_MAP_CATEGORY
+        ? createGeographyMapQuestion(difficulty, runtime, resources)
+        : createAdultForcedCategoryQuestion(category, difficulty, resources);
+    if (question) {
+      return question;
+    }
+  }
+
+  return createAdultForcedCategoryQuestion("geography", difficulty, resources) || createMathChoiceQuestion(difficulty);
+}
+
+function createAdultForcedCategoryQuestion(category, difficulty, resources) {
+  const effectiveDifficulty = getEffectiveCategoryDifficulty(category, difficulty);
+  const generatedFactory = generatedChoiceCategoryConfigs[category]?.factory;
+  if (generatedFactory) {
+    try {
+      const normalizedEntry = normalizeChoiceBankEntry(
+        generatedFactory(effectiveDifficulty),
+        `${category}-choice`
+      );
+      if (normalizedEntry) {
+        return createBankChoiceQuestion(normalizedEntry, `${category}-choice`);
+      }
+    } catch {
+      // Fall back to the static bank when the generator cannot build a valid entry.
+    }
+  }
+
+  const categoryConfig = choiceCategoryConfigs[category];
+  const pool = resources?.[category];
+  if (categoryConfig && pool?.entries?.length) {
+    return categoryConfig.createQuestion(drawFromPool(pool, effectiveDifficulty));
+  }
+
+  return null;
+}
+
+function createAdultWritingPracticeQuestionFromRuntime(runtime) {
+  const prompt = drawAdultWritingPrompt(runtime);
+  return prompt
+    ? createHebrewWritingPracticeQuestion(prompt.text, prompt.difficulty, prompt.variant)
+    : null;
+}
+
+function drawAdultWritingPrompt(runtime) {
+  if (!runtime) {
+    return adultWritingPromptBank[0] || null;
+  }
+
+  if (!Array.isArray(runtime.adultWritingPromptQueue) || !runtime.adultWritingPromptQueue.length) {
+    runtime.adultWritingPromptQueue = shuffleArray([...adultWritingPromptBank]);
+  }
+
+  return runtime.adultWritingPromptQueue.pop() || null;
 }
 
 function injectAdultWritingPracticeTail(questions) {
