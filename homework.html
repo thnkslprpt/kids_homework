@@ -29,6 +29,7 @@
             <label class="field session-mode-field" aria-label="Session mode">
               <span id="session-mode-label">Session Mode</span>
               <input id="hebrew-only" name="hebrewOnly" type="hidden" value="false">
+              <input id="specialty-words-only" name="specialtyWordsOnly" type="hidden" value="false">
               <div class="session-mode-selector" role="group" aria-label="Session mode">
                 <button
                   id="hebrew-only-button"
@@ -38,18 +39,36 @@
                 >
                   Hebrew Only
                 </button>
+                <button
+                  id="specialty-words-button"
+                  type="button"
+                  class="specialty-words-button"
+                  aria-pressed="false"
+                  aria-label="Use only specialty Hebrew word lists"
+                  hidden
+                >
+                  <span aria-hidden="true">★</span>
+                </button>
               </div>
             </label>
 
             <label class="field difficulty-field">
               <span id="difficulty-label">Difficulty</span>
-              <input id="difficulty-level" name="difficultyLevel" type="hidden" value="3">
-              <div class="difficulty-selector" role="group" aria-label="Difficulty">
-                <button type="button" class="difficulty-button level-1" data-difficulty="1" aria-pressed="false">1</button>
-                <button type="button" class="difficulty-button level-2" data-difficulty="2" aria-pressed="false">2</button>
-                <button type="button" class="difficulty-button level-3" data-difficulty="3" aria-pressed="true">3</button>
-                <button type="button" class="difficulty-button level-4" data-difficulty="4" aria-pressed="false">4</button>
-                <button type="button" class="difficulty-button level-5" data-difficulty="5" aria-pressed="false">5</button>
+              <div id="difficulty-selector" class="difficulty-selector" role="group" aria-labelledby="difficulty-label">
+                <span class="difficulty-scale-label" aria-hidden="true">1</span>
+                <input
+                  id="difficulty-level"
+                  name="difficultyLevel"
+                  class="difficulty-slider"
+                  type="range"
+                  min="1"
+                  max="10"
+                  step="1"
+                  value="3"
+                  aria-labelledby="difficulty-label"
+                >
+                <span class="difficulty-scale-label" aria-hidden="true">10</span>
+                <output id="difficulty-value" class="difficulty-value" for="difficulty-level">3</output>
               </div>
             </label>
           </div>
@@ -124,6 +143,7 @@
       </section>
     </main>
 
+    <script src="app/hebrew-expanded-words.js"></script>
     <script src="app/hebrew-words.js"></script>
     <script src="app/hebrew-image-words.js"></script>
     <script src="app/science-questions.js"></script>
@@ -146,7 +166,6 @@
     <script src="app/estimation-questions.js"></script>
     <script src="app/probability-questions.js"></script>
     <script src="app/maps-and-directions-questions.js"></script>
-    <script src="app/digital-safety-questions.js"></script>
     <script src="app/health-and-first-aid-questions.js"></script>
     <script src="app/nutrition-questions.js"></script>
     <script src="app/household-problem-solving-questions.js"></script>
@@ -160,6 +179,7 @@
     <script src="app/sentence-drag-questions.js"></script>
     <script src="app/vocabulary-grammar-questions.js"></script>
     <script src="app/adult-hebrew-module.js"></script>
+    <script src="app/avi-hebrew-module.js"></script>
     <script src="app/app.js"></script>
   </body>
 </html>

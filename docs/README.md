@@ -91,8 +91,6 @@ Within math, the app uses both:
   - likelihood, equal chance, impossible/certain events, and simple fractions of chance
 - `Maps and Directions`
   - cardinal directions, map keys, relative position, and simple scale
-- `Digital Safety`
-  - passwords, scams, private information, safe sharing, and suspicious links
 - `Health and First Aid`
   - basic safety, hydration, hygiene, minor first-aid basics, and emergency numbers
 - `Nutrition`
@@ -171,7 +169,6 @@ Important:
 - `app/estimation-questions.js`: estimation bank
 - `app/probability-questions.js`: probability bank
 - `app/maps-and-directions-questions.js`: map-skills bank
-- `app/digital-safety-questions.js`: online safety bank
 - `app/health-and-first-aid-questions.js`: health and first-aid bank
 - `app/nutrition-questions.js`: nutrition bank
 - `app/household-problem-solving-questions.js`: household skills bank

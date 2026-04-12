@@ -3719,7 +3719,16 @@ const HEBREW_LEVEL_2_KEYS = new Set(
   ].map(([hebrew, english]) => buildHebrewWordKey(hebrew, english))
 );
 
-const HEBREW_WORDS = buildCuratedHebrewWords(RAW_HEBREW_WORDS);
+const RAW_HEBREW_EXPANDED_WORDS = Array.isArray(
+  typeof HEBREW_EXPANDED_WORDS !== "undefined" ? HEBREW_EXPANDED_WORDS : null
+)
+  ? HEBREW_EXPANDED_WORDS
+  : [];
+
+const HEBREW_WORDS = mergeHebrewWordSets(
+  buildCuratedHebrewWords(RAW_HEBREW_WORDS),
+  normalizeExpandedHebrewWords(RAW_HEBREW_EXPANDED_WORDS)
+);
 
 function buildHebrewWordKey(hebrew, english) {
   return `${String(hebrew || "").trim()}||${String(english || "").trim()}`;
@@ -3783,4 +3792,44 @@ function buildCuratedHebrewWords(words) {
   });
 
   return curatedWords;
+}
+
+function normalizeExpandedHebrewWords(words) {
+  const normalizedWords = [];
+
+  (words || []).forEach((entry) => {
+    const difficulty = Math.max(6, Math.min(10, Number(entry?.difficulty) || 6));
+    const normalizedEntry = {
+      category: String(entry?.category || "Everyday Hebrew (Expanded)").trim(),
+      english: String(entry?.english || "").trim(),
+      transliteration: String(entry?.transliteration || "").trim(),
+      hebrew: String(entry?.hebrew || "").trim(),
+      difficulty,
+    };
+
+    if (!normalizedEntry.hebrew || !normalizedEntry.english) {
+      return;
+    }
+
+    normalizedWords.push(normalizedEntry);
+  });
+
+  return normalizedWords;
+}
+
+function mergeHebrewWordSets(...wordSets) {
+  const mergedWords = [];
+  const seen = new Set();
+
+  wordSets.flat().forEach((entry) => {
+    const identity = buildHebrewWordKey(entry?.hebrew, entry?.english);
+    if (!entry?.hebrew || !entry?.english || seen.has(identity)) {
+      return;
+    }
+
+    seen.add(identity);
+    mergedWords.push(entry);
+  });
+
+  return mergedWords;
 }

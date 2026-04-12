@@ -1,4 +1,4 @@
-const GEOGRAPHY_MAP_QUESTION_BANK = (() => {
+(() => {
   const MAP_COUNTRIES = Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
     ? globalThis.GEOGRAPHY_MAP_COUNTRIES.slice()
     : [];
@@ -128,14 +128,10 @@ const GEOGRAPHY_MAP_QUESTION_BANK = (() => {
   }
 
   globalThis.createGeographyMapGeneratedEntry = buildGeneratedEntry;
-  return MAP_COUNTRIES.map((entry) => buildQuestionFromEntry(entry, entry.minDifficulty || 3, MAP_COUNTRIES)).filter(Boolean);
 })();
-
-globalThis.GEOGRAPHY_MAP_QUESTION_BANK = GEOGRAPHY_MAP_QUESTION_BANK;
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
-    GEOGRAPHY_MAP_QUESTION_BANK,
     createGeographyMapGeneratedEntry: globalThis.createGeographyMapGeneratedEntry,
   };
 }

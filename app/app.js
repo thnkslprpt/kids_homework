@@ -3,12 +3,17 @@ const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
 const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
 const MAX_SAVED_SESSIONS = 10;
 const QUESTION_COUNT_OPTIONS = [20, 30, 40];
-const ADULT_USER_ID = "adult";
+const ADULT_USER_ID = "miranda";
+const AVI_USER_ID = "avi";
 const ADULT_SESSION_DEFAULT_QUESTION_COUNT = 30;
 const ADULT_SESSION_INTERNAL_DIFFICULTY = 3;
 const ADULT_MATH_INTERVAL = 2;
 const ADULT_GEOGRAPHY_SHARE = 1 / 8;
 const ADULT_MAX_HARD_QUESTION_DIFFICULTY = 5;
+const MAX_SESSION_DIFFICULTY = 10;
+const MAX_NON_HEBREW_DIFFICULTY = 5;
+const MAX_HEBREW_DIFFICULTY = 10;
+const FIXED_HEBREW_SESSION_DIFFICULTY = MAX_HEBREW_DIFFICULTY;
 const DEFAULT_HEBREW_WRITING_TAIL_COUNT = 3;
 const HEBREW_ONLY_WRITING_TAIL_COUNT = 5;
 const MAP_QUESTION_INTERVAL = 30;
@@ -57,6 +62,14 @@ const HEBREW_OPPOSITE_PAIR_DEFINITIONS = [
   { leftEnglish: "Early", rightEnglish: "Late", leftDisplay: "מוּקְדָּם", rightDisplay: "מְאֻחָר" },
   { leftEnglish: "Easy", rightEnglish: "Difficult", leftDisplay: "קַל", rightDisplay: "קָשֶׁה" },
   { leftEnglish: "First", rightEnglish: "Last, final", leftDisplay: "רִאשׁוֹן", rightDisplay: "אַחֲרוֹן" },
+  { leftEnglish: "Long (m.s.)", rightEnglish: "Short (m.s.)", leftDisplay: "אָרֹוךְ", rightDisplay: "קָצָר" },
+  { leftEnglish: "Near / next to", rightEnglish: "Far away", leftDisplay: "לְיַד", rightDisplay: "הַרְחֵק" },
+  {
+    leftEnglish: "Inside / interior / content",
+    rightEnglish: "Outside of",
+    leftDisplay: "תּוֹךְ",
+    rightDisplay: "מִחוּץ",
+  },
 ];
 const REVIEW_FOCUS_SHARE = 0.2;
 const REVIEW_RECENCY_DECAY = 0.82;
@@ -85,7 +98,6 @@ const NON_CORE_SESSION_CATEGORIES = [
   "reading-comprehension",
   "vocabulary-grammar",
   "maps-and-directions",
-  "digital-safety",
   "health-and-first-aid",
   "nutrition",
   "household-problem-solving",
@@ -94,7 +106,6 @@ const NON_CORE_SESSION_CATEGORIES = [
   "spatial-reasoning",
 ];
 const RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES = {
-  "digital-safety": 1 / 50,
   "health-and-first-aid": 1 / 50,
   "household-problem-solving": 1 / 50,
   "nutrition": 1 / 50,
@@ -127,6 +138,7 @@ const USER_PROFILES = [
     id: "noga",
     name: "Noga",
     defaultDifficulty: 3,
+    enableReviewFocus: false,
     avatarStyle: "longHair",
     palette: {
       sky: "#fff1d2",
@@ -140,6 +152,7 @@ const USER_PROFILES = [
     id: "gideon",
     name: "Gideon",
     defaultDifficulty: 4,
+    enableReviewFocus: false,
     avatarStyle: "curlyHair",
     palette: {
       sky: "#e6f6ff",
@@ -153,6 +166,7 @@ const USER_PROFILES = [
     id: "gabriel",
     name: "Gabriel",
     defaultDifficulty: 1,
+    enableReviewFocus: false,
     avatarStyle: "lightCurls",
     palette: {
       sky: "#ecf7ea",
@@ -164,8 +178,10 @@ const USER_PROFILES = [
   },
   {
     id: ADULT_USER_ID,
-    name: "Adult",
-    defaultDifficulty: ADULT_SESSION_INTERNAL_DIFFICULTY,
+    name: "Miranda",
+    defaultDifficulty: FIXED_HEBREW_SESSION_DIFFICULTY,
+    enableReviewFocus: false,
+    enableHebrewWritingTail: false,
     avatarStyle: "adultBun",
     palette: {
       sky: "#f6ede8",
@@ -173,6 +189,21 @@ const USER_PROFILES = [
       hair: "#3b2a26",
       accent: "#d7b19d",
       eyes: "#2c3b49",
+    },
+  },
+  {
+    id: AVI_USER_ID,
+    name: "avi",
+    defaultDifficulty: FIXED_HEBREW_SESSION_DIFFICULTY,
+    enableReviewFocus: false,
+    enableHebrewWritingTail: false,
+    avatarStyle: "sidePart",
+    palette: {
+      sky: "#e8f1ff",
+      shirt: "#4b6fb1",
+      hair: "#5c473c",
+      accent: "#92c18d",
+      eyes: "#2f3d52",
     },
   },
 ];
@@ -203,7 +234,6 @@ const CATEGORY_LABELS = {
   "reading-comprehension": "Reading Comprehension",
   "vocabulary-grammar": "Vocabulary / Grammar",
   "maps-and-directions": "Maps and Directions",
-  "digital-safety": "Digital Safety",
   "health-and-first-aid": "Health and First Aid",
   nutrition: "Nutrition",
   "household-problem-solving": "Household Problem Solving",
@@ -212,6 +242,18 @@ const CATEGORY_LABELS = {
   "spatial-reasoning": "Spatial Reasoning",
 };
 const USER_PROFILE_MAP = Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, profile]));
+const DIFFICULTY_LEVEL_STYLES = {
+  1: { accent: "#89d48c", text: "#17324a" },
+  2: { accent: "#b5de7a", text: "#17324a" },
+  3: { accent: "#f3d46b", text: "#17324a" },
+  4: { accent: "#f0ab63", text: "#17324a" },
+  5: { accent: "#e57a7a", text: "#ffffff" },
+  6: { accent: "#d96d8c", text: "#ffffff" },
+  7: { accent: "#ca67a4", text: "#ffffff" },
+  8: { accent: "#af63bc", text: "#ffffff" },
+  9: { accent: "#8b5fd0", text: "#ffffff" },
+  10: { accent: "#695ad9", text: "#ffffff" },
+};
 const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   1: { 1: 1 },
   2: { 2: 0.75, 1: 0.25 },
@@ -1440,6 +1482,28 @@ const HEBREW_WRITING_LONG_SENTENCES = [
   "המורה ביקשה מהתלמידים לענות במשפט מלא ומדויק.",
 ];
 
+const HEBREW_WRITING_MEDIUM_SENTENCES = [
+  "אחרי הפגישה אנחנו מסכמים את הרעיונות החשובים במחברת.",
+  "המדריכה מסבירה איך להגיע לתחנה המרכזית בלי למהר.",
+  "כשהגשם התחזק המשפחה חיפשה מקום יבש לשבת בו.",
+  "לפני היציאה כדאי לבדוק שהטלפון, המפתחות והארנק בתיק.",
+  "התלמידים משווים בין שתי תשובות ובוחרים את ההסבר המדויק יותר.",
+  "בסוף היום אני מעדיף להכין רשימה קצרה של הדברים למחר.",
+  "השכנים הזמינו אותנו לארוחת ערב חגיגית במרפסת.",
+  "הצוות תכנן מסלול בטוח כדי להגיע בזמן לפגישה.",
+];
+
+const HEBREW_WRITING_ADVANCED_SENTENCES = [
+  "למרות העייפות, היא המשיכה לקרוא את ההוראות עד שהבינה בדיוק מה צריך לעשות.",
+  "במהלך הוויכוח כולם דיברו מהר מדי, ולכן היה קשה להבין את הנקודה העיקרית.",
+  "אם נשמור קבלות ונרשום הוצאות, יהיה קל יותר לתכנן את התקציב לחודש הבא.",
+  "אחרי שהמכשיר הפסיק לעבוד, בדקנו את הכבל, החלפנו סוללה וניסינו שוב.",
+  "המורה ביקשה מכל תלמיד להסביר לא רק מה התשובה, אלא גם איך הגיע אליה.",
+  "בזמן הנסיעה דיברנו על המקומות שנרצה לבקר בהם ועל הדברים שנצטרך לקחת.",
+  "כדי למנוע בלבול, המנהלת חילקה משימות ברורות וקבעה מי אחראי על כל חלק.",
+  "כאשר השכן הציע עזרה, הודינו לו וביקשנו שיחכה כמה דקות ליד הדלת.",
+];
+
 const HEBREW_AGREEMENT_BLUEPRINTS = [
   {
     difficulty: 1,
@@ -1553,6 +1617,76 @@ const HEBREW_AGREEMENT_BLUEPRINTS = [
     answer: "הן",
     reviewText: "הילדות שרות. הן שמחות.",
   },
+  {
+    difficulty: 6,
+    displayText: "הספרים החדשים ___ על המדף.",
+    options: ["נמצא", "נמצאת", "נמצאים", "נמצאות"],
+    answer: "נמצאים",
+    reviewText: "הספרים החדשים נמצאים על המדף.",
+  },
+  {
+    difficulty: 6,
+    displayText: "שתי החברות ___ ליציאה.",
+    options: ["מוכן", "מוכנה", "מוכנים", "מוכנות"],
+    answer: "מוכנות",
+    reviewText: "שתי החברות מוכנות ליציאה.",
+  },
+  {
+    difficulty: 7,
+    displayText: "הילדות קיבלו ספרים חדשים, ו___ מיד התחילו לקרוא.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "הן",
+    reviewText: "הילדות קיבלו ספרים חדשים, והן מיד התחילו לקרוא.",
+  },
+  {
+    difficulty: 7,
+    displayText: "הכיסאות בחדר ___ ליד הקיר.",
+    options: ["עומד", "עומדת", "עומדים", "עומדות"],
+    answer: "עומדים",
+    reviewText: "הכיסאות בחדר עומדים ליד הקיר.",
+  },
+  {
+    difficulty: 8,
+    displayText: "המזוודות הכבדות ___ ליד הדלת עד הבוקר.",
+    options: ["נשאר", "נשארה", "נשארו", "נשארתי"],
+    answer: "נשארו",
+    reviewText: "המזוודות הכבדות נשארו ליד הדלת עד הבוקר.",
+  },
+  {
+    difficulty: 8,
+    displayText: "ההחלטה הסופית ___ ברורה לכולם.",
+    options: ["היה", "הייתה", "היו", "הייתי"],
+    answer: "הייתה",
+    reviewText: "ההחלטה הסופית הייתה ברורה לכולם.",
+  },
+  {
+    difficulty: 9,
+    displayText: "כשדנה ורות יצאו מהכיתה, ___ לקחו איתן את המחברות.",
+    options: ["הוא", "היא", "הם", "הן"],
+    answer: "הן",
+    reviewText: "כשדנה ורות יצאו מהכיתה, הן לקחו איתן את המחברות.",
+  },
+  {
+    difficulty: 9,
+    displayText: "המסמכים החשובים ___ מוכנים לחתימה.",
+    options: ["היה", "הייתה", "היו", "הייתי"],
+    answer: "היו",
+    reviewText: "המסמכים החשובים היו מוכנים לחתימה.",
+  },
+  {
+    difficulty: 10,
+    displayText: "אם ההנחיות החדשות ___ ברורות, אפשר להתחיל לעבוד.",
+    options: ["אינו", "אינה", "אינם", "אינן"],
+    answer: "אינן",
+    reviewText: "אם ההנחיות החדשות אינן ברורות, אפשר להתחיל לעבוד.",
+  },
+  {
+    difficulty: 10,
+    displayText: "הצוות והשכנים ___ אחראים על הסידור בחצר.",
+    options: ["אחראי", "אחראית", "אחראים", "אחראיות"],
+    answer: "אחראים",
+    reviewText: "הצוות והשכנים אחראים על הסידור בחצר.",
+  },
 ];
 
 const HEBREW_CATEGORY_SORT_GROUPS = [
@@ -1619,6 +1753,38 @@ const HEBREW_CATEGORY_SORT_GROUPS = [
       "מִשְׁחַת שִׁנַּיִם",
     ],
   },
+  {
+    label: "רגשות",
+    words: ["שמחה", "תקווה", "סקרנות", "התרגשות", "דאגה", "שלווה", "אהבה", "כעס", "פחד", "הפתעה"],
+  },
+  {
+    label: "עיר",
+    words: ["רחוב", "כיכר", "תחנה", "חנות", "משרד", "מרפאה", "ספריה", "שכונה", "גשר", "מעלית"],
+  },
+  {
+    label: "תקשורת",
+    words: ["הודעה", "שיחה", "תשובה", "שאלה", "כתובת", "טלפון", "אתר", "תמונה", "מסך", "מצלמה"],
+  },
+  {
+    label: "עבודה ולימודים",
+    words: ["פגישה", "משימה", "פרויקט", "צוות", "אחריות", "ניסיון", "החלטה", "מסמך", "דיווח", "מחקר"],
+  },
+  {
+    label: "זמן",
+    words: ["שבוע", "חודש", "שנה", "דקה", "רגע", "תקופה", "תאריך", "הפסקה", "התחלה", "סוף"],
+  },
+  {
+    label: "בית",
+    words: ["סלון", "מרפסת", "מדרגות", "מפתח", "ארנק", "ארון", "מדף", "שמיכה", "כרית", "מנורה"],
+  },
+  {
+    label: "בריאות",
+    words: ["כאב", "תרופה", "מרשם", "בדיקה", "מנוחה", "נשימה", "בריאות", "תיאבון", "חום", "סחרחורת"],
+  },
+  {
+    label: "נסיעה",
+    words: ["כרטיס", "מזוודה", "דרכון", "טיסה", "מסלול", "עיכוב", "נהג", "תחנה", "נסיעה", "כיוון"],
+  },
 ];
 
 const HEBREW_CATEGORY_SORT_LEVEL_CONFIG = {
@@ -1653,6 +1819,31 @@ const HEBREW_CATEGORY_SORT_LEVEL_CONFIG = {
     bucketCount: 5,
     itemsPerBucket: 2,
   },
+  6: {
+    labelPool: ["אוכל", "חיות", "בית ספר", "מטבח", "משפחה", "בית", "זמן", "עיר", "תקשורת", "רגשות"],
+    bucketCount: 5,
+    itemsPerBucket: 3,
+  },
+  7: {
+    labelPool: ["אוכל", "בית ספר", "משפחה", "בית", "זמן", "עיר", "תקשורת", "עבודה ולימודים", "רגשות", "בריאות"],
+    bucketCount: 5,
+    itemsPerBucket: 3,
+  },
+  8: {
+    labelPool: ["אוכל", "בית", "זמן", "עיר", "תקשורת", "עבודה ולימודים", "רגשות", "בריאות", "נסיעה", "תחבורה", "מזג אוויר"],
+    bucketCount: 6,
+    itemsPerBucket: 3,
+  },
+  9: {
+    labelPool: ["בית", "זמן", "עיר", "תקשורת", "עבודה ולימודים", "רגשות", "בריאות", "נסיעה", "תחבורה", "מזג אוויר", "טבע"],
+    bucketCount: 6,
+    itemsPerBucket: 4,
+  },
+  10: {
+    labelPool: ["בית", "זמן", "עיר", "תקשורת", "עבודה ולימודים", "רגשות", "בריאות", "נסיעה", "תחבורה", "מזג אוויר", "טבע", "חדר אמבטיה"],
+    bucketCount: 7,
+    itemsPerBucket: 4,
+  },
 };
 
 const HEBREW_FINAL_LETTER_DRILLS = [
@@ -1671,6 +1862,41 @@ const HEBREW_FINAL_LETTER_DRILLS = [
   { difficulty: 3, middleLetter: "נ", finalLetter: "ן", middleWord: "ענבים", finalWord: "לבן" },
   { difficulty: 3, middleLetter: "פ", finalLetter: "ף", middleWord: "מאפייה", finalWord: "אף" },
   { difficulty: 3, middleLetter: "צ", finalLetter: "ץ", middleWord: "קבוצה", finalWord: "קיץ" },
+  { difficulty: 4, middleLetter: "כ", finalLetter: "ך", middleWord: "בריכה", finalWord: "תאריך" },
+  { difficulty: 4, middleLetter: "מ", finalLetter: "ם", middleWord: "משימה", finalWord: "חלום" },
+  { difficulty: 4, middleLetter: "נ", finalLetter: "ן", middleWord: "מנגינה", finalWord: "עניין" },
+  { difficulty: 4, middleLetter: "פ", finalLetter: "ף", middleWord: "קפיצה", finalWord: "עוף" },
+  { difficulty: 4, middleLetter: "צ", finalLetter: "ץ", middleWord: "מצלמה", finalWord: "ארץ" },
+  { difficulty: 5, middleLetter: "כ", finalLetter: "ך", middleWord: "מכשיר", finalWord: "מסך" },
+  { difficulty: 5, middleLetter: "מ", finalLetter: "ם", middleWord: "מצלמה", finalWord: "עולם" },
+  { difficulty: 5, middleLetter: "נ", finalLetter: "ן", middleWord: "אנשים", finalWord: "רעיון" },
+  { difficulty: 5, middleLetter: "פ", finalLetter: "ף", middleWord: "תפקיד", finalWord: "שותף" },
+  { difficulty: 5, middleLetter: "צ", finalLetter: "ץ", middleWord: "מצב", finalWord: "חוץ" },
+  { difficulty: 6, middleLetter: "כ", finalLetter: "ך", middleWord: "רכבת", finalWord: "צריך" },
+  { difficulty: 6, middleLetter: "מ", finalLetter: "ם", middleWord: "מדרגה", finalWord: "צילום" },
+  { difficulty: 6, middleLetter: "נ", finalLetter: "ן", middleWord: "מנורה", finalWord: "תכנון" },
+  { difficulty: 6, middleLetter: "פ", finalLetter: "ף", middleWord: "תפקיד", finalWord: "ענף" },
+  { difficulty: 6, middleLetter: "צ", finalLetter: "ץ", middleWord: "מציאות", finalWord: "לחץ" },
+  { difficulty: 7, middleLetter: "כ", finalLetter: "ך", middleWord: "הצלחה", finalWord: "חינוך" },
+  { difficulty: 7, middleLetter: "מ", finalLetter: "ם", middleWord: "תמרור", finalWord: "יוזם" },
+  { difficulty: 7, middleLetter: "נ", finalLetter: "ן", middleWord: "תנועה", finalWord: "עניין" },
+  { difficulty: 7, middleLetter: "פ", finalLetter: "ף", middleWord: "תקופה", finalWord: "אלף" },
+  { difficulty: 7, middleLetter: "צ", finalLetter: "ץ", middleWord: "הצגה", finalWord: "אומץ" },
+  { difficulty: 8, middleLetter: "כ", finalLetter: "ך", middleWord: "תוכנית", finalWord: "מהלך" },
+  { difficulty: 8, middleLetter: "מ", finalLetter: "ם", middleWord: "משפחה", finalWord: "צילום" },
+  { difficulty: 8, middleLetter: "נ", finalLetter: "ן", middleWord: "תחנה", finalWord: "עדכון" },
+  { difficulty: 8, middleLetter: "פ", finalLetter: "ף", middleWord: "תקיפה", finalWord: "שיתוף" },
+  { difficulty: 8, middleLetter: "צ", finalLetter: "ץ", middleWord: "מציאות", finalWord: "מרוץ" },
+  { difficulty: 9, middleLetter: "כ", finalLetter: "ך", middleWord: "זכייה", finalWord: "תיווך" },
+  { difficulty: 9, middleLetter: "מ", finalLetter: "ם", middleWord: "מדריכים", finalWord: "קידום" },
+  { difficulty: 9, middleLetter: "נ", finalLetter: "ן", middleWord: "מנהיגות", finalWord: "שלטון" },
+  { difficulty: 9, middleLetter: "פ", finalLetter: "ף", middleWord: "תפיסה", finalWord: "עדיף" },
+  { difficulty: 9, middleLetter: "צ", finalLetter: "ץ", middleWord: "קבוצה", finalWord: "חפץ" },
+  { difficulty: 10, middleLetter: "כ", finalLetter: "ך", middleWord: "מכולת", finalWord: "המשך" },
+  { difficulty: 10, middleLetter: "מ", finalLetter: "ם", middleWord: "מסגרת", finalWord: "תיאום" },
+  { difficulty: 10, middleLetter: "נ", finalLetter: "ן", middleWord: "תנאים", finalWord: "דיון" },
+  { difficulty: 10, middleLetter: "פ", finalLetter: "ף", middleWord: "הפסקה", finalWord: "שקוף" },
+  { difficulty: 10, middleLetter: "צ", finalLetter: "ץ", middleWord: "מצפון", finalWord: "אילוץ" },
 ];
 
 const HEBREW_READING_BLUEPRINTS = [
@@ -1775,6 +2001,131 @@ const HEBREW_READING_BLUEPRINTS = [
       { asset: "book.svg", alt: "ספר" },
     ],
   },
+  {
+    difficulty: 6,
+    lines: [
+      "לפני היציאה נועם בדק שהטלפון, המפתחות והארנק בתיק שלו.",
+      "אחר כך הוא נעל את הדלת וירד במדרגות.",
+    ],
+    question: "מה נועם בדק לפני היציאה?",
+    options: [
+      "שהטלפון, המפתחות והארנק בתיק שלו",
+      "שהחלון פתוח",
+      "שהאוכל מוכן",
+      "שהאוטובוס הגיע",
+    ],
+    answer: "שהטלפון, המפתחות והארנק בתיק שלו",
+    images: [],
+  },
+  {
+    difficulty: 6,
+    lines: [
+      "רוני חיפשה תחנה קרובה לאוטובוס, אבל גילתה שהקו מתעכב.",
+      "בינתיים היא התקשרה לחברה שלה כדי לעדכן אותה.",
+    ],
+    question: "למה רוני התקשרה לחברה שלה?",
+    options: ["כדי לעדכן אותה", "כדי להזמין אוכל", "כדי לבטל שיעור", "כדי לקנות כרטיס"],
+    answer: "כדי לעדכן אותה",
+    images: [],
+  },
+  {
+    difficulty: 7,
+    lines: [
+      "אמא ביקשה מעידו לקנות לחם, חלב ועגבניות.",
+      "הוא מצא מבצע על גבינה אבל שכח לקחת ביצים.",
+    ],
+    question: "מה עידו שכח לקחת?",
+    options: ["ביצים", "חלב", "לחם", "עגבניות"],
+    answer: "ביצים",
+    images: [],
+  },
+  {
+    difficulty: 7,
+    lines: [
+      "כשהתחיל לרדת גשם, הקבוצה עברה לשבת במרפסת המקורה.",
+      "המדריך פרש מפה חדשה והסביר איך ממשיכים במסלול.",
+    ],
+    question: "איפה הקבוצה ישבה כשירד גשם?",
+    options: ["במרפסת המקורה", "בתחנה המרכזית", "ליד הנהר", "על הדשא"],
+    answer: "במרפסת המקורה",
+    images: [],
+  },
+  {
+    difficulty: 8,
+    lines: [
+      "בפגישה הקצרה הצוות עבר על המשימות של השבוע הבא.",
+      "יעל קיבלה אחריות על הדוח, ועומר בדק את לוח הזמנים.",
+    ],
+    question: "על מה יעל קיבלה אחריות?",
+    options: ["על הדוח", "על המפתחות", "על האוכל", "על התחבורה"],
+    answer: "על הדוח",
+    images: [],
+  },
+  {
+    difficulty: 8,
+    lines: [
+      "אחרי שהמחשב הפסיק לעבוד, דניאל ניסה להחליף כבל ולהפעיל אותו מחדש.",
+      "כשזה לא עזר, הוא שלח הודעה לטכנאי וביקש שיגיע בהקדם.",
+    ],
+    question: "למי דניאל שלח הודעה?",
+    options: ["לטכנאי", "לשכן", "למורה", "לנהג"],
+    answer: "לטכנאי",
+    images: [],
+  },
+  {
+    difficulty: 9,
+    lines: [
+      "במהלך הנסיעה לירושלים כולם דיברו על המקומות שירצו לבקר בהם.",
+      "בסוף החליטו להתחיל בשוק, להמשיך למוזיאון ולסיים בארוחת ערב.",
+    ],
+    question: "איפה הם החליטו להתחיל?",
+    options: ["בשוק", "במוזיאון", "בתחנה", "במלון"],
+    answer: "בשוק",
+    images: [],
+  },
+  {
+    difficulty: 9,
+    lines: [
+      "המנהלת חילקה את המשימה לחלקים ברורים כדי למנוע בלבול.",
+      "כל תלמיד קיבל תפקיד אחר, ובסוף היום כולם הגישו סיכום מסודר.",
+    ],
+    question: "למה המנהלת חילקה את המשימה לחלקים?",
+    options: ["כדי למנוע בלבול", "כדי לקצר את ההפסקה", "כדי לסגור את החצר", "כדי לשנות את המסלול"],
+    answer: "כדי למנוע בלבול",
+    images: [],
+  },
+  {
+    difficulty: 10,
+    lines: [
+      "למרות העייפות, מאיה המשיכה לקרוא את ההוראות עד שהבינה בדיוק מה נדרש ממנה.",
+      "רק אחרי שבדקה שוב את כל הפרטים היא שלחה את הקובץ הסופי.",
+    ],
+    question: "מתי מאיה שלחה את הקובץ הסופי?",
+    options: [
+      "אחרי שבדקה שוב את כל הפרטים",
+      "לפני שקראה את ההוראות",
+      "בזמן ההפסקה הראשונה",
+      "כשחברתה התקשרה אליה",
+    ],
+    answer: "אחרי שבדקה שוב את כל הפרטים",
+    images: [],
+  },
+  {
+    difficulty: 10,
+    lines: [
+      "השכנים רצו לארגן אירוע קטן בחצר, אבל היה קשה לבחור תאריך שמתאים לכולם.",
+      "בסופו של דבר הם פתחו קבוצה משותפת, הציעו שלוש אפשרויות והצביעו יחד.",
+    ],
+    question: "איך השכנים החליטו על התאריך?",
+    options: [
+      "הם פתחו קבוצה משותפת והצביעו על שלוש אפשרויות",
+      "הם חיכו שהמזג ישתנה",
+      "הם ביקשו מהנהג לבחור",
+      "הם ביטלו את האירוע מיד",
+    ],
+    answer: "הם פתחו קבוצה משותפת והצביעו על שלוש אפשרויות",
+    images: [],
+  },
 ];
 
 const SCIENCE_EXCLUDED_PATTERNS = [
@@ -1796,6 +2147,7 @@ const state = {
   totalQuestions: 0,
   difficulty: 3,
   hebrewOnly: false,
+  specialtyWordsOnly: false,
   currentIndex: 0,
   viewIndex: 0,
   answeredCount: 0,
@@ -1838,9 +2190,12 @@ const elements = {
   questionCountButtons: Array.from(document.querySelectorAll(".question-count-button")),
   hebrewOnly: document.getElementById("hebrew-only"),
   hebrewOnlyButton: document.getElementById("hebrew-only-button"),
+  specialtyWordsOnly: document.getElementById("specialty-words-only"),
+  specialtyWordsButton: document.getElementById("specialty-words-button"),
   difficultyLabel: document.getElementById("difficulty-label"),
+  difficultySelector: document.getElementById("difficulty-selector"),
   difficultyLevel: document.getElementById("difficulty-level"),
-  difficultyButtons: Array.from(document.querySelectorAll(".difficulty-button")),
+  difficultyValue: document.getElementById("difficulty-value"),
   progressTracker: document.getElementById("progress-tracker"),
   scoreText: document.getElementById("score-text"),
   feedback: document.getElementById("feedback"),
@@ -1874,21 +2229,41 @@ function cleanupInteractiveDragState() {
 }
 
 const rawHebrewWordEntries = typeof HEBREW_WORDS !== "undefined" ? HEBREW_WORDS : [];
-const hebrewQuestionBank = buildHebrewQuestionBank(rawHebrewWordEntries);
-const hebrewReverseQuestionBank = buildHebrewReverseQuestionBank(rawHebrewWordEntries);
-const hebrewOppositeQuestionBank = buildHebrewOppositeQuestionBank(hebrewReverseQuestionBank);
-const hebrewHomographQuestionBank = buildHebrewHomographQuestionBank(rawHebrewWordEntries);
-const hebrewImageQuestionBank = buildHebrewImageQuestionBank(
-  typeof HEBREW_IMAGE_WORD_BANK !== "undefined" ? HEBREW_IMAGE_WORD_BANK : [],
-  hebrewQuestionBank
-);
-const hebrewMeanings = hebrewQuestionBank.map((entry) => entry.english);
-const HEBREW_POINTED_WORD_LOOKUP = new Map(
-  hebrewQuestionBank.map((entry) => [entry.hebrew, entry.hebrewDisplay])
-);
+const rawHebrewImageWordEntries = typeof HEBREW_IMAGE_WORD_BANK !== "undefined" ? HEBREW_IMAGE_WORD_BANK : [];
+const DEFAULT_HEBREW_BANKS = createHebrewBankBundle(rawHebrewWordEntries, rawHebrewImageWordEntries);
+const hebrewQuestionBank = DEFAULT_HEBREW_BANKS.questionBank;
+const hebrewReverseQuestionBank = DEFAULT_HEBREW_BANKS.reverseQuestionBank;
+const hebrewOppositeQuestionBank = DEFAULT_HEBREW_BANKS.oppositeQuestionBank;
+const hebrewHomographQuestionBank = DEFAULT_HEBREW_BANKS.homographQuestionBank;
+const hebrewImageQuestionBank = DEFAULT_HEBREW_BANKS.imageQuestionBank;
+const hebrewMeanings = DEFAULT_HEBREW_BANKS.meanings;
+const HEBREW_POINTED_WORD_LOOKUP = (() => {
+  const lookup = new Map();
+
+  hebrewQuestionBank.forEach((entry) => {
+    const rawHebrew = String(entry?.hebrew || "").trim();
+    const displayHebrew = String(entry?.hebrewDisplay || "").trim();
+    const strippedHebrew = stripHebrewDiacritics(rawHebrew).trim();
+
+    if (rawHebrew && displayHebrew && !lookup.has(rawHebrew)) {
+      lookup.set(rawHebrew, displayHebrew);
+    }
+
+    if (strippedHebrew && displayHebrew && !lookup.has(strippedHebrew)) {
+      lookup.set(strippedHebrew, displayHebrew);
+    }
+  });
+
+  return lookup;
+})();
 const adultHebrewModule =
   typeof ADULT_HEBREW_MODULE !== "undefined" && ADULT_HEBREW_MODULE ? ADULT_HEBREW_MODULE : {};
 const adultHebrewWordEntries = Array.isArray(adultHebrewModule.words) ? adultHebrewModule.words : [];
+const MIRANDA_SPECIALTY_HEBREW_BANKS = createHebrewBankBundle(adultHebrewWordEntries, rawHebrewImageWordEntries);
+const MIRANDA_HEBREW_BANKS = createHebrewBankBundle(
+  mergeUserHebrewWordSets(adultHebrewWordEntries, rawHebrewWordEntries),
+  rawHebrewImageWordEntries
+);
 const adultHebrewQuestionBank = buildHebrewQuestionBank(adultHebrewWordEntries);
 const adultHebrewReverseQuestionBank = buildHebrewReverseQuestionBank(adultHebrewWordEntries);
 const adultHebrewMeanings = adultHebrewQuestionBank.map((entry) => entry.english);
@@ -1908,6 +2283,17 @@ const adultReadingBlueprints = Array.isArray(adultHebrewModule.readingBlueprints
   : [];
 const adultWritingPromptBank = normalizeAdultWritingPromptBank(
   Array.isArray(adultHebrewModule.writingPrompts) ? adultHebrewModule.writingPrompts : []
+);
+const aviHebrewModule =
+  typeof AVI_HEBREW_MODULE !== "undefined" && AVI_HEBREW_MODULE ? AVI_HEBREW_MODULE : {};
+const aviHebrewWordEntries = normalizeUserHebrewWordEntries(
+  Array.isArray(aviHebrewModule.words) ? aviHebrewModule.words : [],
+  { defaultDifficulty: FIXED_HEBREW_SESSION_DIFFICULTY }
+);
+const AVI_SPECIALTY_HEBREW_BANKS = createHebrewBankBundle(aviHebrewWordEntries, rawHebrewImageWordEntries);
+const AVI_HEBREW_BANKS = createHebrewBankBundle(
+  mergeUserHebrewWordSets(aviHebrewWordEntries, rawHebrewWordEntries),
+  rawHebrewImageWordEntries
 );
 const scienceQuestionBank = buildScienceQuestionBank(
   typeof SCIENCE_QUESTIONS !== "undefined" ? SCIENCE_QUESTIONS : []
@@ -1989,10 +2375,6 @@ const staticChoiceBankSources = [
     category: "maps-and-directions",
     entries:
       typeof MAPS_AND_DIRECTIONS_QUESTIONS !== "undefined" ? MAPS_AND_DIRECTIONS_QUESTIONS : [],
-  },
-  {
-    category: "digital-safety",
-    entries: typeof DIGITAL_SAFETY_QUESTIONS !== "undefined" ? DIGITAL_SAFETY_QUESTIONS : [],
   },
   {
     category: "health-and-first-aid",
@@ -2184,13 +2566,6 @@ const generatedChoiceCategoryConfigs = {
         ? createMapsAndDirectionsGeneratedEntry
         : null,
   },
-  "digital-safety": {
-    share: 0.6,
-    factory:
-      typeof createDigitalSafetyGeneratedEntry === "function"
-        ? createDigitalSafetyGeneratedEntry
-        : null,
-  },
   "health-and-first-aid": {
     share: 0.4,
     factory:
@@ -2316,7 +2691,8 @@ elements.resultsForwardButton.addEventListener("click", showNextQuizQuestion);
 initializeUserSelector();
 initializeQuestionCountButtons();
 initializeHebrewOnlyButton();
-initializeDifficultyButtons();
+initializeSpecialtyWordsButton();
+initializeDifficultyControl();
 updateStartControlsForCurrentUser();
 
 function buildHebrewQuestionBank(entries) {
@@ -2529,6 +2905,73 @@ function buildHebrewImageQuestionBank(entries, hebrewEntries) {
 
 function buildHebrewImageWordKey(hebrew, english) {
   return `${stripHebrewDiacritics(hebrew).trim()}||${String(english || "").trim()}`;
+}
+
+function createHebrewBankBundle(entries, imageWordEntries) {
+  const questionBank = buildHebrewQuestionBank(entries);
+  const reverseQuestionBank = buildHebrewReverseQuestionBank(entries);
+
+  return {
+    questionBank,
+    reverseQuestionBank,
+    oppositeQuestionBank: buildHebrewOppositeQuestionBank(reverseQuestionBank),
+    homographQuestionBank: buildHebrewHomographQuestionBank(entries),
+    imageQuestionBank: buildHebrewImageQuestionBank(imageWordEntries, questionBank),
+    meanings: questionBank.map((entry) => entry.english),
+  };
+}
+
+function normalizeUserHebrewWordEntries(entries, options = {}) {
+  const fallbackDifficulty = Math.max(
+    1,
+    Math.min(MAX_HEBREW_DIFFICULTY, Number(options.defaultDifficulty) || FIXED_HEBREW_SESSION_DIFFICULTY)
+  );
+
+  return (entries || [])
+    .map((entry) => {
+      const hebrew = String(entry?.hebrew || "").trim();
+      const english = String(entry?.english || "").trim();
+      if (!hebrew || !english) {
+        return null;
+      }
+
+      return {
+        category: String(entry?.category || options.defaultCategory || "User Hebrew").trim(),
+        english,
+        transliteration: String(entry?.transliteration || "").trim(),
+        hebrew,
+        difficulty: getEntryDifficulty(entry?.difficulty) || fallbackDifficulty,
+      };
+    })
+    .filter(Boolean);
+}
+
+function mergeUserHebrewWordSets(...wordSets) {
+  const mergedWords = [];
+  const seen = new Set();
+
+  wordSets.flat().forEach((entry) => {
+    const hebrew = stripHebrewDiacritics(String(entry?.hebrew || "")).trim();
+    const english = String(entry?.english || "").trim();
+    if (!hebrew || !english) {
+      return;
+    }
+
+    const identity = `${hebrew}||${english.toLowerCase()}`;
+    if (seen.has(identity)) {
+      return;
+    }
+
+    seen.add(identity);
+    mergedWords.push({
+      ...entry,
+      english,
+      hebrew: String(entry.hebrew).trim(),
+      transliteration: String(entry?.transliteration || "").trim(),
+    });
+  });
+
+  return mergedWords;
 }
 
 function stripHebrewDiacritics(value) {
@@ -3080,7 +3523,7 @@ function getChoiceMeaningKey(value) {
 
 function getEntryDifficulty(value) {
   const difficulty = Number(value);
-  if (!Number.isInteger(difficulty) || difficulty < 1 || difficulty > 5) {
+  if (!Number.isInteger(difficulty) || difficulty < 1 || difficulty > MAX_SESSION_DIFFICULTY) {
     return null;
   }
 
@@ -3091,8 +3534,54 @@ function isAdultUserId(userId) {
   return String(userId || "") === ADULT_USER_ID;
 }
 
+function isAviUserId(userId) {
+  return String(userId || "") === AVI_USER_ID;
+}
+
 function isAdultUserSelected() {
   return isAdultUserId(state.currentUserId);
+}
+
+function isAviUserSelected() {
+  return isAviUserId(state.currentUserId);
+}
+
+function hasSpecialtyWordToggle(userId = state.currentUserId) {
+  return isAdultUserId(userId) || isAviUserId(userId);
+}
+
+function isReviewFocusEnabledForUser(userId = state.currentUserId) {
+  return USER_PROFILE_MAP[userId]?.enableReviewFocus !== false;
+}
+
+function isHebrewWritingTailEnabledForUser(userId = state.currentUserId) {
+  return USER_PROFILE_MAP[userId]?.enableHebrewWritingTail !== false;
+}
+
+function getSessionHebrewBanksForUser(userId, options = {}) {
+  const specialtyWordsOnly = Boolean(options.specialtyWordsOnly);
+
+  if (isAdultUserId(userId)) {
+    return specialtyWordsOnly ? MIRANDA_SPECIALTY_HEBREW_BANKS : MIRANDA_HEBREW_BANKS;
+  }
+
+  if (isAviUserId(userId)) {
+    return specialtyWordsOnly ? AVI_SPECIALTY_HEBREW_BANKS : AVI_HEBREW_BANKS;
+  }
+
+  return DEFAULT_HEBREW_BANKS;
+}
+
+function getSpecialtyWordListLabel(userId = state.currentUserId) {
+  if (isAdultUserId(userId)) {
+    return "pregnancy, birth, postpartum, and female anatomy";
+  }
+
+  if (isAviUserId(userId)) {
+    return "space, satellite, and software";
+  }
+
+  return "";
 }
 
 function initializeUserSelector() {
@@ -3131,6 +3620,7 @@ function selectUser(userId) {
   }
 
   state.currentUserId = userId;
+  resetSpecialtyWordsOnlySelection();
   writeSelectedUserId(userId);
   applyUserDefaultDifficulty(userId);
   renderUserSelector();
@@ -3145,10 +3635,10 @@ function applyUserDefaultDifficulty(userId) {
   const profile = USER_PROFILE_MAP[userId];
   const difficulty = Number(profile?.defaultDifficulty);
   elements.difficultyLevel.value =
-    Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= 5
+    Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= MAX_SESSION_DIFFICULTY
       ? String(difficulty)
       : "3";
-  updateDifficultyButtons();
+  updateDifficultyControl();
 }
 
 function loadSelectedUserId() {
@@ -3159,7 +3649,10 @@ function loadSelectedUserId() {
 
   try {
     const rawValue = String(storage.getItem(SELECTED_USER_STORAGE_KEY) || "");
-    return USER_PROFILES.some((profile) => profile.id === rawValue) ? rawValue : USER_PROFILES[0].id;
+    const normalizedUserId = rawValue === "adult" ? ADULT_USER_ID : rawValue;
+    return USER_PROFILES.some((profile) => profile.id === normalizedUserId)
+      ? normalizedUserId
+      : USER_PROFILES[0].id;
   } catch {
     return USER_PROFILES[0].id;
   }
@@ -3215,6 +3708,11 @@ function buildUserAvatarMarkup(profile) {
       <path d="M24 36c2-13 10-22 20-22 11 0 19 8 21 20-4-3-10-5-17-5-9 0-16 3-24 7z" fill="${palette.hair}"></path>
       <path d="M23 37c0-12 9-21 21-21s21 9 21 21v7c-5-5-13-8-21-8s-16 3-21 8z" fill="${palette.hair}" opacity="0.96"></path>
     `,
+    sidePart: `
+      <path d="M23 36c1-12 10-21 21-21 12 0 20 8 21 20-4-2-10-4-18-4-8 0-16 2-24 5z" fill="${palette.hair}"></path>
+      <path d="M24 36c0-11 9-20 20-20 6 0 12 2 16 6-6 0-10 2-14 5-5 3-11 6-22 9z" fill="${palette.hair}" opacity="0.94"></path>
+      <path d="M30 23c6-7 18-9 27-2" fill="none" stroke="${palette.hair}" stroke-width="3.2" stroke-linecap="round"></path>
+    `,
   };
   const hairMarkup = hairMarkupByStyle[profile.avatarStyle] || hairMarkupByStyle.curlyHair;
   return `
@@ -3246,8 +3744,36 @@ function setButtonPressedState(button, isActive) {
   button.setAttribute("aria-pressed", isActive ? "true" : "false");
 }
 
+function normalizeSessionDifficulty(value, fallback = 3) {
+  const parsedValue = Number.parseInt(value, 10);
+  if (!Number.isFinite(parsedValue)) {
+    return fallback;
+  }
+
+  return Math.max(1, Math.min(MAX_SESSION_DIFFICULTY, parsedValue));
+}
+
+function getDifficultyPresentation(difficulty) {
+  const normalizedDifficulty = normalizeSessionDifficulty(difficulty);
+  const style = DIFFICULTY_LEVEL_STYLES[normalizedDifficulty] || DIFFICULTY_LEVEL_STYLES[3];
+  const progress =
+    MAX_SESSION_DIFFICULTY <= 1
+      ? "100%"
+      : `${((normalizedDifficulty - 1) / (MAX_SESSION_DIFFICULTY - 1)) * 100}%`;
+
+  return {
+    normalizedDifficulty,
+    accent: style.accent,
+    text: style.text,
+    progress,
+  };
+}
+
 function updateStartControlsForCurrentUser() {
   const isAdult = isAdultUserSelected();
+  const isAvi = isAviUserSelected();
+  const isSpecialtyOnly = isAdult && isSpecialtyWordsOnlySelected();
+  const currentUser = getCurrentUserProfile();
 
   if (isAdult && elements.questionCount) {
     elements.questionCount.value = String(ADULT_SESSION_DEFAULT_QUESTION_COUNT);
@@ -3255,40 +3781,38 @@ function updateStartControlsForCurrentUser() {
   }
 
   if (elements.sessionModeLabel) {
-    elements.sessionModeLabel.textContent = isAdult
-      ? "Session Mode (Adult mix is fixed)"
-      : "Session Mode";
+    elements.sessionModeLabel.textContent = "Session Mode";
   }
 
   if (elements.difficultyLabel) {
-    elements.difficultyLabel.textContent = isAdult ? "Difficulty (Adult mix is fixed)" : "Difficulty";
+    elements.difficultyLabel.textContent = "Difficulty";
   }
 
   if (elements.hebrewOnlyButton) {
-    elements.hebrewOnlyButton.disabled = isAdult;
-    elements.hebrewOnlyButton.title = isAdult
-      ? "Adult sessions use a fixed mix of Hebrew, hard math, and geography."
-      : "";
+    elements.hebrewOnlyButton.disabled = isAvi || isSpecialtyOnly;
+    elements.hebrewOnlyButton.title =
+      isAvi || isSpecialtyOnly ? `${currentUser.name}'s session settings are preset.` : "";
     if (isAdult) {
-      setButtonPressedState(elements.hebrewOnlyButton, false);
+      if (isSpecialtyOnly) {
+        setButtonPressedState(elements.hebrewOnlyButton, true);
+      } else {
+        updateHebrewOnlyButton();
+      }
+    } else if (isAvi) {
+      setButtonPressedState(elements.hebrewOnlyButton, true);
     } else {
       updateHebrewOnlyButton();
     }
   }
 
-  elements.difficultyButtons.forEach((button) => {
-    button.disabled = isAdult;
-    button.title = isAdult
-      ? "Adult sessions use adult Hebrew plus the hardest math and geography questions."
-      : "";
-    if (isAdult) {
-      setButtonPressedState(button, false);
-    }
-  });
+  updateSpecialtyWordsButton();
 
-  if (!isAdult) {
-    updateDifficultyButtons();
+  if (elements.difficultyLevel) {
+    elements.difficultyLevel.disabled = isAdult || isAvi;
+    elements.difficultyLevel.title = isAdult || isAvi ? `${currentUser.name}'s session settings are preset.` : "";
   }
+
+  updateDifficultyControl();
 }
 
 function initializeQuestionCountButtons() {
@@ -3317,20 +3841,15 @@ function updateQuestionCountButtons() {
   });
 }
 
-function initializeDifficultyButtons() {
-  elements.difficultyButtons.forEach((button) => {
-    button.addEventListener("click", () => {
-      const difficulty = button.dataset.difficulty;
-      if (!difficulty) {
-        return;
-      }
-
-      elements.difficultyLevel.value = difficulty;
-      updateDifficultyButtons();
-    });
+function initializeDifficultyControl() {
+  elements.difficultyLevel?.addEventListener("input", () => {
+    updateDifficultyControl();
+  });
+  elements.difficultyLevel?.addEventListener("change", () => {
+    updateDifficultyControl();
   });
 
-  updateDifficultyButtons();
+  updateDifficultyControl();
 }
 
 function initializeHebrewOnlyButton() {
@@ -3342,14 +3861,37 @@ function initializeHebrewOnlyButton() {
   updateHebrewOnlyButton();
 }
 
-function updateDifficultyButtons() {
-  const selectedDifficulty = String(elements.difficultyLevel.value || "3");
+function initializeSpecialtyWordsButton() {
+  elements.specialtyWordsButton?.addEventListener("click", () => {
+    if (!hasSpecialtyWordToggle()) {
+      return;
+    }
 
-  elements.difficultyButtons.forEach((button) => {
-    const isActive = button.dataset.difficulty === selectedDifficulty;
-    button.classList.toggle("active", isActive);
-    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+    elements.specialtyWordsOnly.value = String(!isSpecialtyWordsOnlySelected());
+    updateSpecialtyWordsButton();
   });
+
+  updateSpecialtyWordsButton();
+}
+
+function updateDifficultyControl() {
+  if (!elements.difficultyLevel) {
+    return;
+  }
+
+  const { normalizedDifficulty, accent, text, progress } = getDifficultyPresentation(
+    elements.difficultyLevel.value
+  );
+  elements.difficultyLevel.value = String(normalizedDifficulty);
+  elements.difficultySelector?.style.setProperty("--difficulty-accent", accent);
+  elements.difficultySelector?.style.setProperty("--difficulty-text", text);
+  elements.difficultySelector?.style.setProperty("--difficulty-progress", progress);
+  elements.difficultySelector?.setAttribute("data-disabled", elements.difficultyLevel.disabled ? "true" : "false");
+
+  if (elements.difficultyValue) {
+    elements.difficultyValue.textContent = String(normalizedDifficulty);
+    elements.difficultyValue.setAttribute("aria-label", `Difficulty level ${normalizedDifficulty}`);
+  }
 }
 
 function isHebrewOnlySelected() {
@@ -3362,8 +3904,62 @@ function updateHebrewOnlyButton() {
   elements.hebrewOnlyButton?.setAttribute("aria-pressed", isActive ? "true" : "false");
 }
 
-function hasAdultSessionResources() {
+function isSpecialtyWordsOnlySelected() {
+  return String(elements.specialtyWordsOnly?.value || "").toLowerCase() === "true";
+}
+
+function resetSpecialtyWordsOnlySelection() {
+  if (elements.specialtyWordsOnly) {
+    elements.specialtyWordsOnly.value = "false";
+  }
+
+  updateSpecialtyWordsButton();
+}
+
+function updateSpecialtyWordsButton() {
+  if (!elements.specialtyWordsButton) {
+    return;
+  }
+
+  const isAvailable = hasSpecialtyWordToggle();
+  const isActive = isAvailable && isSpecialtyWordsOnlySelected();
+  const description = getSpecialtyWordListLabel();
+  const currentUser = getCurrentUserProfile();
+  const label = description
+    ? `${isActive ? "Using" : "Use"} only ${currentUser.name}'s ${description} word lists.`
+    : "Use only specialty Hebrew word lists.";
+
+  elements.specialtyWordsButton.hidden = !isAvailable;
+  elements.specialtyWordsButton.disabled = !isAvailable;
+  elements.specialtyWordsButton.title = isAvailable ? label : "";
+  elements.specialtyWordsButton.setAttribute("aria-label", label);
+  setButtonPressedState(elements.specialtyWordsButton, isActive);
+
+  if (isAdultUserSelected() && elements.hebrewOnlyButton) {
+    const currentUser = getCurrentUserProfile();
+    elements.hebrewOnlyButton.disabled = isActive;
+    elements.hebrewOnlyButton.title = isActive ? `${currentUser.name}'s session settings are preset.` : "";
+    if (isActive) {
+      setButtonPressedState(elements.hebrewOnlyButton, true);
+    } else {
+      updateHebrewOnlyButton();
+    }
+  }
+}
+
+function hasAdultSessionResources(options = {}) {
+  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID, options);
+  if (options.specialtyWordsOnly) {
+    return hebrewBanks.questionBank.length > 0 && hebrewBanks.reverseQuestionBank.length > 0;
+  }
+
+  if (options.hebrewOnly) {
+    return hebrewBanks.questionBank.length > 0 && hebrewBanks.reverseQuestionBank.length > 0;
+  }
+
   return (
+    hebrewBanks.questionBank.length > 0 &&
+    hebrewBanks.reverseQuestionBank.length > 0 &&
     adultHebrewQuestionBank.length > 0 &&
     adultHebrewReverseQuestionBank.length > 0 &&
     adultSentenceDragQuestionBank.length > 0 &&
@@ -3374,29 +3970,41 @@ function hasAdultSessionResources() {
   );
 }
 
+function hasAviSessionResources(options = {}) {
+  const hebrewBanks = getSessionHebrewBanksForUser(AVI_USER_ID, options);
+  return hebrewBanks.questionBank.length > 0 && hebrewBanks.reverseQuestionBank.length > 0;
+}
+
 function startSession(event) {
   event.preventDefault();
 
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
   const selectedDifficulty = Number.parseInt(elements.difficultyLevel.value, 10);
   const selectedHebrewOnly = isHebrewOnlySelected();
+  const specialtyWordsOnly = hasSpecialtyWordToggle() && isSpecialtyWordsOnlySelected();
   const isAdult = isAdultUserSelected();
-  const difficulty = isAdult ? ADULT_SESSION_INTERNAL_DIFFICULTY : selectedDifficulty;
-  const hebrewOnly = isAdult ? false : selectedHebrewOnly;
+  const isAvi = isAviUserSelected();
+  const difficulty = isAdult || isAvi ? FIXED_HEBREW_SESSION_DIFFICULTY : selectedDifficulty;
+  const hebrewOnly = specialtyWordsOnly ? true : isAdult ? selectedHebrewOnly : isAvi ? true : selectedHebrewOnly;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
     return;
   }
 
-  if (!isAdult && (!Number.isFinite(difficulty) || difficulty < 1 || difficulty > 5)) {
-    showStartMessage("Please choose a difficulty from 1 to 5.", "error");
+  if (!(isAdult || isAvi) && (!Number.isFinite(difficulty) || difficulty < 1 || difficulty > MAX_SESSION_DIFFICULTY)) {
+    showStartMessage(`Please choose a difficulty from 1 to ${MAX_SESSION_DIFFICULTY}.`, "error");
     return;
   }
 
   if (isAdult) {
-    if (!hasAdultSessionResources()) {
-      showStartMessage("The adult Hebrew module is missing required data.", "error");
+    if (!hasAdultSessionResources({ specialtyWordsOnly, hebrewOnly })) {
+      showStartMessage("Miranda's Hebrew module is missing required data.", "error");
+      return;
+    }
+  } else if (isAvi) {
+    if (!hasAviSessionResources({ specialtyWordsOnly })) {
+      showStartMessage("avi's Hebrew module is missing required data.", "error");
       return;
     }
   } else {
@@ -3417,6 +4025,7 @@ function startSession(event) {
   state.totalQuestions = totalQuestions;
   state.difficulty = difficulty;
   state.hebrewOnly = hebrewOnly;
+  state.specialtyWordsOnly = specialtyWordsOnly;
   state.currentIndex = 0;
   state.viewIndex = 0;
   state.answeredCount = 0;
@@ -3428,7 +4037,15 @@ function startSession(event) {
   state.feedbackMessage = "";
   state.feedbackTone = "";
   state.questions = isAdult
-    ? buildAdultSessionQuestions(totalQuestions)
+    ? specialtyWordsOnly
+      ? buildSpecialtyOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
+      : hebrewOnly
+        ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
+      : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
+    : isAvi
+      ? specialtyWordsOnly
+        ? buildSpecialtyOnlySessionQuestions(totalQuestions, AVI_USER_ID)
+        : buildAviSessionQuestions(totalQuestions, { specialtyWordsOnly })
     : injectHebrewWritingPracticeTail(
         buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly }),
         difficulty,
@@ -3439,8 +4056,16 @@ function startSession(event) {
   renderCurrentQuestion();
 }
 
-function buildAdultSessionQuestions(totalQuestions) {
+function buildAdultSessionQuestions(totalQuestions, options = {}) {
+  const categorySequence = buildAdultSessionCategorySequence(totalQuestions);
+  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID, options);
   const resources = {
+    hebrew: createPool(hebrewBanks.questionBank),
+    hebrewReverse: createPool(hebrewBanks.reverseQuestionBank),
+    hebrewOpposites: createPool(hebrewBanks.oppositeQuestionBank),
+    hebrewHomograph: createPool(hebrewBanks.homographQuestionBank),
+    hebrewImage: createPool(hebrewBanks.imageQuestionBank),
+    hebrewMeanings: hebrewBanks.meanings,
     adultWords: createPool(adultHebrewQuestionBank),
     adultReverse: createPool(adultHebrewReverseQuestionBank),
     adultContext: createPool(adultContextQuestionBank),
@@ -3450,18 +4075,60 @@ function buildAdultSessionQuestions(totalQuestions) {
     fractions: createPool(choiceCategoryConfigs.fractions.bank),
     "fractions-and-ratios": createPool(choiceCategoryConfigs["fractions-and-ratios"].bank),
     geography: createPool(choiceCategoryConfigs.geography.bank),
+    logic: createPool(choiceCategoryConfigs.logic.bank),
     measurement: createPool(choiceCategoryConfigs.measurement.bank),
     population: createPool(choiceCategoryConfigs.population.bank),
   };
   const runtime = {
     adultGeographyQuestionIndex: 0,
     adultHebrewQuestionIndex: 0,
+    adultHebrewDifficultyQueue: buildHebrewDifficultyQueue(
+      categorySequence.filter((category) => category === "adult-hebrew").length,
+      FIXED_HEBREW_SESSION_DIFFICULTY,
+      hebrewBanks.questionBank
+    ),
     adultMathQuestionIndex: 0,
     adultWritingPromptQueue: [],
+    hebrewStandardQuestionIndex: 0,
     mapCountries: new Set(),
   };
-  const categorySequence = buildAdultSessionCategorySequence(totalQuestions);
   return categorySequence.map((category) => createAdultSessionQuestion(category, resources, runtime));
+}
+
+function buildSpecialtyOnlySessionQuestions(totalQuestions, userId) {
+  const hebrewBanks = getSessionHebrewBanksForUser(userId, { specialtyWordsOnly: true });
+  return buildSessionQuestions(totalQuestions, FIXED_HEBREW_SESSION_DIFFICULTY, {
+    hebrewOnly: true,
+    hebrewBanks,
+    hebrewQuestionMode: "bank-only",
+    userId,
+  });
+}
+
+function buildHebrewOnlySessionQuestions(totalQuestions, userId) {
+  const hebrewBanks = getSessionHebrewBanksForUser(userId);
+  const questions = buildSessionQuestions(totalQuestions, FIXED_HEBREW_SESSION_DIFFICULTY, {
+    hebrewOnly: true,
+    hebrewBanks,
+    userId,
+  });
+
+  return isHebrewWritingTailEnabledForUser(userId)
+    ? injectHebrewWritingPracticeTail(questions, FIXED_HEBREW_SESSION_DIFFICULTY, { hebrewOnly: true })
+    : questions;
+}
+
+function buildAviSessionQuestions(totalQuestions, options = {}) {
+  const hebrewBanks = getSessionHebrewBanksForUser(AVI_USER_ID, options);
+  const questions = buildSessionQuestions(totalQuestions, FIXED_HEBREW_SESSION_DIFFICULTY, {
+    hebrewOnly: true,
+    hebrewBanks,
+    userId: AVI_USER_ID,
+  });
+
+  return isHebrewWritingTailEnabledForUser(AVI_USER_ID)
+    ? injectHebrewWritingPracticeTail(questions, FIXED_HEBREW_SESSION_DIFFICULTY, { hebrewOnly: true })
+    : questions;
 }
 
 function buildAdultSessionCategorySequence(totalQuestions) {
@@ -3514,19 +4181,24 @@ function createAdultSessionQuestion(category, resources, runtime) {
     return createAdultGeographyQuestion(resources, runtime);
   }
 
-  return createAdultHebrewSessionQuestion(resources, runtime);
+  const difficulty = drawNextDifficulty(runtime?.adultHebrewDifficultyQueue || [], FIXED_HEBREW_SESSION_DIFFICULTY);
+  return createAdultHebrewSessionQuestion(resources, difficulty, runtime);
 }
 
-function createAdultHebrewSessionQuestion(resources, runtime) {
+function createAdultHebrewSessionQuestion(resources, difficulty, runtime) {
   const startIndex = Number(runtime?.adultHebrewQuestionIndex || 0);
   if (runtime) {
     runtime.adultHebrewQuestionIndex = startIndex + 1;
   }
 
   const factories = [
+    () => createHebrewSessionQuestion(resources, difficulty, runtime),
     () => createAdultHebrewChoiceQuestion(drawHebrewEntry(resources.adultWords, 1)),
+    () => createHebrewSessionQuestion(resources, difficulty, runtime),
     () => createAdultHebrewReverseChoiceQuestion(resources),
+    () => createHebrewSessionQuestion(resources, difficulty, runtime),
     () => createAdultMatchingQuestion(resources),
+    () => createHebrewSessionQuestion(resources, difficulty, runtime),
     () => createAdultCategorySortQuestion(),
     () => createAdultContextChoiceQuestion(resources),
     () => createAdultSentenceDragQuestion(resources),
@@ -3541,7 +4213,8 @@ function createAdultHebrewSessionQuestion(resources, runtime) {
     }
   }
 
-  return createAdultHebrewChoiceQuestion(drawHebrewEntry(resources.adultWords, 1));
+  return createHebrewSessionQuestion(resources, difficulty, runtime) ||
+    createAdultHebrewChoiceQuestion(drawHebrewEntry(resources.adultWords, 1));
 }
 
 function createAdultHardMathQuestion(resources, runtime) {
@@ -3559,6 +4232,7 @@ function createAdultHardMathQuestion(resources, runtime) {
     () => createAdultForcedCategoryQuestion("estimation", difficulty, resources),
     () => createAdultForcedCategoryQuestion("fractions", difficulty, resources),
     () => createAdultForcedCategoryQuestion("fractions-and-ratios", difficulty, resources),
+    () => createAdultForcedCategoryQuestion("logic", difficulty, resources),
     () => createAdultForcedCategoryQuestion("measurement", difficulty, resources),
     () => createPercentageChoiceQuestion(difficulty),
   ];
@@ -3643,33 +4317,6 @@ function drawAdultWritingPrompt(runtime) {
   return runtime.adultWritingPromptQueue.pop() || null;
 }
 
-function injectAdultWritingPracticeTail(questions) {
-  const requestedTailCount = Math.min(questions.length, HEBREW_ONLY_WRITING_TAIL_COUNT);
-  const practiceCount = Math.min(requestedTailCount, Math.max(0, questions.length - 1));
-  const readingQuestion = questions.length > 0 ? createAdultReadingComprehensionQuestion() : null;
-  if (!practiceCount && !readingQuestion) {
-    return questions;
-  }
-
-  const practiceQuestions = buildAdultWritingPracticeQuestions(practiceCount);
-  const prefixCount = Math.max(
-    0,
-    questions.length - practiceQuestions.length - (readingQuestion ? 1 : 0)
-  );
-
-  return [
-    ...questions.slice(0, prefixCount),
-    ...(readingQuestion ? [readingQuestion] : []),
-    ...practiceQuestions,
-  ];
-}
-
-function buildAdultWritingPracticeQuestions(totalCount) {
-  return takeRepeatedRandomItems(adultWritingPromptBank, totalCount).map((prompt) =>
-    createHebrewWritingPracticeQuestion(prompt.text, prompt.difficulty, prompt.variant)
-  );
-}
-
 function normalizeAdultWritingPromptBank(entries) {
   return (entries || [])
     .map((entry) => {
@@ -3694,10 +4341,15 @@ function normalizeAdultWritingPromptBank(entries) {
 }
 
 function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
+  const normalizedDifficulty = Math.max(1, Math.min(MAX_HEBREW_DIFFICULTY, Number(difficulty) || 1));
+  const nonHebrewBaseDifficulty = Math.min(MAX_NON_HEBREW_DIFFICULTY, normalizedDifficulty);
   const hebrewOnly = Boolean(options.hebrewOnly);
+  const userId = String(options.userId || state.currentUserId || "");
+  const hebrewBanks = options.hebrewBanks || DEFAULT_HEBREW_BANKS;
+  const hebrewQuestionMode = options.hebrewQuestionMode === "bank-only" ? "bank-only" : "default";
   const categorySequence = hebrewOnly
     ? Array.from({ length: totalQuestions }, () => "hebrew")
-    : buildDefaultSessionCategorySequence(totalQuestions);
+    : buildDefaultSessionCategorySequence(totalQuestions, userId);
   const resources = Object.fromEntries(
     Object.entries(choiceCategoryConfigs).map(([category, config]) => [
       category,
@@ -3706,23 +4358,26 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   );
   resources.sentenceDragEnglish = createPool(sentenceDragEnglishQuestionBank);
   resources.sentenceDragHebrew = createPool(sentenceDragHebrewQuestionBank);
-  resources.hebrewImage = createPool(hebrewImageQuestionBank);
-  resources.hebrewReverse = createPool(hebrewReverseQuestionBank);
-  resources.hebrewOpposites = createPool(hebrewOppositeQuestionBank);
-  resources.hebrewHomograph = createPool(hebrewHomographQuestionBank);
+  resources.hebrew = createPool(hebrewBanks.questionBank);
+  resources.hebrewImage = createPool(hebrewBanks.imageQuestionBank);
+  resources.hebrewReverse = createPool(hebrewBanks.reverseQuestionBank);
+  resources.hebrewOpposites = createPool(hebrewBanks.oppositeQuestionBank);
+  resources.hebrewHomograph = createPool(hebrewBanks.homographQuestionBank);
+  resources.hebrewMeanings = hebrewBanks.meanings;
   const hebrewQuestionCount = categorySequence.filter((category) => category === "hebrew").length;
   const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
   const nonHebrewDifficultyQueue = buildDifficultyQueue(
     nonHebrewQuestionCount,
-    NON_HEBREW_DIFFICULTY_WEIGHTS[difficulty] || { [difficulty]: 1 }
+    NON_HEBREW_DIFFICULTY_WEIGHTS[nonHebrewBaseDifficulty] || { [nonHebrewBaseDifficulty]: 1 }
   );
   const hebrewDifficultyQueue = buildHebrewDifficultyQueue(
     hebrewQuestionCount,
-    difficulty,
-    hebrewQuestionBank
+    normalizedDifficulty,
+    hebrewBanks.questionBank
   );
 
   const runtime = {
+    hebrewQuestionMode,
     mathModeIndex: 0,
     languageQuestionIndex: 0,
     hebrewQuestionIndex: 0,
@@ -3731,7 +4386,14 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   };
 
   return categorySequence.map((category) =>
-    createSessionQuestionForCategory(category, difficulty, resources, nonHebrewDifficultyQueue, hebrewDifficultyQueue, runtime)
+    createSessionQuestionForCategory(
+      category,
+      normalizedDifficulty,
+      resources,
+      nonHebrewDifficultyQueue,
+      hebrewDifficultyQueue,
+      runtime
+    )
   );
 }
 
@@ -3761,7 +4423,7 @@ function injectHebrewWritingPracticeTail(questions, difficulty, options = {}) {
 }
 
 function buildHebrewWritingPracticeQuestions(totalCount, difficulty) {
-  const normalizedDifficulty = Math.max(2, Math.min(5, Number(difficulty) || 2));
+  const normalizedDifficulty = Math.max(2, Math.min(MAX_HEBREW_DIFFICULTY, Number(difficulty) || 2));
   if (normalizedDifficulty <= 2) {
     return takeRepeatedRandomItems(HEBREW_WRITING_LETTERS, totalCount).map((letter) =>
       createHebrewWritingPracticeQuestion(letter, normalizedDifficulty, "letter")
@@ -3780,7 +4442,19 @@ function buildHebrewWritingPracticeQuestions(totalCount, difficulty) {
     );
   }
 
-  return takeRepeatedRandomItems(HEBREW_WRITING_LONG_SENTENCES, totalCount).map((sentence) =>
+  if (normalizedDifficulty === 5) {
+    return takeRepeatedRandomItems(HEBREW_WRITING_LONG_SENTENCES, totalCount).map((sentence) =>
+      createHebrewWritingPracticeQuestion(sentence, normalizedDifficulty, "long-sentence")
+    );
+  }
+
+  if (normalizedDifficulty <= 7) {
+    return takeRepeatedRandomItems(HEBREW_WRITING_MEDIUM_SENTENCES, totalCount).map((sentence) =>
+      createHebrewWritingPracticeQuestion(sentence, normalizedDifficulty, "long-sentence")
+    );
+  }
+
+  return takeRepeatedRandomItems(HEBREW_WRITING_ADVANCED_SENTENCES, totalCount).map((sentence) =>
     createHebrewWritingPracticeQuestion(sentence, normalizedDifficulty, "long-sentence")
   );
 }
@@ -3818,8 +4492,8 @@ function takeRepeatedRandomItems(values, count) {
   return result;
 }
 
-function buildDefaultSessionCategorySequence(totalQuestions) {
-  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions);
+function buildDefaultSessionCategorySequence(totalQuestions, userId = state.currentUserId) {
+  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions, userId);
   const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
   const regularQuestionCount = Math.max(
     0,
@@ -3880,8 +4554,10 @@ function createSessionQuestionForCategory(
   hebrewDifficultyQueue,
   runtime
 ) {
+  const nonHebrewFallbackDifficulty = Math.min(MAX_NON_HEBREW_DIFFICULTY, difficulty);
+
   if (category === "math") {
-    const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+    const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, nonHebrewFallbackDifficulty);
     const question =
       runtime.mathModeIndex % 2 === 0
         ? createMathInputQuestion(effectiveDifficulty)
@@ -3897,23 +4573,26 @@ function createSessionQuestionForCategory(
       runtime.hebrewQuestionIndex = hebrewQuestionIndex + 1;
     }
 
-    if (shouldCreateHebrewFinalLetterQuestion(hebrewQuestionIndex)) {
+    if (runtime?.hebrewQuestionMode !== "bank-only" && shouldCreateHebrewFinalLetterQuestion(hebrewQuestionIndex)) {
       const finalLetterQuestion = createHebrewFinalLetterQuestion(effectiveDifficulty);
       if (finalLetterQuestion) {
         return finalLetterQuestion;
       }
     }
 
-    const dragQuestion = maybeCreateSessionDragQuestion(category, resources, effectiveDifficulty, runtime);
-    if (dragQuestion) {
-      return dragQuestion;
+    if (runtime?.hebrewQuestionMode !== "bank-only") {
+      const dragQuestion = maybeCreateSessionDragQuestion(category, resources, effectiveDifficulty, runtime);
+      if (dragQuestion) {
+        return dragQuestion;
+      }
     }
+
     return createHebrewSessionQuestion(resources, effectiveDifficulty, runtime);
   }
 
   const effectiveDifficulty = getEffectiveCategoryDifficulty(
     category,
-    drawNextDifficulty(nonHebrewDifficultyQueue, difficulty)
+    drawNextDifficulty(nonHebrewDifficultyQueue, nonHebrewFallbackDifficulty)
   );
 
   if (category === RESERVED_MAP_CATEGORY) {
@@ -4092,7 +4771,11 @@ function drawHebrewImageEntries(pool, difficulty, count) {
   return shuffleArray([...source]).slice(0, count);
 }
 
-function buildReviewCategorySequence(totalQuestions) {
+function buildReviewCategorySequence(totalQuestions, userId = state.currentUserId) {
+  if (!isReviewFocusEnabledForUser(userId)) {
+    return [];
+  }
+
   const reviewQuestionCount = Math.min(
     Math.max(0, totalQuestions - 1),
     Math.max(0, Math.round(totalQuestions * REVIEW_FOCUS_SHARE))
@@ -4101,7 +4784,9 @@ function buildReviewCategorySequence(totalQuestions) {
     return [];
   }
 
-  const weaknessEntries = getUserWeakCategoryEntries(loadSessionHistory()).slice(0, 3);
+  const sessionHistoryByUser = loadAllSessionHistory();
+  const sessionHistory = Array.isArray(sessionHistoryByUser[userId]) ? sessionHistoryByUser[userId] : [];
+  const weaknessEntries = getUserWeakCategoryEntries(sessionHistory).slice(0, 3);
   if (!weaknessEntries.length) {
     return [];
   }
@@ -5418,7 +6103,11 @@ function renderTableVisual(dataset) {
   `;
 }
 
-function createHebrewChoiceQuestion(entry) {
+function createHebrewChoiceQuestion(entry, meaningPool = hebrewMeanings) {
+  if (!entry) {
+    return null;
+  }
+
   return {
     type: "hebrew-choice",
     difficulty: entry.difficulty,
@@ -5427,7 +6116,7 @@ function createHebrewChoiceQuestion(entry) {
     displayText: entry.hebrewDisplay,
     extraText: "",
     extraHtml: "",
-    options: buildHebrewOptions(entry.english),
+    options: buildHebrewOptions(entry.english, meaningPool),
     answerValue: entry.english,
     answerLabel: entry.english,
     reviewText: entry.hebrewDisplay,
@@ -5473,17 +6162,24 @@ function createHebrewSessionQuestion(resources, difficulty, runtime) {
     runtime.hebrewStandardQuestionIndex = startIndex + 1;
   }
 
-  const factories = [
-    () => createHebrewReverseChoiceQuestion(resources, difficulty),
-    () => createHebrewMatchingQuestion(resources, difficulty),
-    () => createHebrewOppositesQuestion(resources, difficulty),
-    () => createHebrewOppositeSinglePromptQuestion(resources, difficulty),
-    () => createHebrewAgreementQuestion(difficulty),
-    () => createHebrewCategorySortQuestion(difficulty),
-    () => createHebrewNikkudContrastQuestion(resources, difficulty),
-    () => maybeCreateHebrewImageQuestion(resources, difficulty),
-    () => createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty)),
-  ];
+  const factories =
+    runtime?.hebrewQuestionMode === "bank-only"
+      ? [
+          () => createHebrewReverseChoiceQuestion(resources, difficulty),
+          () => createHebrewMatchingQuestion(resources, difficulty),
+          () => createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty), resources?.hebrewMeanings),
+        ]
+      : [
+          () => createHebrewReverseChoiceQuestion(resources, difficulty),
+          () => createHebrewMatchingQuestion(resources, difficulty),
+          () => createHebrewOppositesQuestion(resources, difficulty),
+          () => createHebrewOppositeSinglePromptQuestion(resources, difficulty),
+          () => createHebrewAgreementQuestion(difficulty),
+          () => createHebrewCategorySortQuestion(difficulty),
+          () => createHebrewNikkudContrastQuestion(resources, difficulty),
+          () => maybeCreateHebrewImageQuestion(resources, difficulty),
+          () => createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty), resources?.hebrewMeanings),
+        ];
 
   for (let offset = 0; offset < factories.length; offset += 1) {
     const question = factories[(startIndex + offset) % factories.length]();
@@ -5492,7 +6188,7 @@ function createHebrewSessionQuestion(resources, difficulty, runtime) {
     }
   }
 
-  return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty));
+  return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty), resources?.hebrewMeanings);
 }
 
 function createHebrewChoiceModeQuestion({
@@ -8425,6 +9121,7 @@ function buildSessionHistoryEntry() {
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
     hebrewOnly: Boolean(state.hebrewOnly),
+    specialtyWordsOnly: Boolean(state.specialtyWordsOnly),
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
     records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
@@ -8468,10 +9165,15 @@ function loadAllSessionHistory() {
       return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
     }
 
+    const legacyAdultHistory = Array.isArray(parsed.adult) ? parsed.adult : [];
     return Object.fromEntries(
       USER_PROFILES.map((profile) => [
         profile.id,
-        Array.isArray(parsed[profile.id]) ? parsed[profile.id] : [],
+        Array.isArray(parsed[profile.id])
+          ? parsed[profile.id]
+          : profile.id === ADULT_USER_ID
+            ? legacyAdultHistory
+            : [],
       ])
     );
   } catch (error) {
@@ -8563,6 +9265,10 @@ function formatSessionHistoryMeta(session) {
 
   if (session?.hebrewOnly) {
     parts.push("Hebrew Only");
+  }
+
+  if (session?.specialtyWordsOnly) {
+    parts.push("Specialty Words");
   }
 
   return parts.join(" | ");
@@ -9482,9 +10188,9 @@ function buildVisualNumberOptions(answer, difficulty, maxOverride = null) {
   return buildNumberOptions(answer, min, max).map(String);
 }
 
-function buildHebrewOptions(correctAnswer) {
+function buildHebrewOptions(correctAnswer, meaningPool = hebrewMeanings) {
   const distractorPool = shuffleArray(
-    Array.from(new Set(hebrewMeanings.filter((meaning) => meaning !== correctAnswer)))
+    Array.from(new Set((meaningPool || hebrewMeanings).filter((meaning) => meaning !== correctAnswer)))
   );
   return shuffleArray([correctAnswer, ...distractorPool.slice(0, 3)]);
 }
@@ -9565,10 +10271,6 @@ function greatestCommonDivisor(left, right) {
   }
 
   return a || 1;
-}
-
-function clamp(value, min, max) {
-  return Math.min(max, Math.max(min, value));
 }
 
 function roundToNearest(value, placeValue) {

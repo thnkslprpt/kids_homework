@@ -658,10 +658,6 @@ function dedupePopulationEntries(entries) {
   return unique;
 }
 
-function dedupeStrings(values) {
-  return Array.from(new Set(values));
-}
-
 function shuffleLocal(values) {
   const copy = [...values];
   for (let index = copy.length - 1; index > 0; index -= 1) {
