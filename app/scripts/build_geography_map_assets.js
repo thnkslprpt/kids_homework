@@ -1269,4 +1269,13 @@ function escapeHtml(value) {
     .replaceAll("'", "&#39;");
 }
 
-main();
+if (require.main === module) {
+  main();
+} else {
+  module.exports = {
+    SOURCE_FILES,
+    TOP_COUNTRY_ENTRIES,
+    resolveCountrySpec,
+    collectIds,
+  };
+}

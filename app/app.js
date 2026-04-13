@@ -4022,7 +4022,6 @@ function startSession(event) {
 
   clearStartMessage();
   stopConfetti();
-  state.totalQuestions = totalQuestions;
   state.difficulty = difficulty;
   state.hebrewOnly = hebrewOnly;
   state.specialtyWordsOnly = specialtyWordsOnly;
@@ -4036,21 +4035,25 @@ function startSession(event) {
   state.sessionStartedAt = new Date();
   state.feedbackMessage = "";
   state.feedbackTone = "";
-  state.questions = isAdult
+  const sessionQuestions = isAdult
     ? specialtyWordsOnly
       ? buildSpecialtyOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
       : hebrewOnly
         ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
-      : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
+        : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
     : isAvi
       ? specialtyWordsOnly
         ? buildSpecialtyOnlySessionQuestions(totalQuestions, AVI_USER_ID)
         : buildAviSessionQuestions(totalQuestions, { specialtyWordsOnly })
-    : injectHebrewWritingPracticeTail(
-        buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly }),
-        difficulty,
-        { hebrewOnly }
-      );
+      : isGeographyMapPrototypeMode()
+        ? buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly: false })
+        : injectHebrewWritingPracticeTail(
+            buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly }),
+            difficulty,
+            { hebrewOnly }
+          );
+  state.questions = sessionQuestions;
+  state.totalQuestions = sessionQuestions.length;
 
   switchScreen(elements.quizScreen);
   renderCurrentQuestion();
@@ -4493,6 +4496,10 @@ function takeRepeatedRandomItems(values, count) {
 }
 
 function buildDefaultSessionCategorySequence(totalQuestions, userId = state.currentUserId) {
+  if (isGeographyMapPrototypeMode()) {
+    return Array.from({ length: getGeographyMapPrototypeQuestionCount() }, () => RESERVED_MAP_CATEGORY);
+  }
+
   const reviewCategorySequence = buildReviewCategorySequence(totalQuestions, userId);
   const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
   const regularQuestionCount = Math.max(
@@ -4514,6 +4521,19 @@ function hasGeographyMapSupport() {
     Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES) &&
     globalThis.GEOGRAPHY_MAP_COUNTRIES.length > 0
   );
+}
+
+function isGeographyMapPrototypeMode() {
+  return (
+    globalThis.GEOGRAPHY_MAP_RENDER_MODE === "shared-base-prototype" &&
+    hasGeographyMapSupport()
+  );
+}
+
+function getGeographyMapPrototypeQuestionCount() {
+  return Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
+    ? globalThis.GEOGRAPHY_MAP_COUNTRIES.length
+    : 0;
 }
 
 function getReservedMapQuestionCount(totalQuestions) {

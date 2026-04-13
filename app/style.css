@@ -871,10 +871,21 @@ button:disabled {
   margin: 0 auto;
 }
 
+.geography-map-frame {
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #f8fbff, #ffffff);
+}
+
+.geography-map-svg,
 .geography-map-image {
   display: block;
   width: 100%;
   max-height: 420px;
+  height: auto;
+}
+
+.geography-map-image {
   object-fit: contain;
   background: linear-gradient(180deg, #f8fbff, #ffffff);
   border-radius: 18px;
