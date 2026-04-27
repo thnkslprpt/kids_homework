@@ -119,6 +119,18 @@ const POPULATION_QUESTIONS = [
     answer: "About 70 million",
     difficulty: 5,
   },
+  {
+    question: "About how many people live in Jordan?",
+    options: ["About 4 million", "About 11 million", "About 30 million", "About 70 million"],
+    answer: "About 11 million",
+    difficulty: 5,
+  },
+  {
+    question: "About how many people live in Lebanon?",
+    options: ["About 2 million", "About 6 million", "About 20 million", "About 50 million"],
+    answer: "About 6 million",
+    difficulty: 5,
+  },
 ];
 
 POPULATION_QUESTIONS.push(
@@ -277,6 +289,8 @@ const POPULATION_GENERATION_DATA = [
   { country: "Australia", population: 27_227_096 },
   { country: "Kenya", population: 58_636_412 },
   { country: "Iraq", population: 48_007_437 },
+  { country: "Jordan", population: 11_520_684 },
+  { country: "Lebanon", population: 5_849_053 },
   { country: "Peru", population: 34_922_148 },
   { country: "Malaysia", population: 36_385_115 },
   { country: "Venezuela", population: 28_633_711 },
@@ -294,7 +308,7 @@ const POPULATION_QUESTION_COUNTRY_ALIASES = {
   "democratic republic of the congo": "DR Congo",
 };
 const POPULATION_MAX_DIFFICULTY = 3;
-const POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO = 0.25;
+const POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO = 0.4;
 const POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS = [
   0.08,
   0.12,
@@ -408,7 +422,8 @@ function buildPopulationEstimateOptions(entry, difficulty) {
 }
 
 function buildPopulationEstimateOptionsForValue(answerPopulation, answerLabel, difficulty) {
-  const selected = [{ label: answerLabel, population: answerPopulation }];
+  const displayedAnswerPopulation = parsePopulationApproximateLabel(answerLabel) || answerPopulation;
+  const selected = [{ label: answerLabel, population: displayedAnswerPopulation }];
   const candidates = buildPopulationEstimateCandidatePool(answerPopulation, answerLabel, difficulty);
 
   for (const candidate of candidates) {
@@ -436,19 +451,21 @@ function buildPopulationEstimateCandidatePool(answerPopulation, answerLabel, dif
   );
 
   sameDifficultyPool.forEach((entry) => {
+    const displayedPopulation = parsePopulationApproximateLabel(entry.label) || entry.population;
     candidates.push({
       label: entry.label,
-      population: entry.population,
-      distance: Math.abs(entry.population - answerPopulation),
+      population: displayedPopulation,
+      distance: Math.abs(displayedPopulation - answerPopulation),
       priority: 0,
     });
   });
 
   fullPool.forEach((entry) => {
+    const displayedPopulation = parsePopulationApproximateLabel(entry.label) || entry.population;
     candidates.push({
       label: entry.label,
-      population: entry.population,
-      distance: Math.abs(entry.population - answerPopulation),
+      population: displayedPopulation,
+      distance: Math.abs(displayedPopulation - answerPopulation),
       priority: 1,
     });
   });

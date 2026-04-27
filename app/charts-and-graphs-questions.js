@@ -24,9 +24,9 @@ const CHARTS_AND_GRAPHS_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "A step-count table shows Maya 3,000, Avi 4,500, Ron 3,500, Lea 2,500. Who walked the most steps?",
-    options: ["Maya", "Avi", "Ron", "Lea"],
-    answer: "Avi",
+    question: "A step-count table shows Noga 3,000, Gideon 4,500, Gabriel 3,500, Teva 2,500. Who walked the most steps?",
+    options: ["Noga", "Gideon", "Gabriel", "Teva"],
+    answer: "Gideon",
     difficulty: 3,
   },
   {

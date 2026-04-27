@@ -85,6 +85,73 @@
       .join(" | ");
   }
 
+  function buildMatchingAnswerLabel(leftItems, answerTokens) {
+    return leftItems.map((item, index) => `${item.text}: ${answerTokens[index] || ""}`).join(" | ");
+  }
+
+  function createMatchingDragQuestion({
+    type,
+    difficulty,
+    questionText,
+    extraText = "",
+    visualSummary = "",
+    leftItems,
+    rightItems,
+    reviewText = "",
+    matchSnapDistance = 140,
+  }) {
+    const normalizedLeftItems = Array.isArray(leftItems)
+      ? leftItems
+          .map((item, index) => ({
+            id: `${type}-left-${difficulty}-${index}-${slugify(item?.text || index)}`,
+            text: String(item?.text || "").trim(),
+            answer: String(item?.answer || "").trim(),
+          }))
+          .filter((item) => item.text && item.answer)
+      : [];
+    const normalizedRightItems = uniqueStrings((rightItems || []).map((item) => String(item).trim())).filter(Boolean);
+    const answerTokens = normalizedLeftItems.map((item) => item.answer);
+    const answerLabel = buildMatchingAnswerLabel(normalizedLeftItems, answerTokens);
+
+    if (
+      !type ||
+      !questionText ||
+      normalizedLeftItems.length < 2 ||
+      normalizedRightItems.length < normalizedLeftItems.length ||
+      !answerTokens.every((token) => normalizedRightItems.includes(token))
+    ) {
+      return null;
+    }
+
+    return {
+      type,
+      difficulty,
+      mode: "drag",
+      questionText,
+      displayText: "",
+      extraText,
+      extraHtml: "",
+      visualHtml: "",
+      visualSummary,
+      dragLayout: "matching",
+      dragChoices: [],
+      dragAnswerTokens: answerTokens,
+      matchLeftItems: normalizedLeftItems.map((item) => ({
+        id: item.id,
+        text: item.text,
+      })),
+      matchRightItems: shuffleArrayLocal(normalizedRightItems).map((text, index) => ({
+        id: `${type}-right-${difficulty}-${index}-${slugify(text)}`,
+        text,
+      })),
+      matchSnapDistance,
+      reviewText: reviewText || answerLabel,
+      answerValue: answerTokens.join(" | "),
+      answerLabel,
+      isHebrew: false,
+    };
+  }
+
   function createSentenceDragQuestion({
     type,
     difficulty,
@@ -295,7 +362,7 @@
       },
       {
         templateParts: [
-          "Maya and Eli washed the flowerpots. Then they filled ",
+          "Noga and Gabriel washed the flowerpots. Then they filled ",
           " with soil and set the pots by ",
           " window.",
         ],
@@ -313,7 +380,7 @@
       },
       {
         templateParts: [
-          "Ava picked a ripe peach. She washed ",
+          "Teva picked a ripe peach. She washed ",
           " and put it in ",
           " lunch bag.",
         ],
@@ -322,7 +389,7 @@
       },
       {
         templateParts: [
-          "Noah and Iris built a kite. After painting ",
+          "Gabriel and Eden built a kite. After painting ",
           ", they held it above ",
           " heads.",
         ],
@@ -355,7 +422,7 @@
     const blueprints = [
       {
         templateParts: [
-          "The cave was dark, so Maya used a ",
+          "The cave was dark, so Noga used a ",
           " to see the path. She walked ",
           " over the wet rocks.",
         ],
@@ -364,7 +431,7 @@
       },
       {
         templateParts: [
-          "The soup was still steaming, so Noah waited for it to ",
+          "The soup was still steaming, so Gabriel waited for it to ",
           " before he took a ",
           ".",
         ],
@@ -382,7 +449,7 @@
       },
       {
         templateParts: [
-          "The ice cream was melting, so Nora ",
+          "The ice cream was melting, so Teva ",
           " to put it in the ",
           ".",
         ],
@@ -391,7 +458,7 @@
       },
       {
         templateParts: [
-          "The dog was barking at the door, so Liam grabbed the ",
+          "The dog was barking at the door, so Gideon grabbed the ",
           " and went ",
           ".",
         ],
@@ -400,7 +467,7 @@
       },
       {
         templateParts: [
-          "Rain was pouring down, so Mia opened an ",
+          "Rain was pouring down, so Eden opened an ",
           " and walked ",
           " to the car.",
         ],
@@ -425,7 +492,7 @@
       {
         templateParts: [
           "",
-          ", Zuri rinsed the lettuce leaves. ",
+          ", Eden rinsed the lettuce leaves. ",
           ", she sliced the tomatoes. ",
           ", she tossed everything in a bowl. ",
           ", she served the salad for lunch.",
@@ -458,7 +525,7 @@
       {
         templateParts: [
           "",
-          ", Lena dug a small hole. ",
+          ", Noga dug a small hole. ",
           ", she placed the seed inside. ",
           ", she covered it with soil. ",
           ", she watered the pot.",
@@ -1046,6 +1113,53 @@
     });
   }
 
+  const FINANCIAL_CURRENCY_MATCH_GROUPS = [
+    [
+      { country: "Israel", currency: "shekel" },
+      { country: "United States", currency: "dollar" },
+      { country: "Japan", currency: "yen" },
+      { country: "India", currency: "rupee" },
+    ],
+    [
+      { country: "China", currency: "yuan" },
+      { country: "South Korea", currency: "won" },
+      { country: "Mexico", currency: "peso" },
+      { country: "Brazil", currency: "real" },
+    ],
+    [
+      { country: "Saudi Arabia", currency: "riyal" },
+      { country: "Switzerland", currency: "franc" },
+      { country: "Turkey", currency: "lira" },
+      { country: "Nigeria", currency: "naira" },
+    ],
+    [
+      { country: "United Arab Emirates", currency: "dirham" },
+      { country: "Indonesia", currency: "rupiah" },
+      { country: "South Africa", currency: "rand" },
+      { country: "Egypt", currency: "pound" },
+    ],
+  ];
+
+  function createFinancialLiteracyDragQuestion(category, difficulty) {
+    const entries = randomChoiceLocal(FINANCIAL_CURRENCY_MATCH_GROUPS);
+    const leftItems = entries.map((entry) => ({
+      text: entry.country,
+      answer: entry.currency,
+    }));
+    const answerTokens = entries.map((entry) => entry.currency);
+
+    return createMatchingDragQuestion({
+      type: `${category}-drag`,
+      difficulty,
+      questionText: "Draw a line from each country to its currency.",
+      extraText: "Match all 4 countries to the correct currency names.",
+      visualSummary: entries.map((entry) => `${entry.country}: ${entry.currency}`).join(", "),
+      leftItems,
+      rightItems: answerTokens,
+      reviewText: buildMatchingAnswerLabel(leftItems, answerTokens),
+    });
+  }
+
   globalThis.createCategoryGeneratedDragQuestion = function createCategoryGeneratedDragQuestion(
     category,
     difficulty
@@ -1060,6 +1174,8 @@
         return createFractionsDragQuestion(category, level);
       case "science":
         return createScienceSortDragQuestion(category, level);
+      case "financial-literacy":
+        return createFinancialLiteracyDragQuestion(category, level);
       case "nutrition":
         return createNutritionSortDragQuestion(category, level);
       case "estimation":

@@ -122,7 +122,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
     }),
     createEntry({
       question: "Complete the sentence with the best words.",
-      templateParts: ["Maya put ", " books in the ", " backpack before class."],
+      templateParts: ["Eden put ", " books in the ", " backpack before class."],
       answer: ["her", "red"],
       distractors: ["their", "our", "blue"],
       difficulty: 2,
@@ -159,7 +159,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
       question: "Build the sentence with the best names.",
       templateParts: ["After lunch, ", " and ", " started homework."],
       answer: ["Gideon", "Gabriel"],
-      distractors: ["Noga", "Maya"],
+      distractors: ["Noga", "Eden"],
       difficulty: 3,
     }),
     createEntry({
@@ -192,7 +192,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
     }),
     createEntry({
       question: "Complete the sentence with the best words.",
-      templateParts: ["After Maya compared the two maps, she ", " the river on one map and ", " the bridge on the other."],
+      templateParts: ["After Eden compared the two maps, she ", " the river on one map and ", " the bridge on the other."],
       answer: ["found", "circled"],
       distractors: ["watched", "opened"],
       difficulty: 4,
@@ -234,7 +234,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
     }),
     createEntry({
       question: "Complete the sentence with the best words.",
-      templateParts: ["While Noga was reading, Gideon ", " ", " the books and put them back on the ", "."],
+      templateParts: ["While Noga was reading, Gabriel ", " ", " the books and put them back on the ", "."],
       answer: ["quietly", "organized", "shelf"],
       distractors: ["loudly"],
       difficulty: 5,
@@ -310,7 +310,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
 
   const REFERENCE_ITEMS = [
     {
-      sentenceParts: ["Maya saw Gabriel drop his pencil. ", " picked it up."],
+      sentenceParts: ["Eden saw Gabriel drop his pencil. ", " picked it up."],
       answer: ["She"],
       distractors: ["He", "They", "It"],
     },
@@ -364,7 +364,7 @@ const SENTENCE_DRAG_ENGLISH_DATA = (() => {
 
   const REASONING_ITEMS = [
     {
-      sentenceParts: ["Because the floor was wet, Liam ", " carefully and held the rail ", "."],
+      sentenceParts: ["Because the floor was wet, Gideon ", " carefully and held the rail ", "."],
       answer: ["walked", "tightly"],
       distractors: ["ran", "softly"],
     },

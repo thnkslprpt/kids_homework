@@ -612,9 +612,9 @@ FINANCIAL_LITERACY_QUESTIONS.push(
       answer: "41 shekels",
       difficulty: 2,
     },
-  {
-    question: "Which is the best deal for erasers?",
-    options: [
+    {
+      question: "Which is the best deal for erasers?",
+      options: [
       "3 erasers for 24 shekels",
       "2 erasers for 18 shekels",
         "1 eraser for 10 shekels",
@@ -622,6 +622,83 @@ FINANCIAL_LITERACY_QUESTIONS.push(
       ],
       answer: "3 erasers for 24 shekels",
       difficulty: 2,
+    },
+    {
+      question: "What currency is used in Israel?",
+      options: ["shekel", "dollar", "euro", "pound"],
+      answer: "shekel",
+      difficulty: 1,
+    },
+    {
+      question: "What currency is used in Japan?",
+      options: ["yen", "yuan", "won", "peso"],
+      answer: "yen",
+      difficulty: 1,
+    },
+    {
+      question: "What currency is used in India?",
+      options: ["rupee", "riyal", "rupiah", "ruble"],
+      answer: "rupee",
+      difficulty: 1,
+    },
+    {
+      question: "What currency is used in Mexico?",
+      options: ["peso", "real", "rand", "franc"],
+      answer: "peso",
+      difficulty: 2,
+    },
+    {
+      question: "Which country uses the yuan?",
+      options: ["China", "Japan", "India", "Russia"],
+      answer: "China",
+      difficulty: 2,
+    },
+    {
+      question: "Which country uses the won?",
+      options: ["South Korea", "China", "Japan", "Singapore"],
+      answer: "South Korea",
+      difficulty: 2,
+    },
+    {
+      question: "Which country uses the riyal?",
+      options: ["Saudi Arabia", "Turkey", "Egypt", "Nigeria"],
+      answer: "Saudi Arabia",
+      difficulty: 3,
+    },
+    {
+      question: "Which country uses the dirham?",
+      options: ["United Arab Emirates", "Saudi Arabia", "Switzerland", "Indonesia"],
+      answer: "United Arab Emirates",
+      difficulty: 3,
+    },
+    {
+      question: "Which currency code means euro?",
+      options: ["EUR", "EGP", "AED", "AUD"],
+      answer: "EUR",
+      difficulty: 4,
+    },
+    {
+      question: "Which currency code belongs to the shekel?",
+      options: ["ILS", "INR", "IDR", "EGP"],
+      answer: "ILS",
+      difficulty: 4,
+    },
+    {
+      question: "Germany, France, Italy, and Spain all use which currency?",
+      options: ["euro", "pound", "franc", "dollar"],
+      answer: "euro",
+      difficulty: 4,
+    },
+    {
+      question: "Which list shows only currencies?",
+      options: [
+        "yen, peso, euro, naira",
+        "Japan, Brazil, won, euro",
+        "dollar, Mexico, rand, rupee",
+        "yuan, India, lira, franc",
+      ],
+      answer: "yen, peso, euro, naira",
+      difficulty: 5,
     },
   ]
 );
@@ -678,33 +755,67 @@ const FINANCIAL_PURCHASE_TEMPLATES = [
   },
 ];
 
+const FINANCIAL_CURRENCY_FACTS = [
+  { country: "Israel", currency: "shekel", code: "ILS" },
+  { country: "United States", currency: "dollar", code: "USD" },
+  { country: "China", currency: "yuan", code: "CNY" },
+  { country: "Japan", currency: "yen", code: "JPY" },
+  { country: "Germany", currency: "euro", code: "EUR" },
+  { country: "India", currency: "rupee", code: "INR" },
+  { country: "United Kingdom", currency: "pound", code: "GBP" },
+  { country: "France", currency: "euro", code: "EUR" },
+  { country: "Italy", currency: "euro", code: "EUR" },
+  { country: "Canada", currency: "dollar", code: "CAD" },
+  { country: "Brazil", currency: "real", code: "BRL" },
+  { country: "Russia", currency: "ruble", code: "RUB" },
+  { country: "South Korea", currency: "won", code: "KRW" },
+  { country: "Australia", currency: "dollar", code: "AUD" },
+  { country: "Mexico", currency: "peso", code: "MXN" },
+  { country: "Indonesia", currency: "rupiah", code: "IDR" },
+  { country: "Saudi Arabia", currency: "riyal", code: "SAR" },
+  { country: "Turkey", currency: "lira", code: "TRY" },
+  { country: "South Africa", currency: "rand", code: "ZAR" },
+  { country: "Switzerland", currency: "franc", code: "CHF" },
+  { country: "Singapore", currency: "dollar", code: "SGD" },
+  { country: "Netherlands", currency: "euro", code: "EUR" },
+  { country: "Spain", currency: "euro", code: "EUR" },
+  { country: "United Arab Emirates", currency: "dirham", code: "AED" },
+  { country: "Nigeria", currency: "naira", code: "NGN" },
+  { country: "Egypt", currency: "pound", code: "EGP" },
+];
+
 function createFinancialLiteracyGeneratedEntry(difficulty) {
   const generatorsByDifficulty = {
     1: [
+      createFinancialCurrencyQuestion,
       createFinancialNeedWantQuestion,
       createFinancialSavingsQuestion,
       createFinancialSpendingQuestion,
       createFinancialBestValueQuestion,
     ],
     2: [
+      createFinancialCurrencyQuestion,
       createFinancialNeedWantQuestion,
       createFinancialSavingsQuestion,
       createFinancialSpendingQuestion,
       createFinancialBestValueQuestion,
     ],
     3: [
+      createFinancialCurrencyQuestion,
       createFinancialSavingsQuestion,
       createFinancialSpendingQuestion,
       createFinancialBestValueQuestion,
       createFinancialDiscountQuestion,
     ],
     4: [
+      createFinancialCurrencyCodeQuestion,
       createFinancialSpendingQuestion,
       createFinancialBestValueQuestion,
       createFinancialDiscountQuestion,
       createFinancialPlanComparisonQuestion,
     ],
     5: [
+      createFinancialCurrencyCodeQuestion,
       createFinancialBestValueQuestion,
       createFinancialDiscountQuestion,
       createFinancialPlanComparisonQuestion,
@@ -714,6 +825,68 @@ function createFinancialLiteracyGeneratedEntry(difficulty) {
 
   const generators = generatorsByDifficulty[difficulty] || generatorsByDifficulty[3];
   return randomChoice(generators)(difficulty);
+}
+
+function createFinancialCurrencyQuestion(difficulty) {
+  const entry = randomChoice(FINANCIAL_CURRENCY_FACTS);
+  const byCountry = Math.random() < 0.5;
+
+  if (byCountry) {
+    const distractors = shuffleArray(
+      Array.from(
+        new Set(FINANCIAL_CURRENCY_FACTS.filter((item) => item.currency !== entry.currency).map((item) => item.currency))
+      )
+    ).slice(0, 3);
+
+    return {
+      question: `What currency is used in ${entry.country}?`,
+      options: shuffleArray([entry.currency, ...distractors]),
+      answer: entry.currency,
+      difficulty,
+    };
+  }
+
+  const distractors = shuffleArray(
+    FINANCIAL_CURRENCY_FACTS.filter((item) => item.country !== entry.country).map((item) => item.country)
+  ).slice(0, 3);
+
+  return {
+    question: `Which country uses the ${entry.currency}?`,
+    options: shuffleArray([entry.country, ...distractors]),
+    answer: entry.country,
+    difficulty,
+  };
+}
+
+function createFinancialCurrencyCodeQuestion(difficulty) {
+  const entry = randomChoice(FINANCIAL_CURRENCY_FACTS);
+  const askForCode = Math.random() < 0.5;
+
+  if (askForCode) {
+    const distractors = shuffleArray(
+      FINANCIAL_CURRENCY_FACTS.filter((item) => item.code !== entry.code).map((item) => item.code)
+    ).slice(0, 3);
+
+    return {
+      question: `Which currency code belongs to the ${entry.currency}?`,
+      options: shuffleArray([entry.code, ...distractors]),
+      answer: entry.code,
+      difficulty,
+    };
+  }
+
+  const distractors = shuffleArray(
+    Array.from(
+      new Set(FINANCIAL_CURRENCY_FACTS.filter((item) => item.currency !== entry.currency).map((item) => item.currency))
+    )
+  ).slice(0, 3);
+
+  return {
+    question: `Which currency code means ${entry.code}?`,
+    options: shuffleArray([entry.currency, ...distractors]),
+    answer: entry.currency,
+    difficulty,
+  };
 }
 
 function createFinancialNeedWantQuestion(difficulty) {

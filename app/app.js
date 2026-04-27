@@ -29,6 +29,7 @@ const GENERATED_CATEGORY_DRAG_SHARES = {
   fractions: 0.28,
   "fractions-and-ratios": 0.24,
   science: 0.2,
+  "financial-literacy": 0.18,
   nutrition: 0.22,
   estimation: 0.22,
   measurement: 0.26,

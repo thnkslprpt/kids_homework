@@ -1,9 +1,9 @@
 const READING_COMPREHENSION_QUESTIONS = [
   {
     question: "What is the main idea of the passage?",
-    passage: "Noah watered his bean plant every day. He put it near a sunny window, and the plant grew taller each week.",
+    passage: "Gabriel watered his bean plant every day. He put it near a sunny window, and the plant grew taller each week.",
     visualHtml: buildReadingPassageCard("Passage", [
-      "Noah watered his bean plant every day.",
+      "Gabriel watered his bean plant every day.",
       "He put it near a sunny window, and the plant grew taller each week.",
     ]),
     options: [
@@ -16,9 +16,9 @@ const READING_COMPREHENSION_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "What can you tell about Mia from the passage?",
+    question: "What can you tell about Eden from the passage?",
     visualHtml: buildReadingPassageCard("Passage", [
-      "Mia packed an umbrella, a raincoat, and boots before leaving the house.",
+      "Eden packed an umbrella, a raincoat, and boots before leaving the house.",
       "Dark clouds covered the sky.",
     ]),
     options: [
@@ -78,9 +78,9 @@ const READING_COMPREHENSION_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Why did Sam probably bring a flashlight?",
+    question: "Why did Gabriel probably bring a flashlight?",
     visualHtml: buildReadingPassageCard("Passage", [
-      "Sam and his sister were walking back from the garden after sunset.",
+      "Gabriel and his sister were walking back from the garden after sunset.",
       "The path was dark near the gate.",
     ]),
     options: [
@@ -171,7 +171,7 @@ const READING_COMPREHENSION_QUESTIONS = [
   {
     question: "What does the word 'fragile' mean in the passage?",
     visualHtml: buildReadingPassageCard("Passage", [
-      "The ornament was fragile, so Jaden wrapped it in soft paper before putting it in the box.",
+      "The ornament was fragile, so Teva wrapped it in soft paper before putting it in the box.",
     ]),
     options: ["Easy to break", "Very heavy", "Very dirty", "Hard to carry"],
     answer: "Easy to break",
@@ -209,22 +209,22 @@ const READING_COMPREHENSION_QUESTIONS = [
     {
       question: "What is the main idea of the passage?",
       lines: [
-        "Lena borrowed a library book about whales.",
+        "Noga borrowed a library book about whales.",
         "She read it each night and shared new facts with her brother.",
       ],
       options: [
-        "Lena enjoyed learning about whales.",
-        "Lena wanted to swim across the ocean.",
-        "Lena was hiding a book from the library.",
-        "Lena forgot how to read.",
+        "Noga enjoyed learning about whales.",
+        "Noga wanted to swim across the ocean.",
+        "Noga was hiding a book from the library.",
+        "Noga forgot how to read.",
       ],
-      answer: "Lena enjoyed learning about whales.",
+      answer: "Noga enjoyed learning about whales.",
       difficulty: 1,
     },
     {
-      question: "What can you tell about Evan from the passage?",
+      question: "What can you tell about Gabriel from the passage?",
       lines: [
-        "Evan put on his helmet and knee pads before going outside with his skateboard.",
+        "Gabriel put on his helmet and knee pads before going outside with his skateboard.",
       ],
       options: [
         "He planned to ride his skateboard.",
@@ -239,9 +239,9 @@ const READING_COMPREHENSION_QUESTIONS = [
       question: "In the passage, what does the word 'it' refer to?",
       lines: [
         "The kite landed in a tree.",
-        "Maya used a long stick to pull it down.",
+        "Eden used a long stick to pull it down.",
       ],
-      options: ["The tree", "The stick", "The kite", "Maya"],
+      options: ["The tree", "The stick", "The kite", "Eden"],
       answer: "The kite",
       difficulty: 1,
     },
@@ -333,7 +333,7 @@ const READING_COMPREHENSION_QUESTIONS = [
     {
       question: "How is this passage organized?",
       lines: [
-        "First, Nora rinsed the apple.",
+        "First, Teva rinsed the apple.",
         "Next, she sliced it.",
         "Last, she placed the pieces on a plate.",
       ],
@@ -344,7 +344,7 @@ const READING_COMPREHENSION_QUESTIONS = [
     {
       question: "What is the best title for the passage?",
       lines: [
-        "Zuri folded the flyer and tucked it into her backpack.",
+        "Teva folded the flyer and tucked it into her backpack.",
         "On the bus ride home, she practiced her lines for the class play.",
       ],
       options: [
@@ -407,7 +407,7 @@ const READING_COMPREHENSION_QUESTIONS = [
     {
       question: "What is the best title for the passage?",
       lines: [
-        "Each week, Maya dropped part of her allowance into a jar.",
+        "Each week, Eden dropped part of her allowance into a jar.",
         "After two months, she had enough money to buy the art set she wanted.",
       ],
       options: [
@@ -422,16 +422,16 @@ const READING_COMPREHENSION_QUESTIONS = [
     {
       question: "What does the author mostly want you to understand?",
       lines: [
-        "At first, Zoe missed the soccer goal during practice.",
+        "At first, Teva missed the soccer goal during practice.",
         "By the end of the week, she kicked the ball between the cones again and again.",
       ],
       options: [
-        "Practice helped Zoe improve.",
+        "Practice helped Teva improve.",
         "Soccer is only fun for experts.",
-        "Zoe wanted to quit her team.",
+        "Teva wanted to quit her team.",
         "Cones are harder to move than goals.",
       ],
-      answer: "Practice helped Zoe improve.",
+      answer: "Practice helped Teva improve.",
       difficulty: 3,
     },
     {
@@ -490,7 +490,7 @@ const READING_COMPREHENSION_QUESTIONS = [
       question: "How is this passage organized?",
       lines: [
         "The tomato plant drooped in the heat.",
-        "After Maya watered it and moved it into partial shade, the leaves lifted again.",
+        "After Eden watered it and moved it into partial shade, the leaves lifted again.",
       ],
       options: ["Problem and solution", "Compare and contrast", "Steps in order", "A list of facts only"],
       answer: "Problem and solution",
@@ -701,15 +701,15 @@ function createReadingMainIdeaQuestion(difficulty = 1) {
     {
       title: "A Bird Feeder",
       lines: [
-        "Mila filled the bird feeder with seeds.",
+        "Teva filled the bird feeder with seeds.",
         "Soon, birds came to eat each morning.",
       ],
-      answer: "Mila helped birds by filling a feeder.",
+      answer: "Teva helped birds by filling a feeder.",
       options: [
-        "Mila helped birds by filling a feeder.",
-        "Mila was hiding from birds.",
-        "Mila was making soup.",
-        "Mila was cleaning a car.",
+        "Teva helped birds by filling a feeder.",
+        "Teva was hiding from birds.",
+        "Teva was making soup.",
+        "Teva was cleaning a car.",
       ],
     },
   ]);
@@ -727,7 +727,7 @@ function createReadingMainIdeaQuestion(difficulty = 1) {
 function createReadingReferenceQuestion(difficulty = 1) {
   const animals = [
     ["The kittens were sleepy. They curled up in a basket.", "they", "The kittens"],
-    ["The teacher handed Ava a pencil because she did not have one.", "she", "Ava"],
+    ["The teacher handed Eden a pencil because she did not have one.", "she", "Eden"],
     ["The robot blinked, and it rolled forward slowly.", "it", "The robot"],
   ];
   const [sentence, reference, answer] = readingRandomChoice(animals);
@@ -751,31 +751,31 @@ function createReadingInferenceQuestion(difficulty = 2) {
     {
       title: "A Rainy Day",
       lines: [
-        "Jon packed a raincoat and boots before school.",
+        "Gabriel packed a raincoat and boots before school.",
         "The sky was gray and the wind was cool.",
       ],
       question: "What can you infer?",
-      answer: "Jon expected rainy weather.",
+      answer: "Gabriel expected rainy weather.",
       options: [
-        "Jon expected rainy weather.",
-        "Jon was going to the beach.",
-        "Jon was baking cookies.",
-        "Jon forgot to get dressed.",
+        "Gabriel expected rainy weather.",
+        "Gabriel was going to the beach.",
+        "Gabriel was baking cookies.",
+        "Gabriel forgot to get dressed.",
       ],
     },
     {
       title: "A Long Walk",
       lines: [
-        "After the hike, Sara sat on a bench and drank water.",
+        "After the hike, Noga sat on a bench and drank water.",
         "She had been walking for a long time.",
       ],
       question: "What can you infer?",
-      answer: "Sara was probably tired and thirsty.",
+      answer: "Noga was probably tired and thirsty.",
       options: [
-        "Sara was probably tired and thirsty.",
-        "Sara wanted to play a trumpet.",
-        "Sara was making a painting.",
-        "Sara was moving to a new house.",
+        "Noga was probably tired and thirsty.",
+        "Noga wanted to play a trumpet.",
+        "Noga was making a painting.",
+        "Noga was moving to a new house.",
       ],
     },
   ];
@@ -829,7 +829,7 @@ function createReadingTextStructureQuestion(difficulty = 4) {
     {
       title: "A Recipe",
       lines: [
-        "First, Mia cracked the eggs.",
+        "First, Eden cracked the eggs.",
         "Next, she stirred the batter.",
         "Finally, she baked the cake.",
       ],

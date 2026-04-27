@@ -60,9 +60,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Sam finished before Lee. Lee finished before Noor. Who finished last?",
-    options: ["Sam", "Lee", "Noor", "They tied"],
-    answer: "Noor",
+    question: "Gabriel finished before Eden. Eden finished before Teva. Who finished last?",
+    options: ["Gabriel", "Eden", "Teva", "They tied"],
+    answer: "Teva",
     difficulty: 3,
   },
   {
@@ -132,9 +132,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "Maya is shorter than Omar but taller than Lior. Who is tallest?",
-    options: ["Maya", "Omar", "Lior", "Maya and Omar"],
-    answer: "Omar",
+    question: "Eden is shorter than Noga but taller than Teva. Who is tallest?",
+    options: ["Eden", "Noga", "Teva", "Eden and Noga"],
+    answer: "Noga",
     difficulty: 5,
   },
   {
@@ -150,9 +150,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "Liam is taller than Noah. Noah is taller than Ezra. Who is tallest?",
-    options: ["Liam", "Noah", "Ezra", "You cannot tell"],
-    answer: "Liam",
+    question: "Gabriel is taller than Gideon. Gideon is taller than Teva. Who is tallest?",
+    options: ["Gabriel", "Gideon", "Teva", "You cannot tell"],
+    answer: "Gabriel",
     difficulty: 1,
   },
   {
@@ -180,8 +180,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Gideon sits between Noah and Teva. Who cannot sit on an end?",
-    options: ["Gideon", "Noah", "Teva", "Noah and Teva"],
+    question: "Gideon sits between Gabriel and Teva. Who cannot sit on an end?",
+    options: ["Gideon", "Gabriel", "Teva", "Gabriel and Teva"],
     answer: "Gideon",
     difficulty: 3,
   },
@@ -222,9 +222,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Nia sits right of Tom and left of Ziv. Who is in the middle?",
-    options: ["Nia", "Tom", "Ziv", "No one"],
-    answer: "Nia",
+    question: "Eden sits right of Noga and left of Gabriel. Who is in the middle?",
+    options: ["Eden", "Noga", "Gabriel", "No one"],
+    answer: "Eden",
     difficulty: 2,
   },
   {
@@ -324,8 +324,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Sara is left of Noga. Noga is left of Kim. Who is in the middle?",
-    options: ["Sara", "Noga", "Kim", "No one"],
+    question: "Eden is left of Noga. Noga is left of Teva. Who is in the middle?",
+    options: ["Eden", "Noga", "Teva", "No one"],
     answer: "Noga",
     difficulty: 2,
   },
@@ -366,9 +366,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Sam finished before Tay. Tay finished before Uma. Who finished last?",
-    options: ["Sam", "Tay", "Uma", "They tied"],
-    answer: "Uma",
+    question: "Noga finished before Gabriel. Gabriel finished before Eden. Who finished last?",
+    options: ["Noga", "Gabriel", "Eden", "They tied"],
+    answer: "Eden",
     difficulty: 2,
   },
   {
@@ -390,9 +390,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Three kids wore red, blue, and green shirts. Ana did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
-    options: ["Ana", "Noga", "Eden", "No one"],
-    answer: "Ana",
+    question: "Three kids wore red, blue, and green shirts. Teva did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
+    options: ["Teva", "Noga", "Eden", "No one"],
+    answer: "Teva",
     difficulty: 3,
   },
   {
@@ -414,8 +414,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "Gideon sits between Tom and Zoe. Who cannot sit on an end?",
-    options: ["Gideon", "Tom", "Zoe", "Tom and Zoe"],
+    question: "Gideon sits between Eden and Teva. Who cannot sit on an end?",
+    options: ["Gideon", "Eden", "Teva", "Eden and Teva"],
     answer: "Gideon",
     difficulty: 3,
   },
@@ -576,9 +576,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "Noga is taller than Gideon. Gideon is taller than Ali. Who is shortest?",
-    options: ["Noga", "Gideon", "Ali", "No one"],
-    answer: "Ali",
+    question: "Noga is taller than Gideon. Gideon is taller than Teva. Who is shortest?",
+    options: ["Noga", "Gideon", "Teva", "No one"],
+    answer: "Teva",
     difficulty: 1,
   },
   {
@@ -624,8 +624,8 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "If Sam is left of Noga and Noga is left of Kim, who is in the middle?",
-    options: ["Sam", "Noga", "Kim", "No one"],
+    question: "If Eden is left of Noga and Noga is left of Gabriel, who is in the middle?",
+    options: ["Eden", "Noga", "Gabriel", "No one"],
     answer: "Noga",
     difficulty: 1,
   },
@@ -654,9 +654,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 2,
   },
   {
-    question: "Sara is left of Leo. Leo is left of Nia. Who is in the middle?",
-    options: ["Sara", "Leo", "Nia", "No one"],
-    answer: "Leo",
+    question: "Eden is left of Gabriel. Gabriel is left of Teva. Who is in the middle?",
+    options: ["Eden", "Gabriel", "Teva", "No one"],
+    answer: "Gabriel",
     difficulty: 2,
   },
   {
@@ -876,9 +876,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "Three kids wore red, blue, and green shirts. Ali is not red. Bea is not blue. Eden wore green. Who wore red?",
-    options: ["Ali", "Bea", "Eden", "No one"],
-    answer: "Bea",
+    question: "Three kids wore red, blue, and green shirts. Gabriel is not red. Gideon is not blue. Eden wore green. Who wore red?",
+    options: ["Gabriel", "Gideon", "Eden", "No one"],
+    answer: "Gideon",
     difficulty: 4,
   },
   {
@@ -996,9 +996,9 @@ const LOGIC_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "Sam is taller than Jo, but shorter than Kim. Who is tallest?",
-    options: ["Sam", "Jo", "Kim", "No one"],
-    answer: "Kim",
+    question: "Gabriel is taller than Teva, but shorter than Noga. Who is tallest?",
+    options: ["Gabriel", "Teva", "Noga", "No one"],
+    answer: "Noga",
     difficulty: 5,
   },
   {
@@ -1116,14 +1116,14 @@ function createLogicGeneratedEntry(difficulty) {
 
 function logicCreateSequenceQuestion() {
   const templates = [
-    { start: 4, step: 4, options: ["12", "16", "18", "20"], answer: "16", difficulty: 1 },
-    { start: 1, step: 3, options: ["8", "9", "10", "11"], answer: "10", difficulty: 2 },
-    { start: 10, step: -2, options: ["2", "4", "6", "8"], answer: "4", difficulty: 3 },
-    { start: 3, step: 6, options: ["15", "18", "21", "24"], answer: "21", difficulty: 4 },
-    { start: 2, step: 4, options: ["14", "16", "18", "20"], answer: "18", difficulty: 5 },
+    { start: 4, step: 4, options: ["12", "16", "18", "20"], difficulty: 1 },
+    { start: 1, step: 3, options: ["8", "9", "10", "11"], difficulty: 2 },
+    { start: 10, step: -2, options: ["2", "4", "6", "8"], difficulty: 3 },
+    { start: 3, step: 6, options: ["15", "18", "21", "24"], difficulty: 4 },
+    { start: 2, step: 4, options: ["14", "16", "18", "20"], difficulty: 5 },
   ];
   const pick = logicRandomChoice(templates);
-  const answerNumber = Number(pick.answer);
+  const answerNumber = pick.start + pick.step * 4;
   return {
     question: `What comes next in the pattern: ${pick.start}, ${pick.start + pick.step}, ${pick.start + pick.step * 2}, ${pick.start + pick.step * 3}, __`,
     options: logicShuffle(
@@ -1154,15 +1154,15 @@ function logicCreateLetterSequenceQuestion() {
 function logicCreateOrderQuestion() {
   const templates = [
     {
-      question: "Mina is taller than Omar. Omar is taller than Lior. Who is tallest?",
-      options: ["Mina", "Omar", "Lior", "You cannot tell"],
-      answer: "Mina",
+      question: "Noga is taller than Gabriel. Gabriel is taller than Eden. Who is tallest?",
+      options: ["Noga", "Gabriel", "Eden", "You cannot tell"],
+      answer: "Noga",
       difficulty: 1,
     },
     {
-      question: "Sam finished before Lee. Lee finished before Noor. Who finished last?",
-      options: ["Sam", "Lee", "Noor", "They tied"],
-      answer: "Noor",
+      question: "Gideon finished before Gabriel. Gabriel finished before Teva. Who finished last?",
+      options: ["Gideon", "Gabriel", "Teva", "They tied"],
+      answer: "Teva",
       difficulty: 2,
     },
     {
@@ -1172,9 +1172,9 @@ function logicCreateOrderQuestion() {
       difficulty: 2,
     },
     {
-      question: "Maya is shorter than Omar but taller than Lior. Who is tallest?",
-      options: ["Maya", "Omar", "Lior", "Maya and Omar"],
-      answer: "Omar",
+      question: "Eden is shorter than Noga but taller than Teva. Who is tallest?",
+      options: ["Eden", "Noga", "Teva", "Eden and Noga"],
+      answer: "Noga",
       difficulty: 5,
     },
   ];
