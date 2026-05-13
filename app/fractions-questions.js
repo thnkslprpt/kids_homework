@@ -457,6 +457,54 @@ const FRACTIONS_QUESTIONS = (() => {
         difficulty: 5,
       }),
     ],
+    6: [
+      () => ({
+        question: "What is 5/6 - 1/4?",
+        options: ["7/12", "2/3", "3/4", "1/2"],
+        answer: "7/12",
+        difficulty: 6,
+      }),
+      () => ({
+        question: "Which fraction is equal to 0.375?",
+        options: ["3/8", "5/8", "3/4", "7/10"],
+        answer: "3/8",
+        difficulty: 6,
+      }),
+      () =>
+        createSetQuestion({
+          question: "Which fraction in simplest form matches the colored counters?",
+          coloredCount: 18,
+          totalCount: 24,
+          options: ["2/3", "3/4", "4/5", "5/6"],
+          answer: "3/4",
+          difficulty: 6,
+          visualSummary: "18 of 24 counters are colored.",
+        }),
+    ],
+    7: [
+      () => ({
+        question: "What is 1 1/2 + 2/3?",
+        options: ["1 5/6", "2 1/6", "2 1/3", "2 2/3"],
+        answer: "2 1/6",
+        difficulty: 7,
+      }),
+      () => ({
+        question: "What is 3/4 x 2/3?",
+        options: ["1/2", "2/5", "5/7", "7/12"],
+        answer: "1/2",
+        difficulty: 7,
+      }),
+      () =>
+        createComparisonQuestion({
+          question: "Which picture shows the larger fraction?",
+          leftVisualHtml: buildStripSvg(11, 12, FILLED_COLOR),
+          rightVisualHtml: buildStripSvg(9, 10, FILLED_ALT_COLOR),
+          options: ["Picture A", "Picture B", "They are equal", "Not enough information"],
+          answer: "Picture A",
+          difficulty: 7,
+          visualSummary: "Picture A shows 11/12 shaded. Picture B shows 9/10 shaded.",
+        }),
+    ],
   };
 
   globalThis.createFractionsGeneratedEntry = function createFractionsGeneratedEntry(difficulty) {
@@ -708,6 +756,33 @@ const FRACTIONS_QUESTIONS = (() => {
       answer: "11/12",
       difficulty: 5,
     },
+    {
+      question: "What is 5/6 - 1/4?",
+      options: ["7/12", "2/3", "3/4", "1/2"],
+      answer: "7/12",
+      difficulty: 6,
+    },
+    createSetQuestion({
+      question: "Which fraction in simplest form matches the colored counters?",
+      coloredCount: 18,
+      totalCount: 24,
+      options: ["2/3", "3/4", "4/5", "5/6"],
+      answer: "3/4",
+      difficulty: 6,
+      visualSummary: "18 of 24 counters are colored.",
+    }),
+    {
+      question: "What is 1 1/2 + 2/3?",
+      options: ["1 5/6", "2 1/6", "2 1/3", "2 2/3"],
+      answer: "2 1/6",
+      difficulty: 7,
+    },
+    {
+      question: "What is 3/4 x 2/3?",
+      options: ["1/2", "2/5", "5/7", "7/12"],
+      answer: "1/2",
+      difficulty: 7,
+    },
   ];
 })();
 
@@ -717,7 +792,7 @@ function fractionsClampDifficulty(value) {
     return 1;
   }
 
-  return Math.min(5, difficulty);
+  return Math.min(7, difficulty);
 }
 
 function fractionsRandomChoice(values) {

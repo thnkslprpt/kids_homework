@@ -73,9 +73,49 @@
             </label>
           </div>
 
+          <div id="session-builder" class="session-builder">
+            <div class="builder-row builder-presets" aria-label="Session preset">
+              <button type="button" class="builder-preset-button active" data-session-preset="balanced" aria-pressed="true">Balanced</button>
+              <button type="button" class="builder-preset-button" data-session-preset="adaptive" aria-pressed="false">Adaptive</button>
+              <button type="button" class="builder-preset-button" data-session-preset="math-heavy" aria-pressed="false">Math Heavy</button>
+              <button type="button" class="builder-preset-button" data-session-preset="custom" aria-pressed="false">Custom</button>
+            </div>
+
+            <div class="builder-row builder-options">
+              <label class="builder-select-field">
+                <span>Min Level</span>
+                <select id="difficulty-min" name="difficultyMin">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                </select>
+              </label>
+              <button
+                id="adaptive-review-button"
+                type="button"
+                class="builder-toggle-button active"
+                aria-pressed="true"
+              >
+                Adaptive Review
+              </button>
+              <button id="category-reset-button" type="button" class="builder-toggle-button">
+                Reset Topics
+              </button>
+            </div>
+
+            <div id="category-builder-grid" class="category-builder-grid" aria-label="Topics"></div>
+          </div>
+
           <button type="submit" class="primary-button">Start Homework</button>
         </form>
-        <button id="history-button" type="button" class="secondary-button history-button">Previous Sessions</button>
+        <div class="start-actions">
+          <button id="history-button" type="button" class="secondary-button history-button">Previous Sessions</button>
+          <button id="dashboard-button" type="button" class="secondary-button history-button">Parent Dashboard</button>
+        </div>
         <p id="start-feedback" class="feedback" aria-live="polite"></p>
       </section>
 
@@ -140,6 +180,15 @@
         </div>
         <p id="history-empty" class="history-empty" hidden>No previous sessions yet.</p>
         <div id="history-list" class="history-list"></div>
+      </section>
+
+      <section id="dashboard-screen" class="card screen" hidden>
+        <div class="history-header">
+          <h2>Parent Dashboard</h2>
+          <button id="dashboard-back-button" type="button" class="secondary-button">Back</button>
+        </div>
+        <div id="dashboard-user-selector" class="dashboard-user-selector" role="group" aria-label="Dashboard student"></div>
+        <div id="dashboard-content" class="dashboard-content"></div>
       </section>
     </main>
 

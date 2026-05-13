@@ -1081,6 +1081,35 @@ const LOGIC_QUESTIONS = [
   },
 ];
 
+LOGIC_QUESTIONS.push(
+  {
+    question:
+      "Ava, Ben, Cara, and Dov each chose a different color: red, blue, green, or yellow. Ava did not choose red or blue. Ben chose green. Cara did not choose yellow. Which color did Ava choose?",
+    options: ["Red", "Blue", "Green", "Yellow"],
+    answer: "Yellow",
+    difficulty: 6,
+  },
+  {
+    question: "A code changes 2 to 9, 3 to 14, and 4 to 19. What does 7 change to?",
+    options: ["29", "32", "34", "36"],
+    answer: "34",
+    difficulty: 6,
+  },
+  {
+    question:
+      "Four books are on a shelf. The atlas is left of the novel. The poem book is right of the novel. The comic is not at either end. Which book is farthest left?",
+    options: ["Atlas", "Novel", "Poem book", "Comic"],
+    answer: "Atlas",
+    difficulty: 7,
+  },
+  {
+    question: "A code changes 1 to 4, 2 to 11, and 3 to 22. What does 5 change to?",
+    options: ["42", "46", "50", "54"],
+    answer: "46",
+    difficulty: 7,
+  }
+);
+
 function createLogicGeneratedEntry(difficulty) {
   const level = logicClampDifficulty(difficulty);
   const generatorsByLevel = {
@@ -1108,6 +1137,16 @@ function createLogicGeneratedEntry(difficulty) {
       logicCreateLogicGridQuestion,
       logicCreateTwoStepLogicQuestion,
       logicCreateOddOneOutQuestion,
+    ],
+    6: [
+      logicCreateMultiConstraintQuestion,
+      logicCreateRuleTableQuestion,
+      logicCreateConditionalChainQuestion,
+    ],
+    7: [
+      logicCreateMultiConstraintQuestion,
+      logicCreateRuleTableQuestion,
+      logicCreateConditionalChainQuestion,
     ],
   };
 
@@ -1349,6 +1388,82 @@ function logicCreateLogicGridQuestion() {
   };
 }
 
+function logicCreateMultiConstraintQuestion() {
+  const templates = [
+    {
+      question:
+        "Ava, Ben, Cara, and Dov each chose a different color: red, blue, green, or yellow. Ava did not choose red or blue. Ben chose green. Cara did not choose yellow. Which color did Ava choose?",
+      options: ["Red", "Blue", "Green", "Yellow"],
+      answer: "Yellow",
+      difficulty: 6,
+    },
+    {
+      question:
+        "Four books are on a shelf. The atlas is left of the novel. The poem book is right of the novel. The comic is not at either end. Which book is farthest left?",
+      options: ["Atlas", "Novel", "Poem book", "Comic"],
+      answer: "Atlas",
+      difficulty: 7,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateRuleTableQuestion() {
+  const templates = [
+    {
+      question: "A code changes 2 to 9, 3 to 14, and 4 to 19. What does 7 change to?",
+      options: ["29", "32", "34", "36"],
+      answer: "34",
+      difficulty: 6,
+    },
+    {
+      question: "A code changes 1 to 4, 2 to 11, and 3 to 22. What does 5 change to?",
+      options: ["42", "46", "50", "54"],
+      answer: "46",
+      difficulty: 7,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
+function logicCreateConditionalChainQuestion() {
+  const templates = [
+    {
+      question:
+        "If the switch is on, the lamp is bright. If the lamp is bright, the door is open. The switch is on. What must be true?",
+      options: ["The door is open", "The door is closed", "The switch is off", "The lamp is broken"],
+      answer: "The door is open",
+      difficulty: 6,
+    },
+    {
+      question:
+        "If a card is striped, it is tall. If a card is tall, it is not blue. This card is striped. What must be true?",
+      options: ["It is blue", "It is not blue", "It is short", "It is not striped"],
+      answer: "It is not blue",
+      difficulty: 7,
+    },
+  ];
+  const pick = logicRandomChoice(templates);
+  return {
+    question: pick.question,
+    options: logicShuffle([...pick.options]),
+    answer: pick.answer,
+    difficulty: pick.difficulty,
+  };
+}
+
 function logicBuildNumericOptions(answer, step) {
   const value = Number(answer);
   const candidates = [
@@ -1389,7 +1504,7 @@ function logicClampDifficulty(value) {
     return 1;
   }
 
-  return Math.min(5, difficulty);
+  return Math.min(7, difficulty);
 }
 
 function logicRandomChoice(values) {

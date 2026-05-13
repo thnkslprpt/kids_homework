@@ -314,6 +314,15 @@ function createFractionsAndRatiosGeneratedEntry(difficulty) {
       fractionsAndRatiosCreateRatioPartEntry,
       fractionsAndRatiosCreateRecipeScalingEntry,
     ],
+    6: [
+      fractionsAndRatiosCreateScaleRatioEntry,
+      fractionsAndRatiosCreateFractionOperationEntry,
+    ],
+    7: [
+      fractionsAndRatiosCreateScaleRatioEntry,
+      fractionsAndRatiosCreateMultiStepRatioEntry,
+      fractionsAndRatiosCreateFractionOperationEntry,
+    ],
   };
 
   return {
@@ -639,13 +648,75 @@ function fractionsAndRatiosCreateRecipeScalingEntry(difficulty) {
   );
 }
 
+function fractionsAndRatiosCreateScaleRatioEntry(difficulty) {
+  const questions = [
+    {
+      question: "A map scale says 1 cm represents 4 km. How far apart are two towns that are 7.5 cm apart on the map?",
+      options: ["18 km", "24 km", "30 km", "36 km"],
+      answer: "30 km",
+      difficulty: 6,
+    },
+    {
+      question: "A drawing uses a scale of 2 cm to 5 m. If a wall is 12 cm on the drawing, how long is the real wall?",
+      options: ["20 m", "25 m", "30 m", "35 m"],
+      answer: "30 m",
+      difficulty: 7,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateMultiStepRatioEntry(difficulty) {
+  const questions = [
+    {
+      question:
+        "A club has dancers and singers in the ratio 4:5. If there are 27 students altogether, how many are singers?",
+      options: ["12", "15", "18", "20"],
+      answer: "15",
+      difficulty: 7,
+    },
+    {
+      question:
+        "Flour and oats are mixed in the ratio 3:2. If there are 35 cups total, how many cups are flour?",
+      options: ["14", "18", "21", "24"],
+      answer: "21",
+      difficulty: 7,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
+function fractionsAndRatiosCreateFractionOperationEntry(difficulty) {
+  const questions = [
+    {
+      question: "What is 5/6 - 1/4?",
+      options: ["7/12", "2/3", "3/4", "1/2"],
+      answer: "7/12",
+      difficulty: 6,
+    },
+    {
+      question: "What is 3/4 of 2/3?",
+      options: ["1/2", "5/7", "6/7", "7/12"],
+      answer: "1/2",
+      difficulty: 7,
+    },
+  ];
+  return fractionsAndRatiosRandomChoice(
+    questions.filter((template) => template.difficulty <= difficulty)
+  );
+}
+
 function fractionsAndRatiosClampDifficulty(value) {
   const difficulty = Number(value);
   if (!Number.isInteger(difficulty) || difficulty < 1) {
     return 1;
   }
 
-  return Math.min(5, difficulty);
+  return Math.min(7, difficulty);
 }
 
 function fractionsAndRatiosRandomChoice(values) {
@@ -913,6 +984,30 @@ FRACTIONS_AND_RATIOS_QUESTIONS.push(
       options: ["6", "8", "9", "10"],
       answer: "9",
       difficulty: 5,
+    },
+    {
+      question: "A map scale says 1 cm represents 4 km. How far apart are two towns that are 7.5 cm apart on the map?",
+      options: ["18 km", "24 km", "30 km", "36 km"],
+      answer: "30 km",
+      difficulty: 6,
+    },
+    {
+      question: "What is 5/6 - 1/4?",
+      options: ["7/12", "2/3", "3/4", "1/2"],
+      answer: "7/12",
+      difficulty: 6,
+    },
+    {
+      question: "A drawing uses a scale of 2 cm to 5 m. If a wall is 12 cm on the drawing, how long is the real wall?",
+      options: ["20 m", "25 m", "30 m", "35 m"],
+      answer: "30 m",
+      difficulty: 7,
+    },
+    {
+      question: "A club has dancers and singers in the ratio 4:5. If there are 27 students altogether, how many are singers?",
+      options: ["12", "15", "18", "20"],
+      answer: "15",
+      difficulty: 7,
     },
   ]
 );

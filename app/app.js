@@ -11,7 +11,7 @@ const ADULT_MATH_INTERVAL = 2;
 const ADULT_GEOGRAPHY_SHARE = 1 / 8;
 const ADULT_MAX_HARD_QUESTION_DIFFICULTY = 5;
 const MAX_SESSION_DIFFICULTY = 10;
-const MAX_NON_HEBREW_DIFFICULTY = 5;
+const MAX_NON_HEBREW_DIFFICULTY = 7;
 const MAX_HEBREW_DIFFICULTY = 10;
 const FIXED_HEBREW_SESSION_DIFFICULTY = MAX_HEBREW_DIFFICULTY;
 const DEFAULT_HEBREW_WRITING_TAIL_COUNT = 3;
@@ -261,9 +261,36 @@ const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   3: { 3: 0.7, 2: 0.2, 1: 0.1 },
   4: { 4: 0.6, 3: 0.25, 2: 0.1, 1: 0.05 },
   5: { 5: 0.7, 4: 0.2, 3: 0.05, 2: 0.05 },
+  6: { 6: 0.65, 5: 0.22, 4: 0.08, 3: 0.05 },
+  7: { 7: 0.68, 6: 0.22, 5: 0.07, 4: 0.03 },
 };
 const CATEGORY_MAX_DIFFICULTIES = {
   population: 3,
+};
+const MATH_EXTENDED_CATEGORY_MAX_DIFFICULTY = 7;
+const STANDARD_CATEGORY_MAX_DIFFICULTY = 5;
+const EXTENDED_MATH_CATEGORIES = new Set([
+  "math",
+  "statistics",
+  "time",
+  "algebra",
+  "applied-word-problems",
+  "visual-math",
+  "visual-measurement",
+  "logic",
+  "measurement",
+  "charts-and-graphs",
+  "estimation",
+  "probability",
+  "fractions",
+  "fractions-and-ratios",
+  "spatial-reasoning",
+]);
+const SESSION_PRESETS = {
+  balanced: "balanced",
+  adaptive: "adaptive",
+  "math-heavy": "math-heavy",
+  custom: "custom",
 };
 const CHART_BAR_TEMPLATES = [
   {
@@ -2145,6 +2172,11 @@ const SCIENCE_EXCLUDED_PATTERNS = [
 
 const state = {
   currentUserId: USER_PROFILES[0].id,
+  dashboardUserId: USER_PROFILES[0].id,
+  sessionPreset: SESSION_PRESETS.balanced,
+  adaptiveReview: true,
+  selectedCategories: new Set(SESSION_CATEGORY_ORDER),
+  minDifficulty: 1,
   totalQuestions: 0,
   difficulty: 3,
   hebrewOnly: false,
@@ -2179,6 +2211,7 @@ const elements = {
   quizScreen: document.getElementById("quiz-screen"),
   resultsScreen: document.getElementById("results-screen"),
   historyScreen: document.getElementById("history-screen"),
+  dashboardScreen: document.getElementById("dashboard-screen"),
   startForm: document.getElementById("start-form"),
   userSelector: document.getElementById("user-selector"),
   startFeedback: document.getElementById("start-feedback"),
@@ -2186,6 +2219,10 @@ const elements = {
   historyBackButton: document.getElementById("history-back-button"),
   historyList: document.getElementById("history-list"),
   historyEmpty: document.getElementById("history-empty"),
+  dashboardButton: document.getElementById("dashboard-button"),
+  dashboardBackButton: document.getElementById("dashboard-back-button"),
+  dashboardUserSelector: document.getElementById("dashboard-user-selector"),
+  dashboardContent: document.getElementById("dashboard-content"),
   sessionModeLabel: document.getElementById("session-mode-label"),
   questionCount: document.getElementById("question-count"),
   questionCountButtons: Array.from(document.querySelectorAll(".question-count-button")),
@@ -2193,6 +2230,12 @@ const elements = {
   hebrewOnlyButton: document.getElementById("hebrew-only-button"),
   specialtyWordsOnly: document.getElementById("specialty-words-only"),
   specialtyWordsButton: document.getElementById("specialty-words-button"),
+  difficultyMin: document.getElementById("difficulty-min"),
+  sessionBuilder: document.getElementById("session-builder"),
+  sessionPresetButtons: Array.from(document.querySelectorAll(".builder-preset-button")),
+  adaptiveReviewButton: document.getElementById("adaptive-review-button"),
+  categoryResetButton: document.getElementById("category-reset-button"),
+  categoryBuilderGrid: document.getElementById("category-builder-grid"),
   difficultyLabel: document.getElementById("difficulty-label"),
   difficultySelector: document.getElementById("difficulty-selector"),
   difficultyLevel: document.getElementById("difficulty-level"),
@@ -2626,6 +2669,8 @@ const mathChoiceGenerators = [
   createRoundingChoiceQuestion,
   createRectangleMeasureChoiceQuestion,
   createPrimeCompositeChoiceQuestion,
+  createNumberLineChoiceQuestion,
+  createFractionBarChoiceQuestion,
   createMoneyChoiceQuestion,
   createPercentageChoiceQuestion,
 ];
@@ -2663,6 +2708,20 @@ const statisticsGeneratorsByDifficulty = {
     createStatisticsRangeQuestion,
     createStatisticsDataQuestion,
   ],
+  6: [
+    createStatisticsMeanQuestion,
+    createStatisticsMedianQuestion,
+    createStatisticsModeQuestion,
+    createStatisticsRangeQuestion,
+    createStatisticsDataQuestion,
+  ],
+  7: [
+    createStatisticsMeanQuestion,
+    createStatisticsMedianQuestion,
+    createStatisticsModeQuestion,
+    createStatisticsRangeQuestion,
+    createStatisticsDataQuestion,
+  ],
 };
 
 const PLACE_VALUE_NAMES = [
@@ -2684,6 +2743,8 @@ elements.answerForm.addEventListener("submit", submitTypedAnswer);
 elements.restartButton.addEventListener("click", showStartScreen);
 elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
+elements.dashboardButton?.addEventListener("click", showDashboardScreen);
+elements.dashboardBackButton?.addEventListener("click", showStartScreen);
 elements.quizBackButton.addEventListener("click", showPreviousQuizQuestion);
 elements.quizForwardButton.addEventListener("click", showNextQuizQuestion);
 elements.resultsBackButton.addEventListener("click", showPreviousQuizQuestion);
@@ -2693,6 +2754,7 @@ initializeUserSelector();
 initializeQuestionCountButtons();
 initializeHebrewOnlyButton();
 initializeSpecialtyWordsButton();
+initializeSessionBuilder();
 initializeDifficultyControl();
 updateStartControlsForCurrentUser();
 
@@ -3630,6 +3692,11 @@ function selectUser(userId) {
   if (!elements.historyScreen.hidden) {
     renderHistoryScreen();
   }
+
+  if (elements.dashboardScreen && !elements.dashboardScreen.hidden) {
+    state.dashboardUserId = userId;
+    renderDashboardScreen();
+  }
 }
 
 function applyUserDefaultDifficulty(userId) {
@@ -3775,6 +3842,7 @@ function updateStartControlsForCurrentUser() {
   const isAvi = isAviUserSelected();
   const isSpecialtyOnly = isAdult && isSpecialtyWordsOnlySelected();
   const currentUser = getCurrentUserProfile();
+  const builderLocked = isAdult || isAvi || isSpecialtyOnly;
 
   if (isAdult && elements.questionCount) {
     elements.questionCount.value = String(ADULT_SESSION_DEFAULT_QUESTION_COUNT);
@@ -3813,6 +3881,27 @@ function updateStartControlsForCurrentUser() {
     elements.difficultyLevel.title = isAdult || isAvi ? `${currentUser.name}'s session settings are preset.` : "";
   }
 
+  if (elements.sessionBuilder) {
+    elements.sessionBuilder.classList.toggle("disabled", builderLocked);
+  }
+
+  [
+    ...elements.sessionPresetButtons,
+    elements.difficultyMin,
+    elements.adaptiveReviewButton,
+    elements.categoryResetButton,
+    ...Array.from(elements.categoryBuilderGrid?.querySelectorAll?.(".category-toggle-button") || []),
+  ].forEach((control) => {
+    if (control) {
+      control.disabled = builderLocked;
+      control.title = builderLocked ? `${currentUser.name}'s session settings are preset.` : "";
+    }
+  });
+
+  if (builderLocked) {
+    syncDifficultyRange();
+  }
+
   updateDifficultyControl();
 }
 
@@ -3842,12 +3931,158 @@ function updateQuestionCountButtons() {
   });
 }
 
+function initializeSessionBuilder() {
+  renderCategoryBuilder();
+
+  elements.sessionPresetButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      applySessionPreset(button.dataset.sessionPreset || SESSION_PRESETS.balanced);
+    });
+  });
+
+  elements.difficultyMin?.addEventListener("change", () => {
+    state.minDifficulty = normalizeSessionDifficulty(elements.difficultyMin.value, 1);
+    syncDifficultyRange();
+    setSessionPreset(SESSION_PRESETS.custom);
+  });
+
+  elements.adaptiveReviewButton?.addEventListener("click", () => {
+    state.adaptiveReview = !state.adaptiveReview;
+    updateAdaptiveReviewButton();
+    setSessionPreset(state.adaptiveReview ? SESSION_PRESETS.adaptive : SESSION_PRESETS.custom);
+  });
+
+  elements.categoryResetButton?.addEventListener("click", () => {
+    state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
+    renderCategoryBuilder();
+    setSessionPreset(SESSION_PRESETS.balanced);
+  });
+
+  syncDifficultyRange();
+  updateAdaptiveReviewButton();
+  updateSessionPresetButtons();
+}
+
+function applySessionPreset(preset) {
+  const normalizedPreset = Object.prototype.hasOwnProperty.call(SESSION_PRESETS, preset)
+    ? SESSION_PRESETS[preset]
+    : SESSION_PRESETS.balanced;
+
+  if (normalizedPreset === SESSION_PRESETS.balanced) {
+    state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
+    state.adaptiveReview = true;
+  } else if (normalizedPreset === SESSION_PRESETS.adaptive) {
+    state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
+    state.adaptiveReview = true;
+  } else if (normalizedPreset === SESSION_PRESETS["math-heavy"]) {
+    state.selectedCategories = new Set(
+      SESSION_CATEGORY_ORDER.filter((category) => category === "hebrew" || EXTENDED_MATH_CATEGORIES.has(category))
+    );
+    state.adaptiveReview = true;
+  }
+
+  setSessionPreset(normalizedPreset);
+  renderCategoryBuilder();
+  updateAdaptiveReviewButton();
+}
+
+function setSessionPreset(preset) {
+  state.sessionPreset = Object.values(SESSION_PRESETS).includes(preset) ? preset : SESSION_PRESETS.custom;
+  updateSessionPresetButtons();
+}
+
+function updateSessionPresetButtons() {
+  elements.sessionPresetButtons.forEach((button) => {
+    const isActive = button.dataset.sessionPreset === state.sessionPreset;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
+function updateAdaptiveReviewButton() {
+  setButtonPressedState(elements.adaptiveReviewButton, state.adaptiveReview);
+}
+
+function renderCategoryBuilder() {
+  if (!elements.categoryBuilderGrid) {
+    return;
+  }
+
+  elements.categoryBuilderGrid.innerHTML = "";
+  SESSION_CATEGORY_ORDER.forEach((category) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "category-toggle-button";
+    button.dataset.category = category;
+    button.textContent = getCategoryLabel(category);
+    button.addEventListener("click", () => toggleSessionCategory(category));
+    elements.categoryBuilderGrid.appendChild(button);
+  });
+
+  updateCategoryBuilderButtons();
+}
+
+function toggleSessionCategory(category) {
+  if (!SESSION_CATEGORY_ORDER.includes(category)) {
+    return;
+  }
+
+  const nextCategories = new Set(state.selectedCategories);
+  if (nextCategories.has(category)) {
+    nextCategories.delete(category);
+  } else {
+    nextCategories.add(category);
+  }
+
+  if (!nextCategories.size) {
+    nextCategories.add(category);
+  }
+
+  state.selectedCategories = nextCategories;
+  setSessionPreset(SESSION_PRESETS.custom);
+  updateCategoryBuilderButtons();
+}
+
+function updateCategoryBuilderButtons() {
+  elements.categoryBuilderGrid?.querySelectorAll?.(".category-toggle-button").forEach((button) => {
+    const isActive = state.selectedCategories.has(button.dataset.category);
+    setButtonPressedState(button, isActive);
+  });
+}
+
+function syncDifficultyRange() {
+  const minDifficulty = normalizeSessionDifficulty(elements.difficultyMin?.value || state.minDifficulty || 1, 1);
+  const maxDifficulty = normalizeSessionDifficulty(elements.difficultyLevel?.value || 3, 3);
+  state.minDifficulty = Math.min(minDifficulty, maxDifficulty);
+
+  if (elements.difficultyMin) {
+    elements.difficultyMin.max = String(maxDifficulty);
+    elements.difficultyMin.value = String(state.minDifficulty);
+  }
+}
+
+function getSessionBuilderOptions(maxDifficulty) {
+  syncDifficultyRange();
+  const selectedCategories = Array.from(state.selectedCategories).filter((category) =>
+    SESSION_CATEGORY_ORDER.includes(category)
+  );
+
+  return {
+    minDifficulty: Math.min(state.minDifficulty, normalizeSessionDifficulty(maxDifficulty, 3)),
+    selectedCategories,
+    adaptiveReview: Boolean(state.adaptiveReview),
+    sessionPreset: state.sessionPreset,
+  };
+}
+
 function initializeDifficultyControl() {
   elements.difficultyLevel?.addEventListener("input", () => {
     updateDifficultyControl();
+    syncDifficultyRange();
   });
   elements.difficultyLevel?.addEventListener("change", () => {
     updateDifficultyControl();
+    syncDifficultyRange();
   });
 
   updateDifficultyControl();
@@ -3986,6 +4221,7 @@ function startSession(event) {
   const isAdult = isAdultUserSelected();
   const isAvi = isAviUserSelected();
   const difficulty = isAdult || isAvi ? FIXED_HEBREW_SESSION_DIFFICULTY : selectedDifficulty;
+  const sessionBuilderOptions = getSessionBuilderOptions(difficulty);
   const hebrewOnly = specialtyWordsOnly ? true : isAdult ? selectedHebrewOnly : isAvi ? true : selectedHebrewOnly;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
@@ -3995,6 +4231,11 @@ function startSession(event) {
 
   if (!(isAdult || isAvi) && (!Number.isFinite(difficulty) || difficulty < 1 || difficulty > MAX_SESSION_DIFFICULTY)) {
     showStartMessage(`Please choose a difficulty from 1 to ${MAX_SESSION_DIFFICULTY}.`, "error");
+    return;
+  }
+
+  if (!(isAdult || isAvi || hebrewOnly) && !sessionBuilderOptions.selectedCategories.length) {
+    showStartMessage("Please choose at least one topic.", "error");
     return;
   }
 
@@ -4026,6 +4267,7 @@ function startSession(event) {
   state.difficulty = difficulty;
   state.hebrewOnly = hebrewOnly;
   state.specialtyWordsOnly = specialtyWordsOnly;
+  state.minDifficulty = sessionBuilderOptions.minDifficulty;
   state.currentIndex = 0;
   state.viewIndex = 0;
   state.answeredCount = 0;
@@ -4049,7 +4291,11 @@ function startSession(event) {
       : isGeographyMapPrototypeMode()
         ? buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly: false })
         : injectHebrewWritingPracticeTail(
-            buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly }),
+            buildSessionQuestions(totalQuestions, difficulty, {
+              hebrewOnly,
+              userId: state.currentUserId,
+              ...sessionBuilderOptions,
+            }),
             difficulty,
             { hebrewOnly }
           );
@@ -4346,6 +4592,10 @@ function normalizeAdultWritingPromptBank(entries) {
 
 function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   const normalizedDifficulty = Math.max(1, Math.min(MAX_HEBREW_DIFFICULTY, Number(difficulty) || 1));
+  const minDifficulty = Math.max(
+    1,
+    Math.min(normalizedDifficulty, Number(options.minDifficulty) || 1)
+  );
   const nonHebrewBaseDifficulty = Math.min(MAX_NON_HEBREW_DIFFICULTY, normalizedDifficulty);
   const hebrewOnly = Boolean(options.hebrewOnly);
   const userId = String(options.userId || state.currentUserId || "");
@@ -4353,7 +4603,7 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   const hebrewQuestionMode = options.hebrewQuestionMode === "bank-only" ? "bank-only" : "default";
   const categorySequence = hebrewOnly
     ? Array.from({ length: totalQuestions }, () => "hebrew")
-    : buildDefaultSessionCategorySequence(totalQuestions, userId);
+    : buildDefaultSessionCategorySequence(totalQuestions, userId, options);
   const resources = Object.fromEntries(
     Object.entries(choiceCategoryConfigs).map(([category, config]) => [
       category,
@@ -4372,12 +4622,16 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
   const nonHebrewDifficultyQueue = buildDifficultyQueue(
     nonHebrewQuestionCount,
-    NON_HEBREW_DIFFICULTY_WEIGHTS[nonHebrewBaseDifficulty] || { [nonHebrewBaseDifficulty]: 1 }
+    applyMinimumDifficultyWeightMap(
+      NON_HEBREW_DIFFICULTY_WEIGHTS[nonHebrewBaseDifficulty] || { [nonHebrewBaseDifficulty]: 1 },
+      Math.min(MAX_NON_HEBREW_DIFFICULTY, minDifficulty)
+    )
   );
   const hebrewDifficultyQueue = buildHebrewDifficultyQueue(
     hebrewQuestionCount,
     normalizedDifficulty,
-    hebrewBanks.questionBank
+    hebrewBanks.questionBank,
+    minDifficulty
   );
 
   const runtime = {
@@ -4496,24 +4750,42 @@ function takeRepeatedRandomItems(values, count) {
   return result;
 }
 
-function buildDefaultSessionCategorySequence(totalQuestions, userId = state.currentUserId) {
+function buildDefaultSessionCategorySequence(totalQuestions, userId = state.currentUserId, options = {}) {
   if (isGeographyMapPrototypeMode()) {
     return Array.from({ length: getGeographyMapPrototypeQuestionCount() }, () => RESERVED_MAP_CATEGORY);
   }
 
-  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions, userId);
-  const mapQuestionCount = getReservedMapQuestionCount(totalQuestions);
+  const selectedCategories = normalizeSelectedSessionCategories(options.selectedCategories);
+  const reviewCategorySequence = buildReviewCategorySequence(totalQuestions, userId, {
+    adaptiveReview: options.adaptiveReview,
+    selectedCategories,
+  });
+  const mapQuestionCount = selectedCategories.includes("geography")
+    ? getReservedMapQuestionCount(totalQuestions)
+    : 0;
   const regularQuestionCount = Math.max(
     0,
     totalQuestions - reviewCategorySequence.length - mapQuestionCount
   );
-  const categoryCounts = allocateCategoryCounts(regularQuestionCount);
-  const regularCategorySequence = buildCategorySequence(regularQuestionCount, categoryCounts);
+  const categoryCounts = allocateCategoryCounts(
+    regularQuestionCount,
+    selectedCategories,
+    options.sessionPreset
+  );
+  const regularCategorySequence = buildCategorySequence(regularQuestionCount, categoryCounts, selectedCategories);
 
   return [
     ...reviewCategorySequence,
     ...insertReservedMapCategories(regularCategorySequence, mapQuestionCount),
   ];
+}
+
+function normalizeSelectedSessionCategories(categories) {
+  const selected = Array.isArray(categories)
+    ? categories.filter((category) => SESSION_CATEGORY_ORDER.includes(category))
+    : SESSION_CATEGORY_ORDER;
+
+  return selected.length ? Array.from(new Set(selected)) : SESSION_CATEGORY_ORDER;
 }
 
 function hasGeographyMapSupport() {
@@ -4689,7 +4961,16 @@ function createGeographyMapQuestion(difficulty, runtime, resources) {
 
 function getEffectiveCategoryDifficulty(category, difficulty) {
   const maxDifficulty = CATEGORY_MAX_DIFFICULTIES[category];
-  return typeof maxDifficulty === "number" ? Math.min(difficulty, maxDifficulty) : difficulty;
+  if (typeof maxDifficulty === "number") {
+    return Math.min(difficulty, maxDifficulty);
+  }
+
+  return Math.min(
+    difficulty,
+    EXTENDED_MATH_CATEGORIES.has(category)
+      ? MATH_EXTENDED_CATEGORY_MAX_DIFFICULTY
+      : STANDARD_CATEGORY_MAX_DIFFICULTY
+  );
 }
 
 function maybeCreateLanguageDragQuestion(category, resources, difficulty, runtime) {
@@ -4792,8 +5073,9 @@ function drawHebrewImageEntries(pool, difficulty, count) {
   return shuffleArray([...source]).slice(0, count);
 }
 
-function buildReviewCategorySequence(totalQuestions, userId = state.currentUserId) {
-  if (!isReviewFocusEnabledForUser(userId)) {
+function buildReviewCategorySequence(totalQuestions, userId = state.currentUserId, options = {}) {
+  const adaptiveReview = options.adaptiveReview ?? isReviewFocusEnabledForUser(userId);
+  if (!adaptiveReview) {
     return [];
   }
 
@@ -4807,7 +5089,10 @@ function buildReviewCategorySequence(totalQuestions, userId = state.currentUserI
 
   const sessionHistoryByUser = loadAllSessionHistory();
   const sessionHistory = Array.isArray(sessionHistoryByUser[userId]) ? sessionHistoryByUser[userId] : [];
-  const weaknessEntries = getUserWeakCategoryEntries(sessionHistory).slice(0, 3);
+  const allowedCategories = new Set(normalizeSelectedSessionCategories(options.selectedCategories));
+  const weaknessEntries = getUserWeakCategoryEntries(sessionHistory)
+    .filter((entry) => allowedCategories.has(entry.category))
+    .slice(0, 3);
   if (!weaknessEntries.length) {
     return [];
   }
@@ -4907,28 +5192,65 @@ function interleaveReviewCategories(categories) {
   return sequence;
 }
 
-function allocateCategoryCounts(totalQuestions) {
-  const coreTotal = Math.min(totalQuestions, Math.max(1, Math.round(totalQuestions * CORE_CATEGORY_SHARE)));
+function allocateCategoryCounts(
+  totalQuestions,
+  selectedCategories = SESSION_CATEGORY_ORDER,
+  sessionPreset = SESSION_PRESETS.balanced
+) {
+  const categories = normalizeSelectedSessionCategories(selectedCategories);
+  if (!totalQuestions) {
+    return Object.fromEntries(categories.map((category) => [category, 0]));
+  }
+
+  if (
+    sessionPreset === SESSION_PRESETS.custom ||
+    sessionPreset === SESSION_PRESETS["math-heavy"] ||
+    categories.length !== SESSION_CATEGORY_ORDER.length
+  ) {
+    const weights = Object.fromEntries(
+      categories.map((category) => [
+        category,
+        sessionPreset === SESSION_PRESETS["math-heavy"] && EXTENDED_MATH_CATEGORIES.has(category)
+          ? 3
+          : category === "math"
+            ? 1.5
+            : 1,
+      ])
+    );
+    return allocateWeightedCategoryCounts(
+      categories.map((category) => ({ category, score: weights[category] || 1 })),
+      totalQuestions
+    );
+  }
+
+  const coreCategories = CORE_SESSION_CATEGORIES.filter((category) => categories.includes(category));
+  const nonCoreCategories = NON_CORE_SESSION_CATEGORIES.filter((category) => categories.includes(category));
+  const coreTotal = coreCategories.length
+    ? Math.min(totalQuestions, Math.max(1, Math.round(totalQuestions * CORE_CATEGORY_SHARE)))
+    : 0;
   const otherTotal = totalQuestions - coreTotal;
 
   return {
-    ...allocateEvenCounts(CORE_SESSION_CATEGORIES, coreTotal),
-    ...allocateNonCoreCategoryCounts(otherTotal),
+    ...allocateEvenCounts(coreCategories, coreTotal),
+    ...allocateNonCoreCategoryCounts(otherTotal, nonCoreCategories),
   };
 }
 
-function allocateNonCoreCategoryCounts(total) {
-  const counts = Object.fromEntries(NON_CORE_SESSION_CATEGORIES.map((category) => [category, 0]));
+function allocateNonCoreCategoryCounts(total, categories = NON_CORE_SESSION_CATEGORIES) {
+  const counts = Object.fromEntries(categories.map((category) => [category, 0]));
   if (total <= 0) {
     return counts;
   }
 
-  const rareCounts = allocateRareNonCoreCategoryCounts(total);
+  const rareCounts = allocateRareNonCoreCategoryCounts(total, categories);
   const rareTotal = Object.values(rareCounts).reduce((sum, count) => sum + count, 0);
-  const standardCategories = NON_CORE_SESSION_CATEGORIES.filter(
+  const standardCategories = categories.filter(
     (category) =>
       !Object.prototype.hasOwnProperty.call(RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES, category)
   );
+  if (!standardCategories.length) {
+    return allocateEvenCounts(categories, total);
+  }
 
   Object.assign(counts, allocateEvenCounts(standardCategories, Math.max(0, total - rareTotal)));
   Object.entries(rareCounts).forEach(([category, count]) => {
@@ -4938,12 +5260,14 @@ function allocateNonCoreCategoryCounts(total) {
   return counts;
 }
 
-function allocateRareNonCoreCategoryCounts(total) {
+function allocateRareNonCoreCategoryCounts(total, categories = NON_CORE_SESSION_CATEGORIES) {
   return Object.fromEntries(
-    Object.entries(RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES).map(([category, overallShare]) => [
-      category,
-      sampleRareCategoryCount(total, overallShare),
-    ])
+    Object.entries(RARE_NON_CORE_CATEGORY_TARGET_OVERALL_SHARES)
+      .filter(([category]) => categories.includes(category))
+      .map(([category, overallShare]) => [
+        category,
+        sampleRareCategoryCount(total, overallShare),
+      ])
   );
 }
 
@@ -4963,6 +5287,10 @@ function sampleRareCategoryCount(total, overallShare) {
 }
 
 function allocateEvenCounts(categories, total) {
+  if (!categories.length) {
+    return {};
+  }
+
   const counts = Object.fromEntries(categories.map((category) => [category, 0]));
   const base = Math.floor(total / categories.length);
   const remainder = total % categories.length;
@@ -4980,17 +5308,17 @@ function allocateEvenCounts(categories, total) {
   return counts;
 }
 
-function buildCategorySequence(totalQuestions, categoryCounts) {
+function buildCategorySequence(totalQuestions, categoryCounts, categories = SESSION_CATEGORY_ORDER) {
   const sequence = [];
   const usedCounts = Object.fromEntries(
-    SESSION_CATEGORY_ORDER.map((category) => [category, 0])
+    categories.map((category) => [category, 0])
   );
 
   for (let slot = 0; slot < totalQuestions; slot += 1) {
     let bestCategory = null;
     let bestScore = Number.NEGATIVE_INFINITY;
 
-    for (const category of SESSION_CATEGORY_ORDER) {
+    for (const category of categories) {
       if (usedCounts[category] >= categoryCounts[category]) {
         continue;
       }
@@ -5009,6 +5337,10 @@ function buildCategorySequence(totalQuestions, categoryCounts) {
           bestCategory = category;
         }
       }
+    }
+
+    if (bestCategory === null) {
+      break;
     }
 
     sequence.push(bestCategory);
@@ -5081,13 +5413,26 @@ function buildDifficultyQueue(totalCount, weightMap) {
   );
 }
 
-function buildHebrewDifficultyQueue(totalCount, sessionDifficulty, entries) {
+function applyMinimumDifficultyWeightMap(weightMap, minDifficulty) {
+  const filteredEntries = Object.entries(weightMap).filter(
+    ([difficulty]) => Number(difficulty) >= minDifficulty
+  );
+
+  if (filteredEntries.length) {
+    return Object.fromEntries(filteredEntries);
+  }
+
+  const highestDifficulty = Math.max(...Object.keys(weightMap).map(Number));
+  return { [highestDifficulty]: 1 };
+}
+
+function buildHebrewDifficultyQueue(totalCount, sessionDifficulty, entries, minDifficulty = 1) {
   if (totalCount <= 0) {
     return [];
   }
 
   const availableLevels = [];
-  for (let difficulty = 1; difficulty <= sessionDifficulty; difficulty += 1) {
+  for (let difficulty = Math.max(1, minDifficulty); difficulty <= sessionDifficulty; difficulty += 1) {
     if (entries.some((entry) => entry.difficulty === difficulty)) {
       availableLevels.push(difficulty);
     }
@@ -5353,6 +5698,8 @@ function createRectangleMeasureInputQuestion(difficulty) {
     difficulty,
     questionText: problem.questionText,
     displayText: "",
+    visualHtml: renderRectangleMeasureVisual(problem.length, problem.width, problem.measure),
+    visualSummary: `Rectangle: ${problem.length} units by ${problem.width} units.`,
     answer: problem.answer,
     answerLabel:
       problem.measure === "area"
@@ -5367,13 +5714,20 @@ function createRectangleMeasureInputQuestion(difficulty) {
 
 function createRectangleMeasureChoiceQuestion(difficulty) {
   const problem = generateRectangleMeasureProblem(difficulty);
-  return createNumericChoiceQuestion({
+  return {
     type: "math-choice",
     difficulty,
+    mode: "choice",
     questionText: problem.questionText,
     displayText: "",
-    answer: problem.answer,
-  });
+    extraText: "",
+    visualHtml: renderRectangleMeasureVisual(problem.length, problem.width, problem.measure),
+    visualSummary: `Rectangle: ${problem.length} units by ${problem.width} units.`,
+    options: buildNumberOptions(problem.answer).map(String),
+    answerValue: String(problem.answer),
+    answerLabel: String(problem.answer),
+    isHebrew: false,
+  };
 }
 
 function createPrimeCompositeChoiceQuestion(difficulty) {
@@ -5392,6 +5746,63 @@ function createPrimeCompositeChoiceQuestion(difficulty) {
   };
 }
 
+function createNumberLineChoiceQuestion(difficulty) {
+  const config = {
+    1: { start: 0, step: 1, count: 10 },
+    2: { start: 0, step: 2, count: 10 },
+    3: { startMin: -10, startMax: 10, step: 5, count: 8 },
+    4: { startMin: -25, startMax: 25, step: 10, count: 8 },
+    5: { startMin: -50, startMax: 50, step: 25, count: 8 },
+    6: { startMin: -100, startMax: 80, step: 20, count: 9 },
+    7: { startMin: -150, startMax: 120, step: 25, count: 9 },
+  }[difficulty] || { startMin: -50, startMax: 50, step: 25, count: 8 };
+  const start = config.start ?? randomInt(config.startMin, config.startMax);
+  const tickIndex = randomInt(1, config.count - 2);
+  const answer = start + tickIndex * config.step;
+  const end = start + (config.count - 1) * config.step;
+
+  return createVisualChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "What number is marked on the number line?",
+    visualHtml: renderNumberLineVisual(start, end, config.step, answer),
+    visualSummary: `A number line from ${start} to ${end} with ${answer} marked.`,
+    options: buildNumberOptions(answer, start, end).map(String),
+    answerValue: String(answer),
+    answerLabel: String(answer),
+  });
+}
+
+function createFractionBarChoiceQuestion(difficulty) {
+  const denominators = difficulty >= 6 ? [6, 8, 10, 12] : difficulty >= 4 ? [4, 5, 6, 8] : [2, 3, 4];
+  const denominator = randomChoice(denominators);
+  const numerator = randomInt(1, denominator - 1);
+  const answer = `${numerator}/${denominator}`;
+  const options = new Set([
+    answer,
+    `${Math.max(1, numerator - 1)}/${denominator}`,
+    `${Math.min(denominator - 1, numerator + 1)}/${denominator}`,
+    `${numerator}/${Math.max(2, denominator - 1)}`,
+    `${denominator - numerator}/${denominator}`,
+  ]);
+
+  while (options.size < 4) {
+    const optionDenominator = randomChoice(denominators);
+    options.add(`${randomInt(1, optionDenominator - 1)}/${optionDenominator}`);
+  }
+
+  return createVisualChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "Which fraction is shaded?",
+    visualHtml: renderFractionBarVisual(numerator, denominator),
+    visualSummary: `${numerator} out of ${denominator} equal parts are shaded.`,
+    options: shuffleArray([answer, ...shuffleArray(Array.from(options).filter((value) => value !== answer)).slice(0, 3)]),
+    answerValue: answer,
+    answerLabel: answer,
+  });
+}
+
 function createSkipCountingChoiceQuestion(difficulty) {
   const config = {
     1: { steps: [2, 5, 10], maxStart: 30 },
@@ -5399,6 +5810,8 @@ function createSkipCountingChoiceQuestion(difficulty) {
     3: { steps: [2, 3, 4, 5, 6, 8, 10], maxStart: 80 },
     4: { steps: [3, 4, 5, 6, 7, 8, 9, 10, 12], maxStart: 120 },
     5: { steps: [4, 5, 6, 7, 8, 9, 10, 12, 15, 25], maxStart: 180 },
+    6: { steps: [6, 7, 8, 9, 11, 12, 15, 20, 25, 50], maxStart: 300 },
+    7: { steps: [7, 8, 9, 11, 12, 13, 15, 25, 50, 75], maxStart: 500 },
   }[difficulty];
 
   const step = randomChoice(config.steps);
@@ -5433,6 +5846,8 @@ function createComparisonChoiceQuestion(difficulty) {
     3: { min: -20, max: 150, minGap: 8 },
     4: { min: -50, max: 300, minGap: 12 },
     5: { min: -100, max: 1000, minGap: 20 },
+    6: { min: -500, max: 2500, minGap: 50 },
+    7: { min: -1500, max: 7500, minGap: 125 },
   }[difficulty];
 
   const askFor = randomChoice(["bigger", "smaller"]);
@@ -5492,6 +5907,8 @@ function createMoneyInputQuestion(difficulty) {
     difficulty,
     questionText: `You have ${amount} shekels. You buy something for ${price} shekels. How much change should you get?`,
     displayText: "",
+    visualHtml: renderMoneyVisual(amount, price),
+    visualSummary: `Money shown: ${amount} shekels with a ${price}-shekel price.`,
     answer,
     answerLabel: `${answer} shekels`,
     acceptedAnswerPrefixes: ["₪"],
@@ -5513,6 +5930,8 @@ function createMoneyChoiceQuestion(difficulty) {
     questionText: `You have ${amount} shekels. You buy something for ${price} shekels. How much change should you get?`,
     displayText: "",
     extraText: "",
+    visualHtml: renderMoneyVisual(amount, price),
+    visualSummary: `Money shown: ${amount} shekels with a ${price}-shekel price.`,
     options,
     answerValue: `${answer} shekels`,
     answerLabel: `${answer} shekels`,
@@ -5554,6 +5973,8 @@ function createStatisticsMiddleNumberQuestion(difficulty) {
     3: { count: 5, min: 2, max: 20, minGap: 1 },
     4: { count: 7, min: 3, max: 30, minGap: 2 },
     5: { count: 7, min: 5, max: 40, minGap: 3 },
+    6: { count: 9, min: 8, max: 80, minGap: 4 },
+    7: { count: 9, min: 10, max: 150, minGap: 6 },
   }[difficulty];
 
   const ordered = buildDistinctNumberList(config.count, config.min, config.max, config.minGap).sort(
@@ -5586,6 +6007,8 @@ function createStatisticsExtremeValueQuestion(difficulty, kind) {
     3: { count: 5, min: 2, max: 20, minGap: 1 },
     4: { count: 5, min: 3, max: 30, minGap: 2 },
     5: { count: 6, min: 5, max: 40, minGap: 2 },
+    6: { count: 7, min: 5, max: 90, minGap: 4 },
+    7: { count: 8, min: 10, max: 180, minGap: 8 },
   }[difficulty];
 
   const values = buildDistinctNumberList(config.count, config.min, config.max, config.minGap);
@@ -5607,6 +6030,8 @@ function createStatisticsMeanQuestion(difficulty) {
     3: { count: randomChoice([4, 5]), min: 2, max: 20, answerMin: 4, answerMax: 16 },
     4: { count: randomChoice([4, 5, 6]), min: 3, max: 25, answerMin: 5, answerMax: 18 },
     5: { count: randomChoice([5, 6]), min: 4, max: 30, answerMin: 6, answerMax: 22 },
+    6: { count: randomChoice([5, 6, 7]), min: 5, max: 60, answerMin: 12, answerMax: 40 },
+    7: { count: randomChoice([6, 7, 8]), min: 8, max: 100, answerMin: 20, answerMax: 70 },
   }[difficulty];
 
   const answer = randomInt(config.answerMin, config.answerMax);
@@ -5628,6 +6053,8 @@ function createStatisticsMedianQuestion(difficulty) {
     3: { count: 5, min: 2, max: 25, minGap: 2 },
     4: { count: 7, min: 3, max: 30, minGap: 2 },
     5: { count: 7, min: 5, max: 40, minGap: 3 },
+    6: { count: 9, min: 8, max: 80, minGap: 4 },
+    7: { count: 9, min: 10, max: 150, minGap: 6 },
   }[difficulty];
 
   const ordered = buildDistinctNumberList(config.count, config.min, config.max, config.minGap).sort(
@@ -5652,6 +6079,8 @@ function createStatisticsModeQuestion(difficulty) {
     3: { min: 2, max: 15, listLength: 5 },
     4: { min: 3, max: 20, listLength: 6 },
     5: { min: 4, max: 24, listLength: 6 },
+    6: { min: 6, max: 60, listLength: 8 },
+    7: { min: 8, max: 100, listLength: 9 },
   }[difficulty];
 
   const answer = randomInt(config.min, config.max);
@@ -5680,6 +6109,8 @@ function createStatisticsRangeQuestion(difficulty) {
     3: { count: 5, min: 2, max: 25, answerMax: 14 },
     4: { count: 5, min: 4, max: 35, answerMax: 18 },
     5: { count: 6, min: 5, max: 45, answerMax: 24 },
+    6: { count: 7, min: 8, max: 90, answerMax: 45 },
+    7: { count: 8, min: 10, max: 160, answerMax: 80 },
   }[difficulty];
 
   const answer = randomInt(config.count - 1, config.answerMax);
@@ -5705,7 +6136,7 @@ function createStatisticsRangeQuestion(difficulty) {
 
 function createStatisticsDataQuestion(difficulty) {
   const categories = shuffleArray(["dogs", "cats", "fish", "birds"]).slice(0, 4);
-  const maxCount = difficulty <= 2 ? 9 : difficulty <= 4 ? 14 : 20;
+  const maxCount = difficulty <= 2 ? 9 : difficulty <= 4 ? 14 : difficulty === 5 ? 20 : difficulty === 6 ? 35 : 60;
   const countValues = buildDistinctNumberList(4, 1, maxCount, 1);
   const counts = categories.map((category, index) => ({
     category,
@@ -6029,6 +6460,8 @@ function buildChartDataset(difficulty, visualType) {
     3: { min: 3, max: 12 },
     4: { min: 4, max: 18 },
     5: { min: 5, max: 24 },
+    6: { min: 8, max: 40 },
+    7: { min: 12, max: 80 },
   }[difficulty];
   const values = buildDistinctNumberList(template.labels.length, config.min, config.max, 1);
   const items = template.labels.map((label, index) => ({
@@ -6120,6 +6553,131 @@ function renderTableVisual(dataset) {
         </thead>
         <tbody>${rows}</tbody>
       </table>
+    </div>
+  `;
+}
+
+function renderNumberLineVisual(start, end, step, markedValue) {
+  const ticks = [];
+  const count = Math.floor((end - start) / step) + 1;
+
+  for (let index = 0; index < count; index += 1) {
+    const value = start + index * step;
+    const x = 24 + (index / Math.max(1, count - 1)) * 552;
+    const isMarked = value === markedValue;
+    ticks.push(`
+      <g class="number-line-tick${isMarked ? " marked" : ""}">
+        <line x1="${x}" y1="58" x2="${x}" y2="${isMarked ? 30 : 44}"></line>
+        <text x="${x}" y="86">${value}</text>
+        ${isMarked ? `<circle cx="${x}" cy="28" r="9"></circle>` : ""}
+      </g>
+    `);
+  }
+
+  return `
+    <div class="visual-card math-visual-card">
+      <div class="visual-card-title">Number line</div>
+      <svg class="number-line-visual" viewBox="0 0 600 104" aria-hidden="true">
+        <line class="number-line-axis" x1="24" y1="58" x2="576" y2="58"></line>
+        ${ticks.join("")}
+      </svg>
+    </div>
+  `;
+}
+
+function renderFractionBarVisual(numerator, denominator) {
+  const cells = Array.from({ length: denominator }, (_, index) => `
+    <span class="math-fraction-cell${index < numerator ? " filled" : ""}"></span>
+  `).join("");
+
+  return `
+    <div class="visual-card math-visual-card">
+      <div class="visual-card-title">Fraction bar</div>
+      <div class="math-fraction-bar" style="grid-template-columns: repeat(${denominator}, minmax(0, 1fr));">
+        ${cells}
+      </div>
+    </div>
+  `;
+}
+
+function renderClockVisual(totalMinutes, label = "") {
+  const normalized = ((totalMinutes % 720) + 720) % 720;
+  const minute = normalized % 60;
+  const hour = Math.floor(normalized / 60) || 12;
+  const minuteAngle = minute * 6;
+  const hourAngle = (hour % 12) * 30 + minute * 0.5;
+  const labelHtml = label ? `<div class="clock-visual-label">${escapeHtml(label)}</div>` : "";
+
+  return `
+    <div class="visual-card math-visual-card clock-visual-card">
+      <div class="visual-card-title">Clock</div>
+      <svg class="clock-visual" viewBox="0 0 160 160" aria-hidden="true">
+        <circle class="clock-face" cx="80" cy="80" r="66"></circle>
+        ${Array.from({ length: 12 }, (_, index) => {
+          const angle = (index * 30 * Math.PI) / 180;
+          const x = 80 + Math.sin(angle) * 54;
+          const y = 80 - Math.cos(angle) * 54;
+          return `<text x="${x.toFixed(1)}" y="${(y + 4).toFixed(1)}">${index === 0 ? 12 : index}</text>`;
+        }).join("")}
+        <line class="clock-hand hour" x1="80" y1="80" x2="80" y2="42" transform="rotate(${hourAngle} 80 80)"></line>
+        <line class="clock-hand minute" x1="80" y1="80" x2="80" y2="26" transform="rotate(${minuteAngle} 80 80)"></line>
+        <circle class="clock-pin" cx="80" cy="80" r="5"></circle>
+      </svg>
+      ${labelHtml}
+    </div>
+  `;
+}
+
+function renderMoneyVisual(amount, price) {
+  const notes = [100, 50, 20, 10, 5, 1];
+  const amountParts = buildMoneyVisualParts(amount, notes);
+  const priceParts = buildMoneyVisualParts(price, notes);
+
+  return `
+    <div class="visual-card math-visual-card money-visual-card">
+      <div class="visual-card-title">Money</div>
+      <div class="money-visual-row">
+        <div>
+          <span class="money-visual-label">You have</span>
+          <div class="money-visual-stack">${renderMoneyVisualParts(amountParts)}</div>
+        </div>
+        <div>
+          <span class="money-visual-label">Price</span>
+          <div class="money-visual-stack">${renderMoneyVisualParts(priceParts)}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function buildMoneyVisualParts(amount, notes) {
+  let remaining = amount;
+  const parts = [];
+  notes.forEach((note) => {
+    const count = Math.floor(remaining / note);
+    remaining %= note;
+    for (let index = 0; index < count && parts.length < 9; index += 1) {
+      parts.push(note);
+    }
+  });
+  return parts.length ? parts : [amount];
+}
+
+function renderMoneyVisualParts(parts) {
+  return parts.map((value) => `<span class="money-token">${value}</span>`).join("");
+}
+
+function renderRectangleMeasureVisual(length, width, measure) {
+  return `
+    <div class="visual-card math-visual-card measure-visual-card">
+      <div class="visual-card-title">${capitalize(measure)}</div>
+      <svg class="measure-rectangle-visual" viewBox="0 0 260 160" aria-hidden="true">
+        <rect x="54" y="32" width="152" height="88" rx="6"></rect>
+        <line x1="54" y1="134" x2="206" y2="134"></line>
+        <line x1="38" y1="32" x2="38" y2="120"></line>
+        <text x="130" y="152">${length} units</text>
+        <text x="20" y="82" transform="rotate(-90 20 82)">${width} units</text>
+      </svg>
     </div>
   `;
 }
@@ -7247,6 +7805,8 @@ function createTimeChoiceQuestion(difficulty) {
     3: { minutes: [15, 20, 30, 45, 60], hours: [7, 20], crossHour: true },
     4: { minutes: [20, 25, 35, 45, 60, 75, 90], hours: [6, 21], crossHour: true },
     5: { minutes: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60, 75, 90, 105, 120], hours: [6, 21], crossHour: true },
+    6: { minutes: [35, 40, 45, 50, 55, 65, 75, 85, 95, 110, 125, 140], hours: [5, 22], crossHour: true },
+    7: { minutes: [45, 55, 65, 75, 90, 105, 115, 135, 150, 165, 180], hours: [5, 22], crossHour: true },
   }[difficulty];
 
   let startMinutes = randomInt(config.hours[0], config.hours[1]) * 60 + randomChoice([0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55]);
@@ -7268,6 +7828,8 @@ function createTimeChoiceQuestion(difficulty) {
     displayText: "",
     extraText: "",
     reviewText: "",
+    visualHtml: renderClockVisual(startMinutes, formatClockTime(startMinutes)),
+    visualSummary: `Clock shows ${formatClockTime(startMinutes)}.`,
     options: optionMinutes.map((value) => formatClockTime(value)),
     answerValue: correctTime,
     answerLabel: correctTime,
@@ -7284,6 +7846,8 @@ function createNumericInputQuestion({
   answerLabel = null,
   acceptedAnswerPrefixes = [],
   acceptedAnswerSuffixes = [],
+  visualHtml = "",
+  visualSummary = "",
 }) {
   return {
     type,
@@ -7293,6 +7857,8 @@ function createNumericInputQuestion({
     displayText,
     extraText: "",
     reviewText: "",
+    visualHtml,
+    visualSummary,
     answerValue: answer,
     answerLabel: answerLabel ?? String(answer),
     acceptedAnswerPrefixes: Array.isArray(acceptedAnswerPrefixes)
@@ -9039,6 +9605,9 @@ function switchScreen(activeScreen) {
   elements.quizScreen.hidden = activeScreen !== elements.quizScreen;
   elements.resultsScreen.hidden = activeScreen !== elements.resultsScreen;
   elements.historyScreen.hidden = activeScreen !== elements.historyScreen;
+  if (elements.dashboardScreen) {
+    elements.dashboardScreen.hidden = activeScreen !== elements.dashboardScreen;
+  }
 }
 
 function clearStartMessage() {
@@ -9086,6 +9655,16 @@ function getCategoryLabel(category) {
     .split("-")
     .map((part) => (part ? part[0].toUpperCase() + part.slice(1) : ""))
     .join(" ");
+}
+
+function getSessionPresetLabel(preset) {
+  return (
+    {
+      [SESSION_PRESETS.adaptive]: "Adaptive",
+      [SESSION_PRESETS["math-heavy"]]: "Math Heavy",
+      [SESSION_PRESETS.custom]: "Custom",
+    }[preset] || "Balanced"
+  );
 }
 
 function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, selectedMeta = null) {
@@ -9141,8 +9720,12 @@ function buildSessionHistoryEntry() {
     userId: state.currentUserId,
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
+    minDifficulty: state.minDifficulty,
     hebrewOnly: Boolean(state.hebrewOnly),
     specialtyWordsOnly: Boolean(state.specialtyWordsOnly),
+    adaptiveReview: Boolean(state.adaptiveReview),
+    sessionPreset: state.sessionPreset,
+    selectedCategories: Array.from(state.selectedCategories || []),
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
     records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
@@ -9281,7 +9864,15 @@ function createHistorySessionElement(session, shouldOpen) {
 function formatSessionHistoryMeta(session) {
   const parts = [`${session.correctCount}/${session.totalQuestions} correct`];
   if (!isAdultUserId(session?.userId)) {
-    parts.push(`Difficulty ${session.difficulty}`);
+    parts.push(
+      session.minDifficulty && session.minDifficulty < session.difficulty
+        ? `Levels ${session.minDifficulty}-${session.difficulty}`
+        : `Difficulty ${session.difficulty}`
+    );
+  }
+
+  if (session?.sessionPreset && session.sessionPreset !== SESSION_PRESETS.balanced) {
+    parts.push(getSessionPresetLabel(session.sessionPreset));
   }
 
   if (session?.hebrewOnly) {
@@ -9325,6 +9916,212 @@ function createHistoryQuestionElement(record, sessionStartedAt) {
   wrapper.appendChild(result);
 
   return wrapper;
+}
+
+function showDashboardScreen() {
+  state.dashboardUserId = state.currentUserId;
+  renderDashboardScreen();
+  switchScreen(elements.dashboardScreen);
+}
+
+function renderDashboardScreen() {
+  if (!elements.dashboardContent) {
+    return;
+  }
+
+  renderDashboardUserSelector();
+
+  const historyByUser = loadAllSessionHistory();
+  const userId = USER_PROFILE_MAP[state.dashboardUserId] ? state.dashboardUserId : state.currentUserId;
+  const profile = USER_PROFILE_MAP[userId] || getCurrentUserProfile();
+  const sessions = Array.isArray(historyByUser[userId]) ? historyByUser[userId] : [];
+  const stats = buildDashboardStats(sessions);
+
+  if (!sessions.length) {
+    elements.dashboardContent.innerHTML = `
+      <div class="dashboard-empty">${escapeHtml(profile.name)} has no saved sessions yet.</div>
+    `;
+    return;
+  }
+
+  elements.dashboardContent.innerHTML = `
+    <div class="dashboard-stat-grid">
+      ${renderDashboardStatCard("Sessions", stats.sessionCount)}
+      ${renderDashboardStatCard("Accuracy", `${stats.accuracy}%`)}
+      ${renderDashboardStatCard("Questions", stats.totalQuestions)}
+      ${renderDashboardStatCard("Last Session", stats.lastSessionLabel)}
+    </div>
+    <div class="dashboard-grid">
+      <section class="dashboard-panel">
+        <h3>Recent Accuracy</h3>
+        ${renderSessionTrendChart(sessions)}
+      </section>
+      <section class="dashboard-panel">
+        <h3>Weak Topics</h3>
+        ${renderWeakTopicChart(stats.categoryStats)}
+      </section>
+    </div>
+    <section class="dashboard-panel">
+      <h3>Topic Detail</h3>
+      ${renderCategoryStatsTable(stats.categoryStats)}
+    </section>
+  `;
+}
+
+function renderDashboardUserSelector() {
+  if (!elements.dashboardUserSelector) {
+    return;
+  }
+
+  elements.dashboardUserSelector.innerHTML = "";
+  USER_PROFILES.forEach((profile) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "dashboard-user-button";
+    button.textContent = profile.name;
+    button.dataset.userId = profile.id;
+    button.addEventListener("click", () => {
+      state.dashboardUserId = profile.id;
+      renderDashboardScreen();
+    });
+    setButtonPressedState(button, profile.id === state.dashboardUserId);
+    elements.dashboardUserSelector.appendChild(button);
+  });
+}
+
+function buildDashboardStats(sessions) {
+  const totals = sessions.reduce(
+    (accumulator, session) => {
+      accumulator.correct += Number(session.correctCount) || 0;
+      accumulator.questions += Number(session.totalQuestions) || 0;
+      (session.records || []).forEach((record) => {
+        const category = String(record?.category || "unknown");
+        if (!accumulator.categories.has(category)) {
+          accumulator.categories.set(category, {
+            category,
+            categoryLabel: getCategoryLabel(category),
+            attempts: 0,
+            correct: 0,
+            wrong: 0,
+          });
+        }
+
+        const entry = accumulator.categories.get(category);
+        entry.attempts += 1;
+        if (record.isCorrect) {
+          entry.correct += 1;
+        } else {
+          entry.wrong += 1;
+        }
+      });
+      return accumulator;
+    },
+    { correct: 0, questions: 0, categories: new Map() }
+  );
+  const lastSession = sessions[0];
+  const categoryStats = Array.from(totals.categories.values())
+    .map((entry) => ({
+      ...entry,
+      accuracy: entry.attempts ? Math.round((entry.correct / entry.attempts) * 100) : 0,
+      wrongRate: entry.attempts ? entry.wrong / entry.attempts : 0,
+    }))
+    .sort((left, right) => right.wrongRate - left.wrongRate || right.wrong - left.wrong);
+
+  return {
+    sessionCount: sessions.length,
+    totalQuestions: totals.questions,
+    accuracy: totals.questions ? Math.round((totals.correct / totals.questions) * 100) : 0,
+    lastSessionLabel: lastSession ? formatHistoryDate(lastSession.startedAt) : "None",
+    categoryStats,
+  };
+}
+
+function renderDashboardStatCard(label, value) {
+  return `
+    <div class="dashboard-stat-card">
+      <span>${escapeHtml(label)}</span>
+      <strong>${escapeHtml(value)}</strong>
+    </div>
+  `;
+}
+
+function renderSessionTrendChart(sessions) {
+  const recentSessions = sessions.slice(0, 8).reverse();
+  return `
+    <div class="dashboard-trend-chart">
+      ${recentSessions
+        .map((session) => {
+          const total = Number(session.totalQuestions) || 0;
+          const percentage = total ? Math.round(((Number(session.correctCount) || 0) / total) * 100) : 0;
+          return `
+            <div class="dashboard-trend-item">
+              <span class="dashboard-trend-bar" style="height:${Math.max(8, percentage)}%"></span>
+              <span class="dashboard-trend-label">${percentage}%</span>
+            </div>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderWeakTopicChart(categoryStats) {
+  const weakTopics = categoryStats.filter((entry) => entry.wrong > 0).slice(0, 6);
+  if (!weakTopics.length) {
+    return `<p class="dashboard-empty small">No weak topics in saved sessions.</p>`;
+  }
+
+  return `
+    <div class="dashboard-topic-bars">
+      ${weakTopics
+        .map((entry) => {
+          const wrongPercent = Math.round(entry.wrongRate * 100);
+          return `
+            <div class="dashboard-topic-bar-row">
+              <span>${escapeHtml(entry.categoryLabel)}</span>
+              <span class="dashboard-topic-track">
+                <span class="dashboard-topic-fill" style="width:${wrongPercent}%"></span>
+              </span>
+              <strong>${wrongPercent}%</strong>
+            </div>
+          `;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderCategoryStatsTable(categoryStats) {
+  if (!categoryStats.length) {
+    return `<p class="dashboard-empty small">No topic data yet.</p>`;
+  }
+
+  return `
+    <table class="dashboard-table">
+      <thead>
+        <tr>
+          <th>Topic</th>
+          <th>Attempts</th>
+          <th>Correct</th>
+          <th>Accuracy</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${categoryStats
+          .map(
+            (entry) => `
+              <tr>
+                <th scope="row">${escapeHtml(entry.categoryLabel)}</th>
+                <td>${entry.attempts}</td>
+                <td>${entry.correct}</td>
+                <td>${entry.accuracy}%</td>
+              </tr>
+            `
+          )
+          .join("")}
+      </tbody>
+    </table>
+  `;
 }
 
 function formatHistoryQuestionText(questionText, sessionStartedAt) {
@@ -9592,6 +10389,8 @@ function generateAdditionValues(difficulty) {
     3: { min: -10, max: 30, answerMin: -20, answerMax: 40, negativeBias: 0.4 },
     4: { min: -20, max: 50, answerMin: -20, answerMax: 70, negativeBias: 0.5 },
     5: { min: -20, max: 80, answerMin: -20, answerMax: 100, negativeBias: 0.55 },
+    6: { min: -60, max: 160, answerMin: -100, answerMax: 220, negativeBias: 0.55 },
+    7: { min: -150, max: 350, answerMin: -220, answerMax: 500, negativeBias: 0.6 },
   }[difficulty];
 
   return buildSignedOperationValues((left, right) => left + right, config);
@@ -9604,6 +10403,8 @@ function generateSubtractionValues(difficulty) {
     3: { min: -10, max: 30, answerMin: -20, answerMax: 40, negativeBias: 0.45 },
     4: { min: -20, max: 50, answerMin: -20, answerMax: 70, negativeBias: 0.55 },
     5: { min: -20, max: 80, answerMin: -20, answerMax: 100, negativeBias: 0.6 },
+    6: { min: -60, max: 160, answerMin: -120, answerMax: 220, negativeBias: 0.62 },
+    7: { min: -150, max: 350, answerMin: -300, answerMax: 500, negativeBias: 0.66 },
   }[difficulty];
 
   return buildSignedOperationValues((left, right) => left - right, config);
@@ -9640,6 +10441,8 @@ function generateMultiplicationValues(difficulty) {
     3: { min: 0, max: 8, requireLargeFactor: false },
     4: { min: 1, max: 10, requireLargeFactor: false },
     5: { min: 2, max: 10, requireLargeFactor: true },
+    6: { min: 3, max: 12, requireLargeFactor: true },
+    7: { min: 4, max: 15, requireLargeFactor: true },
   }[difficulty];
 
   while (true) {
@@ -9659,6 +10462,8 @@ function generateDivisionProblem(difficulty) {
     3: { divisors: [2, 3, 4, 5, 6, 7, 8, 9, 10], quotientMin: 2, quotientMax: 15 },
     4: { divisors: [3, 4, 5, 6, 7, 8, 9, 10, 12], quotientMin: 3, quotientMax: 18 },
     5: { divisors: [4, 5, 6, 7, 8, 9, 10, 12], quotientMin: 4, quotientMax: 25 },
+    6: { divisors: [5, 6, 7, 8, 9, 10, 11, 12, 15], quotientMin: 5, quotientMax: 32 },
+    7: { divisors: [6, 7, 8, 9, 10, 11, 12, 14, 15], quotientMin: 6, quotientMax: 45 },
   }[difficulty];
 
   const divisor = randomChoice(config.divisors);
@@ -9678,6 +10483,8 @@ function generateMissingNumberProblem(difficulty) {
       3: ["addition", "subtraction", "multiplication"],
       4: ["addition", "subtraction", "multiplication", "division"],
       5: ["addition", "subtraction", "multiplication", "division"],
+      6: ["addition", "subtraction", "multiplication", "division"],
+      7: ["addition", "subtraction", "multiplication", "division"],
     }[difficulty]
   );
 
@@ -9755,6 +10562,8 @@ function generateDecimalOperationProblem(difficulty) {
     3: { digits: 2, maxWhole: 10, allowSubtraction: true },
     4: { digits: 2, maxWhole: 20, allowSubtraction: true },
     5: { digits: 2, maxWhole: 35, allowSubtraction: true },
+    6: { digits: 2, maxWhole: 60, allowSubtraction: true },
+    7: { digits: 3, maxWhole: 75, allowSubtraction: true },
   }[difficulty];
   const scale = 10 ** config.digits;
   const operator = config.allowSubtraction && Math.random() < 0.45 ? "-" : "+";
@@ -9807,7 +10616,7 @@ function generateComparisonDragProblem(difficulty) {
 }
 
 function generatePlaceValueProblem(difficulty) {
-  const digitCount = difficulty <= 2 ? 4 : difficulty === 3 ? 5 : 6;
+  const digitCount = difficulty <= 2 ? 4 : difficulty === 3 ? 5 : difficulty <= 5 ? 6 : difficulty === 6 ? 7 : 8;
   const digits = buildUniqueDigitSequence(digitCount);
   const validIndexes = digits
     .map((digit, index) => (digit === 0 ? null : index))
@@ -9835,6 +10644,8 @@ function generateRoundingProblem(difficulty) {
     3: { placeValues: [10, 100], min: 120, max: 2495 },
     4: { placeValues: [100], min: 250, max: 4995 },
     5: { placeValues: [100, 1000], min: 1500, max: 99995 },
+    6: { placeValues: [100, 1000, 10000], min: 15000, max: 999995 },
+    7: { placeValues: [1000, 10000, 100000], min: 100000, max: 9999999 },
   }[difficulty];
 
   while (true) {
@@ -9853,11 +10664,11 @@ function generateRoundingProblem(difficulty) {
 }
 
 function generateDecimalComparisonProblem(difficulty) {
-  const digits = difficulty <= 2 ? 1 : 2;
+  const digits = difficulty <= 2 ? 1 : difficulty >= 7 ? 3 : 2;
   const scale = 10 ** digits;
   const askFor = randomChoice(["greatest", "smallest"]);
   const scaledValues = new Set();
-  const baseWhole = difficulty <= 2 ? randomInt(0, 9) : randomInt(1, 24);
+  const baseWhole = difficulty <= 2 ? randomInt(0, 9) : difficulty >= 6 ? randomInt(1, 80) : randomInt(1, 24);
 
   while (scaledValues.size < 4) {
     let wholePart = baseWhole;
@@ -9889,6 +10700,8 @@ function generateRectangleMeasureProblem(difficulty) {
     3: { min: 3, max: 10, measures: ["area", "perimeter"] },
     4: { min: 4, max: 14, measures: ["area", "perimeter"] },
     5: { min: 5, max: 20, measures: ["area", "perimeter"] },
+    6: { min: 8, max: 32, measures: ["area", "perimeter"] },
+    7: { min: 12, max: 50, measures: ["area", "perimeter"] },
   }[difficulty];
   const length = randomInt(config.min, config.max);
   let width = randomInt(config.min, config.max);
@@ -9899,13 +10712,15 @@ function generateRectangleMeasureProblem(difficulty) {
 
   return {
     questionText: `A rectangle is ${length} units long and ${width} units wide. What is the ${measure}?`,
+    length,
+    width,
     measure,
     answer: measure === "area" ? length * width : 2 * (length + width),
   };
 }
 
 function generatePrimeCompositeProblem(difficulty) {
-  const maxValue = difficulty <= 2 ? 25 : difficulty === 3 ? 40 : difficulty === 4 ? 60 : 90;
+  const maxValue = difficulty <= 2 ? 25 : difficulty === 3 ? 40 : difficulty === 4 ? 60 : difficulty === 5 ? 90 : difficulty === 6 ? 150 : 250;
   const values = Array.from({ length: maxValue - 1 }, (_, index) => index + 2);
   const primes = values.filter(isPrime);
   const composites = values.filter((value) => !isPrime(value));
@@ -9928,6 +10743,8 @@ function generateNumberPattern(difficulty) {
     3: [3, 4, 5, 6, 8, -2, -3],
     4: [4, 6, 8, 10, -3, -4],
     5: [5, 6, 8, 10, 12, -4, -5],
+    6: [6, 8, 10, 12, 15, -6, -8],
+    7: [7, 9, 11, 13, 15, 20, -9, -12],
   }[difficulty];
 
   const multiplicativeSteps = {
@@ -9936,6 +10753,8 @@ function generateNumberPattern(difficulty) {
     3: [2],
     4: [2, 3],
     5: [2, 3],
+    6: [2, 3, 4],
+    7: [2, 3, 4, 5],
   }[difficulty];
 
   const advancedFactories = {
@@ -9944,6 +10763,8 @@ function generateNumberPattern(difficulty) {
     3: [],
     4: [generateGrowingStepPattern, generateShrinkingStepPattern],
     5: [generateGrowingStepPattern, generateShrinkingStepPattern, generateGrowingStepPattern],
+    6: [generateGrowingStepPattern, generateShrinkingStepPattern, generateGrowingStepPattern],
+    7: [generateGrowingStepPattern, generateShrinkingStepPattern, generateShrinkingStepPattern],
   }[difficulty];
 
   if (advancedFactories.length && Math.random() < 0.45) {
@@ -9968,7 +10789,7 @@ function generateNumberPattern(difficulty) {
   const step = randomChoice(constantSteps);
   const start = randomInt(
     step > 0 ? 1 : Math.abs(step) * 4 + 5,
-    difficulty <= 2 ? 20 : difficulty === 3 ? 45 : difficulty === 4 ? 70 : 100
+    difficulty <= 2 ? 20 : difficulty === 3 ? 45 : difficulty === 4 ? 70 : difficulty === 5 ? 100 : difficulty === 6 ? 180 : 280
   );
   const sequence = [start, start + step, start + step * 2, start + step * 3];
   return {
@@ -10034,6 +10855,8 @@ function generateMoneyProblem(difficulty) {
     3: { amounts: [50, 60, 80, 90, 100, 120, 150], step: 5 },
     4: { amounts: [80, 100, 120, 150, 180, 200], step: 1 },
     5: { amounts: [100, 120, 150, 180, 200, 250, 300], step: 1 },
+    6: { amounts: [180, 200, 250, 300, 360, 400, 500], step: 1 },
+    7: { amounts: [300, 360, 400, 500, 600, 750, 900], step: 1 },
   }[difficulty];
 
   const amount = randomChoice(config.amounts);
@@ -10052,6 +10875,8 @@ function generatePercentageProblem(difficulty) {
     3: { percents: [10, 20, 30, 40, 50, 60, 70, 80, 90], maxWhole: 100 },
     4: { percents: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70, 75, 80, 85, 90, 95], maxWhole: 100 },
     5: { percents: buildPercentChoices(1, 99), maxWhole: 250 },
+    6: { percents: buildPercentChoices(1, 99), maxWhole: 500 },
+    7: { percents: buildPercentChoices(1, 99), maxWhole: 1000 },
   }[difficulty];
 
   while (true) {
@@ -10203,7 +11028,7 @@ function buildRoundingOptions(answer, placeValue) {
 }
 
 function buildVisualNumberOptions(answer, difficulty, maxOverride = null) {
-  const spread = difficulty <= 2 ? 4 : difficulty <= 4 ? 7 : 10;
+  const spread = difficulty <= 2 ? 4 : difficulty <= 4 ? 7 : difficulty <= 5 ? 10 : difficulty === 6 ? 18 : 30;
   const min = Math.max(0, answer - spread);
   const max = Math.max(answer + spread, maxOverride ?? answer + spread);
   return buildNumberOptions(answer, min, max).map(String);

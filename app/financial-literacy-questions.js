@@ -784,6 +784,11 @@ const FINANCIAL_CURRENCY_FACTS = [
   { country: "Egypt", currency: "pound", code: "EGP" },
 ];
 
+const FINANCIAL_UNIQUE_CURRENCY_FACTS = FINANCIAL_CURRENCY_FACTS.filter(
+  (entry) =>
+    FINANCIAL_CURRENCY_FACTS.filter((item) => item.currency === entry.currency).length === 1
+);
+
 function createFinancialLiteracyGeneratedEntry(difficulty) {
   const generatorsByDifficulty = {
     1: [
@@ -846,14 +851,15 @@ function createFinancialCurrencyQuestion(difficulty) {
     };
   }
 
+  const reverseEntry = randomChoice(FINANCIAL_UNIQUE_CURRENCY_FACTS);
   const distractors = shuffleArray(
-    FINANCIAL_CURRENCY_FACTS.filter((item) => item.country !== entry.country).map((item) => item.country)
+    FINANCIAL_CURRENCY_FACTS.filter((item) => item.country !== reverseEntry.country).map((item) => item.country)
   ).slice(0, 3);
 
   return {
-    question: `Which country uses the ${entry.currency}?`,
-    options: shuffleArray([entry.country, ...distractors]),
-    answer: entry.country,
+    question: `Which country uses the ${reverseEntry.currency}?`,
+    options: shuffleArray([reverseEntry.country, ...distractors]),
+    answer: reverseEntry.country,
     difficulty,
   };
 }
@@ -864,11 +870,13 @@ function createFinancialCurrencyCodeQuestion(difficulty) {
 
   if (askForCode) {
     const distractors = shuffleArray(
-      FINANCIAL_CURRENCY_FACTS.filter((item) => item.code !== entry.code).map((item) => item.code)
+      Array.from(
+        new Set(FINANCIAL_CURRENCY_FACTS.filter((item) => item.code !== entry.code).map((item) => item.code))
+      )
     ).slice(0, 3);
 
     return {
-      question: `Which currency code belongs to the ${entry.currency}?`,
+      question: `Which currency code is used in ${formatCurrencyCountry(entry.country)} for the ${entry.currency}?`,
       options: shuffleArray([entry.code, ...distractors]),
       answer: entry.code,
       difficulty,
@@ -882,7 +890,7 @@ function createFinancialCurrencyCodeQuestion(difficulty) {
   ).slice(0, 3);
 
   return {
-    question: `Which currency code means ${entry.code}?`,
+    question: `Which currency does the code ${entry.code} mean?`,
     options: shuffleArray([entry.currency, ...distractors]),
     answer: entry.currency,
     difficulty,
@@ -1047,4 +1055,10 @@ function makeMoneyDistractors(answerValue, preferredOffsets) {
 
 function formatShekels(value) {
   return `${value} ${value === 1 ? "shekel" : "shekels"}`;
+}
+
+function formatCurrencyCountry(country) {
+  return ["Netherlands", "United Arab Emirates", "United Kingdom", "United States"].includes(country)
+    ? `the ${country}`
+    : country;
 }

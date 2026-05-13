@@ -5,7 +5,7 @@ const ALGEBRA_QUESTIONS = (() => {
       return 3;
     }
 
-    return Math.min(5, Math.max(1, level));
+    return Math.min(7, Math.max(1, level));
   }
 
   function randomInt(min, max) {
@@ -287,6 +287,52 @@ const ALGEBRA_QUESTIONS = (() => {
     });
   }
 
+  function buildDistributeSubtractQuestion(difficulty) {
+    const multiplier = randomChoice(difficulty >= 7 ? [4, 5, 6] : [3, 4, 5]);
+    const answer = randomInt(3, difficulty >= 7 ? 12 : 10);
+    const offset = randomInt(2, Math.min(difficulty >= 7 ? 8 : 6, answer - 1));
+    const total = multiplier * (answer - offset);
+
+    return buildGeneratedEntry({
+      question: `What is x if ${multiplier}(x - ${offset}) = ${total}?`,
+      answer,
+      distractors: [answer - 2, answer - 1, answer + 2],
+      difficulty,
+      family: "distribute-subtract",
+    });
+  }
+
+  function buildExpressionSubstitutionQuestion(difficulty) {
+    const xValue = randomInt(3, difficulty >= 7 ? 9 : 7);
+    const yValue = randomInt(2, difficulty >= 7 ? 8 : 6);
+    const xMultiplier = randomChoice(difficulty >= 7 ? [3, 4, 5] : [2, 3, 4]);
+    const yMultiplier = randomChoice([2, 3]);
+    const answer = xMultiplier * xValue + yMultiplier * yValue;
+
+    return buildGeneratedEntry({
+      question: `If x = ${xValue} and y = ${yValue}, what is ${xMultiplier}x + ${yMultiplier}y?`,
+      answer,
+      distractors: [answer - yValue, answer - xValue, answer + xMultiplier],
+      difficulty,
+      family: "two-variable-substitution",
+    });
+  }
+
+  function buildBothSidesEquation(difficulty) {
+    const leftMultiplier = randomChoice(difficulty >= 7 ? [4, 5, 6] : [3, 4, 5]);
+    const rightMultiplier = randomChoice([2, 3].filter((candidate) => candidate < leftMultiplier));
+    const answer = randomInt(3, difficulty >= 7 ? 12 : 9);
+    const offset = (leftMultiplier - rightMultiplier) * answer;
+
+    return buildGeneratedEntry({
+      question: `What is x if ${leftMultiplier}x = ${rightMultiplier}x + ${offset}?`,
+      answer,
+      distractors: [answer - 2, answer - 1, answer + 2],
+      difficulty,
+      family: "variables-both-sides",
+    });
+  }
+
   const GENERATED_FACTORIES = {
     1: [
       () => buildMissingAddendEquation(1),
@@ -314,6 +360,16 @@ const ALGEBRA_QUESTIONS = (() => {
       () => buildTwoStepSubtractQuestion(5),
       () => buildTwoStepParenthesesQuestion(5),
       () => buildAddThenDoubleSubstitutionQuestion(5),
+    ],
+    6: [
+      () => buildDistributeSubtractQuestion(6),
+      () => buildExpressionSubstitutionQuestion(6),
+      () => buildBothSidesEquation(6),
+    ],
+    7: [
+      () => buildDistributeSubtractQuestion(7),
+      () => buildExpressionSubstitutionQuestion(7),
+      () => buildBothSidesEquation(7),
     ],
   };
 
@@ -415,6 +471,34 @@ const ALGEBRA_QUESTIONS = (() => {
       options: ["11", "12", "13", "14"],
       difficulty: 5,
       family: "function-table",
+    }),
+    makeEntry({
+      question: "What is x if 4(x - 3) = 20?",
+      answer: 8,
+      options: ["5", "7", "8", "10"],
+      difficulty: 6,
+      family: "distribute-subtract",
+    }),
+    makeEntry({
+      question: "If x = 6 and y = 4, what is 3x + 2y?",
+      answer: 26,
+      options: ["22", "24", "26", "30"],
+      difficulty: 6,
+      family: "two-variable-substitution",
+    }),
+    makeEntry({
+      question: "What is x if 5x = 2x + 27?",
+      answer: 9,
+      options: ["7", "8", "9", "11"],
+      difficulty: 7,
+      family: "variables-both-sides",
+    }),
+    makeEntry({
+      question: "If x = 8 and y = 5, what is 4x + 3y?",
+      answer: 47,
+      options: ["37", "42", "47", "52"],
+      difficulty: 7,
+      family: "two-variable-substitution",
     }),
   ];
 

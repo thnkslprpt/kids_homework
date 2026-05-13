@@ -491,6 +491,33 @@ SPATIAL_REASONING_QUESTIONS.push(
   ]
 );
 
+SPATIAL_REASONING_QUESTIONS.push(
+  {
+    question: "Which 3D shape can be made from 6 equal square faces?",
+    options: ["Cube", "Cone", "Cylinder", "Triangular prism"],
+    answer: "Cube",
+    difficulty: 6,
+  },
+  {
+    question: "A cube is sliced straight across parallel to one face. What shape is the cross-section?",
+    options: ["Square", "Triangle", "Circle", "Pentagon"],
+    answer: "Square",
+    difficulty: 6,
+  },
+  {
+    question: "A net has 2 congruent triangles and 3 rectangles. Which solid does it make?",
+    options: ["Triangular prism", "Square pyramid", "Cube", "Cylinder"],
+    answer: "Triangular prism",
+    difficulty: 7,
+  },
+  {
+    question: "A cylinder is sliced straight across parallel to its circular bases. What shape is the cross-section?",
+    options: ["Circle", "Rectangle", "Triangle", "Hexagon"],
+    answer: "Circle",
+    difficulty: 7,
+  }
+);
+
 function createSpatialReasoningGeneratedEntry(difficulty) {
   const level = spatialClampDifficulty(difficulty);
   const generators = {
@@ -523,6 +550,16 @@ function createSpatialReasoningGeneratedEntry(difficulty) {
       spatialCreateCompositeQuestion,
       spatialCreateEdgesQuestion,
       spatialCreateVerticesQuestion,
+    ],
+    6: [
+      spatialCreateNetQuestion,
+      spatialCreateCrossSectionQuestion,
+      spatialCreateCoordinateTurnQuestion,
+    ],
+    7: [
+      spatialCreateNetQuestion,
+      spatialCreateCrossSectionQuestion,
+      spatialCreateCoordinateTurnQuestion,
     ],
   };
 
@@ -808,6 +845,73 @@ function spatialCreateRotationQuestion(difficulty) {
   return spatialPickTemplate(difficulty, templates);
 }
 
+function spatialCreateNetQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Which 3D shape can be made from 6 equal square faces?",
+      answer: "Cube",
+      options: ["Cube", "Cone", "Cylinder", "Triangular prism"],
+      difficulty: 6,
+    },
+    {
+      question: "A net has 2 congruent triangles and 3 rectangles. Which solid does it make?",
+      answer: "Triangular prism",
+      options: ["Triangular prism", "Square pyramid", "Cube", "Cylinder"],
+      difficulty: 7,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateCrossSectionQuestion(difficulty) {
+  const templates = [
+    {
+      question: "A cube is sliced straight across parallel to one face. What shape is the cross-section?",
+      answer: "Square",
+      options: ["Square", "Triangle", "Circle", "Pentagon"],
+      difficulty: 6,
+    },
+    {
+      question: "A cylinder is sliced straight across parallel to its circular bases. What shape is the cross-section?",
+      answer: "Circle",
+      options: ["Circle", "Rectangle", "Triangle", "Hexagon"],
+      difficulty: 7,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
+function spatialCreateCoordinateTurnQuestion(difficulty) {
+  const templates = [
+    {
+      question: "Point A is 3 squares right and 2 squares up from the start. After a quarter-turn clockwise around the start, where is A?",
+      answer: "2 squares right and 3 squares down",
+      options: [
+        "2 squares right and 3 squares down",
+        "3 squares left and 2 squares up",
+        "2 squares left and 3 squares up",
+        "3 squares right and 2 squares down",
+      ],
+      difficulty: 6,
+    },
+    {
+      question: "Point B is 4 squares left and 1 square up from the start. After a half-turn around the start, where is B?",
+      answer: "4 squares right and 1 square down",
+      options: [
+        "4 squares right and 1 square down",
+        "1 square right and 4 squares down",
+        "4 squares left and 1 square down",
+        "1 square left and 4 squares up",
+      ],
+      difficulty: 7,
+    },
+  ];
+
+  return spatialPickTemplate(difficulty, templates);
+}
+
 function spatialBuildOptions(answer, candidates) {
   const options = [String(answer), ...candidates.map(String)];
   const unique = [];
@@ -837,7 +941,7 @@ function spatialClampDifficulty(value) {
     return 1;
   }
 
-  return Math.min(5, difficulty);
+  return Math.min(7, difficulty);
 }
 
 function spatialRandomChoice(values) {
