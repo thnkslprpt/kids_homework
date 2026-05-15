@@ -98,7 +98,6 @@
     leftItems,
     rightItems,
     reviewText = "",
-    matchSnapDistance = 140,
   }) {
     const normalizedLeftItems = Array.isArray(leftItems)
       ? leftItems
@@ -144,7 +143,6 @@
         id: `${type}-right-${difficulty}-${index}-${slugify(text)}`,
         text,
       })),
-      matchSnapDistance,
       reviewText: reviewText || answerLabel,
       answerValue: answerTokens.join(" | "),
       answerLabel,
@@ -1151,8 +1149,8 @@
     return createMatchingDragQuestion({
       type: `${category}-drag`,
       difficulty,
-      questionText: "Draw a line from each country to its currency.",
-      extraText: "Match all 4 countries to the correct currency names.",
+      questionText: "Select each country and its currency.",
+      extraText: "Click a country or dot, then click the matching currency name or dot.",
       visualSummary: entries.map((entry) => `${entry.country}: ${entry.currency}`).join(", "),
       leftItems,
       rightItems: answerTokens,
