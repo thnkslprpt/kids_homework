@@ -1,491 +1,3 @@
-const CALENDAR_QUESTIONS = [
-  {
-    question: "Which month comes after April?",
-    options: ["March", "May", "June", "July"],
-    answer: "May",
-    difficulty: 1,
-  },
-  {
-    question: "How many days are in 1 week?",
-    options: ["5", "6", "7", "8"],
-    answer: "7",
-    difficulty: 1,
-  },
-  {
-    question: "If today is Tuesday, what day will it be in 3 days?",
-    options: ["Thursday", "Friday", "Saturday", "Sunday"],
-    answer: "Friday",
-    difficulty: 2,
-  },
-  {
-    question: "Which month has 28 or 29 days?",
-    options: ["January", "February", "March", "April"],
-    answer: "February",
-    difficulty: 2,
-  },
-  {
-    question: "If today is the 9th and a trip starts on the 15th, how many days are left until the trip?",
-    options: ["5 days", "6 days", "7 days", "8 days"],
-    answer: "6 days",
-    difficulty: 3,
-  },
-  {
-    question: "How many days are in February during a leap year?",
-    options: ["28", "29", "30", "31"],
-    answer: "29",
-    difficulty: 3,
-  },
-  {
-    question: "School starts on Monday and lasts for 5 days. On which day does it end?",
-    options: ["Thursday", "Friday", "Saturday", "Sunday"],
-    answer: "Friday",
-    difficulty: 4,
-  },
-  {
-    question: "What date is 7 days after August 12?",
-    options: ["August 17", "August 18", "August 19", "August 20"],
-    answer: "August 19",
-    difficulty: 4,
-  },
-  {
-    question: "Which month has 30 days?",
-    options: ["April", "May", "July", "January"],
-    answer: "April",
-    difficulty: 5,
-  },
-  {
-    question: "If today is Friday, what day will it be in 10 days?",
-    options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-    answer: "Monday",
-    difficulty: 5,
-  },
-  {
-    question: "Which month comes before November?",
-    options: ["September", "October", "December", "January"],
-    answer: "October",
-    difficulty: 1,
-  },
-  {
-    question: "How many months are in a year?",
-    options: ["10", "11", "12", "13"],
-    answer: "12",
-    difficulty: 1,
-  },
-  {
-    question: "If today is Thursday, what day will it be in 2 days?",
-    options: ["Friday", "Saturday", "Sunday", "Monday"],
-    answer: "Saturday",
-    difficulty: 2,
-  },
-  {
-    question: "Which month comes after February?",
-    options: ["January", "March", "April", "May"],
-    answer: "March",
-    difficulty: 2,
-  },
-  {
-    question: "How many weeks are in 14 days?",
-    options: ["1 week", "2 weeks", "3 weeks", "4 weeks"],
-    answer: "2 weeks",
-    difficulty: 3,
-  },
-  {
-    question: "What date is 5 days after June 22?",
-    options: ["June 25", "June 26", "June 27", "June 28"],
-    answer: "June 27",
-    difficulty: 3,
-  },
-  {
-    question: "Which month has 31 days?",
-    options: ["April", "June", "September", "July"],
-    answer: "July",
-    difficulty: 4,
-  },
-  {
-    question: "If today is Sunday, what day will it be in 9 days?",
-    options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-    answer: "Tuesday",
-    difficulty: 4,
-  },
-  {
-    question: "How many days are in a normal year?",
-    options: ["360", "365", "366", "370"],
-    answer: "365",
-    difficulty: 5,
-  },
-  {
-    question: "Which month is 2 months after May?",
-    options: ["June", "July", "August", "September"],
-    answer: "July",
-    difficulty: 5,
-  },
-];
-
-CALENDAR_QUESTIONS.push(
-  ...[
-    {
-      question: "Which month comes after July?",
-      options: ["June", "August", "September", "October"],
-      answer: "August",
-      difficulty: 1,
-    },
-    {
-      question: "How many days are in 2 weeks?",
-      options: ["7", "10", "14", "21"],
-      answer: "14",
-      difficulty: 1,
-    },
-    {
-      question: "Which month comes before March?",
-      options: ["January", "February", "April", "May"],
-      answer: "February",
-      difficulty: 1,
-    },
-    {
-      question: "How many days are in 3 weeks?",
-      options: ["14", "18", "21", "24"],
-      answer: "21",
-      difficulty: 1,
-    },
-    {
-      question: "If today is Monday, what day will it be in 4 days?",
-      options: ["Thursday", "Friday", "Saturday", "Sunday"],
-      answer: "Friday",
-      difficulty: 2,
-    },
-    {
-      question: "Which month comes after September?",
-      options: ["August", "October", "November", "December"],
-      answer: "October",
-      difficulty: 2,
-    },
-    {
-      question: "If today is Saturday, what day was it yesterday?",
-      options: ["Thursday", "Friday", "Sunday", "Monday"],
-      answer: "Friday",
-      difficulty: 2,
-    },
-    {
-      question: "Which month has only 28 or 29 days?",
-      options: ["January", "February", "March", "December"],
-      answer: "February",
-      difficulty: 2,
-    },
-    {
-      question: "What date is 3 days after May 7?",
-      options: ["May 8", "May 9", "May 10", "May 11"],
-      answer: "May 10",
-      difficulty: 3,
-    },
-    {
-      question: "How many days are in 4 weeks?",
-      options: ["24", "28", "30", "31"],
-      answer: "28",
-      difficulty: 3,
-    },
-    {
-      question: "If a trip starts on the 12th and ends on the 16th, how many days are between those dates?",
-      options: ["3", "4", "5", "6"],
-      answer: "4",
-      difficulty: 3,
-    },
-    {
-      question: "What date is 10 days after January 5?",
-      options: ["January 13", "January 14", "January 15", "January 16"],
-      answer: "January 15",
-      difficulty: 3,
-    },
-    {
-      question: "If today is Wednesday, what day will it be in 12 days?",
-      options: ["Sunday", "Monday", "Tuesday", "Thursday"],
-      answer: "Monday",
-      difficulty: 4,
-    },
-    {
-      question: "Which month is 3 months after February?",
-      options: ["April", "May", "June", "July"],
-      answer: "May",
-      difficulty: 4,
-    },
-    {
-      question: "What date is 14 days after March 3?",
-      options: ["March 15", "March 16", "March 17", "March 18"],
-      answer: "March 17",
-      difficulty: 4,
-    },
-    {
-      question: "Which month has 31 days and comes after June?",
-      options: ["June", "July", "August", "September"],
-      answer: "July",
-      difficulty: 4,
-    },
-    {
-      question: "If today is Tuesday, what day will it be in 20 days?",
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-      answer: "Monday",
-      difficulty: 5,
-    },
-    {
-      question: "Which month is 5 months after August?",
-      options: ["December", "January", "February", "March"],
-      answer: "January",
-      difficulty: 5,
-    },
-    {
-      question: "What date is 21 days after July 4?",
-      options: ["July 23", "July 24", "July 25", "July 26"],
-      answer: "July 25",
-      difficulty: 5,
-    },
-    {
-      question: "If today is Sunday, what day will it be in 15 days?",
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-      answer: "Monday",
-      difficulty: 5,
-    },
-    {
-      question: "Which month comes after January?",
-      options: ["February", "March", "April", "May"],
-      answer: "February",
-      difficulty: 1,
-    },
-    {
-      question: "If today is Monday, what day is tomorrow?",
-      options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-      answer: "Tuesday",
-      difficulty: 1,
-    },
-    {
-      question: "Which month comes before August?",
-      options: ["June", "July", "September", "October"],
-      answer: "July",
-      difficulty: 1,
-    },
-    {
-      question: "How many days are in a week?",
-      options: ["5", "6", "7", "8"],
-      answer: "7",
-      difficulty: 1,
-    },
-    {
-      question: "If today is Sunday, what day was yesterday?",
-      options: ["Friday", "Saturday", "Monday", "Tuesday"],
-      answer: "Saturday",
-      difficulty: 1,
-    },
-    {
-      question: "Which season comes after winter?",
-      options: ["Spring", "Summer", "Autumn", "Winter"],
-      answer: "Spring",
-      difficulty: 1,
-    },
-    {
-      question: "How many months are in half a year?",
-      options: ["4", "5", "6", "7"],
-      answer: "6",
-      difficulty: 1,
-    },
-    {
-      question: "Which month comes after November?",
-      options: ["October", "November", "December", "January"],
-      answer: "December",
-      difficulty: 1,
-    },
-    {
-      question: "If today is Wednesday, what day will it be in 2 days?",
-      options: ["Thursday", "Friday", "Saturday", "Sunday"],
-      answer: "Friday",
-      difficulty: 2,
-    },
-    {
-      question: "Which month comes after October?",
-      options: ["September", "October", "November", "December"],
-      answer: "November",
-      difficulty: 2,
-    },
-    {
-      question: "How many days are in 5 weeks?",
-      options: ["28", "30", "35", "40"],
-      answer: "35",
-      difficulty: 2,
-    },
-    {
-      question: "If today is Friday, what day was 3 days ago?",
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-      answer: "Tuesday",
-      difficulty: 2,
-    },
-    {
-      question: "Which month has 30 days and comes after May?",
-      options: ["May", "June", "July", "August"],
-      answer: "June",
-      difficulty: 2,
-    },
-    {
-      question: "If today is Saturday, what day will it be in 4 days?",
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-      answer: "Wednesday",
-      difficulty: 2,
-    },
-    {
-      question: "How many weeks are in 28 days?",
-      options: ["3", "4", "5", "6"],
-      answer: "4",
-      difficulty: 2,
-    },
-    {
-      question: "Which season comes after summer?",
-      options: ["Winter", "Autumn", "Spring", "Summer"],
-      answer: "Autumn",
-      difficulty: 2,
-    },
-    {
-      question: "If today is March 4, what date is 3 days later?",
-      options: ["March 5", "March 6", "March 7", "March 8"],
-      answer: "March 7",
-      difficulty: 3,
-    },
-    {
-      question: "How many days are in 6 weeks?",
-      options: ["35", "40", "42", "45"],
-      answer: "42",
-      difficulty: 3,
-    },
-    {
-      question: "If today is Tuesday, what day will it be in 9 days?",
-      options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-      answer: "Thursday",
-      difficulty: 3,
-    },
-    {
-      question: "Which month is 3 months after March?",
-      options: ["May", "June", "July", "August"],
-      answer: "June",
-      difficulty: 3,
-    },
-    {
-      question: "What date is 5 days after June 10?",
-      options: ["June 12", "June 13", "June 14", "June 15"],
-      answer: "June 15",
-      difficulty: 3,
-    },
-    {
-      question: "How many days are between the 8th and the 13th?",
-      options: ["4", "5", "6", "7"],
-      answer: "5",
-      difficulty: 3,
-    },
-    {
-      question: "If today is Sunday, what day was it 1 week ago?",
-      options: ["Saturday", "Sunday", "Monday", "Tuesday"],
-      answer: "Sunday",
-      difficulty: 3,
-    },
-    {
-      question: "Which month is the shortest month?",
-      options: ["January", "February", "March", "April"],
-      answer: "February",
-      difficulty: 3,
-    },
-    {
-      question: "If today is Thursday, what day will it be in 15 days?",
-      options: ["Thursday", "Friday", "Saturday", "Sunday"],
-      answer: "Friday",
-      difficulty: 4,
-    },
-    {
-      question: "What date is 10 days after January 12?",
-      options: ["January 20", "January 21", "January 22", "January 23"],
-      answer: "January 22",
-      difficulty: 4,
-    },
-    {
-      question: "Which month is 4 months after February?",
-      options: ["April", "May", "June", "July"],
-      answer: "June",
-      difficulty: 4,
-    },
-    {
-      question: "If today is Monday, what day will it be in 18 days?",
-      options: ["Thursday", "Friday", "Saturday", "Sunday"],
-      answer: "Friday",
-      difficulty: 4,
-    },
-    {
-      question: "How many days are in 7 weeks?",
-      options: ["42", "45", "49", "56"],
-      answer: "49",
-      difficulty: 4,
-    },
-    {
-      question: "What date is 14 days after April 8?",
-      options: ["April 20", "April 21", "April 22", "April 23"],
-      answer: "April 22",
-      difficulty: 4,
-    },
-    {
-      question: "Which month comes 4 months after August?",
-      options: ["November", "December", "January", "February"],
-      answer: "December",
-      difficulty: 4,
-    },
-    {
-      question: "If today is Saturday, what day was 10 days ago?",
-      options: ["Tuesday", "Wednesday", "Thursday", "Friday"],
-      answer: "Wednesday",
-      difficulty: 4,
-    },
-    {
-      question: "If today is Tuesday, what day will it be in 29 days?",
-      options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-      answer: "Wednesday",
-      difficulty: 5,
-    },
-    {
-      question: "Which month is 6 months after January?",
-      options: ["June", "July", "August", "September"],
-      answer: "July",
-      difficulty: 5,
-    },
-    {
-      question: "What date is 21 days after October 4?",
-      options: ["October 24", "October 25", "October 26", "October 27"],
-      answer: "October 25",
-      difficulty: 5,
-    },
-    {
-      question: "If today is Friday, what day was 17 days ago?",
-      options: ["Monday", "Tuesday", "Wednesday", "Thursday"],
-      answer: "Tuesday",
-      difficulty: 5,
-    },
-    {
-      question: "What date is 14 days after November 17?",
-      options: ["November 29", "November 30", "December 1", "December 2"],
-      answer: "December 1",
-      difficulty: 5,
-    },
-    {
-      question: "How many days are in 8 weeks?",
-      options: ["48", "52", "56", "60"],
-      answer: "56",
-      difficulty: 5,
-    },
-    {
-      question: "If today is Sunday, what day will it be in 22 days?",
-      options: ["Sunday", "Monday", "Tuesday", "Wednesday"],
-      answer: "Monday",
-      difficulty: 5,
-    },
-    {
-      question: "Which month is 5 months after September?",
-      options: ["January", "February", "March", "April"],
-      answer: "February",
-      difficulty: 5,
-    },
-  ]
-);
-
 const CALENDAR_DAY_NAMES = [
   "Sunday",
   "Monday",
@@ -511,250 +23,759 @@ const CALENDAR_MONTHS = [
   { name: "December", days: 31 },
 ];
 
+const CALENDAR_QUESTIONS = [
+  // Level 1: basic calendar facts.
+  calendarStatic("Which month comes after April?", "May", ["March", "May", "June", "July"], 1),
+  calendarStatic("How many days are in 1 week?", "7", ["5", "6", "7", "8"], 1),
+  calendarStatic("Which month comes before November?", "October", ["September", "October", "December", "January"], 1),
+  calendarStatic("How many months are in a year?", "12", ["10", "11", "12", "13"], 1),
+  calendarStatic("Which month comes after July?", "August", ["June", "August", "September", "October"], 1),
+  calendarStatic("Which month comes before March?", "February", ["January", "February", "April", "May"], 1),
+  calendarStatic("If today is Monday, what day is tomorrow?", "Tuesday", ["Tuesday", "Wednesday", "Thursday", "Friday"], 1),
+  calendarStatic("If today is Sunday, what day was yesterday?", "Saturday", ["Friday", "Saturday", "Monday", "Tuesday"], 1),
+  calendarStatic("Which days are usually called the weekend?", "Saturday and Sunday", ["Monday and Tuesday", "Saturday and Sunday", "Wednesday and Thursday", "Thursday and Friday"], 1),
+  calendarStatic("How many months are in half a year?", "6", ["4", "5", "6", "7"], 1),
+  calendarStatic("Which month comes after November?", "December", ["October", "November", "December", "January"], 1),
+  calendarStatic("Which month is the first month of the year?", "January", ["January", "March", "June", "December"], 1),
+
+  // Level 2: short offsets, seasons, and simple week conversions.
+  calendarStatic("If today is Tuesday, what day will it be in 3 days?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 2),
+  calendarStatic("Which month has 28 or 29 days?", "February", ["January", "February", "March", "April"], 2),
+  calendarStatic("If today is Thursday, what day will it be in 2 days?", "Saturday", ["Friday", "Saturday", "Sunday", "Monday"], 2),
+  calendarStatic("Which month comes after February?", "March", ["January", "March", "April", "May"], 2),
+  calendarStatic("How many days are in 2 weeks?", "14", ["7", "10", "14", "21"], 2),
+  calendarStatic("Which month comes after September?", "October", ["August", "October", "November", "December"], 2),
+  calendarStatic("If today is Friday, what day was it 3 days ago?", "Tuesday", ["Sunday", "Monday", "Tuesday", "Wednesday"], 2),
+  calendarStatic("Which month has 30 days and comes after May?", "June", ["May", "June", "July", "August"], 2),
+  calendarStatic("Which season comes after winter in many places?", "Spring", ["Spring", "Summer", "Autumn", "Winter"], 2),
+  calendarStatic("Which month comes before August?", "July", ["June", "July", "September", "October"], 2),
+  calendarStatic("How many weeks are in 28 days?", "4", ["3", "4", "5", "6"], 2),
+  calendarStatic("If today is Saturday, what day will it be in 4 days?", "Wednesday", ["Sunday", "Monday", "Tuesday", "Wednesday"], 2),
+
+  // Level 3: date arithmetic inside a month, leap February, and elapsed days.
+  calendarStatic("If today is the 9th and a trip starts on the 15th, how many days are left until the trip?", "6 days", ["5 days", "6 days", "7 days", "8 days"], 3),
+  calendarStatic("How many days are in February during a leap year?", "29", ["28", "29", "30", "31"], 3),
+  calendarStatic("How many weeks are in 14 days?", "2 weeks", ["1 week", "2 weeks", "3 weeks", "4 weeks"], 3),
+  calendarStatic("What date is 5 days after June 22?", "June 27", ["June 25", "June 26", "June 27", "June 28"], 3),
+  calendarStatic("If today is March 4, what date is 3 days later?", "March 7", ["March 5", "March 6", "March 7", "March 8"], 3),
+  calendarStatic("How many days are in 6 weeks?", "42", ["35", "40", "42", "45"], 3),
+  calendarStatic("If today is Tuesday, what day will it be in 9 days?", "Thursday", ["Tuesday", "Wednesday", "Thursday", "Friday"], 3),
+  calendarStatic("How many days are between the 8th and the 13th?", "5", ["4", "5", "6", "7"], 3),
+  calendarStatic("Which month is the shortest month?", "February", ["January", "February", "March", "April"], 3),
+  calendarStatic("Which month has 31 days?", "July", ["April", "June", "September", "July"], 3),
+  calendarStatic("If today is Sunday, what day was it 1 week ago?", "Sunday", ["Saturday", "Sunday", "Monday", "Tuesday"], 3),
+  calendarStatic("What date is 10 days after January 5?", "January 15", ["January 13", "January 14", "January 15", "January 16"], 3),
+
+  // Level 4: longer offsets, month offsets, and school-week thinking.
+  calendarStatic("School starts on Monday and lasts for 5 school days. On which day does it end?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
+  calendarStatic("What date is 7 days after August 12?", "August 19", ["August 17", "August 18", "August 19", "August 20"], 4),
+  calendarStatic("Which month is 3 months after February?", "May", ["April", "May", "June", "July"], 4),
+  calendarStatic("If today is Sunday, what day will it be in 9 days?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 4),
+  calendarStatic("If today is Thursday, what day will it be in 15 days?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
+  calendarStatic("What date is 10 days after January 12?", "January 22", ["January 20", "January 21", "January 22", "January 23"], 4),
+  calendarStatic("Which month is 4 months after February?", "June", ["April", "May", "June", "July"], 4),
+  calendarStatic("How many days are in 7 weeks?", "49", ["42", "45", "49", "56"], 4),
+  calendarStatic("What date is 14 days after April 8?", "April 22", ["April 20", "April 21", "April 22", "April 23"], 4),
+  calendarStatic("If today is Saturday, what day was it 10 days ago?", "Wednesday", ["Tuesday", "Wednesday", "Thursday", "Friday"], 4),
+  calendarStatic("Which month has 31 days and comes after June?", "July", ["June", "July", "August", "September"], 4),
+  calendarStatic("Which month comes 4 months after August?", "December", ["November", "December", "January", "February"], 4),
+
+  // Level 5: cross-month movement, common years, and longer cycles.
+  calendarStatic("Which month has 30 days?", "April", ["April", "May", "July", "January"], 5),
+  calendarStatic("If today is Friday, what day will it be in 10 days?", "Monday", ["Sunday", "Monday", "Tuesday", "Wednesday"], 5),
+  calendarStatic("How many days are in a normal year?", "365", ["360", "365", "366", "370"], 5),
+  calendarStatic("Which month is 2 months after May?", "July", ["June", "July", "August", "September"], 5),
+  calendarStatic("If today is Tuesday, what day will it be in 20 days?", "Monday", ["Sunday", "Monday", "Tuesday", "Wednesday"], 5),
+  calendarStatic("Which month is 5 months after August?", "January", ["December", "January", "February", "March"], 5),
+  calendarStatic("What date is 21 days after July 4?", "July 25", ["July 23", "July 24", "July 25", "July 26"], 5),
+  calendarStatic("What date is 14 days after November 17?", "December 1", ["November 29", "November 30", "December 1", "December 2"], 5),
+  calendarStatic("How many days are in 8 weeks?", "56", ["48", "52", "56", "60"], 5),
+  calendarStatic("Which month is 5 months after September?", "February", ["January", "February", "March", "April"], 5),
+  calendarStatic("If today is Friday, what day was it 17 days ago?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 5),
+  calendarStatic("What date is 30 days after August 20?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 5),
+
+  // Level 6: the useful life lesson that months are not exactly 4 weeks.
+  calendarStatic("Why is it usually wrong to say that 1 month is exactly 4 weeks?", "Most months have 30 or 31 days", ["Every month has 28 days", "Most months have 30 or 31 days", "A week has 10 days", "A year has 10 months"], 6),
+  calendarStatic("How many days are in exactly 4 weeks?", "28 days", ["27 days", "28 days", "30 days", "31 days"], 6),
+  calendarStatic("About how long is the average month in a normal 365-day year?", "About 30.4 days", ["Exactly 28 days", "About 30.4 days", "Exactly 35 days", "About 52 days"], 6),
+  calendarStatic("How many days are in 52 weeks?", "364 days", ["360 days", "364 days", "365 days", "366 days"], 6),
+  calendarStatic("A normal 365-day year is 52 weeks plus what?", "1 extra day", ["No extra days", "1 extra day", "2 extra days", "7 extra days"], 6),
+  calendarStatic("A lesson happens every Tuesday for 5 weeks. How many lessons happen?", "5 lessons", ["4 lessons", "5 lessons", "6 lessons", "7 lessons"], 6),
+  calendarStatic("A club meets every other week. About how many meetings are in 8 weeks?", "4 meetings", ["2 meetings", "4 meetings", "6 meetings", "8 meetings"], 6),
+  calendarStatic("School days are Monday through Friday. How many school days are in 2 full weeks?", "10 school days", ["7 school days", "10 school days", "12 school days", "14 school days"], 6),
+  calendarStatic("What date is exactly 4 weeks after March 1?", "March 29", ["March 28", "March 29", "March 31", "April 1"], 6),
+  calendarStatic("A bill is due on the 15th of each month. After March 15, when is the next due date?", "April 15", ["March 29", "April 12", "April 15", "May 15"], 6),
+  calendarStatic("Which is longer: February in a normal year or exactly 4 weeks?", "They are the same", ["February is longer", "Exactly 4 weeks is longer", "They are the same", "You cannot compare them"], 6),
+  calendarStatic("Which is longer: April or exactly 4 weeks?", "April", ["April", "Exactly 4 weeks", "They are the same", "Neither has days"], 6),
+
+  // Level 7: planning with weeks, months, quarters, and elapsed days.
+  calendarStatic("If today is Monday, what day will it be in 45 days?", "Thursday", ["Wednesday", "Thursday", "Friday", "Saturday"], 7),
+  calendarStatic("January has 31 days. That is 4 full weeks plus how many extra days?", "3 extra days", ["1 extra day", "2 extra days", "3 extra days", "4 extra days"], 7),
+  calendarStatic("How many days are in 3 weeks and 4 days?", "25 days", ["21 days", "24 days", "25 days", "28 days"], 7),
+  calendarStatic("About how many months is 90 days?", "About 3 months", ["About 1 month", "About 2 months", "About 3 months", "About 6 months"], 7),
+  calendarStatic("A form is due May 20. What date is 14 days before the due date?", "May 6", ["May 4", "May 5", "May 6", "May 7"], 7),
+  calendarStatic("What is the last day of April?", "April 30", ["April 28", "April 29", "April 30", "April 31"], 7),
+  calendarStatic("Which months are in the first quarter of the year?", "January, February, March", ["January, February, March", "April, May, June", "July, August, September", "October, November, December"], 7),
+  calendarStatic("If practice happens twice a month for 6 months, how many practices is that?", "12 practices", ["6 practices", "8 practices", "12 practices", "18 practices"], 7),
+  calendarStatic("An event happens every 10 days starting June 1. What is the third event date?", "June 21", ["June 11", "June 20", "June 21", "July 1"], 7),
+  calendarStatic("How many days are in 13 weeks?", "91 days", ["84 days", "90 days", "91 days", "98 days"], 7),
+  calendarStatic("If a reminder repeats every 3 weeks, how many days are between reminders?", "21 days", ["14 days", "21 days", "28 days", "30 days"], 7),
+  calendarStatic("A subscription renews every month, not every 4 weeks. What is true?", "The renewal date usually stays on the same day number", ["It always renews every 28 days", "The renewal date usually stays on the same day number", "It renews every 13 days", "It skips all short months"], 7),
+
+  // Level 8: leap-year rules, quarterly schedules, and calendar grids.
+  calendarStatic("Which year is a leap year?", "2024", ["2023", "2024", "2025", "2026"], 8),
+  calendarStatic("If checkups are quarterly, how many checkups happen in 1 year?", "4", ["2", "3", "4", "6"], 8),
+  calendarStatic("A semiannual event happens how often?", "Twice a year", ["Every week", "Every month", "Twice a year", "Every 10 years"], 8),
+  calendarStatic("A reminder repeats on the 31st of each month. Which month can cause a problem because it has no 31st?", "April", ["January", "March", "April", "July"], 8),
+  calendarStatic("If your birthday is on a Tuesday, what day of the week is it 7 days later?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 8),
+  calendarStatic("In a normal year, what date is 60 days after January 1?", "March 2", ["February 28", "March 1", "March 2", "March 3"], 8),
+  calendarStatic("What date is 100 days after April 1?", "July 10", ["July 8", "July 9", "July 10", "July 11"], 8),
+  calendarStatic("If the 1st day of a month is Friday, what day is the 15th?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 8),
+  calendarStatic("If a 31-day month starts on Sunday, how many calendar rows does it use?", "5 rows", ["4 rows", "5 rows", "6 rows", "7 rows"], 8),
+  calendarStatic("Which months are in the second quarter of the year?", "April, May, June", ["January, February, March", "April, May, June", "July, August, September", "October, November, December"], 8),
+  calendarStatic("What is the basic rule for most leap years?", "A year divisible by 4 is usually a leap year", ["Every even year is a leap year", "A year divisible by 4 is usually a leap year", "Every 5th year is a leap year", "Only years ending in 0 are leap years"], 8),
+  calendarStatic("How many months are in 2 quarters?", "6 months", ["3 months", "4 months", "6 months", "8 months"], 8),
+
+  // Level 9: real planning with inclusive counts, business days, and leap dates.
+  calendarStatic("In leap year 2024, what date is 1 day after February 28?", "February 29", ["February 27", "February 29", "March 1", "March 2"], 9),
+  calendarStatic("In common year 2025, what date is 1 day after February 28?", "March 1", ["February 29", "March 1", "March 2", "March 3"], 9),
+  calendarStatic("School days are Monday through Friday. How many school days are from Wednesday through the next Tuesday, including both days?", "5 school days", ["4 school days", "5 school days", "6 school days", "7 school days"], 9),
+  calendarStatic("A meeting is every other Friday starting January 5. After January 19, what is the next meeting date?", "February 2", ["January 26", "February 1", "February 2", "February 9"], 9),
+  calendarStatic("A 30-day project starts on August 20. What date is 30 days later?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 9),
+  calendarStatic("What date is 4 weeks after May 1?", "May 29", ["May 28", "May 29", "May 31", "June 1"], 9),
+  calendarStatic("Why is 2 calendar months usually more than 8 weeks?", "Most pairs of months have more than 56 days", ["8 weeks is 80 days", "Most pairs of months have more than 56 days", "A month has only 20 days", "There are no weeks in months"], 9),
+  calendarStatic("How many quarters are in a year?", "4", ["2", "3", "4", "12"], 9),
+  calendarStatic("What is true about February 29 birthdays?", "The exact date appears only in leap years", ["The exact date appears every year", "The exact date appears only in leap years", "They happen every month", "They are always on Sunday"], 9),
+  calendarStatic("How many days are counted from Monday the 8th through Friday the 12th, including both days?", "5 days", ["3 days", "4 days", "5 days", "6 days"], 9),
+  calendarStatic("If a month starts on Saturday and has 31 days, how many calendar rows does it use?", "6 rows", ["4 rows", "5 rows", "6 rows", "7 rows"], 9),
+  calendarStatic("A reminder is every 6 weeks. How many days are between reminders?", "42 days", ["35 days", "40 days", "42 days", "48 days"], 9),
+
+  // Level 10: advanced calendar reasoning and Gregorian leap-year exceptions.
+  calendarStatic("Why was the year 2000 a leap year?", "It is divisible by 400", ["It is divisible by 3", "It is divisible by 400", "All century years are leap years", "It has 31 days"], 10),
+  calendarStatic("Why will 2100 not be a leap year in the Gregorian calendar?", "It is divisible by 100 but not by 400", ["It is divisible by 4 only", "It is divisible by 100 but not by 400", "It has an odd number", "February always has 29 days"], 10),
+  calendarStatic("Why was 1900 not a leap year in the Gregorian calendar?", "Century years must be divisible by 400", ["It was not divisible by 4", "Century years must be divisible by 400", "It had no February", "It started on Monday"], 10),
+  calendarStatic("Which happens more often in a 52-week year: monthly payments or payments every 4 weeks?", "Payments every 4 weeks", ["Monthly payments", "Payments every 4 weeks", "They are always equal", "Neither happens"], 10),
+  calendarStatic("If today is Friday, what day will it be in 10 weeks?", "Friday", ["Monday", "Wednesday", "Friday", "Sunday"], 10),
+  calendarStatic("26 weeks is closest to what part of a 52-week year?", "Half a year", ["One month", "One quarter", "Half a year", "Two years"], 10),
+  calendarStatic("A project is due March 1, 2024. What date is 1 day before it?", "February 29, 2024", ["February 28, 2024", "February 29, 2024", "March 0, 2024", "March 2, 2024"], 10),
+  calendarStatic("A project is due March 1, 2025. What date is 1 day before it?", "February 28, 2025", ["February 28, 2025", "February 29, 2025", "March 0, 2025", "March 2, 2025"], 10),
+  calendarStatic("An event happens every 15 days starting January 1, 2025. What is the 5th event date?", "March 2, 2025", ["February 28, 2025", "March 1, 2025", "March 2, 2025", "March 3, 2025"], 10),
+  calendarStatic("Which statement about a 3-month quarter is true?", "It is not always exactly 13 weeks", ["It is always exactly 90 days", "It is always exactly 13 weeks", "It is not always exactly 13 weeks", "It always has February"], 10),
+  calendarStatic("A subscription bills every 4 weeks. About how many bills are there in 52 weeks?", "13 bills", ["10 bills", "12 bills", "13 bills", "14 bills"], 10),
+  calendarStatic("A date is moved forward by 400 years in the Gregorian calendar. What usually stays the same?", "The leap-year pattern repeats", ["Every month becomes 28 days", "The leap-year pattern repeats", "Weeks disappear", "The year becomes shorter"], 10),
+];
+
 function createCalendarGeneratedEntry(difficulty) {
   const level = calendarClampDifficulty(difficulty);
   const generators = {
     1: [
-      createCalendarNextMonthQuestion,
-      createCalendarTomorrowQuestion,
-      createCalendarDaysInWeekQuestion,
-      createCalendarMonthCountQuestion,
+      calendarGenerateAdjacentMonth,
+      calendarGenerateTomorrow,
+      calendarGenerateYesterday,
+      calendarGenerateBasicFact,
     ],
     2: [
-      createCalendarDayOffsetQuestion,
-      createCalendarMonthRelationQuestion,
-      createCalendarYesterdayQuestion,
-      createCalendarFebruaryQuestion,
+      calendarGenerateShortDayOffset,
+      calendarGenerateAdjacentMonth,
+      calendarGenerateWeeksToDays,
+      calendarGenerateSeasonQuestion,
     ],
     3: [
-      createCalendarDaysBetweenDatesQuestion,
-      createCalendarWeeksQuestion,
-      createCalendarDateShiftQuestion,
-      createCalendarLeapYearQuestion,
+      calendarGenerateDateShiftWithinMonth,
+      calendarGenerateWeeksToDays,
+      calendarGenerateDaysBetween,
+      calendarGenerateLeapFebruary,
     ],
     4: [
-      createCalendarDayOffsetQuestion,
-      createCalendarMonthOffsetQuestion,
-      createCalendarDateShiftQuestion,
-      createCalendarWeeksQuestion,
+      calendarGenerateLongDayOffset,
+      calendarGenerateMonthOffset,
+      calendarGenerateDateShiftWithinMonth,
+      calendarGenerateSchoolWeekQuestion,
     ],
     5: [
-      createCalendarDateShiftQuestion,
-      createCalendarMonthOffsetQuestion,
-      createCalendarCommonYearQuestion,
-      createCalendarDaysBetweenDatesQuestion,
+      calendarGenerateCrossMonthDateShift,
+      calendarGenerateMonthOffset,
+      calendarGenerateCommonYear,
+      calendarGenerateLongDayOffset,
+    ],
+    6: [
+      calendarGenerateMonthNotFourWeeks,
+      calendarGenerateWeeksToDays,
+      calendarGenerateEveryOtherWeek,
+      calendarGenerateSchoolDaysInWeeks,
+    ],
+    7: [
+      calendarGenerateAdvancedWeekOffset,
+      calendarGenerateDeadlineBefore,
+      calendarGenerateQuarterQuestion,
+      calendarGenerateRecurringDays,
+    ],
+    8: [
+      calendarGenerateLeapYearChoice,
+      calendarGenerateQuarterlySchedule,
+      calendarGenerateCalendarGridRows,
+      calendarGenerateDateShiftWithYear,
+    ],
+    9: [
+      calendarGenerateLeapDayShift,
+      calendarGenerateBusinessDaysRange,
+      calendarGenerateBiweeklyDate,
+      calendarGenerateCalendarGridRows,
+    ],
+    10: [
+      calendarGenerateCenturyLeapRule,
+      calendarGenerateEveryFourWeeksVsMonthly,
+      calendarGenerateDateShiftWithYear,
+      calendarGenerateAdvancedRecurringEvent,
     ],
   };
 
-  return calendarRandomChoice(generators[level])();
+  return calendarRandomChoice(generators[level])(level);
 }
 
-function createCalendarNextMonthQuestion() {
-  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 2);
-  const answer = CALENDAR_MONTHS[monthIndex + 1].name;
-  return {
-    question: `Which month comes after ${CALENDAR_MONTHS[monthIndex].name}?`,
-    options: calendarMakeMonthOptions(answer),
-    answer,
-    difficulty: 1,
-  };
+function calendarStatic(question, answer, options, difficulty) {
+  return calendarBuildEntry({ question, answer, options, difficulty, family: "static" });
 }
 
-function createCalendarTomorrowQuestion() {
-  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
-  const answer = CALENDAR_DAY_NAMES[(dayIndex + 1) % CALENDAR_DAY_NAMES.length];
-  return {
-    question: `If today is ${CALENDAR_DAY_NAMES[dayIndex]}, what day will it be tomorrow?`,
-    options: calendarMakeDayOptions(answer),
-    answer,
-    difficulty: 1,
-  };
-}
+function calendarBuildEntry({ question, answer, options, difficulty, family = "calendar" }) {
+  const normalizedQuestion = String(question || "").trim();
+  const normalizedAnswer = String(answer);
+  const normalizedOptions = calendarUniqueStrings(options || []);
+  const normalizedDifficulty = calendarClampDifficulty(difficulty);
 
-function createCalendarDaysInWeekQuestion() {
-  return {
-    question: "How many days are in 1 week?",
-    options: calendarMakeNumberOptions("7", [5, 6, 8, 9]),
-    answer: "7",
-    difficulty: 1,
-  };
-}
-
-function createCalendarMonthCountQuestion() {
-  return {
-    question: "How many months are in a year?",
-    options: calendarMakeNumberOptions("12", [10, 11, 13, 14]),
-    answer: "12",
-    difficulty: 1,
-  };
-}
-
-function createCalendarDayOffsetQuestion() {
-  const startIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
-  const offset = calendarRandomInt(2, 6);
-  const answer = CALENDAR_DAY_NAMES[(startIndex + offset) % CALENDAR_DAY_NAMES.length];
-  return {
-    question: `If today is ${CALENDAR_DAY_NAMES[startIndex]}, what day will it be in ${offset} days?`,
-    options: calendarMakeDayOptions(answer),
-    answer,
-    difficulty: 2,
-  };
-}
-
-function createCalendarMonthRelationQuestion() {
-  const monthIndex = calendarRandomInt(1, CALENDAR_MONTHS.length - 2);
-  const direction = calendarRandomChoice(["before", "after"]);
-  const answerIndex = direction === "before" ? monthIndex - 1 : monthIndex + 1;
-  const answer = CALENDAR_MONTHS[answerIndex].name;
-  return {
-    question: `Which month comes ${direction} ${CALENDAR_MONTHS[monthIndex].name}?`,
-    options: calendarMakeMonthOptions(answer),
-    answer,
-    difficulty: 2,
-  };
-}
-
-function createCalendarYesterdayQuestion() {
-  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
-  const answer = CALENDAR_DAY_NAMES[(dayIndex + CALENDAR_DAY_NAMES.length - 1) % CALENDAR_DAY_NAMES.length];
-  return {
-    question: `If today is ${CALENDAR_DAY_NAMES[dayIndex]}, what day was it yesterday?`,
-    options: calendarMakeDayOptions(answer),
-    answer,
-    difficulty: 2,
-  };
-}
-
-function createCalendarFebruaryQuestion() {
-  return {
-    question: "Which month has 28 or 29 days?",
-    options: calendarMakeMonthOptions("February"),
-    answer: "February",
-    difficulty: 2,
-  };
-}
-
-function createCalendarDaysBetweenDatesQuestion() {
-  const startMonth = calendarRandomInt(0, CALENDAR_MONTHS.length - 2);
-  const startDay = calendarRandomInt(1, Math.min(20, CALENDAR_MONTHS[startMonth].days - 1));
-  const endDay = startDay + calendarRandomInt(3, 7);
-  const answer = String(endDay - startDay);
-  return {
-    question: `If a trip starts on the ${calendarFormatOrdinal(startDay)} and ends on the ${calendarFormatOrdinal(endDay)}, how many days are between those dates?`,
-    options: calendarMakeNumberOptions(answer, calendarBuildNearbyNumbers(answer, 3, 1)),
-    answer,
-    difficulty: 3,
-  };
-}
-
-function createCalendarWeeksQuestion() {
-  const weeks = calendarRandomChoice([2, 3, 4, 5, 6, 8]);
-  const answer = String(weeks * 7);
-  return {
-    question: `How many days are in ${weeks} weeks?`,
-    options: calendarMakeNumberOptions(answer, calendarBuildNearbyNumbers(answer, 14, 7)),
-    answer,
-    difficulty: 3,
-  };
-}
-
-function createCalendarDateShiftQuestion() {
-  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
-  const day = calendarRandomInt(1, Math.min(20, CALENDAR_MONTHS[monthIndex].days - 7));
-  const shift = calendarRandomChoice([3, 5, 7, 10, 14, 21]);
-  const answerDate = calendarAddDays(monthIndex, day, shift);
-  const answer = calendarFormatDate(answerDate.monthIndex, answerDate.day);
-  const options = calendarBuildDateOptions(answerDate.monthIndex, answerDate.day, [1, 2, 3, -1, -2, -3]);
-
-  return {
-    question: `What date is ${shift} days after ${CALENDAR_MONTHS[monthIndex].name} ${day}?`,
-    options,
-    answer,
-    difficulty: 3,
-  };
-}
-
-function createCalendarLeapYearQuestion() {
-  return {
-    question: "How many days are in February during a leap year?",
-    options: calendarMakeNumberOptions("29", [28, 30, 31, 32]),
-    answer: "29",
-    difficulty: 3,
-  };
-}
-
-function createCalendarMonthOffsetQuestion() {
-  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
-  const offset = calendarRandomChoice([2, 3, 4, 5]);
-  const answer = CALENDAR_MONTHS[(monthIndex + offset) % CALENDAR_MONTHS.length].name;
-  return {
-    question: `Which month is ${offset} months after ${CALENDAR_MONTHS[monthIndex].name}?`,
-    options: calendarMakeMonthOptions(answer),
-    answer,
-    difficulty: 4,
-  };
-}
-
-function createCalendarCommonYearQuestion() {
-  return {
-    question: "How many days are in a normal year?",
-    options: calendarMakeNumberOptions("365", [360, 364, 366, 370]),
-    answer: "365",
-    difficulty: 5,
-  };
-}
-
-function calendarMakeDayOptions(answer) {
-  return calendarBuildOptions(answer, CALENDAR_DAY_NAMES);
-}
-
-function calendarMakeMonthOptions(answer) {
-  return calendarBuildOptions(answer, CALENDAR_MONTHS.map((month) => month.name));
-}
-
-function calendarMakeNumberOptions(answer, candidates) {
-  return calendarBuildOptions(answer, candidates.map(String));
-}
-
-function calendarBuildNearbyNumbers(answer, spread, step) {
-  const value = Number(answer);
-  if (!Number.isFinite(value)) {
-    return [];
+  if (!normalizedQuestion) {
+    throw new Error("Calendar questions must have question text.");
   }
 
-  return [value - spread, value - step, value + step, value + spread]
-    .map((number) => String(Math.max(1, Math.round(number))))
-    .filter((option) => option !== String(answer));
+  if (normalizedOptions.length !== 4 || !normalizedOptions.includes(normalizedAnswer)) {
+    throw new Error(`Calendar question must have exactly 4 unique options including the answer: ${normalizedQuestion}`);
+  }
+
+  return {
+    question: normalizedQuestion,
+    options: normalizedOptions,
+    answer: normalizedAnswer,
+    difficulty: normalizedDifficulty,
+    category: "Calendar",
+    type: "calendar-choice",
+    family,
+  };
 }
 
-function calendarBuildDateOptions(monthIndex, day, offsets) {
-  const answer = calendarFormatDate(monthIndex, day);
-  return calendarBuildOptions(
+function calendarBuildGeneratedEntry({ question, answer, distractors, difficulty, family }) {
+  return calendarBuildEntry({
+    question,
     answer,
-    offsets.map((offset) => {
-      const date = calendarAddDays(monthIndex, day, offset);
-      return calendarFormatDate(date.monthIndex, date.day);
-    })
-  );
+    options: calendarMakeChoiceOptions(answer, distractors),
+    difficulty,
+    family,
+  });
+}
+
+function calendarGenerateAdjacentMonth(level) {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
+  const direction = calendarRandomChoice(level <= 1 ? [1] : [-1, 1]);
+  const answerIndex = calendarWrap(monthIndex + direction, CALENDAR_MONTHS.length);
+  const word = direction === 1 ? "after" : "before";
+  const answer = CALENDAR_MONTHS[answerIndex].name;
+
+  return calendarBuildGeneratedEntry({
+    question: `Which month comes ${word} ${CALENDAR_MONTHS[monthIndex].name}?`,
+    answer,
+    distractors: calendarMonthDistractors(answer),
+    difficulty: level,
+    family: "adjacent-month",
+  });
+}
+
+function calendarGenerateTomorrow(level) {
+  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const answer = calendarDayName(dayIndex + 1);
+  return calendarBuildGeneratedEntry({
+    question: `If today is ${calendarDayName(dayIndex)}, what day is tomorrow?`,
+    answer,
+    distractors: calendarDayDistractors(answer),
+    difficulty: level,
+    family: "tomorrow",
+  });
+}
+
+function calendarGenerateYesterday(level) {
+  const dayIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const answer = calendarDayName(dayIndex - 1);
+  return calendarBuildGeneratedEntry({
+    question: `If today is ${calendarDayName(dayIndex)}, what day was yesterday?`,
+    answer,
+    distractors: calendarDayDistractors(answer),
+    difficulty: level,
+    family: "yesterday",
+  });
+}
+
+function calendarGenerateBasicFact(level) {
+  const facts = [
+    ["How many days are in 1 week?", "7", ["5", "6", "8", "10"]],
+    ["How many months are in 1 year?", "12", ["10", "11", "13", "14"]],
+    ["How many months are in half a year?", "6", ["3", "4", "5", "12"]],
+    ["Which month is the first month of the year?", "January", ["February", "March", "June", "December"]],
+  ];
+  const [question, answer, distractors] = calendarRandomChoice(facts);
+  return calendarBuildGeneratedEntry({ question, answer, distractors, difficulty: level, family: "basic-fact" });
+}
+
+function calendarGenerateShortDayOffset(level) {
+  const startIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const offset = calendarRandomInt(2, 6);
+  const answer = calendarDayName(startIndex + offset);
+  return calendarBuildGeneratedEntry({
+    question: `If today is ${calendarDayName(startIndex)}, what day will it be in ${offset} days?`,
+    answer,
+    distractors: calendarDayDistractors(answer),
+    difficulty: level,
+    family: "short-day-offset",
+  });
+}
+
+function calendarGenerateLongDayOffset(level) {
+  const startIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const offset = calendarRandomChoice(level >= 5 ? [9, 10, 12, 15, 17, 18, 20, 22, 29] : [8, 9, 10, 12, 14, 15]);
+  const answer = calendarDayName(startIndex + offset);
+  return calendarBuildGeneratedEntry({
+    question: `If today is ${calendarDayName(startIndex)}, what day will it be in ${offset} days?`,
+    answer,
+    distractors: calendarDayDistractors(answer),
+    difficulty: level,
+    family: "long-day-offset",
+  });
+}
+
+function calendarGenerateAdvancedWeekOffset(level) {
+  const startIndex = calendarRandomInt(0, CALENDAR_DAY_NAMES.length - 1);
+  const offset = calendarRandomChoice([25, 31, 38, 45, 52, 73, 91]);
+  const answer = calendarDayName(startIndex + offset);
+  return calendarBuildGeneratedEntry({
+    question: `If today is ${calendarDayName(startIndex)}, what day will it be in ${offset} days?`,
+    answer,
+    distractors: calendarDayDistractors(answer),
+    difficulty: level,
+    family: "advanced-week-offset",
+  });
+}
+
+function calendarGenerateWeeksToDays(level) {
+  const weeks = calendarRandomChoice(level >= 6 ? [4, 5, 6, 8, 10, 13, 26, 52] : [2, 3, 4, 5, 6, 7, 8]);
+  const answer = `${weeks * 7} days`;
+  const distractors = calendarNearbyNumbers(weeks * 7, [weeks * 7 - 7, weeks * 7 + 7, weeks * 6, weeks * 8]).map((value) => `${value} days`);
+  return calendarBuildGeneratedEntry({
+    question: `How many days are in ${weeks} weeks?`,
+    answer,
+    distractors,
+    difficulty: level,
+    family: "weeks-to-days",
+  });
+}
+
+function calendarGenerateSeasonQuestion(level) {
+  const seasons = ["winter", "spring", "summer", "autumn"];
+  const next = { winter: "spring", spring: "summer", summer: "autumn", autumn: "winter" };
+  const season = calendarRandomChoice(seasons);
+  const answer = calendarTitleCase(next[season]);
+  return calendarBuildGeneratedEntry({
+    question: `Which season comes after ${season} in many places?`,
+    answer,
+    distractors: seasons.map(calendarTitleCase).filter((candidate) => candidate !== answer),
+    difficulty: level,
+    family: "season-order",
+  });
+}
+
+function calendarGenerateDateShiftWithinMonth(level) {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
+  const shift = calendarRandomChoice([3, 4, 5, 7, 10, 14]);
+  const day = calendarRandomInt(1, CALENDAR_MONTHS[monthIndex].days - shift);
+  const answer = `${CALENDAR_MONTHS[monthIndex].name} ${day + shift}`;
+  const distractors = [shift - 1, shift + 1, shift + 2, shift - 2]
+    .map((candidateShift) => `${CALENDAR_MONTHS[monthIndex].name} ${day + candidateShift}`)
+    .filter((candidate) => candidate !== answer);
+  return calendarBuildGeneratedEntry({
+    question: `What date is ${shift} days after ${CALENDAR_MONTHS[monthIndex].name} ${day}?`,
+    answer,
+    distractors,
+    difficulty: level,
+    family: "date-shift-within-month",
+  });
+}
+
+function calendarGenerateDaysBetween(level) {
+  const start = calendarRandomInt(1, 20);
+  const distance = calendarRandomInt(3, level >= 7 ? 14 : 8);
+  const end = start + distance;
+  const answer = `${distance} days`;
+  return calendarBuildGeneratedEntry({
+    question: `How many days are between the ${calendarFormatOrdinal(start)} and the ${calendarFormatOrdinal(end)}?`,
+    answer,
+    distractors: [`${distance - 1} days`, `${distance + 1} days`, `${distance + 2} days`, `${Math.max(1, distance - 2)} days`],
+    difficulty: level,
+    family: "days-between",
+  });
+}
+
+function calendarGenerateLeapFebruary(level) {
+  return calendarBuildGeneratedEntry({
+    question: "How many days are in February during a leap year?",
+    answer: "29 days",
+    distractors: ["28 days", "30 days", "31 days", "32 days"],
+    difficulty: level,
+    family: "leap-february",
+  });
+}
+
+function calendarGenerateMonthOffset(level) {
+  const monthIndex = calendarRandomInt(0, CALENDAR_MONTHS.length - 1);
+  const offset = calendarRandomChoice(level >= 7 ? [2, 3, 4, 5, 6, 9] : [2, 3, 4, 5, 6]);
+  const answer = CALENDAR_MONTHS[calendarWrap(monthIndex + offset, CALENDAR_MONTHS.length)].name;
+  return calendarBuildGeneratedEntry({
+    question: `Which month is ${offset} months after ${CALENDAR_MONTHS[monthIndex].name}?`,
+    answer,
+    distractors: calendarMonthDistractors(answer),
+    difficulty: level,
+    family: "month-offset",
+  });
+}
+
+function calendarGenerateSchoolWeekQuestion(level) {
+  const weeks = calendarRandomChoice([1, 2, 3, 4]);
+  const answer = `${weeks * 5} school days`;
+  return calendarBuildGeneratedEntry({
+    question: `School days are Monday through Friday. How many school days are in ${weeks} full weeks?`,
+    answer,
+    distractors: [`${weeks * 7} school days`, `${weeks * 4} school days`, `${weeks * 5 + 1} school days`, `${weeks * 5 - 1} school days`],
+    difficulty: level,
+    family: "school-week",
+  });
+}
+
+function calendarGenerateCrossMonthDateShift(level) {
+  const year = calendarRandomChoice([2025, 2026, 2027]);
+  const monthIndex = calendarRandomInt(0, 11);
+  const shift = calendarRandomChoice([10, 14, 21, 28, 30, 35]);
+  const maxStartDay = Math.min(calendarDaysInMonth(year, monthIndex), 24);
+  const day = calendarRandomInt(Math.max(1, maxStartDay - 8), maxStartDay);
+  const answerDate = calendarAddDaysToDate(year, monthIndex, day, shift);
+  const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
+  const distractors = calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false);
+  return calendarBuildGeneratedEntry({
+    question: `What date is ${shift} days after ${calendarFormatMonthDay(monthIndex, day)}?`,
+    answer,
+    distractors,
+    difficulty: level,
+    family: "cross-month-date-shift",
+  });
+}
+
+function calendarGenerateCommonYear(level) {
+  return calendarBuildGeneratedEntry({
+    question: "How many days are in a normal common year?",
+    answer: "365 days",
+    distractors: ["360 days", "364 days", "366 days", "370 days"],
+    difficulty: level,
+    family: "common-year",
+  });
+}
+
+function calendarGenerateMonthNotFourWeeks(level) {
+  const facts = [
+    ["Why is 1 calendar month usually not exactly 4 weeks?", "Most months have 30 or 31 days", ["Most months have 30 or 31 days", "Every month has 28 days", "A week has 8 days", "A year has 10 months"]],
+    ["Exactly 4 weeks is how many days?", "28 days", ["21 days", "28 days", "30 days", "31 days"]],
+    ["Which month in a normal year is exactly 4 weeks long?", "February", ["January", "February", "March", "April"]],
+    ["A normal 365-day year is 52 weeks plus what?", "1 extra day", ["No extra days", "1 extra day", "2 extra days", "12 extra days"]],
+  ];
+  const [question, answer, options] = calendarRandomChoice(facts);
+  return calendarBuildEntry({ question, answer, options, difficulty: level, family: "month-not-four-weeks" });
+}
+
+function calendarGenerateEveryOtherWeek(level) {
+  const weeks = calendarRandomChoice([6, 8, 10, 12]);
+  const answer = `${weeks / 2} meetings`;
+  return calendarBuildGeneratedEntry({
+    question: `A club meets every other week. How many meetings are there in ${weeks} weeks?`,
+    answer,
+    distractors: [`${weeks} meetings`, `${Math.max(1, weeks / 2 - 1)} meetings`, `${weeks / 2 + 1} meetings`, `${weeks / 2 + 2} meetings`],
+    difficulty: level,
+    family: "every-other-week",
+  });
+}
+
+function calendarGenerateSchoolDaysInWeeks(level) {
+  const weeks = calendarRandomChoice([2, 3, 4, 5]);
+  const answer = `${weeks * 5} school days`;
+  return calendarBuildGeneratedEntry({
+    question: `If school is Monday through Friday, how many school days are in ${weeks} full weeks?`,
+    answer,
+    distractors: [`${weeks * 7} school days`, `${weeks * 5 - 1} school days`, `${weeks * 5 + 1} school days`, `${weeks * 4} school days`],
+    difficulty: level,
+    family: "school-days-in-weeks",
+  });
+}
+
+function calendarGenerateDeadlineBefore(level) {
+  const year = 2026;
+  const monthIndex = calendarRandomInt(2, 10);
+  const day = calendarRandomInt(15, 26);
+  const daysBefore = calendarRandomChoice([7, 10, 14, 21]);
+  const answerDate = calendarAddDaysToDate(year, monthIndex, day, -daysBefore);
+  const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
+  return calendarBuildGeneratedEntry({
+    question: `A deadline is ${calendarFormatMonthDay(monthIndex, day)}. What date is ${daysBefore} days before the deadline?`,
+    answer,
+    distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
+    difficulty: level,
+    family: "deadline-before",
+  });
+}
+
+function calendarGenerateQuarterQuestion(level) {
+  const quarter = calendarRandomInt(1, 4);
+  const quarterMonths = [
+    ["January", "February", "March"],
+    ["April", "May", "June"],
+    ["July", "August", "September"],
+    ["October", "November", "December"],
+  ];
+  const answer = quarterMonths[quarter - 1].join(", ");
+  const distractors = quarterMonths.filter((_, index) => index !== quarter - 1).map((months) => months.join(", "));
+  return calendarBuildGeneratedEntry({
+    question: `Which months are in quarter ${quarter} of the year?`,
+    answer,
+    distractors,
+    difficulty: level,
+    family: "quarter-months",
+  });
+}
+
+function calendarGenerateRecurringDays(level) {
+  const interval = calendarRandomChoice([10, 14, 15, 21]);
+  const occurrence = calendarRandomChoice([3, 4, 5]);
+  const elapsed = interval * (occurrence - 1);
+  const startYear = 2026;
+  const startMonth = calendarRandomChoice([0, 2, 5, 8]);
+  const startDay = calendarRandomChoice([1, 3, 5]);
+  const answerDate = calendarAddDaysToDate(startYear, startMonth, startDay, elapsed);
+  const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
+  return calendarBuildGeneratedEntry({
+    question: `An event happens every ${interval} days starting ${calendarFormatMonthDay(startMonth, startDay)}. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
+    answer,
+    distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
+    difficulty: level,
+    family: "recurring-days",
+  });
+}
+
+function calendarGenerateLeapYearChoice(level) {
+  const leapYear = calendarRandomChoice([2024, 2028, 2032, 2036]);
+  return calendarBuildGeneratedEntry({
+    question: "Which of these years is a leap year?",
+    answer: String(leapYear),
+    distractors: [String(leapYear - 1), String(leapYear + 1), String(leapYear + 2), String(leapYear + 3)],
+    difficulty: level,
+    family: "leap-year-choice",
+  });
+}
+
+function calendarGenerateQuarterlySchedule(level) {
+  const facts = [
+    ["If a checkup is quarterly, how many checkups happen in 1 year?", "4", ["2", "3", "4", "6"]],
+    ["A semiannual event happens how often?", "Twice a year", ["Every month", "Twice a year", "Four times a year", "Every 2 weeks"]],
+    ["How many months are in 2 quarters?", "6 months", ["3 months", "4 months", "6 months", "8 months"]],
+  ];
+  const [question, answer, options] = calendarRandomChoice(facts);
+  return calendarBuildEntry({ question, answer, options, difficulty: level, family: "schedule-vocabulary" });
+}
+
+function calendarGenerateCalendarGridRows(level) {
+  const startDayIndex = calendarRandomInt(0, 6);
+  const daysInMonth = calendarRandomChoice(level >= 9 ? [30, 31] : [28, 30, 31]);
+  const rows = Math.ceil((startDayIndex + daysInMonth) / 7);
+  const answer = `${rows} rows`;
+  return calendarBuildGeneratedEntry({
+    question: `If a ${daysInMonth}-day month starts on ${calendarDayName(startDayIndex)}, how many calendar rows does it use?`,
+    answer,
+    distractors: ["4 rows", "5 rows", "6 rows", "7 rows"].filter((option) => option !== answer),
+    difficulty: level,
+    family: "calendar-grid-rows",
+  });
+}
+
+function calendarGenerateDateShiftWithYear(level) {
+  const year = level >= 10 ? calendarRandomChoice([2024, 2025, 2028, 2100]) : calendarRandomChoice([2024, 2025, 2026]);
+  const monthIndex = calendarRandomChoice(level >= 10 ? [0, 1, 2, 10, 11] : [0, 2, 3, 6, 9]);
+  const maxDay = Math.min(24, calendarDaysInMonth(year, monthIndex));
+  const day = calendarRandomInt(1, maxDay);
+  const shift = calendarRandomChoice(level >= 10 ? [30, 45, 60, 75, 100] : [30, 45, 60, 90, 100]);
+  const answerDate = calendarAddDaysToDate(year, monthIndex, day, shift);
+  const answer = calendarFormatFullDate(answerDate.year, answerDate.monthIndex, answerDate.day);
+  return calendarBuildGeneratedEntry({
+    question: `What date is ${shift} days after ${calendarFormatFullDate(year, monthIndex, day)}?`,
+    answer,
+    distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, true),
+    difficulty: level,
+    family: "date-shift-with-year",
+  });
+}
+
+function calendarGenerateLeapDayShift(level) {
+  const year = calendarRandomChoice([2024, 2025]);
+  const answer = year === 2024 ? "February 29, 2024" : "March 1, 2025";
+  return calendarBuildGeneratedEntry({
+    question: `What date is 1 day after February 28, ${year}?`,
+    answer,
+    distractors: year === 2024
+      ? ["February 27, 2024", "March 1, 2024", "March 2, 2024"]
+      : ["February 29, 2025", "March 2, 2025", "February 27, 2025"],
+    difficulty: level,
+    family: "leap-day-shift",
+  });
+}
+
+function calendarGenerateBusinessDaysRange(level) {
+  const starts = ["Monday", "Tuesday", "Wednesday"];
+  const startName = calendarRandomChoice(starts);
+  const startIndex = CALENDAR_DAY_NAMES.indexOf(startName);
+  const span = calendarRandomChoice([5, 6, 7, 8]);
+  let businessDays = 0;
+  for (let offset = 0; offset < span; offset += 1) {
+    const index = calendarWrap(startIndex + offset, 7);
+    if (index >= 1 && index <= 5) {
+      businessDays += 1;
+    }
+  }
+  const endName = calendarDayName(startIndex + span - 1);
+  return calendarBuildGeneratedEntry({
+    question: `School days are Monday through Friday. How many school days are from ${startName} through ${endName}, including both days?`,
+    answer: `${businessDays} school days`,
+    distractors: [`${businessDays - 1} school days`, `${businessDays + 1} school days`, `${span} school days`, `${Math.max(1, businessDays - 2)} school days`],
+    difficulty: level,
+    family: "business-days-range",
+  });
+}
+
+function calendarGenerateBiweeklyDate(level) {
+  const year = 2026;
+  const monthIndex = calendarRandomChoice([0, 2, 5, 8]);
+  const startDay = calendarRandomChoice([1, 3, 5, 7]);
+  const meetingsAfterStart = calendarRandomChoice([1, 2, 3]);
+  const answerDate = calendarAddDaysToDate(year, monthIndex, startDay, meetingsAfterStart * 14);
+  const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
+  return calendarBuildGeneratedEntry({
+    question: `A meeting happens every other week starting ${calendarFormatMonthDay(monthIndex, startDay)}. What is the date ${meetingsAfterStart} meeting${meetingsAfterStart === 1 ? "" : "s"} after that?`,
+    answer,
+    distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
+    difficulty: level,
+    family: "biweekly-date",
+  });
+}
+
+function calendarGenerateCenturyLeapRule(level) {
+  const examples = [
+    ["Why was 2000 a leap year?", "It is divisible by 400", ["It is divisible by 400", "Every century year is a leap year", "It has 30 months", "It starts on Monday"]],
+    ["Why was 1900 not a leap year in the Gregorian calendar?", "Century years must be divisible by 400", ["Century years must be divisible by 400", "It was not divisible by 4", "February did not exist", "It had 364 days because all years do"]],
+    ["Why will 2100 not be a leap year in the Gregorian calendar?", "It is divisible by 100 but not by 400", ["It is divisible by 100 but not by 400", "It is not divisible by 4", "All future years are common years", "It has 13 months"]],
+  ];
+  const [question, answer, options] = calendarRandomChoice(examples);
+  return calendarBuildEntry({ question, answer, options, difficulty: level, family: "century-leap-rule" });
+}
+
+function calendarGenerateEveryFourWeeksVsMonthly(level) {
+  const facts = [
+    ["Which happens more often in 52 weeks: monthly payments or payments every 4 weeks?", "Payments every 4 weeks", ["Monthly payments", "Payments every 4 weeks", "They are always equal", "Neither happens"]],
+    ["How many 4-week periods fit into 52 weeks?", "13", ["10", "12", "13", "14"]],
+    ["Why can every-4-weeks billing happen 13 times in a year?", "52 weeks divided by 4 is 13", ["52 weeks divided by 4 is 13", "A year has 13 months", "A week has 13 days", "February has 13 days"]],
+  ];
+  const [question, answer, options] = calendarRandomChoice(facts);
+  return calendarBuildEntry({ question, answer, options, difficulty: level, family: "four-weeks-vs-monthly" });
+}
+
+function calendarGenerateAdvancedRecurringEvent(level) {
+  const year = 2025;
+  const interval = calendarRandomChoice([15, 20, 30]);
+  const occurrence = calendarRandomChoice([4, 5, 6]);
+  const elapsed = interval * (occurrence - 1);
+  const answerDate = calendarAddDaysToDate(year, 0, 1, elapsed);
+  const answer = calendarFormatFullDate(answerDate.year, answerDate.monthIndex, answerDate.day);
+  return calendarBuildGeneratedEntry({
+    question: `An event happens every ${interval} days starting January 1, ${year}. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
+    answer,
+    distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, true),
+    difficulty: level,
+    family: "advanced-recurring-event",
+  });
+}
+
+function calendarMakeChoiceOptions(answer, candidates) {
+  return calendarBuildOptions(answer, candidates);
 }
 
 function calendarBuildOptions(answer, candidates) {
-  const options = [String(answer)];
-  const uniqueCandidates = Array.from(new Set(candidates.map(String))).filter((candidate) => candidate !== String(answer));
-  const shuffledCandidates = calendarShuffle(uniqueCandidates);
+  const normalizedAnswer = String(answer);
+  const options = [normalizedAnswer];
+  const uniqueCandidates = calendarShuffle(calendarUniqueStrings(candidates || []).filter((candidate) => candidate !== normalizedAnswer));
 
-  while (options.length < 4 && shuffledCandidates.length) {
-    options.push(shuffledCandidates.shift());
+  while (options.length < 4 && uniqueCandidates.length) {
+    options.push(uniqueCandidates.shift());
   }
 
+  let fallbackIndex = 1;
   while (options.length < 4) {
-    const fallback = `${answer} ${options.length}`;
+    const fallback = `${normalizedAnswer} (${fallbackIndex})`;
     if (!options.includes(fallback)) {
       options.push(fallback);
     }
+    fallbackIndex += 1;
   }
 
   return calendarShuffle(options);
+}
+
+function calendarDayDistractors(answer) {
+  return CALENDAR_DAY_NAMES.filter((day) => day !== answer);
+}
+
+function calendarMonthDistractors(answer) {
+  return CALENDAR_MONTHS.map((month) => month.name).filter((month) => month !== answer);
+}
+
+function calendarBuildDateDistractors(year, monthIndex, day, includeYear) {
+  return [-2, -1, 1, 2, 3, -3].map((offset) => {
+    const date = calendarAddDaysToDate(year, monthIndex, day, offset);
+    return includeYear
+      ? calendarFormatFullDate(date.year, date.monthIndex, date.day)
+      : calendarFormatMonthDay(date.monthIndex, date.day);
+  });
+}
+
+function calendarNearbyNumbers(answer, candidates) {
+  return calendarUniqueStrings(candidates.map((candidate) => String(Math.max(1, Number(candidate)))));
+}
+
+function calendarAddDaysToDate(year, monthIndex, day, delta) {
+  const date = new Date(Date.UTC(year, monthIndex, day + delta));
+  return {
+    year: date.getUTCFullYear(),
+    monthIndex: date.getUTCMonth(),
+    day: date.getUTCDate(),
+  };
+}
+
+function calendarDaysInMonth(year, monthIndex) {
+  return new Date(Date.UTC(year, monthIndex + 1, 0)).getUTCDate();
+}
+
+function calendarFormatMonthDay(monthIndex, day) {
+  return `${CALENDAR_MONTHS[monthIndex].name} ${day}`;
+}
+
+function calendarFormatFullDate(year, monthIndex, day) {
+  return `${CALENDAR_MONTHS[monthIndex].name} ${day}, ${year}`;
 }
 
 function calendarFormatOrdinal(day) {
@@ -772,34 +793,30 @@ function calendarFormatOrdinal(day) {
   return `${day}${suffixes[day % 10] ?? "th"}`;
 }
 
-function calendarAddDays(monthIndex, day, delta) {
-  let currentMonth = monthIndex;
-  let currentDay = day + delta;
-
-  while (currentDay > CALENDAR_MONTHS[currentMonth].days) {
-    currentDay -= CALENDAR_MONTHS[currentMonth].days;
-    currentMonth = (currentMonth + 1) % CALENDAR_MONTHS.length;
-  }
-
-  while (currentDay < 1) {
-    currentMonth = (currentMonth - 1 + CALENDAR_MONTHS.length) % CALENDAR_MONTHS.length;
-    currentDay += CALENDAR_MONTHS[currentMonth].days;
-  }
-
-  return { monthIndex: currentMonth, day: currentDay };
-}
-
-function calendarFormatDate(monthIndex, day) {
-  return `${CALENDAR_MONTHS[monthIndex].name} ${day}`;
-}
-
 function calendarClampDifficulty(difficulty) {
   const value = Number(difficulty);
   if (!Number.isInteger(value)) {
     return 1;
   }
 
-  return Math.min(5, Math.max(1, value));
+  return Math.min(10, Math.max(1, value));
+}
+
+function calendarDayName(index) {
+  return CALENDAR_DAY_NAMES[calendarWrap(index, CALENDAR_DAY_NAMES.length)];
+}
+
+function calendarWrap(value, size) {
+  return ((value % size) + size) % size;
+}
+
+function calendarTitleCase(value) {
+  const text = String(value);
+  return `${text.slice(0, 1).toUpperCase()}${text.slice(1)}`;
+}
+
+function calendarUniqueStrings(values) {
+  return Array.from(new Set(values.map((value) => String(value))));
 }
 
 function calendarRandomChoice(values) {

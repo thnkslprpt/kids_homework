@@ -22,7 +22,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "china",
     "continent": "Asia",
     "choiceGroup": "East Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "cn"
@@ -46,7 +46,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "indonesia",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "id"
@@ -70,7 +70,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "nigeria",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "africa",
     "ids": [
       "ng"
@@ -94,7 +94,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "bangladesh",
     "continent": "Asia",
     "choiceGroup": "South Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "bd"
@@ -118,7 +118,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "ethiopia",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "africa",
     "ids": [
       "et"
@@ -142,7 +142,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "japan",
     "continent": "Asia",
     "choiceGroup": "East Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "jp"
@@ -166,7 +166,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "philippines",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "ph"
@@ -178,7 +178,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "dr-congo",
     "continent": "Africa",
     "choiceGroup": "Central Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "cd"
@@ -202,7 +202,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "iran",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "asia",
     "ids": [
       "ir"
@@ -214,7 +214,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "turkey",
     "continent": "Europe / Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "tr"
@@ -226,7 +226,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "germany",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "europe",
     "ids": [
       "de"
@@ -250,7 +250,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "thailand",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "th"
@@ -274,7 +274,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "france",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "europe",
     "ids": [
       "fr"
@@ -298,7 +298,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "italy",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "europe",
     "ids": [
       "it"
@@ -322,7 +322,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "myanmar",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "asia",
     "ids": [
       "mm"
@@ -334,7 +334,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "colombia",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "americas",
     "ids": [
       "co"
@@ -346,7 +346,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "sudan",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "sd"
@@ -358,7 +358,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "uganda",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "ug"
@@ -382,7 +382,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "algeria",
     "continent": "Africa",
     "choiceGroup": "North Africa",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "africa",
     "ids": [
       "dz"
@@ -394,7 +394,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "iraq",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "iq"
@@ -418,7 +418,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "argentina",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "americas",
     "ids": [
       "ar"
@@ -430,7 +430,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "afghanistan",
     "continent": "Asia",
     "choiceGroup": "South Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "asia",
     "ids": [
       "af"
@@ -442,7 +442,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "yemen",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "asia",
     "ids": [
       "ye"
@@ -467,7 +467,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "angola",
     "continent": "Africa",
     "choiceGroup": "Southern Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "ao"
@@ -479,7 +479,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "ukraine",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "europe",
     "ids": [
       "ua"
@@ -491,7 +491,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "morocco",
     "continent": "Africa",
     "choiceGroup": "North Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "ma"
@@ -503,7 +503,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "poland",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "europe",
     "ids": [
       "pl"
@@ -515,7 +515,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "uzbekistan",
     "continent": "Asia",
     "choiceGroup": "Central Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "uz"
@@ -527,7 +527,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "mozambique",
     "continent": "Africa",
     "choiceGroup": "Southern Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "mz"
@@ -539,7 +539,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "malaysia",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "my"
@@ -551,7 +551,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "ghana",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "gh"
@@ -563,7 +563,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "saudi-arabia",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 1,
+    "minDifficulty": 2,
     "source": "asia",
     "ids": [
       "sa"
@@ -575,7 +575,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "peru",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "americas",
     "ids": [
       "pe"
@@ -587,7 +587,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "madagascar",
     "continent": "Africa",
     "choiceGroup": "Southern Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "mg"
@@ -599,7 +599,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "cote-d-ivoire",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "africa",
     "ids": [
       "ci"
@@ -611,7 +611,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "cameroon",
     "continent": "Africa",
     "choiceGroup": "Central Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "cm"
@@ -623,7 +623,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "nepal",
     "continent": "Asia",
     "choiceGroup": "South Asia",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "asia",
     "ids": [
       "np"
@@ -635,7 +635,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "niger",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "ne"
@@ -647,7 +647,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "venezuela",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "americas",
     "ids": [
       "ve"
@@ -671,7 +671,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "north-korea",
     "continent": "Asia",
     "choiceGroup": "East Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "kp"
@@ -683,7 +683,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "syria",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "asia",
     "ids": [
       "sy"
@@ -695,7 +695,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "mali",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "ml"
@@ -707,7 +707,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "burkina-faso",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "bf"
@@ -719,7 +719,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "sri-lanka",
     "continent": "Asia",
     "choiceGroup": "South Asia",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "asia",
     "ids": [
       "lk"
@@ -731,7 +731,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "taiwan",
     "continent": "Asia",
     "choiceGroup": "East Asia",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "asia",
     "ids": [
       "tw"
@@ -743,7 +743,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "malawi",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "africa",
     "ids": [
       "mw"
@@ -755,7 +755,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "zambia",
     "continent": "Africa",
     "choiceGroup": "Southern Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "africa",
     "ids": [
       "zm"
@@ -767,7 +767,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "chad",
     "continent": "Africa",
     "choiceGroup": "Central Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "td"
@@ -779,7 +779,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "kazakhstan",
     "continent": "Asia",
     "choiceGroup": "Central Asia",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "asia",
     "ids": [
       "kz"
@@ -791,7 +791,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "somalia",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "so"
@@ -803,7 +803,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "chile",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "americas",
     "ids": [
       "cl"
@@ -815,7 +815,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "senegal",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "sn"
@@ -827,7 +827,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "guatemala",
     "continent": "North America",
     "choiceGroup": "Central America",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "americas",
     "ids": [
       "gt"
@@ -839,7 +839,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "romania",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "europe",
     "ids": [
       "ro"
@@ -851,7 +851,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "netherlands",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "europe",
     "ids": [
       "nl"
@@ -863,7 +863,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "ecuador",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "americas",
     "ids": [
       "ec"
@@ -875,7 +875,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "cambodia",
     "continent": "Asia",
     "choiceGroup": "Southeast Asia",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "asia",
     "ids": [
       "kh"
@@ -887,7 +887,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "zimbabwe",
     "continent": "Africa",
     "choiceGroup": "Southern Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "africa",
     "ids": [
       "zw"
@@ -899,7 +899,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "guinea",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "gn"
@@ -911,7 +911,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "benin",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "africa",
     "ids": [
       "bj"
@@ -923,7 +923,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "rwanda",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "africa",
     "ids": [
       "rw"
@@ -935,7 +935,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "burundi",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 4,
+    "minDifficulty": 9,
     "source": "africa",
     "ids": [
       "bi"
@@ -947,7 +947,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "bolivia",
     "continent": "South America",
     "choiceGroup": "South America",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "americas",
     "ids": [
       "bo"
@@ -959,7 +959,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "south-sudan",
     "continent": "Africa",
     "choiceGroup": "East Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "ss"
@@ -971,7 +971,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "tunisia",
     "continent": "Africa",
     "choiceGroup": "North Africa",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "africa",
     "ids": [
       "tn"
@@ -983,7 +983,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "haiti",
     "continent": "North America",
     "choiceGroup": "Caribbean",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "americas",
     "ids": [
       "ht"
@@ -995,7 +995,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "belgium",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "europe",
     "ids": [
       "be"
@@ -1007,7 +1007,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "dominican-republic",
     "continent": "North America",
     "choiceGroup": "Caribbean",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "americas",
     "ids": [
       "do"
@@ -1019,7 +1019,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "jordan",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "asia",
     "ids": [
       "jo"
@@ -1031,7 +1031,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "united-arab-emirates",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 4,
+    "minDifficulty": 8,
     "source": "asia",
     "ids": [
       "ae"
@@ -1043,7 +1043,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "honduras",
     "continent": "North America",
     "choiceGroup": "Central America",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "americas",
     "ids": [
       "hn"
@@ -1055,7 +1055,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "tajikistan",
     "continent": "Asia",
     "choiceGroup": "Central Asia",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "asia",
     "ids": [
       "tj"
@@ -1067,7 +1067,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "papua-new-guinea",
     "continent": "Oceania",
     "choiceGroup": "Oceania",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "oceania-png",
     "ids": [
       "Papua_1_"
@@ -1079,7 +1079,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "cuba",
     "continent": "North America",
     "choiceGroup": "Caribbean",
-    "minDifficulty": 2,
+    "minDifficulty": 3,
     "source": "americas",
     "ids": [
       "cu"
@@ -1091,7 +1091,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "sweden",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 2,
+    "minDifficulty": 4,
     "source": "europe",
     "ids": [
       "se"
@@ -1103,7 +1103,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "czechia",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 4,
+    "minDifficulty": 8,
     "source": "europe",
     "ids": [
       "cz"
@@ -1115,7 +1115,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "azerbaijan",
     "continent": "Asia",
     "choiceGroup": "Central Asia",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "asia",
     "ids": [
       "az"
@@ -1127,7 +1127,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "portugal",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "europe",
     "ids": [
       "pt"
@@ -1139,7 +1139,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "togo",
     "continent": "Africa",
     "choiceGroup": "West Africa",
-    "minDifficulty": 4,
+    "minDifficulty": 8,
     "source": "africa",
     "ids": [
       "tg"
@@ -1151,7 +1151,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "greece",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 3,
+    "minDifficulty": 5,
     "source": "europe",
     "ids": [
       "gr"
@@ -1163,7 +1163,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "israel",
     "continent": "Asia",
     "choiceGroup": "Middle East",
-    "minDifficulty": 5,
+    "minDifficulty": 10,
     "source": "asia",
     "ids": [
       "il"
@@ -1175,7 +1175,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "hungary",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "europe",
     "ids": [
       "hu"
@@ -1187,7 +1187,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "austria",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 4,
+    "minDifficulty": 8,
     "source": "europe",
     "ids": [
       "at"
@@ -1199,7 +1199,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "switzerland",
     "continent": "Europe",
     "choiceGroup": "Europe",
-    "minDifficulty": 4,
+    "minDifficulty": 7,
     "source": "europe",
     "ids": [
       "ch"
@@ -1211,7 +1211,7 @@ const GEOGRAPHY_MAP_COUNTRIES = [
     "slug": "libya",
     "continent": "Africa",
     "choiceGroup": "North Africa",
-    "minDifficulty": 3,
+    "minDifficulty": 6,
     "source": "africa",
     "ids": [
       "ly"

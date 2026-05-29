@@ -9,7 +9,7 @@ const POPULATION_QUESTIONS = [
     question: "About how many people live in China?",
     options: ["About 800 million", "About 1 billion", "About 1.4 billion", "About 1.8 billion"],
     answer: "About 1.4 billion",
-    difficulty: 1,
+    difficulty: 2,
   },
   {
     question: "About how many people live in Israel?",
@@ -21,115 +21,115 @@ const POPULATION_QUESTIONS = [
     question: "About how many people live in Indonesia?",
     options: ["About 70 million", "About 150 million", "About 290 million", "About 600 million"],
     answer: "About 290 million",
-    difficulty: 1,
+    difficulty: 2,
   },
   {
     question: "About how many people live in Pakistan?",
     options: ["About 80 million", "About 140 million", "About 260 million", "About 500 million"],
     answer: "About 260 million",
-    difficulty: 2,
+    difficulty: 3,
   },
   {
     question: "About how many people live in Nigeria?",
     options: ["About 60 million", "About 130 million", "About 240 million", "About 430 million"],
     answer: "About 240 million",
-    difficulty: 2,
+    difficulty: 4,
   },
   {
     question: "About how many people live in Brazil?",
     options: ["About 50 million", "About 110 million", "About 210 million", "About 410 million"],
     answer: "About 210 million",
-    difficulty: 2,
+    difficulty: 3,
   },
   {
     question: "About how many people live in Bangladesh?",
     options: ["About 40 million", "About 100 million", "About 180 million", "About 350 million"],
     answer: "About 180 million",
-    difficulty: 2,
+    difficulty: 4,
   },
   {
     question: "About how many people live in Russia?",
     options: ["About 30 million", "About 80 million", "About 140 million", "About 280 million"],
     answer: "About 140 million",
-    difficulty: 3,
+    difficulty: 5,
   },
   {
     question: "About how many people live in Ethiopia?",
     options: ["About 20 million", "About 70 million", "About 140 million", "About 260 million"],
     answer: "About 140 million",
-    difficulty: 3,
+    difficulty: 6,
   },
   {
     question: "About how many people live in Mexico?",
     options: ["About 40 million", "About 90 million", "About 130 million", "About 250 million"],
     answer: "About 130 million",
-    difficulty: 3,
+    difficulty: 5,
   },
   {
     question: "About how many people live in Japan?",
     options: ["About 30 million", "About 70 million", "About 120 million", "About 230 million"],
     answer: "About 120 million",
-    difficulty: 3,
+    difficulty: 6,
   },
   {
     question: "About how many people live in Egypt?",
     options: ["About 20 million", "About 60 million", "About 120 million", "About 220 million"],
     answer: "About 120 million",
-    difficulty: 4,
+    difficulty: 7,
   },
   {
     question: "About how many people live in the Philippines?",
     options: ["About 20 million", "About 80 million", "About 120 million", "About 240 million"],
     answer: "About 120 million",
-    difficulty: 4,
+    difficulty: 8,
   },
   {
     question: "About how many people live in the Democratic Republic of the Congo?",
     options: ["About 30 million", "About 70 million", "About 120 million", "About 230 million"],
     answer: "About 120 million",
-    difficulty: 4,
+    difficulty: 7,
   },
   {
     question: "About how many people live in Vietnam?",
     options: ["About 20 million", "About 50 million", "About 100 million", "About 200 million"],
     answer: "About 100 million",
-    difficulty: 4,
+    difficulty: 8,
   },
   {
     question: "About how many people live in Iran?",
     options: ["About 10 million", "About 40 million", "About 90 million", "About 170 million"],
     answer: "About 90 million",
-    difficulty: 5,
+    difficulty: 9,
   },
   {
     question: "About how many people live in Turkey?",
     options: ["About 20 million", "About 50 million", "About 90 million", "About 190 million"],
     answer: "About 90 million",
-    difficulty: 5,
+    difficulty: 10,
   },
   {
     question: "About how many people live in Germany?",
     options: ["About 20 million", "About 40 million", "About 80 million", "About 170 million"],
     answer: "About 80 million",
-    difficulty: 5,
+    difficulty: 9,
   },
   {
     question: "About how many people live in Tanzania?",
     options: ["About 10 million", "About 30 million", "About 70 million", "About 150 million"],
     answer: "About 70 million",
-    difficulty: 5,
+    difficulty: 10,
   },
   {
     question: "About how many people live in Jordan?",
     options: ["About 4 million", "About 11 million", "About 30 million", "About 70 million"],
     answer: "About 11 million",
-    difficulty: 5,
+    difficulty: 9,
   },
   {
     question: "About how many people live in Lebanon?",
     options: ["About 2 million", "About 6 million", "About 20 million", "About 50 million"],
     answer: "About 6 million",
-    difficulty: 5,
+    difficulty: 10,
   },
 ];
 
@@ -145,7 +145,7 @@ POPULATION_QUESTIONS.push(
       question: "About how many people live in South Korea?",
       options: ["About 20 million", "About 50 million", "About 100 million", "About 200 million"],
       answer: "About 50 million",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "About how many people live in Colombia?",
@@ -157,103 +157,103 @@ POPULATION_QUESTIONS.push(
       question: "About how many people live in South Africa?",
       options: ["About 20 million", "About 60 million", "About 130 million", "About 250 million"],
       answer: "About 60 million",
-      difficulty: 1,
+      difficulty: 2,
     },
     {
       question: "About how many people live in Sudan?",
       options: ["About 20 million", "About 50 million", "About 100 million", "About 220 million"],
       answer: "About 50 million",
-      difficulty: 2,
+      difficulty: 3,
     },
     {
       question: "About how many people live in Algeria?",
       options: ["About 20 million", "About 50 million", "About 110 million", "About 210 million"],
       answer: "About 50 million",
-      difficulty: 2,
+      difficulty: 4,
     },
     {
       question: "About how many people live in Canada?",
       options: ["About 10 million", "About 40 million", "About 100 million", "About 220 million"],
       answer: "About 40 million",
-      difficulty: 2,
+      difficulty: 3,
     },
     {
       question: "About how many people live in Poland?",
       options: ["About 10 million", "About 40 million", "About 90 million", "About 180 million"],
       answer: "About 40 million",
-      difficulty: 2,
+      difficulty: 4,
     },
     {
       question: "About how many people live in Morocco?",
       options: ["About 10 million", "About 40 million", "About 90 million", "About 170 million"],
       answer: "About 40 million",
-      difficulty: 3,
+      difficulty: 5,
     },
     {
       question: "About how many people live in Saudi Arabia?",
       options: ["About 10 million", "About 40 million", "About 90 million", "About 200 million"],
       answer: "About 40 million",
-      difficulty: 3,
+      difficulty: 6,
     },
     {
       question: "About how many people live in Uzbekistan?",
       options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
       answer: "About 40 million",
-      difficulty: 3,
+      difficulty: 5,
     },
     {
       question: "About how many people live in Peru?",
       options: ["About 10 million", "About 30 million", "About 70 million", "About 150 million"],
       answer: "About 30 million",
-      difficulty: 3,
+      difficulty: 6,
     },
     {
       question: "About how many people live in Malaysia?",
       options: ["About 10 million", "About 30 million", "About 70 million", "About 140 million"],
       answer: "About 30 million",
-      difficulty: 4,
+      difficulty: 7,
     },
     {
       question: "About how many people live in Venezuela?",
       options: ["About 10 million", "About 30 million", "About 70 million", "About 140 million"],
       answer: "About 30 million",
-      difficulty: 4,
+      difficulty: 8,
     },
     {
       question: "About how many people live in Afghanistan?",
       options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
       answer: "About 40 million",
-      difficulty: 4,
+      difficulty: 7,
     },
     {
       question: "About how many people live in Yemen?",
       options: ["About 10 million", "About 40 million", "About 80 million", "About 170 million"],
       answer: "About 40 million",
-      difficulty: 4,
+      difficulty: 8,
     },
     {
       question: "About how many people live in Uganda?",
       options: ["About 20 million", "About 50 million", "About 100 million", "About 220 million"],
       answer: "About 50 million",
-      difficulty: 5,
+      difficulty: 9,
     },
     {
       question: "About how many people live in Australia?",
       options: ["About 10 million", "About 30 million", "About 80 million", "About 150 million"],
       answer: "About 30 million",
-      difficulty: 5,
+      difficulty: 10,
     },
     {
       question: "About how many people live in Kenya?",
       options: ["About 20 million", "About 50 million", "About 100 million", "About 200 million"],
       answer: "About 50 million",
-      difficulty: 5,
+      difficulty: 9,
     },
     {
       question: "About how many people live in Iraq?",
       options: ["About 10 million", "About 40 million", "About 80 million", "About 160 million"],
       answer: "About 40 million",
-      difficulty: 5,
+      difficulty: 10,
     },
   ]
 );
@@ -307,7 +307,7 @@ const POPULATION_GENERATION_DATA = [
 const POPULATION_QUESTION_COUNTRY_ALIASES = {
   "democratic republic of the congo": "DR Congo",
 };
-const POPULATION_MAX_DIFFICULTY = 3;
+const POPULATION_MAX_DIFFICULTY = 10;
 const POPULATION_ESTIMATE_MIN_OPTION_GAP_RATIO = 0.4;
 const POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS = [
   0.08,
@@ -327,7 +327,7 @@ const POPULATION_ESTIMATE_FALLBACK_MULTIPLIERS = [
 ];
 
 function createPopulationGeneratedEntry(difficulty) {
-  const level = Math.min(clampDifficulty(difficulty), POPULATION_MAX_DIFFICULTY);
+  const level = clampDifficulty(difficulty);
   const questionType = pickPopulationQuestionType(level);
 
   if (questionType === "compare") {
@@ -554,11 +554,11 @@ function normalizePopulationEstimateQuestionSet() {
 }
 
 function pickPopulationQuestionType(difficulty) {
-  if (difficulty <= 2) {
+  if (difficulty <= 4) {
     return randomChoiceLocal(["estimate", "compare", "estimate"]);
   }
 
-  if (difficulty === 3) {
+  if (difficulty <= 6) {
     return randomChoiceLocal(["estimate", "compare", "closest"]);
   }
 
@@ -584,26 +584,26 @@ function pickTwoPopulationEntries(difficulty) {
 }
 
 function difficultyMatchesPopulation(entry, difficulty) {
-  if (difficulty <= 2) {
+  if (difficulty <= 4) {
     return entry.population >= 60_000_000;
   }
-  if (difficulty === 3) {
+  if (difficulty <= 6) {
     return entry.population >= 10_000_000 && entry.population <= 160_000_000;
   }
   return entry.population <= 120_000_000;
 }
 
 function roundPopulationForDifficulty(population, difficulty) {
-  if (difficulty <= 1) {
+  if (difficulty <= 2) {
     return Math.round(population / 10_000_000) * 10_000_000;
   }
-  if (difficulty === 2) {
+  if (difficulty <= 4) {
     return Math.round(population / 5_000_000) * 5_000_000;
   }
-  if (difficulty === 3) {
+  if (difficulty <= 6) {
     return Math.round(population / 2_000_000) * 2_000_000;
   }
-  if (difficulty === 4) {
+  if (difficulty <= 8) {
     return Math.round(population / 1_000_000) * 1_000_000;
   }
   return Math.round(population / 500_000) * 500_000;
@@ -697,5 +697,5 @@ function clampDifficulty(value) {
   if (!Number.isInteger(numeric)) {
     return 3;
   }
-  return Math.min(5, Math.max(1, numeric));
+  return Math.min(10, Math.max(1, numeric));
 }

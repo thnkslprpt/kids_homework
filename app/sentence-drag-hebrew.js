@@ -76,11 +76,6 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     return values[Math.floor(Math.random() * values.length)];
   }
 
-  function pickDistinct(values, count) {
-    const shuffled = shuffleArray(values);
-    return shuffled.slice(0, count);
-  }
-
   function materializeBlueprint(blueprint, fallbackDifficulty = 3) {
     const choices = uniqueStrings([
       ...blueprint.answer,
@@ -641,6 +636,16 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
   };
 })();
 
-function createSentenceDragHebrewGeneratedEntry(difficulty) {
+globalThis.SENTENCE_DRAG_HEBREW_DATA = SENTENCE_DRAG_HEBREW_DATA;
+
+function createHebrewSentenceDragGeneratedEntry(difficulty) {
   return SENTENCE_DRAG_HEBREW_DATA.createGeneratedEntry(difficulty);
 }
+
+globalThis.createHebrewSentenceDragGeneratedEntry = createHebrewSentenceDragGeneratedEntry;
+
+function createSentenceDragHebrewGeneratedEntry(difficulty) {
+  return createHebrewSentenceDragGeneratedEntry(difficulty);
+}
+
+globalThis.createSentenceDragHebrewGeneratedEntry = createSentenceDragHebrewGeneratedEntry;

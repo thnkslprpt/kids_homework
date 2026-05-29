@@ -15,6 +15,9 @@
           <div id="user-selector" class="user-selector" role="group" aria-label="Student"></div>
         </div>
         <form id="start-form" class="start-form">
+          <input id="hebrew-only" name="hebrewOnly" type="hidden" value="false">
+          <input id="specialty-words-only" name="specialtyWordsOnly" type="hidden" value="false">
+
           <div class="start-fields">
             <label class="field question-count-field">
               <span>How many questions?</span>
@@ -23,32 +26,6 @@
                 <button type="button" class="question-count-button" data-question-count="20" aria-pressed="false">20</button>
                 <button type="button" class="question-count-button active" data-question-count="30" aria-pressed="true">30</button>
                 <button type="button" class="question-count-button" data-question-count="40" aria-pressed="false">40</button>
-              </div>
-            </label>
-
-            <label class="field session-mode-field" aria-label="Session mode">
-              <span id="session-mode-label">Session Mode</span>
-              <input id="hebrew-only" name="hebrewOnly" type="hidden" value="false">
-              <input id="specialty-words-only" name="specialtyWordsOnly" type="hidden" value="false">
-              <div class="session-mode-selector" role="group" aria-label="Session mode">
-                <button
-                  id="hebrew-only-button"
-                  type="button"
-                  class="session-mode-button"
-                  aria-pressed="false"
-                >
-                  Hebrew Only
-                </button>
-                <button
-                  id="specialty-words-button"
-                  type="button"
-                  class="specialty-words-button"
-                  aria-pressed="false"
-                  aria-label="Use only specialty Hebrew word lists"
-                  hidden
-                >
-                  <span aria-hidden="true">★</span>
-                </button>
               </div>
             </label>
 
@@ -75,39 +52,10 @@
 
           <div id="session-builder" class="session-builder">
             <div class="builder-row builder-presets" aria-label="Session preset">
-              <button type="button" class="builder-preset-button active" data-session-preset="balanced" aria-pressed="true">Balanced</button>
-              <button type="button" class="builder-preset-button" data-session-preset="adaptive" aria-pressed="false">Adaptive</button>
-              <button type="button" class="builder-preset-button" data-session-preset="math-heavy" aria-pressed="false">Math Heavy</button>
-              <button type="button" class="builder-preset-button" data-session-preset="custom" aria-pressed="false">Custom</button>
+              <button type="button" class="builder-preset-button active" data-session-preset="adaptive" aria-pressed="true">Adaptive</button>
+              <button type="button" class="builder-preset-button" data-session-preset="math-heavy" aria-pressed="false">Math</button>
+              <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew" aria-pressed="false">Hebrew</button>
             </div>
-
-            <div class="builder-row builder-options">
-              <label class="builder-select-field">
-                <span>Min Level</span>
-                <select id="difficulty-min" name="difficultyMin">
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                  <option value="6">6</option>
-                  <option value="7">7</option>
-                </select>
-              </label>
-              <button
-                id="adaptive-review-button"
-                type="button"
-                class="builder-toggle-button active"
-                aria-pressed="true"
-              >
-                Adaptive Review
-              </button>
-              <button id="category-reset-button" type="button" class="builder-toggle-button">
-                Reset Topics
-              </button>
-            </div>
-
-            <div id="category-builder-grid" class="category-builder-grid" aria-label="Topics"></div>
           </div>
 
           <button type="submit" class="primary-button">Start Homework</button>
@@ -126,6 +74,15 @@
           </div>
           <div class="status-card score-card">
             <p id="score-text" class="status-value">0/0</p>
+          </div>
+        </div>
+        <div id="speed-timer" class="speed-timer" aria-live="off" hidden>
+          <div class="speed-timer-meta">
+            <span>Speed Round</span>
+            <strong id="speed-timer-text">10</strong>
+          </div>
+          <div class="speed-timer-track" aria-hidden="true">
+            <span id="speed-timer-fill" class="speed-timer-fill"></span>
           </div>
         </div>
 
@@ -225,10 +182,8 @@
     <script src="app/category-drag-questions.js"></script>
     <script src="app/sentence-drag-english.js"></script>
     <script src="app/sentence-drag-hebrew.js"></script>
-    <script src="app/sentence-drag-questions.js"></script>
     <script src="app/vocabulary-grammar-questions.js"></script>
     <script src="app/adult-hebrew-module.js"></script>
-    <script src="app/avi-hebrew-module.js"></script>
     <script src="app/app.js"></script>
   </body>
 </html>

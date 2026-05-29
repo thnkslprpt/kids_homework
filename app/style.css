@@ -146,7 +146,7 @@ h2 {
 
 .user-selector {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -180,9 +180,13 @@ h2 {
 }
 
 .user-card-name {
+  display: block;
+  width: 100%;
+  justify-self: center;
   font-weight: 800;
   font-size: 1rem;
   line-height: 1.2;
+  text-align: center;
 }
 
 .user-avatar-svg {
@@ -193,7 +197,7 @@ h2 {
 
 .start-fields {
   display: grid;
-  grid-template-columns: max-content max-content max-content;
+  grid-template-columns: max-content max-content;
   gap: 20px;
   align-items: end;
   justify-content: space-between;
@@ -201,12 +205,8 @@ h2 {
 
 .session-builder {
   display: grid;
-  gap: 14px;
+  gap: 10px;
   margin: 20px 0 4px;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid rgba(39, 73, 114, 0.1);
-  background: rgba(255, 255, 255, 0.7);
 }
 
 .session-builder.disabled {
@@ -218,6 +218,16 @@ h2 {
   flex-wrap: wrap;
   gap: 10px;
   align-items: center;
+}
+
+.builder-presets {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.session-builder [hidden] {
+  display: none !important;
 }
 
 .builder-preset-button,
@@ -942,6 +952,46 @@ button:disabled {
 .progress-box.current {
   border-color: rgba(20, 108, 148, 0.5);
   box-shadow: 0 0 0 2px rgba(20, 108, 148, 0.12);
+}
+
+.speed-timer {
+  margin: -10px 0 20px;
+  padding: 12px 14px 14px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(39, 73, 114, 0.1);
+}
+
+.speed-timer-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+
+.speed-timer-meta strong {
+  min-width: 2ch;
+  text-align: right;
+  font-size: 1.25rem;
+}
+
+.speed-timer-track {
+  height: 12px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: rgba(20, 108, 148, 0.12);
+}
+
+.speed-timer-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin-left: auto;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #f0ab63, #71c78b);
 }
 
 .feedback-banner {

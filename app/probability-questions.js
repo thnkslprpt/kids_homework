@@ -1,780 +1,911 @@
+function probabilityClampDifficulty(value) {
+  const level = Number.parseInt(value, 10);
+  if (!Number.isFinite(level)) {
+    return 3;
+  }
+  return Math.max(1, Math.min(10, level));
+}
+
+function probabilityRandomInt(min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+
+function probabilityRandomChoice(values) {
+  return values[Math.floor(Math.random() * values.length)];
+}
+
+function probabilityShuffleArray(values) {
+  const copy = [...values];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+function probabilityUniqueStrings(values) {
+  return Array.from(new Set(values.map((value) => String(value))));
+}
+
+function probabilityGreatestCommonDivisor(left, right) {
+  let a = Math.abs(Number(left));
+  let b = Math.abs(Number(right));
+  while (b) {
+    const next = a % b;
+    a = b;
+    b = next;
+  }
+  return a || 1;
+}
+
+function probabilityFormatFraction(numerator, denominator) {
+  if (numerator === 0) {
+    return "0";
+  }
+  if (numerator === denominator) {
+    return "1";
+  }
+  const divisor = probabilityGreatestCommonDivisor(numerator, denominator);
+  return `${numerator / divisor}/${denominator / divisor}`;
+}
+
+function probabilityFormatPercent(numerator, denominator) {
+  const percent = (numerator / denominator) * 100;
+  return `${Number.isInteger(percent) ? percent : percent.toFixed(1)}%`;
+}
+
+function probabilityMakeOptions(answer, distractors) {
+  const normalizedAnswer = String(answer);
+  const fallbackDistractors = [
+    "0",
+    "1/10",
+    "1/8",
+    "1/6",
+    "1/5",
+    "1/4",
+    "1/3",
+    "1/2",
+    "2/3",
+    "3/4",
+    "5/6",
+    "1",
+    "10%",
+    "20%",
+    "25%",
+    "30%",
+    "40%",
+    "50%",
+    "60%",
+    "75%",
+    "90%",
+    "Impossible",
+    "Unlikely",
+    "Equally likely",
+    "Likely",
+    "Certain",
+    "Not enough information",
+  ];
+  const options = probabilityUniqueStrings([normalizedAnswer, ...distractors, ...fallbackDistractors])
+    .filter((option) => option !== "" && option !== normalizedAnswer)
+    .slice(0, 3);
+  const allOptions = probabilityUniqueStrings([normalizedAnswer, ...options]);
+
+  if (allOptions.length !== 4 || !allOptions.includes(normalizedAnswer)) {
+    throw new Error(`Probability question must have exactly 4 unique choices: ${normalizedAnswer}`);
+  }
+
+  return probabilityShuffleArray(allOptions);
+}
+
+function probabilityStaticQuestion(question, answer, distractors, difficulty, displayText = "") {
+  const entry = {
+    question: String(question),
+    options: probabilityMakeOptions(answer, distractors),
+    answer: String(answer),
+    difficulty: probabilityClampDifficulty(difficulty),
+  };
+
+  if (displayText) {
+    entry.displayText = String(displayText);
+  }
+
+  return entry;
+}
+
 const PROBABILITY_QUESTIONS = [
-  {
-    question: "A bag has 5 red marbles and 1 blue marble. Which color are you more likely to pick?",
-    options: ["Red", "Blue", "Both are equally likely", "Neither color can be picked"],
-    answer: "Red",
-    difficulty: 1,
-  },
-  {
-    question: "A spinner has 4 equal parts and only 1 part is green. What is the chance of landing on green?",
-    options: ["1/2", "1/3", "1/4", "1/5"],
-    answer: "1/4",
-    difficulty: 1,
-  },
-  {
-    question: "Which result is impossible on a standard 6-sided die?",
-    options: ["2", "4", "6", "7"],
-    answer: "7",
-    difficulty: 2,
-  },
-  {
-    question: "If you flip a fair coin once, what is true?",
-    options: [
-      "Heads is more likely",
-      "Tails is more likely",
-      "Heads and tails are equally likely",
-      "Neither heads nor tails can happen",
-    ],
-    answer: "Heads and tails are equally likely",
-    difficulty: 2,
-  },
-  {
-    question: "A basket has 3 apples and 3 oranges. Which is true if you pick 1 fruit without looking?",
-    options: [
-      "Apple is more likely",
-      "Orange is more likely",
-      "Apple and orange are equally likely",
-      "Neither fruit can be picked",
-    ],
-    answer: "Apple and orange are equally likely",
-    difficulty: 3,
-  },
-  {
-    question: "Which is more likely?",
-    options: [
-      "Picking blue from a bag with 8 blue and 2 red marbles",
+  // Level 1: likely, unlikely, certain, impossible, and one-step chance language.
+  probabilityStaticQuestion(
+    "A bag has 5 red marbles and 1 blue marble. Which color are you more likely to pick?",
+    "Red",
+    ["Blue", "Both are equally likely", "Neither color can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 4 equal parts and only 1 part is green. What is the chance of landing on green?",
+    "1/4",
+    ["1/2", "1/3", "1/5"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 yellow marbles and 4 green marbles. Which color is more likely to be picked?",
+    "They are equally likely",
+    ["Yellow", "Green", "Neither can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 3 red parts and 1 blue part. Which color is more likely?",
+    "Red",
+    ["Blue", "They are equally likely", "Neither can happen"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "If you flip a fair coin once, which result is possible?",
+    "Heads",
+    ["2", "Blue", "A shoe"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A bag has only purple marbles. Picking a purple marble is:",
+    "Certain",
+    ["Impossible", "Unlikely", "Less than half likely"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A box has 6 blue counters and 2 red counters. Which color are you less likely to pick?",
+    "Red",
+    ["Blue", "They are equally likely", "Neither can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A fair spinner has 2 equal sections, one orange and one white. What is true?",
+    "Orange and white are equally likely",
+    ["Orange is more likely", "White is more likely", "Neither can happen"],
+    1
+  ),
+
+  // Level 2: simple die facts and simple fractions out of a total.
+  probabilityStaticQuestion(
+    "Which result is impossible on a standard 6-sided die?",
+    "7",
+    ["2", "4", "6"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "If you flip a fair coin once, what is true?",
+    "Heads and tails are equally likely",
+    ["Heads is more likely", "Tails is more likely", "Neither heads nor tails can happen"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of rolling a number greater than 4 on a standard 6-sided die?",
+    "1/3",
+    ["1/6", "1/2", "2/3"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bag has 1 red marble and 9 blue marbles. What is the chance of picking red?",
+    "1/10",
+    ["1/5", "1/2", "9/10"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 2 blue sections and 6 red sections. Which color is more likely?",
+    "Red",
+    ["Blue", "They are equally likely", "Neither"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 yellow marbles and 2 green marbles. What is true?",
+    "They are equally likely",
+    ["Yellow is more likely", "Green is more likely", "Neither can be picked"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 5 equal sections and only 1 section is red. What is the chance of landing on red?",
+    "1/5",
+    ["1/2", "1/3", "1/4"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "Which number cannot be rolled on a standard 6-sided die?",
+    "0",
+    ["1", "3", "6"],
+    2
+  ),
+
+  // Level 3: comparing probabilities and reading fractions from small models.
+  probabilityStaticQuestion(
+    "A basket has 3 apples and 3 oranges. Which is true if you pick 1 fruit without looking?",
+    "Apple and orange are equally likely",
+    ["Apple is more likely", "Orange is more likely", "Neither fruit can be picked"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "Which is more likely?",
+    "Picking blue from a bag with 8 blue and 2 red marbles",
+    [
       "Picking blue from a bag with 5 blue and 5 red marbles",
       "They are equally likely",
       "Neither can happen",
     ],
-    answer: "Picking blue from a bag with 8 blue and 2 red marbles",
-    difficulty: 3,
-  },
-  {
-    question: "What is the chance of rolling an even number on a standard 6-sided die?",
-    options: ["1/6", "1/3", "1/2", "2/3"],
-    answer: "1/2",
-    difficulty: 4,
-  },
-  {
-    question: "A bag has only green marbles in it. Picking a green marble is:",
-    options: ["Impossible", "Unlikely", "Certain", "Less than half likely"],
-    answer: "Certain",
-    difficulty: 4,
-  },
-  {
-    question: "If you toss 2 coins, how many possible outcomes are there altogether?",
-    options: ["2", "3", "4", "6"],
-    answer: "4",
-    difficulty: 5,
-  },
-  {
-    question: "A bag has 2 red marbles, 5 blue marbles, and 3 green marbles. Which color is least likely to be picked?",
-    options: ["Red", "Blue", "Green", "All are equally likely"],
-    answer: "Red",
-    difficulty: 5,
-  },
-  {
-    question: "A bag has 4 yellow marbles and 4 green marbles. Which color is more likely to be picked?",
-    options: ["Yellow", "Green", "They are equally likely", "Neither can be picked"],
-    answer: "They are equally likely",
-    difficulty: 1,
-  },
-  {
-    question: "A spinner has 3 red parts and 1 blue part. Which color is more likely?",
-    options: ["Red", "Blue", "They are equally likely", "Neither can happen"],
-    answer: "Red",
-    difficulty: 1,
-  },
-  {
-    question: "What is the chance of rolling a number greater than 4 on a standard 6-sided die?",
-    options: ["1/6", "1/3", "1/2", "2/3"],
-    answer: "1/3",
-    difficulty: 2,
-  },
-  {
-      question: "Which number cannot be rolled on a standard 6-sided die?",
-    options: ["1", "5", "6", "9"],
-    answer: "9",
-    difficulty: 2,
-  },
-  {
-    question: "A bag has 1 red marble and 9 blue marbles. What is the chance of picking red?",
-    options: ["1/10", "1/5", "1/2", "9/10"],
-    answer: "1/10",
-    difficulty: 3,
-  },
-  {
-      question: "Which of these chances is more likely?",
-    options: [
-      "Picking black from a bag with 7 black and 3 white marbles",
+    3
+  ),
+  probabilityStaticQuestion(
+    "A box has 3 red balls and 1 blue ball. What fraction of the balls are blue?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A bag with 5 red, 5 blue, and 10 green marbles: which color is most likely?",
+    "Green",
+    ["Red", "Blue", "Red and blue together"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "Which is less likely?",
+    "Picking black from a bag with 2 black and 8 white marbles",
+    [
       "Picking black from a bag with 5 black and 5 white marbles",
       "They are equally likely",
       "Neither can happen",
     ],
-    answer: "Picking black from a bag with 7 black and 3 white marbles",
-    difficulty: 3,
-  },
-  {
-    question: "A bag has only purple marbles. Picking a purple marble is:",
-    options: ["Impossible", "Unlikely", "Certain", "Only possible on weekends"],
-    answer: "Certain",
-    difficulty: 4,
-  },
-  {
-    question: "If you toss 3 coins, how many possible outcomes are there altogether?",
-    options: ["4", "6", "8", "12"],
-    answer: "8",
-    difficulty: 4,
-  },
-  {
-    question: "A bag has 2 red marbles, 2 blue marbles, and 6 green marbles. Which color is most likely to be picked?",
-    options: ["Red", "Blue", "Green", "Red and blue together"],
-    answer: "Green",
-    difficulty: 5,
-  },
-  {
-    question: "What is the chance of rolling a number less than 3 on a standard 6-sided die?",
-    options: ["1/6", "1/3", "1/2", "2/3"],
-    answer: "1/3",
-    difficulty: 5,
-  },
-  {
-    question: "A bag has 4 red marbles and 1 blue marble. Which color is more likely?",
-    options: ["Red", "Blue", "They are equally likely", "Neither"],
-    answer: "Red",
-    difficulty: 1,
-  },
-  {
-    question: "If you flip a fair coin, which result is possible?",
-    options: ["Heads", "2", "Blue", "A shoe"],
-    answer: "Heads",
-    difficulty: 1,
-  },
-  {
-      question: "Which number would never appear on a standard 6-sided die?",
-    options: ["1", "3", "6", "8"],
-    answer: "8",
-    difficulty: 2,
-  },
-  {
-    question: "A spinner has 2 blue sections and 6 red sections. Which color is more likely?",
-    options: ["Blue", "Red", "They are equally likely", "Neither"],
-    answer: "Red",
-    difficulty: 2,
-  },
-  {
-    question: "A bag has 2 yellow marbles and 2 green marbles. What is true?",
-    options: [
-      "Yellow is more likely",
-      "Green is more likely",
-      "They are equally likely",
-      "Neither can be picked",
-    ],
-    answer: "They are equally likely",
-    difficulty: 3,
-  },
-  {
-      question: "Which option is more likely in this comparison?",
-    options: [
-      "Picking a red marble from a bag with 9 red and 1 blue marble",
-      "Picking a red marble from a bag with 5 red and 5 blue marbles",
-      "They are equally likely",
-      "Neither can happen",
-    ],
-    answer: "Picking a red marble from a bag with 9 red and 1 blue marble",
-    difficulty: 3,
-  },
-  {
-    question: "What is the chance of rolling a 6 on a standard 6-sided die?",
-    options: ["1/6", "1/3", "1/2", "5/6"],
-    answer: "1/6",
-    difficulty: 4,
-  },
-  {
-    question: "A bag has only orange marbles. Picking an orange marble is:",
-    options: ["Impossible", "Unlikely", "Certain", "Half likely"],
-    answer: "Certain",
-    difficulty: 4,
-  },
-  {
-      question: "How many possible outcomes are there if you flip one coin and roll one die?",
-    options: ["6", "8", "10", "12"],
-    answer: "12",
-    difficulty: 5,
-  },
-  {
-      question: "A bag has 3 red, 4 blue, and 5 green marbles. Which color is least likely to be picked?",
-    options: ["Red", "Blue", "Green", "All are equally likely"],
-    answer: "Red",
-    difficulty: 5,
-  },
-  {
-      question: "A bag has 6 blue marbles and 2 yellow marbles. Which color has the smaller chance?",
-    options: ["Blue", "Yellow", "They are equally likely", "Neither"],
-    answer: "Yellow",
-    difficulty: 1,
-  },
-  {
-      question: "If you spin a fair spinner with 4 equal colors, what is the chance of landing on any one color?",
-    options: ["1/2", "1/3", "1/4", "1/5"],
-    answer: "1/4",
-    difficulty: 1,
-  },
-  {
-      question: "Which number cannot appear on a standard 6-sided die?",
-    options: ["0", "2", "4", "5"],
-    answer: "0",
-    difficulty: 2,
-  },
-  {
-      question: "In a bag with 7 red marbles and 3 green marbles, what is the chance of picking green?",
-    options: ["3/10", "7/10", "1/2", "1/10"],
-    answer: "3/10",
-    difficulty: 2,
-  },
-  {
-      question: "A bag with 5 red, 5 blue, and 10 green marbles: which color is most likely?",
-    options: ["Red", "Blue", "Green", "Red and blue together"],
-    answer: "Green",
-    difficulty: 3,
-  },
-  {
-    question: "Which is less likely?",
-    options: [
-      "Picking a black marble from a bag with 2 black and 8 white marbles",
-      "Picking a black marble from a bag with 5 black and 5 white marbles",
-      "They are equally likely",
-      "Neither can happen",
-    ],
-    answer: "Picking a black marble from a bag with 2 black and 8 white marbles",
-    difficulty: 3,
-  },
-  {
-      question: "What is the chance of heads on one fair coin flip?",
-    options: ["1/4", "1/3", "1/2", "1/1"],
-    answer: "1/2",
-    difficulty: 4,
-  },
-  {
-      question: "When you flip two coins, which result cannot happen?",
-    options: ["Two heads", "Two tails", "One head and one tail", "Three heads"],
-    answer: "Three heads",
-    difficulty: 4,
-  },
-  {
-      question: "In a bag with 1 red marble, 2 blue marbles, and 7 yellow marbles, what is the chance of picking yellow?",
-    options: ["1/10", "2/10", "7/10", "9/10"],
-    answer: "7/10",
-    difficulty: 5,
-  },
-  {
-      question: "A spinner has 8 equal sections with 3 purple sections. What is the chance of landing on purple?",
-    options: ["3/8", "5/8", "1/4", "1/8"],
-    answer: "3/8",
-    difficulty: 5,
-  },
+    3
+  ),
+  probabilityStaticQuestion(
+    "If you flip 2 fair coins, how many possible outcomes are there altogether?",
+    "4",
+    ["2", "3", "6"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "In a bag with 7 red marbles and 3 green marbles, what is the chance of picking green?",
+    "3/10",
+    ["7/10", "1/2", "1/10"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 8 equal sections, and 3 of them are purple. What is the chance of purple?",
+    "3/8",
+    ["5/8", "1/4", "1/8"],
+    3
+  ),
+
+  // Level 4: die events, complements, and sample spaces.
+  probabilityStaticQuestion(
+    "What is the chance of rolling an even number on a standard 6-sided die?",
+    "1/2",
+    ["1/6", "1/3", "2/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A bag has only green marbles in it. Picking a green marble is:",
+    "Certain",
+    ["Impossible", "Unlikely", "Less than half likely"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "If you toss 3 coins, how many possible outcomes are there altogether?",
+    "8",
+    ["4", "6", "12"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of rolling a 6 on a standard 6-sided die?",
+    "1/6",
+    ["1/3", "1/2", "5/6"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "When you flip two coins, which result cannot happen?",
+    "Three heads",
+    ["Two heads", "Two tails", "One head and one tail"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "On a fair 6-sided die, what is the chance of rolling a 1 or 2?",
+    "1/3",
+    ["1/6", "1/2", "2/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 red marbles, 4 blue marbles, and 2 green marbles. Which color is least likely?",
+    "Green",
+    ["Red", "Blue", "Red and blue together"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red marbles and 7 blue marbles. What is the chance of not picking red?",
+    "7/10",
+    ["3/10", "1/2", "1/3"],
+    4
+  ),
+
+  // Level 5: percentages, multi-part outcomes, and proportional comparison.
+  probabilityStaticQuestion(
+    "If you toss 2 coins, how many possible outcomes are there altogether?",
+    "4",
+    ["2", "3", "6"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 red marbles, 5 blue marbles, and 3 green marbles. Which color is least likely to be picked?",
+    "Red",
+    ["Blue", "Green", "All are equally likely"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "How many possible outcomes are there if you flip one coin and roll one die?",
+    "12",
+    ["6", "8", "10"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A box has 4 red balls and 1 blue ball. What percentage of the balls are blue?",
+    "20%",
+    ["10%", "40%", "60%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A box has 5 red balls, 3 blue balls, and 2 green balls. What percentage of the balls are blue?",
+    "30%",
+    ["20%", "40%", "50%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 10 equal sections and 2 are red. What is the chance of landing on red?",
+    "1/5",
+    ["1/2", "1/10", "2/5"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red, 4 blue, and 5 green marbles. Which color is least likely to be picked?",
+    "Red",
+    ["Blue", "Green", "All are equally likely"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 6 equal sections and 2 are star shapes. What is the chance of landing on a star?",
+    "1/3",
+    ["1/6", "1/2", "2/3"],
+    5
+  ),
+
+  // Level 6: complements, probability lines, and changing totals after one draw.
+  probabilityStaticQuestion(
+    "A bag has 4 red marbles and 6 blue marbles. What is the chance of not picking red?",
+    "3/5",
+    ["2/5", "4/10", "1/2"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A bag starts with 3 red and 2 blue marbles. One blue marble is removed. What is the chance of picking blue now?",
+    "1/4",
+    ["2/5", "1/2", "3/4"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "Which event has probability 0?",
+    "Rolling an 8 on a standard 6-sided die",
+    ["Rolling an even number", "Flipping heads", "Picking red from a bag with red marbles"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "Which event has probability 1?",
+    "Picking a square card from a box that has only square cards",
+    ["Rolling a 7 on a die", "Flipping heads once", "Picking blue from a mixed bag"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A weather report says there is a 25% chance of rain. Which fraction is the same chance?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 12 equal sections. 3 sections are blue. What is the chance of not landing on blue?",
+    "3/4",
+    ["1/4", "1/3", "2/3"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A class raffle has 8 green tickets and 12 yellow tickets. What is the chance of picking a green ticket?",
+    "2/5",
+    ["3/5", "8/12", "1/2"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from 1, 2, 3, 4, 5, and 6. What is the chance of choosing a multiple of 3?",
+    "1/3",
+    ["1/6", "1/2", "2/3"],
+    6
+  ),
+
+  // Level 7: independent events, expected results, and with-replacement thinking.
+  probabilityStaticQuestion(
+    "You flip a fair coin and spin a 4-section spinner. How many equally likely outcomes are there?",
+    "8",
+    ["4", "6", "10"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of flipping heads and then tails with a fair coin?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner lands on red 1/4 of the time. About how many reds would you expect in 40 spins?",
+    "10",
+    ["4", "20", "30"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red and 7 blue marbles. You pick a marble, put it back, and pick again. What is the chance of red then red?",
+    "9/100",
+    ["3/10", "6/20", "7/10"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A fair die is rolled 60 times. About how many times would you expect to roll a 6?",
+    "10",
+    ["6", "12", "30"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 5 equal sections: 2 red, 2 blue, and 1 yellow. Which statement is true?",
+    "Red and blue are equally likely",
+    ["Yellow is most likely", "Red is impossible", "Blue is certain"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A game is fair if each player has the same chance to win. Which game is fair?",
+    "Player A wins on heads, Player B wins on tails",
+    ["Player A wins on 1-5, Player B wins on 6", "Player A gets 3 cards, Player B gets 1", "Player A wins on red only, Player B never wins"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A card is picked from 10 cards numbered 1 to 10. What is the chance of picking a number greater than 7?",
+    "3/10",
+    ["7/10", "1/2", "1/5"],
+    7
+  ),
+
+  // Level 8: dependent events, simple conditional probability, and at-least-one reasoning.
+  probabilityStaticQuestion(
+    "A bag has 3 red and 2 blue marbles. You pick one red marble and do not put it back. What is the chance the next marble is red?",
+    "1/2",
+    ["3/5", "2/5", "1/4"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 red and 6 blue marbles. You pick one blue marble and do not put it back. What is the chance the next marble is blue?",
+    "5/9",
+    ["6/10", "4/9", "1/2"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Two fair coins are flipped. What is the chance of getting at least one head?",
+    "3/4",
+    ["1/4", "1/2", "1/3"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that both dice show 6?",
+    "1/36",
+    ["1/6", "1/12", "2/36"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A box has 5 animal cards: cat, dog, fish, bird, and horse. You pick 2 cards without replacement. How many ordered outcomes are possible?",
+    "20",
+    ["10", "25", "5"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A student records 18 sunny days and 12 rainy days. Based on this data, what is the experimental probability of a sunny day?",
+    "3/5",
+    ["2/5", "1/2", "18/12"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 3 red, 2 blue, and 1 green section. If you know it did not land on green, what is the chance it landed on red?",
+    "3/5",
+    ["3/6", "1/2", "2/5"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A fair die is rolled twice. What is the chance of rolling a 1 first and then a 2?",
+    "1/36",
+    ["1/6", "1/12", "2/6"],
+    8
+  ),
+
+  // Level 9: combinations, two-dice events, expected value, and interpreting simulations.
+  probabilityStaticQuestion(
+    "Three fair coins are flipped. What is the chance of getting exactly two heads?",
+    "3/8",
+    ["1/8", "1/2", "2/3"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that the sum is 7?",
+    "1/6",
+    ["1/12", "1/9", "7/36"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A game pays 6 points if you roll a 6 and 0 points otherwise. What is the expected score for one fair die roll?",
+    "1 point",
+    ["0 points", "3 points", "6 points"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "In a simulation, red appeared 43 times in 100 trials. Which is the best estimate of the experimental probability of red?",
+    "43%",
+    ["4.3%", "50%", "57%"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A password uses one letter A-D followed by one digit 1-5. How many possible passwords are there?",
+    "20",
+    ["9", "10", "45"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A bag has 6 red, 3 blue, and 1 green marble. If you know the marble is not red, what is the chance it is green?",
+    "1/4",
+    ["1/10", "1/3", "3/4"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A spinner has probability 1/5 of landing on yellow. About how many yellows should you expect in 200 spins?",
+    "40",
+    ["20", "50", "100"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A deck has 4 red cards and 4 black cards. You draw 2 cards without replacement. What is the chance both are red?",
+    "3/14",
+    ["1/4", "1/2", "4/8"],
+    9
+  ),
+
+  // Level 10: advanced conditional probability, fairness, and multi-step reasoning.
+  probabilityStaticQuestion(
+    "A school club has 30 soccer players. Of those soccer players, 12 are girls. If one soccer player is chosen, what is the chance the player is a girl?",
+    "2/5",
+    ["12/42", "3/5", "1/2"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A jar has 5 red and 5 blue marbles. You draw 2 without replacement. What is the chance they are different colors?",
+    "5/9",
+    ["1/2", "4/9", "1/5"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "Four fair coins are flipped. What is the chance of getting exactly one head?",
+    "1/4",
+    ["1/16", "1/2", "3/4"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A game costs 2 points to play. You win 10 points on a 6 and 0 points otherwise. What is the expected net result per fair die roll?",
+    "Lose 1/3 point on average",
+    ["Win 8 points on average", "Break even exactly", "Lose 2 points every time"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 red, 3 blue, and 5 green marbles. You draw 2 without replacement. What is the chance both are green?",
+    "2/9",
+    ["1/4", "5/10", "4/10"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "Two events are independent. Event A has chance 1/3 and Event B has chance 1/4. What is the chance both happen?",
+    "1/12",
+    ["1/7", "1/3", "1/4"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 2 red and 3 blue sections. It is spun 3 times. What is the chance of blue all 3 times?",
+    "27/125",
+    ["9/25", "3/5", "8/125"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A survey has 40 students: 24 like math, 18 like science, and 10 like both. How many like math or science?",
+    "32",
+    ["28", "42", "52"],
+    10
+  ),
 ];
 
-PROBABILITY_QUESTIONS.push(
-  ...[
-    {
-      question: "A bag has 6 red marbles and 2 blue marbles. Which color are you more likely to pick?",
-      options: ["Red", "Blue", "They are equally likely", "Neither can be picked"],
-      answer: "Red",
-      difficulty: 1,
-    },
-    {
-      question: "A spinner has 2 equal sections, one yellow and one blue. What is true?",
-      options: ["Yellow is more likely", "Blue is more likely", "They are equally likely", "Neither can happen"],
-      answer: "They are equally likely",
-      difficulty: 1,
-    },
-    {
-      question: "If you flip a fair coin once, what is the chance of getting tails?",
-      options: ["1/4", "1/3", "1/2", "1/1"],
-      answer: "1/2",
-      difficulty: 1,
-    },
-    {
-      question: "Which number would never come up on a standard 6-sided die?",
-      options: ["0", "2", "4", "5"],
-      answer: "0",
-      difficulty: 1,
-    },
-    {
-      question: "A bag has 3 cats, 1 dog, and 1 bird stickers. Which sticker are you most likely to pick?",
-      options: ["Cat", "Dog", "Bird", "They are all equally likely"],
-      answer: "Cat",
-      difficulty: 2,
-    },
-    {
-      question: "A spinner has 1 green part out of 4 equal parts. What is the chance of landing on green?",
-      options: ["1/2", "1/3", "1/4", "1/5"],
-      answer: "1/4",
-      difficulty: 2,
-    },
-    {
-      question: "A bag has 2 yellow marbles and 2 purple marbles. What is true?",
-      options: ["Yellow is more likely", "Purple is more likely", "They are equally likely", "Neither can be picked"],
-      answer: "They are equally likely",
-      difficulty: 2,
-    },
-    {
-      question: "A bag has only silver marbles. Picking a silver marble is:",
-      options: ["Impossible", "Unlikely", "Certain", "Less than half likely"],
-      answer: "Certain",
-      difficulty: 2,
-    },
-    {
-      question: "On a fair 6-sided die, what is the chance of rolling a 5 or 6?",
-      options: ["1/6", "1/3", "1/2", "2/3"],
-      answer: "1/3",
-      difficulty: 3,
-    },
-    {
-      question: "In a bag with 1 red marble and 9 blue marbles, what is the chance of picking red?",
-      options: ["1/10", "1/5", "1/2", "9/10"],
-      answer: "1/10",
-      difficulty: 3,
-    },
-    {
-      question: "If you flip 2 fair coins, how many possible outcomes are there altogether?",
-      options: ["2", "3", "4", "6"],
-      answer: "4",
-      difficulty: 3,
-    },
-    {
-      question: "A bag has 8 green marbles and 2 yellow marbles. Which color is more likely?",
-      options: ["Green", "Yellow", "They are equally likely", "Neither can happen"],
-      answer: "Green",
-      difficulty: 3,
-    },
-    {
-      question: "On a fair 6-sided die, what is the chance of rolling an even number?",
-      options: ["1/6", "1/3", "1/2", "2/3"],
-      answer: "1/2",
-      difficulty: 4,
-    },
-    {
-      question: "How many outcomes are possible when you flip three fair coins?",
-      options: ["4", "6", "8", "12"],
-      answer: "8",
-      difficulty: 4,
-    },
-    {
-      question: "A bag has 4 red marbles, 4 blue marbles, and 2 green marbles. Which color is least likely?",
-      options: ["Red", "Blue", "Green", "Red and blue together"],
-      answer: "Green",
-      difficulty: 4,
-    },
-    {
-      question: "A spinner has 6 equal sections and 2 are star shapes. What is the chance of landing on a star?",
-      options: ["1/6", "1/3", "1/2", "2/3"],
-      answer: "1/3",
-      difficulty: 4,
-    },
-    {
-      question: "How many equally likely outcomes are there if you flip one coin and roll one die?",
-      options: ["6", "8", "10", "12"],
-      answer: "12",
-      difficulty: 5,
-    },
-    {
-      question: "A bag has 2 red marbles, 5 blue marbles, and 3 yellow marbles. Which color is most likely?",
-      options: ["Red", "Blue", "Yellow", "All are equally likely"],
-      answer: "Blue",
-      difficulty: 5,
-    },
-    {
-      question: "On a standard 6-sided die, what is the chance of rolling a 1 or 2?",
-      options: ["1/6", "1/3", "1/2", "2/3"],
-      answer: "1/3",
-      difficulty: 5,
-    },
-    {
-      question: "A bag has 3 red marbles, 4 blue marbles, and 5 green marbles. Which color has the smallest chance?",
-      options: ["Red", "Blue", "Green", "All are equally likely"],
-      answer: "Red",
-      difficulty: 5,
-    },
-    {
-      question: "A bag has 4 yellow marbles and 1 purple marble. Which color are you less likely to pick?",
-      options: ["Yellow", "Purple", "They are equally likely", "Neither"],
-      answer: "Purple",
-      difficulty: 1,
-    },
-    {
-      question: "If you spin a fair spinner with 4 equal colors, what is the chance of landing on one color?",
-      options: ["1/2", "1/3", "1/4", "1/5"],
-      answer: "1/4",
-      difficulty: 1,
-    },
-    {
-      question: "A bag has 4 green marbles and 4 orange marbles. What is true?",
-      options: ["Green is more likely", "Orange is more likely", "They are equally likely", "Neither can happen"],
-      answer: "They are equally likely",
-      difficulty: 1,
-    },
-    {
-      question: "Which number is impossible on a standard 6-sided die?",
-      options: ["1", "3", "6", "8"],
-      answer: "8",
-      difficulty: 2,
-    },
-    {
-      question: "In a bag with 7 red marbles and 3 green marbles, what is the chance of drawing green?",
-      options: ["3/10", "7/10", "1/2", "1/10"],
-      answer: "3/10",
-      difficulty: 2,
-    },
-    {
-      question: "A spinner has 2 blue sections and 6 red sections. Which color are you more likely to land on?",
-      options: ["Blue", "Red", "They are equally likely", "Neither"],
-      answer: "Red",
-      difficulty: 2,
-    },
-    {
-      question: "What could happen when you flip a fair coin once?",
-      options: ["Heads", "2", "Blue", "A shoe"],
-      answer: "Heads",
-      difficulty: 2,
-    },
-    {
-      question: "A bag with 5 red marbles, 5 blue marbles, and 10 green marbles: which color is most likely?",
-      options: ["Red", "Blue", "Green", "Red and blue together"],
-      answer: "Green",
-      difficulty: 3,
-    },
-    {
-      question: "A bag has 2 black marbles and 8 white marbles. Which color is less likely?",
-      options: ["Black", "White", "They are equally likely", "Neither"],
-      answer: "Black",
-      difficulty: 3,
-    },
-    {
-      question: "What is the chance of getting heads on one fair coin flip?",
-      options: ["1/4", "1/3", "1/2", "1/1"],
-      answer: "1/2",
-      difficulty: 3,
-    },
-    {
-      question: "In a bag with 1 red marble, 2 blue marbles, and 7 yellow marbles, what is the chance of drawing yellow?",
-      options: ["1/10", "2/10", "7/10", "9/10"],
-      answer: "7/10",
-      difficulty: 3,
-    },
-    {
-      question: "If every marble in a bag is purple, picking purple is:",
-      options: ["Impossible", "Unlikely", "Certain", "Half likely"],
-      answer: "Certain",
-      difficulty: 4,
-    },
-    {
-      question: "When you flip two coins, which result is impossible?",
-      options: ["Two heads", "Two tails", "One head and one tail", "Three heads"],
-      answer: "Three heads",
-      difficulty: 4,
-    },
-    {
-      question: "A spinner has 8 equal sections, and 3 of them are purple. What is the chance of purple?",
-      options: ["3/8", "5/8", "1/4", "1/8"],
-      answer: "3/8",
-      difficulty: 4,
-    },
-    {
-      question: "A bag with 6 blue marbles and 2 yellow marbles: which color has the smaller chance?",
-      options: ["Blue", "Yellow", "They are equally likely", "Neither"],
-      answer: "Yellow",
-      difficulty: 4,
-    },
-    {
-      question: "How many possible outcomes are there if you flip three fair coins?",
-      options: ["6", "8", "10", "12"],
-      answer: "8",
-      difficulty: 5,
-    },
-    {
-      question: "In a bag with 1 red marble, 2 blue marbles, and 7 yellow marbles, what is the chance of choosing yellow?",
-      options: ["1/10", "2/10", "7/10", "9/10"],
-      answer: "7/10",
-      difficulty: 5,
-    },
-    {
-      question: "A spinner has 10 equal sections and 2 are red. What is the chance of landing on red?",
-      options: ["1/2", "1/5", "1/10", "2/5"],
-      answer: "1/5",
-      difficulty: 5,
-    },
-    {
-      question: "A bag with 2 red marbles, 2 blue marbles, and 6 green marbles: which color is most likely?",
-      options: ["Red", "Blue", "Green", "Red and blue together"],
-      answer: "Green",
-      difficulty: 5,
-    },
-  ]
-);
-
-PROBABILITY_QUESTIONS.push(
-  {
-    question: "A box has 2 red balls and 1 blue ball. Which color is more likely to be picked?",
-    options: ["Red", "Blue", "They are equally likely", "Neither color can be picked"],
-    answer: "Red",
-    difficulty: 2,
-  },
-  {
-    question: "A box has 3 red balls and 1 blue ball. What fraction of the balls are blue?",
-    options: ["1/2", "1/3", "1/4", "3/4"],
-    answer: "1/4",
-    difficulty: 3,
-  },
-  {
-    question: "A box has 4 red balls and 1 blue ball. What percentage of the balls are blue?",
-    options: ["40%", "60%", "20%", "10%"],
-    answer: "20%",
-    difficulty: 4,
-  },
-  {
-    question: "A box has 3 red balls and 2 blue balls. What percentage of the balls are blue?",
-    options: ["20%", "30%", "40%", "60%"],
-    answer: "40%",
-    difficulty: 4,
-  },
-  {
-    question: "A box has 5 red balls, 3 blue balls, and 2 green balls. What percentage of the balls are blue?",
-    options: ["20%", "30%", "40%", "50%"],
-    answer: "30%",
-    difficulty: 5,
-  },
-  {
-    question: "A box has 4 red balls, 4 blue balls, and 2 yellow balls. What percentage of the balls are blue?",
-    options: ["20%", "30%", "40%", "50%"],
-    answer: "40%",
-    difficulty: 5,
-  }
-);
-
 function createProbabilityGeneratedEntry(difficulty) {
-  function buildOptionSet(answer, distractors) {
-    return shuffleArray(Array.from(new Set([answer, ...distractors])));
+  const level = probabilityClampDifficulty(difficulty);
+
+  function buildEntry({ question, answer, distractors, displayText = "" }) {
+    return probabilityStaticQuestion(question, answer, distractors, level, displayText);
   }
 
-  function pickFraction(numerator, denominator) {
-    const divisor = greatestCommonDivisor(numerator, denominator);
-    return `${numerator / divisor}/${denominator / divisor}`;
+  function plural(value, singular, pluralForm = `${singular}s`) {
+    return `${value} ${value === 1 ? singular : pluralForm}`;
   }
 
-  function pickPercent(numerator, denominator) {
-    return `${(numerator / denominator) * 100}%`;
-  }
-
-  function buildOptionsFromPool(answer, pool) {
-    return buildOptionSet(answer, shuffleArray(pool.filter((value) => value !== answer)).slice(0, 3));
+  function compareBagChance(color, firstGood, firstOther, secondGood, secondOther) {
+    const firstChance = firstGood / (firstGood + firstOther);
+    const secondChance = secondGood / (secondGood + secondOther);
+    const answer = firstChance > secondChance ? "The first bag" : firstChance < secondChance ? "The second bag" : "They are equally likely";
+    return buildEntry({
+      question: `Bag 1 has ${firstGood} ${color} marbles and ${firstOther} other marbles. Bag 2 has ${secondGood} ${color} marbles and ${secondOther} other marbles. Which bag gives a better chance of picking ${color}?`,
+      answer,
+      distractors: ["The first bag", "The second bag", "They are equally likely"].filter((choice) => choice !== answer).concat("Neither can happen"),
+    });
   }
 
   const generators = {
     1: [
       () => {
-        const red = randomChoice([4, 5, 6, 7, 8]);
-        const blue = randomChoice([1, 2, 3]);
-        return {
-          question: `A bag has ${red} red marbles and ${blue} blue marble${blue === 1 ? "" : "s"}. Which color are you more likely to pick?`,
-          options: buildOptionSet("Red", ["Blue", "Both are equally likely", "Neither color can be picked"]),
+        const red = probabilityRandomInt(4, 8);
+        const blue = probabilityRandomInt(1, 3);
+        return buildEntry({
+          question: `A bag has ${plural(red, "red marble")} and ${plural(blue, "blue marble")}. Which color are you more likely to pick?`,
           answer: "Red",
-          difficulty: 1,
-        };
+          distractors: ["Blue", "They are equally likely", "Neither color can be picked"],
+        });
       },
       () => {
-        const spinnerParts = randomChoice([4, 6, 8]);
-        const coloredParts = 1;
-        const answer = pickFraction(coloredParts, spinnerParts);
-        const question = `A spinner has ${spinnerParts} equal parts and only 1 part is green. What is the chance of landing on green?`;
-        return {
-          question,
-          options: buildOptionSet(answer, [
-            pickFraction(1, 2),
-            pickFraction(1, 3),
-            pickFraction(1, spinnerParts + 1),
-          ]),
+        const sections = probabilityRandomChoice([3, 4, 5, 6]);
+        const answer = probabilityFormatFraction(1, sections);
+        return buildEntry({
+          question: `A spinner has ${sections} equal parts and only 1 part is green. What is the chance of landing on green?`,
           answer,
-          difficulty: 1,
-        };
+          distractors: ["1/2", "1/3", "1/4", "1/5"].filter((choice) => choice !== answer),
+        });
       },
+      () => buildEntry({
+        question: "A bag has only orange marbles. Picking an orange marble is:",
+        answer: "Certain",
+        distractors: ["Impossible", "Unlikely", "Equally likely"],
+      }),
     ],
     2: [
       () => {
-        const impossibleNumbers = [0, 7, 8, 9];
-        const answer = String(randomChoice(impossibleNumbers));
-        return {
+        const answer = String(probabilityRandomChoice([0, 7, 8, 9]));
+        return buildEntry({
           question: "Which result is impossible on a standard 6-sided die?",
-          options: buildOptionSet(answer, ["2", "4", "6"]),
           answer,
-          difficulty: 2,
-        };
+          distractors: ["1", "3", "6"],
+        });
       },
       () => {
-        return {
-          question: "If you flip a fair coin once, what is true?",
-          options: buildOptionSet("Heads and tails are equally likely", [
-            "Heads is more likely",
-            "Tails is more likely",
-            "Neither heads nor tails can happen",
-          ]),
-          answer: "Heads and tails are equally likely",
-          difficulty: 2,
-        };
+        const favorable = probabilityRandomChoice([1, 2, 3]);
+        const total = probabilityRandomChoice([4, 6, 8]);
+        const answer = probabilityFormatFraction(favorable, total);
+        return buildEntry({
+          question: `A spinner has ${total} equal sections. ${favorable} ${favorable === 1 ? "section is" : "sections are"} blue. What is the chance of landing on blue?`,
+          answer,
+          distractors: ["1/2", "1/3", "1/4", "3/4"].filter((choice) => choice !== answer),
+        });
       },
       () => {
-        const setups = [
-          { red: 2, blue: 1 },
-          { red: 3, blue: 1 },
-          { red: 4, blue: 2 },
-          { red: 1, blue: 2 },
-        ];
-        const { red, blue } = randomChoice(setups);
-        const answer = red > blue ? "Red" : "Blue";
-        return {
-          question: `A box has ${red} red ball${red === 1 ? "" : "s"} and ${blue} blue ball${blue === 1 ? "" : "s"}. Which color is more likely to be picked?`,
-          options: buildOptionSet(answer, ["Red", "Blue", "They are equally likely", "Neither color can be picked"]),
-          answer,
-          difficulty: 2,
-        };
+        const count = probabilityRandomChoice([2, 3, 4, 5]);
+        return buildEntry({
+          question: `A basket has ${count} apples and ${count} oranges. Which is true if you pick 1 fruit without looking?`,
+          answer: "Apple and orange are equally likely",
+          distractors: ["Apple is more likely", "Orange is more likely", "Neither fruit can be picked"],
+        });
       },
     ],
     3: [
       () => {
-        const red = randomChoice([2, 3, 4]);
-        const blue = red;
-        const answer = "Apple and orange are equally likely";
-        return {
-          question: `A basket has ${red} apples and ${blue} oranges. Which is true if you pick 1 fruit without looking?`,
-          options: buildOptionSet(answer, [
-            "Apple is more likely",
-            "Orange is more likely",
-            "Neither fruit can be picked",
-          ]),
+        const red = probabilityRandomInt(1, 4);
+        const blue = probabilityRandomInt(5, 9);
+        const answer = probabilityFormatFraction(red, red + blue);
+        return buildEntry({
+          question: `A bag has ${plural(red, "red marble")} and ${plural(blue, "blue marble")}. What is the chance of picking red?`,
           answer,
-          difficulty: 3,
-        };
+          distractors: [probabilityFormatFraction(blue, red + blue), "1/2", "1/10"],
+        });
       },
-      () => {
-        const firstBlue = randomChoice([7, 8, 9]);
-        const firstRed = randomChoice([1, 2, 3]);
-        const secondBlue = randomChoice([4, 5, 6]);
-        const secondRed = randomChoice([4, 5, 6]);
-        const answer = "The first bag";
-        return {
-          question: `A bag has ${firstBlue} blue marbles and ${firstRed} red marbles. Another bag has ${secondBlue} blue marbles and ${secondRed} red marbles. Which bag is more likely to give you a blue marble?`,
-          options: buildOptionSet(answer, [
-            "The second bag",
-            "They are equally likely",
-            "Neither can happen",
-          ]),
-          answer,
-          difficulty: 3,
-        };
-      },
-      () => {
-        const setups = [
-          { red: 3, blue: 1 },
-          { red: 4, blue: 2 },
-          { red: 3, blue: 2 },
-          { red: 2, blue: 3 },
-        ];
-        const { red, blue } = randomChoice(setups);
-        const answer = pickFraction(blue, red + blue);
-        return {
-          question: `A box has ${red} red balls and ${blue} blue ball${blue === 1 ? "" : "s"}. What fraction of the balls are blue?`,
-          options: buildOptionsFromPool(answer, ["1/2", "1/3", "1/4", "2/5", "3/5", "2/3"]),
-          answer,
-          difficulty: 3,
-        };
-      },
+      () => compareBagChance("blue", probabilityRandomInt(7, 9), probabilityRandomInt(1, 3), probabilityRandomInt(4, 6), probabilityRandomInt(4, 6)),
+      () => buildEntry({
+        question: "If you flip 2 fair coins, how many possible outcomes are there altogether?",
+        answer: "4",
+        distractors: ["2", "3", "6"],
+      }),
     ],
     4: [
       () => {
-        const answer = "1/2";
-        return {
-          question: "What is the chance of rolling an even number on a standard 6-sided die?",
-          options: buildOptionSet(answer, ["1/6", "1/3", "2/3"]),
-          answer,
-          difficulty: 4,
-        };
-      },
-      () => {
-        return {
-          question: "A bag has only green marbles in it. Picking a green marble is:",
-          options: buildOptionSet("Certain", ["Impossible", "Unlikely", "Less than half likely"]),
-          answer: "Certain",
-          difficulty: 4,
-        };
-      },
-      () => {
-        const setups = [
-          { red: 4, blue: 1 },
-          { red: 3, blue: 2 },
-          { red: 7, blue: 3 },
-          { red: 6, blue: 4 },
+        const events = [
+          { text: "rolling an even number", favorable: 3 },
+          { text: "rolling a number less than 3", favorable: 2 },
+          { text: "rolling a 6", favorable: 1 },
+          { text: "rolling a number greater than 2", favorable: 4 },
         ];
-        const { red, blue } = randomChoice(setups);
-        const answer = pickPercent(blue, red + blue);
-        return {
-          question: `A box has ${red} red balls and ${blue} blue ball${blue === 1 ? "" : "s"}. What percentage of the balls are blue?`,
-          options: buildOptionsFromPool(answer, ["10%", "20%", "30%", "40%", "50%", "60%"]),
-          answer,
-          difficulty: 4,
-        };
+        const event = probabilityRandomChoice(events);
+        return buildEntry({
+          question: `What is the chance of ${event.text} on a standard 6-sided die?`,
+          answer: probabilityFormatFraction(event.favorable, 6),
+          distractors: ["1/6", "1/3", "1/2", "2/3", "5/6"].filter((choice) => choice !== probabilityFormatFraction(event.favorable, 6)),
+        });
+      },
+      () => buildEntry({
+        question: "If you toss 3 fair coins, how many possible outcomes are there altogether?",
+        answer: "8",
+        distractors: ["4", "6", "12"],
+      }),
+      () => {
+        const red = probabilityRandomInt(2, 5);
+        const blue = probabilityRandomInt(2, 5);
+        const green = probabilityRandomInt(6, 9);
+        return buildEntry({
+          question: `A bag has ${red} red marbles, ${blue} blue marbles, and ${green} green marbles. Which color is most likely to be picked?`,
+          answer: "Green",
+          distractors: ["Red", "Blue", "All are equally likely"],
+        });
       },
     ],
     5: [
       () => {
-        const answer = "4";
-        return {
-          question: "If you toss 2 coins, how many possible outcomes are there altogether?",
-          options: buildOptionSet(answer, ["2", "3", "6"]),
-          answer,
-          difficulty: 5,
-        };
-      },
-      () => {
-        const red = randomChoice([2, 3, 4]);
-        const blue = randomChoice([4, 5, 6]);
-        const green = randomChoice([6, 7, 8]);
-        const least = Math.min(red, blue, green);
-        const answer = least === red ? "Red" : least === blue ? "Blue" : "Green";
-        return {
-          question: `A bag has ${red} red marbles, ${blue} blue marbles, and ${green} green marbles. Which color is least likely to be picked?`,
-          options: buildOptionSet(answer, ["Red", "Blue", "Green", "All are equally likely"]),
-          answer,
-          difficulty: 5,
-        };
-      },
-      () => {
         const setups = [
-          { red: 5, blue: 3, green: 2 },
-          { red: 4, blue: 4, green: 2 },
-          { red: 6, blue: 2, green: 2 },
-          { red: 3, blue: 5, green: 2 },
+          { blue: 1, total: 5 },
+          { blue: 2, total: 5 },
+          { blue: 3, total: 10 },
+          { blue: 4, total: 10 },
         ];
-        const { red, blue, green } = randomChoice(setups);
-        const answer = pickPercent(blue, red + blue + green);
-        return {
-          question: `A box has ${red} red balls, ${blue} blue balls, and ${green} green balls. What percentage of the balls are blue?`,
-          options: buildOptionsFromPool(answer, ["10%", "20%", "30%", "40%", "50%"]),
-          answer,
-          difficulty: 5,
-        };
+        const setup = probabilityRandomChoice(setups);
+        return buildEntry({
+          question: `A box has ${setup.blue} blue balls out of ${setup.total} balls. What percentage of the balls are blue?`,
+          answer: probabilityFormatPercent(setup.blue, setup.total),
+          distractors: ["10%", "20%", "30%", "40%", "50%", "60%"].filter((choice) => choice !== probabilityFormatPercent(setup.blue, setup.total)),
+        });
       },
+      () => buildEntry({
+        question: "How many equally likely outcomes are there if you flip one coin and roll one die?",
+        answer: "12",
+        distractors: ["6", "8", "10"],
+      }),
+      () => {
+        const red = probabilityRandomInt(2, 4);
+        const blue = probabilityRandomInt(5, 7);
+        const green = probabilityRandomInt(3, 5);
+        const counts = [
+          { color: "Red", count: red },
+          { color: "Blue", count: blue },
+          { color: "Green", count: green },
+        ];
+        const least = counts.reduce((lowest, item) => (item.count < lowest.count ? item : lowest));
+        return buildEntry({
+          question: `A bag has ${red} red marbles, ${blue} blue marbles, and ${green} green marbles. Which color is least likely to be picked?`,
+          answer: least.color,
+          distractors: counts.map((item) => item.color).filter((color) => color !== least.color).concat("All are equally likely"),
+        });
+      },
+    ],
+    6: [
+      () => {
+        const red = probabilityRandomChoice([2, 3, 4, 5]);
+        const blue = probabilityRandomChoice([5, 6, 7, 8]);
+        const total = red + blue;
+        const answer = probabilityFormatFraction(blue, total);
+        return buildEntry({
+          question: `A bag has ${red} red marbles and ${blue} blue marbles. What is the chance of not picking red?`,
+          answer,
+          distractors: [probabilityFormatFraction(red, total), "1/2", "1/4"],
+        });
+      },
+      () => {
+        const total = probabilityRandomChoice([8, 10, 12]);
+        const blue = probabilityRandomChoice([2, 3, 4]);
+        const answer = probabilityFormatFraction(total - blue, total);
+        return buildEntry({
+          question: `A spinner has ${total} equal sections. ${blue} sections are blue. What is the chance of not landing on blue?`,
+          answer,
+          distractors: [probabilityFormatFraction(blue, total), "1/2", "1/3"],
+        });
+      },
+      () => {
+        const good = probabilityRandomChoice([2, 3, 4]);
+        const bad = probabilityRandomChoice([6, 8, 10]);
+        const answer = probabilityFormatFraction(good, good + bad);
+        return buildEntry({
+          question: `A raffle has ${good} winning tickets and ${bad} losing tickets. What is the chance of picking a winning ticket?`,
+          answer,
+          distractors: [probabilityFormatFraction(bad, good + bad), "1/2", "1/4"],
+        });
+      },
+    ],
+    7: [
+      () => {
+        const spinnerSections = probabilityRandomChoice([3, 4, 5, 6]);
+        return buildEntry({
+          question: `You flip a fair coin and spin a ${spinnerSections}-section spinner. How many equally likely outcomes are there?`,
+          answer: String(2 * spinnerSections),
+          distractors: [String(spinnerSections), String(spinnerSections + 2), String(2 * spinnerSections + 2)],
+        });
+      },
+      () => {
+        const chanceDenominator = probabilityRandomChoice([4, 5, 6]);
+        const trials = chanceDenominator * probabilityRandomChoice([8, 10, 12]);
+        return buildEntry({
+          question: `A spinner lands on red ${probabilityFormatFraction(1, chanceDenominator)} of the time. About how many reds would you expect in ${trials} spins?`,
+          answer: String(trials / chanceDenominator),
+          distractors: [String(chanceDenominator), String(trials / 2), String(trials - trials / chanceDenominator)],
+        });
+      },
+      () => buildEntry({
+        question: "What is the chance of flipping heads and then tails with a fair coin?",
+        answer: "1/4",
+        distractors: ["1/2", "1/3", "3/4"],
+      }),
+    ],
+    8: [
+      () => {
+        const red = probabilityRandomChoice([3, 4, 5]);
+        const blue = probabilityRandomChoice([2, 3, 4]);
+        const answer = probabilityFormatFraction(red - 1, red + blue - 1);
+        return buildEntry({
+          question: `A bag has ${red} red and ${blue} blue marbles. You pick one red marble and do not put it back. What is the chance the next marble is red?`,
+          answer,
+          distractors: [probabilityFormatFraction(red, red + blue), probabilityFormatFraction(blue, red + blue - 1), "1/2"],
+        });
+      },
+      () => buildEntry({
+        question: "Two fair coins are flipped. What is the chance of getting at least one head?",
+        answer: "3/4",
+        distractors: ["1/4", "1/2", "1/3"],
+      }),
+      () => buildEntry({
+        question: "Two fair dice are rolled. What is the chance that both dice show 6?",
+        answer: "1/36",
+        distractors: ["1/6", "1/12", "2/36"],
+      }),
+    ],
+    9: [
+      () => buildEntry({
+        question: "Three fair coins are flipped. What is the chance of getting exactly two heads?",
+        answer: "3/8",
+        distractors: ["1/8", "1/2", "2/3"],
+      }),
+      () => buildEntry({
+        question: "Two fair dice are rolled. What is the chance that the sum is 7?",
+        answer: "1/6",
+        distractors: ["1/12", "1/9", "7/36"],
+      }),
+      () => {
+        const trials = probabilityRandomChoice([50, 100, 200]);
+        const hits = Math.round(trials * probabilityRandomChoice([0.22, 0.34, 0.43]));
+        return buildEntry({
+          question: `In a simulation, red appeared ${hits} times in ${trials} trials. Which is the best estimate of the experimental probability of red?`,
+          answer: probabilityFormatPercent(hits, trials),
+          distractors: [probabilityFormatPercent(trials - hits, trials), "50%", "10%"],
+        });
+      },
+    ],
+    10: [
+      () => {
+        const soccerPlayers = probabilityRandomChoice([20, 30, 40]);
+        const girls = soccerPlayers * probabilityRandomChoice([0.25, 0.4, 0.6]);
+        return buildEntry({
+          question: `A school club has ${soccerPlayers} soccer players. Of those soccer players, ${girls} are girls. If one soccer player is chosen, what is the chance the player is a girl?`,
+          answer: probabilityFormatFraction(girls, soccerPlayers),
+          distractors: [probabilityFormatFraction(girls, soccerPlayers + 10), probabilityFormatFraction(soccerPlayers - girls, soccerPlayers), "1/2"],
+        });
+      },
+      () => buildEntry({
+        question: "Two events are independent. Event A has chance 1/3 and Event B has chance 1/4. What is the chance both happen?",
+        answer: "1/12",
+        distractors: ["1/7", "1/3", "1/4"],
+      }),
+      () => buildEntry({
+        question: "Four fair coins are flipped. What is the chance of getting exactly one head?",
+        answer: "1/4",
+        distractors: ["1/16", "1/2", "3/4"],
+      }),
     ],
   };
 
-  const level = generators[difficulty] ? difficulty : 1;
-  return randomChoice(generators[level])();
+  return probabilityRandomChoice(generators[level] || generators[10])();
 }
-
-PROBABILITY_QUESTIONS.push({
-  question: "A spinner has 5 equal sections and only 1 section is red. What is the chance of landing on red?",
-  options: ["1/2", "1/3", "1/4", "1/5"],
-  answer: "1/5",
-  difficulty: 2,
-});

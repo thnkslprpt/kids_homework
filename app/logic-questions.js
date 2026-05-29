@@ -1,1510 +1,187 @@
-const LOGIC_QUESTIONS = [
-  {
-    question: "If all squares have 4 sides, which must be true?",
-    options: ["Every triangle has 4 sides", "A square has 4 sides", "Every 4-sided shape is a square", "A square is a circle"],
-    answer: "A square has 4 sides",
-    difficulty: 1,
-  },
-  {
-    question: "Which number does not belong?",
-    options: ["2", "4", "6", "9"],
-    answer: "9",
-    difficulty: 1,
-  },
-  {
-    question: "Noga is older than Gideon. Gideon is older than Teva. Who is youngest?",
-    options: ["Noga", "Gideon", "Teva", "You cannot tell"],
-    answer: "Teva",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next in the pattern: circle, square, circle, square, __",
-    options: ["Triangle", "Circle", "Square", "Star"],
-    answer: "Circle",
-    difficulty: 1,
-  },
-  {
-    question: "If every robin is a bird and this animal is a robin, what is it also?",
-    options: ["A fish", "A bird", "A reptile", "A mammal"],
-    answer: "A bird",
-    difficulty: 1,
-  },
-  {
-    question: "Which letter comes next: A, C, E, G, __",
-    options: ["H", "I", "J", "K"],
-    answer: "I",
-    difficulty: 2,
-  },
-  {
-    question: "Gabriel is left of Noga. Noga is left of Eden. Who is in the middle?",
-    options: ["Gabriel", "Noga", "Eden", "No one"],
-    answer: "Noga",
-    difficulty: 2,
-  },
-  {
-    question: "Which set follows the same rule as 3, 6, 9, 12?",
-    options: ["5, 10, 15, 20", "4, 7, 10, 12", "2, 5, 7, 10", "1, 2, 4, 8"],
-    answer: "5, 10, 15, 20",
-    difficulty: 2,
-  },
-  {
-    question: "If no cats are dogs and Pip is a cat, what do we know?",
-    options: ["Pip is a dog", "Pip is not a dog", "Pip is a fish", "We know nothing"],
-    answer: "Pip is not a dog",
-    difficulty: 2,
-  },
-  {
-    question: "Which is the odd one out?",
-    options: ["Triangle", "Square", "Rectangle", "Apple"],
-    answer: "Apple",
-    difficulty: 2,
-  },
-  {
-    question: "Gabriel finished before Eden. Eden finished before Teva. Who finished last?",
-    options: ["Gabriel", "Eden", "Teva", "They tied"],
-    answer: "Teva",
-    difficulty: 3,
-  },
-  {
-    question: "Which number comes next: 1, 4, 7, 10, __",
-    options: ["11", "12", "13", "14"],
-    answer: "13",
-    difficulty: 3,
-  },
-  {
-    question: "Which rule matches this pattern: 10, 8, 6, 4, __",
-    options: ["Add 2 each time", "Subtract 2 each time", "Double each time", "Subtract 4 each time"],
-    answer: "Subtract 2 each time",
-    difficulty: 3,
-  },
-  {
-    question: "The red book is heavier than the blue book. The blue book is heavier than the green book. Which book is lightest?",
-    options: ["Red book", "Blue book", "Green book", "The red and blue books tie"],
-    answer: "Green book",
-    difficulty: 3,
-  },
-  {
-    question: "If every insect has 6 legs and an ant is an insect, what must be true?",
-    options: ["An ant has 6 legs", "Every 6-legged animal is an ant", "Ants are not insects", "An ant has 8 legs"],
-    answer: "An ant has 6 legs",
-    difficulty: 3,
-  },
-  {
-    question: "Which number comes next: 2, 4, 8, 16, __",
-    options: ["20", "24", "30", "32"],
-    answer: "32",
-    difficulty: 4,
-  },
-  {
-    question: "The toy is not in the box. It is either on the shelf or under the bed. Gideon checked under the bed and it is not there. Where is the toy?",
-    options: ["In the box", "On the shelf", "Outside", "In the closet"],
-    answer: "On the shelf",
-    difficulty: 4,
-  },
-  {
-    question: "Three friends wore red, blue, and green shirts. Chen wore green. Ali did not wear red. Bea did not wear blue. Who wore the blue shirt?",
-    options: ["Ali", "Bea", "Chen", "No one"],
-    answer: "Ali",
-    difficulty: 4,
-  },
-  {
-    question: "If weekends are days off and Saturday is a weekend, what follows?",
-    options: ["Saturday is a school day", "Saturday is a day off", "Every day is a weekend", "Saturday is Monday"],
-    answer: "Saturday is a day off",
-    difficulty: 4,
-  },
-  {
-    question: "Which number comes next: 3, 6, 12, 24, __",
-    options: ["30", "36", "42", "48"],
-    answer: "48",
-    difficulty: 4,
-  },
-  {
-    question: "A code changes 2 to 5, 4 to 7, and 6 to 9. What should 8 change to?",
-    options: ["9", "10", "11", "12"],
-    answer: "11",
-    difficulty: 5,
-  },
-  {
-    question: "If every tulip is a flower and some flowers are yellow, what can we know for sure?",
-    options: ["Every tulip is yellow", "Some tulips are yellow", "A tulip is a flower", "No flowers are yellow"],
-    answer: "A tulip is a flower",
-    difficulty: 5,
-  },
-  {
-    question: "Eden is shorter than Noga but taller than Teva. Who is tallest?",
-    options: ["Eden", "Noga", "Teva", "Eden and Noga"],
-    answer: "Noga",
-    difficulty: 5,
-  },
-  {
-    question: "Which number comes next: 5, 10, 20, 40, __",
-    options: ["45", "60", "70", "80"],
-    answer: "80",
-    difficulty: 5,
-  },
-  {
-    question: "A snack is hidden in one of three drawers. It is not in the top drawer. The middle drawer is empty. Where is the snack?",
-    options: ["Top drawer", "Middle drawer", "Bottom drawer", "It is nowhere"],
-    answer: "Bottom drawer",
-    difficulty: 5,
-  },
-  {
-    question: "Gabriel is taller than Gideon. Gideon is taller than Teva. Who is tallest?",
-    options: ["Gabriel", "Gideon", "Teva", "You cannot tell"],
-    answer: "Gabriel",
-    difficulty: 1,
-  },
-  {
-    question: "Which number comes next: 4, 8, 12, 16, __",
-    options: ["18", "19", "20", "21"],
-    answer: "20",
-    difficulty: 1,
-  },
-  {
-    question: "Which letter comes next: B, D, F, H, __",
-    options: ["I", "J", "K", "L"],
-    answer: "J",
-    difficulty: 2,
-  },
-  {
-    question: "Which does not belong?",
-    options: ["Elbow", "Knee", "Banana", "Ankle"],
-    answer: "Banana",
-    difficulty: 2,
-  },
-  {
-    question: "If all tulips are flowers and all flowers are plants, what must be true?",
-    options: ["Tulips are trees", "Tulips are plants", "All plants are tulips", "Flowers are not plants"],
-    answer: "Tulips are plants",
-    difficulty: 3,
-  },
-  {
-    question: "Gideon sits between Gabriel and Teva. Who cannot sit on an end?",
-    options: ["Gideon", "Gabriel", "Teva", "Gabriel and Teva"],
-    answer: "Gideon",
-    difficulty: 3,
-  },
-  {
-    question: "The red coin is not in Box A. It is in Box B or Box C. Box C is empty. Where is the red coin?",
-    options: ["Box A", "Box B", "Box C", "It is missing"],
-    answer: "Box B",
-    difficulty: 4,
-  },
-  {
-    question: "Which number comes next: 12, 10, 8, 6, __",
-    options: ["5", "4", "3", "2"],
-    answer: "4",
-    difficulty: 4,
-  },
-  {
-    question: "A code changes 1 to 4, 3 to 6, and 5 to 8. What should 7 change to?",
-    options: ["9", "10", "11", "12"],
-    answer: "10",
-    difficulty: 5,
-  },
-  {
-    question: "If every rectangle has 4 sides and this shape has 3 sides, what can you know for sure?",
-    options: ["It is a rectangle", "It is not a rectangle", "It is a square", "It is a circle"],
-    answer: "It is not a rectangle",
-    difficulty: 5,
-  },
-  {
-    question: "Which number comes next: 1, 2, 4, 8, __",
-    options: ["10", "12", "16", "18"],
-    answer: "16",
-    difficulty: 1,
-  },
-  {
-    question: "If all bloops are razzies and all razzies are blue, what must be true about a bloop?",
-    options: ["It is blue", "It is red", "It is not a razzy", "It is a number"],
-    answer: "It is blue",
-    difficulty: 1,
-  },
-  {
-    question: "Eden sits right of Noga and left of Gabriel. Who is in the middle?",
-    options: ["Eden", "Noga", "Gabriel", "No one"],
-    answer: "Eden",
-    difficulty: 2,
-  },
-  {
-    question: "If all frogs are animals and this is a frog, what is it?",
-    options: ['A plant', 'An animal', 'A rock', 'A toy'],
-    answer: "An animal",
-    difficulty: 1,
-  },
-  {
-    question: "The bag is not in the closet. It is either under the bed or by the door. It is not under the bed. Where is the bag?",
-    options: ["In the closet", "By the door", "On the roof", "In the sink"],
-    answer: "By the door",
-    difficulty: 3,
-  },
-  {
-    question: "Which letter comes next: Z, X, V, T, __",
-    options: ["R", "S", "U", "W"],
-    answer: "R",
-    difficulty: 3,
-  },
-  {
-    question: "If no fish can fly and tuna is a fish, what must be true?",
-    options: ["Tuna can fly", "Tuna cannot fly", "Tuna is a bird", "All birds are fish"],
-    answer: "Tuna cannot fly",
-    difficulty: 4,
-  },
-  {
-    question: "Which set follows the same rule as 2, 5, 8, 11?",
-    options: ["4, 7, 10, 13", "3, 6, 12, 24", "1, 4, 9, 16", "5, 9, 10, 18"],
-    answer: "4, 7, 10, 13",
-    difficulty: 4,
-  },
-  {
-    question: "The red ball is heavier than the blue ball. The blue ball is heavier than the green ball. Which ball is heaviest?",
-    options: ["Red", "Blue", "Green", "Blue and green tie"],
-    answer: "Red",
-    difficulty: 5,
-  },
-  {
-    question: "The key is in drawer A or drawer B. It is not in drawer A. Where is the key?",
-    options: ["Drawer A", "Drawer B", "In both drawers", "In neither drawer"],
-    answer: "Drawer B",
-    difficulty: 5,
-  },
-  {
-    question: "If all apples are fruit and this is an apple, what is it?",
-    options: ["A vegetable", "A fruit", "A toy", "A rock"],
-    answer: "A fruit",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: 10, 12, 14, __",
-    options: ['15', '16', '17', '18'],
-    answer: "16",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: sun, moon, sun, moon, __",
-    options: ["Star", "Cloud", "Sun", "Tree"],
-    answer: "Sun",
-    difficulty: 1,
-  },
-  {
-    question: "If every dog barks and this animal is a dog, what must be true?",
-    options: ["It barks", "It swims", "It flies", "It is a cat"],
-    answer: "It barks",
-    difficulty: 1,
-  },
-  {
-    question: "Which shape has exactly 3 sides?",
-    options: ['Square', 'Triangle', 'Circle', 'Rectangle'],
-    answer: "Triangle",
-    difficulty: 1,
-  },
-  {
-    question: "Gideon is older than Gabriel. Gabriel is older than Eden. Who is youngest?",
-    options: ["Gideon", "Gabriel", "Eden", "You cannot tell"],
-    answer: "Eden",
-    difficulty: 1,
-  },
-  {
-    question: "Which set follows the same rule as 2, 4, 6, 8?",
-    options: ["10, 12, 14, 16", "11, 14, 17, 20", "1, 3, 6, 10", "5, 9, 13, 18"],
-    answer: "10, 12, 14, 16",
-    difficulty: 1,
-  },
-  {
-    question: "If no birds are fish and this animal is a bird, what is true?",
-    options: ["It is a fish", "It is not a fish", "It is a rock", "It is a turtle"],
-    answer: "It is not a fish",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: green, yellow, green, yellow, __",
-    options: ['Green', 'Yellow', 'Blue', 'Red'],
-    answer: "Green",
-    difficulty: 1,
-  },
-  {
-    question: "Eden is left of Noga. Noga is left of Teva. Who is in the middle?",
-    options: ["Eden", "Noga", "Teva", "No one"],
-    answer: "Noga",
-    difficulty: 2,
-  },
-  {
-    question: "Which number comes next: 5, 10, 15, 20, __",
-    options: ["22", "24", "25", "30"],
-    answer: "25",
-    difficulty: 2,
-  },
-  {
-    question: "If all squares have 4 sides, which shape must have 4 sides?",
-    options: ["Triangle", "Square", "Circle", "Star"],
-    answer: "Square",
-    difficulty: 2,
-  },
-  {
-    question: "If every sunflower is a plant and this is a sunflower, what is it?",
-    options: ['A plant', 'A bird', 'A fish', 'A chair'],
-    answer: "A plant",
-    difficulty: 1,
-  },
-  {
-    question: "Which set follows the same rule as 1, 4, 7, 10?",
-    options: ["2, 5, 8, 11", "3, 6, 12, 24", "4, 8, 12, 15", "5, 10, 15, 21"],
-    answer: "2, 5, 8, 11",
-    difficulty: 2,
-  },
-  {
-    question: "If no cats are birds and Milo is a cat, what do we know?",
-    options: ["Milo is a bird", "Milo is not a bird", "Milo is a fish", "We know nothing"],
-    answer: "Milo is not a bird",
-    difficulty: 2,
-  },
-  {
-    question: "Which number is smallest: 3, 7, 5, 9?",
-    options: ['3', '5', '7', '9'],
-    answer: "3",
-    difficulty: 1,
-  },
-  {
-    question: "Noga finished before Gabriel. Gabriel finished before Eden. Who finished last?",
-    options: ["Noga", "Gabriel", "Eden", "They tied"],
-    answer: "Eden",
-    difficulty: 2,
-  },
-  {
-    question: "Which number comes next: 2, 5, 8, 11, 14, __",
-    options: ["15", "16", "17", "18"],
-    answer: "17",
-    difficulty: 2,
-  },
-  {
-    question: "Which number comes next: 12, 9, 6, 3, __",
-    options: ["1", "0", "-1", "-3"],
-    answer: "0",
-    difficulty: 3,
-  },
-  {
-    question: "The toy is not in the drawer. It is either on the shelf or on the table. It is not on the shelf. Where is the toy?",
-    options: ["In the drawer", "On the shelf", "On the table", "Under the bed"],
-    answer: "On the table",
-    difficulty: 3,
-  },
-  {
-    question: "Three kids wore red, blue, and green shirts. Teva did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
-    options: ["Teva", "Noga", "Eden", "No one"],
-    answer: "Teva",
-    difficulty: 3,
-  },
-  {
-    question: "If weekdays are school days and Monday is a weekday, what follows?",
-    options: ["Monday is a school day", "Monday is a weekend day", "Monday is a holiday", "Monday is a night"],
-    answer: "Monday is a school day",
-    difficulty: 3,
-  },
-  {
-    question: "Noga is taller than Gideon. Gideon is taller than Gabriel. Who is shortest?",
-    options: ['Noga', 'Gideon', 'Gabriel', 'You cannot tell'],
-    answer: "Gabriel",
-    difficulty: 1,
-  },
-  {
-    question: "If every tulip is a flower and this is a tulip, what is it?",
-    options: ["A flower", "A tree", "A rock", "A bug"],
-    answer: "A flower",
-    difficulty: 3,
-  },
-  {
-    question: "Gideon sits between Eden and Teva. Who cannot sit on an end?",
-    options: ["Gideon", "Eden", "Teva", "Eden and Teva"],
-    answer: "Gideon",
-    difficulty: 3,
-  },
-  {
-    question: "What comes next: 7, 14, 21, 28, __",
-    options: ['30', '32', '35', '38'],
-    answer: "35",
-    difficulty: 1,
-  },
-  {
-    question: "Which one does not belong: apple, banana, carrot, pencil?",
-    options: ['Apple', 'Banana', 'Carrot', 'Pencil'],
-    answer: "Pencil",
-    difficulty: 2,
-  },
-  {
-    question: "Which number comes next: 7, 14, 28, 56, __",
-    options: ["64", "84", "98", "112"],
-    answer: "112",
-    difficulty: 4,
-  },
-  {
-    question: "If no robots are animals and Rolo is a robot, what must be true?",
-    options: ["Rolo is an animal", "Rolo is not an animal", "Rolo is a bird", "Rolo is a tree"],
-    answer: "Rolo is not an animal",
-    difficulty: 4,
-  },
-  {
-    question: "Which set follows the same rule as 4, 8, 12, 16?",
-    options: ["6, 10, 14, 18", "5, 11, 17, 23", "3, 6, 12, 24", "2, 3, 5, 8"],
-    answer: "6, 10, 14, 18",
-    difficulty: 4,
-  },
-  {
-    question: "A code changes 3 to 7, 5 to 9, and 8 to 12. What should 10 change to?",
-    options: ["12", "13", "14", "15"],
-    answer: "14",
-    difficulty: 4,
-  },
-  {
-    question: "The key is in box A or box B. It is not in box A. Where is the key?",
-    options: ["Box A", "Box B", "Both boxes", "Neither box"],
-    answer: "Box B",
-    difficulty: 4,
-  },
-  {
-    question: "The toy is on the shelf or the table. It is not on the shelf. Where is it?",
-    options: ['The shelf', 'The table', 'The drawer', 'The closet'],
-    answer: "The table",
-    difficulty: 2,
-  },
-  {
-    question: "Which letter comes next: Z, W, T, Q, __",
-    options: ["N", "O", "P", "R"],
-    answer: "N",
-    difficulty: 4,
-  },
-  {
-    question: "If no fish can bark and Salmon is a fish, what must be true?",
-    options: ["Salmon can bark", "Salmon cannot bark", "Salmon is a dog", "All dogs are fish"],
-    answer: "Salmon cannot bark",
-    difficulty: 4,
-  },
-  {
-    question: "Which number comes next: 2, 6, 18, 54, __",
-    options: ["72", "108", "162", "216"],
-    answer: "162",
-    difficulty: 4,
-  },
-  {
-    question: "A code changes 2 to 7, 4 to 9, and 6 to 11. What should 8 change to?",
-    options: ["12", "13", "14", "15"],
-    answer: "13",
-    difficulty: 5,
-  },
-  {
-    question: "If all squares are rectangles and this shape is a square, what must be true?",
-    options: ["It is a rectangle", "It is a triangle", "It is a circle", "It is not a shape"],
-    answer: "It is a rectangle",
-    difficulty: 5,
-  },
-  {
-    question: "What comes next: 2, 3, 5, 8, 12, __",
-    options: ["15", "16", "17", "18"],
-    answer: "17",
-    difficulty: 5,
-  },
-  {
-    question: "What comes next: 1, 2, 4, 7, 11, __",
-    options: ["14", "15", "16", "18"],
-    answer: "16",
-    difficulty: 5,
-  },
-  {
-    question: "A pattern repeats: red, red, blue, red, red, blue, __",
-    options: ["Red", "Blue", "Green", "Yellow"],
-    answer: "Red",
-    difficulty: 5,
-  },
-  {
-    question: "The number is greater than 10. It is less than 15. It is even. It is not 14. What is it?",
-    options: ["11", "12", "13", "15"],
-    answer: "12",
-    difficulty: 5,
-  },
-  {
-    question: "Dana is first. Noga is not first. Eden is not last. Who is in the middle?",
-    options: ["Dana", "Noga", "Eden", "You cannot tell"],
-    answer: "Eden",
-    difficulty: 5,
-  },
-  {
-    question: "The gem is in box A, box B, or box C. It is not in box A. It is not in box C. Where is it?",
-    options: ["Box A", "Box B", "Box C", "It is nowhere"],
-    answer: "Box B",
-    difficulty: 5,
-  },
-  {
-    question: "If a number is doubled and then 3 is added, what does 5 become?",
-    options: ["10", "11", "12", "13"],
-    answer: "13",
-    difficulty: 5,
-  },
-  {
-    question: "If all dogs are animals and this is a dog, what is it?",
-    options: ["An animal", "A bird", "A fish", "A car"],
-    answer: "An animal",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: 2, 4, 6, __",
-    options: ["7", "8", "9", "10"],
-    answer: "8",
-    difficulty: 1,
-  },
-  {
-    question: "Which shape has 3 sides?",
-    options: ["Square", "Triangle", "Circle", "Rectangle"],
-    answer: "Triangle",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: red, blue, red, blue, __",
-    options: ["Red", "Blue", "Green", "Yellow"],
-    answer: "Red",
-    difficulty: 1,
-  },
-  {
-    question: "If every apple is a fruit and this is an apple, what is it?",
-    options: ["A vegetable", "A fruit", "A tree", "A toy"],
-    answer: "A fruit",
-    difficulty: 1,
-  },
-  {
-    question: "Which number is bigger?",
-    options: ["7", "9", "4", "2"],
-    answer: "9",
-    difficulty: 1,
-  },
-  {
-    question: "Noga is taller than Gideon. Gideon is taller than Teva. Who is shortest?",
-    options: ["Noga", "Gideon", "Teva", "No one"],
-    answer: "Teva",
-    difficulty: 1,
-  },
-  {
-    question: "Which letter comes next: A, C, E, __",
-    options: ["F", "G", "H", "I"],
-    answer: "G",
-    difficulty: 1,
-  },
-  {
-    question: "Which one does not belong?",
-    options: ["Cat", "Dog", "Fish", "Chair"],
-    answer: "Chair",
-    difficulty: 1,
-  },
-  {
-    question: "If no birds are fish and this is a bird, what is true?",
-    options: ["It is a fish", "It is not a fish", "It is a rock", "It is a cat"],
-    answer: "It is not a fish",
-    difficulty: 1,
-  },
-  {
-    question: "If every square is a rectangle and this shape is a square, what must be true?",
-    options: ['It is a rectangle', 'It is a triangle', 'It is a circle', 'It is a hexagon'],
-    answer: "It is a rectangle",
-    difficulty: 2,
-  },
-  {
-    question: "Which set follows the same rule as 1, 2, 3?",
-    options: ["4, 5, 6", "2, 4, 6", "1, 3, 5", "3, 6, 9"],
-    answer: "4, 5, 6",
-    difficulty: 1,
-  },
-  {
-    question: "If all flowers are plants and this is a flower, what is it?",
-    options: ["A plant", "A rock", "A bird", "A shoe"],
-    answer: "A plant",
-    difficulty: 1,
-  },
-  {
-    question: "Which letter comes next: C, E, G, I, __",
-    options: ['J', 'K', 'L', 'M'],
-    answer: "K",
-    difficulty: 2,
-  },
-  {
-    question: "If Eden is left of Noga and Noga is left of Gabriel, who is in the middle?",
-    options: ["Eden", "Noga", "Gabriel", "No one"],
-    answer: "Noga",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: 5, 10, 15, __",
-    options: ["18", "20", "21", "25"],
-    answer: "20",
-    difficulty: 1,
-  },
-  {
-    question: "If every cat meows and this animal is a cat, what must be true?",
-    options: ["It meows", "It swims", "It flies", "It is a horse"],
-    answer: "It meows",
-    difficulty: 1,
-  },
-  {
-    question: "Which number is smaller?",
-    options: ["4", "6", "8", "10"],
-    answer: "4",
-    difficulty: 1,
-  },
-  {
-    question: "What comes next: 3, 6, 9, 12, __",
-    options: ["14", "15", "16", "18"],
-    answer: "15",
-    difficulty: 2,
-  },
-  {
-    question: "Eden is left of Gabriel. Gabriel is left of Teva. Who is in the middle?",
-    options: ["Eden", "Gabriel", "Teva", "No one"],
-    answer: "Gabriel",
-    difficulty: 2,
-  },
-  {
-    question: "If a shape has 5 sides, what is it?",
-    options: ['Triangle', 'Square', 'Pentagon', 'Hexagon'],
-    answer: "Pentagon",
-    difficulty: 4,
-  },
-  {
-    question: "What comes next: 10, 20, 30, __",
-    options: ["35", "40", "45", "50"],
-    answer: "40",
-    difficulty: 2,
-  },
-  {
-    question: "If a bag is not in box A and not in box C, where is it?",
-    options: ['Box A', 'Box B', 'Box C', 'Box D'],
-    answer: "Box B",
-    difficulty: 2,
-  },
-  {
-    question: "Which letter comes next: Y, W, U, S, __",
-    options: ['Q', 'R', 'T', 'V'],
-    answer: "Q",
-    difficulty: 4,
-  },
-  {
-    question: "If no fish can walk and Nemo is a fish, what must be true?",
-    options: ['Nemo can walk', 'Nemo cannot walk', 'Nemo is a bird', 'Nemo is a tree'],
-    answer: "Nemo cannot walk",
-    difficulty: 3,
-  },
-  {
-    question: "If all squares have four sides, which shape must have four sides?",
-    options: ["Triangle", "Square", "Circle", "Star"],
-    answer: "Square",
-    difficulty: 2,
-  },
-  {
-    question: "Gabriel is older than Eden. Eden is older than Teva. Who is youngest?",
-    options: ["Gabriel", "Eden", "Teva", "You cannot tell"],
-    answer: "Teva",
-    difficulty: 2,
-  },
-  {
-    question: "What comes next: 5, 8, 11, 14, __",
-    options: ["15", "16", "17", "18"],
-    answer: "17",
-    difficulty: 2,
-  },
-  {
-    question: "The red block is left of blue, and blue is left of green. Which block is in the middle?",
-    options: ['Red', 'Blue', 'Green', 'They are tied'],
-    answer: "Blue",
-    difficulty: 3,
-  },
-  {
-    question: "Which word does not belong?",
-    options: ["Monday", "Tuesday", "April", "Wednesday"],
-    answer: "April",
-    difficulty: 2,
-  },
-  {
-    question: "If a box has 2 red balls and 1 blue ball, which color is more likely to be picked?",
-    options: ["Red", "Blue", "Green", "Yellow"],
-    answer: "Red",
-    difficulty: 2,
-  },
-  {
-    question: "Which comes next: A, D, G, J, __",
-    options: ["K", "L", "M", "N"],
-    answer: "M",
-    difficulty: 2,
-  },
-  {
-    question: "If all pencils are tools and this is a pencil, what is it?",
-    options: ["A tool", "A toy", "A fruit", "A shoe"],
-    answer: "A tool",
-    difficulty: 2,
-  },
-  {
-    question: "If the light is on, the room is bright. The light is on. What must be true?",
-    options: ["The room is bright", "The room is dark", "It is night", "Nothing"],
-    answer: "The room is bright",
-    difficulty: 2,
-  },
-  {
-    question: "If no frogs are birds and this animal is a frog, what must be true?",
-    options: ['It is a bird', 'It is not a bird', 'It is a cat', 'It is a fish'],
-    answer: "It is not a bird",
-    difficulty: 3,
-  },
-  {
-    question: "If every kite needs string and this is a kite, what must be true?",
-    options: ["It needs string", "It needs water", "It needs wings", "It needs wheels"],
-    answer: "It needs string",
-    difficulty: 2,
-  },
-  {
-    question: "The bag is under the bed or in the closet. It is not under the bed. Where is it?",
-    options: ['In the bed', 'Under the bed', 'In the closet', 'On the chair'],
-    answer: "In the closet",
-    difficulty: 3,
-  },
-  {
-    question: "Three kids wore hats. Gabriel did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?",
-    options: ['Gabriel', 'Noga', 'Eden', 'No one'],
-    answer: "Gabriel",
-    difficulty: 3,
-  },
-  {
-    question: "If weekdays are school days and Friday is a weekday, what follows?",
-    options: ['Friday is a school day', 'Friday is a weekend day', 'Friday is a holiday', 'Friday is a night'],
-    answer: "Friday is a school day",
-    difficulty: 3,
-  },
-  {
-    question: "What comes next: 3, 6, 12, 24, __",
-    options: ["30", "36", "48", "54"],
-    answer: "48",
-    difficulty: 3,
-  },
-  {
-    question: "Which set follows the same rule as 4, 7, 10, 13?",
-    options: ['16, 19, 22, 25', '5, 8, 12, 15', '2, 6, 10, 14', '20, 24, 28, 31'],
-    answer: "16, 19, 22, 25",
-    difficulty: 2,
-  },
-  {
-    question: "If no cats are dogs and this animal is a cat, what is true?",
-    options: ['It is a dog', 'It is not a dog', 'It is a bird', 'It is a horse'],
-    answer: "It is not a dog",
-    difficulty: 1,
-  },
-  {
-    question: "Which set follows the same rule as 5, 8, 11, 14?",
-    options: ['17, 20, 23, 26', '16, 18, 22, 24', '2, 4, 6, 8', '7, 11, 15, 21'],
-    answer: "17, 20, 23, 26",
-    difficulty: 2,
-  },
-  {
-    question: "If all maps use symbols and this is a map, what must be true?",
-    options: ['It uses symbols', 'It is a toy', 'It is a book', 'It has no meaning'],
-    answer: "It uses symbols",
-    difficulty: 4,
-  },
-  {
-    question: "A machine adds 3 each time. What comes next: 4, 7, 10, 13, __",
-    options: ["15", "16", "17", "18"],
-    answer: "16",
-    difficulty: 3,
-  },
-  {
-    question: "If every dolphin is a mammal and this animal is a dolphin, what is it?",
-    options: ["A mammal", "A bird", "A fish", "A snake"],
-    answer: "A mammal",
-    difficulty: 3,
-  },
-  {
-    question: "Noga sits between Gabriel and Teva. Who cannot sit on an end?",
-    options: ['Gabriel', 'Noga', 'Teva', 'No one'],
-    answer: "Noga",
-    difficulty: 3,
-  },
-  {
-    question: "What comes next: 24, 20, 16, 12, __",
-    options: ["6", "8", "10", "14"],
-    answer: "8",
-    difficulty: 3,
-  },
-  {
-    question: "The key is in the drawer or on the table. It is not on the table. Where is it?",
-    options: ['The drawer', 'The table', 'The shelf', 'The floor'],
-    answer: "The drawer",
-    difficulty: 3,
-  },
-  {
-    question: "If the red ball is heavier than blue and blue is heavier than green, which ball is lightest?",
-    options: ["Red", "Blue", "Green", "They weigh the same"],
-    answer: "Green",
-    difficulty: 3,
-  },
-  {
-    question: "Which word is the odd one out?",
-    options: ["Potato", "Carrot", "Onion", "Apple"],
-    answer: "Apple",
-    difficulty: 3,
-  },
-  {
-    question: "If all squares are shapes and all shapes can be drawn, what must be true about squares?",
-    options: ["They can be drawn", "They are vegetables", "They are circles", "They cannot be drawn"],
-    answer: "They can be drawn",
-    difficulty: 3,
-  },
-  {
-    question: "Which number comes next: 1, 4, 7, 10, 13, __",
-    options: ["15", "16", "17", "19"],
-    answer: "16",
-    difficulty: 3,
-  },
-  {
-    question: "If the key is in drawer A or B, and it is not in drawer A, where is it?",
-    options: ["Drawer A", "Drawer B", "Both drawers", "Neither drawer"],
-    answer: "Drawer B",
-    difficulty: 3,
-  },
-  {
-    question: "Which number comes next: 2, 6, 12, 20, __",
-    options: ["24", "28", "30", "32"],
-    answer: "30",
-    difficulty: 4,
-  },
-  {
-    question: "If every rectangle is a quadrilateral and every square is a rectangle, what must be true about a square?",
-    options: ["It is a quadrilateral", "It is a circle", "It is a triangle", "It is not a shape"],
-    answer: "It is a quadrilateral",
-    difficulty: 4,
-  },
-  {
-    question: "Three kids wore red, blue, and green shirts. Gabriel is not red. Gideon is not blue. Eden wore green. Who wore red?",
-    options: ["Gabriel", "Gideon", "Eden", "No one"],
-    answer: "Gideon",
-    difficulty: 4,
-  },
-  {
-    question: "What comes next: 5, 11, 19, 29, __",
-    options: ["37", "39", "40", "41"],
-    answer: "41",
-    difficulty: 4,
-  },
-  {
-    question: "The prize is in box A, B, C, or D. It is not in A or D. It is not in B. Where is it?",
-    options: ["A", "B", "C", "D"],
-    answer: "C",
-    difficulty: 4,
-  },
-  {
-    question: "A code changes 4 to 9, 5 to 11, and 6 to 13. What does 7 become?",
-    options: ["14", "15", "16", "17"],
-    answer: "15",
-    difficulty: 4,
-  },
-  {
-    question: "Which set follows the same rule as 3, 9, 27?",
-    options: ["6, 18, 54", "4, 8, 16", "5, 10, 15", "7, 14, 28"],
-    answer: "6, 18, 54",
-    difficulty: 4,
-  },
-  {
-    question: "A pattern repeats: circle, circle, square, circle, circle, square, __",
-    options: ["Circle", "Square", "Triangle", "Star"],
-    answer: "Circle",
-    difficulty: 4,
-  },
-  {
-    question: "The key is not in box 1. It is in box 2 or 3. Box 2 is empty. Where is the key?",
-    options: ["Box 1", "Box 2", "Box 3", "It is missing"],
-    answer: "Box 3",
-    difficulty: 4,
-  },
-  {
-    question: "What comes next: 100, 90, 81, 73, __",
-    options: ["65", "66", "67", "68"],
-    answer: "66",
-    difficulty: 4,
-  },
-  {
-    question: "If all tulips are flowers and some flowers are yellow, what can we know for sure?",
-    options: ["Tulips are flowers", "All flowers are yellow", "All tulips are yellow", "No flowers are yellow"],
-    answer: "Tulips are flowers",
-    difficulty: 4,
-  },
-  {
-    question: "Which shape has 4 equal sides and 4 right angles?",
-    options: ["Triangle", "Circle", "Square", "Pentagon"],
-    answer: "Square",
-    difficulty: 4,
-  },
-  {
-    question: "Dana is first, Noga is not first, and Eden is not last. Who is in the middle?",
-    options: ["Dana", "Noga", "Eden", "No one"],
-    answer: "Eden",
-    difficulty: 4,
-  },
-  {
-    question: "A machine doubles a number and then adds 1. What does 4 become?",
-    options: ["8", "9", "10", "11"],
-    answer: "9",
-    difficulty: 4,
-  },
-  {
-    question: "Which is the only prime number in the list 21, 22, 23, 24?",
-    options: ['21', '22', '23', '24'],
-    answer: "23",
-    difficulty: 5,
-  },
-  {
-    question: "If all clocks show time and this is a clock, what must be true?",
-    options: ['It shows time', 'It makes food', 'It is a shoe', 'It is a book'],
-    answer: "It shows time",
-    difficulty: 4,
-  },
-  {
-    question: "Which number comes next: 30, 25, 21, 18, __",
-    options: ["14", "15", "16", "17"],
-    answer: "16",
-    difficulty: 4,
-  },
-  {
-    question: "If every bloop is a razzy and every razzy is blue, what must a bloop be?",
-    options: ["Blue", "Red", "Green", "Yellow"],
-    answer: "Blue",
-    difficulty: 5,
-  },
-  {
-    question: "The gem is in box A, B, C, or D. It is not in A. It is not in C. It is not in D. Where is it?",
-    options: ["A", "B", "C", "D"],
-    answer: "B",
-    difficulty: 5,
-  },
-  {
-    question: "A machine changes 3 to 8, 4 to 10, and 5 to 12. What does 9 become?",
-    options: ["18", "19", "20", "21"],
-    answer: "20",
-    difficulty: 5,
-  },
-  {
-    question: "What comes next: 1, 2, 6, 24, __",
-    options: ["48", "60", "72", "120"],
-    answer: "120",
-    difficulty: 5,
-  },
-  {
-    question: "If a number is greater than 20, less than 30, even, and a multiple of 7, what is it?",
-    options: ["21", "24", "28", "30"],
-    answer: "28",
-    difficulty: 5,
-  },
-  {
-    question: "Gabriel is taller than Teva, but shorter than Noga. Who is tallest?",
-    options: ["Gabriel", "Teva", "Noga", "No one"],
-    answer: "Noga",
-    difficulty: 5,
-  },
-  {
-    question: "The toy is not in the box, not in the drawer, and not on the shelf. It is on the table or under the chair. Under the chair is empty. Where is it?",
-    options: ["The box", "The drawer", "The table", "The shelf"],
-    answer: "The table",
-    difficulty: 5,
-  },
-  {
-    question: "If every maple is a tree and every tree needs water, what must be true about a maple?",
-    options: ["It needs water", "It is a fish", "It has wheels", "It is a rock"],
-    answer: "It needs water",
-    difficulty: 5,
-  },
-  {
-    question: "Which set follows the same rule as 4, 12, 36?",
-    options: ["2, 6, 18", "3, 6, 12", "4, 8, 16", "5, 10, 15"],
-    answer: "2, 6, 18",
-    difficulty: 5,
-  },
-  {
-    question: "A pattern is red, red, blue, red, red, blue, __",
-    options: ["Red", "Blue", "Green", "Yellow"],
-    answer: "Red",
-    difficulty: 5,
-  },
-  {
-    question: "If the machine adds 4 and then doubles, what does 3 become?",
-    options: ["12", "13", "14", "15"],
-    answer: "14",
-    difficulty: 5,
-  },
-  {
-    question: "If a shape has four equal sides and four right angles, what is it?",
-    options: ["Circle", "Triangle", "Square", "Rectangle"],
-    answer: "Square",
-    difficulty: 5,
-  },
-  {
-    question: "Which number comes next: 2, 5, 11, 23, __",
-    options: ["35", "43", "45", "47"],
-    answer: "47",
-    difficulty: 5,
-  },
-  {
-    question: "A code changes 1 to 4, 3 to 10, and 5 to 16. What does 7 become?",
-    options: ["18", "20", "22", "24"],
-    answer: "22",
-    difficulty: 5,
-  },
-  {
-    question: "A box contains one red, one blue, and one green marble. The red marble is not in box A. The blue marble is not in box B. The green marble is not in box C. If the red marble is in box B, where is the blue marble?",
-    options: ["Box A", "Box B", "Box C", "It is nowhere"],
-    answer: "Box C",
-    difficulty: 5,
-  },
-  {
-    question: "Which number comes next: 8, 16, 32, 64, __",
-    options: ["96", "112", "120", "128"],
-    answer: "128",
-    difficulty: 5,
-  },
-  {
-    question: "If all rectangles are four-sided shapes and this shape is a rectangle, what must be true?",
-    options: ["It is a four-sided shape", "It is a triangle", "It is a circle", "It is not a shape"],
-    answer: "It is a four-sided shape",
-    difficulty: 5,
-  },
-  {
-    question: "The sign says, 'If the light is green, go.' The light is green. What should happen?",
-    options: ["Go", "Stop", "Wait", "Turn around"],
-    answer: "Go",
-    difficulty: 5,
-  },
-  {
-    question: "Which of 29, 30, 32, 34 is prime?",
-    options: ['29', '30', '32', '34'],
-    answer: "29",
-    difficulty: 5,
-  },
-];
+function logicMakeQuestion(question, options, answer, difficulty, extra = {}) {
+  const normalizedQuestion = String(question || "").trim();
+  const normalizedOptions = Array.from(new Set((options || []).map((option) => String(option))));
+  const normalizedAnswer = String(answer);
+  const normalizedDifficulty = logicClampDifficulty(difficulty);
 
-LOGIC_QUESTIONS.push(
-  {
-    question:
-      "Ava, Ben, Cara, and Dov each chose a different color: red, blue, green, or yellow. Ava did not choose red or blue. Ben chose green. Cara did not choose yellow. Which color did Ava choose?",
-    options: ["Red", "Blue", "Green", "Yellow"],
-    answer: "Yellow",
-    difficulty: 6,
-  },
-  {
-    question: "A code changes 2 to 9, 3 to 14, and 4 to 19. What does 7 change to?",
-    options: ["29", "32", "34", "36"],
-    answer: "34",
-    difficulty: 6,
-  },
-  {
-    question:
-      "Four books are on a shelf. The atlas is left of the novel. The poem book is right of the novel. The comic is not at either end. Which book is farthest left?",
-    options: ["Atlas", "Novel", "Poem book", "Comic"],
-    answer: "Atlas",
-    difficulty: 7,
-  },
-  {
-    question: "A code changes 1 to 4, 2 to 11, and 3 to 22. What does 5 change to?",
-    options: ["42", "46", "50", "54"],
-    answer: "46",
-    difficulty: 7,
+  if (!normalizedQuestion) {
+    throw new Error("Logic question is missing question text.");
   }
-);
+  if (normalizedOptions.length !== 4 || !normalizedOptions.includes(normalizedAnswer)) {
+    throw new Error(`Logic question must have exactly 4 unique options including the answer: ${normalizedQuestion}`);
+  }
+
+  return {
+    question: normalizedQuestion,
+    options: normalizedOptions,
+    answer: normalizedAnswer,
+    difficulty: normalizedDifficulty,
+    ...extra,
+  };
+}
+
+const LOGIC_QUESTIONS = [
+  // Level 1: simple patterns, categories, direct clues, and basic deduction.
+  logicMakeQuestion("If all squares have 4 sides, which must be true?", ["Every triangle has 4 sides", "A square has 4 sides", "Every 4-sided shape is a square", "A square is a circle"], "A square has 4 sides", 1),
+  logicMakeQuestion("Which number does not belong with the even numbers?", ["2", "4", "6", "9"], "9", 1),
+  logicMakeQuestion("Noga is older than Gideon. Gideon is older than Teva. Who is youngest?", ["Noga", "Gideon", "Teva", "You cannot tell"], "Teva", 1),
+  logicMakeQuestion("What comes next in the pattern: circle, square, circle, square, __", ["Triangle", "Circle", "Square", "Star"], "Circle", 1),
+  logicMakeQuestion("If every robin is a bird and this animal is a robin, what is it also?", ["A fish", "A bird", "A reptile", "A mammal"], "A bird", 1),
+  logicMakeQuestion("Which object does not belong with the animals?", ["Cat", "Dog", "Fish", "Chair"], "Chair", 1),
+  logicMakeQuestion("What comes next: red, blue, red, blue, __", ["Red", "Blue", "Green", "Yellow"], "Red", 1),
+  logicMakeQuestion("If all apples are fruit and this is an apple, what is it?", ["A vegetable", "A fruit", "A toy", "A rock"], "A fruit", 1),
+  logicMakeQuestion("Which number is smallest: 3, 7, 5, 9?", ["3", "5", "7", "9"], "3", 1),
+  logicMakeQuestion("Gabriel is taller than Gideon. Gideon is taller than Teva. Who is tallest?", ["Gabriel", "Gideon", "Teva", "You cannot tell"], "Gabriel", 1),
+  logicMakeQuestion("What comes next: 2, 4, 6, __", ["7", "8", "9", "10"], "8", 1),
+  logicMakeQuestion("If no birds are fish and this animal is a bird, what is true?", ["It is a fish", "It is not a fish", "It is a rock", "It is a turtle"], "It is not a fish", 1),
+
+  // Level 2: skip counting, simple ordering, easy conditionals, and odd-one-out reasoning.
+  logicMakeQuestion("Which letter comes next: A, C, E, G, __", ["H", "I", "J", "K"], "I", 2),
+  logicMakeQuestion("Gabriel is left of Noga. Noga is left of Eden. Who is in the middle?", ["Gabriel", "Noga", "Eden", "No one"], "Noga", 2),
+  logicMakeQuestion("Which set follows the same rule as 3, 6, 9, 12?", ["5, 10, 15, 20", "4, 7, 10, 12", "2, 5, 7, 10", "1, 2, 4, 8"], "5, 10, 15, 20", 2),
+  logicMakeQuestion("If no cats are dogs and Pip is a cat, what do we know?", ["Pip is a dog", "Pip is not a dog", "Pip is a fish", "We know nothing"], "Pip is not a dog", 2),
+  logicMakeQuestion("Which is the odd one out?", ["Triangle", "Square", "Rectangle", "Apple"], "Apple", 2),
+  logicMakeQuestion("Noga finished before Gabriel. Gabriel finished before Eden. Who finished last?", ["Noga", "Gabriel", "Eden", "They tied"], "Eden", 2),
+  logicMakeQuestion("Which number comes next: 5, 10, 15, 20, __", ["22", "24", "25", "30"], "25", 2),
+  logicMakeQuestion("If the light is on, the room is bright. The light is on. What must be true?", ["The room is bright", "The room is dark", "It is night", "Nothing"], "The room is bright", 2),
+  logicMakeQuestion("Which word does not belong?", ["Monday", "Tuesday", "April", "Wednesday"], "April", 2),
+  logicMakeQuestion("If every kite needs string and this is a kite, what must be true?", ["It needs string", "It needs water", "It needs wheels", "It needs roots"], "It needs string", 2),
+  logicMakeQuestion("What comes next: green, yellow, green, yellow, __", ["Green", "Yellow", "Blue", "Red"], "Green", 2),
+  logicMakeQuestion("Which set follows the same rule as 1, 4, 7, 10?", ["2, 5, 8, 11", "3, 6, 12, 24", "4, 8, 12, 15", "5, 10, 15, 21"], "2, 5, 8, 11", 2),
+
+  // Level 3: longer patterns, two-step deductions, simple elimination, and transitive logic.
+  logicMakeQuestion("Gabriel finished before Eden. Eden finished before Teva. Who finished last?", ["Gabriel", "Eden", "Teva", "They tied"], "Teva", 3),
+  logicMakeQuestion("Which number comes next: 1, 4, 7, 10, __", ["11", "12", "13", "14"], "13", 3),
+  logicMakeQuestion("Which rule matches this pattern: 10, 8, 6, 4, __", ["Add 2 each time", "Subtract 2 each time", "Double each time", "Subtract 4 each time"], "Subtract 2 each time", 3),
+  logicMakeQuestion("The red book is heavier than the blue book. The blue book is heavier than the green book. Which book is lightest?", ["Red book", "Blue book", "Green book", "The red and blue books tie"], "Green book", 3),
+  logicMakeQuestion("If every insect has 6 legs and an ant is an insect, what must be true?", ["An ant has 6 legs", "Every 6-legged animal is an ant", "Ants are not insects", "An ant has 8 legs"], "An ant has 6 legs", 3),
+  logicMakeQuestion("The bag is not in the closet. It is either under the bed or by the door. It is not under the bed. Where is the bag?", ["In the closet", "By the door", "On the roof", "In the sink"], "By the door", 3),
+  logicMakeQuestion("Which letter comes next: Z, X, V, T, __", ["R", "S", "U", "W"], "R", 3),
+  logicMakeQuestion("If weekdays are school days and Monday is a weekday, what follows?", ["Monday is a school day", "Monday is a weekend day", "Monday is a holiday", "Monday is a night"], "Monday is a school day", 3),
+  logicMakeQuestion("Three kids wore red, blue, and green shirts. Teva did not wear red. Noga did not wear blue. Eden wore green. Who wore blue?", ["Teva", "Noga", "Eden", "No one"], "Teva", 3),
+  logicMakeQuestion("What comes next: 24, 20, 16, 12, __", ["6", "8", "10", "14"], "8", 3),
+  logicMakeQuestion("If all squares are shapes and all shapes can be drawn, what must be true about squares?", ["They can be drawn", "They are vegetables", "They are circles", "They cannot be drawn"], "They can be drawn", 3),
+  logicMakeQuestion("Which number comes next: 12, 9, 6, 3, __", ["1", "0", "-1", "-3"], "0", 3),
+
+  // Level 4: elimination, code rules, larger patterns, and multi-clue sorting.
+  logicMakeQuestion("Which number comes next: 2, 4, 8, 16, __", ["20", "24", "30", "32"], "32", 4),
+  logicMakeQuestion("The toy is not in the box. It is either on the shelf or under the bed. Gideon checked under the bed and it is not there. Where is the toy?", ["In the box", "On the shelf", "Outside", "In the closet"], "On the shelf", 4),
+  logicMakeQuestion("Three friends wore red, blue, and green shirts. Chen wore green. Ali did not wear red. Bea did not wear blue. Who wore the blue shirt?", ["Ali", "Bea", "Chen", "No one"], "Ali", 4),
+  logicMakeQuestion("If weekends are days off and Saturday is a weekend, what follows?", ["Saturday is a school day", "Saturday is a day off", "Every day is a weekend", "Saturday is Monday"], "Saturday is a day off", 4),
+  logicMakeQuestion("A code changes 2 to 5, 4 to 7, and 6 to 9. What should 8 change to?", ["9", "10", "11", "12"], "11", 4),
+  logicMakeQuestion("If no fish can fly and tuna is a fish, what must be true?", ["Tuna can fly", "Tuna cannot fly", "Tuna is a bird", "All birds are fish"], "Tuna cannot fly", 4),
+  logicMakeQuestion("Which set follows the same rule as 2, 5, 8, 11?", ["4, 7, 10, 13", "3, 6, 12, 24", "1, 4, 9, 16", "5, 9, 10, 18"], "4, 7, 10, 13", 4),
+  logicMakeQuestion("The prize is in box A, B, C, or D. It is not in A or D. It is not in B. Where is it?", ["A", "B", "C", "D"], "C", 4),
+  logicMakeQuestion("Which number comes next: 2, 6, 12, 20, __", ["24", "28", "30", "32"], "30", 4),
+  logicMakeQuestion("If every rectangle is a quadrilateral and every square is a rectangle, what must be true about a square?", ["It is a quadrilateral", "It is a circle", "It is a triangle", "It is not a shape"], "It is a quadrilateral", 4),
+  logicMakeQuestion("What comes next: 100, 90, 81, 73, __", ["65", "66", "67", "68"], "66", 4),
+  logicMakeQuestion("A machine doubles a number and then adds 1. What does 4 become?", ["8", "9", "10", "11"], "9", 4),
+
+  // Level 5: richer patterns, condition chains, counterexamples, and multiple constraints.
+  logicMakeQuestion("If every tulip is a flower and some flowers are yellow, what can we know for sure?", ["Every tulip is yellow", "Some tulips are yellow", "A tulip is a flower", "No flowers are yellow"], "A tulip is a flower", 5),
+  logicMakeQuestion("Eden is shorter than Noga but taller than Teva. Who is tallest?", ["Eden", "Noga", "Teva", "Eden and Noga"], "Noga", 5),
+  logicMakeQuestion("Which number comes next: 5, 10, 20, 40, __", ["45", "60", "70", "80"], "80", 5),
+  logicMakeQuestion("A snack is hidden in one of three drawers. It is not in the top drawer. The middle drawer is empty. Where is the snack?", ["Top drawer", "Middle drawer", "Bottom drawer", "It is nowhere"], "Bottom drawer", 5),
+  logicMakeQuestion("A code changes 1 to 4, 3 to 10, and 5 to 16. What does 7 become?", ["18", "20", "22", "24"], "22", 5),
+  logicMakeQuestion("What comes next: 1, 2, 4, 7, 11, __", ["14", "15", "16", "18"], "16", 5),
+  logicMakeQuestion("If a number is greater than 20, less than 30, even, and a multiple of 7, what is it?", ["21", "24", "28", "30"], "28", 5),
+  logicMakeQuestion("If every maple is a tree and every tree needs water, what must be true about a maple?", ["It needs water", "It is a fish", "It has wheels", "It is a rock"], "It needs water", 5),
+  logicMakeQuestion("Which set follows the same rule as 4, 12, 36?", ["2, 6, 18", "3, 6, 12", "4, 8, 16", "5, 10, 15"], "2, 6, 18", 5),
+  logicMakeQuestion("If the machine adds 4 and then doubles, what does 3 become?", ["12", "13", "14", "15"], "14", 5),
+  logicMakeQuestion("A box contains one red, one blue, and one green marble. The red marble is not in box A. The blue marble is not in box B. The green marble is not in box C. If the red marble is in box B, where is the blue marble?", ["Box A", "Box B", "Box C", "It is nowhere"], "Box C", 5),
+  logicMakeQuestion("Which of 29, 30, 32, 34 is prime?", ["29", "30", "32", "34"], "29", 5),
+
+  // Level 6: multi-constraint puzzles, compound rules, and necessary conclusions.
+  logicMakeQuestion("Ava, Ben, Cara, and Dov each chose a different color: red, blue, green, or yellow. Ava did not choose red or blue. Ben chose green. Cara did not choose yellow. Which color did Ava choose?", ["Red", "Blue", "Green", "Yellow"], "Yellow", 6),
+  logicMakeQuestion("A code changes 2 to 9, 3 to 14, and 4 to 19. What does 7 change to?", ["29", "32", "34", "36"], "34", 6),
+  logicMakeQuestion("If the switch is on, the lamp is bright. If the lamp is bright, the door is open. The switch is on. What must be true?", ["The door is open", "The door is closed", "The switch is off", "The lamp is broken"], "The door is open", 6),
+  logicMakeQuestion("Which number comes next: 1, 4, 9, 16, 25, __", ["30", "35", "36", "49"], "36", 6),
+  logicMakeQuestion("Mira is taller than Leo. Sam is shorter than Leo. Tali is taller than Mira. Who is tallest?", ["Mira", "Leo", "Sam", "Tali"], "Tali", 6),
+  logicMakeQuestion("Exactly one of two boxes has a coin. Box A is empty. Where must the coin be?", ["Box A", "Box B", "Both boxes", "No box"], "Box B", 6),
+  logicMakeQuestion("If all glims are plogs, and no plogs are zibs, what must be true?", ["No glims are zibs", "All zibs are glims", "Some glims are zibs", "No plogs are glims"], "No glims are zibs", 6),
+  logicMakeQuestion("A machine triples a number and subtracts 2. What does 6 become?", ["14", "16", "18", "20"], "16", 6),
+  logicMakeQuestion("Which pattern uses alternating add 2, add 4?", ["3, 5, 9, 11, 15", "3, 7, 9, 13, 15", "3, 6, 12, 24, 48", "3, 5, 7, 9, 11"], "3, 5, 9, 11, 15", 6),
+  logicMakeQuestion("Noga, Gideon, and Gabriel each have one pet: cat, dog, or fish. Noga does not have the cat. Gideon has the fish. Who has the dog?", ["Noga", "Gideon", "Gabriel", "You cannot tell"], "Noga", 6),
+  logicMakeQuestion("If a card is red, it has a star. This card does not have a star. What must be true?", ["It is red", "It is not red", "It is blue", "It has a circle"], "It is not red", 6),
+  logicMakeQuestion("Which statement is a counterexample to 'All birds can fly'?", ["A sparrow can fly", "A penguin cannot fly", "A kite can fly", "A fish cannot fly"], "A penguin cannot fly", 6),
+
+  // Level 7: conditional reasoning, squares/cubes, inferred positions, and rule tables.
+  logicMakeQuestion("Four books are on a shelf. The atlas is left of the novel. The poem book is right of the novel. The comic is not at either end. Which book is farthest left?", ["Atlas", "Novel", "Poem book", "Comic"], "Atlas", 7),
+  logicMakeQuestion("A code changes 1 to 4, 2 to 11, and 3 to 22. What does 5 change to?", ["42", "46", "50", "54"], "46", 7),
+  logicMakeQuestion("If a card is striped, it is tall. If a card is tall, it is not blue. This card is striped. What must be true?", ["It is blue", "It is not blue", "It is short", "It is not striped"], "It is not blue", 7),
+  logicMakeQuestion("Which number comes next: 2, 3, 5, 9, 17, __", ["25", "31", "33", "35"], "33", 7),
+  logicMakeQuestion("A, B, C, and D stand in a line. A is before C. B is after C. D is before A. Who is first?", ["A", "B", "C", "D"], "D", 7),
+  logicMakeQuestion("Which statement is enough to prove a number is not odd?", ["The number is even", "The number is large", "The number is less than 100", "The number has two digits"], "The number is even", 7),
+  logicMakeQuestion("If every zor is a mip, and some mips are lums, what can we know for sure?", ["Every zor is a mip", "Some zors are lums", "No zors are lums", "Every lum is a zor"], "Every zor is a mip", 7),
+  logicMakeQuestion("A machine squares the input and adds 1. What does 6 become?", ["35", "36", "37", "49"], "37", 7),
+  logicMakeQuestion("A pattern adds 1, then 2, then 3, then 4. What comes next: 4, 5, 7, 10, 14, __", ["17", "18", "19", "20"], "19", 7),
+  logicMakeQuestion("Three runners finished with no ties. Maya was not first. Leo was not last. Sam finished after Maya. Who was first?", ["Maya", "Leo", "Sam", "You cannot tell"], "Leo", 7),
+  logicMakeQuestion("If the rule is 'multiply by 4, then subtract 3,' which input gives 25?", ["6", "7", "8", "9"], "7", 7),
+  logicMakeQuestion("Which conclusion follows from: All planets are round objects. Earth is a planet.", ["Earth is a round object", "All round objects are planets", "Earth is not round", "No planets are round"], "Earth is a round object", 7),
+
+  // Level 8: necessary/sufficient conditions, nested rules, and exactly-one reasoning.
+  logicMakeQuestion("If a number is a multiple of 12, then it is a multiple of 3. Which must be true about 48?", ["48 is a multiple of 3", "48 is not a multiple of 3", "48 is prime", "48 is odd"], "48 is a multiple of 3", 8),
+  logicMakeQuestion("A code changes 2 to 7, 4 to 19, and 6 to 39. What does 8 change to if the rule is n squared plus 3?", ["59", "64", "67", "71"], "67", 8),
+  logicMakeQuestion("There are four doors. The prize is not behind an even-numbered door. It is not behind door 1. Where is the prize?", ["Door 1", "Door 2", "Door 3", "Door 4"], "Door 3", 8),
+  logicMakeQuestion("Which number comes next: 3, 4, 8, 17, 33, __", ["48", "56", "58", "64"], "58", 8),
+  logicMakeQuestion("If all flurbs are green, and this object is not green, what must be true?", ["It is a flurb", "It is not a flurb", "It is green", "All green things are flurbs"], "It is not a flurb", 8),
+  logicMakeQuestion("A rule says: if a card has a star, then it is red. This card has a star. What must be true?", ["It is red", "It is blue", "It has no star", "All red cards have stars"], "It is red", 8),
+  logicMakeQuestion("A recipe rule says: if it has nuts, mark it N; if it has dairy, mark it D. A snack has nuts but no dairy. Which mark is correct?", ["N only", "D only", "N and D", "No mark"], "N only", 8),
+  logicMakeQuestion("In a race, Ana is ahead of Bo. Cy is behind Ana but ahead of Bo. Dee is ahead of Ana. Who is second?", ["Ana", "Bo", "Cy", "Dee"], "Ana", 8),
+  logicMakeQuestion("If the rule is 'divide by 2, then add 9,' which input gives 20?", ["18", "20", "22", "24"], "22", 8),
+  logicMakeQuestion("Which conclusion is valid? If it rains, the field is wet. It is raining.", ["The field is wet", "It is not raining", "The field is dry", "Wet fields cause rain"], "The field is wet", 8),
+  logicMakeQuestion("Which statement would disprove 'Every number ending in 5 is divisible by 10'?", ["15 is not divisible by 10", "20 is divisible by 10", "30 is divisible by 10", "100 is divisible by 10"], "15 is not divisible by 10", 8),
+  logicMakeQuestion("A machine changes 1 to 2, 2 to 6, 3 to 12, and 4 to 20. What does 6 become?", ["30", "36", "40", "42"], "42", 8),
+
+  // Level 9: advanced deduction with constraints, fallacy spotting, and complex patterns.
+  logicMakeQuestion("Four students took math, art, music, and science, one class each. Mira did not take art or science. Leo took music. Noga did not take math. What did Mira take?", ["Math", "Art", "Music", "Science"], "Math", 9),
+  logicMakeQuestion("If a shape is a square, it has four equal sides. A shape has four equal sides. What is the safest conclusion?", ["It must be a square", "It might be a square", "It cannot be a square", "It must be a circle"], "It might be a square", 9),
+  logicMakeQuestion("Which number comes next: 1, 1, 2, 3, 5, 8, __", ["10", "11", "12", "13"], "13", 9),
+  logicMakeQuestion("A code changes 3 to 10, 4 to 17, and 5 to 26. What does 9 change to?", ["73", "80", "82", "90"], "82", 9),
+  logicMakeQuestion("Exactly one of these is true: A says 'The key is in box 1.' B says 'The key is not in box 1.' If exactly one is true, what can you know?", ["The key is in box 1", "The key is not in box 1", "Exactly one statement is true", "Both statements are false"], "Exactly one statement is true", 9),
+  logicMakeQuestion("If every number in a list is even, what must be true about the sum of the list?", ["The sum is even", "The sum is odd", "The sum is prime", "The sum is zero"], "The sum is even", 9),
+  logicMakeQuestion("The treasure is in one of five boxes. It is not in boxes 1, 3, or 5. Box 2 is empty. Where is it?", ["Box 1", "Box 2", "Box 4", "Box 5"], "Box 4", 9),
+  logicMakeQuestion("Which conclusion follows? No reptiles are mammals. All snakes are reptiles.", ["No snakes are mammals", "All mammals are snakes", "Some snakes are mammals", "No reptiles are snakes"], "No snakes are mammals", 9),
+  logicMakeQuestion("A machine applies this rule: multiply by 2, add 3, then multiply by 2. What does 5 become?", ["20", "23", "26", "30"], "26", 9),
+  logicMakeQuestion("Which statement is the converse of 'If a shape is a square, then it is a rectangle'?", ["If a shape is a rectangle, then it is a square", "If a shape is not a rectangle, then it is not a square", "All squares are rectangles", "A square is not a rectangle"], "If a shape is a rectangle, then it is a square", 9),
+  logicMakeQuestion("In a line, A is before B, C is after D, D is before A, and B is before C. Who is first?", ["A", "B", "C", "D"], "D", 9),
+  logicMakeQuestion("Which number comes next: 2, 6, 12, 20, 30, __", ["40", "42", "44", "48"], "42", 9),
+
+  // Level 10: challenge logic, formal conditionals, deeper patterns, and proof/counterexample thinking.
+  logicMakeQuestion("If and only if a badge is gold, it opens the gate. This badge opens the gate. What must be true?", ["The badge is gold", "The badge is silver", "The gate is broken", "No badge is needed"], "The badge is gold", 10),
+  logicMakeQuestion("If all wugs are daxes, and no dax is a lim, which statement must be true?", ["No wug is a lim", "Every lim is a wug", "Some wugs are lims", "No dax is a wug"], "No wug is a lim", 10),
+  logicMakeQuestion("Which number comes next: 2, 3, 5, 9, 17, 33, __", ["49", "55", "65", "66"], "65", 10),
+  logicMakeQuestion("A code changes 1 to 3, 2 to 8, 3 to 15, and 4 to 24. What does 7 change to?", ["48", "51", "55", "63"], "63", 10),
+  logicMakeQuestion("Only one box can contain the prize. It is not in A. If it is not in B, then it is in C. Box B is empty. Where is the prize?", ["A", "B", "C", "None"], "C", 10),
+  logicMakeQuestion("If a number is divisible by 6, it is divisible by 2 and by 3. Which statement proves a number is not divisible by 6?", ["It is not divisible by 2", "It is divisible by 3", "It is greater than 6", "It is an even number"], "It is not divisible by 2", 10),
+  logicMakeQuestion("A, B, C, and D each chose a different snack: apple, bread, carrot, dates. A did not choose apple or bread. B chose carrot. C did not choose dates. What did A choose?", ["Apple", "Bread", "Carrot", "Dates"], "Dates", 10),
+  logicMakeQuestion("Which conclusion is valid? If a number is prime and greater than 2, then it is odd. 17 is prime and greater than 2.", ["17 is odd", "17 is even", "All odd numbers are prime", "17 is not prime"], "17 is odd", 10),
+  logicMakeQuestion("Which statement is logically the same as 'If it is a square, then it has 4 sides'?", ["If it does not have 4 sides, then it is not a square", "If it has 4 sides, then it is a square", "If it is not a square, then it has no sides", "All 4-sided shapes are squares"], "If it does not have 4 sides, then it is not a square", 10),
+  logicMakeQuestion("The rule is: if the input is even, divide by 2; if the input is odd, multiply by 3 and add 1. What does 7 become?", ["20", "21", "22", "24"], "22", 10),
+  logicMakeQuestion("A sequence follows n squared plus n: 2, 6, 12, 20, 30, __. What comes next?", ["36", "40", "42", "44"], "42", 10),
+  logicMakeQuestion("Which is the best counterexample to 'If a number is large, then it is even'?", ["101 is large and odd", "100 is large and even", "2 is small and even", "3 is small and odd"], "101 is large and odd", 10),
+];
 
 function createLogicGeneratedEntry(difficulty) {
   const level = logicClampDifficulty(difficulty);
-  const generatorsByLevel = {
-    1: [
-      logicCreateSequenceQuestion,
-      logicCreateOrderQuestion,
-      logicCreateSimpleSyllogismQuestion,
-    ],
-    2: [
-      logicCreateLetterSequenceQuestion,
-      logicCreateEliminationQuestion,
-      logicCreateOddOneOutQuestion,
-    ],
-    3: [
-      logicCreateSequenceQuestion,
-      logicCreateOrderQuestion,
-      logicCreateTwoStepLogicQuestion,
-    ],
-    4: [
-      logicCreateLogicGridQuestion,
-      logicCreateEliminationQuestion,
-      logicCreateSequenceQuestion,
-    ],
-    5: [
-      logicCreateLogicGridQuestion,
-      logicCreateTwoStepLogicQuestion,
-      logicCreateOddOneOutQuestion,
-    ],
-    6: [
-      logicCreateMultiConstraintQuestion,
-      logicCreateRuleTableQuestion,
-      logicCreateConditionalChainQuestion,
-    ],
-    7: [
-      logicCreateMultiConstraintQuestion,
-      logicCreateRuleTableQuestion,
-      logicCreateConditionalChainQuestion,
-    ],
-  };
+  const exactPool = LOGIC_QUESTIONS.filter((entry) => entry.difficulty === level);
+  const fallbackPool = LOGIC_QUESTIONS.filter((entry) => entry.difficulty <= level);
+  const entry = logicRandomChoice(exactPool.length ? exactPool : fallbackPool);
 
-  return logicRandomChoice(generatorsByLevel[level])();
-}
-
-function logicCreateSequenceQuestion() {
-  const templates = [
-    { start: 4, step: 4, options: ["12", "16", "18", "20"], difficulty: 1 },
-    { start: 1, step: 3, options: ["8", "9", "10", "11"], difficulty: 2 },
-    { start: 10, step: -2, options: ["2", "4", "6", "8"], difficulty: 3 },
-    { start: 3, step: 6, options: ["15", "18", "21", "24"], difficulty: 4 },
-    { start: 2, step: 4, options: ["14", "16", "18", "20"], difficulty: 5 },
-  ];
-  const pick = logicRandomChoice(templates);
-  const answerNumber = pick.start + pick.step * 4;
   return {
-    question: `What comes next in the pattern: ${pick.start}, ${pick.start + pick.step}, ${pick.start + pick.step * 2}, ${pick.start + pick.step * 3}, __`,
-    options: logicShuffle(
-      pick.options.map(String).includes(String(answerNumber))
-        ? pick.options.map(String)
-        : logicBuildNumericOptions(String(answerNumber), pick.step)
-    ),
-    answer: String(answerNumber),
-    difficulty: pick.difficulty,
+    ...entry,
+    options: logicShuffle([...entry.options]),
+    difficulty: level,
   };
-}
-
-function logicCreateLetterSequenceQuestion() {
-  const templates = [
-    { letters: ["A", "C", "E", "G"], answer: "I", options: ["H", "I", "J", "K"], difficulty: 2 },
-    { letters: ["B", "D", "F", "H"], answer: "J", options: ["I", "J", "K", "L"], difficulty: 2 },
-    { letters: ["Z", "X", "V", "T"], answer: "R", options: ["R", "S", "U", "W"], difficulty: 3 },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: `Which letter comes next: ${pick.letters.join(", ")}, __`,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateOrderQuestion() {
-  const templates = [
-    {
-      question: "Noga is taller than Gabriel. Gabriel is taller than Eden. Who is tallest?",
-      options: ["Noga", "Gabriel", "Eden", "You cannot tell"],
-      answer: "Noga",
-      difficulty: 1,
-    },
-    {
-      question: "Gideon finished before Gabriel. Gabriel finished before Teva. Who finished last?",
-      options: ["Gideon", "Gabriel", "Teva", "They tied"],
-      answer: "Teva",
-      difficulty: 2,
-    },
-    {
-      question: "Gabriel is left of Noga. Noga is left of Eden. Who is in the middle?",
-      options: ["Gabriel", "Noga", "Eden", "No one"],
-      answer: "Noga",
-      difficulty: 2,
-    },
-    {
-      question: "Eden is shorter than Noga but taller than Teva. Who is tallest?",
-      options: ["Eden", "Noga", "Teva", "Eden and Noga"],
-      answer: "Noga",
-      difficulty: 5,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateSimpleSyllogismQuestion() {
-  const templates = [
-    {
-      question: "If every robin is a bird and this animal is a robin, what is it also?",
-      options: ["A fish", "A bird", "A reptile", "A mammal"],
-      answer: "A bird",
-      difficulty: 1,
-    },
-    {
-      question: "If every frog is an animal and this is a frog, what is it?",
-      options: ["A plant", "An animal", "A rock", "A toy"],
-      answer: "An animal",
-      difficulty: 1,
-    },
-    {
-      question: "If all tulips are flowers and all flowers are plants, what must be true?",
-      options: ["Tulips are trees", "Tulips are plants", "All plants are tulips", "Flowers are not plants"],
-      answer: "Tulips are plants",
-      difficulty: 3,
-    },
-    {
-      question: "If every rectangle has 4 sides and this shape is a rectangle, what must be true?",
-      options: ["It is a four-sided shape", "It is a triangle", "It is a circle", "It is not a shape"],
-      answer: "It is a four-sided shape",
-      difficulty: 5,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateEliminationQuestion() {
-  const templates = [
-    {
-      question: "The toy is not in the box. It is either on the shelf or under the bed. The bed is empty. Where is the toy?",
-      options: ["In the box", "On the shelf", "Under the bed", "In the closet"],
-      answer: "On the shelf",
-      difficulty: 4,
-    },
-    {
-      question: "The red coin is not in Box A. It is in Box B or Box C. Box C is empty. Where is the red coin?",
-      options: ["Box A", "Box B", "Box C", "It is missing"],
-      answer: "Box B",
-      difficulty: 4,
-    },
-    {
-      question: "The snack is not in the top drawer. The middle drawer is empty. Where is the snack?",
-      options: ["Top drawer", "Middle drawer", "Bottom drawer", "It is nowhere"],
-      answer: "Bottom drawer",
-      difficulty: 5,
-    },
-    {
-      question: "The gem is in box A, B, C, or D. It is not in A, C, or D. Where is it?",
-      options: ["A", "B", "C", "D"],
-      answer: "B",
-      difficulty: 5,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateOddOneOutQuestion() {
-  const templates = [
-    {
-      question: "Which number does not belong?",
-      options: ["2", "4", "6", "9"],
-      answer: "9",
-      difficulty: 1,
-    },
-    {
-      question: "Which does not belong?",
-      options: ["Elbow", "Knee", "Banana", "Ankle"],
-      answer: "Banana",
-      difficulty: 2,
-    },
-    {
-      question: "Which set follows the same rule as 2, 5, 8, 11?",
-      options: ["4, 7, 10, 13", "3, 6, 12, 24", "1, 4, 9, 16", "5, 9, 10, 18"],
-      answer: "4, 7, 10, 13",
-      difficulty: 4,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateTwoStepLogicQuestion() {
-  const templates = [
-    {
-      question: "If all bloops are razzies and all razzies are blue, what must be true about a bloop?",
-      options: ["It is blue", "It is red", "It is not a razzy", "It is a number"],
-      answer: "It is blue",
-      difficulty: 1,
-    },
-    {
-      question: "If no cats are dogs and Pip is a cat, what do we know?",
-      options: ["Pip is a dog", "Pip is not a dog", "Pip is a fish", "We know nothing"],
-      answer: "Pip is not a dog",
-      difficulty: 2,
-    },
-    {
-      question: "If every maple is a tree and every tree needs water, what must be true about a maple?",
-      options: ["It needs water", "It is a fish", "It has wheels", "It is a rock"],
-      answer: "It needs water",
-      difficulty: 5,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateLogicGridQuestion() {
-  const templates = [
-    {
-      question: "A code changes 2 to 5, 4 to 7, and 6 to 9. What should 8 change to?",
-      options: ["9", "10", "11", "12"],
-      answer: "11",
-      difficulty: 4,
-    },
-    {
-      question: "A machine changes 3 to 8, 4 to 10, and 5 to 12. What does 9 become?",
-      options: ["18", "19", "20", "21"],
-      answer: "20",
-      difficulty: 5,
-    },
-    {
-      question: "If the machine adds 4 and then doubles, what does 3 become?",
-      options: ["12", "13", "14", "15"],
-      answer: "14",
-      difficulty: 5,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateMultiConstraintQuestion() {
-  const templates = [
-    {
-      question:
-        "Ava, Ben, Cara, and Dov each chose a different color: red, blue, green, or yellow. Ava did not choose red or blue. Ben chose green. Cara did not choose yellow. Which color did Ava choose?",
-      options: ["Red", "Blue", "Green", "Yellow"],
-      answer: "Yellow",
-      difficulty: 6,
-    },
-    {
-      question:
-        "Four books are on a shelf. The atlas is left of the novel. The poem book is right of the novel. The comic is not at either end. Which book is farthest left?",
-      options: ["Atlas", "Novel", "Poem book", "Comic"],
-      answer: "Atlas",
-      difficulty: 7,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateRuleTableQuestion() {
-  const templates = [
-    {
-      question: "A code changes 2 to 9, 3 to 14, and 4 to 19. What does 7 change to?",
-      options: ["29", "32", "34", "36"],
-      answer: "34",
-      difficulty: 6,
-    },
-    {
-      question: "A code changes 1 to 4, 2 to 11, and 3 to 22. What does 5 change to?",
-      options: ["42", "46", "50", "54"],
-      answer: "46",
-      difficulty: 7,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicCreateConditionalChainQuestion() {
-  const templates = [
-    {
-      question:
-        "If the switch is on, the lamp is bright. If the lamp is bright, the door is open. The switch is on. What must be true?",
-      options: ["The door is open", "The door is closed", "The switch is off", "The lamp is broken"],
-      answer: "The door is open",
-      difficulty: 6,
-    },
-    {
-      question:
-        "If a card is striped, it is tall. If a card is tall, it is not blue. This card is striped. What must be true?",
-      options: ["It is blue", "It is not blue", "It is short", "It is not striped"],
-      answer: "It is not blue",
-      difficulty: 7,
-    },
-  ];
-  const pick = logicRandomChoice(templates);
-  return {
-    question: pick.question,
-    options: logicShuffle([...pick.options]),
-    answer: pick.answer,
-    difficulty: pick.difficulty,
-  };
-}
-
-function logicBuildNumericOptions(answer, step) {
-  const value = Number(answer);
-  const candidates = [
-    value - Math.abs(step || 1),
-    value - 2,
-    value + 2,
-    value + Math.abs(step || 1),
-  ]
-    .map((candidate) => String(candidate))
-    .filter((candidate) => candidate !== String(answer));
-  return logicBuildOptions(String(answer), candidates);
-}
-
-function logicBuildOptions(answer, candidates) {
-  const options = [String(answer)];
-  for (const candidate of logicShuffle(Array.from(new Set(candidates.map(String))))) {
-    if (!options.includes(candidate)) {
-      options.push(candidate);
-    }
-    if (options.length === 4) {
-      break;
-    }
-  }
-
-  while (options.length < 4) {
-    const fallback = `${answer} ${options.length}`;
-    if (!options.includes(fallback)) {
-      options.push(fallback);
-    }
-  }
-
-  return logicShuffle(options);
 }
 
 function logicClampDifficulty(value) {
-  const difficulty = Number(value);
-  if (!Number.isInteger(difficulty) || difficulty < 1) {
-    return 1;
+  const difficulty = Number.parseInt(value, 10);
+  if (!Number.isFinite(difficulty)) {
+    return 3;
   }
 
-  return Math.min(7, difficulty);
+  return Math.max(1, Math.min(10, difficulty));
 }
 
 function logicRandomChoice(values) {

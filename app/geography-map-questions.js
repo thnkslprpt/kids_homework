@@ -27,7 +27,7 @@
     if (!Number.isFinite(numeric)) {
       return 3;
     }
-    return Math.max(1, Math.min(5, Math.round(numeric)));
+    return Math.max(1, Math.min(10, Math.round(numeric)));
   }
 
   function randomChoice(values) {
@@ -81,9 +81,9 @@
     const everythingElse = pool.filter((entry) => entry.country !== answer);
 
     const orderedPools =
-      level >= 4
+      level >= 7
         ? [exactGroup, sameContinent, similarRank, everythingElse]
-        : level === 3
+        : level >= 5
           ? [sameContinent, exactGroup, similarRank, everythingElse]
           : [similarRank, sameContinent, exactGroup, everythingElse];
 
