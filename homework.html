@@ -56,6 +56,27 @@
               <button type="button" class="builder-preset-button" data-session-preset="math-heavy" aria-pressed="false">Math</button>
               <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew" aria-pressed="false">Hebrew</button>
             </div>
+            <div class="builder-row builder-options">
+              <label class="builder-select-field">
+                <span>Minimum Level</span>
+                <select id="difficulty-min" aria-label="Minimum difficulty">
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                  <option value="6">6</option>
+                  <option value="7">7</option>
+                  <option value="8">8</option>
+                  <option value="9">9</option>
+                  <option value="10">10</option>
+                </select>
+              </label>
+              <button id="adaptive-review-button" type="button" class="builder-toggle-button active" aria-pressed="true">Review Focus</button>
+              <button id="category-reset-button" type="button" class="builder-toggle-button">All Topics</button>
+              <button id="specialty-words-button" type="button" class="specialty-words-button" aria-label="Use specialty words" hidden>*</button>
+            </div>
+            <div id="category-builder-grid" class="category-builder-grid" aria-label="Topics"></div>
           </div>
 
           <button type="submit" class="primary-button">Start Homework</button>
@@ -184,6 +205,15 @@
     <script src="app/sentence-drag-hebrew.js"></script>
     <script src="app/vocabulary-grammar-questions.js"></script>
     <script src="app/adult-hebrew-module.js"></script>
+    <script src="app/extended-exercise-utils.js"></script>
+    <script src="app/extended-math-questions.js"></script>
+    <script src="app/extended-data-questions.js"></script>
+    <script src="app/extended-language-questions.js"></script>
+    <script src="app/extended-hebrew-questions.js"></script>
+    <script src="app/extended-science-questions.js"></script>
+    <script src="app/extended-practical-questions.js"></script>
+    <script src="app/extended-thinking-questions.js"></script>
+    <script src="app/extended-history-geography-questions.js"></script>
     <script src="app/app.js"></script>
   </body>
 </html>

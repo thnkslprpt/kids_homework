@@ -2467,6 +2467,26 @@ const sentenceDragHebrewQuestionBank = buildStaticDragQuestionBank(
   sentenceDragHebrewEntries,
   "hebrew-drag"
 );
+
+function getOptionalGlobalFunction(name) {
+  const candidate = typeof globalThis !== "undefined" ? globalThis[name] : null;
+  return typeof candidate === "function" ? candidate : null;
+}
+
+function buildCombinedGeneratedEntryFactory(primaryFactory, extensionFactory, extensionShare = 0.45) {
+  if (!primaryFactory && !extensionFactory) {
+    return null;
+  }
+
+  return (difficulty) => {
+    const useExtensionFirst = Boolean(extensionFactory) && Math.random() < extensionShare;
+    const firstFactory = useExtensionFirst ? extensionFactory : primaryFactory;
+    const secondFactory = useExtensionFirst ? primaryFactory : extensionFactory;
+
+    return firstFactory?.(difficulty) || secondFactory?.(difficulty) || null;
+  };
+}
+
 const choiceCategoryConfigs = {
   hebrew: {
     bank: hebrewQuestionBank,
@@ -2500,17 +2520,21 @@ const generatedChoiceCategoryConfigs = {
   },
   "reading-comprehension": {
     share: 0.85,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createReadingComprehensionGeneratedEntry === "function"
         ? createReadingComprehensionGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedReadingComprehensionGeneratedEntry"),
+      0.45
+    ),
   },
   "science-evidence": {
     share: 0.85,
-    factory:
-      typeof createScienceEvidenceGeneratedEntry === "function"
-        ? createScienceEvidenceGeneratedEntry
-        : null,
+    factory: buildCombinedGeneratedEntryFactory(
+      typeof createScienceEvidenceGeneratedEntry === "function" ? createScienceEvidenceGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedThinkingGeneratedEntry"),
+      0.35
+    ),
   },
   "visual-math": {
     share: 0.85,
@@ -2526,21 +2550,31 @@ const generatedChoiceCategoryConfigs = {
   },
   "vocabulary-grammar": {
     share: 0.85,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createVocabularyGrammarGeneratedEntry === "function"
         ? createVocabularyGrammarGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedVocabularyGrammarGeneratedEntry"),
+      0.45
+    ),
   },
   "financial-literacy": {
     share: 0.85,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createFinancialLiteracyGeneratedEntry === "function"
         ? createFinancialLiteracyGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedPracticalGeneratedEntry"),
+      0.3
+    ),
   },
   geography: {
     share: 0.85,
-    factory: typeof createGeographyGeneratedEntry === "function" ? createGeographyGeneratedEntry : null,
+    factory: buildCombinedGeneratedEntryFactory(
+      typeof createGeographyGeneratedEntry === "function" ? createGeographyGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedGeographyHistoryGeneratedEntry"),
+      0.45
+    ),
   },
   population: {
     share: 0.8,
@@ -2563,23 +2597,37 @@ const generatedChoiceCategoryConfigs = {
   },
   logic: {
     share: 0.6,
-    factory: typeof createLogicGeneratedEntry === "function" ? createLogicGeneratedEntry : null,
+    factory: buildCombinedGeneratedEntryFactory(
+      typeof createLogicGeneratedEntry === "function" ? createLogicGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedThinkingGeneratedEntry"),
+      0.45
+    ),
   },
   rationality: {
     share: 0.7,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createRationalityGeneratedEntry === "function" ? createRationalityGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedThinkingGeneratedEntry"),
+      0.45
+    ),
   },
   "general-knowledge": {
     share: 0.6,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createGeneralKnowledgeGeneratedEntry === "function"
         ? createGeneralKnowledgeGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedGeographyHistoryGeneratedEntry"),
+      0.35
+    ),
   },
   science: {
     share: 0.45,
-    factory: typeof createScienceGeneratedEntry === "function" ? createScienceGeneratedEntry : null,
+    factory: buildCombinedGeneratedEntryFactory(
+      typeof createScienceGeneratedEntry === "function" ? createScienceGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedScienceGeneratedEntry"),
+      0.55
+    ),
   },
   calendar: {
     share: 0.9,
@@ -2594,28 +2642,41 @@ const generatedChoiceCategoryConfigs = {
   },
   "maps-and-directions": {
     share: 0.85,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createMapsAndDirectionsGeneratedEntry === "function"
         ? createMapsAndDirectionsGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedGeographyHistoryGeneratedEntry"),
+      0.35
+    ),
   },
   "health-and-first-aid": {
     share: 0.4,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createHealthAndFirstAidGeneratedEntry === "function"
         ? createHealthAndFirstAidGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedPracticalGeneratedEntry"),
+      0.55
+    ),
   },
   nutrition: {
     share: 0.55,
-    factory: typeof createNutritionGeneratedEntry === "function" ? createNutritionGeneratedEntry : null,
+    factory: buildCombinedGeneratedEntryFactory(
+      typeof createNutritionGeneratedEntry === "function" ? createNutritionGeneratedEntry : null,
+      getOptionalGlobalFunction("createExtendedPracticalGeneratedEntry"),
+      0.35
+    ),
   },
   "household-problem-solving": {
     share: 0.6,
-    factory:
+    factory: buildCombinedGeneratedEntryFactory(
       typeof createHouseholdProblemSolvingGeneratedEntry === "function"
         ? createHouseholdProblemSolvingGeneratedEntry
         : null,
+      getOptionalGlobalFunction("createExtendedPracticalGeneratedEntry"),
+      0.55
+    ),
   },
   fractions: {
     share: 0.8,
@@ -4216,6 +4277,77 @@ function hasAdultSessionResources(options = {}) {
   );
 }
 
+function validateHomeworkQuestionShape(question, context = "question") {
+  const errors = [];
+  const addError = (message) => errors.push(`${context}: ${message}`);
+
+  if (!question || typeof question !== "object") {
+    return [`${context}: missing question object`];
+  }
+
+  if (!["choice", "input", "drag", "practice"].includes(question.mode)) {
+    addError(`unsupported mode "${question.mode}"`);
+  }
+
+  if (!String(question.type || "").trim()) {
+    addError("missing type");
+  }
+
+  if (!Number.isFinite(Number(question.difficulty))) {
+    addError("missing numeric difficulty");
+  }
+
+  if (question.mode === "choice") {
+    const options = Array.isArray(question.options) ? question.options.map(String) : [];
+    if (options.length < 2 || options.length > 4) {
+      addError("choice questions need 2 to 4 options");
+    }
+    if (new Set(options).size !== options.length) {
+      addError("choice options must be unique");
+    }
+    if (!options.includes(String(question.answerValue))) {
+      addError("choice answer must appear in options");
+    }
+  }
+
+  if (question.mode === "input" && String(question.answerValue ?? "").trim() === "") {
+    addError("input questions need an answer");
+  }
+
+  if (question.mode === "drag") {
+    const usesMatchingLayout = question.dragLayout === "matching";
+    if (usesMatchingLayout) {
+      if (!Array.isArray(question.matchLeftItems) || !question.matchLeftItems.length) {
+        addError("matching drag questions need left items");
+      }
+      if (!Array.isArray(question.matchRightItems) || !question.matchRightItems.length) {
+        addError("matching drag questions need right items");
+      }
+    } else if (!Array.isArray(question.dragChoices) || !question.dragChoices.length) {
+      addError("drag questions need choices");
+    }
+
+    if (!Array.isArray(question.dragAnswerTokens) || !question.dragAnswerTokens.length) {
+      addError("drag questions need answer tokens");
+    }
+  }
+
+  return errors;
+}
+
+function validateHomeworkQuestionList(questions, context = "session") {
+  const errors = [];
+  if (!Array.isArray(questions) || !questions.length) {
+    return [`${context}: no questions were generated`];
+  }
+
+  questions.forEach((question, index) => {
+    errors.push(...validateHomeworkQuestionShape(question, `${context} question ${index + 1}`));
+  });
+
+  return errors;
+}
+
 function startSession(event) {
   event.preventDefault();
 
@@ -4280,23 +4412,35 @@ function startSession(event) {
   state.sessionStartedAt = new Date();
   state.feedbackMessage = "";
   state.feedbackTone = "";
-  const sessionQuestions = isAdult
-    ? specialtyWordsOnly
-      ? buildSpecialtyOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
-      : hebrewOnly
-        ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
-        : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
-    : isGeographyMapPrototypeMode()
-      ? buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly: false })
-      : injectHebrewWritingPracticeTail(
-          buildSessionQuestions(totalQuestions, difficulty, {
-            hebrewOnly,
-            userId: state.currentUserId,
-            ...sessionBuilderOptions,
-          }),
-          difficulty,
-          { hebrewOnly }
-        );
+  let sessionQuestions;
+  try {
+    sessionQuestions = isAdult
+      ? specialtyWordsOnly
+        ? buildSpecialtyOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
+        : hebrewOnly
+          ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
+          : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
+      : isGeographyMapPrototypeMode()
+        ? buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly: false })
+        : injectHebrewWritingPracticeTail(
+            buildSessionQuestions(totalQuestions, difficulty, {
+              hebrewOnly,
+              userId: state.currentUserId,
+              ...sessionBuilderOptions,
+            }),
+            difficulty,
+            { hebrewOnly }
+          );
+
+    const validationErrors = validateHomeworkQuestionList(sessionQuestions, "session");
+    if (validationErrors.length) {
+      throw new Error(validationErrors.join("\n"));
+    }
+  } catch (error) {
+    console.error(error);
+    showStartMessage("Could not build a valid session. Please try a different topic or difficulty.", "error");
+    return;
+  }
   state.questions = sessionQuestions;
   state.totalQuestions = sessionQuestions.length;
 
@@ -4851,6 +4995,13 @@ function createSessionQuestionForCategory(
   }
 
   if (category === "charts-and-graphs") {
+    if (getOptionalGlobalFunction("createExtendedDataGeneratedEntry") && Math.random() < 0.45) {
+      const extendedDataQuestion = createExtendedDataChoiceQuestion(effectiveDifficulty);
+      if (extendedDataQuestion) {
+        return extendedDataQuestion;
+      }
+    }
+
     if (resources["charts-and-graphs"]?.entries.length && Math.random() >= 0.8) {
       return createBankChoiceQuestion(
         drawFromPool(resources["charts-and-graphs"], effectiveDifficulty),
@@ -4881,6 +5032,17 @@ function createSessionQuestionForCategory(
   }
 
   throw new Error(`Unknown session category: ${category}`);
+}
+
+function createExtendedDataChoiceQuestion(difficulty) {
+  const factory = getOptionalGlobalFunction("createExtendedDataGeneratedEntry");
+  const normalizedEntry = factory
+    ? normalizeChoiceBankEntry(factory(difficulty), "charts-and-graphs-choice")
+    : null;
+
+  return normalizedEntry
+    ? createBankChoiceQuestion(normalizedEntry, "charts-and-graphs-choice")
+    : null;
 }
 
 function createGeographyMapQuestion(difficulty, runtime, resources) {
@@ -5379,8 +5541,23 @@ function createMathChoiceQuestion(difficulty) {
     return createComparisonDragQuestion(difficulty);
   }
 
+  if (getOptionalGlobalFunction("createExtendedMathGeneratedEntry") && Math.random() < 0.32) {
+    return createExtendedMathChoiceQuestion(difficulty);
+  }
+
   const question = randomChoice(mathChoiceGenerators)(getCoreNumericGeneratorDifficulty(difficulty));
   return { ...question, difficulty };
+}
+
+function createExtendedMathChoiceQuestion(difficulty) {
+  const factory = getOptionalGlobalFunction("createExtendedMathGeneratedEntry");
+  const normalizedEntry = factory
+    ? normalizeChoiceBankEntry(factory(difficulty), "math-choice")
+    : null;
+
+  return normalizedEntry
+    ? createBankChoiceQuestion(normalizedEntry, "math-choice")
+    : createRoundingChoiceQuestion(getCoreNumericGeneratorDifficulty(difficulty));
 }
 
 function buildSpeedRoundQuestions() {
@@ -6882,12 +7059,14 @@ function createHebrewSessionQuestion(resources, difficulty, runtime) {
 
   const factories =
     runtime?.hebrewQuestionMode === "bank-only"
-      ? [
+        ? [
+          () => createExtendedHebrewSessionQuestion(difficulty),
           () => createHebrewReverseChoiceQuestion(resources, difficulty),
           () => createHebrewMatchingQuestion(resources, difficulty),
           () => createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty), resources?.hebrewMeanings),
         ]
-      : [
+        : [
+          () => createExtendedHebrewSessionQuestion(difficulty),
           () => createHebrewReverseChoiceQuestion(resources, difficulty),
           () => createHebrewMatchingQuestion(resources, difficulty),
           () => createHebrewOppositesQuestion(resources, difficulty),
@@ -6907,6 +7086,12 @@ function createHebrewSessionQuestion(resources, difficulty, runtime) {
   }
 
   return createHebrewChoiceQuestion(drawHebrewEntry(resources.hebrew, difficulty), resources?.hebrewMeanings);
+}
+
+function createExtendedHebrewSessionQuestion(difficulty) {
+  const factory = getOptionalGlobalFunction("createExtendedHebrewQuestion");
+  const question = factory ? factory(difficulty) : null;
+  return question?.mode === "choice" || question?.mode === "drag" ? question : null;
 }
 
 function createHebrewChoiceModeQuestion({
@@ -11137,6 +11322,7 @@ function generateShrinkingStepPattern(difficulty) {
 }
 
 function generateMoneyProblem(difficulty) {
+  const generatorDifficulty = getCoreNumericGeneratorDifficulty(difficulty);
   const config = {
     1: { amounts: [10, 20, 30, 40, 50], step: 5 },
     2: { amounts: [20, 30, 40, 50, 60, 80, 100], step: 5 },
@@ -11145,7 +11331,7 @@ function generateMoneyProblem(difficulty) {
     5: { amounts: [100, 120, 150, 180, 200, 250, 300], step: 1 },
     6: { amounts: [180, 200, 250, 300, 360, 400, 500], step: 1 },
     7: { amounts: [300, 360, 400, 500, 600, 750, 900], step: 1 },
-  }[difficulty];
+  }[generatorDifficulty];
 
   const amount = randomChoice(config.amounts);
   const price = randomChoice(buildMoneyChoicesBelow(amount, config.step));
@@ -11157,6 +11343,7 @@ function generateMoneyProblem(difficulty) {
 }
 
 function generatePercentageProblem(difficulty) {
+  const generatorDifficulty = getCoreNumericGeneratorDifficulty(difficulty);
   const config = {
     1: { percents: [10, 50], maxWhole: 20 },
     2: { percents: [10, 25, 50, 75], maxWhole: 50 },
@@ -11165,7 +11352,7 @@ function generatePercentageProblem(difficulty) {
     5: { percents: buildPercentChoices(1, 99), maxWhole: 250 },
     6: { percents: buildPercentChoices(1, 99), maxWhole: 500 },
     7: { percents: buildPercentChoices(1, 99), maxWhole: 1000 },
-  }[difficulty];
+  }[generatorDifficulty];
 
   while (true) {
     const percent = randomChoice(config.percents);
@@ -11440,4 +11627,27 @@ function shuffleArray(values) {
     [shuffled[index], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[index]];
   }
   return shuffled;
+}
+
+if (typeof globalThis !== "undefined") {
+  globalThis.HOMEWORK_TEST_API = {
+    ADULT_USER_ID,
+    SESSION_CATEGORY_ORDER,
+    SESSION_PRESETS,
+    SPEED_ROUND_QUESTION_COUNT,
+    USER_PROFILES,
+    buildAdultSessionQuestions,
+    buildSessionQuestions,
+    buildSpeedRoundQuestions,
+    createChartsAndGraphsQuestion,
+    createExtendedDataChoiceQuestion,
+    createExtendedMathChoiceQuestion,
+    createExtendedHebrewSessionQuestion,
+    createMathChoiceQuestion,
+    createMathInputQuestion,
+    createStatisticsChoiceQuestion,
+    createTimeChoiceQuestion,
+    state,
+    validateHomeworkQuestionShape,
+  };
 }

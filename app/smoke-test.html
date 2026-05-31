@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Homework Smoke Test</title>
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="start-screen">
+        <div id="user-selector"></div>
+        <form id="start-form">
+          <input id="hebrew-only" value="false">
+          <input id="specialty-words-only" value="false">
+          <input id="question-count" value="30">
+          <button type="button" class="question-count-button active" data-question-count="30"></button>
+          <input id="difficulty-level" value="3">
+          <div id="difficulty-selector"></div>
+          <output id="difficulty-value"></output>
+          <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew"></button>
+          <button type="button" class="builder-preset-button active" data-session-preset="adaptive"></button>
+          <button type="button" class="builder-preset-button" data-session-preset="math-heavy"></button>
+          <select id="difficulty-min"><option value="1">1</option></select>
+          <button id="adaptive-review-button" type="button"></button>
+          <button id="category-reset-button" type="button"></button>
+          <button id="specialty-words-button" type="button"></button>
+          <div id="category-builder-grid"></div>
+        </form>
+        <button id="history-button"></button>
+        <button id="dashboard-button"></button>
+        <p id="start-feedback"></p>
+      </section>
+      <section id="quiz-screen" hidden>
+        <div id="progress-tracker"></div>
+        <p id="score-text"></p>
+        <div id="speed-timer" hidden><strong id="speed-timer-text"></strong><span id="speed-timer-fill"></span></div>
+        <p id="feedback"></p>
+        <p id="question-number"></p>
+        <p id="question-prompt"></p>
+        <div id="question-main"></div>
+        <div id="question-visual"></div>
+        <div id="question-extra"></div>
+        <form id="answer-form"><div id="input-area"><input id="answer-input"></div></form>
+        <div id="choices-area"></div>
+        <div id="drag-area"></div>
+        <button id="quiz-back-button"></button>
+        <button id="quiz-forward-button"></button>
+      </section>
+      <section id="results-screen" hidden>
+        <h2 id="results-title"></h2>
+        <p id="results-summary"></p>
+        <div id="results-category-summary"></div>
+        <div id="results-review-list"></div>
+        <button id="results-back-button"></button>
+        <button id="results-forward-button"></button>
+        <button id="restart-button"></button>
+      </section>
+      <section id="history-screen" hidden>
+        <button id="history-back-button"></button>
+        <p id="history-empty"></p>
+        <div id="history-list"></div>
+      </section>
+      <section id="dashboard-screen" hidden>
+        <button id="dashboard-back-button"></button>
+        <div id="dashboard-user-selector"></div>
+        <div id="dashboard-content"></div>
+      </section>
+    </main>
+    <pre id="result">running</pre>
+
+    <script src="hebrew-expanded-words.js"></script>
+    <script src="hebrew-words.js"></script>
+    <script src="hebrew-image-words.js"></script>
+    <script src="science-questions.js"></script>
+    <script src="science-evidence-questions.js"></script>
+    <script src="general-knowledge-questions.js"></script>
+    <script src="algebra-questions.js"></script>
+    <script src="applied-word-problems-questions.js"></script>
+    <script src="visual-math-questions.js"></script>
+    <script src="visual-measurement-questions.js"></script>
+    <script src="logic-questions.js"></script>
+    <script src="rationality-questions.js"></script>
+    <script src="geography-map-data.js"></script>
+    <script src="geography-map-questions.js"></script>
+    <script src="geography-questions.js"></script>
+    <script src="population-questions.js"></script>
+    <script src="financial-literacy-questions.js"></script>
+    <script src="measurement-questions.js"></script>
+    <script src="charts-and-graphs-questions.js"></script>
+    <script src="calendar-questions.js"></script>
+    <script src="estimation-questions.js"></script>
+    <script src="probability-questions.js"></script>
+    <script src="maps-and-directions-questions.js"></script>
+    <script src="health-and-first-aid-questions.js"></script>
+    <script src="nutrition-questions.js"></script>
+    <script src="household-problem-solving-questions.js"></script>
+    <script src="fractions-questions.js"></script>
+    <script src="fractions-and-ratios-questions.js"></script>
+    <script src="reading-comprehension-questions.js"></script>
+    <script src="spatial-reasoning-questions.js"></script>
+    <script src="category-drag-questions.js"></script>
+    <script src="sentence-drag-english.js"></script>
+    <script src="sentence-drag-hebrew.js"></script>
+    <script src="vocabulary-grammar-questions.js"></script>
+    <script src="adult-hebrew-module.js"></script>
+    <script src="extended-exercise-utils.js"></script>
+    <script src="extended-math-questions.js"></script>
+    <script src="extended-data-questions.js"></script>
+    <script src="extended-language-questions.js"></script>
+    <script src="extended-hebrew-questions.js"></script>
+    <script src="extended-science-questions.js"></script>
+    <script src="extended-practical-questions.js"></script>
+    <script src="extended-thinking-questions.js"></script>
+    <script src="extended-history-geography-questions.js"></script>
+    <script src="app.js"></script>
+    <script>
+      const result = document.getElementById("result");
+      const api = globalThis.HOMEWORK_TEST_API;
+      const failures = [];
+
+      function validateQuestion(question, label) {
+        const errors = api.validateHomeworkQuestionShape(question, label);
+        if (errors.length) failures.push(...errors);
+      }
+
+      function validateEntry(entry, label) {
+        if (!entry || typeof entry !== "object") {
+          failures.push(`${label}: did not return an entry`);
+          return;
+        }
+        const options = Array.isArray(entry.options) ? entry.options.map(String) : [];
+        const answer = String(entry.answer || "");
+        if (!entry.question) failures.push(`${label}: missing question`);
+        if (!answer) failures.push(`${label}: missing answer`);
+        if (options.length !== 4) failures.push(`${label}: expected 4 options, got ${options.length}`);
+        if (new Set(options).size !== options.length) failures.push(`${label}: options are not unique`);
+        if (!options.includes(answer)) failures.push(`${label}: answer is not in options`);
+      }
+
+      try {
+        if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
+        const directEntryFactories = [
+          ["extended language", globalThis.createExtendedVocabularyGrammarGeneratedEntry],
+          ["extended reading", globalThis.createExtendedReadingComprehensionGeneratedEntry],
+          ["extended science", globalThis.createExtendedScienceGeneratedEntry],
+          ["extended practical", globalThis.createExtendedPracticalGeneratedEntry],
+          ["extended thinking", globalThis.createExtendedThinkingGeneratedEntry],
+          ["extended geography history", globalThis.createExtendedGeographyHistoryGeneratedEntry],
+        ];
+        [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((difficulty) => {
+          validateQuestion(api.createMathInputQuestion(difficulty), `math input ${difficulty}`);
+          validateQuestion(api.createMathChoiceQuestion(difficulty), `math choice ${difficulty}`);
+          validateQuestion(api.createStatisticsChoiceQuestion(difficulty), `statistics ${difficulty}`);
+          validateQuestion(api.createTimeChoiceQuestion(difficulty), `time ${difficulty}`);
+          validateQuestion(api.createChartsAndGraphsQuestion(difficulty), `charts ${difficulty}`);
+          validateQuestion(api.createExtendedDataChoiceQuestion(difficulty), `extended data ${difficulty}`);
+          validateQuestion(api.createExtendedMathChoiceQuestion(difficulty), `extended math ${difficulty}`);
+          validateQuestion(api.createExtendedHebrewSessionQuestion(difficulty), `extended Hebrew ${difficulty}`);
+          directEntryFactories.forEach(([label, factory]) => {
+            if (typeof factory !== "function") failures.push(`${label}: factory missing`);
+            else validateEntry(factory(difficulty), `${label} ${difficulty}`);
+          });
+
+          for (let trial = 0; trial < 30; trial += 1) {
+            validateQuestion(api.createMathChoiceQuestion(difficulty), `math choice ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createExtendedMathChoiceQuestion(difficulty), `extended math ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createExtendedDataChoiceQuestion(difficulty), `extended data ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createExtendedHebrewSessionQuestion(difficulty), `extended Hebrew ${difficulty} trial ${trial + 1}`);
+            directEntryFactories.forEach(([label, factory]) => {
+              if (typeof factory === "function") validateEntry(factory(difficulty), `${label} ${difficulty} trial ${trial + 1}`);
+            });
+          }
+
+          api.SESSION_CATEGORY_ORDER.forEach((category) => {
+            const questions = api.buildSessionQuestions(12, difficulty, {
+              hebrewOnly: category === "hebrew",
+              selectedCategories: [category],
+              adaptiveReview: false,
+              sessionPreset: api.SESSION_PRESETS.custom,
+              userId: "gabriel",
+            });
+            if (questions.length !== 12) failures.push(`${category} ${difficulty}: expected 12 questions, got ${questions.length}`);
+            questions.forEach((question, index) => validateQuestion(question, `${category} ${difficulty} #${index + 1}`));
+          });
+        });
+
+        api.USER_PROFILES.forEach((profile) => {
+          api.state.currentUserId = profile.id;
+          const questions =
+            profile.id === api.ADULT_USER_ID
+              ? api.buildAdultSessionQuestions(20)
+              : api.buildSessionQuestions(20, 5, {
+                  selectedCategories: api.SESSION_CATEGORY_ORDER,
+                  adaptiveReview: false,
+                  userId: profile.id,
+                });
+          if (questions.length !== 20) failures.push(`${profile.id}: expected 20 questions, got ${questions.length}`);
+          questions.forEach((question, index) => validateQuestion(question, `${profile.id} #${index + 1}`));
+        });
+
+        const speedQuestions = api.buildSpeedRoundQuestions();
+        if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
+        speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
+      } catch (error) {
+        failures.push(error && error.stack ? error.stack : String(error));
+      }
+
+      result.textContent = failures.length ? `FAIL\n${failures.join("\n")}` : "PASS";
+    </script>
+  </body>
+</html>
