@@ -127,6 +127,20 @@ const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_
 const CORE_CATEGORY_SHARE = 0.45;
 const USER_PROFILES = [
   {
+    id: "guest",
+    name: "Guest",
+    defaultDifficulty: 1,
+    enableReviewFocus: false,
+    avatarStyle: "girlCurls",
+    palette: {
+      sky: "#f4ecff",
+      shirt: "#8f66cf",
+      hair: "#a8714d",
+      accent: "#f0b6cf",
+      eyes: "#6b452e",
+    },
+  },
+  {
     id: "gabriel",
     name: "Gabriel",
     defaultDifficulty: 2,
@@ -3831,6 +3845,20 @@ function buildUserAvatarMarkup(profile) {
         <circle cx="34" cy="17" r="4"></circle>
       </g>
       <path d="M26 37c2-10 9-16 18-16 10 0 18 6 19 16-4-3-10-5-17-5s-14 2-20 5z" fill="${palette.hair}"></path>
+    `,
+    girlCurls: `
+      <path d="M22 36c0-13 9-23 22-23s22 10 22 23v18c-4 8-12 14-22 14s-18-6-22-14z" fill="${palette.hair}" opacity="0.92"></path>
+      <g fill="${palette.hair}">
+        <circle cx="28" cy="27" r="6"></circle>
+        <circle cx="33" cy="21" r="6"></circle>
+        <circle cx="41" cy="18" r="6.5"></circle>
+        <circle cx="50" cy="19" r="6"></circle>
+        <circle cx="57" cy="23" r="5.5"></circle>
+        <circle cx="62" cy="30" r="5"></circle>
+        <circle cx="25" cy="35" r="5"></circle>
+        <circle cx="63" cy="38" r="4.5"></circle>
+      </g>
+      <path d="M24 37c3-10 10-16 20-16 11 0 18 6 20 16-5-3-11-5-18-5-8 0-15 2-22 5z" fill="${palette.hair}"></path>
     `,
     adultBun: `
       <circle cx="58" cy="17" r="8" fill="${palette.hair}"></circle>
