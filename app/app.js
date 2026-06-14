@@ -1,5 +1,6 @@
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
+const SESSION_HISTORY_CSV_MIME_TYPE = "text/csv;charset=utf-8";
 const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
 const MAX_SAVED_SESSIONS = 10;
 const QUESTION_COUNT_OPTIONS = [20, 30, 40];
@@ -2212,6 +2213,8 @@ const elements = {
   historyEmpty: document.getElementById("history-empty"),
   dashboardButton: document.getElementById("dashboard-button"),
   dashboardBackButton: document.getElementById("dashboard-back-button"),
+  dashboardExportCsvButton: document.getElementById("dashboard-export-csv-button"),
+  dashboardShareCsvButton: document.getElementById("dashboard-share-csv-button"),
   dashboardUserSelector: document.getElementById("dashboard-user-selector"),
   dashboardContent: document.getElementById("dashboard-content"),
   sessionModeLabel: document.getElementById("session-mode-label"),
@@ -2797,6 +2800,8 @@ elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
 elements.dashboardButton?.addEventListener("click", showDashboardScreen);
 elements.dashboardBackButton?.addEventListener("click", showStartScreen);
+elements.dashboardExportCsvButton?.addEventListener("click", exportSessionHistoryCsv);
+elements.dashboardShareCsvButton?.addEventListener("click", shareSessionHistoryCsv);
 elements.quizBackButton.addEventListener("click", showPreviousQuizQuestion);
 elements.quizForwardButton.addEventListener("click", showNextQuizQuestion);
 elements.resultsBackButton.addEventListener("click", showPreviousQuizQuestion);
@@ -10362,6 +10367,169 @@ function getSessionStorage() {
   } catch (error) {
     return null;
   }
+}
+
+function exportSessionHistoryCsv() {
+  downloadCsvFile(buildAllSessionHistoryCsv(), getSessionHistoryCsvFilename());
+}
+
+async function shareSessionHistoryCsv() {
+  const csvText = buildAllSessionHistoryCsv();
+  const filename = getSessionHistoryCsvFilename();
+  if (typeof File !== "function") {
+    downloadCsvFile(csvText, filename);
+    return;
+  }
+
+  const file = new File([getCsvFileText(csvText)], filename, { type: SESSION_HISTORY_CSV_MIME_TYPE });
+  const shareData = {
+    files: [file],
+    title: "Homework Sessions CSV",
+    text: "Homework sessions CSV",
+  };
+
+  if (
+    typeof navigator !== "undefined" &&
+    typeof navigator.share === "function" &&
+    navigator.canShare?.({ files: [file] })
+  ) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        return;
+      }
+    }
+  }
+
+  downloadCsvFile(csvText, filename);
+}
+
+function buildAllSessionHistoryCsv() {
+  const rows = [
+    [
+      "Student ID",
+      "Student",
+      "Session ID",
+      "Started At",
+      "Session Preset",
+      "Difficulty",
+      "Minimum Difficulty",
+      "Hebrew Only",
+      "Specialty Words Only",
+      "Adaptive Review",
+      "Selected Categories",
+      "Total Questions",
+      "Correct Count",
+      "Accuracy Percent",
+      "Speed Round Total",
+      "Speed Round Correct",
+      "Record Type",
+      "Question Number",
+      "Category",
+      "Category Label",
+      "Question Text",
+      "Chosen Answer",
+      "Correct Answer",
+      "Is Correct",
+      "Selected Tokens",
+    ],
+  ];
+  const historyByUser = loadAllSessionHistory();
+
+  USER_PROFILES.forEach((profile) => {
+    const sessions = Array.isArray(historyByUser[profile.id]) ? historyByUser[profile.id] : [];
+    sessions.forEach((session) => {
+      const records = [
+        ...(Array.isArray(session.records)
+          ? session.records.map((record) => ({ recordType: "main", record }))
+          : []),
+        ...(Array.isArray(session.speedRoundRecords)
+          ? session.speedRoundRecords.map((record) => ({ recordType: "speed", record }))
+          : []),
+      ];
+
+      if (!records.length) {
+        rows.push(buildSessionHistoryCsvRow(profile, session, null));
+        return;
+      }
+
+      records.forEach((entry) => {
+        rows.push(buildSessionHistoryCsvRow(profile, session, entry));
+      });
+    });
+  });
+
+  return rows.map((row) => row.map(escapeCsvCell).join(",")).join("\r\n") + "\r\n";
+}
+
+function buildSessionHistoryCsvRow(profile, session, entry) {
+  const record = entry?.record || {};
+  const totalQuestions = Number(session?.totalQuestions) || 0;
+  const correctCount = Number(session?.correctCount) || 0;
+  const accuracyPercent = totalQuestions ? Math.round((correctCount / totalQuestions) * 100) : "";
+  const selectedCategories = Array.isArray(session?.selectedCategories)
+    ? session.selectedCategories.join("|")
+    : "";
+  const selectedTokens = Array.isArray(record?.selectedTokens) ? record.selectedTokens.join("|") : "";
+
+  return [
+    profile.id,
+    session?.userName || profile.name,
+    session?.id || "",
+    session?.startedAt || "",
+    getSessionPresetLabel(session?.sessionPreset),
+    isAdultUserId(profile.id) ? "" : session?.difficulty || "",
+    isAdultUserId(profile.id) ? "" : session?.minDifficulty || "",
+    Boolean(session?.hebrewOnly),
+    Boolean(session?.specialtyWordsOnly),
+    Boolean(session?.adaptiveReview),
+    selectedCategories,
+    totalQuestions,
+    correctCount,
+    accuracyPercent,
+    Number.isFinite(Number(session?.speedRoundTotalQuestions)) ? Number(session.speedRoundTotalQuestions) : "",
+    Number.isFinite(Number(session?.speedRoundCorrectCount)) ? Number(session.speedRoundCorrectCount) : "",
+    entry?.recordType || "",
+    record?.questionNumber || "",
+    record?.category || "",
+    record?.categoryLabel || "",
+    record?.questionText || "",
+    record?.chosenAnswer || "",
+    record?.correctAnswer || "",
+    typeof record?.isCorrect === "boolean" ? record.isCorrect : "",
+    selectedTokens,
+  ];
+}
+
+function getSessionHistoryCsvFilename() {
+  return `homework-sessions-${new Date().toISOString().slice(0, 10)}.csv`;
+}
+
+function downloadCsvFile(csvText, filename) {
+  const blob = new Blob([getCsvFileText(csvText)], { type: SESSION_HISTORY_CSV_MIME_TYPE });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 0);
+}
+
+function getCsvFileText(csvText) {
+  return `\ufeff${csvText}`;
+}
+
+function escapeCsvCell(value) {
+  if (value === null || value === undefined) {
+    return "";
+  }
+
+  const text = String(value);
+  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
 }
 
 function showHistoryScreen() {
