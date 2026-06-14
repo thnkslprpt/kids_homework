@@ -176,6 +176,19 @@ function createContext() {
     RegExp,
     Error,
     URLSearchParams,
+    navigator: {
+      serviceWorker: {
+        controller: null,
+        addEventListener() {},
+        register() {
+          return Promise.resolve({
+            waiting: null,
+            installing: null,
+            addEventListener() {},
+          });
+        },
+      },
+    },
     setTimeout,
     clearTimeout,
     requestAnimationFrame(callback) {
@@ -188,6 +201,7 @@ function createContext() {
   context.window = {
     document,
     localStorage: storage,
+    navigator: context.navigator,
     innerWidth: 1280,
     innerHeight: 900,
     location: { search: "" },

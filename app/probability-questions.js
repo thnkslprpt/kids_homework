@@ -622,7 +622,7 @@ const PROBABILITY_QUESTIONS = [
   ),
 ];
 
-function createProbabilityGeneratedEntry(difficulty) {
+function createProbabilityGeneratedEntry(difficulty, options = {}) {
   const level = probabilityClampDifficulty(difficulty);
 
   function buildEntry({ question, answer, distractors, displayText = "" }) {
@@ -643,6 +643,254 @@ function createProbabilityGeneratedEntry(difficulty) {
       distractors: ["The first bag", "The second bag", "They are equally likely"].filter((choice) => choice !== answer).concat("Neither can happen"),
     });
   }
+
+  function compareFractions(leftNumerator, leftDenominator, rightNumerator, rightDenominator) {
+    return leftNumerator * rightDenominator - rightNumerator * leftDenominator;
+  }
+
+  function createLikelihoodQuestion() {
+    const likelySetups = [
+      {
+        minLevel: 1,
+        question: "A normal 6-sided die is rolled. How likely is it to roll an 8?",
+        answer: "Impossible",
+        distractors: ["Unlikely", "Equally likely", "Certain"],
+      },
+      {
+        minLevel: 1,
+        question: "A bag has only red marbles. How likely is it to pick a red marble?",
+        answer: "Certain",
+        distractors: ["Impossible", "Unlikely", "Equally likely"],
+      },
+      {
+        minLevel: 1,
+        question: "A fair coin is flipped. How likely is heads compared with tails?",
+        answer: "Equally likely",
+        distractors: ["Impossible", "Unlikely", "Certain"],
+      },
+      {
+        minLevel: 3,
+        build() {
+          const blue = probabilityRandomInt(5, 8);
+          const yellow = probabilityRandomInt(1, 2);
+          return {
+            question: `A spinner has ${blue} blue sections and ${yellow} yellow section${yellow === 1 ? "" : "s"}. How likely is blue?`,
+            answer: "Likely",
+            distractors: ["Impossible", "Unlikely", "Equally likely"],
+          };
+        },
+      },
+      {
+        minLevel: 3,
+        build() {
+          const winning = probabilityRandomInt(1, 2);
+          const losing = probabilityRandomInt(7, 10);
+          return {
+            question: `A raffle box has ${winning} winning ticket${winning === 1 ? "" : "s"} and ${losing} losing tickets. How likely is it to pick a winning ticket?`,
+            answer: "Unlikely",
+            distractors: ["Impossible", "Equally likely", "Certain"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    const setup = probabilityRandomChoice(likelySetups);
+    return buildEntry(typeof setup.build === "function" ? setup.build() : setup);
+  }
+
+  function createWeatherQuestion() {
+    if (level <= 3 || Math.random() < 0.45) {
+      const firstChance = probabilityRandomChoice([10, 20, 25, 30, 40]);
+      const secondChance = probabilityRandomChoice([60, 70, 75, 80, 90]);
+      const firstDay = probabilityRandomChoice(["Monday", "Wednesday", "Friday"]);
+      const secondDay = probabilityRandomChoice(["Tuesday", "Thursday", "Saturday"]);
+      return buildEntry({
+        question: `${firstDay} has a ${firstChance}% chance of rain. ${secondDay} has a ${secondChance}% chance of rain. Which day is rain more likely?`,
+        answer: secondDay,
+        distractors: [firstDay, "Both days are equally likely", "Rain is impossible"],
+      });
+    }
+
+    const chance = probabilityRandomChoice([20, 30, 40, 50, 60, 70, 75, 80]);
+    const answer =
+      chance > 50
+        ? "Rain is more likely than no rain"
+        : chance < 50
+          ? "Rain is less likely than no rain"
+          : "Rain and no rain are equally likely";
+    return buildEntry({
+      question: `The forecast says there is a ${chance}% chance of rain. Which statement is best?`,
+      answer,
+      distractors: [
+        "It will definitely rain",
+        "Rain is impossible",
+        `${chance / 10}% chance of rain`,
+        "Rain and no rain are equally likely",
+        "Rain is more likely than no rain",
+        "Rain is less likely than no rain",
+      ].filter((choice) => choice !== answer),
+    });
+  }
+
+  function createExperimentalQuestion() {
+    if (level <= 6) {
+      const flips = probabilityRandomChoice([20, 30, 40]);
+      const heads = Math.round(flips * probabilityRandomChoice([0.35, 0.6, 0.7]));
+      return buildEntry({
+        question: `A fair coin should land on heads about half the time. Sam flipped it ${flips} times and got heads ${heads} times. What is ${heads}/${flips} called?`,
+        answer: "The experimental probability",
+        distractors: ["The theoretical probability", "A certain result", "An impossible result"],
+      });
+    }
+
+    if (level <= 8 || Math.random() < 0.55) {
+      const colors = probabilityRandomChoice([4, 5]);
+      const spins = colors * probabilityRandomChoice([8, 10, 12]);
+      const observedHits = probabilityRandomChoice([6, 8, 9, 12, 15]);
+      const hits = observedHits === spins / colors ? observedHits + 1 : observedHits;
+      const safeHits = Math.min(spins - 1, hits);
+      const answer = probabilityFormatFraction(safeHits, spins);
+      return buildEntry({
+        question: `A spinner has ${colors} equal colors. The theoretical chance of red is ${probabilityFormatFraction(1, colors)}. In ${spins} spins, red happened ${safeHits} times. What is the experimental probability?`,
+        answer,
+        distractors: [probabilityFormatFraction(1, colors), `${safeHits}/${colors}`, `${colors}/${spins}`],
+      });
+    }
+
+    const sides = 6;
+    const rolls = probabilityRandomChoice([60, 90, 120]);
+    const expected = rolls / sides;
+    const actual = expected + probabilityRandomChoice([-5, -4, 4, 6]);
+    const answer = actual > expected ? "The experimental result was higher than expected." : "The experimental result was lower than expected.";
+    return buildEntry({
+      question: `A die is rolled ${rolls} times. The theoretical expectation for rolling a 6 is about ${expected} times. It actually happens ${actual} times. Which is true?`,
+      answer,
+      distractors: [
+        "The experimental result was exactly expected.",
+        actual > expected ? "The experimental result was lower than expected." : "The experimental result was higher than expected.",
+        "Rolling a 6 was impossible.",
+      ],
+    });
+  }
+
+  function createFairGameQuestion() {
+    const fairSetups = [
+      { ana: [1, 2, 3], ben: [4, 5, 6] },
+      { ana: [1, 2], ben: [3, 4, 5, 6] },
+      { ana: [1, 3, 5], ben: [2, 4, 6] },
+      { ana: [1, 2, 3, 4], ben: [5, 6] },
+    ];
+    const setup = probabilityRandomChoice(level <= 4 ? [fairSetups[0], fairSetups[2]] : fairSetups);
+    const answer =
+      setup.ana.length === setup.ben.length
+        ? "Yes, both players have the same chance."
+        : setup.ana.length > setup.ben.length
+          ? "No, Ana is more likely to win."
+          : "No, Ben is more likely to win.";
+    return buildEntry({
+      question: `A game uses a normal die. Ana wins on ${setup.ana.join(", ")}. Ben wins on ${setup.ben.join(", ")}. Is the game fair?`,
+      answer,
+      distractors: [
+        "Yes, both players have the same chance.",
+        "No, Ana is more likely to win.",
+        "No, Ben is more likely to win.",
+        "No one can win.",
+      ].filter((choice) => choice !== answer),
+    });
+  }
+
+  function createBestStrategyQuestion() {
+    const labels = ["Bag A", "Bag B", "Bag C", "Bag D"];
+    const candidates = [
+      { red: 2, total: 5 },
+      { red: 4, total: 12 },
+      { red: 1, total: 2 },
+      { red: 3, total: 10 },
+      { red: 5, total: 9 },
+      { red: 6, total: 13 },
+      { red: 7, total: 20 },
+    ];
+    const shuffled = probabilityShuffleArray(candidates).slice(0, 4);
+    const bestIndex = shuffled.reduce((best, item, index) =>
+      compareFractions(item.red, item.total, shuffled[best].red, shuffled[best].total) > 0 ? index : best, 0);
+    const hasTie = shuffled.some((item, index) =>
+      index !== bestIndex && compareFractions(item.red, item.total, shuffled[bestIndex].red, shuffled[bestIndex].total) === 0);
+    if (hasTie) {
+      return createBestStrategyQuestion();
+    }
+    return buildEntry({
+      question: "You want to pick a red marble. Which bag should you choose?",
+      displayText: shuffled
+        .map((item, index) => `${labels[index]}: ${item.red} red and ${item.total - item.red} blue`)
+        .join("\n"),
+      answer: labels[bestIndex],
+      distractors: labels.filter((label) => label !== labels[bestIndex]),
+    });
+  }
+
+  function createIndependentQuestion() {
+    if (level <= 6) {
+      const streak = probabilityRandomChoice([3, 4, 5]);
+      return buildEntry({
+        question: `A fair coin lands heads ${streak} times in a row. What is the chance it lands heads on the next flip?`,
+        answer: "1/2",
+        distractors: ["1/4", `${streak}/${streak + 1}`, "Certain"],
+      });
+    }
+
+    if (level <= 8) {
+      return buildEntry({
+        question: "You flip a fair coin twice. Which result type is most likely?",
+        answer: "One head and one tail",
+        distractors: ["Two heads", "Two tails", "All three result types are equally likely"],
+      });
+    }
+
+    const event = probabilityRandomChoice([
+      { question: "A fair coin is flipped twice. What is the chance of getting two heads in a row?", answer: "1/4", distractors: ["1/2", "1/3", "3/4"] },
+      { question: "A normal die is rolled twice. What is the chance of rolling a 6 both times?", answer: "1/36", distractors: ["1/6", "1/12", "2/6"] },
+    ]);
+    return buildEntry(event);
+  }
+
+  function createNotEnoughInformationQuestion() {
+    const setups = [
+      {
+        minLevel: 3,
+        question: "A bag has red and blue marbles, but you do not know how many of each. What is the chance of picking red?",
+        answer: "Not enough information",
+        distractors: ["1/2", "1/3", "Certain"],
+      },
+      {
+        minLevel: 4,
+        question: "A spinner has red, blue, and green sections, but we do not know how many of each. Which color is most likely?",
+        answer: "Not enough information",
+        distractors: ["Red", "Blue", "Green"],
+      },
+      {
+        minLevel: 6,
+        question: "A box has some winning tickets and some losing tickets. Can you know your chance of winning without knowing how many tickets there are?",
+        answer: "No, there is not enough information.",
+        distractors: ["Yes, it is always 1/2.", "Yes, winning is certain.", "Yes, winning is impossible."],
+      },
+      {
+        minLevel: 8,
+        question: "Bag A has 3 red and 7 blue marbles. Bag B has red and blue marbles, but no counts are given. Which bag gives the better chance of picking red?",
+        answer: "Not enough information",
+        distractors: ["Bag A", "Bag B", "They are equally likely"],
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups));
+  }
+
+  const generatedTemplates = [
+    { minLevel: 1, weight: 3, build: createLikelihoodQuestion },
+    { minLevel: 2, weight: 3, build: createWeatherQuestion },
+    { minLevel: 5, weight: 3, build: createExperimentalQuestion },
+    { minLevel: 3, weight: 3, build: createFairGameQuestion },
+    { minLevel: 4, weight: 3, build: createBestStrategyQuestion },
+    { minLevel: 5, weight: 3, build: createIndependentQuestion },
+    { minLevel: 3, weight: 2, build: createNotEnoughInformationQuestion },
+  ];
 
   const generators = {
     1: [
@@ -906,6 +1154,14 @@ function createProbabilityGeneratedEntry(difficulty) {
       }),
     ],
   };
+
+  const eligibleTemplates = generatedTemplates
+    .filter((template) => level >= template.minLevel && (!template.maxLevel || level <= template.maxLevel))
+    .flatMap((template) => Array.from({ length: template.weight }, () => template.build));
+
+  if (eligibleTemplates.length && (options.templateOnly || Math.random() < 0.7)) {
+    return probabilityRandomChoice(eligibleTemplates)();
+  }
 
   return probabilityRandomChoice(generators[level] || generators[10])();
 }
