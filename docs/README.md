@@ -1,7 +1,45 @@
 # Homework
 
-This is a plain offline homework app. Put the whole folder on a computer or Chromebook, then open
-[`homework.html`](../homework.html) in Chrome.
+This is a plain homework app that works in two modes:
+
+- Folder mode: put the whole folder on a computer or Chromebook, then open
+  [`homework.html`](../homework.html) in Chrome.
+- Hosted phone mode: publish the repo with GitHub Pages, then open the Pages URL on a phone.
+
+The hosted version is installable and works offline after the first successful online load.
+
+## GitHub Pages Phone Setup
+
+The app is ready to publish from the repo root.
+
+Steps to do on GitHub:
+
+1. Push this repo to GitHub.
+2. Open the repo on GitHub.
+3. Go to `Settings` -> `Pages`.
+4. Under `Build and deployment`, choose `Deploy from a branch`.
+5. Choose your normal branch, usually `main`.
+6. Choose the folder `/(root)`.
+7. Save.
+8. Wait for GitHub to show the published Pages URL.
+
+Give the kids the Pages URL. The root URL opens [`homework.html`](../homework.html) automatically.
+
+On phones:
+
+- iPhone: open the Pages URL in Safari, tap Share, then `Add to Home Screen`.
+- Android: open the Pages URL in Chrome, then use `Add to Home screen` or `Install app` when offered.
+
+For offline use, open the app once while online and leave it open until the first screen finishes
+loading. The app caches the runtime HTML, CSS, JavaScript, fonts, icons, map assets, and Hebrew image
+assets. After that, the installed app or Pages URL can reopen without a connection on that device.
+
+When updates are pushed to GitHub:
+
+- GitHub Pages republishes the new static files.
+- A phone that opens the app online will download the new service-worker cache.
+- If the app is already open while a new version becomes ready, it shows a `Reload` prompt.
+- Session history remains stored in that browser/device; it is not synced between devices.
 
 ## Current Features
 

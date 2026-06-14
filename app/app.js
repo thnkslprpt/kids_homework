@@ -2242,6 +2242,8 @@ const elements = {
   resultsBackButton: document.getElementById("results-back-button"),
   resultsForwardButton: document.getElementById("results-forward-button"),
   restartButton: document.getElementById("restart-button"),
+  appUpdateBanner: document.getElementById("app-update-banner"),
+  appUpdateButton: document.getElementById("app-update-button"),
 };
 
 function createEmptySpeedRoundState() {
@@ -2793,6 +2795,60 @@ initializeSpecialtyWordsButton();
 initializeSessionBuilder();
 initializeDifficultyControl();
 updateStartControlsForCurrentUser();
+initializeOfflineApp();
+
+function initializeOfflineApp() {
+  if (!("serviceWorker" in navigator)) {
+    return;
+  }
+
+  let refreshingForUpdate = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (refreshingForUpdate) {
+      return;
+    }
+    refreshingForUpdate = true;
+    window.location.reload();
+  });
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("service-worker.js")
+      .then((registration) => {
+        if (registration.waiting) {
+          showAppUpdatePrompt(registration.waiting);
+        }
+
+        registration.addEventListener("updatefound", () => {
+          const installingWorker = registration.installing;
+          if (!installingWorker) {
+            return;
+          }
+
+          installingWorker.addEventListener("statechange", () => {
+            if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
+              showAppUpdatePrompt(installingWorker);
+            }
+          });
+        });
+      })
+      .catch(() => {
+        // The app still works online or from a downloaded folder without service-worker support.
+      });
+  });
+}
+
+function showAppUpdatePrompt(worker) {
+  if (!elements.appUpdateBanner || !elements.appUpdateButton || !worker) {
+    return;
+  }
+
+  elements.appUpdateBanner.hidden = false;
+  elements.appUpdateButton.onclick = () => {
+    elements.appUpdateButton.disabled = true;
+    worker.postMessage({ type: "SKIP_WAITING" });
+  };
+}
 
 function buildHebrewQuestionBank(entries) {
   const groupedEntries = new Map();

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="title">
+  <title id="title">Homework</title>
+  <rect width="512" height="512" rx="112" fill="#f8d27a"/>
+  <circle cx="392" cy="126" r="78" fill="#dff1f8"/>
+  <path fill="#fffaf0" stroke="#1f2d3d" stroke-width="22" stroke-linejoin="round" d="M126 96h218c32 0 58 26 58 58v230c0 18-14 32-32 32H126c-18 0-32-14-32-32V128c0-18 14-32 32-32Z"/>
+  <path fill="none" stroke="#146c94" stroke-width="22" stroke-linecap="round" d="M150 180h140M150 242h210M150 304h156"/>
+  <path fill="#ccefff" stroke="#1f2d3d" stroke-width="18" stroke-linejoin="round" d="m302 347 44-116 76 76-116 44Z"/>
+  <path fill="#e57a7a" stroke="#1f2d3d" stroke-width="18" stroke-linejoin="round" d="m346 231 28-28c11-11 28-11 39 0l15 15c11 11 11 28 0 39l-28 28Z"/>
+</svg>

@@ -916,6 +916,34 @@ button:disabled {
   color: var(--ink);
 }
 
+.app-update-banner {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  width: min(520px, calc(100% - 32px));
+  margin-left: auto;
+  padding: 12px 14px 12px 18px;
+  border: 1px solid rgba(39, 73, 114, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 252, 246, 0.98);
+  box-shadow: 0 18px 44px rgba(24, 48, 76, 0.18);
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.app-update-banner button {
+  min-height: 44px;
+  padding: 10px 18px;
+  background: var(--accent);
+  color: #ffffff;
+}
+
 .status-bar {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 140px;
@@ -1142,7 +1170,7 @@ button:disabled {
   font-size: clamp(2.1rem, 6vw, 4rem);
   font-weight: 800;
   line-height: 1.1;
-  letter-spacing: 0.02em;
+  letter-spacing: 0;
 }
 
 .question-main.compact {
@@ -2527,20 +2555,34 @@ button:disabled {
   .app-shell {
     width: min(100%, calc(100% - 20px));
     padding-top: 10px;
-    padding-bottom: 24px;
+    padding-bottom: 84px;
   }
 
   .hero,
   .screen {
-    padding: 20px;
+    padding: 16px;
+    border-radius: 18px;
   }
 
   .status-bar {
     grid-template-columns: 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .status-card {
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .score-card .status-value {
+    margin-top: 0;
+    font-size: 2rem;
   }
 
   .start-fields {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .builder-options,
@@ -2553,7 +2595,10 @@ button:disabled {
     grid-template-columns: 1fr;
   }
 
-  .category-builder-grid,
+  .category-builder-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .dashboard-stat-grid,
   .dashboard-grid {
     grid-template-columns: 1fr;
@@ -2590,8 +2635,42 @@ button:disabled {
     gap: 10px;
   }
 
+  .question-count-button {
+    width: 52px;
+    height: 52px;
+  }
+
   .user-selector {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .user-card {
+    gap: 6px;
+    padding: 12px 8px;
+    border-radius: 16px;
+  }
+
+  .user-avatar-svg {
+    width: 52px;
+    height: 52px;
+  }
+
+  .builder-presets {
     grid-template-columns: 1fr;
+  }
+
+  .builder-preset-button,
+  .builder-toggle-button,
+  .category-toggle-button {
+    min-height: 46px;
+    padding: 10px 10px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+  }
+
+  .question-panel {
+    padding: 16px;
+    border-radius: 18px;
   }
 
   .question-main {
@@ -2808,6 +2887,17 @@ button:disabled {
     padding: 18px 16px;
   }
 
+  .choices-area,
+  .drag-area {
+    margin-top: 14px;
+  }
+
+  .choice-button {
+    min-height: 58px;
+    padding: 14px 14px;
+    border-radius: 16px;
+  }
+
   .choice-text.hebrew {
     font-size: clamp(1.4rem, 5.3vw, 1.7rem);
     line-height: 1.6;
@@ -2829,6 +2919,47 @@ button:disabled {
   }
 
   .fraction-visual-pair {
+    grid-template-columns: 1fr;
+  }
+
+  .history-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .history-session summary {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .history-session-meta {
+    text-align: left;
+  }
+
+  .dashboard-table {
+    display: block;
+    overflow-x: auto;
+  }
+
+  .app-update-banner {
+    align-items: stretch;
+    flex-direction: column;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+    width: auto;
+    padding: 12px;
+    border-radius: 16px;
+  }
+
+  .app-update-banner button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 380px) {
+  .category-builder-grid {
     grid-template-columns: 1fr;
   }
 }
