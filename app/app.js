@@ -6484,7 +6484,8 @@ function createSkipCountingChoiceQuestion(difficulty) {
 }
 
 function createNumberPatternChoiceQuestion(difficulty) {
-  const pattern = generateNumberPattern(difficulty);
+  const generatorDifficulty = getCoreNumericGeneratorDifficulty(difficulty);
+  const pattern = generateNumberPattern(generatorDifficulty);
   return createNumericChoiceQuestion({
     type: "math-choice",
     difficulty,
@@ -6495,6 +6496,7 @@ function createNumberPatternChoiceQuestion(difficulty) {
 }
 
 function createComparisonChoiceQuestion(difficulty) {
+  const generatorDifficulty = getCoreNumericGeneratorDifficulty(difficulty);
   const ranges = {
     1: { min: 0, max: 20, minGap: 2 },
     2: { min: 0, max: 100, minGap: 5 },
@@ -6503,7 +6505,7 @@ function createComparisonChoiceQuestion(difficulty) {
     5: { min: -100, max: 1000, minGap: 20 },
     6: { min: -500, max: 2500, minGap: 50 },
     7: { min: -1500, max: 7500, minGap: 125 },
-  }[difficulty];
+  }[generatorDifficulty];
 
   const askFor = randomChoice(["bigger", "smaller"]);
   const options = buildDistinctNumberList(4, ranges.min, ranges.max, ranges.minGap).map(String);
@@ -12153,8 +12155,10 @@ if (typeof globalThis !== "undefined") {
     createExtendedDataChoiceQuestion,
     createExtendedMathChoiceQuestion,
     createExtendedHebrewSessionQuestion,
+    createComparisonChoiceQuestion,
     createMathChoiceQuestion,
     createMathInputQuestion,
+    createNumberPatternChoiceQuestion,
     createStatisticsChoiceQuestion,
     createTimeChoiceQuestion,
     state,

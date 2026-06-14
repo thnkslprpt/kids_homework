@@ -161,6 +161,8 @@
           ["extended geography history", globalThis.createExtendedGeographyHistoryGeneratedEntry],
         ];
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((difficulty) => {
+          validateQuestion(api.createNumberPatternChoiceQuestion(difficulty), `number pattern ${difficulty}`);
+          validateQuestion(api.createComparisonChoiceQuestion(difficulty), `comparison choice ${difficulty}`);
           validateQuestion(api.createMathInputQuestion(difficulty), `math input ${difficulty}`);
           validateQuestion(api.createMathChoiceQuestion(difficulty), `math choice ${difficulty}`);
           validateQuestion(api.createStatisticsChoiceQuestion(difficulty), `statistics ${difficulty}`);

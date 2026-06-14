@@ -1,10 +1,58 @@
-const CACHE_VERSION = "homework-v2026-06-14-1";
+const CACHE_VERSION = "homework-v2026-06-14-2";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
-const OFFLINE_ASSETS = [
+const CRITICAL_ASSETS = [
   "index.html",
   "homework.html",
   "manifest.json",
   "app/style.css",
+  "app/hebrew-expanded-words.js",
+  "app/hebrew-words.js",
+  "app/hebrew-image-words.js",
+  "app/science-questions.js",
+  "app/science-evidence-questions.js",
+  "app/general-knowledge-questions.js",
+  "app/algebra-questions.js",
+  "app/applied-word-problems-questions.js",
+  "app/visual-math-questions.js",
+  "app/visual-measurement-questions.js",
+  "app/logic-questions.js",
+  "app/rationality-questions.js",
+  "app/geography-map-data.js",
+  "app/geography-map-questions.js",
+  "app/geography-questions.js",
+  "app/population-questions.js",
+  "app/financial-literacy-questions.js",
+  "app/measurement-questions.js",
+  "app/charts-and-graphs-questions.js",
+  "app/calendar-questions.js",
+  "app/estimation-questions.js",
+  "app/probability-questions.js",
+  "app/maps-and-directions-questions.js",
+  "app/health-and-first-aid-questions.js",
+  "app/nutrition-questions.js",
+  "app/household-problem-solving-questions.js",
+  "app/fractions-questions.js",
+  "app/fractions-and-ratios-questions.js",
+  "app/reading-comprehension-questions.js",
+  "app/spatial-reasoning-questions.js",
+  "app/category-drag-questions.js",
+  "app/sentence-drag-english.js",
+  "app/sentence-drag-hebrew.js",
+  "app/vocabulary-grammar-questions.js",
+  "app/adult-hebrew-module.js",
+  "app/extended-exercise-utils.js",
+  "app/extended-math-questions.js",
+  "app/extended-data-questions.js",
+  "app/extended-language-questions.js",
+  "app/extended-hebrew-questions.js",
+  "app/extended-science-questions.js",
+  "app/extended-practical-questions.js",
+  "app/extended-thinking-questions.js",
+  "app/extended-history-geography-questions.js",
+  "app/app.js",
+];
+
+const OPTIONAL_ASSETS = [
   "app/icons/apple-touch-icon.png",
   "app/icons/homework-icon.svg",
   "app/icons/icon-192.png",
@@ -98,51 +146,6 @@ const OFFLINE_ASSETS = [
   "app/assets/hebrew-images/tree.svg",
   "app/assets/hebrew-images/tv.svg",
   "app/assets/hebrew-images/watermelon.svg",
-  "app/hebrew-expanded-words.js",
-  "app/hebrew-words.js",
-  "app/hebrew-image-words.js",
-  "app/science-questions.js",
-  "app/science-evidence-questions.js",
-  "app/general-knowledge-questions.js",
-  "app/algebra-questions.js",
-  "app/applied-word-problems-questions.js",
-  "app/visual-math-questions.js",
-  "app/visual-measurement-questions.js",
-  "app/logic-questions.js",
-  "app/rationality-questions.js",
-  "app/geography-map-data.js",
-  "app/geography-map-questions.js",
-  "app/geography-questions.js",
-  "app/population-questions.js",
-  "app/financial-literacy-questions.js",
-  "app/measurement-questions.js",
-  "app/charts-and-graphs-questions.js",
-  "app/calendar-questions.js",
-  "app/estimation-questions.js",
-  "app/probability-questions.js",
-  "app/maps-and-directions-questions.js",
-  "app/health-and-first-aid-questions.js",
-  "app/nutrition-questions.js",
-  "app/household-problem-solving-questions.js",
-  "app/fractions-questions.js",
-  "app/fractions-and-ratios-questions.js",
-  "app/reading-comprehension-questions.js",
-  "app/spatial-reasoning-questions.js",
-  "app/category-drag-questions.js",
-  "app/sentence-drag-english.js",
-  "app/sentence-drag-hebrew.js",
-  "app/vocabulary-grammar-questions.js",
-  "app/adult-hebrew-module.js",
-  "app/extended-exercise-utils.js",
-  "app/extended-math-questions.js",
-  "app/extended-data-questions.js",
-  "app/extended-language-questions.js",
-  "app/extended-hebrew-questions.js",
-  "app/extended-science-questions.js",
-  "app/extended-practical-questions.js",
-  "app/extended-thinking-questions.js",
-  "app/extended-history-geography-questions.js",
-  "app/app.js",
 ];
 
 function scopedUrl(path) {
@@ -152,11 +155,18 @@ function scopedUrl(path) {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(async (cache) => {
-      const requests = OFFLINE_ASSETS.map((path) => new Request(scopedUrl(path), { cache: "reload" }));
-      const results = await Promise.allSettled(requests.map((request) => cache.add(request)));
+      const criticalRequests = CRITICAL_ASSETS.map(
+        (path) => new Request(scopedUrl(path), { cache: "reload" })
+      );
+      await cache.addAll(criticalRequests);
+
+      const optionalRequests = OPTIONAL_ASSETS.map(
+        (path) => new Request(scopedUrl(path), { cache: "reload" })
+      );
+      const results = await Promise.allSettled(optionalRequests.map((request) => cache.add(request)));
       const failures = results.filter((result) => result.status === "rejected");
       if (failures.length > 0) {
-        console.warn(`Homework offline cache skipped ${failures.length} asset(s).`, failures);
+        console.warn(`Homework offline cache skipped ${failures.length} optional asset(s).`, failures);
       }
     })
   );
