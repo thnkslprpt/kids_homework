@@ -200,6 +200,65 @@
         const speedQuestions = api.buildSpeedRoundQuestions();
         if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
         speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
+
+        const previousHistory = localStorage.getItem("homework-session-history-v2");
+        try {
+          localStorage.setItem(
+            "homework-session-history-v2",
+            JSON.stringify({
+              gabriel: [
+                {
+                  id: "session,1",
+                  startedAt: "2026-06-14T07:00:00.000Z",
+                  userId: "gabriel",
+                  userName: "Gabriel",
+                  difficulty: 3,
+                  minDifficulty: 1,
+                  adaptiveReview: true,
+                  sessionPreset: api.SESSION_PRESETS.adaptive,
+                  selectedCategories: ["math", "hebrew"],
+                  totalQuestions: 1,
+                  correctCount: 1,
+                  speedRoundTotalQuestions: 1,
+                  speedRoundCorrectCount: 0,
+                  records: [
+                    {
+                      questionNumber: 1,
+                      category: "math",
+                      categoryLabel: "Math",
+                      questionText: 'Line "one"\nLine two',
+                      chosenAnswer: "4",
+                      correctAnswer: "4",
+                      isCorrect: true,
+                    },
+                  ],
+                  speedRoundRecords: [
+                    {
+                      questionNumber: 1,
+                      category: "math",
+                      categoryLabel: "Math",
+                      questionText: "2 + 3",
+                      chosenAnswer: "6",
+                      correctAnswer: "5",
+                      isCorrect: false,
+                    },
+                  ],
+                },
+              ],
+            })
+          );
+          const csv = api.buildAllSessionHistoryCsv();
+          if (!csv.startsWith("Student ID,Student,Session ID")) failures.push("CSV export missing header");
+          if (!csv.includes('"session,1"')) failures.push("CSV export did not quote comma cells");
+          if (!csv.includes('"Line ""one""\nLine two"')) failures.push("CSV export did not quote multiline cells");
+          if (!csv.includes(",speed,1,math,Math,2 + 3,6,5,false,")) failures.push("CSV export missing speed row");
+        } finally {
+          if (previousHistory === null) {
+            localStorage.removeItem("homework-session-history-v2");
+          } else {
+            localStorage.setItem("homework-session-history-v2", previousHistory);
+          }
+        }
       } catch (error) {
         failures.push(error && error.stack ? error.stack : String(error));
       }

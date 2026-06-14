@@ -11889,6 +11889,7 @@ if (typeof globalThis !== "undefined") {
     SPEED_ROUND_QUESTION_COUNT,
     USER_PROFILES,
     buildAdultSessionQuestions,
+    buildAllSessionHistoryCsv,
     buildSessionQuestions,
     buildSpeedRoundQuestions,
     createChartsAndGraphsQuestion,
