@@ -46,12 +46,14 @@ When updates are pushed to GitHub:
 - Works offline from a normal folder.
 - Lets you choose:
   - how many questions to use for the session
-  - difficulty level `1` to `10`
+  - difficulty level `1` to `10` for Guest sessions
   - a minimum generated-question level for custom sessions
   - a custom set of topic categories
 - Defaults to:
   - `30` questions
-  - each student's saved/default difficulty
+  - each student's hard-coded level per topic category
+- Student category levels are hard-coded in `app/app.js` in the `USER_PROFILES`
+  table. Edit each child's explicit `categoryDifficulties` object to change one category level.
 - Tracks live progress with colored progress boxes and a score counter.
 - Multiple-choice questions check immediately when you click an answer.
 - Typed math questions check when you press `Enter`.
@@ -207,6 +209,7 @@ Each saved session includes:
 
 - date and time
 - chosen difficulty
+- per-category difficulty levels for that session
 - final score
 - each question
 - chosen answer

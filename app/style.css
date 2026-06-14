@@ -535,7 +535,7 @@ h2 {
 }
 
 .difficulty-slider:disabled {
-  cursor: default;
+  cursor: not-allowed;
 }
 
 .difficulty-value {
@@ -555,6 +555,11 @@ h2 {
 
 .difficulty-selector[data-disabled="true"] {
   opacity: 0.74;
+  filter: grayscale(0.7);
+}
+
+.difficulty-selector[data-disabled="true"] .difficulty-slider {
+  cursor: not-allowed;
 }
 
 .mini-data-card {

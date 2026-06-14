@@ -138,6 +138,20 @@
 
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
+        const difficultyInput = document.getElementById("difficulty-level");
+        const gabrielButton = document.querySelector('[data-user-id="gabriel"]');
+        const guestButton = document.querySelector('[data-user-id="guest"]');
+        const gabrielProfile = api.USER_PROFILES.find((profile) => profile.id === "gabriel");
+        const gabrielLevels = Object.values(gabrielProfile?.categoryDifficulties || {});
+        if (gabrielLevels.length !== api.SESSION_CATEGORY_ORDER.length || gabrielLevels.some((level) => level !== 2)) {
+          failures.push("Gabriel category difficulties should all start at level 2");
+        }
+        gabrielButton?.click();
+        if (!difficultyInput.disabled) failures.push("Gabriel difficulty slider should be disabled");
+        if (difficultyInput.value !== "2") failures.push("Gabriel difficulty slider should display level 2");
+        guestButton?.click();
+        if (difficultyInput.disabled) failures.push("Guest difficulty slider should stay enabled");
+
         const directEntryFactories = [
           ["extended language", globalThis.createExtendedVocabularyGrammarGeneratedEntry],
           ["extended reading", globalThis.createExtendedReadingComprehensionGeneratedEntry],

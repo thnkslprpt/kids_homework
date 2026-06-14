@@ -126,6 +126,19 @@ const REVIEW_FOCUS_ALLOWED_CATEGORIES = new Set([
 ]);
 const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_CATEGORIES];
 const CORE_CATEGORY_SHARE = 0.45;
+
+function createUniformCategoryDifficulties(difficulty) {
+  const normalizedDifficulty = Math.max(
+    1,
+    Math.min(MAX_SESSION_DIFFICULTY, Number.parseInt(difficulty, 10) || 3)
+  );
+
+  return Object.fromEntries(
+    SESSION_CATEGORY_ORDER.map((category) => [category, normalizedDifficulty])
+  );
+}
+
+// Hard-code each child's per-category levels here.
 const USER_PROFILES = [
   {
     id: "guest",
@@ -144,7 +157,39 @@ const USER_PROFILES = [
   {
     id: "gabriel",
     name: "Gabriel",
-    defaultDifficulty: 2,
+    categoryDifficulties: {
+      math: 2,
+      hebrew: 2,
+      science: 2,
+      "science-evidence": 2,
+      time: 2,
+      statistics: 2,
+      algebra: 2,
+      "applied-word-problems": 2,
+      "visual-math": 2,
+      "visual-measurement": 2,
+      logic: 2,
+      rationality: 2,
+      "general-knowledge": 2,
+      geography: 2,
+      "geography-map": 2,
+      population: 2,
+      "financial-literacy": 2,
+      measurement: 2,
+      "charts-and-graphs": 2,
+      calendar: 2,
+      estimation: 2,
+      probability: 2,
+      "reading-comprehension": 2,
+      "vocabulary-grammar": 2,
+      "maps-and-directions": 2,
+      "health-and-first-aid": 2,
+      nutrition: 2,
+      "household-problem-solving": 2,
+      fractions: 2,
+      "fractions-and-ratios": 2,
+      "spatial-reasoning": 2,
+    },
     enableReviewFocus: false,
     avatarStyle: "lightCurls",
     palette: {
@@ -158,7 +203,39 @@ const USER_PROFILES = [
   {
     id: "gideon",
     name: "Gideon",
-    defaultDifficulty: 5,
+    categoryDifficulties: {
+      math: 5,
+      hebrew: 5,
+      science: 5,
+      "science-evidence": 5,
+      time: 5,
+      statistics: 5,
+      algebra: 5,
+      "applied-word-problems": 5,
+      "visual-math": 5,
+      "visual-measurement": 5,
+      logic: 5,
+      rationality: 5,
+      "general-knowledge": 5,
+      geography: 5,
+      "geography-map": 5,
+      population: 5,
+      "financial-literacy": 5,
+      measurement: 5,
+      "charts-and-graphs": 5,
+      calendar: 5,
+      estimation: 5,
+      probability: 5,
+      "reading-comprehension": 5,
+      "vocabulary-grammar": 5,
+      "maps-and-directions": 5,
+      "health-and-first-aid": 5,
+      nutrition: 5,
+      "household-problem-solving": 5,
+      fractions: 5,
+      "fractions-and-ratios": 5,
+      "spatial-reasoning": 5,
+    },
     enableReviewFocus: false,
     avatarStyle: "curlyHair",
     palette: {
@@ -172,7 +249,39 @@ const USER_PROFILES = [
   {
     id: "noga",
     name: "Noga",
-    defaultDifficulty: 4,
+    categoryDifficulties: {
+      math: 4,
+      hebrew: 4,
+      science: 4,
+      "science-evidence": 4,
+      time: 4,
+      statistics: 4,
+      algebra: 4,
+      "applied-word-problems": 4,
+      "visual-math": 4,
+      "visual-measurement": 4,
+      logic: 4,
+      rationality: 4,
+      "general-knowledge": 4,
+      geography: 4,
+      "geography-map": 4,
+      population: 4,
+      "financial-literacy": 4,
+      measurement: 4,
+      "charts-and-graphs": 4,
+      calendar: 4,
+      estimation: 4,
+      probability: 4,
+      "reading-comprehension": 4,
+      "vocabulary-grammar": 4,
+      "maps-and-directions": 4,
+      "health-and-first-aid": 4,
+      nutrition: 4,
+      "household-problem-solving": 4,
+      fractions: 4,
+      "fractions-and-ratios": 4,
+      "spatial-reasoning": 4,
+    },
     enableReviewFocus: false,
     avatarStyle: "longHair",
     palette: {
@@ -187,6 +296,7 @@ const USER_PROFILES = [
     id: ADULT_USER_ID,
     name: "Miranda",
     defaultDifficulty: FIXED_ADULT_SESSION_DIFFICULTY,
+    categoryDifficulties: createUniformCategoryDifficulties(FIXED_ADULT_SESSION_DIFFICULTY),
     enableReviewFocus: false,
     enableHebrewWritingTail: false,
     avatarStyle: "adultBun",
@@ -2166,6 +2276,7 @@ const state = {
   sessionPreset: SESSION_PRESETS.adaptive,
   adaptiveReview: true,
   selectedCategories: new Set(SESSION_CATEGORY_ORDER),
+  categoryDifficulties: createUniformCategoryDifficulties(3),
   minDifficulty: 1,
   totalQuestions: 0,
   difficulty: 3,
@@ -3687,6 +3798,92 @@ function isAdultUserSelected() {
   return isAdultUserId(state.currentUserId);
 }
 
+function isGuestUserId(userId) {
+  return String(userId || "") === "guest";
+}
+
+function isGuestUserSelected() {
+  return isGuestUserId(state.currentUserId);
+}
+
+function getProfileDefaultDifficulty(profile, fallback = 3) {
+  const explicitDifficulty = Number.parseInt(profile?.defaultDifficulty, 10);
+  if (Number.isFinite(explicitDifficulty)) {
+    return normalizeSessionDifficulty(explicitDifficulty, fallback);
+  }
+
+  const categoryDifficulties =
+    profile?.categoryDifficulties && typeof profile.categoryDifficulties === "object"
+      ? Object.values(profile.categoryDifficulties)
+      : [];
+  const normalizedDifficulties = categoryDifficulties
+    .map((difficulty) => Number.parseInt(difficulty, 10))
+    .filter(Number.isFinite)
+    .map((difficulty) => normalizeSessionDifficulty(difficulty, fallback));
+
+  return normalizedDifficulties.length
+    ? Math.max(...normalizedDifficulties)
+    : normalizeSessionDifficulty(fallback, 3);
+}
+
+function getUserSessionBaseDifficulty(userId, fallback = 3) {
+  const profile = USER_PROFILE_MAP[userId];
+  return getProfileDefaultDifficulty(profile, fallback);
+}
+
+function normalizeCategoryDifficultyMap(categoryDifficulties, fallbackDifficulty = 3) {
+  const fallback = normalizeSessionDifficulty(fallbackDifficulty, 3);
+  const source = categoryDifficulties && typeof categoryDifficulties === "object"
+    ? categoryDifficulties
+    : {};
+
+  return Object.fromEntries(
+    SESSION_CATEGORY_ORDER.map((category) => [
+      category,
+      normalizeSessionDifficulty(source[category], fallback),
+    ])
+  );
+}
+
+function getUserCategoryDifficultyMap(userId, fallbackDifficulty = 3) {
+  const profile = USER_PROFILE_MAP[userId];
+  const fallback = isGuestUserId(userId)
+    ? normalizeSessionDifficulty(fallbackDifficulty, 3)
+    : getProfileDefaultDifficulty(profile, fallbackDifficulty);
+
+  return normalizeCategoryDifficultyMap(profile?.categoryDifficulties, fallback);
+}
+
+function getCategoryDifficultyFromMap(categoryDifficulties, category, fallbackDifficulty = 3) {
+  const normalizedMap = normalizeCategoryDifficultyMap(categoryDifficulties, fallbackDifficulty);
+  return normalizedMap[category] || normalizeSessionDifficulty(fallbackDifficulty, 3);
+}
+
+function getUserCategoryDifficulty(userId, category, fallbackDifficulty = 3) {
+  return getCategoryDifficultyFromMap(
+    getUserCategoryDifficultyMap(userId, fallbackDifficulty),
+    category,
+    fallbackDifficulty
+  );
+}
+
+function getUserMaxCategoryDifficulty(userId, fallbackDifficulty = 3) {
+  const profile = USER_PROFILE_MAP[userId];
+  const categoryDifficulties = getUserCategoryDifficultyMap(userId, fallbackDifficulty);
+  const normalizedDifficulties = Object.values(categoryDifficulties).map((difficulty) =>
+    normalizeSessionDifficulty(difficulty, fallbackDifficulty)
+  );
+
+  if (profile?.categoryDifficulties && typeof profile.categoryDifficulties === "object") {
+    return Math.max(...normalizedDifficulties);
+  }
+
+  return Math.max(
+    normalizeSessionDifficulty(fallbackDifficulty, 3),
+    ...normalizedDifficulties
+  );
+}
+
 function hasSpecialtyWordToggle(userId = state.currentUserId) {
   return isAdultUserId(userId);
 }
@@ -3773,11 +3970,7 @@ function selectUser(userId) {
 
 function applyUserDefaultDifficulty(userId) {
   const profile = USER_PROFILE_MAP[userId];
-  const difficulty = Number(profile?.defaultDifficulty);
-  elements.difficultyLevel.value =
-    Number.isInteger(difficulty) && difficulty >= 1 && difficulty <= MAX_SESSION_DIFFICULTY
-      ? String(difficulty)
-      : "3";
+  elements.difficultyLevel.value = String(getProfileDefaultDifficulty(profile, 3));
   updateDifficultyControl();
 }
 
@@ -3937,6 +4130,7 @@ function getDifficultyPresentation(difficulty) {
 
 function updateStartControlsForCurrentUser() {
   const isAdult = isAdultUserSelected();
+  const isGuest = isGuestUserSelected();
   const isSpecialtyOnly = isAdult && isSpecialtyWordsOnlySelected();
   const currentUser = getCurrentUserProfile();
   const builderLocked = isAdult || isSpecialtyOnly;
@@ -3979,8 +4173,10 @@ function updateStartControlsForCurrentUser() {
   updateSpecialtyWordsButton();
 
   if (elements.difficultyLevel) {
-    elements.difficultyLevel.disabled = isAdult;
-    elements.difficultyLevel.title = isAdult ? `${currentUser.name}'s session settings are preset.` : "";
+    elements.difficultyLevel.disabled = !isGuest;
+    elements.difficultyLevel.title = isGuest
+      ? ""
+      : `${currentUser.name}'s difficulty is set by topic.`;
   }
 
   if (elements.sessionBuilder) {
@@ -4191,7 +4387,10 @@ function updateCategoryBuilderButtons() {
 
 function syncDifficultyRange() {
   const minDifficulty = normalizeSessionDifficulty(elements.difficultyMin?.value || state.minDifficulty || 1, 1);
-  const maxDifficulty = normalizeSessionDifficulty(elements.difficultyLevel?.value || 3, 3);
+  const selectedDifficulty = normalizeSessionDifficulty(elements.difficultyLevel?.value || 3, 3);
+  const maxDifficulty = isGuestUserSelected()
+    ? selectedDifficulty
+    : getUserMaxCategoryDifficulty(state.currentUserId, selectedDifficulty);
   state.minDifficulty = Math.min(minDifficulty, maxDifficulty);
 
   if (elements.difficultyMin) {
@@ -4445,8 +4644,18 @@ function startSession(event) {
   const selectedHebrewOnly = isHebrewOnlySelected();
   const specialtyWordsOnly = hasSpecialtyWordToggle() && isSpecialtyWordsOnlySelected();
   const isAdult = isAdultUserSelected();
-  const difficulty = isAdult ? FIXED_ADULT_SESSION_DIFFICULTY : selectedDifficulty;
-  const sessionBuilderOptions = getSessionBuilderOptions(difficulty);
+  const isGuest = isGuestUserSelected();
+  const difficulty = isAdult
+    ? FIXED_ADULT_SESSION_DIFFICULTY
+    : isGuest
+      ? selectedDifficulty
+      : getUserSessionBaseDifficulty(state.currentUserId, selectedDifficulty);
+  const sessionMaxDifficulty = isGuest
+    ? difficulty
+    : getUserMaxCategoryDifficulty(state.currentUserId, difficulty);
+  const categoryDifficulties = getUserCategoryDifficultyMap(state.currentUserId, difficulty);
+  const hebrewCategoryDifficulty = getCategoryDifficultyFromMap(categoryDifficulties, "hebrew", difficulty);
+  const sessionBuilderOptions = getSessionBuilderOptions(sessionMaxDifficulty);
   const hebrewOnly = specialtyWordsOnly ? true : selectedHebrewOnly;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
@@ -4486,6 +4695,7 @@ function startSession(event) {
   stopConfetti();
   clearSpeedRoundTimer();
   state.difficulty = difficulty;
+  state.categoryDifficulties = categoryDifficulties;
   state.hebrewOnly = hebrewOnly;
   state.specialtyWordsOnly = specialtyWordsOnly;
   state.minDifficulty = sessionBuilderOptions.minDifficulty;
@@ -4510,14 +4720,19 @@ function startSession(event) {
           ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
           : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
       : isGeographyMapPrototypeMode()
-        ? buildSessionQuestions(totalQuestions, difficulty, { hebrewOnly: false })
+        ? buildSessionQuestions(totalQuestions, difficulty, {
+            hebrewOnly: false,
+            userId: state.currentUserId,
+            categoryDifficulties,
+          })
         : injectHebrewWritingPracticeTail(
             buildSessionQuestions(totalQuestions, difficulty, {
               hebrewOnly,
               userId: state.currentUserId,
+              categoryDifficulties,
               ...sessionBuilderOptions,
             }),
-            difficulty,
+            hebrewCategoryDifficulty,
             { hebrewOnly }
           );
 
@@ -4817,6 +5032,7 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   const userId = String(options.userId || state.currentUserId || "");
   const hebrewBanks = options.hebrewBanks || DEFAULT_HEBREW_BANKS;
   const hebrewQuestionMode = options.hebrewQuestionMode === "bank-only" ? "bank-only" : "default";
+  const categoryDifficulties = normalizeCategoryDifficultyMap(options.categoryDifficulties, normalizedDifficulty);
   const categorySequence = hebrewOnly
     ? Array.from({ length: totalQuestions }, () => "hebrew")
     : buildDefaultSessionCategorySequence(totalQuestions, userId, options);
@@ -4834,23 +5050,42 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   resources.hebrewOpposites = createPool(hebrewBanks.oppositeQuestionBank);
   resources.hebrewHomograph = createPool(hebrewBanks.homographQuestionBank);
   resources.hebrewMeanings = hebrewBanks.meanings;
+  const categoryCounts = countCategorySequence(categorySequence);
   const hebrewQuestionCount = categorySequence.filter((category) => category === "hebrew").length;
-  const nonHebrewQuestionCount = categorySequence.length - hebrewQuestionCount;
-  const nonHebrewDifficultyQueue = buildDifficultyQueue(
-    nonHebrewQuestionCount,
-    applyMinimumDifficultyWeightMap(
-      NON_HEBREW_DIFFICULTY_WEIGHTS[normalizedDifficulty] || { [normalizedDifficulty]: 1 },
-      minDifficulty
-    )
+  const nonHebrewDifficultyQueues = Object.fromEntries(
+    Object.entries(categoryCounts)
+      .filter(([category]) => category !== "hebrew")
+      .map(([category, count]) => {
+        const categoryDifficulty = getCategoryDifficultyFromMap(
+          categoryDifficulties,
+          category,
+          normalizedDifficulty
+        );
+        const categoryMinDifficulty = Math.min(minDifficulty, categoryDifficulty);
+
+        return [
+          category,
+          buildDifficultyQueue(
+            count,
+            applyMinimumDifficultyWeightMap(
+              NON_HEBREW_DIFFICULTY_WEIGHTS[categoryDifficulty] || { [categoryDifficulty]: 1 },
+              categoryMinDifficulty
+            )
+          ),
+        ];
+      })
   );
+  const hebrewCategoryDifficulty = getCategoryDifficultyFromMap(categoryDifficulties, "hebrew", normalizedDifficulty);
+  const hebrewMinDifficulty = Math.min(minDifficulty, hebrewCategoryDifficulty);
   const hebrewDifficultyQueue = buildHebrewDifficultyQueue(
     hebrewQuestionCount,
-    normalizedDifficulty,
+    hebrewCategoryDifficulty,
     hebrewBanks.questionBank,
-    minDifficulty
+    hebrewMinDifficulty
   );
 
   const runtime = {
+    categoryDifficulties,
     hebrewQuestionMode,
     mathModeIndex: 0,
     languageQuestionIndex: 0,
@@ -4864,7 +5099,7 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
       category,
       normalizedDifficulty,
       resources,
-      nonHebrewDifficultyQueue,
+      nonHebrewDifficultyQueues,
       hebrewDifficultyQueue,
       runtime
     )
@@ -5001,6 +5236,13 @@ function normalizeSelectedSessionCategories(categories) {
   return selected.length ? Array.from(new Set(selected)) : SESSION_CATEGORY_ORDER;
 }
 
+function countCategorySequence(categorySequence) {
+  return categorySequence.reduce((counts, category) => {
+    counts[category] = (counts[category] || 0) + 1;
+    return counts;
+  }, {});
+}
+
 function hasGeographyMapSupport() {
   return (
     typeof createGeographyMapGeneratedEntry === "function" &&
@@ -5026,12 +5268,21 @@ function createSessionQuestionForCategory(
   category,
   difficulty,
   resources,
-  nonHebrewDifficultyQueue,
+  nonHebrewDifficultyQueues,
   hebrewDifficultyQueue,
   runtime
 ) {
+  const categoryDifficulty = getCategoryDifficultyFromMap(
+    runtime?.categoryDifficulties,
+    category,
+    difficulty
+  );
+
   if (category === "math") {
-    const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+    const effectiveDifficulty = drawNextDifficulty(
+      nonHebrewDifficultyQueues?.[category] || [],
+      categoryDifficulty
+    );
     const question =
       runtime.mathModeIndex % 2 === 0
         ? createMathInputQuestion(effectiveDifficulty)
@@ -5041,7 +5292,7 @@ function createSessionQuestionForCategory(
   }
 
   if (category === "hebrew") {
-    const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, difficulty);
+    const effectiveDifficulty = drawNextDifficulty(hebrewDifficultyQueue, categoryDifficulty);
     const hebrewQuestionIndex = Number(runtime?.hebrewQuestionIndex || 0);
     if (runtime) {
       runtime.hebrewQuestionIndex = hebrewQuestionIndex + 1;
@@ -5064,7 +5315,10 @@ function createSessionQuestionForCategory(
     return createHebrewSessionQuestion(resources, effectiveDifficulty, runtime);
   }
 
-  const effectiveDifficulty = drawNextDifficulty(nonHebrewDifficultyQueue, difficulty);
+  const effectiveDifficulty = drawNextDifficulty(
+    nonHebrewDifficultyQueues?.[category] || [],
+    categoryDifficulty
+  );
 
   if (category === RESERVED_MAP_CATEGORY) {
     return createGeographyMapQuestion(effectiveDifficulty, runtime, resources);
@@ -5651,7 +5905,9 @@ function createExtendedMathChoiceQuestion(difficulty) {
 
 function buildSpeedRoundQuestions() {
   const hebrewOnly = Boolean(state.hebrewOnly || state.specialtyWordsOnly);
-  const difficulty = normalizeSessionDifficulty(state.difficulty);
+  const difficulty = hebrewOnly
+    ? normalizeSessionDifficulty(state.difficulty)
+    : getCategoryDifficultyFromMap(state.categoryDifficulties, "math", state.difficulty);
   const questions = [];
 
   for (let index = 0; index < SPEED_ROUND_QUESTION_COUNT; index += 1) {
@@ -10274,6 +10530,7 @@ function buildSessionHistoryEntry() {
     userId: state.currentUserId,
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
+    categoryDifficulties: { ...state.categoryDifficulties },
     minDifficulty: state.minDifficulty,
     hebrewOnly: Boolean(state.hebrewOnly),
     specialtyWordsOnly: Boolean(state.specialtyWordsOnly),
