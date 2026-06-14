@@ -102,17 +102,23 @@
           <div id="question-extra" class="question-extra"></div>
         </div>
 
-        <form id="answer-form" class="answer-form">
+        <form id="answer-form" class="answer-form" autocomplete="off" novalidate>
           <div id="input-area" class="answer-area">
             <input
               id="answer-input"
-              name="answer"
-              type="number"
-              inputmode="numeric"
-              step="any"
+              name="homeworkAnswer"
+              type="text"
+              inputmode="decimal"
+              enterkeyhint="done"
               autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
+              spellcheck="false"
               aria-label="Answer"
             >
+            <button id="answer-submit-button" type="submit" class="primary-button answer-submit-button">
+              Submit
+            </button>
           </div>
         </form>
 

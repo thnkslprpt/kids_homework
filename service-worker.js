@@ -1,4 +1,4 @@
-const CACHE_VERSION = "homework-v2026-06-14-ios15-1";
+const CACHE_VERSION = "homework-v2026-06-14-ios15-answer-submit-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CRITICAL_ASSETS = [
   "index.html",

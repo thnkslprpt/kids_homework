@@ -870,7 +870,7 @@ h2 {
   font-weight: 800;
 }
 
-input[type="number"] {
+#answer-input {
   width: 100%;
   padding: 14px 16px;
   border: 2px solid rgba(20, 108, 148, 0.18);
@@ -879,17 +879,9 @@ input[type="number"] {
   color: var(--ink);
   font: inherit;
   font-size: 1.1rem;
-  appearance: textfield;
-  -moz-appearance: textfield;
 }
 
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  margin: 0;
-  -webkit-appearance: none;
-}
-
-input[type="number"]:focus {
+#answer-input:focus {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 4px rgba(20, 108, 148, 0.14);
@@ -1622,9 +1614,30 @@ button:disabled {
 }
 
 .answer-area {
-  display: grid;
-  gap: 14px;
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.answer-form {
   margin-top: 20px;
+  position: sticky;
+  bottom: 0;
+  z-index: 20;
+  padding: 12px 0 calc(12px + env(safe-area-inset-bottom));
+  background: var(--card);
+}
+
+#answer-input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.answer-submit-button {
+  flex: 0 0 auto;
+  min-height: 44px;
+  white-space: nowrap;
 }
 
 .choices-area {
@@ -2909,6 +2922,10 @@ button:disabled {
     margin-top: 14px;
   }
 
+  .answer-form {
+    margin-top: 14px;
+  }
+
   .choice-button {
     min-height: 58px;
     padding: 14px 14px;
@@ -3027,6 +3044,14 @@ button:disabled {
   .start-form,
   .answer-form {
     gap: 14px;
+  }
+
+  .answer-area {
+    gap: 8px;
+  }
+
+  .answer-submit-button {
+    padding-inline: 14px;
   }
 
   .start-fields {

@@ -2379,6 +2379,7 @@ const elements = {
   answerForm: document.getElementById("answer-form"),
   inputArea: document.getElementById("input-area"),
   answerInput: document.getElementById("answer-input"),
+  answerSubmitButton: document.getElementById("answer-submit-button"),
   choicesArea: document.getElementById("choices-area"),
   dragArea: document.getElementById("drag-area"),
   quizBackButton: document.getElementById("quiz-back-button"),
@@ -2926,6 +2927,7 @@ const statisticsGeneratorsByDifficulty = {
 
 elements.startForm.addEventListener("submit", startSession);
 elements.answerForm.addEventListener("submit", submitTypedAnswer);
+elements.answerInput.addEventListener("focus", scrollAnswerFormIntoView);
 elements.restartButton.addEventListener("click", showStartScreen);
 elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
@@ -9124,8 +9126,9 @@ function renderCurrentQuestion() {
     elements.choicesArea.hidden = true;
     elements.dragArea.hidden = true;
     elements.answerInput.disabled = reviewingPreviousQuestion;
+    elements.answerSubmitButton.disabled = reviewingPreviousQuestion;
     elements.answerInput.value = reviewingPreviousQuestion ? answerSelection?.value || "" : "";
-    if (!reviewingPreviousQuestion) {
+    if (!reviewingPreviousQuestion && shouldAutoFocusAnswerInput()) {
       focusAnswerInput();
     }
     return;
@@ -9134,6 +9137,7 @@ function renderCurrentQuestion() {
   if (question.mode === "drag") {
     elements.answerInput.value = "";
     elements.answerInput.disabled = false;
+    elements.answerSubmitButton.disabled = false;
     elements.answerForm.hidden = true;
     elements.inputArea.hidden = true;
     elements.choicesArea.hidden = true;
@@ -9148,6 +9152,7 @@ function renderCurrentQuestion() {
   if (question.mode === "practice") {
     elements.answerInput.value = "";
     elements.answerInput.disabled = false;
+    elements.answerSubmitButton.disabled = false;
     elements.answerForm.hidden = true;
     elements.inputArea.hidden = true;
     elements.choicesArea.hidden = false;
@@ -9161,6 +9166,7 @@ function renderCurrentQuestion() {
 
   elements.answerInput.value = "";
   elements.answerInput.disabled = false;
+  elements.answerSubmitButton.disabled = false;
   elements.answerForm.hidden = true;
   elements.inputArea.hidden = true;
   elements.choicesArea.hidden = false;
@@ -9986,6 +9992,24 @@ function focusAnswerInput() {
   focusInput();
 }
 
+function shouldAutoFocusAnswerInput() {
+  if (window.matchMedia && window.matchMedia("(pointer: coarse)").matches) {
+    return false;
+  }
+
+  return true;
+}
+
+function scrollAnswerFormIntoView() {
+  window.setTimeout(() => {
+    elements.answerForm.scrollIntoView({
+      block: "nearest",
+      inline: "nearest",
+      behavior: "smooth",
+    });
+  }, 250);
+}
+
 function buildNumericAnswerCandidates(rawValue, question) {
   const strippedValue = stripAcceptedNumericAffixes(rawValue, question);
   if (!strippedValue) {
@@ -10125,9 +10149,13 @@ function submitTypedAnswer(event) {
     return;
   }
 
+  if (round.answerResults[round.currentIndex] !== undefined) {
+    return;
+  }
+
   const typedValue = elements.answerInput.value.trim();
   if (typedValue === "") {
-    state.feedbackMessage = "Type an answer and press Enter.";
+    state.feedbackMessage = "Type an answer and press Submit.";
     state.feedbackTone = "error";
     renderFeedback();
     return;
@@ -10143,6 +10171,7 @@ function submitTypedAnswer(event) {
 
   const correctAnswer = Number(question.answerValue);
   const isCorrect = parsedCandidates.some((candidate) => numericAnswersMatch(candidate, correctAnswer));
+  elements.answerSubmitButton.disabled = true;
   handleAnswer(question, isCorrect, typedValue);
 }
 
