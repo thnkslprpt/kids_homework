@@ -1634,6 +1634,24 @@ button:disabled {
   min-width: 0;
 }
 
+.answer-sign-button {
+  flex: 0 0 auto;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 2px solid rgba(20, 108, 148, 0.2);
+  background: #ffffff;
+  color: var(--accent-dark);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.answer-sign-button:hover:not(:disabled),
+.answer-sign-button:focus-visible {
+  background: rgba(20, 108, 148, 0.08);
+  outline: none;
+}
+
 .answer-submit-button {
   flex: 0 0 auto;
   min-height: 44px;
@@ -3048,6 +3066,12 @@ button:disabled {
 
   .answer-area {
     gap: 8px;
+  }
+
+  .answer-sign-button {
+    min-width: 44px;
+    min-height: 44px;
+    padding-inline: 12px;
   }
 
   .answer-submit-button {

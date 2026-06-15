@@ -687,3 +687,50 @@ const VOCABULARY_GRAMMAR_QUESTIONS = VOCABULARY_GRAMMAR_DATA.bank;
 function createVocabularyGrammarGeneratedEntry(difficulty) {
   return VOCABULARY_GRAMMAR_DATA.createVocabularyGrammarGeneratedEntry(difficulty);
 }
+
+(() => {
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+
+  const vocabularyGrammarSupplementalBlueprints = [
+    { topic: "language-spelling", difficulty: 1, question: "Which word is spelled correctly?", answer: "because", options: ["because", "becuz", "beacuse", "becaus"] },
+    { topic: "language-spelling", difficulty: 1, question: "Which word is spelled correctly?", answer: "friend", options: ["friend", "freind", "frend", "friende"] },
+    { topic: "language-spelling", difficulty: 2, question: "Which word is spelled correctly?", answer: "thought", options: ["thought", "thot", "thaught", "thougt"] },
+    { topic: "language-spelling", difficulty: 4, question: "Which word is spelled correctly?", answer: "necessary", options: ["necessary", "neccesary", "necesary", "nessessary"] },
+    { topic: "language-syllables", difficulty: 1, question: "How many syllables are in banana?", answer: "3", options: ["1", "2", "3", "4"] },
+    { topic: "language-syllables", difficulty: 1, question: "How many syllables are in tiger?", answer: "2", options: ["1", "2", "3", "4"] },
+    { topic: "language-syllables", difficulty: 3, question: "How many syllables are in elephant?", answer: "3", options: ["1", "2", "3", "4"] },
+    { topic: "language-syllables", difficulty: 5, question: "How many syllables are in information?", answer: "4", options: ["2", "3", "4", "5"] },
+    { topic: "language-punctuation", difficulty: 1, question: "Which sentence has correct punctuation?", answer: "Where is my pencil?", options: ["Where is my pencil?", "Where is my pencil.", "Where is my pencil", "Where, is my pencil"] },
+    { topic: "language-punctuation", difficulty: 2, question: "Which sentence uses a comma correctly?", answer: "After lunch, we played outside.", options: ["After lunch, we played outside.", "After, lunch we played outside.", "After lunch we, played outside.", "After lunch we played, outside."] },
+    { topic: "language-punctuation", difficulty: 6, question: "Which sentence punctuates dialogue correctly?", answer: "\"Wait,\" said Maya.", options: ["\"Wait,\" said Maya.", "\"Wait\" said, Maya.", "Wait, said Maya.", "\"Wait said Maya.\""] },
+    { topic: "language-capitalization", difficulty: 1, question: "Which sentence has correct capitalization?", answer: "Maya went to Tel Aviv.", options: ["Maya went to Tel Aviv.", "maya went to tel aviv.", "Maya went to tel aviv.", "maya went to Tel Aviv."] },
+    { topic: "language-capitalization", difficulty: 3, question: "Which title is capitalized correctly?", answer: "The Lion and the Mouse", options: ["The Lion and the Mouse", "the lion and the mouse", "The lion And The mouse", "the Lion and The Mouse"] },
+    { topic: "language-parts-of-speech", difficulty: 2, question: "Which word is a noun?", displayText: "The careful child builds a tower.", answer: "child", options: ["careful", "child", "builds", "quickly"] },
+    { topic: "language-parts-of-speech", difficulty: 3, question: "Which word is a verb?", displayText: "The careful child builds a tower.", answer: "builds", options: ["careful", "child", "builds", "tower"] },
+    { topic: "language-parts-of-speech", difficulty: 4, question: "Which word is an adjective?", displayText: "The silver robot moved slowly.", answer: "silver", options: ["silver", "robot", "moved", "slowly"] },
+    { topic: "language-parts-of-speech", difficulty: 5, question: "Which word is an adverb?", displayText: "The silver robot moved slowly.", answer: "slowly", options: ["silver", "robot", "moved", "slowly"] },
+    { topic: "language-prefixes", difficulty: 2, question: "What does the prefix re- mean in reread?", answer: "again", options: ["again", "not", "before", "between"] },
+    { topic: "language-prefixes", difficulty: 4, question: "What does the prefix un- mean in unfair?", answer: "not", options: ["not", "again", "many", "before"] },
+    { topic: "language-prefixes", difficulty: 6, question: "What does the prefix pre- mean in preview?", answer: "before", options: ["before", "after", "wrong", "under"] },
+    { topic: "language-suffixes", difficulty: 3, question: "What does the suffix -less mean in careless?", answer: "without", options: ["without", "full of", "one who", "again"] },
+    { topic: "language-suffixes", difficulty: 7, question: "Which suffix changes a word into a person who does an action?", answer: "-er", options: ["-er", "-less", "-ful", "-ness"] },
+    { topic: "language-roots", difficulty: 5, question: "What does the root scrib/script mean?", answer: "write", options: ["write", "carry", "hear", "measure"] },
+    { topic: "language-roots", difficulty: 8, question: "What does the root bio mean?", answer: "life", options: ["life", "water", "sound", "light"] },
+    { topic: "language-sentence-combining", difficulty: 4, question: "Which sentence combines the ideas best?", displayText: "The rain stopped. We went outside.", answer: "When the rain stopped, we went outside.", options: ["When the rain stopped, we went outside.", "The rain stopped we went outside.", "Outside stopped when rain went.", "We went rain stopped outside."] },
+    { topic: "language-sentence-combining", difficulty: 6, question: "Which sentence combines the ideas best?", displayText: "The bridge was narrow. The hikers crossed carefully.", answer: "Because the bridge was narrow, the hikers crossed carefully.", options: ["Because the bridge was narrow, the hikers crossed carefully.", "The bridge narrow hikers because crossed.", "The hikers crossed because carefully narrow.", "The bridge was narrow the hikers crossed carefully."] },
+    { topic: "language-sentence-combining", difficulty: 9, question: "Which revision is most concise and clear?", displayText: "Due to the fact that the trail was icy, the hikers moved at a slow speed.", answer: "Because the trail was icy, the hikers moved slowly.", options: ["Because the trail was icy, the hikers moved slowly.", "The icy trail was due to the hikers slowly.", "At a slow speed, the trail was due to ice.", "The hikers were icy because speed was slow."] },
+  ];
+
+  function createSupplementalVocabularyGrammarEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const choices = vocabularyGrammarSupplementalBlueprints.filter((item) => item.difficulty <= level);
+    return entry(randomChoice(choices));
+  }
+
+  globalThis.createVocabularyGrammarSupplementalGeneratedEntry = (difficulty) =>
+    pickGeneratedEntry([createSupplementalVocabularyGrammarEntry], difficulty);
+})();

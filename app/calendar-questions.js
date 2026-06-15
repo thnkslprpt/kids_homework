@@ -56,26 +56,26 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("If today is the 9th and a trip starts on the 15th, how many days are left until the trip?", "6 days", ["5 days", "6 days", "7 days", "8 days"], 3),
   calendarStatic("How many days are in February during a leap year?", "29", ["28", "29", "30", "31"], 3),
   calendarStatic("How many weeks are in 14 days?", "2 weeks", ["1 week", "2 weeks", "3 weeks", "4 weeks"], 3),
-  calendarStatic("What date is 5 days after June 22?", "June 27", ["June 25", "June 26", "June 27", "June 28"], 3),
-  calendarStatic("If today is March 4, what date is 3 days later?", "March 7", ["March 5", "March 6", "March 7", "March 8"], 3),
+  calendarStatic("Start on June 22. After 5 full days pass, what date is it?", "June 27", ["June 25", "June 26", "June 27", "June 28"], 3),
+  calendarStatic("If today is March 4, after 3 full days pass, what date is it?", "March 7", ["March 5", "March 6", "March 7", "March 8"], 3),
   calendarStatic("How many days are in 6 weeks?", "42", ["35", "40", "42", "45"], 3),
   calendarStatic("If today is Tuesday, what day will it be in 9 days?", "Thursday", ["Tuesday", "Wednesday", "Thursday", "Friday"], 3),
-  calendarStatic("How many days are between the 8th and the 13th?", "5", ["4", "5", "6", "7"], 3),
+  calendarStatic("How many days are between the 8th and the 13th, not counting the 8th?", "5", ["4", "5", "6", "7"], 3),
   calendarStatic("Which month is the shortest month?", "February", ["January", "February", "March", "April"], 3),
   calendarStatic("Which month has 31 days?", "July", ["April", "June", "September", "July"], 3),
   calendarStatic("If today is Sunday, what day was it 1 week ago?", "Sunday", ["Saturday", "Sunday", "Monday", "Tuesday"], 3),
-  calendarStatic("What date is 10 days after January 5?", "January 15", ["January 13", "January 14", "January 15", "January 16"], 3),
+  calendarStatic("Start on January 5. After 10 full days pass, what date is it?", "January 15", ["January 13", "January 14", "January 15", "January 16"], 3),
 
   // Level 4: longer offsets, month offsets, and school-week thinking.
   calendarStatic("School starts on Monday and lasts for 5 school days. On which day does it end?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
-  calendarStatic("What date is 7 days after August 12?", "August 19", ["August 17", "August 18", "August 19", "August 20"], 4),
+  calendarStatic("Start on August 12. After 7 full days pass, what date is it?", "August 19", ["August 17", "August 18", "August 19", "August 20"], 4),
   calendarStatic("Which month is 3 months after February?", "May", ["April", "May", "June", "July"], 4),
   calendarStatic("If today is Sunday, what day will it be in 9 days?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 4),
   calendarStatic("If today is Thursday, what day will it be in 15 days?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
-  calendarStatic("What date is 10 days after January 12?", "January 22", ["January 20", "January 21", "January 22", "January 23"], 4),
+  calendarStatic("Start on January 12. After 10 full days pass, what date is it?", "January 22", ["January 20", "January 21", "January 22", "January 23"], 4),
   calendarStatic("Which month is 4 months after February?", "June", ["April", "May", "June", "July"], 4),
   calendarStatic("How many days are in 7 weeks?", "49", ["42", "45", "49", "56"], 4),
-  calendarStatic("What date is 14 days after April 8?", "April 22", ["April 20", "April 21", "April 22", "April 23"], 4),
+  calendarStatic("Start on April 8. After 14 full days pass, what date is it?", "April 22", ["April 20", "April 21", "April 22", "April 23"], 4),
   calendarStatic("If today is Saturday, what day was it 10 days ago?", "Wednesday", ["Tuesday", "Wednesday", "Thursday", "Friday"], 4),
   calendarStatic("Which month has 31 days and comes after June?", "July", ["June", "July", "August", "September"], 4),
   calendarStatic("Which month comes 4 months after August?", "December", ["November", "December", "January", "February"], 4),
@@ -87,12 +87,12 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("Which month is 2 months after May?", "July", ["June", "July", "August", "September"], 5),
   calendarStatic("If today is Tuesday, what day will it be in 20 days?", "Monday", ["Sunday", "Monday", "Tuesday", "Wednesday"], 5),
   calendarStatic("Which month is 5 months after August?", "January", ["December", "January", "February", "March"], 5),
-  calendarStatic("What date is 21 days after July 4?", "July 25", ["July 23", "July 24", "July 25", "July 26"], 5),
-  calendarStatic("What date is 14 days after November 17?", "December 1", ["November 29", "November 30", "December 1", "December 2"], 5),
+  calendarStatic("Start on July 4. After 21 full days pass, what date is it?", "July 25", ["July 23", "July 24", "July 25", "July 26"], 5),
+  calendarStatic("Start on November 17. After 14 full days pass, what date is it?", "December 1", ["November 29", "November 30", "December 1", "December 2"], 5),
   calendarStatic("How many days are in 8 weeks?", "56", ["48", "52", "56", "60"], 5),
   calendarStatic("Which month is 5 months after September?", "February", ["January", "February", "March", "April"], 5),
   calendarStatic("If today is Friday, what day was it 17 days ago?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 5),
-  calendarStatic("What date is 30 days after August 20?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 5),
+  calendarStatic("Start on August 20. After 30 full days pass, what date is it?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 5),
 
   // Level 6: the useful life lesson that months are not exactly 4 weeks.
   calendarStatic("Why is it usually wrong to say that 1 month is exactly 4 weeks?", "Most months have 30 or 31 days", ["Every month has 28 days", "Most months have 30 or 31 days", "A week has 10 days", "A year has 10 months"], 6),
@@ -103,7 +103,7 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("A lesson happens every Tuesday for 5 weeks. How many lessons happen?", "5 lessons", ["4 lessons", "5 lessons", "6 lessons", "7 lessons"], 6),
   calendarStatic("A club meets every other week. About how many meetings are in 8 weeks?", "4 meetings", ["2 meetings", "4 meetings", "6 meetings", "8 meetings"], 6),
   calendarStatic("School days are Monday through Friday. How many school days are in 2 full weeks?", "10 school days", ["7 school days", "10 school days", "12 school days", "14 school days"], 6),
-  calendarStatic("What date is exactly 4 weeks after March 1?", "March 29", ["March 28", "March 29", "March 31", "April 1"], 6),
+  calendarStatic("Start on March 1. After exactly 4 full weeks pass, what date is it?", "March 29", ["March 28", "March 29", "March 31", "April 1"], 6),
   calendarStatic("A bill is due on the 15th of each month. After March 15, when is the next due date?", "April 15", ["March 29", "April 12", "April 15", "May 15"], 6),
   calendarStatic("Which is longer: February in a normal year or exactly 4 weeks?", "They are the same", ["February is longer", "Exactly 4 weeks is longer", "They are the same", "You cannot compare them"], 6),
   calendarStatic("Which is longer: April or exactly 4 weeks?", "April", ["April", "Exactly 4 weeks", "They are the same", "Neither has days"], 6),
@@ -113,7 +113,7 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("January has 31 days. That is 4 full weeks plus how many extra days?", "3 extra days", ["1 extra day", "2 extra days", "3 extra days", "4 extra days"], 7),
   calendarStatic("How many days are in 3 weeks and 4 days?", "25 days", ["21 days", "24 days", "25 days", "28 days"], 7),
   calendarStatic("About how many months is 90 days?", "About 3 months", ["About 1 month", "About 2 months", "About 3 months", "About 6 months"], 7),
-  calendarStatic("A form is due May 20. What date is 14 days before the due date?", "May 6", ["May 4", "May 5", "May 6", "May 7"], 7),
+  calendarStatic("A form is due May 20. What date is 14 full days before the due date?", "May 6", ["May 4", "May 5", "May 6", "May 7"], 7),
   calendarStatic("What is the last day of April?", "April 30", ["April 28", "April 29", "April 30", "April 31"], 7),
   calendarStatic("Which months are in the first quarter of the year?", "January, February, March", ["January, February, March", "April, May, June", "July, August, September", "October, November, December"], 7),
   calendarStatic("If practice happens twice a month for 6 months, how many practices is that?", "12 practices", ["6 practices", "8 practices", "12 practices", "18 practices"], 7),
@@ -128,8 +128,8 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("A semiannual event happens how often?", "Twice a year", ["Every week", "Every month", "Twice a year", "Every 10 years"], 8),
   calendarStatic("A reminder repeats on the 31st of each month. Which month can cause a problem because it has no 31st?", "April", ["January", "March", "April", "July"], 8),
   calendarStatic("If your birthday is on a Tuesday, what day of the week is it 7 days later?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 8),
-  calendarStatic("In a normal year, what date is 60 days after January 1?", "March 2", ["February 28", "March 1", "March 2", "March 3"], 8),
-  calendarStatic("What date is 100 days after April 1?", "July 10", ["July 8", "July 9", "July 10", "July 11"], 8),
+  calendarStatic("In a normal year, start on January 1. After 60 full days pass, what date is it?", "March 2", ["February 28", "March 1", "March 2", "March 3"], 8),
+  calendarStatic("Start on April 1. After 100 full days pass, what date is it?", "July 10", ["July 8", "July 9", "July 10", "July 11"], 8),
   calendarStatic("If the 1st day of a month is Friday, what day is the 15th?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 8),
   calendarStatic("If a 31-day month starts on Sunday, how many calendar rows does it use?", "5 rows", ["4 rows", "5 rows", "6 rows", "7 rows"], 8),
   calendarStatic("Which months are in the second quarter of the year?", "April, May, June", ["January, February, March", "April, May, June", "July, August, September", "October, November, December"], 8),
@@ -137,12 +137,12 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("How many months are in 2 quarters?", "6 months", ["3 months", "4 months", "6 months", "8 months"], 8),
 
   // Level 9: real planning with inclusive counts, business days, and leap dates.
-  calendarStatic("In leap year 2024, what date is 1 day after February 28?", "February 29", ["February 27", "February 29", "March 1", "March 2"], 9),
-  calendarStatic("In common year 2025, what date is 1 day after February 28?", "March 1", ["February 29", "March 1", "March 2", "March 3"], 9),
+  calendarStatic("In leap year 2024, start on February 28. After 1 full day passes, what date is it?", "February 29", ["February 27", "February 29", "March 1", "March 2"], 9),
+  calendarStatic("In common year 2025, start on February 28. After 1 full day passes, what date is it?", "March 1", ["February 29", "March 1", "March 2", "March 3"], 9),
   calendarStatic("School days are Monday through Friday. How many school days are from Wednesday through the next Tuesday, including both days?", "5 school days", ["4 school days", "5 school days", "6 school days", "7 school days"], 9),
-  calendarStatic("A meeting is every other Friday starting January 5. After January 19, what is the next meeting date?", "February 2", ["January 26", "February 1", "February 2", "February 9"], 9),
-  calendarStatic("A 30-day project starts on August 20. What date is 30 days later?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 9),
-  calendarStatic("What date is 4 weeks after May 1?", "May 29", ["May 28", "May 29", "May 31", "June 1"], 9),
+  calendarStatic("In 2024, a meeting is every other Friday starting January 5. After the January 19 meeting, what is the next meeting date?", "February 2", ["January 26", "February 1", "February 2", "February 9"], 9),
+  calendarStatic("A 30-day project starts on August 20. After 30 full days pass, what date is it?", "September 19", ["September 17", "September 18", "September 19", "September 20"], 9),
+  calendarStatic("Start on May 1. After 4 full weeks pass, what date is it?", "May 29", ["May 28", "May 29", "May 31", "June 1"], 9),
   calendarStatic("Why is 2 calendar months usually more than 8 weeks?", "Most pairs of months have more than 56 days", ["8 weeks is 80 days", "Most pairs of months have more than 56 days", "A month has only 20 days", "There are no weeks in months"], 9),
   calendarStatic("How many quarters are in a year?", "4", ["2", "3", "4", "12"], 9),
   calendarStatic("What is true about February 29 birthdays?", "The exact date appears only in leap years", ["The exact date appears every year", "The exact date appears only in leap years", "They happen every month", "They are always on Sunday"], 9),
@@ -157,9 +157,9 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("Which happens more often in a 52-week year: monthly payments or payments every 4 weeks?", "Payments every 4 weeks", ["Monthly payments", "Payments every 4 weeks", "They are always equal", "Neither happens"], 10),
   calendarStatic("If today is Friday, what day will it be in 10 weeks?", "Friday", ["Monday", "Wednesday", "Friday", "Sunday"], 10),
   calendarStatic("26 weeks is closest to what part of a 52-week year?", "Half a year", ["One month", "One quarter", "Half a year", "Two years"], 10),
-  calendarStatic("A project is due March 1, 2024. What date is 1 day before it?", "February 29, 2024", ["February 28, 2024", "February 29, 2024", "March 0, 2024", "March 2, 2024"], 10),
-  calendarStatic("A project is due March 1, 2025. What date is 1 day before it?", "February 28, 2025", ["February 28, 2025", "February 29, 2025", "March 0, 2025", "March 2, 2025"], 10),
-  calendarStatic("An event happens every 15 days starting January 1, 2025. What is the 5th event date?", "March 2, 2025", ["February 28, 2025", "March 1, 2025", "March 2, 2025", "March 3, 2025"], 10),
+  calendarStatic("A project is due March 1, 2024. What date is 1 full day before it?", "February 29, 2024", ["February 28, 2024", "February 29, 2024", "March 0, 2024", "March 2, 2024"], 10),
+  calendarStatic("A project is due March 1, 2025. What date is 1 full day before it?", "February 28, 2025", ["February 28, 2025", "February 29, 2025", "March 0, 2025", "March 2, 2025"], 10),
+  calendarStatic("An event happens every 15 days, counting January 1, 2025 as the first event. What is the 5th event date?", "March 2, 2025", ["February 28, 2025", "March 1, 2025", "March 2, 2025", "March 3, 2025"], 10),
   calendarStatic("Which statement about a 3-month quarter is true?", "It is not always exactly 13 weeks", ["It is always exactly 90 days", "It is always exactly 13 weeks", "It is not always exactly 13 weeks", "It always has February"], 10),
   calendarStatic("A subscription bills every 4 weeks. About how many bills are there in 52 weeks?", "13 bills", ["10 bills", "12 bills", "13 bills", "14 bills"], 10),
   calendarStatic("A date is moved forward by 400 years in the Gregorian calendar. What usually stays the same?", "The leap-year pattern repeats", ["Every month becomes 28 days", "The leap-year pattern repeats", "Weeks disappear", "The year becomes shorter"], 10),
@@ -397,8 +397,12 @@ function calendarGenerateDateShiftWithinMonth(level) {
   const distractors = [shift - 1, shift + 1, shift + 2, shift - 2]
     .map((candidateShift) => `${CALENDAR_MONTHS[monthIndex].name} ${day + candidateShift}`)
     .filter((candidate) => candidate !== answer);
+  const startText = `${CALENDAR_MONTHS[monthIndex].name} ${day}`;
+  const promptStart = monthIndex === 1
+    ? `In a normal year, start on ${startText}`
+    : `Start on ${startText}`;
   return calendarBuildGeneratedEntry({
-    question: `What date is ${shift} days after ${CALENDAR_MONTHS[monthIndex].name} ${day}?`,
+    question: `${promptStart}. After ${shift} full days pass, what date is it?`,
     answer,
     distractors,
     difficulty: level,
@@ -412,7 +416,7 @@ function calendarGenerateDaysBetween(level) {
   const end = start + distance;
   const answer = `${distance} days`;
   return calendarBuildGeneratedEntry({
-    question: `How many days are between the ${calendarFormatOrdinal(start)} and the ${calendarFormatOrdinal(end)}?`,
+    question: `How many days are between the ${calendarFormatOrdinal(start)} and the ${calendarFormatOrdinal(end)}, not counting the ${calendarFormatOrdinal(start)}?`,
     answer,
     distractors: [`${distance - 1} days`, `${distance + 1} days`, `${distance + 2} days`, `${Math.max(1, distance - 2)} days`],
     difficulty: level,
@@ -465,7 +469,7 @@ function calendarGenerateCrossMonthDateShift(level) {
   const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
   const distractors = calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false);
   return calendarBuildGeneratedEntry({
-    question: `What date is ${shift} days after ${calendarFormatMonthDay(monthIndex, day)}?`,
+    question: `In ${year}, start on ${calendarFormatMonthDay(monthIndex, day)}. After ${shift} full days pass, what date is it?`,
     answer,
     distractors,
     difficulty: level,
@@ -526,7 +530,7 @@ function calendarGenerateDeadlineBefore(level) {
   const answerDate = calendarAddDaysToDate(year, monthIndex, day, -daysBefore);
   const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
   return calendarBuildGeneratedEntry({
-    question: `A deadline is ${calendarFormatMonthDay(monthIndex, day)}. What date is ${daysBefore} days before the deadline?`,
+    question: `In ${year}, a deadline is ${calendarFormatMonthDay(monthIndex, day)}. What date is ${daysBefore} full days before the deadline?`,
     answer,
     distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
     difficulty: level,
@@ -563,7 +567,7 @@ function calendarGenerateRecurringDays(level) {
   const answerDate = calendarAddDaysToDate(startYear, startMonth, startDay, elapsed);
   const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
   return calendarBuildGeneratedEntry({
-    question: `An event happens every ${interval} days starting ${calendarFormatMonthDay(startMonth, startDay)}. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
+    question: `In ${startYear}, an event happens every ${interval} days, counting ${calendarFormatMonthDay(startMonth, startDay)} as the first event. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
     answer,
     distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
     difficulty: level,
@@ -615,7 +619,7 @@ function calendarGenerateDateShiftWithYear(level) {
   const answerDate = calendarAddDaysToDate(year, monthIndex, day, shift);
   const answer = calendarFormatFullDate(answerDate.year, answerDate.monthIndex, answerDate.day);
   return calendarBuildGeneratedEntry({
-    question: `What date is ${shift} days after ${calendarFormatFullDate(year, monthIndex, day)}?`,
+    question: `Start on ${calendarFormatFullDate(year, monthIndex, day)}. After ${shift} full days pass, what date is it?`,
     answer,
     distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, true),
     difficulty: level,
@@ -627,7 +631,7 @@ function calendarGenerateLeapDayShift(level) {
   const year = calendarRandomChoice([2024, 2025]);
   const answer = year === 2024 ? "February 29, 2024" : "March 1, 2025";
   return calendarBuildGeneratedEntry({
-    question: `What date is 1 day after February 28, ${year}?`,
+    question: `Start on February 28, ${year}. After 1 full day passes, what date is it?`,
     answer,
     distractors: year === 2024
       ? ["February 27, 2024", "March 1, 2024", "March 2, 2024"]
@@ -667,7 +671,7 @@ function calendarGenerateBiweeklyDate(level) {
   const answerDate = calendarAddDaysToDate(year, monthIndex, startDay, meetingsAfterStart * 14);
   const answer = calendarFormatMonthDay(answerDate.monthIndex, answerDate.day);
   return calendarBuildGeneratedEntry({
-    question: `A meeting happens every other week starting ${calendarFormatMonthDay(monthIndex, startDay)}. What is the date ${meetingsAfterStart} meeting${meetingsAfterStart === 1 ? "" : "s"} after that?`,
+    question: `In ${year}, a meeting happens every other week starting ${calendarFormatMonthDay(monthIndex, startDay)}. What is the date of the meeting ${meetingsAfterStart} meeting${meetingsAfterStart === 1 ? "" : "s"} after the starting meeting?`,
     answer,
     distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, false),
     difficulty: level,
@@ -703,7 +707,7 @@ function calendarGenerateAdvancedRecurringEvent(level) {
   const answerDate = calendarAddDaysToDate(year, 0, 1, elapsed);
   const answer = calendarFormatFullDate(answerDate.year, answerDate.monthIndex, answerDate.day);
   return calendarBuildGeneratedEntry({
-    question: `An event happens every ${interval} days starting January 1, ${year}. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
+    question: `An event happens every ${interval} days, counting January 1, ${year} as the first event. What is the ${calendarFormatOrdinal(occurrence)} event date?`,
     answer,
     distractors: calendarBuildDateDistractors(answerDate.year, answerDate.monthIndex, answerDate.day, true),
     difficulty: level,

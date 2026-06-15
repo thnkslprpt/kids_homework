@@ -1,10 +1,11 @@
-const CACHE_VERSION = "homework-v2026-06-14-ios15-answer-submit-1";
+const CACHE_VERSION = "homework-v2026-06-15-question-file-cleanup-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const CRITICAL_ASSETS = [
   "index.html",
   "homework.html",
   "manifest.json",
   "app/style.css",
+  "app/question-utils.js",
   "app/hebrew-expanded-words.js",
   "app/hebrew-words.js",
   "app/hebrew-image-words.js",
@@ -38,17 +39,9 @@ const CRITICAL_ASSETS = [
   "app/category-drag-questions.js",
   "app/sentence-drag-english.js",
   "app/sentence-drag-hebrew.js",
+  "app/hebrew-questions.js",
   "app/vocabulary-grammar-questions.js",
   "app/adult-hebrew-module.js",
-  "app/extended-exercise-utils.js",
-  "app/extended-math-questions.js",
-  "app/extended-data-questions.js",
-  "app/extended-language-questions.js",
-  "app/extended-hebrew-questions.js",
-  "app/extended-science-questions.js",
-  "app/extended-practical-questions.js",
-  "app/extended-thinking-questions.js",
-  "app/extended-history-geography-questions.js",
   "app/app.js",
 ];
 

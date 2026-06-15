@@ -39,7 +39,13 @@
         <div id="question-main"></div>
         <div id="question-visual"></div>
         <div id="question-extra"></div>
-        <form id="answer-form"><div id="input-area"><input id="answer-input"></div></form>
+        <form id="answer-form">
+          <div id="input-area">
+            <input id="answer-input">
+            <button id="answer-sign-button" type="button">−</button>
+            <button id="answer-submit-button" type="submit">Submit</button>
+          </div>
+        </form>
         <div id="choices-area"></div>
         <div id="drag-area"></div>
         <button id="quiz-back-button"></button>
@@ -67,6 +73,7 @@
     </main>
     <pre id="result">running</pre>
 
+    <script src="question-utils.js"></script>
     <script src="hebrew-expanded-words.js"></script>
     <script src="hebrew-words.js"></script>
     <script src="hebrew-image-words.js"></script>
@@ -100,17 +107,9 @@
     <script src="category-drag-questions.js"></script>
     <script src="sentence-drag-english.js"></script>
     <script src="sentence-drag-hebrew.js"></script>
+    <script src="hebrew-questions.js"></script>
     <script src="vocabulary-grammar-questions.js"></script>
     <script src="adult-hebrew-module.js"></script>
-    <script src="extended-exercise-utils.js"></script>
-    <script src="extended-math-questions.js"></script>
-    <script src="extended-data-questions.js"></script>
-    <script src="extended-language-questions.js"></script>
-    <script src="extended-hebrew-questions.js"></script>
-    <script src="extended-science-questions.js"></script>
-    <script src="extended-practical-questions.js"></script>
-    <script src="extended-thinking-questions.js"></script>
-    <script src="extended-history-geography-questions.js"></script>
     <script src="app.js"></script>
     <script>
       const result = document.getElementById("result");
@@ -120,6 +119,7 @@
       function validateQuestion(question, label) {
         const errors = api.validateHomeworkQuestionShape(question, label);
         if (errors.length) failures.push(...errors);
+        failures.push(...validateCalendarQuestionClarity(question, label));
       }
 
       function validateEntry(entry, label) {
@@ -134,10 +134,49 @@
         if (options.length !== 4) failures.push(`${label}: expected 4 options, got ${options.length}`);
         if (new Set(options).size !== options.length) failures.push(`${label}: options are not unique`);
         if (!options.includes(answer)) failures.push(`${label}: answer is not in options`);
+        failures.push(...validateCalendarQuestionClarity(entry, label));
+      }
+
+      function validateCalendarQuestionClarity(question, label) {
+        const text = String(question?.question || question?.questionText || "").trim();
+        const category = String(question?.category || "").toLowerCase();
+        const type = String(question?.type || "").toLowerCase();
+        const isCalendar = category === "calendar" || type.includes("calendar") || String(label || "").toLowerCase().includes("calendar");
+        if (!isCalendar || !text) return [];
+
+        const monthDayPattern = /\b(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+\d{1,2}(?:,\s*\d{4})?\b/i;
+        const februaryDatePattern = /\bFebruary\s+\d{1,2}(?:,\s*\d{4})?\b/i;
+        const dateArithmeticPattern = /\b(?:\d+\s+(?:full\s+)?(?:days?|weeks?)\s+(?:after|before|later)|days?\s+between|full\s+(?:days?|weeks?)\s+pass)\b/i;
+        const ordinalBetweenPattern = /\bdays?\s+are\s+between\s+the\s+\d+(?:st|nd|rd|th)\s+and\s+the\s+\d+(?:st|nd|rd|th)\b/i;
+        const countingMarkerPattern = /\b(?:full\s+(?:days?|weeks?)|not counting|including both days|counting\b.+\bas the first|starting meeting)\b/i;
+        const yearMarkerPattern = /\b(?:in\s+(?:leap year\s+|common year\s+|normal year\s+)?\d{4}|leap year|common year|normal year|,\s*\d{4})\b/i;
+        const errors = [];
+
+        if (monthDayPattern.test(text) && dateArithmeticPattern.test(text) && !countingMarkerPattern.test(text)) {
+          errors.push(`${label}: calendar date arithmetic must say whether the start/end date is counted: ${text}`);
+        }
+
+        if (februaryDatePattern.test(text) && dateArithmeticPattern.test(text) && !yearMarkerPattern.test(text)) {
+          errors.push(`${label}: February date arithmetic must include a year or say leap/common/normal year: ${text}`);
+        }
+
+        if (ordinalBetweenPattern.test(text) && !/\b(?:not counting|including both days)\b/i.test(text)) {
+          errors.push(`${label}: calendar "between" questions must say whether endpoints are counted: ${text}`);
+        }
+
+        return errors;
       }
 
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
+        const ambiguousCalendarErrors = validateCalendarQuestionClarity(
+          { category: "Calendar", type: "calendar-choice", question: "What date is 10 days after February 23?" },
+          "calendar clarity regression"
+        );
+        if (!ambiguousCalendarErrors.length) {
+          failures.push("Calendar clarity lint should reject hidden-year February date arithmetic");
+        }
+
         const difficultyInput = document.getElementById("difficulty-level");
         const gabrielButton = document.querySelector('[data-user-id="gabriel"]');
         const guestButton = document.querySelector('[data-user-id="guest"]');
@@ -152,14 +191,36 @@
         guestButton?.click();
         if (difficultyInput.disabled) failures.push("Guest difficulty slider should stay enabled");
 
+        const answerInput = document.getElementById("answer-input");
+        const answerSignButton = document.getElementById("answer-sign-button");
+        answerInput.value = "12";
+        answerSignButton.click();
+        if (answerInput.value !== "-12") failures.push("Negative sign button should prefix an ASCII minus");
+        if (!globalThis.buildNumericAnswerCandidates(answerInput.value, {}).includes(-12)) {
+          failures.push("Negative sign button value should parse as a negative number");
+        }
+        answerSignButton.click();
+        if (answerInput.value !== "12") failures.push("Negative sign button should remove an existing minus");
+        answerInput.value = "\u22123.5";
+        answerSignButton.click();
+        if (answerInput.value !== "3.5") failures.push("Negative sign button should remove a Unicode minus");
+
         const directEntryFactories = [
-          ["extended language", globalThis.createExtendedVocabularyGrammarGeneratedEntry],
-          ["extended reading", globalThis.createExtendedReadingComprehensionGeneratedEntry],
-          ["extended science", globalThis.createExtendedScienceGeneratedEntry],
-          ["extended practical", globalThis.createExtendedPracticalGeneratedEntry],
-          ["extended thinking", globalThis.createExtendedThinkingGeneratedEntry],
-          ["extended geography history", globalThis.createExtendedGeographyHistoryGeneratedEntry],
+          ["vocabulary supplemental", globalThis.createVocabularyGrammarSupplementalGeneratedEntry],
+          ["reading supplemental", globalThis.createReadingComprehensionSupplementalGeneratedEntry],
+          ["science topics", globalThis.createScienceTopicGeneratedEntry],
+          ["logic thinking", globalThis.createLogicThinkingGeneratedEntry],
+          ["geography history", globalThis.createGeographyHistoryGeneratedEntry],
+          ["nutrition practical", globalThis.createNutritionPracticalGeneratedEntry],
+          ["health practical", globalThis.createHealthAndFirstAidPracticalGeneratedEntry],
+          ["household practical", globalThis.createHouseholdPracticalGeneratedEntry],
         ];
+        if (typeof CALENDAR_QUESTIONS === "undefined") {
+          failures.push("calendar static bank: CALENDAR_QUESTIONS missing");
+        } else {
+          CALENDAR_QUESTIONS.forEach((entry, index) => validateEntry(entry, `calendar static #${index + 1}`));
+        }
+
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((difficulty) => {
           validateQuestion(api.createNumberPatternChoiceQuestion(difficulty), `number pattern ${difficulty}`);
           validateQuestion(api.createComparisonChoiceQuestion(difficulty), `comparison choice ${difficulty}`);
@@ -168,9 +229,14 @@
           validateQuestion(api.createStatisticsChoiceQuestion(difficulty), `statistics ${difficulty}`);
           validateQuestion(api.createTimeChoiceQuestion(difficulty), `time ${difficulty}`);
           validateQuestion(api.createChartsAndGraphsQuestion(difficulty), `charts ${difficulty}`);
-          validateQuestion(api.createExtendedDataChoiceQuestion(difficulty), `extended data ${difficulty}`);
-          validateQuestion(api.createExtendedMathChoiceQuestion(difficulty), `extended math ${difficulty}`);
-          validateQuestion(api.createExtendedHebrewSessionQuestion(difficulty), `extended Hebrew ${difficulty}`);
+          validateQuestion(api.createChartsAndGraphsGeneratedChoiceQuestion(difficulty), `charts generated ${difficulty}`);
+          validateQuestion(api.createSupplementalMathChoiceQuestion(difficulty), `math supplemental ${difficulty}`);
+          validateQuestion(api.createHebrewSupplementalSessionQuestion(difficulty), `Hebrew supplemental ${difficulty}`);
+          if (typeof createCalendarGeneratedEntry === "function") {
+            validateEntry(createCalendarGeneratedEntry(difficulty), `calendar generated ${difficulty}`);
+          } else {
+            failures.push("calendar generated: factory missing");
+          }
           directEntryFactories.forEach(([label, factory]) => {
             if (typeof factory !== "function") failures.push(`${label}: factory missing`);
             else validateEntry(factory(difficulty), `${label} ${difficulty}`);
@@ -178,9 +244,12 @@
 
           for (let trial = 0; trial < 30; trial += 1) {
             validateQuestion(api.createMathChoiceQuestion(difficulty), `math choice ${difficulty} trial ${trial + 1}`);
-            validateQuestion(api.createExtendedMathChoiceQuestion(difficulty), `extended math ${difficulty} trial ${trial + 1}`);
-            validateQuestion(api.createExtendedDataChoiceQuestion(difficulty), `extended data ${difficulty} trial ${trial + 1}`);
-            validateQuestion(api.createExtendedHebrewSessionQuestion(difficulty), `extended Hebrew ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createSupplementalMathChoiceQuestion(difficulty), `math supplemental ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createChartsAndGraphsGeneratedChoiceQuestion(difficulty), `charts generated ${difficulty} trial ${trial + 1}`);
+            validateQuestion(api.createHebrewSupplementalSessionQuestion(difficulty), `Hebrew supplemental ${difficulty} trial ${trial + 1}`);
+            if (typeof createCalendarGeneratedEntry === "function") {
+              validateEntry(createCalendarGeneratedEntry(difficulty), `calendar generated ${difficulty} trial ${trial + 1}`);
+            }
             directEntryFactories.forEach(([label, factory]) => {
               if (typeof factory === "function") validateEntry(factory(difficulty), `${label} ${difficulty} trial ${trial + 1}`);
             });

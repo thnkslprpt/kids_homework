@@ -887,3 +887,49 @@ function createHouseholdProblemSolvingGeneratedEntry(difficulty) {
     difficulty: entry.difficulty,
   };
 }
+
+(() => {
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, pickGeneratedEntry, randomChoice, randomInt } = questionUtils;
+
+  function createTransitQuestion(difficulty) {
+    const busMinute = randomChoice([10, 15, 25, 35, 45, 50]);
+    const walk = randomInt(5, difficulty >= 6 ? 14 : 9);
+    const hour = randomChoice([7, 8, 14, 15]);
+    const leaveMinute = busMinute - walk;
+    const leaveHour = leaveMinute >= 0 ? hour : hour - 1;
+    const normalizedMinute = leaveMinute >= 0 ? leaveMinute : 60 + leaveMinute;
+    const answer = `${leaveHour}:${String(normalizedMinute).padStart(2, "0")}`;
+    return entry({
+      topic: "household-transit-schedules",
+      difficulty,
+      question: "What is the latest safe leave time?",
+      displayText: `The bus comes at ${hour}:${String(busMinute).padStart(2, "0")}. The walk to the stop takes ${walk} minutes.`,
+      answer,
+      options: [
+        answer,
+        `${hour}:${String(busMinute).padStart(2, "0")}`,
+        `${hour}:${String(Math.min(59, busMinute + walk)).padStart(2, "0")}`,
+        `${leaveHour}:${String(Math.max(0, normalizedMinute - 5)).padStart(2, "0")}`,
+      ],
+    });
+  }
+
+  const toolSafetyBlueprints = [
+    { topic: "household-tool-safety", difficulty: 1, question: "What should you do before using scissors?", answer: "Point them away from your body and walk carefully", options: ["Point them away from your body and walk carefully", "Run with them", "Point them at a friend", "Throw them into a drawer"] },
+    { topic: "household-tool-safety", difficulty: 3, question: "Which label warning means you should not touch the tool?", answer: "Hot surface", options: ["Hot surface", "Blue handle", "Made on Monday", "Lightweight"] },
+    { topic: "household-tool-safety", difficulty: 5, question: "A cutting tool is dull and slipping. What is the safest next step?", answer: "Stop and ask an adult to fix or replace it", options: ["Stop and ask an adult to fix or replace it", "Push harder", "Cut faster", "Point it toward your hand"] },
+    { topic: "household-tool-safety", difficulty: 8, question: "Why should goggles be worn for some building tasks?", answer: "They help protect eyes from flying bits", options: ["They help protect eyes from flying bits", "They make tools sharper", "They replace adult supervision", "They make dust safe to breathe"] },
+  ];
+
+  function createToolSafetyEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    return entry(randomChoice(toolSafetyBlueprints.filter((item) => item.difficulty <= level)));
+  }
+
+  globalThis.createHouseholdPracticalGeneratedEntry = (difficulty) =>
+    pickGeneratedEntry([createTransitQuestion, createToolSafetyEntry], difficulty);
+})();

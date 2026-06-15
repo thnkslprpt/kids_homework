@@ -191,7 +191,7 @@ Math generators scale with the effective question difficulty. That now includes 
 decimals, place value, and rectangle-measure questions in both typed-answer and multiple-choice
 formats.
 
-Extended generated exercises are calibrated for levels `1` through `10`, where level `1` is aimed
+Supplemental generated exercises are calibrated for levels `1` through `10`, where level `1` is aimed
 at early elementary work and level `10` is aimed at roughly age `14`. Each generated multiple-choice
 question is checked for exactly one correct answer before it is used in a session or smoke test.
 
@@ -227,29 +227,15 @@ Important:
 - `homework.html`: main page
 - `app/style.css`: visual design
 - `app/app.js`: quiz logic, storage, history screen, and confetti
-- `app/extended-exercise-utils.js`: shared helpers and recent-question tracking for expanded generators
-- `app/extended-math-questions.js`: remainders, GCF / LCM, prime factorization, order of operations,
-  fractions, mixed numbers, percent change, rates, proportions, inequalities, exponents, coordinate
-  transformations, angles, triangles, symmetry, volume, and surface area
-- `app/extended-data-questions.js`: line graphs, pie charts, scatterplots, two-way tables,
-  misleading graphs, sampling bias, and averages with outliers
-- `app/extended-language-questions.js`: spelling, syllables, punctuation, capitalization,
-  parts of speech, roots, prefixes, suffixes, sentence combining, paragraph ordering, main idea,
-  evidence, inference, and summarization
-- `app/extended-hebrew-questions.js`: final letters, roots, gender / number agreement,
-  prepositions, and verb-tense matching
-- `app/extended-science-questions.js`: food webs, life cycles, classification, states of matter,
-  circuits, forces, simple machines, weather, the water cycle, rocks / minerals, and astronomy scale
-- `app/extended-practical-questions.js`: recipes, transit schedules, labels, tool safety,
-  and emergency decision trees
-- `app/extended-thinking-questions.js`: prioritization, planning, debugging, cause/effect chains,
-  tradeoffs, risk/reward, and evidence checks
-- `app/extended-history-geography-questions.js`: timelines, latitude / longitude, climate zones,
-  landforms, migration routes, and culture / holiday matching
+- `app/question-utils.js`: shared helpers and recent-question tracking for supplemental generators
 - `app/hebrew-words.js`: bundled Hebrew vocabulary list
+- `app/hebrew-questions.js`: Hebrew final letters, roots, agreement, prepositions, and tense matching
 - `app/science-questions.js`: bundled offline science bank
 - `app/general-knowledge-questions.js`: bundled offline general knowledge bank
 - `app/algebra-questions.js`: algebra bank and generator
+- `app/charts-and-graphs-questions.js`: chart, graph, table, sampling, and outlier questions
+- `app/vocabulary-grammar-questions.js`: vocabulary, grammar, spelling, punctuation, and sentence combining
+- `app/reading-comprehension-questions.js`: reading passages, main idea, inference, evidence, and summaries
 - `app/visual-math-questions.js`: visual math bank and generator
 - `app/logic-questions.js`: bundled offline logic bank
 - `app/rationality-questions.js`: bundled offline rationality bank

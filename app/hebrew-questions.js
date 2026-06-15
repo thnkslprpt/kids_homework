@@ -1,5 +1,9 @@
 (() => {
-  const { entry, pickGeneratedEntry, randomChoice, shuffle } = globalThis.HomeworkExtended;
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, pickGeneratedEntry, randomChoice, shuffle } = questionUtils;
 
   function point(value) {
     return typeof globalThis.applyHebrewSentenceNikkud === "function"
@@ -44,7 +48,7 @@
     });
   }
 
-  globalThis.createExtendedHebrewQuestion = (difficulty) => {
+  globalThis.createHebrewGeneratedSessionQuestion = (difficulty) => {
     const picked = pickGeneratedEntry([createBlueprintEntry], difficulty);
     if (!picked) {
       return null;

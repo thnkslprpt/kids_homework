@@ -407,3 +407,27 @@ function healthPick(values) {
   }
   return values[Math.floor(Math.random() * values.length)];
 }
+
+(() => {
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+
+  const emergencyDecisionBlueprints = [
+    { topic: "health-emergency-decisions", difficulty: 1, question: "What should you do first for a small scrape?", answer: "Tell an adult and wash it gently", options: ["Tell an adult and wash it gently", "Hide it", "Rub dirt on it", "Keep playing without looking"] },
+    { topic: "health-emergency-decisions", difficulty: 4, question: "You smell smoke in the kitchen. What should you do first?", answer: "Tell an adult and move away from danger", options: ["Tell an adult and move away from danger", "Hide in a closet", "Touch the stove", "Open every container"] },
+    { topic: "health-emergency-decisions", difficulty: 6, question: "Someone is unconscious and not responding. What should you do first?", answer: "Call emergency help or tell an adult to call now", options: ["Call emergency help or tell an adult to call now", "Give them food", "Wait an hour", "Move them far away for no reason"] },
+    { topic: "health-emergency-decisions", difficulty: 9, question: "Which emergency choice is best during a kitchen grease fire?", answer: "Turn off heat if safe and get adult/emergency help", options: ["Turn off heat if safe and get adult/emergency help", "Pour water on the grease", "Carry the pan outside", "Fan the flames"] },
+    { topic: "health-emergency-decisions", difficulty: 10, question: "What is the best reason to follow an emergency decision tree?", answer: "It helps choose safe steps in the right order", options: ["It helps choose safe steps in the right order", "It makes every emergency harmless", "It replaces calling for help", "It makes facts unnecessary"] },
+  ];
+
+  function createEmergencyDecisionEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    return entry(randomChoice(emergencyDecisionBlueprints.filter((item) => item.difficulty <= level)));
+  }
+
+  globalThis.createHealthAndFirstAidPracticalGeneratedEntry = (difficulty) =>
+    pickGeneratedEntry([createEmergencyDecisionEntry], difficulty);
+})();

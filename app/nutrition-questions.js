@@ -1430,3 +1430,46 @@ function nutritionShuffle(values) {
   }
   return shuffled;
 }
+
+(() => {
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, numberOptions, pickGeneratedEntry, randomChoice, randomInt, renderTable } =
+    questionUtils;
+
+  function createRecipeQuestion(difficulty) {
+    const ingredient = randomChoice(["flour", "rice", "oats", "sugar"]);
+    const amount = randomChoice([1, 2, 3, 4]);
+    const batches = randomInt(2, difficulty >= 6 ? 5 : 3);
+    const answer = amount * batches;
+    return entry({
+      topic: "nutrition-recipes",
+      difficulty,
+      question: `A recipe needs ${amount} cups of ${ingredient} for one batch. How much for ${batches} batches?`,
+      answer: `${answer} cups`,
+      options: numberOptions(answer, [-amount, -1, 1, amount, batches], 1).map((value) => `${value} cups`),
+    });
+  }
+
+  function createLabelQuestion(difficulty) {
+    const serving = randomChoice([1, 2, 3]);
+    const calories = randomChoice([80, 120, 150, 210]);
+    const sugar = randomChoice([4, 8, 12, 16]);
+    const askCalories = Math.random() < 0.5;
+    return entry({
+      topic: "nutrition-reading-labels",
+      difficulty,
+      question: askCalories ? "How many calories are in two servings?" : "Which label item tells you the amount counted as one serving?",
+      visualHtml: renderTable("Snack label", [["Serving size", `${serving} cup`], ["Calories", calories], ["Added sugar", `${sugar} g`]]),
+      answer: askCalories ? `${calories * 2} calories` : "Serving size",
+      options: askCalories
+        ? [`${calories * 2} calories`, `${calories} calories`, `${calories + 2} calories`, `${sugar * 2} calories`]
+        : ["Serving size", "Brand logo", "Package color", "Barcode"],
+    });
+  }
+
+  globalThis.createNutritionPracticalGeneratedEntry = (difficulty) =>
+    pickGeneratedEntry([createRecipeQuestion, createLabelQuestion], difficulty);
+})();

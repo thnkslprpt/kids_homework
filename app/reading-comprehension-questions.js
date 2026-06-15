@@ -182,3 +182,34 @@ function readingShuffleArray(values) {
   }
   return copy;
 }
+
+(() => {
+  const questionUtils = globalThis.HomeworkQuestionUtils;
+  if (!questionUtils) {
+    return;
+  }
+  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+
+  const readingComprehensionSupplementalBlueprints = [
+    { topic: "reading-main-idea", difficulty: 1, question: "What is the main idea?", displayText: "Sam feeds the dog, fills its water bowl, and brushes its fur.", answer: "Sam takes care of the dog.", options: ["Sam takes care of the dog.", "Sam loses the dog.", "The dog is at school.", "The bowl is broken."] },
+    { topic: "reading-paragraph-ordering", difficulty: 1, question: "Which comes first?", displayText: "A: Eat the sandwich. B: Make the sandwich. C: Put the plate away.", answer: "B", options: ["A", "B", "C", "They are all first"] },
+    { topic: "reading-main-idea", difficulty: 2, question: "What is the main idea?", displayText: "Nora waters the seedlings every morning. She checks the soil and moves the tray closer to the window when the leaves look pale.", answer: "Nora takes care of seedlings carefully.", options: ["Nora takes care of seedlings carefully.", "Nora dislikes plants.", "The window is broken.", "Seedlings never need water."] },
+    { topic: "reading-evidence", difficulty: 3, question: "Which detail is evidence that the library was busy?", displayText: "The librarian put out extra chairs. Every table was full, and a line formed at the desk.", answer: "Every table was full.", options: ["Every table was full.", "The librarian works there.", "The chairs had legs.", "The desk was near the door."] },
+    { topic: "reading-paragraph-ordering", difficulty: 4, question: "Which paragraph order makes the most sense?", displayText: "A: Finally, she served the soup. B: First, she chopped vegetables. C: Then, she let the soup simmer.", answer: "B, C, A", options: ["B, C, A", "A, B, C", "C, A, B", "B, A, C"] },
+    { topic: "reading-evidence", difficulty: 5, question: "Which detail is evidence for the claim?", displayText: "Claim: The library is busier after school. Visits: morning 18, lunch 24, after school 51.", answer: "After school had 51 visits, the most of the three times.", options: ["After school had 51 visits, the most of the three times.", "Libraries have books.", "Lunch sounds busy.", "Morning comes before lunch."] },
+    { topic: "reading-inference", difficulty: 5, question: "What can you infer?", displayText: "Mia looked at the dark clouds, zipped her backpack, and took an umbrella.", answer: "Mia thinks it may rain.", options: ["Mia thinks it may rain.", "Mia is going swimming.", "Mia hates backpacks.", "The umbrella is broken."] },
+    { topic: "reading-inference", difficulty: 7, question: "What can you infer?", displayText: "Omar crossed out two answers, reread the question, and checked the chart before choosing.", answer: "Omar is trying to answer carefully.", options: ["Omar is trying to answer carefully.", "Omar cannot read charts.", "Omar already knows the answer is wrong.", "Omar is ignoring the question."] },
+    { topic: "reading-summarization", difficulty: 8, question: "Which summary is strongest?", displayText: "A class tested three bridge designs. The triangle design held the most weight, so they chose it for the final model.", answer: "The class used test results to choose the strongest bridge design.", options: ["The class used test results to choose the strongest bridge design.", "The class built a bridge and everyone was amazed.", "Triangles are always better for every object.", "The class did not test anything."] },
+    { topic: "reading-summarization", difficulty: 9, question: "Which summary keeps only the important information?", displayText: "A team tried three materials for a model roof. Paper leaked quickly, foil bent, and plastic stayed dry. The team used plastic in the final model.", answer: "The team tested roof materials and chose plastic because it worked best.", options: ["The team tested roof materials and chose plastic because it worked best.", "The paper was white and the foil was shiny.", "The model roof was the greatest roof ever made.", "The team used every material equally in the final model."] },
+    { topic: "reading-summarization", difficulty: 10, question: "Which summary is most objective?", displayText: "The article explains that city trees lower street temperatures, provide shade, and can reduce storm-water runoff.", answer: "City trees can cool streets, give shade, and help manage runoff.", options: ["City trees can cool streets, give shade, and help manage runoff.", "Trees are obviously the best thing in every city.", "The article is mostly about birds in trees.", "Storm water is never affected by trees."] },
+  ];
+
+  function createSupplementalReadingComprehensionEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const choices = readingComprehensionSupplementalBlueprints.filter((item) => item.difficulty <= level);
+    return entry(randomChoice(choices));
+  }
+
+  globalThis.createReadingComprehensionSupplementalGeneratedEntry = (difficulty) =>
+    pickGeneratedEntry([createSupplementalReadingComprehensionEntry], difficulty);
+})();

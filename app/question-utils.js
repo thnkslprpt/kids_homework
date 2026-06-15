@@ -1,6 +1,6 @@
 (() => {
   const MAX_LEVEL = 10;
-  const RECENT_STORAGE_KEY = "homework-extended-question-recent-v1";
+  const RECENT_STORAGE_KEY = "homework-question-recent-v1";
   const RECENT_TTL_DAYS = 21;
   const MAX_RECENT_KEYS = 1500;
   let recentMapCache = null;
@@ -177,7 +177,7 @@
 
   function buildEntryKey(entry) {
     return [
-      entry.topic || entry.question || "extended",
+      entry.topic || entry.question || "question",
       entry.question,
       entry.displayText,
       entry.visualSummary,
@@ -268,7 +268,7 @@
     return fallback ? rememberEntry(fallback) : null;
   }
 
-  globalThis.HomeworkExtended = {
+  globalThis.HomeworkQuestionUtils = {
     clampDifficulty,
     entry,
     fractionText,
