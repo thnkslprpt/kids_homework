@@ -215,6 +215,22 @@
           ["health practical", globalThis.createHealthAndFirstAidPracticalGeneratedEntry],
           ["household practical", globalThis.createHouseholdPracticalGeneratedEntry],
         ];
+        const chartGeneratedCoverage = globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE || {};
+        [
+          ["line", 4],
+          ["trend", 5],
+          ["outlier", 7],
+          ["meanMedian", 7],
+          ["compareTwoCharts", 7],
+          ["misleadingAxis", 8],
+        ].forEach(([label, difficulty]) => {
+          const factory = chartGeneratedCoverage[label];
+          if (typeof factory !== "function") {
+            failures.push(`charts generated ${label}: factory missing`);
+          } else {
+            validateEntry(factory(difficulty), `charts generated ${label}`);
+          }
+        });
         if (typeof CALENDAR_QUESTIONS === "undefined") {
           failures.push("calendar static bank: CALENDAR_QUESTIONS missing");
         } else {

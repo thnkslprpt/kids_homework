@@ -184,33 +184,72 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
   ];
 
   const CLOZES = [
+    { sentence: "The sun was ___, so we wore hats.", answer: "bright", distractors: ["empty", "quiet", "late", "square"], minDifficulty: 1 },
+    { sentence: "I felt ___ after running across the playground.", answer: "tired", distractors: ["sharp", "purple", "round", "frozen"], minDifficulty: 1 },
     { sentence: "The puppy was ___, so it stayed close to Maya.", answer: "shy", distractors: ["loud", "hungry", "tall", "windy"], minDifficulty: 1 },
     { sentence: "The librarian asked us to whisper because the room needed to stay ___.", answer: "quiet", distractors: ["bright", "crowded", "messy", "round"], minDifficulty: 1 },
+    { sentence: "The soup was too ___ to eat right away.", answer: "hot", distractors: ["wide", "silent", "empty", "early"], minDifficulty: 2 },
     { sentence: "The glass was fragile, so we carried it ___.", answer: "carefully", distractors: ["roughly", "hungrily", "loudly", "sleepily"], minDifficulty: 2 },
     { sentence: "The path was muddy after the rain, so our shoes became ___.", answer: "dirty", distractors: ["dry", "invisible", "silent", "empty"], minDifficulty: 2 },
+    { sentence: "The two stories are similar; ___, both have a surprise ending.", answer: "for example", distractors: ["however", "instead", "before", "although"], minDifficulty: 4 },
     { sentence: "Because the instructions were confusing, Dad asked the teacher to ___ them.", answer: "clarify", distractors: ["hide", "decorate", "ignore", "carry"], minDifficulty: 5 },
     { sentence: "The team had practiced for weeks; ___, they felt ready for the match.", answer: "therefore", distractors: ["however", "instead", "meanwhile", "although"], minDifficulty: 6 },
     { sentence: "The old bridge was sturdy, meaning it was ___.", answer: "strong and well built", distractors: ["easy to break", "painted blue", "very noisy", "made yesterday"], minDifficulty: 6 },
+    { sentence: "The evidence was weak; ___, the claim was hard to believe.", answer: "therefore", distractors: ["meanwhile", "instead", "before", "likewise"], minDifficulty: 7 },
     { sentence: "The scientist repeated the test to get ___ results.", answer: "reliable", distractors: ["random", "colorful", "secret", "careless"], minDifficulty: 7 },
     { sentence: "The directions were ambiguous, so different students understood them in different ways.", answer: "unclear", distractors: ["obvious", "silent", "ancient", "tiny"], minDifficulty: 8 },
+    { sentence: "The article was objective because it reported facts without ___.", answer: "personal opinions", distractors: ["clear numbers", "source names", "exact dates", "careful notes"], minDifficulty: 8 },
     { sentence: "Noga gave a concise answer: it was short but complete.", answer: "brief", distractors: ["confusing", "careless", "angry", "musical"], minDifficulty: 9 },
     { sentence: "The evidence was sufficient because it was enough to support the claim.", answer: "enough", distractors: ["missing", "colorful", "incorrect", "ordinary"], minDifficulty: 10 },
+    { sentence: "The explanation was nuanced because it included ___ instead of a simple yes-or-no answer.", answer: "important differences and details", distractors: ["only one repeated word", "no evidence at all", "a louder voice", "a shorter title"], minDifficulty: 10 },
   ];
 
   const CONTEXT_CLUES = [
+    { word: "soggy", sentence: "The napkin became soggy after juice spilled on it.", answer: "wet and soft", distractors: ["dry and crisp", "very loud", "hard to lift", "full of light"], minDifficulty: 1 },
+    { word: "empty", sentence: "The basket was empty after we took out all the apples.", answer: "with nothing inside", distractors: ["full of fruit", "hard to open", "made of stone", "very noisy"], minDifficulty: 1 },
+    { word: "blend", sentence: "Blend the yellow and blue paint to make green.", answer: "mix together", distractors: ["pull apart", "count quickly", "hide under", "make silent"], minDifficulty: 2 },
+    { word: "rescue", sentence: "The lifeguard ran to rescue the swimmer who needed help.", answer: "save from danger", distractors: ["teach a song", "cover with paint", "forget about", "make smaller"], minDifficulty: 2 },
     { word: "glimpse", sentence: "Gabriel caught a glimpse of the fox before it ran behind the tree.", answer: "a quick look", distractors: ["a loud sound", "a deep hole", "a heavy box", "a long trip"], minDifficulty: 3 },
     { word: "drowsy", sentence: "After staying up late, Gideon felt drowsy during breakfast.", answer: "sleepy", distractors: ["angry", "hungry", "excited", "lost"], minDifficulty: 3 },
+    { word: "rapid", sentence: "The rapid stream moved so fast that leaves zipped past the rocks.", answer: "fast", distractors: ["still", "dry", "careless", "ancient"], minDifficulty: 4 },
     { word: "retrieve", sentence: "The ball rolled under the sofa, so Noga crawled down to retrieve it.", answer: "get it back", distractors: ["paint it", "forget it", "break it", "hide it"], minDifficulty: 4 },
     { word: "generous", sentence: "Miranda was generous with the cookies and shared them with everyone.", answer: "willing to give", distractors: ["easy to scare", "hard to hear", "quick to sleep", "full of dust"], minDifficulty: 5 },
+    { word: "essential", sentence: "Water is essential for the seedlings; without it, they wilt.", answer: "needed", distractors: ["optional", "decorative", "hidden", "noisy"], minDifficulty: 5 },
     { word: "contrast", sentence: "The essay asks you to contrast cats and dogs by explaining how they are different.", answer: "show differences", distractors: ["make a drawing", "repeat exactly", "hide details", "count quickly"], minDifficulty: 6 },
     { word: "evidence", sentence: "The footprints were evidence that someone had walked through the mud.", answer: "proof or clues", distractors: ["a funny joke", "a kind of food", "a loud sound", "a color"], minDifficulty: 6 },
+    { word: "scarce", sentence: "Fresh water is scarce in the desert, so travelers carry extra bottles.", answer: "hard to find", distractors: ["easy to waste", "brightly colored", "too heavy", "made by hand"], minDifficulty: 7 },
     { word: "analyze", sentence: "To analyze the poem, the class looked closely at each line and discussed what it meant.", answer: "study carefully", distractors: ["copy quickly", "throw away", "make louder", "decorate"], minDifficulty: 7 },
+    { word: "plausible", sentence: "Her explanation was plausible because it fit the clues and did not contradict the evidence.", answer: "reasonable or believable", distractors: ["impossible to read", "painted brightly", "made of cloth", "always incorrect"], minDifficulty: 8 },
     { word: "imply", sentence: "The dark clouds imply that rain may come soon, even though no one says it directly.", answer: "suggest without saying directly", distractors: ["prove with a ruler", "draw in color", "repeat word for word", "make disappear"], minDifficulty: 8 },
+    { word: "valid", sentence: "The conclusion was valid because it followed logically from the data.", answer: "well supported and logical", distractors: ["written in pencil", "easy to carry", "full of jokes", "missing all details"], minDifficulty: 9 },
     { word: "perspective", sentence: "From the ant's perspective, a small leaf looked like a giant umbrella.", answer: "point of view", distractors: ["kind of weather", "short message", "secret code", "piece of food"], minDifficulty: 9 },
     { word: "infer", sentence: "If the floor is wet and umbrellas are by the door, you can infer that it rained.", answer: "figure out using clues", distractors: ["ask for a vote", "paint a picture", "make a mistake", "copy a sentence"], minDifficulty: 10 },
+    { word: "qualify", sentence: "The writer qualified the claim by saying the plan works well in small gardens but not in crowded city parks.", answer: "limit or make more exact", distractors: ["repeat with no change", "make louder", "erase all evidence", "turn into a question"], minDifficulty: 10 },
   ];
 
   const SENTENCE_EDITING = [
+    {
+      sentence: "i can see the moon",
+      answer: "I can see the moon.",
+      distractors: [
+        "i can see the moon.",
+        "I can see the moon",
+        "I can sees the moon.",
+        "I can see moon the.",
+      ],
+      minDifficulty: 1,
+    },
+    {
+      sentence: "she has a blue backpack",
+      answer: "She has a blue backpack.",
+      distractors: [
+        "she has a blue backpack.",
+        "She have a blue backpack.",
+        "She has blue a backpack.",
+        "She has a blue backpack",
+      ],
+      minDifficulty: 1,
+    },
     {
       sentence: "my brother go to soccer practice on tuesdays",
       answer: "My brother goes to soccer practice on Tuesdays.",
@@ -221,6 +260,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
         "My brother goes soccer practice on Tuesdays.",
       ],
       minDifficulty: 2,
+    },
+    {
+      sentence: "we was late because the bus came slowly",
+      answer: "We were late because the bus came slowly.",
+      distractors: [
+        "We was late because the bus came slowly.",
+        "We were late because the bus come slowly.",
+        "we were late because the bus came slowly.",
+        "We were late because slowly the bus.",
+      ],
+      minDifficulty: 3,
     },
     {
       sentence: "the cat slept on the sofa and it was warm",
@@ -234,6 +284,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       minDifficulty: 3,
     },
     {
+      sentence: "dad and i made dinner for aunt rina",
+      answer: "Dad and I made dinner for Aunt Rina.",
+      distractors: [
+        "Dad and me made dinner for Aunt Rina.",
+        "dad and I made dinner for Aunt Rina.",
+        "Dad and I made dinner for aunt rina.",
+        "Dad and I make dinner for Aunt Rina.",
+      ],
+      minDifficulty: 4,
+    },
+    {
       sentence: "noga and gideon was reading in the quiet library",
       answer: "Noga and Gideon were reading in the quiet library.",
       distractors: [
@@ -245,6 +306,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       minDifficulty: 4,
     },
     {
+      sentence: "the students has finished their posters",
+      answer: "The students have finished their posters.",
+      distractors: [
+        "The students has finished their posters.",
+        "The students have finish their posters.",
+        "The students have finished there posters.",
+        "the students have finished their posters.",
+      ],
+      minDifficulty: 5,
+    },
+    {
       sentence: "although it was raining we walked to the bus stop",
       answer: "Although it was raining, we walked to the bus stop.",
       distractors: [
@@ -252,6 +324,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
         "Although, it was raining we walked to the bus stop.",
         "although it was raining, we walked to the bus stop.",
         "Although it was raining we walk to the bus stop.",
+      ],
+      minDifficulty: 6,
+    },
+    {
+      sentence: "the recipe said to add flour sugar and salt",
+      answer: "The recipe said to add flour, sugar, and salt.",
+      distractors: [
+        "The recipe said to add flour sugar, and salt.",
+        "The recipe said, to add flour sugar and salt.",
+        "The recipe said to add, flour sugar and salt.",
+        "the recipe said to add flour, sugar, and salt.",
       ],
       minDifficulty: 6,
     },
@@ -267,6 +350,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       minDifficulty: 7,
     },
     {
+      sentence: "maya wanted to join the club she missed the signup date",
+      answer: "Maya wanted to join the club, but she missed the signup date.",
+      distractors: [
+        "Maya wanted to join the club she missed the signup date.",
+        "Maya wanted to join the club, she missed the signup date.",
+        "Maya wanted to join the club but, she missed the signup date.",
+        "maya wanted to join the club, but she missed the signup date.",
+      ],
+      minDifficulty: 7,
+    },
+    {
       sentence: "after reading the chapter the class discussed the authors purpose",
       answer: "After reading the chapter, the class discussed the author's purpose.",
       distractors: [
@@ -278,6 +372,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       minDifficulty: 8,
     },
     {
+      sentence: "the article explains how bees pollinate flowers it also describes why farmers protect them",
+      answer: "The article explains how bees pollinate flowers, and it also describes why farmers protect them.",
+      distractors: [
+        "The article explains how bees pollinate flowers it also describes why farmers protect them.",
+        "The article explains how bees pollinate flowers, it also describes why farmers protect them.",
+        "The article explain how bees pollinate flowers, and it also describes why farmers protect them.",
+        "the article explains how bees pollinate flowers, and it also describes why farmers protect them.",
+      ],
+      minDifficulty: 9,
+    },
+    {
       sentence: "the teacher asked who brought their notebook",
       answer: "The teacher asked who brought his or her notebook.",
       distractors: [
@@ -285,6 +390,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
         "The teacher asked who bring his or her notebook.",
         "The teacher asked who brought they're notebook.",
         "the teacher asked who brought his or her notebook.",
+      ],
+      minDifficulty: 10,
+    },
+    {
+      sentence: "neither the chart nor the note explains why the results changed",
+      answer: "Neither the chart nor the note explains why the results changed.",
+      distractors: [
+        "Neither the chart nor the note explain why the results changed.",
+        "Neither the chart or the note explains why the results changed.",
+        "Neither the chart nor the note explains why the results changes.",
+        "neither the chart nor the note explains why the results changed.",
       ],
       minDifficulty: 10,
     },
@@ -437,15 +553,15 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
   ];
 
   const GENERATOR_TYPES = {
-    1: ["prefix", "synonym", "antonym", "cloze", "partsOfSpeech"],
-    2: ["prefix", "suffix", "synonym", "antonym", "cloze", "homophone", "editing"],
-    3: ["suffix", "root", "homophone", "context", "cloze", "partsOfSpeech", "punctuation"],
+    1: ["prefix", "synonym", "antonym", "cloze", "context", "partsOfSpeech", "editing"],
+    2: ["prefix", "suffix", "synonym", "antonym", "cloze", "context", "homophone", "editing"],
+    3: ["suffix", "root", "homophone", "context", "cloze", "partsOfSpeech", "punctuation", "editing"],
     4: ["root", "homophone", "context", "editing", "sentenceCombining", "wordChoice", "punctuation"],
     5: ["root", "suffix", "context", "figurative", "homophone", "editing", "partsOfSpeech"],
-    6: ["prefix", "suffix", "root", "context", "figurative", "transition", "pronounReference", "sentenceCombining"],
-    7: ["prefix", "root", "context", "figurative", "transition", "pronounReference", "clause", "wordChoice"],
-    8: ["prefix", "suffix", "root", "homophone", "context", "clause", "pronounReference", "sentenceCombining"],
-    9: ["prefix", "root", "homophone", "context", "transition", "punctuation", "wordChoice", "sentenceCombining"],
+    6: ["prefix", "suffix", "root", "context", "figurative", "transition", "pronounReference", "sentenceCombining", "editing"],
+    7: ["prefix", "root", "context", "figurative", "transition", "pronounReference", "clause", "wordChoice", "editing"],
+    8: ["prefix", "suffix", "root", "homophone", "context", "clause", "pronounReference", "sentenceCombining", "editing"],
+    9: ["prefix", "root", "homophone", "context", "transition", "punctuation", "wordChoice", "sentenceCombining", "editing"],
     10: ["root", "antonym", "context", "clause", "pronounReference", "punctuation", "wordChoice", "editing"],
   };
 

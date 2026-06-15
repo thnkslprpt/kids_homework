@@ -162,6 +162,18 @@ const PROBABILITY_QUESTIONS = [
     ["Orange is more likely", "White is more likely", "Neither can happen"],
     1
   ),
+  probabilityStaticQuestion(
+    "A lunch basket has 6 apples and 2 bananas. Which snack are you more likely to pick without looking?",
+    "Apple",
+    ["Banana", "They are equally likely", "Neither can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 5 equal parts: 4 are blue and 1 is yellow. Which color is less likely?",
+    "Yellow",
+    ["Blue", "They are equally likely", "Neither can happen"],
+    1
+  ),
 
   // Level 2: simple die facts and simple fractions out of a total.
   probabilityStaticQuestion(
@@ -210,6 +222,18 @@ const PROBABILITY_QUESTIONS = [
     "Which number cannot be rolled on a standard 6-sided die?",
     "0",
     ["1", "3", "6"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A deck has 3 star cards and 1 moon card. What is the chance of picking a moon card?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bowl has 2 chocolate cookies and 6 vanilla cookies. Which cookie is more likely to be picked?",
+    "Vanilla",
+    ["Chocolate", "They are equally likely", "Neither can be picked"],
     2
   ),
 
@@ -270,6 +294,18 @@ const PROBABILITY_QUESTIONS = [
     ["5/8", "1/4", "1/8"],
     3
   ),
+  probabilityStaticQuestion(
+    "A standard deck has 4 suits: hearts, diamonds, clubs, and spades. What is the chance of picking a heart if each suit is equally likely?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A game spinner has 3 win spaces and 7 lose spaces. Is winning more likely or less likely than losing?",
+    "Less likely",
+    ["More likely", "Equally likely", "Certain"],
+    3
+  ),
 
   // Level 4: die events, complements, and sample spaces.
   probabilityStaticQuestion(
@@ -318,6 +354,18 @@ const PROBABILITY_QUESTIONS = [
     "A bag has 3 red marbles and 7 blue marbles. What is the chance of not picking red?",
     "7/10",
     ["3/10", "1/2", "1/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from cards 1 through 8. What is the chance of not choosing an even number?",
+    "1/2",
+    ["1/4", "3/4", "1/8"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A normal die is rolled. Which is more likely?",
+    "Rolling a number greater than 2",
+    ["Rolling a 1", "They are equally likely", "Rolling a 7"],
     4
   ),
 
@@ -370,6 +418,18 @@ const PROBABILITY_QUESTIONS = [
     ["1/6", "1/2", "2/3"],
     5
   ),
+  probabilityStaticQuestion(
+    "A fair coin is flipped and then a card is picked from 4 color cards. How many equally likely outcomes are there?",
+    "8",
+    ["4", "6", "10"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A school bus is on time 8 days out of 10. What is the best estimate of the probability it is on time tomorrow?",
+    "80%",
+    ["20%", "50%", "100%"],
+    5
+  ),
 
   // Level 6: complements, probability lines, and changing totals after one draw.
   probabilityStaticQuestion(
@@ -418,6 +478,18 @@ const PROBABILITY_QUESTIONS = [
     "A number card is chosen from 1, 2, 3, 4, 5, and 6. What is the chance of choosing a multiple of 3?",
     "1/3",
     ["1/6", "1/2", "2/3"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A standard deck has 52 cards and 13 are hearts. What is the chance of not picking a heart?",
+    "3/4",
+    ["1/4", "1/2", "13/52"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A bag has 5 green cubes and 3 yellow cubes. One green cube is removed. What is the chance of picking green now?",
+    "4/7",
+    ["5/8", "3/7", "1/2"],
     6
   ),
 
@@ -470,6 +542,18 @@ const PROBABILITY_QUESTIONS = [
     ["7/10", "1/2", "1/5"],
     7
   ),
+  probabilityStaticQuestion(
+    "A card is picked from 4 cards numbered 1 to 4, then a fair coin is flipped. What is the chance of picking 4 and flipping heads?",
+    "1/8",
+    ["1/4", "1/2", "1/6"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner pays 5 points on 1 of its 5 equal sections and 0 points otherwise. What is the expected score per spin?",
+    "1 point",
+    ["0 points", "2 points", "5 points"],
+    7
+  ),
 
   // Level 8: dependent events, simple conditional probability, and at-least-one reasoning.
   probabilityStaticQuestion(
@@ -518,6 +602,18 @@ const PROBABILITY_QUESTIONS = [
     "A fair die is rolled twice. What is the chance of rolling a 1 first and then a 2?",
     "1/36",
     ["1/6", "1/12", "2/6"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 red tokens and 2 blue tokens. You draw 2 tokens without replacement. What is the chance both are blue?",
+    "1/15",
+    ["1/3", "1/6", "2/6"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Two dice are rolled. What is the chance the sum is 2?",
+    "1/36",
+    ["1/6", "1/12", "2/36"],
     8
   ),
 
@@ -570,6 +666,18 @@ const PROBABILITY_QUESTIONS = [
     ["1/4", "1/2", "4/8"],
     9
   ),
+  probabilityStaticQuestion(
+    "A game pays 12 points if a spinner lands on the 1 winning space out of 4 equal spaces, and 0 otherwise. What is the expected score?",
+    "3 points",
+    ["1 point", "4 points", "12 points"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that the sum is at least 10?",
+    "1/6",
+    ["1/12", "1/4", "5/36"],
+    9
+  ),
 
   // Level 10: advanced conditional probability, fairness, and multi-step reasoning.
   probabilityStaticQuestion(
@@ -618,6 +726,18 @@ const PROBABILITY_QUESTIONS = [
     "A survey has 40 students: 24 like math, 18 like science, and 10 like both. How many like math or science?",
     "32",
     ["28", "42", "52"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A game costs 3 points to play. You win 18 points if two fair dice both show 6, and 0 otherwise. What is the expected net result?",
+    "Lose 2.5 points on average",
+    ["Win 15 points on average", "Break even exactly", "Lose 3 points every time"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red, 4 blue, and 5 green tiles. You draw 2 without replacement. What is the chance neither tile is green?",
+    "7/22",
+    ["5/12", "7/12", "35/144"],
     10
   ),
 ];
@@ -882,6 +1002,371 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
     return buildEntry(probabilityRandomChoice(setups));
   }
 
+  function createCardQuestion() {
+    const setups = [
+      {
+        minLevel: 2,
+        build() {
+          const star = probabilityRandomChoice([1, 2, 3]);
+          const moon = probabilityRandomChoice([4, 5, 6]);
+          const answer = moon > star ? "Moon" : "Star";
+          return {
+            question: `A small deck has ${star} star cards and ${moon} moon cards. Which card type is more likely to be picked?`,
+            answer,
+            distractors: ["Star", "Moon", "They are equally likely", "Neither can be picked"].filter((choice) => choice !== answer),
+          };
+        },
+      },
+      {
+        minLevel: 3,
+        build() {
+          const suit = probabilityRandomChoice(["heart", "diamond", "club", "spade"]);
+          return {
+            question: `A card is picked from a standard deck. What is the chance it is a ${suit}?`,
+            answer: "1/4",
+            distractors: ["1/2", "1/13", "13/52"],
+          };
+        },
+      },
+      {
+        minLevel: 5,
+        build() {
+          const cards = probabilityRandomChoice([
+            { event: "an ace", favorable: 4, total: 52 },
+            { event: "a red card", favorable: 26, total: 52 },
+            { event: "a face card", favorable: 12, total: 52 },
+            { event: "a black queen", favorable: 2, total: 52 },
+          ]);
+          return {
+            question: `A card is picked from a standard deck. What is the chance of picking ${cards.event}?`,
+            answer: probabilityFormatFraction(cards.favorable, cards.total),
+            distractors: ["1/2", "1/4", "1/13", "3/13"].filter((choice) => choice !== probabilityFormatFraction(cards.favorable, cards.total)),
+          };
+        },
+      },
+      {
+        minLevel: 8,
+        build() {
+          const red = probabilityRandomChoice([4, 5, 6]);
+          const black = probabilityRandomChoice([4, 5, 6]);
+          const total = red + black;
+          const answer = probabilityFormatFraction(red * (red - 1), total * (total - 1));
+          return {
+            question: `A deck has ${red} red cards and ${black} black cards. You draw 2 cards without replacement. What is the chance both are red?`,
+            answer,
+            distractors: [probabilityFormatFraction(red, total), probabilityFormatFraction(red * black, total * (total - 1)), "1/2"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
+  function createObjectBagQuestion() {
+    const objectSetups = [
+      {
+        minLevel: 1,
+        build() {
+          const apples = probabilityRandomInt(5, 9);
+          const bananas = probabilityRandomInt(1, 3);
+          return {
+            question: `A lunch basket has ${plural(apples, "apple")} and ${plural(bananas, "banana")}. Which snack is more likely to be picked?`,
+            answer: "Apple",
+            distractors: ["Banana", "They are equally likely", "Neither can be picked"],
+          };
+        },
+      },
+      {
+        minLevel: 2,
+        build() {
+          const chocolate = probabilityRandomInt(1, 3);
+          const vanilla = probabilityRandomInt(5, 8);
+          const answer = probabilityFormatFraction(chocolate, chocolate + vanilla);
+          return {
+            question: `A cookie jar has ${plural(chocolate, "chocolate cookie")} and ${plural(vanilla, "vanilla cookie")}. What is the chance of picking a chocolate cookie?`,
+            answer,
+            distractors: [probabilityFormatFraction(vanilla, chocolate + vanilla), "1/2", "1/4"],
+          };
+        },
+      },
+      {
+        minLevel: 4,
+        build() {
+          const green = probabilityRandomInt(2, 5);
+          const yellow = probabilityRandomInt(3, 6);
+          const purple = probabilityRandomInt(1, 4);
+          const total = green + yellow + purple;
+          const answer = probabilityFormatFraction(green + yellow, total);
+          return {
+            question: `A bag has ${green} green cubes, ${yellow} yellow cubes, and ${purple} purple cubes. What is the chance of picking green or yellow?`,
+            answer,
+            distractors: [probabilityFormatFraction(purple, total), probabilityFormatFraction(green, total), probabilityFormatFraction(yellow, total)],
+          };
+        },
+      },
+      {
+        minLevel: 6,
+        build() {
+          const pencils = probabilityRandomInt(4, 7);
+          const erasers = probabilityRandomInt(2, 5);
+          const stickers = probabilityRandomInt(1, 3);
+          const total = pencils + erasers + stickers;
+          const answer = probabilityFormatFraction(total - stickers, total);
+          return {
+            question: `A prize box has ${pencils} pencils, ${erasers} erasers, and ${stickers} stickers. What is the chance of not picking a sticker?`,
+            answer,
+            distractors: [probabilityFormatFraction(stickers, total), probabilityFormatFraction(pencils, total), "1/2"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(objectSetups).build());
+  }
+
+  function createDiceQuestion() {
+    const setups = [
+      {
+        minLevel: 2,
+        build() {
+          const event = probabilityRandomChoice([
+            { text: "rolling an odd number", favorable: 3 },
+            { text: "rolling a number less than 3", favorable: 2 },
+            { text: "rolling a number greater than 4", favorable: 2 },
+            { text: "rolling a 5", favorable: 1 },
+          ]);
+          return {
+            question: `What is the chance of ${event.text} on a standard 6-sided die?`,
+            answer: probabilityFormatFraction(event.favorable, 6),
+            distractors: ["1/6", "1/3", "1/2", "2/3", "5/6"].filter((choice) => choice !== probabilityFormatFraction(event.favorable, 6)),
+          };
+        },
+      },
+      {
+        minLevel: 6,
+        build() {
+          const event = probabilityRandomChoice([
+            { text: "both dice show the same number", favorable: 6 },
+            { text: "the sum is 7", favorable: 6 },
+            { text: "the sum is 2", favorable: 1 },
+            { text: "the sum is at least 10", favorable: 6 },
+          ]);
+          return {
+            question: `Two fair dice are rolled. What is the chance that ${event.text}?`,
+            answer: probabilityFormatFraction(event.favorable, 36),
+            distractors: ["1/36", "1/12", "1/6", "1/4"].filter((choice) => choice !== probabilityFormatFraction(event.favorable, 36)),
+          };
+        },
+      },
+      {
+        minLevel: 9,
+        build() {
+          const first = probabilityRandomChoice([1, 2, 3, 4, 5, 6]);
+          const second = probabilityRandomChoice([1, 2, 3, 4, 5, 6]);
+          return {
+            question: `A fair die is rolled twice. What is the chance of rolling ${first} first and ${second} second?`,
+            answer: "1/36",
+            distractors: ["1/6", "1/12", "2/36"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
+  function createComplementQuestion() {
+    const setups = [
+      {
+        minLevel: 4,
+        build() {
+          const sections = probabilityRandomChoice([6, 8, 10, 12]);
+          const red = probabilityRandomChoice([1, 2, 3, 4]);
+          const safeRed = Math.min(red, sections - 1);
+          return {
+            question: `A spinner has ${sections} equal sections. ${safeRed} sections are red. What is the chance of not landing on red?`,
+            answer: probabilityFormatFraction(sections - safeRed, sections),
+            distractors: [probabilityFormatFraction(safeRed, sections), "1/2", "1/4"],
+          };
+        },
+      },
+      {
+        minLevel: 6,
+        build() {
+          const total = probabilityRandomChoice([8, 10, 12]);
+          const multiples = Math.floor(total / 3);
+          return {
+            question: `A number card is chosen from 1 through ${total}. What is the chance of not choosing a multiple of 3?`,
+            answer: probabilityFormatFraction(total - multiples, total),
+            distractors: [probabilityFormatFraction(multiples, total), "1/2", "1/3"],
+          };
+        },
+      },
+      {
+        minLevel: 8,
+        build() {
+          const chance = probabilityRandomChoice([15, 20, 25, 30, 40]);
+          return {
+            question: `A delivery has a ${chance}% chance of arriving late. What is the chance it does not arrive late?`,
+            answer: `${100 - chance}%`,
+            distractors: [`${chance}%`, "50%", "100%"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
+  function createTwoStepQuestion() {
+    const setups = [
+      {
+        minLevel: 5,
+        build() {
+          const colors = probabilityRandomChoice([3, 4, 5]);
+          return {
+            question: `You flip a fair coin and pick one card from ${colors} color cards. How many equally likely outcomes are there?`,
+            answer: String(2 * colors),
+            distractors: [String(colors), String(colors + 2), String(2 * colors + 2)],
+          };
+        },
+      },
+      {
+        minLevel: 7,
+        build() {
+          const cards = probabilityRandomChoice([4, 5, 6]);
+          return {
+            question: `A card is picked from ${cards} numbered cards, then a fair coin is flipped. What is the chance of picking card 1 and flipping heads?`,
+            answer: probabilityFormatFraction(1, cards * 2),
+            distractors: [probabilityFormatFraction(1, cards), "1/2", probabilityFormatFraction(2, cards)],
+          };
+        },
+      },
+      {
+        minLevel: 8,
+        build() {
+          const red = probabilityRandomChoice([3, 4, 5]);
+          const blue = probabilityRandomChoice([3, 4, 5]);
+          const total = red + blue;
+          return {
+            question: `A bag has ${red} red and ${blue} blue tokens. You draw 2 tokens without replacement. What is the chance both are blue?`,
+            answer: probabilityFormatFraction(blue * (blue - 1), total * (total - 1)),
+            distractors: [probabilityFormatFraction(blue, total), probabilityFormatFraction(red * blue, total * (total - 1)), "1/2"],
+          };
+        },
+      },
+      {
+        minLevel: 9,
+        build() {
+          const firstChance = probabilityRandomChoice([2, 3, 4]);
+          const secondChance = probabilityRandomChoice([3, 4, 5]);
+          return {
+            question: `A game has two independent steps. The chance of passing step 1 is 1/${firstChance}, and the chance of passing step 2 is 1/${secondChance}. What is the chance of passing both steps?`,
+            answer: probabilityFormatFraction(1, firstChance * secondChance),
+            distractors: [probabilityFormatFraction(1, firstChance), probabilityFormatFraction(1, secondChance), probabilityFormatFraction(2, firstChance + secondChance)],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
+  function createExpectedValueQuestion() {
+    const setups = [
+      {
+        minLevel: 6,
+        build() {
+          const denominator = probabilityRandomChoice([4, 5, 6]);
+          const trials = denominator * probabilityRandomChoice([10, 12, 15]);
+          return {
+            question: `A prize spinner wins ${probabilityFormatFraction(1, denominator)} of the time. About how many wins should you expect in ${trials} spins?`,
+            answer: String(trials / denominator),
+            distractors: [String(denominator), String(trials / 2), String(trials - trials / denominator)],
+          };
+        },
+      },
+      {
+        minLevel: 7,
+        build() {
+          const winningSections = probabilityRandomChoice([1, 2, 3]);
+          const totalSections = probabilityRandomChoice([6, 8, 10]);
+          const plays = totalSections * probabilityRandomChoice([5, 8, 10]);
+          return {
+            question: `A spinner has ${winningSections} winning sections out of ${totalSections} equal sections. About how many wins should you expect in ${plays} spins?`,
+            answer: String((plays * winningSections) / totalSections),
+            distractors: [String(winningSections), String(totalSections), String(plays - (plays * winningSections) / totalSections)],
+          };
+        },
+      },
+      {
+        minLevel: 9,
+        build() {
+          const points = probabilityRandomChoice([6, 8, 12]);
+          const winningFaces = probabilityRandomChoice([1, 2, 3]);
+          const expectedPoints = probabilityFormatFraction(points * winningFaces, 6);
+          const answer = `${expectedPoints} ${expectedPoints === "1" ? "point" : "points"}`;
+          return {
+            question: `A game pays ${points} points if a fair die lands on one of ${winningFaces} winning faces and 0 points otherwise. What is the expected score per roll?`,
+            answer,
+            distractors: ["0 points", `${winningFaces} points`, `${points} points`],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
+  function createRealLifeProbabilityQuestion() {
+    const setups = [
+      {
+        minLevel: 2,
+        build() {
+          const made = probabilityRandomChoice([6, 7, 8, 9]);
+          return {
+            question: `A soccer player made ${made} shots out of 10 in practice. What is the best estimate of the chance the next shot goes in?`,
+            answer: `${made * 10}%`,
+            distractors: [`${(10 - made) * 10}%`, "50%", "100%"],
+          };
+        },
+      },
+      {
+        minLevel: 4,
+        build() {
+          const onTime = probabilityRandomChoice([12, 15, 16, 18]);
+          const total = 20;
+          return {
+            question: `A bus was on time ${onTime} days out of ${total}. What is the experimental probability that it is on time?`,
+            answer: probabilityFormatPercent(onTime, total),
+            distractors: [probabilityFormatPercent(total - onTime, total), "50%", "100%"],
+          };
+        },
+      },
+      {
+        minLevel: 6,
+        build() {
+          const volunteers = probabilityRandomChoice([6, 8, 10, 12]);
+          const total = probabilityRandomChoice([20, 24, 30]);
+          const safeVolunteers = Math.min(volunteers, total - 1);
+          return {
+            question: `In a class of ${total} students, ${safeVolunteers} volunteered for cleanup. If one student is chosen at random, what is the chance the student did not volunteer?`,
+            answer: probabilityFormatFraction(total - safeVolunteers, total),
+            distractors: [probabilityFormatFraction(safeVolunteers, total), "1/2", "1/4"],
+          };
+        },
+      },
+      {
+        minLevel: 8,
+        build() {
+          const correct = probabilityRandomChoice([72, 76, 81, 84]);
+          const total = 100;
+          return {
+            question: `A spelling app marked ${correct} out of ${total} answers correct this week. What is the experimental probability of a correct answer?`,
+            answer: `${correct}%`,
+            distractors: [`${total - correct}%`, "50%", "100%"],
+          };
+        },
+      },
+    ].filter((setup) => level >= setup.minLevel);
+    return buildEntry(probabilityRandomChoice(setups).build());
+  }
+
   const generatedTemplates = [
     { minLevel: 1, weight: 3, build: createLikelihoodQuestion },
     { minLevel: 2, weight: 3, build: createWeatherQuestion },
@@ -890,6 +1375,13 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
     { minLevel: 4, weight: 3, build: createBestStrategyQuestion },
     { minLevel: 5, weight: 3, build: createIndependentQuestion },
     { minLevel: 3, weight: 2, build: createNotEnoughInformationQuestion },
+    { minLevel: 2, weight: 3, build: createCardQuestion },
+    { minLevel: 1, weight: 3, build: createObjectBagQuestion },
+    { minLevel: 2, weight: 3, build: createDiceQuestion },
+    { minLevel: 4, weight: 3, build: createComplementQuestion },
+    { minLevel: 5, weight: 3, build: createTwoStepQuestion },
+    { minLevel: 6, weight: 3, build: createExpectedValueQuestion },
+    { minLevel: 2, weight: 3, build: createRealLifeProbabilityQuestion },
   ];
 
   const generators = {

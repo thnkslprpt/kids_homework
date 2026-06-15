@@ -292,6 +292,11 @@ function fraction(numerator, denominator) {
   return `${numerator / divisor}/${denominator / divisor}`;
 }
 
+function percent(numerator, denominator) {
+  const value = (numerator / denominator) * 100;
+  return `${Number.isInteger(value) ? value : value.toFixed(1)}%`;
+}
+
 function validateProbability(entry, meta) {
   const question = { ...entry, questionText: entry.question, answerValue: entry.answer };
   const errors = expectChoiceShape(question, meta);
@@ -346,6 +351,125 @@ function validateProbability(entry, meta) {
     if (entry.answer !== "1/36") errors.push(`${meta}: two sixes should be 1/36`);
   } else if (/do not know|no counts are given|without knowing/.test(text)) {
     if (!/not enough information/i.test(entry.answer)) errors.push(`${meta}: missing-information question should say not enough information`);
+  } else if ((match = text.match(/small deck has (\d+) star cards and (\d+) moon cards/))) {
+    const expected = Number(match[1]) > Number(match[2]) ? "Star" : Number(match[2]) > Number(match[1]) ? "Moon" : "They are equally likely";
+    if (entry.answer !== expected) errors.push(`${meta}: expected card likelihood ${expected}`);
+  } else if ((match = text.match(/standard deck\. What is the chance (?:it is a|of picking) (.+)\?/))) {
+    const event = match[1];
+    const favorableByEvent = {
+      "a heart": 13,
+      "a diamond": 13,
+      "a club": 13,
+      "a spade": 13,
+      heart: 13,
+      diamond: 13,
+      club: 13,
+      spade: 13,
+      "an ace": 4,
+      "a red card": 26,
+      "a face card": 12,
+      "a black queen": 2,
+    };
+    const expected = fraction(favorableByEvent[event], 52);
+    if (entry.answer !== expected) errors.push(`${meta}: expected standard-deck probability ${expected}`);
+  } else if ((match = text.match(/deck has (\d+) red cards and (\d+) black cards\. You draw 2 cards without replacement\. What is the chance both are red/))) {
+    const red = Number(match[1]);
+    const black = Number(match[2]);
+    const total = red + black;
+    const expected = fraction(red * (red - 1), total * (total - 1));
+    if (entry.answer !== expected) errors.push(`${meta}: expected two-red card probability ${expected}`);
+  } else if ((match = text.match(/lunch basket has (\d+) apples? and (\d+) bananas?\. Which snack is more likely/))) {
+    const expected = Number(match[1]) > Number(match[2]) ? "Apple" : "Banana";
+    if (entry.answer !== expected) errors.push(`${meta}: expected more likely snack ${expected}`);
+  } else if ((match = text.match(/cookie jar has (\d+) chocolate cookies? and (\d+) vanilla cookies?\. What is the chance of picking a chocolate cookie/))) {
+    const chocolate = Number(match[1]);
+    const vanilla = Number(match[2]);
+    const expected = fraction(chocolate, chocolate + vanilla);
+    if (entry.answer !== expected) errors.push(`${meta}: expected chocolate-cookie probability ${expected}`);
+  } else if ((match = text.match(/bag has (\d+) green cubes, (\d+) yellow cubes, and (\d+) purple cubes\. What is the chance of picking green or yellow/))) {
+    const green = Number(match[1]);
+    const yellow = Number(match[2]);
+    const purple = Number(match[3]);
+    const expected = fraction(green + yellow, green + yellow + purple);
+    if (entry.answer !== expected) errors.push(`${meta}: expected green-or-yellow probability ${expected}`);
+  } else if ((match = text.match(/prize box has (\d+) pencils, (\d+) erasers, and (\d+) stickers\. What is the chance of not picking a sticker/))) {
+    const pencils = Number(match[1]);
+    const erasers = Number(match[2]);
+    const stickers = Number(match[3]);
+    const expected = fraction(pencils + erasers, pencils + erasers + stickers);
+    if (entry.answer !== expected) errors.push(`${meta}: expected not-sticker probability ${expected}`);
+  } else if ((match = text.match(/chance of (rolling .+) on a standard 6-sided die/))) {
+    const favorableByEvent = {
+      "rolling an odd number": 3,
+      "rolling a number less than 3": 2,
+      "rolling a number greater than 4": 2,
+      "rolling a 5": 1,
+    };
+    const expected = fraction(favorableByEvent[match[1]], 6);
+    if (entry.answer !== expected) errors.push(`${meta}: expected die probability ${expected}`);
+  } else if ((match = text.match(/Two fair dice are rolled\. What is the chance that (.+)\?/))) {
+    const favorableByEvent = {
+      "both dice show the same number": 6,
+      "the sum is 7": 6,
+      "the sum is 2": 1,
+      "the sum is at least 10": 6,
+    };
+    const expected = fraction(favorableByEvent[match[1]], 36);
+    if (entry.answer !== expected) errors.push(`${meta}: expected two-dice probability ${expected}`);
+  } else if ((match = text.match(/A fair die is rolled twice\. What is the chance of rolling \d first and \d second/))) {
+    if (entry.answer !== "1/36") errors.push(`${meta}: ordered two-roll outcome should be 1/36`);
+  } else if ((match = text.match(/spinner has (\d+) equal sections\. (\d+) sections are red\. What is the chance of not landing on red/))) {
+    const total = Number(match[1]);
+    const red = Number(match[2]);
+    const expected = fraction(total - red, total);
+    if (entry.answer !== expected) errors.push(`${meta}: expected not-red spinner probability ${expected}`);
+  } else if ((match = text.match(/number card is chosen from 1 through (\d+)\. What is the chance of not choosing a multiple of 3/))) {
+    const total = Number(match[1]);
+    const multiples = Math.floor(total / 3);
+    const expected = fraction(total - multiples, total);
+    if (entry.answer !== expected) errors.push(`${meta}: expected not-multiple-of-3 probability ${expected}`);
+  } else if ((match = text.match(/delivery has a (\d+)% chance of arriving late\. What is the chance it does not arrive late/))) {
+    const expected = `${100 - Number(match[1])}%`;
+    if (entry.answer !== expected) errors.push(`${meta}: expected delivery complement ${expected}`);
+  } else if ((match = text.match(/flip a fair coin and pick one card from (\d+) color cards\. How many equally likely outcomes/))) {
+    const expected = String(Number(match[1]) * 2);
+    if (entry.answer !== expected) errors.push(`${meta}: expected coin-card outcomes ${expected}`);
+  } else if ((match = text.match(/card is picked from (\d+) numbered cards, then a fair coin is flipped\. What is the chance of picking card 1 and flipping heads/))) {
+    const expected = fraction(1, Number(match[1]) * 2);
+    if (entry.answer !== expected) errors.push(`${meta}: expected card-and-coin probability ${expected}`);
+  } else if ((match = text.match(/bag has (\d+) red and (\d+) blue tokens\. You draw 2 tokens without replacement\. What is the chance both are blue/))) {
+    const red = Number(match[1]);
+    const blue = Number(match[2]);
+    const total = red + blue;
+    const expected = fraction(blue * (blue - 1), total * (total - 1));
+    if (entry.answer !== expected) errors.push(`${meta}: expected two-blue token probability ${expected}`);
+  } else if ((match = text.match(/chance of passing step 1 is 1\/(\d+), and the chance of passing step 2 is 1\/(\d+)\. What is the chance of passing both steps/))) {
+    const expected = fraction(1, Number(match[1]) * Number(match[2]));
+    if (entry.answer !== expected) errors.push(`${meta}: expected independent two-step probability ${expected}`);
+  } else if ((match = text.match(/prize spinner wins (?:1\/(\d+)) of the time\. About how many wins should you expect in (\d+) spins/))) {
+    const expected = String(Number(match[2]) / Number(match[1]));
+    if (entry.answer !== expected) errors.push(`${meta}: expected prize-spinner wins ${expected}`);
+  } else if ((match = text.match(/spinner has (\d+) winning sections out of (\d+) equal sections\. About how many wins should you expect in (\d+) spins/))) {
+    const expected = String((Number(match[3]) * Number(match[1])) / Number(match[2]));
+    if (entry.answer !== expected) errors.push(`${meta}: expected spinner wins ${expected}`);
+  } else if ((match = text.match(/game pays (\d+) points if a fair die lands on one of (\d+) winning faces and 0 points otherwise\. What is the expected score per roll/))) {
+    const expectedValue = fraction(Number(match[1]) * Number(match[2]), 6);
+    const expected = `${expectedValue} ${expectedValue === "1" ? "point" : "points"}`;
+    if (entry.answer !== expected) errors.push(`${meta}: expected die-game value ${expected}`);
+  } else if ((match = text.match(/soccer player made (\d+) shots out of 10/))) {
+    const expected = `${Number(match[1]) * 10}%`;
+    if (entry.answer !== expected) errors.push(`${meta}: expected shot estimate ${expected}`);
+  } else if ((match = text.match(/bus was on time (\d+) days out of (\d+)\. What is the experimental probability/))) {
+    const expected = percent(Number(match[1]), Number(match[2]));
+    if (entry.answer !== expected) errors.push(`${meta}: expected bus experimental probability ${expected}`);
+  } else if ((match = text.match(/class of (\d+) students, (\d+) volunteered for cleanup\. If one student is chosen at random, what is the chance the student did not volunteer/))) {
+    const total = Number(match[1]);
+    const volunteered = Number(match[2]);
+    const expected = fraction(total - volunteered, total);
+    if (entry.answer !== expected) errors.push(`${meta}: expected cleanup complement ${expected}`);
+  } else if ((match = text.match(/spelling app marked (\d+) out of (\d+) answers correct this week/))) {
+    const expected = percent(Number(match[1]), Number(match[2]));
+    if (entry.answer !== expected) errors.push(`${meta}: expected spelling experimental probability ${expected}`);
   } else {
     errors.push(`${meta}: unrecognized probability template: ${text}`);
   }

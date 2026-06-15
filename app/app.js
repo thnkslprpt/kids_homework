@@ -1018,6 +1018,146 @@ const CHART_TABLE_TEMPLATES = [
     },
     summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "meter")}`,
   },
+  {
+    title: "Reading Minutes",
+    leftLabel: "Day",
+    rightLabel: "Minutes",
+    labels: ["Mon", "Tue", "Wed", "Thu"],
+    prompts: {
+      most: () => "Which day had the most reading minutes?",
+      secondMost: () => "Which day had the second most reading minutes?",
+      fewest: () => "Which day had the fewest reading minutes?",
+      exact: (label) => `How many minutes were spent reading on ${label}?`,
+      total: () => "How many reading minutes were there altogether?",
+      combined: (left, right) =>
+        `How many reading minutes were there on ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more reading minutes were there on ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "minute")} reading`,
+  },
+  {
+    title: "Weather Over Days",
+    leftLabel: "Day",
+    rightLabel: "Degrees",
+    labels: ["Mon", "Tue", "Wed", "Thu"],
+    prompts: {
+      most: () => "Which day was warmest?",
+      secondMost: () => "Which day was second warmest?",
+      fewest: () => "Which day was coolest?",
+      exact: (label) => `What was the temperature on ${label}?`,
+      total: () => "What is the total of the four temperatures?",
+      combined: (left, right) => `What is the total temperature for ${left} and ${right}?`,
+      difference: (larger, smaller) =>
+        `How many degrees warmer was ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "degree")}`,
+  },
+  {
+    title: "Savings Tracker",
+    leftLabel: "Week",
+    rightLabel: "Shekels",
+    labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+    prompts: {
+      most: () => "Which week had the most savings?",
+      secondMost: () => "Which week had the second most savings?",
+      fewest: () => "Which week had the fewest savings?",
+      exact: (label) => `How many shekels were saved in ${label}?`,
+      total: () => "How many shekels were saved altogether?",
+      combined: (left, right) => `How many shekels were saved in ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more shekels were saved in ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "shekel")}`,
+  },
+  {
+    title: "Screen Time",
+    leftLabel: "Day",
+    rightLabel: "Minutes",
+    labels: ["Mon", "Tue", "Wed", "Thu"],
+    prompts: {
+      most: () => "Which day had the most screen time?",
+      secondMost: () => "Which day had the second most screen time?",
+      fewest: () => "Which day had the least screen time?",
+      exact: (label) => `How many minutes of screen time were there on ${label}?`,
+      total: () => "How many screen-time minutes were there altogether?",
+      combined: (left, right) =>
+        `How many screen-time minutes were there on ${left} and ${right} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more screen-time minutes were there on ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "minute")} screen time`,
+  },
+  {
+    title: "Science Experiment Trials",
+    leftLabel: "Trial",
+    rightLabel: "Cm",
+    labels: ["Trial 1", "Trial 2", "Trial 3", "Trial 4"],
+    prompts: {
+      most: () => "Which trial had the longest distance?",
+      secondMost: () => "Which trial had the second longest distance?",
+      fewest: () => "Which trial had the shortest distance?",
+      exact: (label) => `How many centimeters did the object move in ${label}?`,
+      total: () => "What is the total distance across all trials?",
+      combined: (left, right) => `What is the total distance for ${left} and ${right}?`,
+      difference: (larger, smaller) =>
+        `How many centimeters farther was ${larger} than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "centimeter")}`,
+  },
+  {
+    title: "School Votes",
+    leftLabel: "Choice",
+    rightLabel: "Votes",
+    labels: ["Art Day", "Sports Day", "Movie", "Science Fair"],
+    prompts: {
+      most: () => "Which choice got the most votes?",
+      secondMost: () => "Which choice got the second most votes?",
+      fewest: () => "Which choice got the fewest votes?",
+      exact: (label) => `How many votes did ${label} get?`,
+      total: () => "How many votes were there altogether?",
+      combined: (left, right) => `How many votes did ${left} and ${right} get altogether?`,
+      difference: (larger, smaller) =>
+        `How many more votes did ${larger} get than ${smaller}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "vote")}`,
+  },
+  {
+    title: "Bus Schedule Waits",
+    leftLabel: "Bus",
+    rightLabel: "Minutes late",
+    labels: ["7:30", "7:45", "8:00", "8:15"],
+    prompts: {
+      most: () => "Which bus was latest?",
+      secondMost: () => "Which bus was second latest?",
+      fewest: () => "Which bus was closest to on time?",
+      exact: (label) => `How many minutes late was the ${label} bus?`,
+      total: () => "How many late minutes were there altogether?",
+      combined: (left, right) =>
+        `How many late minutes were there for the ${left} and ${right} buses altogether?`,
+      difference: (larger, smaller) =>
+        `How many more minutes late was the ${larger} bus than the ${smaller} bus?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "minute")} late`,
+  },
+  {
+    title: "Sports Practice",
+    leftLabel: "Activity",
+    rightLabel: "Minutes",
+    labels: ["Running", "Passing", "Shooting", "Stretching"],
+    prompts: {
+      most: () => "Which activity took the most practice time?",
+      secondMost: () => "Which activity took the second most practice time?",
+      fewest: () => "Which activity took the least practice time?",
+      exact: (label) => `How many minutes were spent on ${label.toLowerCase()}?`,
+      total: () => "How many sports-practice minutes were there altogether?",
+      combined: (left, right) =>
+        `How many minutes were spent on ${left.toLowerCase()} and ${right.toLowerCase()} altogether?`,
+      difference: (larger, smaller) =>
+        `How many more minutes were spent on ${larger.toLowerCase()} than ${smaller.toLowerCase()}?`,
+    },
+    summaryItem: (item) => `${item.label}: ${formatUnitCount(item.value, "minute")}`,
+  },
 ];
 
 const HEBREW_NIKKUD_OVERRIDES = {

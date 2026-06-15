@@ -111,30 +111,194 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     renderLineGraph,
     renderPieTable,
     renderTable,
+    shuffle,
   } = questionUtils;
 
+  const DAILY_DATA_CONTEXTS = [
+    {
+      title: "Chore minutes",
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      unit: "minutes",
+      low: 8,
+      high: 34,
+      trendQuestion: "What trend do the chore minutes show?",
+    },
+    {
+      title: "Reading minutes",
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      unit: "minutes",
+      low: 12,
+      high: 48,
+      trendQuestion: "What trend do the reading minutes show?",
+    },
+    {
+      title: "Basketball shots made",
+      labels: ["Game 1", "Game 2", "Game 3", "Game 4", "Game 5"],
+      unit: "shots",
+      low: 4,
+      high: 22,
+      trendQuestion: "What trend do the shots made show?",
+    },
+    {
+      title: "Weather over days",
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      unit: "degrees",
+      low: 12,
+      high: 31,
+      trendQuestion: "What trend do the temperatures show?",
+    },
+    {
+      title: "Savings",
+      labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
+      unit: "shekels",
+      low: 5,
+      high: 75,
+      trendQuestion: "What trend do the savings show?",
+    },
+    {
+      title: "Screen time",
+      labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+      unit: "minutes",
+      low: 15,
+      high: 95,
+      trendQuestion: "What trend do the screen time data show?",
+    },
+    {
+      title: "Bean plant science experiment",
+      labels: ["Day 1", "Day 3", "Day 5", "Day 7", "Day 9"],
+      unit: "cm",
+      low: 2,
+      high: 24,
+      trendQuestion: "What trend do the plant heights show?",
+    },
+    {
+      title: "School vote results",
+      labels: ["Art", "Sports", "Music", "Games", "Science"],
+      unit: "votes",
+      low: 8,
+      high: 44,
+      trendQuestion: "Which statement describes the vote counts?",
+    },
+    {
+      title: "Bus wait times",
+      labels: ["Stop A", "Stop B", "Stop C", "Stop D", "Stop E"],
+      unit: "minutes",
+      low: 3,
+      high: 24,
+      trendQuestion: "Which statement describes the bus wait times?",
+    },
+  ];
+
+  const TWO_CHART_CONTEXTS = [
+    {
+      title: "Reading minutes: two weeks",
+      labels: ["Mon", "Tue", "Wed", "Thu"],
+      leftName: "Week 1",
+      rightName: "Week 2",
+      unit: "minutes",
+      low: 12,
+      high: 42,
+    },
+    {
+      title: "Chore minutes: two kids",
+      labels: ["Dishes", "Laundry", "Trash", "Sweep"],
+      leftName: "Noga",
+      rightName: "Gideon",
+      unit: "minutes",
+      low: 5,
+      high: 30,
+    },
+    {
+      title: "Soccer practice: two teams",
+      labels: ["Passing", "Dribbling", "Shooting", "Defense"],
+      leftName: "Blue",
+      rightName: "Green",
+      unit: "minutes",
+      low: 8,
+      high: 36,
+    },
+    {
+      title: "Screen time: school days and weekend",
+      labels: ["Games", "Videos", "Reading", "Messages"],
+      leftName: "School days",
+      rightName: "Weekend",
+      unit: "minutes",
+      low: 10,
+      high: 70,
+    },
+    {
+      title: "Bus schedule riders",
+      labels: ["7:30", "7:45", "8:00", "8:15"],
+      leftName: "Route A",
+      rightName: "Route B",
+      unit: "riders",
+      low: 6,
+      high: 34,
+    },
+  ];
+
+  function makeSeries(context, difficulty, pattern = "mixed") {
+    const spread = Math.max(5, Math.min(context.high - context.low, difficulty * 4 + 8));
+    const start = randomInt(context.low, Math.max(context.low, context.high - spread));
+    let current = start;
+    return context.labels.map((label, index) => {
+      if (pattern === "up") {
+        current = index === 0 ? start : current + randomInt(2, 7);
+      } else if (pattern === "down") {
+        current = index === 0 ? start + spread : current - randomInt(2, 7);
+      } else {
+        current = randomInt(context.low, context.high);
+      }
+      return { label, value: Math.max(1, current) };
+    });
+  }
+
+  function makeOutlierSeries(context, difficulty) {
+    const center = randomInt(context.low + 3, Math.min(context.high - 3, context.low + 16));
+    const values = context.labels.map((label) => ({ label, value: center + randomInt(-2, 2) }));
+    const outlierIndex = randomInt(0, values.length - 1);
+    const direction = Math.random() < 0.75 ? 1 : -1;
+    values[outlierIndex].value = Math.max(1, center + direction * randomInt(12 + difficulty, 20 + difficulty * 3));
+    return values;
+  }
+
+  function valuesSummary(values, unit = "") {
+    return values.map((point) => `${point.label}: ${point.value}${unit ? ` ${unit}` : ""}`).join(", ");
+  }
+
+  function mean(values) {
+    const total = values.reduce((sum, value) => sum + value, 0);
+    return total / values.length;
+  }
+
+  function median(values) {
+    const sorted = [...values].sort((left, right) => left - right);
+    const middle = Math.floor(sorted.length / 2);
+    return sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2;
+  }
+
+  function formatNumber(value) {
+    return Number.isInteger(value) ? String(value) : String(Math.round(value * 10) / 10);
+  }
+
+  function labelOptions(labels, answer) {
+    return shuffle([answer, ...shuffle(labels.filter((label) => label !== answer)).slice(0, 3)]);
+  }
+
   function createLineGraphQuestion(difficulty) {
-    const context = randomChoice([
-      { title: "Practice minutes", labels: ["Mon", "Tue", "Wed", "Thu"], unit: "minutes" },
-      { title: "Books read", labels: ["Week 1", "Week 2", "Week 3", "Week 4"], unit: "books" },
-      { title: "Plant height", labels: ["Day 1", "Day 3", "Day 5", "Day 7"], unit: "cm" },
-    ]);
-    const start = randomInt(3, 10);
-    const values = context.labels.map((label, index) => ({
-      label,
-      value: start + randomInt(index, index * 5 + 8),
-    }));
+    const context = randomChoice(DAILY_DATA_CONTEXTS);
+    const values = makeSeries(context, difficulty, difficulty <= 3 ? "up" : "mixed");
     const askChange = difficulty >= 4 && Math.random() < 0.45;
     const first = values[0];
     const last = values[values.length - 1];
     if (askChange) {
-      const answer = last.value - first.value;
+      const answer = Math.abs(last.value - first.value);
       return entry({
         topic: "data-line-graphs",
         difficulty,
-        question: `How much did the value increase from first to last?`,
+        question: `What is the difference between the first and last values?`,
         visualHtml: renderLineGraph(context.title, values),
-        visualSummary: values.map((point) => `${point.label}: ${point.value}`).join(", "),
+        visualSummary: valuesSummary(values, context.unit),
         answer,
         options: numberOptions(answer, [-4, -2, -1, 1, 2, 4], 0),
       });
@@ -145,9 +309,9 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       difficulty,
       question: `Which label has the highest value?`,
       visualHtml: renderLineGraph(context.title, values),
-      visualSummary: values.map((point) => `${point.label}: ${point.value} ${context.unit}`).join(", "),
+      visualSummary: valuesSummary(values, context.unit),
       answer,
-      options: values.map((point) => point.label),
+      options: labelOptions(values.map((point) => point.label), answer),
     });
   }
 
@@ -330,6 +494,140 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     });
   }
 
+  function createTrendQuestion(difficulty) {
+    const context = randomChoice(DAILY_DATA_CONTEXTS);
+    const pattern = randomChoice(["up", "down", "mixed"]);
+    const values = makeSeries(context, difficulty, pattern);
+    const answer =
+      pattern === "up"
+        ? "The values mostly increase"
+        : pattern === "down"
+          ? "The values mostly decrease"
+          : "The values go up and down";
+    return entry({
+      topic: "data-trends",
+      difficulty,
+      question: context.trendQuestion,
+      visualHtml: renderLineGraph(context.title, values),
+      visualSummary: valuesSummary(values, context.unit),
+      answer,
+      options: [
+        answer,
+        "The values stay exactly the same",
+        pattern === "up" ? "The values mostly decrease" : "The values mostly increase",
+        "The graph has no data points",
+      ],
+    });
+  }
+  createTrendQuestion.minLevel = 3;
+
+  function createOutlierQuestion(difficulty) {
+    const context = randomChoice(DAILY_DATA_CONTEXTS);
+    const values = makeOutlierSeries(context, difficulty);
+    const sorted = [...values].sort((left, right) => left.value - right.value);
+    const lowGap = sorted[1].value - sorted[0].value;
+    const highGap = sorted[sorted.length - 1].value - sorted[sorted.length - 2].value;
+    const outlier = highGap >= lowGap ? sorted[sorted.length - 1] : sorted[0];
+    return entry({
+      topic: "data-outliers",
+      difficulty,
+      question: "Which data point is the outlier?",
+      visualHtml: renderTable(context.title, [["Label", context.unit], ...values.map((point) => [point.label, point.value])]),
+      visualSummary: valuesSummary(values, context.unit),
+      answer: outlier.label,
+      options: labelOptions(values.map((point) => point.label), outlier.label),
+    });
+  }
+  createOutlierQuestion.minLevel = 5;
+
+  function createMeanMedianQuestion(difficulty) {
+    const context = randomChoice(DAILY_DATA_CONTEXTS.filter((item) => item.labels.length >= 5));
+    const values = makeSeries(context, difficulty, "mixed").slice(0, 5);
+    const numericValues = values.map((point) => point.value);
+    const askMedian = difficulty >= 6 && Math.random() < 0.5;
+    const answerValue = askMedian ? median(numericValues) : mean(numericValues);
+    const answer = formatNumber(answerValue);
+    return entry({
+      topic: "data-mean-median",
+      difficulty,
+      question: askMedian ? "What is the median value?" : "What is the mean value?",
+      visualHtml: renderTable(context.title, [["Label", context.unit], ...values.map((point) => [point.label, point.value])]),
+      visualSummary: valuesSummary(values, context.unit),
+      answer,
+      options: numberOptions(answerValue, [-4, -2, -1, 1, 2, 4], 0).map(formatNumber),
+    });
+  }
+  createMeanMedianQuestion.minLevel = 4;
+
+  function createCompareTwoChartsQuestion(difficulty) {
+    const context = randomChoice(TWO_CHART_CONTEXTS);
+    const leftValues = makeSeries(context, difficulty, "mixed").slice(0, 4);
+    const deltas = shuffle([-6, -2, 3, 7]);
+    const rightValues = leftValues.map((point, index) => ({
+      label: point.label,
+      value: Math.max(1, point.value + deltas[index]),
+    }));
+    const rows = leftValues.map((point, index) => [
+      point.label,
+      point.value,
+      rightValues[index].value,
+    ]);
+    const differences = rows.map((row) => ({
+      label: row[0],
+      change: row[2] - row[1],
+    }));
+    const answer = [...differences].sort((left, right) => right.change - left.change)[0].label;
+    return entry({
+      topic: "data-compare-two-charts",
+      difficulty,
+      question: `Compare the two charts. Which category increased the most from ${context.leftName} to ${context.rightName}?`,
+      visualHtml: renderTable(context.title, [["Category", context.leftName, context.rightName], ...rows]),
+      visualSummary: rows.map((row) => `${row[0]}: ${context.leftName} ${row[1]}, ${context.rightName} ${row[2]}`).join(", "),
+      answer,
+      options: rows.map((row) => row[0]),
+    });
+  }
+  createCompareTwoChartsQuestion.minLevel = 5;
+
+  function createMisleadingAxisQuestion(difficulty) {
+    const examples = [
+      {
+        title: "School vote results",
+        rows: [["Choice", "Votes"], ["Movie", 48], ["Game day", 50]],
+        displayText: "The bar graph starts its vote axis at 45 instead of 0.",
+        answer: "The small difference can look much larger than it is",
+      },
+      {
+        title: "Weather over days",
+        rows: [["Day", "Degrees"], ["Monday", 68], ["Tuesday", 70]],
+        displayText: "The temperature graph zooms in from 67 to 71 degrees.",
+        answer: "The zoomed axis can exaggerate a small change",
+      },
+      {
+        title: "Bus schedule riders",
+        rows: [["Route", "Riders"], ["Route A", 92], ["Route B", 96]],
+        displayText: "The rider chart labels only 90 to 100 on its axis.",
+        answer: "The truncated axis makes the bars look very different",
+      },
+    ];
+    const picked = randomChoice(examples);
+    return entry({
+      topic: "data-misleading-axis",
+      difficulty,
+      question: "What should a careful reader notice about the axis?",
+      displayText: picked.displayText,
+      visualHtml: renderTable(picked.title, picked.rows),
+      answer: picked.answer,
+      options: [
+        picked.answer,
+        "The data must be fake because it uses numbers",
+        "The title should be ignored",
+        "The graph proves one choice is twice as large",
+      ],
+    });
+  }
+  createMisleadingAxisQuestion.minLevel = 6;
+
   const dataGenerators = [
     createLineGraphQuestion,
     createPieChartQuestion,
@@ -338,8 +636,21 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     createMisleadingGraphQuestion,
     createSamplingBiasQuestion,
     createOutlierAverageQuestion,
+    createTrendQuestion,
+    createOutlierQuestion,
+    createMeanMedianQuestion,
+    createCompareTwoChartsQuestion,
+    createMisleadingAxisQuestion,
   ];
 
   globalThis.createChartsAndGraphsGeneratedEntry = (difficulty) =>
     pickGeneratedEntry(dataGenerators, difficulty);
+  globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE = {
+    line: createLineGraphQuestion,
+    trend: createTrendQuestion,
+    outlier: createOutlierQuestion,
+    meanMedian: createMeanMedianQuestion,
+    compareTwoCharts: createCompareTwoChartsQuestion,
+    misleadingAxis: createMisleadingAxisQuestion,
+  };
 })();
