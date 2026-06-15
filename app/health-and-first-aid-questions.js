@@ -17,7 +17,7 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 1,
   },
   {
-    question: "If there is a serious medical emergency and no adult is available, what number should you call in Israel?",
+    question: "For a serious medical emergency in Israel, tell a trusted adult if possible and call which ambulance number?",
     options: ["100", "101", "102", "106"],
     answer: "101",
     difficulty: 2,

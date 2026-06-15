@@ -117,7 +117,7 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("What is the last day of April?", "April 30", ["April 28", "April 29", "April 30", "April 31"], 7),
   calendarStatic("Which months are in the first quarter of the year?", "January, February, March", ["January, February, March", "April, May, June", "July, August, September", "October, November, December"], 7),
   calendarStatic("If practice happens twice a month for 6 months, how many practices is that?", "12 practices", ["6 practices", "8 practices", "12 practices", "18 practices"], 7),
-  calendarStatic("An event happens every 10 days starting June 1. What is the third event date?", "June 21", ["June 11", "June 20", "June 21", "July 1"], 7),
+  calendarStatic("An event happens every 10 days. Counting June 1 as the first event, what is the third event date?", "June 21", ["June 11", "June 20", "June 21", "July 1"], 7),
   calendarStatic("How many days are in 13 weeks?", "91 days", ["84 days", "90 days", "91 days", "98 days"], 7),
   calendarStatic("If a reminder repeats every 3 weeks, how many days are between reminders?", "21 days", ["14 days", "21 days", "28 days", "30 days"], 7),
   calendarStatic("A subscription renews every month, not every 4 weeks. What is true?", "The renewal date usually stays on the same day number", ["It always renews every 28 days", "The renewal date usually stays on the same day number", "It renews every 13 days", "It skips all short months"], 7),

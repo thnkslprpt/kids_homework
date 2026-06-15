@@ -236,7 +236,7 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
   // Level 6: unlike denominators, scale drawings, equivalent equations, and percent of a quantity.
   fractionsAndRatiosQuestion("What is 5/6 - 1/4?", ["7/12", "2/3", "3/4", "1/2"], "7/12", 6),
   fractionsAndRatiosQuestion("What is 1/3 + 1/4?", ["1/7", "2/7", "7/12", "2/3"], "7/12", 6),
-  fractionsAndRatiosQuestion("What number makes 2/3 = __/12?", ["6", "8", "9", "10"], "8", 6),
+  fractionsAndRatiosQuestion("What number goes in the blank? 2/3 = __/12", ["6", "8", "9", "10"], "8", 6),
   fractionsAndRatiosQuestion("A drawing uses a scale of 2 cm to 5 m. If a wall is 12 cm on the drawing, how long is the real wall?", ["20 m", "25 m", "30 m", "35 m"], "30 m", 6),
   fractionsAndRatiosQuestion("A fruit mix has apples and pears in a 3:4 ratio. If there are 56 pieces of fruit, how many are apples?", ["21", "24", "28", "32"], "24", 6),
   fractionsAndRatiosQuestion("A pack of 3 notebooks costs 24 shekels. What is the unit price per notebook?", ["6 shekels", "8 shekels", "9 shekels", "12 shekels"], "8 shekels", 6),
@@ -270,8 +270,8 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
   fractionsAndRatiosQuestion("A map scale says 1 cm represents 2.5 km. How far is 8.4 cm on the map?", ["18 km", "20 km", "21 km", "24 km"], "21 km", 8),
   fractionsAndRatiosQuestion("What is 2 1/4 + 1 2/3?", ["3 1/6", "3 5/12", "3 11/12", "4 1/12"], "3 11/12", 8),
   fractionsAndRatiosQuestion("What is 40% of 3/4?", ["3/10", "1/3", "2/5", "3/5"], "3/10", 8),
-  fractionsAndRatiosQuestion("A price of 80 shekels increases by 25%. What is the new price?", ["90 shekels", "96 shekels", "100 shekels", "105 shekels"], "100 shekels", 8),
-  fractionsAndRatiosQuestion("A runner goes 4.5 km in 0.75 hour. What is the unit rate?", ["4 km per hour", "5 km per hour", "6 km per hour", "7.5 km per hour"], "6 km per hour", 8),
+  fractionsAndRatiosQuestion("The price starts at 80 shekels and increases by 25%. What is the new price?", ["90 shekels", "96 shekels", "100 shekels", "105 shekels"], "100 shekels", 8),
+  fractionsAndRatiosQuestion("A runner goes 4.5 km in 0.75 hour. How many kilometers per 1 hour?", ["4 km per hour", "5 km per hour", "6 km per hour", "7.5 km per hour"], "6 km per hour", 8),
   fractionsAndRatiosQuestion("Orange paint uses red and yellow in a 2:5 ratio. If there are 28 cups total, how many cups are yellow?", ["8", "14", "18", "20"], "20", 8),
   fractionsAndRatiosQuestion("What is 5/8 divided by 5?", ["1/8", "1/5", "5/13", "25/8"], "1/8", 8),
   fractionsAndRatiosQuestion("Which fraction is equal to 37.5%?", ["1/4", "3/8", "1/2", "5/8"], "3/8", 8),
@@ -281,7 +281,7 @@ const FRACTIONS_AND_RATIOS_QUESTIONS = [
   fractionsAndRatiosQuestion("The ratio of boys to girls is 5:7. There are 8 more girls than boys. How many children are there altogether?", ["36", "42", "48", "56"], "48", 9),
   fractionsAndRatiosQuestion("A 200-shekel item is discounted by 15%. What is the sale price?", ["160 shekels", "170 shekels", "185 shekels", "215 shekels"], "170 shekels", 9),
   fractionsAndRatiosQuestion("What is 3/4 divided by 1/8?", ["3", "4", "6", "8"], "6", 9),
-  fractionsAndRatiosQuestion("What number makes x/18 = 5/6?", ["12", "15", "18", "24"], "15", 9),
+  fractionsAndRatiosQuestion("What number goes in the blank? __/18 = 5/6", ["12", "15", "18", "24"], "15", 9),
   fractionsAndRatiosQuestion("If A:B is 2:3 and B:C is 4:5, what is A:C?", ["2:5", "3:5", "8:15", "10:12"], "8:15", 9),
   fractionsAndRatiosQuestion("A recipe uses 2/3 cup of flour for 4 muffins. How much flour is needed for 30 muffins?", ["3 cups", "4 cups", "5 cups", "6 cups"], "5 cups", 9),
   fractionsAndRatiosQuestion("A map scale is 1:25,000. If two points are 3.2 cm apart on the map, how far apart are they in real life?", ["80 meters", "320 meters", "800 meters", "8,000 meters"], "800 meters", 9),
@@ -599,7 +599,7 @@ function fractionsAndRatiosCreateMissingEquivalentFractionEntry(difficulty) {
   const answer = (pick.denominator / denominator) * numerator;
 
   return fractionsAndRatiosQuestion(
-    `What number makes ${numerator}/${denominator} = __/${pick.denominator}?`,
+    `What number goes in the blank? ${numerator}/${denominator} = __/${pick.denominator}`,
     fractionsAndRatiosBuildNumericOptions(answer, [answer - 1, answer + 1, pick.denominator - answer]),
     answer,
     difficulty
@@ -609,7 +609,7 @@ function fractionsAndRatiosCreateMissingEquivalentFractionEntry(difficulty) {
 function fractionsAndRatiosCreateUnitRateEntry(difficulty) {
   const questions = [
     fractionsAndRatiosQuestion("A pack of 3 notebooks costs 24 shekels. What is the unit price per notebook?", ["6 shekels", "8 shekels", "9 shekels", "12 shekels"], "8 shekels", difficulty),
-    fractionsAndRatiosQuestion("A runner goes 4.5 km in 0.75 hour. What is the unit rate?", ["4 km per hour", "5 km per hour", "6 km per hour", "7.5 km per hour"], "6 km per hour", difficulty),
+    fractionsAndRatiosQuestion("A runner goes 4.5 km in 0.75 hour. How many kilometers per 1 hour?", ["4 km per hour", "5 km per hour", "6 km per hour", "7.5 km per hour"], "6 km per hour", difficulty),
     fractionsAndRatiosQuestion("A printer makes 84 pages in 7 minutes. What is the rate per minute?", ["10 pages", "12 pages", "14 pages", "21 pages"], "12 pages", difficulty),
   ];
   return fractionsAndRatiosRandomChoice(questions.slice(0, difficulty >= 8 ? 3 : 1));

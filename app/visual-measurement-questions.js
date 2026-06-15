@@ -229,7 +229,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "Which bottle has the better value?",
+    question: "Which bottle has the lower price per milliliter?",
     visualHtml: buildVisualMeasurementCard(
       "Receipt",
       buildReceiptHtml([
@@ -436,7 +436,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 7,
   },
   {
-    question: "Which bottle is the best value?",
+    question: "Which bottle has the lowest price per milliliter?",
     visualHtml: buildVisualMeasurementCard(
       "Receipt",
       buildReceiptHtml([
@@ -613,7 +613,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 9,
   },
   {
-    question: "Which is the best value per liter?",
+    question: "Which option has the lowest price per liter?",
     visualHtml: buildVisualMeasurementCard(
       "Receipt",
       buildReceiptHtml([
@@ -663,7 +663,7 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 10,
   },
   {
-    question: "Which container is the best value per liter?",
+    question: "Which container has the lowest price per liter?",
     visualHtml: buildVisualMeasurementCard(
       "Receipt",
       buildReceiptHtml([
@@ -904,7 +904,7 @@ function visualMeasurementCreateUnitPriceQuestion(difficulty = 4) {
   const items = visualMeasurementRandomChoice(itemSets);
   const answer = items.reduce((winner, item) => item.price / item.amount < winner.price / winner.amount ? item : winner).label;
   return visualMeasurementBuildQuestion({
-    question: level >= 8 ? "Which item is the best value?" : "Which bottle is the best value?",
+    question: level >= 8 ? "Which item has the lowest unit price?" : "Which bottle has the lowest unit price?",
     visualHtml: buildVisualMeasurementCard("Receipt", buildReceiptHtml(items.map((item) => [item.rowA, item.rowB])), "Compare the unit price."),
     options: items.map((item) => item.label),
     answer,

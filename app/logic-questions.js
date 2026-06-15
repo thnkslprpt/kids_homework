@@ -135,7 +135,7 @@ const LOGIC_QUESTIONS = [
 
   // Level 9: advanced deduction with constraints, fallacy spotting, and complex patterns.
   logicMakeQuestion("Four students took math, art, music, and science, one class each. Mira did not take art or science. Leo took music. Noga did not take math. What did Mira take?", ["Math", "Art", "Music", "Science"], "Math", 9),
-  logicMakeQuestion("If a shape is a square, it has four equal sides. A shape has four equal sides. What is the safest conclusion?", ["It must be a square", "It might be a square", "It cannot be a square", "It must be a circle"], "It might be a square", 9),
+  logicMakeQuestion("If a shape is a square, it has four equal sides. A shape has four equal sides. Which conclusion is best supported?", ["It must be a square", "It might be a square", "It cannot be a square", "It must be a circle"], "It might be a square", 9),
   logicMakeQuestion("Which number comes next: 1, 1, 2, 3, 5, 8, __", ["10", "11", "12", "13"], "13", 9),
   logicMakeQuestion("A code changes 3 to 10, 4 to 17, and 5 to 26. What does 9 change to?", ["73", "80", "82", "90"], "82", 9),
   logicMakeQuestion("Exactly one of these is true: A says 'The key is in box 1.' B says 'The key is not in box 1.' If exactly one is true, what can you know?", ["The key is in box 1", "The key is not in box 1", "Exactly one statement is true", "Both statements are false"], "Exactly one statement is true", 9),

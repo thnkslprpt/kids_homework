@@ -262,7 +262,7 @@ const HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS = [
     difficulty: 7,
   },
   {
-    question: "The power goes out in the house. What is the safest first step?",
+    question: "The power goes out at home. Before using candles or touching appliances, what is the safest first step?",
     options: [
       "Light candles everywhere",
       "Tell an adult and use a flashlight",

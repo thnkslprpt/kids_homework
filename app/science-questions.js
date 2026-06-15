@@ -82,7 +82,7 @@ const SCIENCE_QUESTIONS = [
   scienceQuestion("What is biodiversity?", "The variety of living things in an area", ["The total number of clouds", "The weight of one animal", "The color of a mineral"], 7, "Ecosystems"),
   scienceQuestion("What is the main function of white blood cells?", "Help fight infection", ["Carry oxygen only", "Make bones hard", "Store bile"], 7, "Human Body"),
   scienceQuestion("What is an isotope?", "Atoms of the same element with different numbers of neutrons", ["Atoms with no protons", "Two different planets", "A type of fossil leaf"], 8, "Chemistry"),
-  scienceQuestion("What happens to particles when temperature increases?", "They usually move faster", ["They always stop moving", "They become smaller atoms", "They turn into light instantly"], 8, "Matter"),
+  scienceQuestion("In most materials, when temperature increases, what usually happens to the motion of particles?", "They usually move faster", ["They always stop moving", "They become smaller atoms", "They turn into light instantly"], 8, "Matter"),
   scienceQuestion("What does the law of conservation of mass say?", "Matter is not created or destroyed in a closed reaction", ["Mass always becomes energy in every reaction", "All solids weigh the same", "Liquids have no mass"], 8, "Chemistry"),
   scienceQuestion("What is cellular respiration?", "Cells releasing energy from food molecules", ["Plants absorbing moonlight", "Rocks melting into lava", "Clouds making rainbows"], 8, "Cells"),
   scienceQuestion("What is the carbon cycle?", "Movement of carbon among air, organisms, water, and rocks", ["The path of the Moon around Earth", "A circuit made only of copper", "A wheel used to measure speed"], 8, "Earth Systems"),

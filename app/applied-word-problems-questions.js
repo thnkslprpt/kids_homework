@@ -96,7 +96,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 3,
   },
   {
-    question: "How many minutes are in all?",
+    question: "How many minutes pass altogether, including the rest?",
     displayText: "Maya practices piano for 25 minutes, rests for 10 minutes, and then practices again for 20 minutes.",
     options: ["45 minutes", "50 minutes", "55 minutes", "60 minutes"],
     answer: "55 minutes",
@@ -228,7 +228,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 5,
   },
   {
-    question: "Which is the better deal?",
+    question: "Which option has the lower price per notebook?",
     displayText: "Compare 4 notebooks for 28 shekels with 3 notebooks for 24 shekels.",
     options: [
       "4 notebooks for 28 shekels",
@@ -307,7 +307,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
   },
   {
     question: "How many milliliters of concentrate are needed?",
-    displayText: "Juice mix uses 1 part concentrate to 4 parts water. A pitcher has 1,000 mL total.",
+    displayText: "Juice mix uses 1 part concentrate to 4 parts water. The finished pitcher contains 1,000 mL total mixture: concentrate plus water.",
     options: ["100 mL", "200 mL", "250 mL", "400 mL"],
     answer: "200 mL",
     difficulty: 7,
@@ -464,8 +464,8 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 10,
   },
   {
-    question: "What is the missing side length?",
-    displayText: "A rectangle has a perimeter of 54 cm. One side is 18 cm long.",
+    question: "What is the length of each other side?",
+    displayText: "A rectangle has two sides that are 18 cm each. The perimeter is 54 cm.",
     options: ["7 cm", "8 cm", "9 cm", "10 cm"],
     answer: "9 cm",
     difficulty: 10,
@@ -727,13 +727,13 @@ function createUnitConversionQuestion(difficulty = 4) {
 function appliedCreateUnitPriceQuestion(difficulty = 5) {
   const templates = [
     {
-      question: "Which is the better deal?",
+      question: "Which option has the lower price per pen?",
       displayText: "Compare 5 pens for 30 shekels with 4 pens for 28 shekels.",
       options: ["5 pens for 30 shekels", "4 pens for 28 shekels", "They are the same price per pen", "There is not enough information"],
       answer: "5 pens for 30 shekels",
     },
     {
-      question: "Which is the better deal?",
+      question: "Which option has the lower price per apple?",
       displayText: "Compare 6 apples for 24 shekels with 8 apples for 36 shekels.",
       options: ["6 apples for 24 shekels", "8 apples for 36 shekels", "They are the same price per apple", "There is not enough information"],
       answer: "6 apples for 24 shekels",
@@ -1078,8 +1078,8 @@ function createReversePerimeterQuestion(difficulty = 10) {
   const perimeter = 2 * (knownSide + missingSide);
 
   return appliedWordProblemBuildQuestion({
-    question: "What is the missing side length?",
-    displayText: `A rectangle has a perimeter of ${perimeter} cm. One side is ${knownSide} cm long.`,
+    question: "What is the length of each other side?",
+    displayText: `A rectangle has two sides that are ${knownSide} cm each. The perimeter is ${perimeter} cm.`,
     options: appliedWordProblemBuildNumericOptions(missingSide, "cm", [missingSide - 2, missingSide + 2, knownSide]),
     answer: `${missingSide} cm`,
     difficulty,

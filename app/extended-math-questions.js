@@ -150,8 +150,7 @@
     return entry({
       topic: "math-percent-change",
       difficulty,
-      question: increase ? "What is the new amount after the increase?" : "What is the new amount after the decrease?",
-      displayText: `${original} changes by ${percent}% ${increase ? "up" : "down"}`,
+      question: `The amount starts at ${original} and ${increase ? "increases" : "decreases"} by ${percent}%. What is the new amount?`,
       answer,
       options: numberOptions(answer, [-change, -percent, -10, 10, percent, change], 0),
       reviewText: `${percent}% of ${original} is ${change}.`,
@@ -171,7 +170,7 @@
     return entry({
       topic: "math-unit-rates",
       difficulty,
-      question: "What is the unit rate?",
+      question: `How many ${labels[0]} per 1 ${labels[1]}?`,
       displayText: `${total} ${labels[0]} in ${units} ${labels[1]}s`,
       answer: `${rate} ${labels[0]} per ${labels[1]}`,
       options: [
@@ -191,8 +190,8 @@
     return entry({
       topic: "math-proportions",
       difficulty,
-      question: "Solve the proportion.",
-      displayText: `${left}/${right} = ${left * multiplier}/?`,
+      question: "What number goes in the blank?",
+      displayText: `${left}/${right} = ${left * multiplier}/___`,
       answer,
       options: numberOptions(answer, [-right, -left, -1, 1, left, right], 1),
       reviewText: `The top number was multiplied by ${multiplier}, so the bottom number is too.`,
@@ -207,7 +206,7 @@
     return entry({
       topic: "math-inequalities",
       difficulty,
-      question: "Which value makes the inequality true?",
+      question: "Which value can replace x so the inequality is true?",
       displayText: useGreater ? `x - ${offset} > ${boundary - offset}` : `x + ${offset} < ${boundary + offset}`,
       answer,
       options: useGreater
@@ -220,14 +219,15 @@
     const base = randomInt(2, difficulty >= 7 ? 9 : 5);
     const exponent = randomInt(2, difficulty >= 8 ? 4 : 3);
     const answer = base ** exponent;
+    const factorText = Array.from({ length: exponent }, () => base).join(" x ");
     return entry({
       topic: "math-exponents",
       difficulty,
-      question: "What is the value of the exponent expression?",
+      question: "What is the value of this exponential expression?",
       displayText: `${base}^${exponent}`,
       answer,
       options: numberOptions(answer, [-base * exponent, -base, -exponent, 1, base, base * exponent], 1),
-      reviewText: `${base}^${exponent} means multiply ${base} by itself ${exponent} times.`,
+      reviewText: `${base}^${exponent} means ${factorText}.`,
     });
   }
 
@@ -240,7 +240,7 @@
       return entry({
         topic: "math-coordinate-transformations",
         difficulty,
-        question: "What is the new point after the reflection?",
+        question: "What are the new coordinates after reflecting the point?",
         displayText: `Start at (${x}, ${y}). Reflect over the ${reflectX ? "x-axis" : "y-axis"}.`,
         answer,
         options: [answer, `(${-x}, ${-y})`, `(${y}, ${x})`, `(${x}, ${y})`],
@@ -254,7 +254,7 @@
     return entry({
       topic: "math-coordinate-transformations",
       difficulty,
-      question: "Where does the point move?",
+      question: "What is the point's new coordinate after the move?",
       displayText: `Start at (${x}, ${y}). Move ${dx} ${right ? "right" : "left"} and ${dy} ${up ? "up" : "down"}.`,
       answer,
       options: unique([answer, `(${x + dx}, ${y + dy})`, `(${x - dx}, ${y - dy})`, `(${x + (right ? dx : -dx)}, ${y})`, `(${x}, ${y + (up ? dy : -dy)})`]).slice(0, 4),
@@ -320,7 +320,7 @@
       topic: askSurface ? "math-surface-area" : "math-volume",
       difficulty,
       question: askSurface ? "What is the surface area?" : "What is the volume?",
-      displayText: `Rectangular prism: ${length} by ${width} by ${height}`,
+      displayText: `A rectangular prism is ${length} units long, ${width} units wide, and ${height} units tall.`,
       answer: askSurface ? `${surface} square units` : `${volume} cubic units`,
       options: askSurface
         ? [`${surface} square units`, `${volume} square units`, `${length + width + height} square units`, `${2 * (length + width + height)} square units`]

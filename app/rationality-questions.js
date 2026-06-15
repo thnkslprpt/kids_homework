@@ -121,7 +121,7 @@ const RATIONALITY_QUESTIONS = [
     2
   ),
   rationalityQuestion(
-    "Two teams played one game and Team A won. What is the safest conclusion?",
+    "Two teams played one game and Team A won. Which conclusion is best supported by the evidence?",
     ["Team A will win every time", "Team A won that game", "Team B is the better team", "The game was unfair"],
     "Team A won that game",
     2
@@ -367,7 +367,7 @@ const RATIONALITY_QUESTIONS = [
     5
   ),
   rationalityQuestion(
-    "If a study uses a tiny sample, what is the safest conclusion?",
+    "If a study uses a tiny sample, which conclusion is best supported by the evidence?",
     ["The result only tells us about that small group", "The result tells us about everyone everywhere", "The answer is certain", "The result is meaningless"],
     "The result only tells us about that small group",
     5

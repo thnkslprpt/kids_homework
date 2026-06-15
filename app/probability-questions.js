@@ -127,13 +127,13 @@ const PROBABILITY_QUESTIONS = [
     1
   ),
   probabilityStaticQuestion(
-    "A bag has 4 yellow marbles and 4 green marbles. Which color is more likely to be picked?",
-    "They are equally likely",
-    ["Yellow", "Green", "Neither can be picked"],
+    "A bag has 4 yellow marbles and 4 green marbles. Which statement is true about picking yellow or green?",
+    "Yellow and green are equally likely",
+    ["Yellow is more likely", "Green is more likely", "Neither can be picked"],
     1
   ),
   probabilityStaticQuestion(
-    "A spinner has 3 red parts and 1 blue part. Which color is more likely?",
+    "A spinner has 3 red parts and 1 blue part. Which color is more likely to land on?",
     "Red",
     ["Blue", "They are equally likely", "Neither can happen"],
     1
@@ -145,7 +145,7 @@ const PROBABILITY_QUESTIONS = [
     1
   ),
   probabilityStaticQuestion(
-    "A bag has only purple marbles. Picking a purple marble is:",
+    "If you pick 1 marble without looking from a bag with only purple marbles, how likely is it to be purple?",
     "Certain",
     ["Impossible", "Unlikely", "Less than half likely"],
     1
@@ -189,7 +189,7 @@ const PROBABILITY_QUESTIONS = [
     2
   ),
   probabilityStaticQuestion(
-    "A spinner has 2 blue sections and 6 red sections. Which color is more likely?",
+    "A spinner has 2 blue sections and 6 red sections. Which color is more likely to land on?",
     "Red",
     ["Blue", "They are equally likely", "Neither"],
     2
@@ -221,7 +221,7 @@ const PROBABILITY_QUESTIONS = [
     3
   ),
   probabilityStaticQuestion(
-    "Which is more likely?",
+    "Which event is more likely to happen?",
     "Picking blue from a bag with 8 blue and 2 red marbles",
     [
       "Picking blue from a bag with 5 blue and 5 red marbles",
@@ -279,7 +279,7 @@ const PROBABILITY_QUESTIONS = [
     4
   ),
   probabilityStaticQuestion(
-    "A bag has only green marbles in it. Picking a green marble is:",
+    "If you pick 1 marble without looking from a bag with only green marbles, how likely is it to be green?",
     "Certain",
     ["Impossible", "Unlikely", "Less than half likely"],
     4
@@ -913,7 +913,7 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
         });
       },
       () => buildEntry({
-        question: "A bag has only orange marbles. Picking an orange marble is:",
+        question: "If you pick 1 marble without looking from a bag with only orange marbles, how likely is it to be orange?",
         answer: "Certain",
         distractors: ["Impossible", "Unlikely", "Equally likely"],
       }),

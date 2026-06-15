@@ -22,7 +22,7 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("Why is saving some money helpful?", ["It helps you pay for something later", "It makes prices go down", "It means you never spend money", "It turns coins into bigger coins by magic"], "It helps you pay for something later", 1),
   financialLiteracyQuestion("You have 30 shekels and spend 10 shekels. How much money is left?", ["10 shekels", "20 shekels", "30 shekels", "40 shekels"], "20 shekels", 1),
   financialLiteracyQuestion("If you save 10 shekels each week for 4 weeks, how much will you have saved?", ["20 shekels", "30 shekels", "40 shekels", "50 shekels"], "40 shekels", 1),
-  financialLiteracyQuestion("Which apple deal is the best value?", ["5 apples for 20 shekels", "3 apples for 15 shekels", "2 apples for 12 shekels", "6 apples for 30 shekels"], "5 apples for 20 shekels", 1),
+  financialLiteracyQuestion("Assuming the apples are the same quality, which option has the lowest price per apple?", ["5 apples for 20 shekels", "3 apples for 15 shekels", "2 apples for 12 shekels", "6 apples for 30 shekels"], "5 apples for 20 shekels", 1),
   financialLiteracyQuestion("Which is more like a need than a want when packing for school?", ["Water", "A game console", "A toy drone", "Extra stickers"], "Water", 1),
   financialLiteracyQuestion("What currency is used in Israel?", ["shekel", "dollar", "euro", "pound"], "shekel", 1),
   financialLiteracyQuestion("Why is it useful to compare prices before buying?", ["You can choose the better value", "It makes the items free", "It changes the color of the product", "It makes every store the same"], "You can choose the better value", 1),
@@ -34,7 +34,7 @@ const FINANCIAL_LITERACY_QUESTIONS = [
 
   // Level 2: budgets, change, simple goals, and planned spending.
   financialLiteracyQuestion("Which is more like a need than a want?", ["A winter coat", "A toy robot", "Extra candy", "A new video game"], "A winter coat", 2),
-  financialLiteracyQuestion("Which is the better deal for pencils?", ["3 pencils for 12 shekels", "1 pencil for 5 shekels", "2 pencils for 11 shekels", "5 pencils for 30 shekels"], "3 pencils for 12 shekels", 2),
+  financialLiteracyQuestion("Which pencil option has the lowest price per pencil?", ["3 pencils for 12 shekels", "1 pencil for 5 shekels", "2 pencils for 11 shekels", "5 pencils for 30 shekels"], "3 pencils for 12 shekels", 2),
   financialLiteracyQuestion("You have 50 shekels, earn 20 more, and then spend 35 shekels. How much money is left?", ["15 shekels", "25 shekels", "35 shekels", "45 shekels"], "35 shekels", 2),
   financialLiteracyQuestion("What is a simple budget?", ["A plan for how to use money", "A kind of sticker", "A type of snack", "A machine that prints coins"], "A plan for how to use money", 2),
   financialLiteracyQuestion("You want something that costs 60 shekels. You already have 35 shekels. How much more do you need?", ["20 shekels", "25 shekels", "30 shekels", "35 shekels"], "25 shekels", 2),
@@ -64,7 +64,7 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("You have 100 shekels. A book costs 35 shekels and a puzzle costs 25 shekels. How much money is left after buying both?", ["30 shekels", "35 shekels", "40 shekels", "65 shekels"], "40 shekels", 4),
   financialLiteracyQuestion("Which plan saves the most money after 2 months?", ["Save 15 shekels each week", "Save 50 shekels each month", "Save 20 shekels every 2 weeks", "Save 5 shekels each week"], "Save 15 shekels each week", 4),
   financialLiteracyQuestion("You buy 2 notebooks that cost 18 shekels each. How much change should you get from 50 shekels?", ["12 shekels", "14 shekels", "16 shekels", "18 shekels"], "14 shekels", 4),
-  financialLiteracyQuestion("Which cereal is the best value?", ["500 grams for 20 shekels", "300 grams for 15 shekels", "250 grams for 14 shekels", "750 grams for 33 shekels"], "500 grams for 20 shekels", 4),
+  financialLiteracyQuestion("Which cereal option has the lowest price per gram?", ["500 grams for 20 shekels", "300 grams for 15 shekels", "250 grams for 14 shekels", "750 grams for 33 shekels"], "500 grams for 20 shekels", 4),
   financialLiteracyQuestion("A notebook costs 50 shekels and is 20% off. What is the sale price?", ["30 shekels", "35 shekels", "40 shekels", "45 shekels"], "40 shekels", 4),
   financialLiteracyQuestion("Which currency code belongs to the shekel?", ["ILS", "INR", "IDR", "EGP"], "ILS", 4),
   financialLiteracyQuestion("Germany, France, Italy, and Spain all use which currency?", ["euro", "pound", "franc", "dollar"], "euro", 4),
@@ -76,7 +76,7 @@ const FINANCIAL_LITERACY_QUESTIONS = [
 
   // Level 5: tax, subscriptions, recurring spending, and consumer records.
   financialLiteracyQuestion("A toy costs 80 shekels and is 25% off. What is the sale price?", ["55 shekels", "60 shekels", "65 shekels", "70 shekels"], "60 shekels", 5),
-  financialLiteracyQuestion("Which juice is the best value?", ["2 liters for 20 shekels", "1 liter for 12 shekels", "500 milliliters for 8 shekels", "3 liters for 33 shekels"], "2 liters for 20 shekels", 5),
+  financialLiteracyQuestion("Which juice option has the lowest price per liter?", ["2 liters for 20 shekels", "1 liter for 12 shekels", "500 milliliters for 8 shekels", "3 liters for 33 shekels"], "2 liters for 20 shekels", 5),
   financialLiteracyQuestion("A jacket costs 120 shekels and is 25% off. What is the sale price?", ["80 shekels", "90 shekels", "95 shekels", "100 shekels"], "90 shekels", 5),
   financialLiteracyQuestion("You have 200 shekels. You buy 3 games that each cost 45 shekels. How much money is left?", ["55 shekels", "60 shekels", "65 shekels", "70 shekels"], "65 shekels", 5),
   financialLiteracyQuestion("Which list shows only currencies?", ["yen, peso, euro, naira", "Japan, Brazil, won, euro", "dollar, Mexico, rand, rupee", "yuan, India, lira, franc"], "yen, peso, euro, naira", 5),
@@ -267,7 +267,7 @@ function createFinancialBestValueQuestion(difficulty) {
     unitPrice: unitPrices[index],
   }));
   const answer = packs.reduce((best, pack) => (pack.unitPrice < best.unitPrice ? pack : best)).text;
-  return financialLiteracyQuestion(`Which ${item} deal is the best value?`, packs.map((pack) => pack.text), answer, difficulty);
+  return financialLiteracyQuestion(`Which ${item} deal has the lowest price per item?`, packs.map((pack) => pack.text), answer, difficulty);
 }
 
 function createFinancialUnitPriceQuestion(difficulty) {

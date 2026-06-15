@@ -33,8 +33,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
 
     makeQuestion("A chart shows red marbles 4, blue 9, green 7, yellow 2. How many marbles are there in total?", ["20", "21", "22", "23"], "22", 4),
     makeQuestion("A graph shows 10 students chose soccer, 6 chose swimming, 8 chose basketball, and 4 chose tennis. Which sport was chosen by the fewest students?", ["Soccer", "Swimming", "Basketball", "Tennis"], "Tennis", 4),
-    makeQuestion("A table shows tree heights: oak 12 m, pine 15 m, palm 9 m, maple 11 m. What is the range of the tree heights?", ["3 m", "4 m", "5 m", "6 m"], "6 m", 4),
-    makeQuestion("A bar graph uses a scale where each tick mark is 2 votes. If a bar reaches the 7th tick mark, how many votes is that?", ["7", "9", "14", "21"], "14", 4),
+    makeQuestion("A table shows tree heights: oak 12 m, pine 15 m, palm 9 m, maple 11 m. What is the range, meaning tallest minus shortest?", ["3 m", "4 m", "5 m", "6 m"], "6 m", 4),
+    makeQuestion("A bar graph uses a scale of 2 votes per tick. Starting at 0, the bar reaches the tick labeled 14. How many votes is that?", ["7", "9", "14", "21"], "14", 4),
     makeQuestion("A chart shows practice minutes: Mon 20, Tue 30, Wed 25, Thu 35. What is the average number of minutes?", ["25", "27.5", "30", "35"], "27.5", 4),
     makeQuestion("A table shows fruit sold: apples 18, bananas 12, oranges 15, pears 9. Which two fruits together sold 30?", ["Apples and bananas", "Bananas and oranges", "Apples and pears", "Oranges and pears"], "Apples and bananas", 4),
     makeQuestion("A line graph shows temperature: 8 AM 12, 10 AM 16, 12 PM 20, 2 PM 22. What is the total increase from 8 AM to 2 PM?", ["6 degrees", "8 degrees", "10 degrees", "12 degrees"], "10 degrees", 4),
@@ -50,8 +50,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     makeQuestion("A double bar chart compares boys and girls in clubs. Chess: boys 8 girls 6. Art: boys 5 girls 9. Music: boys 7 girls 7. Which club has the same number of boys and girls?", ["Chess", "Art", "Music", "None"], "Music", 5),
 
     makeQuestion("A pictograph key says one icon means 4 students. A row has 6 icons. How many students does the row show?", ["10", "18", "24", "28"], "24", 6),
-    makeQuestion("A line graph shows cumulative pages read: Mon 10, Tue 25, Wed 45, Thu 60. How many pages were read on Wednesday only?", ["15", "20", "35", "45"], "20", 6),
-    makeQuestion("A table shows daily steps: Mon 4,200, Tue 5,100, Wed 4,800, Thu 5,900. What is the range?", ["700", "1,100", "1,700", "10,100"], "1,700", 6),
+    makeQuestion("A line graph shows cumulative pages read: Mon 10, Tue 25, Wed 45, Thu 60. The total went from 25 pages on Tuesday to 45 pages on Wednesday. How many new pages were read on Wednesday?", ["15", "20", "35", "45"], "20", 6),
+    makeQuestion("A table shows daily steps: Mon 4,200, Tue 5,100, Wed 4,800, Thu 5,900. What is the range, meaning largest value minus smallest value?", ["700", "1,100", "1,700", "10,100"], "1,700", 6),
     makeQuestion("A bar graph has a vertical axis labeled by 10s. A bar halfway between 40 and 50 is about what value?", ["42", "45", "50", "55"], "45", 6),
     makeQuestion("A chart shows book types in a class library: fiction 18, nonfiction 12, comics 6, poetry 4. What fraction of the 40 books are nonfiction?", ["3/10", "1/2", "3/5", "12/18"], "3/10", 6),
     makeQuestion("A table shows bike rides: Week 1: 6 km, Week 2: 9 km, Week 3: 12 km, Week 4: 15 km. What pattern does the chart show?", ["It increases by 3 km each week", "It decreases by 3 km each week", "It doubles each week", "It stays the same"], "It increases by 3 km each week", 6),
@@ -86,7 +86,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     makeQuestion("A chart shows two groups. Group A improved from 40 to 60. Group B improved from 80 to 90. Which group had the larger percent increase?", ["Group A", "Group B", "They are equal", "Cannot tell"], "Group A", 9),
 
     makeQuestion("A city chart shows Neighborhood A has 50 bike crashes and 10,000 riders. Neighborhood B has 20 crashes and 2,000 riders. Which has the higher crash rate per rider?", ["Neighborhood A", "Neighborhood B", "They are equal", "Cannot tell"], "Neighborhood B", 10),
-    makeQuestion("A graph shows ice cream sales and temperature rise together. What is the safest conclusion?", ["They are associated", "Ice cream causes hot weather", "Hot weather is impossible", "The graph proves nothing exists"], "They are associated", 10),
+    makeQuestion("A graph shows ice cream sales and temperature rise together. Which conclusion is best supported by the graph?", ["They are associated", "Ice cream causes hot weather", "Hot weather is impossible", "The graph proves nothing exists"], "They are associated", 10),
     makeQuestion("A stacked chart shows a class has 12 boys and 18 girls. In another class, 10 boys and 10 girls. Which class has the higher percentage of girls?", ["First class", "Second class", "They are equal", "Cannot tell"], "First class", 10),
     makeQuestion("A chart shows test averages: small group 95 with 4 students, large group 80 with 16 students. What is the combined average?", ["83", "85", "87.5", "90"], "83", 10),
     makeQuestion("A graph uses different scales on two axes, making a weak pattern look strong. What should you check first?", ["Axis scales", "Favorite color", "Font name", "Whether bars are blue"], "Axis scales", 10),

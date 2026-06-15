@@ -1,18 +1,18 @@
 const ESTIMATION_QUESTIONS = [
   e(1, "What is the best estimate for 19 + 21?", ["About 20", "About 30", "About 40", "About 60"], "About 40"),
-  e(1, "Which answer is most reasonable for 48 divided by 5?", ["About 2", "About 5", "About 10", "About 50"], "About 10"),
+  e(1, "Using estimation, which answer is closest to 48 divided by 5?", ["About 2", "About 5", "About 10", "About 50"], "About 10"),
   e(1, "What is the best estimate for 14 + 16?", ["About 20", "About 30", "About 40", "About 60"], "About 30"),
   e(1, "What is the best estimate for 61 + 39?", ["About 50", "About 80", "About 100", "About 120"], "About 100"),
   e(1, "Which number is closest to 6.1 x 5?", ["20", "30", "40", "50"], "30"),
   e(1, "A class has 28 students. About how many students is that?", ["About 10", "About 20", "About 30", "About 50"], "About 30"),
   e(1, "A snack costs 9 shekels. About how much do 3 snacks cost?", ["About 10 shekels", "About 30 shekels", "About 60 shekels", "About 90 shekels"], "About 30 shekels"),
-  e(1, "Which answer is most reasonable for 18 divided by 4?", ["About 2", "About 5", "About 10", "About 20"], "About 5"),
+  e(1, "Using estimation, which answer is closest to 18 divided by 4?", ["About 2", "About 5", "About 10", "About 20"], "About 5"),
 
   e(2, "What is the best estimate for 198 + 203?", ["About 200", "About 300", "About 400", "About 500"], "About 400"),
   e(2, "Which number is closest to 3.9 x 20?", ["40", "60", "80", "120"], "80"),
   e(2, "Which number is closest to 7.8 x 5?", ["20", "30", "40", "60"], "40"),
   e(2, "If 24 children each get 9 stickers, about how many stickers are needed?", ["About 100", "About 180", "About 220", "About 300"], "About 220"),
-  e(2, "Which answer is most reasonable for 82 divided by 4?", ["About 5", "About 10", "About 20", "About 40"], "About 20"),
+  e(2, "Using estimation, which answer is closest to 82 divided by 4?", ["About 5", "About 10", "About 20", "About 40"], "About 20"),
   e(2, "A book is 118 pages and another is 84 pages. About how many pages is that altogether?", ["About 100", "About 150", "About 200", "About 300"], "About 200"),
   e(2, "A water bottle holds 490 milliliters. About how many milliliters is that?", ["About 100 mL", "About 250 mL", "About 500 mL", "About 1,000 mL"], "About 500 mL"),
   e(2, "Which is the best estimate for 6 groups of 49?", ["About 120", "About 200", "About 300", "About 600"], "About 300"),
@@ -20,7 +20,7 @@ const ESTIMATION_QUESTIONS = [
   e(3, "If 9 children each get 5 stickers, about how many stickers are needed?", ["About 20", "About 30", "About 45", "About 90"], "About 45"),
   e(3, "What is the best estimate for 51% of 200?", ["About 50", "About 75", "About 100", "About 150"], "About 100"),
   e(3, "What is the best estimate for 399 + 402 + 198?", ["About 700", "About 900", "About 1,000", "About 1,200"], "About 1,000"),
-  e(3, "Which answer is most reasonable for 198 divided by 9?", ["About 10", "About 20", "About 40", "About 90"], "About 20"),
+  e(3, "Using estimation, which answer is closest to 198 divided by 9?", ["About 10", "About 20", "About 40", "About 90"], "About 20"),
   e(3, "What is the best estimate for 49% of 80?", ["About 20", "About 30", "About 40", "About 60"], "About 40"),
   e(3, "A notebook costs 19 shekels. About how much do 6 notebooks cost?", ["About 60 shekels", "About 120 shekels", "About 180 shekels", "About 240 shekels"], "About 120 shekels"),
   e(3, "A recipe needs 245 grams of flour. About how many grams is that?", ["About 100 grams", "About 150 grams", "About 250 grams", "About 500 grams"], "About 250 grams"),
@@ -31,7 +31,7 @@ const ESTIMATION_QUESTIONS = [
   e(4, "Eleven buses each carry about 48 students. About how many students is that altogether?", ["About 300", "About 400", "About 500", "About 700"], "About 500"),
   e(4, "A movie is 94 minutes long. About how long is that?", ["About 1 hour", "About 1 and a half hours", "About 2 and a half hours", "About 4 hours"], "About 1 and a half hours"),
   e(4, "What is the best estimate for 62% of 50?", ["About 10", "About 20", "About 30", "About 40"], "About 30"),
-  e(4, "Which answer is most reasonable for 960 divided by 12?", ["About 20", "About 40", "About 80", "About 120"], "About 80"),
+  e(4, "Using estimation, which answer is closest to 960 divided by 12?", ["About 20", "About 40", "About 80", "About 120"], "About 80"),
   e(4, "A shirt costs 79 shekels. About how much do 5 shirts cost?", ["About 200 shekels", "About 300 shekels", "About 400 shekels", "About 600 shekels"], "About 400 shekels"),
   e(4, "Which estimate is closest to 18% of 200?", ["About 20", "About 40", "About 80", "About 120"], "About 40"),
 
@@ -40,7 +40,7 @@ const ESTIMATION_QUESTIONS = [
   e(5, "What is the best estimate for 78 + 121 + 203?", ["About 200", "About 300", "About 400", "About 500"], "About 400"),
   e(5, "Which number is closest to 124 x 4?", ["200", "300", "500", "700"], "500"),
   e(5, "What is the best estimate for 38% of 250?", ["About 50", "About 100", "About 150", "About 200"], "About 100"),
-  e(5, "Which answer is most reasonable for 1,201 divided by 25?", ["About 20", "About 50", "About 80", "About 100"], "About 50"),
+  e(5, "Using estimation, which answer is closest to 1,201 divided by 25?", ["About 20", "About 50", "About 80", "About 100"], "About 50"),
   e(5, "A 198-shekel jacket is about 25% off. About how much is the discount?", ["About 25 shekels", "About 50 shekels", "About 100 shekels", "About 150 shekels"], "About 50 shekels"),
   e(5, "A pool has 48 rows with 21 seats in each row. About how many seats are there?", ["About 500", "About 1,000", "About 1,500", "About 2,000"], "About 1,000"),
 
@@ -51,9 +51,9 @@ const ESTIMATION_QUESTIONS = [
   e(6, "Three quiz scores are 78, 83, and 89. What is the best estimate of the average?", ["About 60", "About 70", "About 80", "About 100"], "About 80"),
   e(6, "A bill is 237 shekels. You want to leave about a 10% tip. About how much is the tip?", ["About 5 shekels", "About 25 shekels", "About 50 shekels", "About 100 shekels"], "About 25 shekels"),
   e(6, "A rectangular garden is about 19 meters by 11 meters. About what is its area?", ["About 100 square meters", "About 200 square meters", "About 400 square meters", "About 600 square meters"], "About 200 square meters"),
-  e(6, "Which total is most reasonable for 246 + 389 + 512?", ["About 700", "About 900", "About 1,100", "About 1,500"], "About 1,100"),
+  e(6, "Using estimation, which total is closest to 246 + 389 + 512?", ["About 700", "About 900", "About 1,100", "About 1,500"], "About 1,100"),
 
-  e(7, "A school has 19 classes with about 28 students each. Which total is most reasonable?", ["About 200 students", "About 400 students", "About 600 students", "About 1,000 students"], "About 600 students"),
+  e(7, "A school has 19 classes with about 28 students each. Using estimation, which total is closest?", ["About 200 students", "About 400 students", "About 600 students", "About 1,000 students"], "About 600 students"),
   e(7, "A 799-shekel tablet is 15% off. About how much is the sale price?", ["About 520 shekels", "About 680 shekels", "About 800 shekels", "About 920 shekels"], "About 680 shekels"),
   e(7, "A car travels 92 km each hour for 3.2 hours. About how far does it travel?", ["About 150 km", "About 300 km", "About 450 km", "About 900 km"], "About 300 km"),
   e(7, "Which estimate is closest to 3,980 divided by 41?", ["About 50", "About 100", "About 200", "About 400"], "About 100"),
@@ -62,23 +62,23 @@ const ESTIMATION_QUESTIONS = [
   e(7, "The numbers 48, 52, 55, and 45 are measured values. Which is the best estimate of their average?", ["About 25", "About 50", "About 75", "About 100"], "About 50"),
   e(7, "A room is 4.9 m by 3.8 m. About how much floor area does it have?", ["About 10 square meters", "About 20 square meters", "About 40 square meters", "About 80 square meters"], "About 20 square meters"),
 
-  e(8, "A stadium section has 48 rows with 23 seats per row. Which order of magnitude is the total seats?", ["About 100", "About 1,000", "About 10,000", "About 100,000"], "About 1,000"),
+  e(8, "A stadium section has 48 rows with 23 seats per row. Which power-of-10 estimate is closest to the total number of seats?", ["About 100", "About 1,000", "About 10,000", "About 100,000"], "About 1,000"),
   e(8, "A map scale is 1 cm = 25 km. Two cities are 7.8 cm apart. About how far apart are they?", ["About 50 km", "About 100 km", "About 200 km", "About 400 km"], "About 200 km"),
   e(8, "A website gets 19,800 visits per day. About how many visits is that in one week?", ["About 20,000", "About 70,000", "About 140,000", "About 500,000"], "About 140,000"),
   e(8, "A water tank holds 2,950 liters and drains at about 48 liters per minute. About how long until it is empty?", ["About 10 minutes", "About 30 minutes", "About 1 hour", "About 3 hours"], "About 1 hour"),
   e(8, "A laptop costs 3,950 shekels and tax is about 17%. About how much tax is that?", ["About 200 shekels", "About 700 shekels", "About 1,700 shekels", "About 3,000 shekels"], "About 700 shekels"),
   e(8, "A square field is about 49 meters on each side. About what is its area?", ["About 250 square meters", "About 500 square meters", "About 2,500 square meters", "About 25,000 square meters"], "About 2,500 square meters"),
-  e(8, "Which is the most reasonable estimate for 0.49 x 798?", ["About 40", "About 200", "About 400", "About 800"], "About 400"),
+  e(8, "Using estimation, which answer is closest to 0.49 x 798?", ["About 40", "About 200", "About 400", "About 800"], "About 400"),
   e(8, "A fundraiser collects 4,850 shekels from 97 people. About how much did each person give on average?", ["About 5 shekels", "About 50 shekels", "About 100 shekels", "About 500 shekels"], "About 50 shekels"),
 
-  e(9, "A 1,200-shekel price rises by about 9%. Which new price is most reasonable?", ["About 1,210 shekels", "About 1,310 shekels", "About 1,800 shekels", "About 2,400 shekels"], "About 1,310 shekels"),
+  e(9, "A 1,200-shekel price rises by about 9%. Using estimation, which new price is closest?", ["About 1,210 shekels", "About 1,310 shekels", "About 1,800 shekels", "About 2,400 shekels"], "About 1,310 shekels"),
   e(9, "A city has 98,000 people and grows by about 2% in a year. About how many new people is that?", ["About 200", "About 2,000", "About 20,000", "About 50,000"], "About 2,000"),
   e(9, "A box is 31 cm by 19 cm by 11 cm. About what is its volume?", ["About 600 cubic cm", "About 3,000 cubic cm", "About 6,000 cubic cm", "About 60,000 cubic cm"], "About 6,000 cubic cm"),
   e(9, "A school prints 29 pages for each of 412 students. About how many pages is that?", ["About 1,200", "About 6,000", "About 12,000", "About 120,000"], "About 12,000"),
   e(9, "A battery loses about 18% each hour. Starting at 80%, about what charge is left after 1 hour?", ["About 20%", "About 35%", "About 65%", "About 95%"], "About 65%"),
   e(9, "A shop sells 1,980 items per month. About how many items is that in a year?", ["About 2,000", "About 12,000", "About 24,000", "About 240,000"], "About 24,000"),
   e(9, "A 3.9 kg bag is split into 8 equal parts. About how much is each part?", ["About 0.05 kg", "About 0.5 kg", "About 2 kg", "About 8 kg"], "About 0.5 kg"),
-  e(9, "Which is the most reasonable estimate for 6.02 x 9.8 x 101?", ["About 60", "About 600", "About 6,000", "About 60,000"], "About 6,000"),
+  e(9, "Using estimation, which answer is closest to 6.02 x 9.8 x 101?", ["About 60", "About 600", "About 6,000", "About 60,000"], "About 6,000"),
 
   e(10, "A school has about 500 students. If each student uses about 2 pencils per month, about how many pencils are used in 10 months?", ["About 1,000", "About 5,000", "About 10,000", "About 100,000"], "About 10,000"),
   e(10, "A person takes about 2,000 steps to walk 1.5 km. About how many steps are in a 6 km walk?", ["About 2,000", "About 4,000", "About 8,000", "About 20,000"], "About 8,000"),
@@ -132,7 +132,7 @@ function genDivide(d) {
   const quotient = pick(d <= 1 ? [4, 5, 8, 10] : [8, 10, 12, 15, 20, 25]);
   const dividend = divisor * quotient + pick([-2, -1, 0, 1, 2]);
   const ans = roundNice(dividend / divisor, d <= 2 ? 5 : 10);
-  return q(d, `Which answer is most reasonable for ${dividend} divided by ${divisor}?`, about(ans), aboutOptions(ans, d <= 2 ? 5 : 10));
+  return q(d, `Using estimation, which answer is closest to ${dividend} divided by ${divisor}?`, about(ans), aboutOptions(ans, d <= 2 ? 5 : 10));
 }
 
 function genSimpleMultiply(d) {
@@ -203,7 +203,7 @@ function genDiscount(d) {
 function genLargeDivide(d) {
   const divisor = pick([12, 20, 24, 25, 40, 50]), quotient = pick([20, 30, 40, 50, 80, 100, 120]);
   const dividend = divisor * quotient + rand(-8, 8), ans = roundNice(dividend / divisor, 10);
-  return q(d, `Which answer is most reasonable for ${fmt(dividend)} divided by ${divisor}?`, about(ans), aboutOptions(ans, 10));
+  return q(d, `Using estimation, which answer is closest to ${fmt(dividend)} divided by ${divisor}?`, about(ans), aboutOptions(ans, 10));
 }
 
 function genSeatCount(d) {
@@ -269,9 +269,9 @@ function genScaleRecipe(d) {
 
 function genOrderOfMagnitude(d) {
   return pick([
-    q(d, "A stadium section has 48 rows with 23 seats per row. Which order of magnitude is the total seats?", "About 1,000", ["About 100", "About 1,000", "About 10,000", "About 100,000"]),
-    q(d, "A school has 505 students using about 20 sheets of paper each week. Which order of magnitude is the weekly paper use?", "About 10,000", ["About 100", "About 1,000", "About 10,000", "About 100,000"]),
-    q(d, "A town has about 19,000 homes, and each home has about 4 people. Which order of magnitude is the population?", "About 100,000", ["About 1,000", "About 10,000", "About 100,000", "About 1,000,000"]),
+    q(d, "A stadium section has 48 rows with 23 seats per row. Which power-of-10 estimate is closest to the total number of seats?", "About 1,000", ["About 100", "About 1,000", "About 10,000", "About 100,000"]),
+    q(d, "A school has 505 students using about 20 sheets of paper each week. Which power-of-10 estimate is closest to the weekly paper use?", "About 10,000", ["About 100", "About 1,000", "About 10,000", "About 100,000"]),
+    q(d, "A town has about 19,000 homes, and each home has about 4 people. Which power-of-10 estimate is closest to the population?", "About 100,000", ["About 1,000", "About 10,000", "About 100,000", "About 1,000,000"]),
   ]);
 }
 

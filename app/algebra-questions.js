@@ -127,7 +127,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const total = addend + answer;
 
     return buildNumericGeneratedEntry({
-      question: `What number makes ${addend} + __ = ${total}?`,
+      question: `What number goes in the blank? ${addend} + __ = ${total}`,
       answer,
       distractors: [answer - 1, answer + 1, total - answer],
       difficulty,
@@ -141,7 +141,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const result = total - missing;
 
     return buildNumericGeneratedEntry({
-      question: `What number makes ${total} - __ = ${result}?`,
+      question: `What number goes in the blank? ${total} - __ = ${result}`,
       answer: missing,
       distractors: [missing - 1, missing + 1, result],
       difficulty,
@@ -165,7 +165,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const rule = randomChoice(rules);
 
     return buildNumericGeneratedEntry({
-      question: `Rule: ${rule.label}. If the input is ${input}, what is the output?`,
+      question: `Rule: ${rule.label.replace("double it", "multiply the input by 2")}. If the input is ${input}, what is the output?`,
       answer: rule.output,
       distractors: [rule.output - 1, rule.output + 1, input + 1],
       difficulty,
@@ -194,7 +194,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const product = factor * answer;
 
     return buildNumericGeneratedEntry({
-      question: `What number makes ${factor} x __ = ${product}?`,
+      question: `What number goes in the blank? ${factor} x __ = ${product}`,
       answer,
       distractors: [answer - 1, answer + 1, answer + factor],
       difficulty,
@@ -208,7 +208,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const dividend = divisor * quotient;
 
     return buildNumericGeneratedEntry({
-      question: `What number makes __ / ${divisor} = ${quotient}?`,
+      question: `What number goes in the blank? __ divided by ${divisor} = ${quotient}`,
       answer: dividend,
       distractors: [dividend - divisor, dividend + divisor, quotient],
       difficulty,
@@ -536,9 +536,10 @@ const ALGEBRA_QUESTIONS = (() => {
     const step = randomChoice(difficulty >= 9 ? [-4, -3, 3, 4, 5] : [2, 3, 4, 5]);
     const n = randomInt(5, difficulty >= 9 ? 10 : 8);
     const answer = first + (n - 1) * step;
+    const stepText = step < 0 ? `Subtract ${Math.abs(step)}` : `Add ${step}`;
 
     return buildNumericGeneratedEntry({
-      question: `A sequence starts at ${first} and changes by ${step} each step. What is term ${n}?`,
+      question: `The 1st term is ${first}. ${stepText} each time. What is the ${n}th term?`,
       answer,
       distractors: [answer - step, answer + step, first + n * step],
       difficulty,
@@ -647,7 +648,7 @@ const ALGEBRA_QUESTIONS = (() => {
     const productExponent = first * second === first + second ? first + second + 1 : first * second;
 
     return buildGeneratedEntry({
-      question: `Which expression is the same as ${base}^${first} times ${base}^${second}?`,
+      question: `Which expression is equal to ${base}^${first} * ${base}^${second}?`,
       answer,
       distractors: [`${base}^${productExponent}`, `${base}^${Math.abs(first - second) || first}`, `${first + second}${base}`],
       difficulty,
@@ -727,14 +728,14 @@ const ALGEBRA_QUESTIONS = (() => {
 
   const fallbackQuestions = [
     makeEntry({
-      question: "What number makes 3 + __ = 8?",
+      question: "What number goes in the blank? 3 + __ = 8",
       answer: 5,
       options: ["4", "5", "6", "7"],
       difficulty: 1,
       family: "missing-addend",
     }),
     makeEntry({
-      question: "What number makes 9 - __ = 4?",
+      question: "What number goes in the blank? 9 - __ = 4",
       answer: 5,
       options: ["4", "5", "6", "7"],
       difficulty: 1,
@@ -755,14 +756,14 @@ const ALGEBRA_QUESTIONS = (() => {
       family: "number-pattern",
     }),
     makeEntry({
-      question: "What number makes 4 x __ = 20?",
+      question: "What number goes in the blank? 4 x __ = 20",
       answer: 5,
       options: ["4", "5", "6", "7"],
       difficulty: 2,
       family: "blank-multiply",
     }),
     makeEntry({
-      question: "What number makes __ / 3 = 4?",
+      question: "What number goes in the blank? __ divided by 3 = 4",
       answer: 12,
       options: ["9", "12", "15", "18"],
       difficulty: 2,
@@ -776,7 +777,7 @@ const ALGEBRA_QUESTIONS = (() => {
       family: "simple-substitution",
     }),
     makeEntry({
-      question: "Rule: double it. If the input is 6, what is the output?",
+      question: "Rule: multiply the input by 2. If the input is 6, what is the output?",
       answer: 12,
       options: ["8", "10", "12", "14"],
       difficulty: 2,
@@ -937,7 +938,7 @@ const ALGEBRA_QUESTIONS = (() => {
       family: "function-notation",
     }),
     makeEntry({
-      question: "A sequence starts at 4 and changes by 5 each step. What is term 6?",
+      question: "The 1st term is 4. Add 5 each time. What is the 6th term?",
       answer: 29,
       options: ["24", "29", "30", "34"],
       difficulty: 8,
@@ -965,7 +966,7 @@ const ALGEBRA_QUESTIONS = (() => {
       family: "factor-quadratic",
     }),
     makeEntry({
-      question: "Which expression is the same as x^3 times x^4?",
+      question: "Which expression is equal to x^3 * x^4?",
       answer: "x^7",
       options: ["x^7", "x^12", "x^1", "7x"],
       difficulty: 9,

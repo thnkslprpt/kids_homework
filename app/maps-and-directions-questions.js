@@ -135,7 +135,7 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     4
   ),
   mapsQuestion("Which direction is opposite northwest?", ["Northeast", "Southwest", "Southeast", "West"], "Southeast", 4),
-  mapsQuestion("If you face south, turn left, then left again, which direction are you facing?", ["North", "South", "East", "West"], "North", 4),
+  mapsQuestion("Each turn is a 90-degree turn. If you face south, turn left, then left again, which direction are you facing?", ["North", "South", "East", "West"], "North", 4),
   mapsQuestion(
     "The fire station is south of the museum. The museum is east of the zoo. Where is the fire station compared with the zoo?",
     ["Northwest", "Northeast", "Southwest", "Southeast"],

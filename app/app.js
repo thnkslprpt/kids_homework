@@ -6810,7 +6810,7 @@ function createStatisticsRangeQuestion(difficulty) {
   return createNumericChoiceQuestion({
     type: "statistics-choice",
     difficulty,
-    questionText: `The numbers are ${values.join(", ")}. What is the range?`,
+    questionText: `The numbers are ${values.join(", ")}. What is the range, meaning largest value minus smallest value?`,
     displayText: "",
     answer,
   });
@@ -11759,14 +11759,14 @@ function generateMissingNumberProblem(difficulty) {
     const [left, right, answer] = generateAdditionValues(Math.max(1, difficulty - 1));
     if (Math.random() < 0.5) {
       return {
-        questionText: "What number makes the equation true?",
+        questionText: "What number goes in the blank?",
         displayText: `__ + ${formatSignedNumber(right)} = ${formatSignedNumber(answer)}`,
         answer: left,
       };
     }
 
     return {
-      questionText: "What number makes the equation true?",
+      questionText: "What number goes in the blank?",
       displayText: `${formatSignedNumber(left)} + __ = ${formatSignedNumber(answer)}`,
       answer: right,
     };
@@ -11776,14 +11776,14 @@ function generateMissingNumberProblem(difficulty) {
     const [left, right, answer] = generateSubtractionValues(Math.max(1, difficulty - 1));
     if (Math.random() < 0.5) {
       return {
-        questionText: "What number makes the equation true?",
+        questionText: "What number goes in the blank?",
         displayText: `__ - ${formatSignedNumber(right)} = ${formatSignedNumber(answer)}`,
         answer: left,
       };
     }
 
     return {
-      questionText: "What number makes the equation true?",
+      questionText: "What number goes in the blank?",
       displayText: `${formatSignedNumber(left)} - __ = ${formatSignedNumber(answer)}`,
       answer: right,
     };
@@ -11793,14 +11793,14 @@ function generateMissingNumberProblem(difficulty) {
     const { left, right } = generateMultiplicationValues(difficulty);
     if (Math.random() < 0.5) {
       return {
-        questionText: "What number makes the equation true?",
+        questionText: "What number goes in the blank?",
         displayText: `__ × ${right} = ${left * right}`,
         answer: left,
       };
     }
 
     return {
-      questionText: "What number makes the equation true?",
+      questionText: "What number goes in the blank?",
       displayText: `${left} × __ = ${left * right}`,
       answer: right,
     };
@@ -11809,14 +11809,14 @@ function generateMissingNumberProblem(difficulty) {
   const { dividend, divisor, quotient } = generateDivisionProblem(difficulty);
   if (Math.random() < 0.5) {
     return {
-      questionText: "What number makes the equation true?",
+      questionText: "What number goes in the blank?",
       displayText: `__ ÷ ${divisor} = ${quotient}`,
       answer: dividend,
     };
   }
 
   return {
-    questionText: "What number makes the equation true?",
+    questionText: "What number goes in the blank?",
     displayText: `${dividend} ÷ __ = ${quotient}`,
     answer: divisor,
   };

@@ -147,7 +147,7 @@ const NUTRITION_QUESTIONS = [
 
   // Level 3: added sugar, fiber, and fair comparisons.
   nutritionQuestion(
-    "If two cereals are similar, which one is usually the healthier choice?",
+    "If two cereals are otherwise similar, which is usually the better choice based on added sugar?",
     [
       "The one with less added sugar",
       "The one with the brightest box",
