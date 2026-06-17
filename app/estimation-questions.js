@@ -552,3 +552,12 @@ function shuffle(values) {
 function unique(values) {
   return Array.from(new Set(values.map((value) => String(value))));
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "estimation",
+  label: "Estimation",
+  getStaticQuestions: () => ESTIMATION_QUESTIONS,
+  generatedEntryFactory: createEstimationGeneratedEntry,
+  generatedShare: 0.85,
+  supportsDrag: true,
+});

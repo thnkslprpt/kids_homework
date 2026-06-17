@@ -1542,3 +1542,11 @@ function rationalityShuffleArray(values) {
 
   return copy;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "rationality",
+  label: "Rationality",
+  getStaticQuestions: () => RATIONALITY_QUESTIONS,
+  generatedEntryFactory: createRationalityGeneratedEntry,
+  generatedShare: 0.7,
+});

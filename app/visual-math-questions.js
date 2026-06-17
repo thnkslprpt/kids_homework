@@ -628,3 +628,11 @@ if (typeof module !== "undefined" && module.exports) {
     createVisualMathGeneratedEntry: globalThis.createVisualMathGeneratedEntry,
   };
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "visual-math",
+  label: "Visual Math",
+  getStaticQuestions: () => VISUAL_MATH_QUESTIONS,
+  generatedEntryFactory: globalThis.createVisualMathGeneratedEntry,
+  generatedShare: 0.85,
+});

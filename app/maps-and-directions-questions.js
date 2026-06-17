@@ -315,3 +315,12 @@ function mapsShuffle(values) {
   }
   return shuffled;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "maps-and-directions",
+  label: "Maps and Directions",
+  getStaticQuestions: () => MAPS_AND_DIRECTIONS_QUESTIONS,
+  generatedEntryFactory: createMapsAndDirectionsGeneratedEntry,
+  generatedShare: 0.85,
+  supportsDrag: true,
+});

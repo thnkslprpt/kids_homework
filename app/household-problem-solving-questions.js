@@ -933,3 +933,13 @@ function createHouseholdProblemSolvingGeneratedEntry(difficulty) {
   globalThis.createHouseholdPracticalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createTransitQuestion, createToolSafetyEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "household-problem-solving",
+  label: "Household Problem Solving",
+  getStaticQuestions: () => HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS,
+  generatedEntryFactory: createHouseholdProblemSolvingGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createHouseholdPracticalGeneratedEntry,
+  generatedShare: 0.6,
+  supplementalShare: 0.55,
+});

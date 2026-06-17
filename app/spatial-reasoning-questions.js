@@ -750,3 +750,11 @@ function spatialShuffle(values) {
   }
   return copy;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "spatial-reasoning",
+  label: "Spatial Reasoning",
+  getStaticQuestions: () => SPATIAL_REASONING_QUESTIONS,
+  generatedEntryFactory: createSpatialReasoningGeneratedEntry,
+  generatedShare: 0.85,
+});

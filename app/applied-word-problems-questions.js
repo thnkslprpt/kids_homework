@@ -1750,3 +1750,11 @@ function formatAppliedNumber(value) {
   const rounded = Math.round(Number(value) * 100) / 100;
   return Number.isInteger(rounded) ? String(rounded) : String(rounded).replace(/0+$/, "").replace(/\.$/, "");
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "applied-word-problems",
+  label: "Applied Word Problems",
+  getStaticQuestions: () => APPLIED_WORD_PROBLEMS_QUESTIONS,
+  generatedEntryFactory: createAppliedWordProblemGeneratedEntry,
+  generatedShare: 0.85,
+});

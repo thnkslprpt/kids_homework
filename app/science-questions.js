@@ -315,3 +315,14 @@ function scienceShuffle(values) {
   globalThis.createScienceTopicGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createBlueprintEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "science",
+  label: "Science",
+  getStaticQuestions: () => SCIENCE_QUESTIONS,
+  generatedEntryFactory: typeof createScienceGeneratedEntry === "function" ? createScienceGeneratedEntry : null,
+  supplementalGeneratedEntryFactory: globalThis.createScienceTopicGeneratedEntry,
+  generatedShare: 0.45,
+  supplementalShare: 0.55,
+  supportsDrag: true,
+});

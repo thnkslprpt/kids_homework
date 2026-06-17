@@ -1302,3 +1302,14 @@ function createVocabularyGrammarGeneratedEntry(difficulty) {
   globalThis.createVocabularyGrammarSupplementalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createSupplementalVocabularyGrammarEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "vocabulary-grammar",
+  label: "Vocabulary / Grammar",
+  getStaticQuestions: () => VOCABULARY_GRAMMAR_QUESTIONS,
+  generatedEntryFactory: createVocabularyGrammarGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createVocabularyGrammarSupplementalGeneratedEntry,
+  generatedShare: 0.85,
+  supplementalShare: 0.45,
+  supportsDrag: true,
+});

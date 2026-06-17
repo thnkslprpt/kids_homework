@@ -2904,3 +2904,11 @@ function scienceEvidenceShuffleArray(values) {
   }
   return copy;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "science-evidence",
+  label: "Science Evidence",
+  getStaticQuestions: () => SCIENCE_EVIDENCE_QUESTIONS,
+  generatedEntryFactory: createScienceEvidenceGeneratedEntry,
+  generatedShare: 0.85,
+});

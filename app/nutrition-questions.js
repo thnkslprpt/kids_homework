@@ -1983,3 +1983,14 @@ function nutritionShuffle(values) {
   globalThis.createNutritionPracticalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createRecipeQuestion, createLabelQuestion], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "nutrition",
+  label: "Nutrition",
+  getStaticQuestions: () => NUTRITION_QUESTIONS,
+  generatedEntryFactory: createNutritionGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createNutritionPracticalGeneratedEntry,
+  generatedShare: 0.55,
+  supplementalShare: 0.35,
+  supportsDrag: true,
+});

@@ -839,3 +839,11 @@ function calendarShuffle(values) {
   }
   return shuffled;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "calendar",
+  label: "Calendar",
+  getStaticQuestions: () => CALENDAR_QUESTIONS,
+  generatedEntryFactory: createCalendarGeneratedEntry,
+  generatedShare: 0.9,
+});

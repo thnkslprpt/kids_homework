@@ -2277,3 +2277,11 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
 
   return probabilityRandomChoice(generators[level] || generators[10])();
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "probability",
+  label: "Probability",
+  getStaticQuestions: () => PROBABILITY_QUESTIONS,
+  generatedEntryFactory: createProbabilityGeneratedEntry,
+  generatedShare: 0.85,
+});

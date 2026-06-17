@@ -748,3 +748,11 @@ function shuffleFinancialArray(values) {
 function uniqueFinancialStrings(values) {
   return Array.from(new Set(values.map((value) => String(value)).filter((value) => value.trim())));
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "financial-literacy",
+  label: "Financial Literacy",
+  getStaticQuestions: () => FINANCIAL_LITERACY_QUESTIONS,
+  generatedEntryFactory: createFinancialLiteracyGeneratedEntry,
+  generatedShare: 0.85,
+});

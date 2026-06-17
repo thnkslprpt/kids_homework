@@ -699,3 +699,11 @@ function clampDifficulty(value) {
   }
   return Math.min(10, Math.max(1, numeric));
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "population",
+  label: "Population",
+  getStaticQuestions: () => POPULATION_QUESTIONS,
+  generatedEntryFactory: createPopulationGeneratedEntry,
+  generatedShare: 0.8,
+});

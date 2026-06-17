@@ -309,3 +309,9 @@ if (typeof module !== "undefined" && module.exports) {
     createGeographyMapGeneratedEntry: globalThis.createGeographyMapGeneratedEntry,
   };
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "geography-map",
+  label: "Geography Map",
+  generatedEntryFactory: globalThis.createGeographyMapGeneratedEntry,
+});

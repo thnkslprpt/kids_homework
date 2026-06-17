@@ -684,3 +684,11 @@ function generalKnowledgeRandomChoice(values) {
 
   return values[Math.floor(Math.random() * values.length)];
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "general-knowledge",
+  label: "General Knowledge",
+  getStaticQuestions: () => GENERAL_KNOWLEDGE_QUESTIONS,
+  generatedEntryFactory: createGeneralKnowledgeGeneratedEntry,
+  generatedShare: 0.6,
+});

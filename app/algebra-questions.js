@@ -1305,3 +1305,11 @@ if (typeof module !== "undefined" && module.exports) {
     createAlgebraGeneratedEntry: globalThis.createAlgebraGeneratedEntry,
   };
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "algebra",
+  label: "Algebra",
+  getStaticQuestions: () => ALGEBRA_QUESTIONS,
+  generatedEntryFactory: globalThis.createAlgebraGeneratedEntry,
+  generatedShare: 0.85,
+});

@@ -1,0 +1,3 @@
+(() => {
+  window.HomeworkApp = window.HomeworkApp || {};
+})();

@@ -2490,3 +2490,12 @@ function visualMeasurementShuffleArray(values) {
   }
   return copy;
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "visual-measurement",
+  label: "Visual Measurement",
+  getStaticQuestions: () => VISUAL_MEASUREMENT_QUESTIONS,
+  generatedEntryFactory: createVisualMeasurementGeneratedEntry,
+  generatedShare: 0.85,
+  supportsDrag: true,
+});

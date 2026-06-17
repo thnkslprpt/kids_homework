@@ -431,3 +431,13 @@ function healthPick(values) {
   globalThis.createHealthAndFirstAidPracticalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createEmergencyDecisionEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "health-and-first-aid",
+  label: "Health and First Aid",
+  getStaticQuestions: () => HEALTH_AND_FIRST_AID_QUESTIONS,
+  generatedEntryFactory: createHealthAndFirstAidGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createHealthAndFirstAidPracticalGeneratedEntry,
+  generatedShare: 0.4,
+  supplementalShare: 0.55,
+});

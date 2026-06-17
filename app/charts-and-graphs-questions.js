@@ -736,3 +736,11 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     misleadingAxis: createMisleadingAxisQuestion,
   };
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "charts-and-graphs",
+  label: "Charts and Graphs",
+  getStaticQuestions: () => CHARTS_AND_GRAPHS_QUESTIONS,
+  generatedEntryFactory: globalThis.createChartsAndGraphsGeneratedEntry,
+  generatedShare: 0.45,
+});

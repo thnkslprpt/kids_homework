@@ -519,3 +519,14 @@ function readingShuffleArray(values) {
   globalThis.createReadingComprehensionSupplementalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createSupplementalReadingComprehensionEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "reading-comprehension",
+  label: "Reading Comprehension",
+  getStaticQuestions: () => READING_COMPREHENSION_QUESTIONS,
+  generatedEntryFactory: createReadingComprehensionGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createReadingComprehensionSupplementalGeneratedEntry,
+  generatedShare: 0.85,
+  supplementalShare: 0.45,
+  supportsDrag: true,
+});

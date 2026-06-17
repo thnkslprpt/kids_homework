@@ -2152,3 +2152,12 @@ function fractionsRandomChoice(values) {
 
   return values[Math.floor(Math.random() * values.length)];
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "fractions",
+  label: "Fractions",
+  getStaticQuestions: () => FRACTIONS_QUESTIONS,
+  generatedEntryFactory: globalThis.createFractionsGeneratedEntry,
+  generatedShare: 0.8,
+  supportsDrag: true,
+});

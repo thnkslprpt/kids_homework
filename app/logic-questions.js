@@ -380,3 +380,13 @@ function logicShuffle(values) {
   globalThis.createLogicThinkingGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createBlueprintEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "logic",
+  label: "Logic",
+  getStaticQuestions: () => LOGIC_QUESTIONS,
+  generatedEntryFactory: createLogicGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createLogicThinkingGeneratedEntry,
+  generatedShare: 0.6,
+  supplementalShare: 0.45,
+});

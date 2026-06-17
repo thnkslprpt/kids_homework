@@ -314,3 +314,13 @@ if (typeof module !== "undefined" && module.exports) {
   globalThis.createGeographyHistoryGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createBlueprintEntry], difficulty);
 })();
+
+globalThis.HomeworkQuestions?.register({
+  id: "geography",
+  label: "Geography",
+  getStaticQuestions: () => GEOGRAPHY_QUESTIONS,
+  generatedEntryFactory: globalThis.createGeographyGeneratedEntry,
+  supplementalGeneratedEntryFactory: globalThis.createGeographyHistoryGeneratedEntry,
+  generatedShare: 0.85,
+  supplementalShare: 0.45,
+});

@@ -861,3 +861,12 @@ FRACTIONS_AND_RATIOS_QUESTIONS.forEach((entry) => {
     reviewText: entry.reviewText,
   });
 });
+
+globalThis.HomeworkQuestions?.register({
+  id: "fractions-and-ratios",
+  label: "Fractions and Ratios",
+  getStaticQuestions: () => FRACTIONS_AND_RATIOS_QUESTIONS,
+  generatedEntryFactory: createFractionsAndRatiosGeneratedEntry,
+  generatedShare: 0.85,
+  supportsDrag: true,
+});

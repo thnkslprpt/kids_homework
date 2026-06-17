@@ -74,42 +74,17 @@
     <pre id="result">running</pre>
 
     <script src="question-utils.js"></script>
-    <script src="hebrew-expanded-words.js"></script>
-    <script src="hebrew-words.js"></script>
-    <script src="hebrew-image-words.js"></script>
-    <script src="science-questions.js"></script>
-    <script src="science-evidence-questions.js"></script>
-    <script src="general-knowledge-questions.js"></script>
-    <script src="algebra-questions.js"></script>
-    <script src="applied-word-problems-questions.js"></script>
-    <script src="visual-math-questions.js"></script>
-    <script src="visual-measurement-questions.js"></script>
-    <script src="logic-questions.js"></script>
-    <script src="rationality-questions.js"></script>
-    <script src="geography-map-data.js"></script>
-    <script src="geography-map-questions.js"></script>
-    <script src="geography-questions.js"></script>
-    <script src="population-questions.js"></script>
-    <script src="financial-literacy-questions.js"></script>
-    <script src="measurement-questions.js"></script>
-    <script src="charts-and-graphs-questions.js"></script>
-    <script src="calendar-questions.js"></script>
-    <script src="estimation-questions.js"></script>
-    <script src="probability-questions.js"></script>
-    <script src="maps-and-directions-questions.js"></script>
-    <script src="health-and-first-aid-questions.js"></script>
-    <script src="nutrition-questions.js"></script>
-    <script src="household-problem-solving-questions.js"></script>
-    <script src="fractions-questions.js"></script>
-    <script src="fractions-and-ratios-questions.js"></script>
-    <script src="reading-comprehension-questions.js"></script>
-    <script src="spatial-reasoning-questions.js"></script>
-    <script src="category-drag-questions.js"></script>
-    <script src="sentence-drag-english.js"></script>
-    <script src="sentence-drag-hebrew.js"></script>
-    <script src="hebrew-questions.js"></script>
-    <script src="vocabulary-grammar-questions.js"></script>
-    <script src="adult-hebrew-module.js"></script>
+    <script src="questions/registry.js"></script>
+    <script src="questions/manifest.js"></script>
+    <script src="questions/load.js"></script>
+    <script src="core/namespace.js"></script>
+    <script src="core/bootstrap-errors.js"></script>
+    <script src="core/config.js"></script>
+    <script src="core/state.js"></script>
+    <script src="core/dom.js"></script>
+    <script src="core/scoring.js"></script>
+    <script src="core/session-history.js"></script>
+    <script src="pwa/updates.js"></script>
     <script src="app.js"></script>
     <script>
       const result = document.getElementById("result");
@@ -169,6 +144,14 @@
 
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
+        const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);
+        api.SESSION_CATEGORY_ORDER
+          .filter((category) => !["math", "hebrew", "time", "statistics"].includes(category))
+          .forEach((category) => {
+            if (!registeredQuestionIds.has(category)) {
+              failures.push(`${category}: missing HomeworkQuestions registry entry`);
+            }
+          });
         const ambiguousCalendarErrors = validateCalendarQuestionClarity(
           { category: "Calendar", type: "calendar-choice", question: "What date is 10 days after February 23?" },
           "calendar clarity regression"

@@ -880,3 +880,12 @@ function createMeasurementTemperatureChangeQuestion() {
     10
   );
 }
+
+globalThis.HomeworkQuestions?.register({
+  id: "measurement",
+  label: "Measurement",
+  getStaticQuestions: () => MEASUREMENT_QUESTIONS,
+  generatedEntryFactory: createMeasurementGeneratedEntry,
+  generatedShare: 0.85,
+  supportsDrag: true,
+});

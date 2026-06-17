@@ -1,417 +1,47 @@
-window.addEventListener("error", (event) => {
-  const feedback = document.getElementById("start-feedback");
-  if (feedback) {
-    feedback.textContent = `App failed to start: ${event.message || "JavaScript error"}`;
-    feedback.classList.add("error");
-  }
-});
+const {
+  OPTION_LABELS,
+  SESSION_HISTORY_STORAGE_KEY,
+  SESSION_HISTORY_CSV_MIME_TYPE,
+  SELECTED_USER_STORAGE_KEY,
+  MAX_SAVED_SESSIONS,
+  QUESTION_COUNT_OPTIONS,
+  SPEED_ROUND_QUESTION_COUNT,
+  SPEED_ROUND_SECONDS,
+  SPEED_ROUND_MS,
+  ADULT_USER_ID,
+  ADULT_SESSION_DEFAULT_QUESTION_COUNT,
+  ADULT_MATH_INTERVAL,
+  ADULT_GEOGRAPHY_SHARE,
+  MAX_SESSION_DIFFICULTY,
+  FIXED_ADULT_SESSION_DIFFICULTY,
+  DEFAULT_HEBREW_WRITING_TAIL_COUNT,
+  HEBREW_ONLY_WRITING_TAIL_COUNT,
+  RESERVED_MAP_CATEGORY,
+  LANGUAGE_DRAG_INTERVAL,
+  HEBREW_FINAL_LETTER_INTERVAL,
+  HEBREW_IMAGE_DRAG_SHARE,
+  HEBREW_MATCHING_PAIR_COUNT,
+  HEBREW_OPPOSITES_PAIR_COUNT,
+  GENERATED_CATEGORY_DRAG_SHARES,
+  HEBREW_OPPOSITE_PAIR_DEFINITIONS,
+  REVIEW_FOCUS_SHARE,
+  REVIEW_RECENCY_DECAY,
+  SNAPSHOT_DATE_PATTERN,
+  CORE_SESSION_CATEGORIES,
+  NON_CORE_SESSION_CATEGORIES,
+  REVIEW_FOCUS_ALLOWED_CATEGORIES,
+  SESSION_CATEGORY_ORDER,
+  CORE_CATEGORY_SHARE,
+  createUniformCategoryDifficulties,
+  USER_PROFILES,
+  CATEGORY_LABELS,
+  USER_PROFILE_MAP,
+  DIFFICULTY_LEVEL_STYLES,
+  NON_HEBREW_DIFFICULTY_WEIGHTS,
+  EXTENDED_MATH_CATEGORIES,
+  SESSION_PRESETS,
+} = window.HomeworkApp.config;
 
-window.addEventListener("unhandledrejection", (event) => {
-  const feedback = document.getElementById("start-feedback");
-  if (feedback) {
-    const reason = event.reason && event.reason.message ? event.reason.message : String(event.reason || "Promise error");
-    feedback.textContent = `App failed to start: ${reason}`;
-    feedback.classList.add("error");
-  }
-});
-
-const OPTION_LABELS = ["A", "B", "C", "D"];
-const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
-const SESSION_HISTORY_CSV_MIME_TYPE = "text/csv;charset=utf-8";
-const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
-const MAX_SAVED_SESSIONS = 10;
-const QUESTION_COUNT_OPTIONS = [20, 30, 40];
-const SPEED_ROUND_QUESTION_COUNT = 5;
-const SPEED_ROUND_SECONDS = 10;
-const SPEED_ROUND_MS = SPEED_ROUND_SECONDS * 1000;
-const ADULT_USER_ID = "miranda";
-const ADULT_SESSION_DEFAULT_QUESTION_COUNT = 30;
-const ADULT_MATH_INTERVAL = 2;
-const ADULT_GEOGRAPHY_SHARE = 1 / 8;
-const MAX_SESSION_DIFFICULTY = 10;
-const FIXED_ADULT_SESSION_DIFFICULTY = MAX_SESSION_DIFFICULTY;
-const DEFAULT_HEBREW_WRITING_TAIL_COUNT = 3;
-const HEBREW_ONLY_WRITING_TAIL_COUNT = 5;
-const RESERVED_MAP_CATEGORY = "geography-map";
-const LANGUAGE_DRAG_INTERVAL = 4;
-const HEBREW_FINAL_LETTER_INTERVAL = 14;
-const HEBREW_IMAGE_DRAG_SHARE = 0.3;
-const HEBREW_MATCHING_PAIR_COUNT = 4;
-const HEBREW_OPPOSITES_PAIR_COUNT = 2;
-const GENERATED_CATEGORY_DRAG_SHARES = {
-  "reading-comprehension": 0.32,
-  fractions: 0.28,
-  "fractions-and-ratios": 0.24,
-  science: 0.2,
-  "financial-literacy": 0.18,
-  nutrition: 0.22,
-  estimation: 0.22,
-  measurement: 0.26,
-  "visual-measurement": 0.3,
-  "maps-and-directions": 0.3,
-};
-const HEBREW_OPPOSITE_PAIR_DEFINITIONS = [
-  { leftEnglish: "A lot", rightEnglish: "A little", leftDisplay: "הַרְבֵּה", rightDisplay: "קְצָת" },
-  { leftEnglish: "Good", rightEnglish: "Bad", leftDisplay: "טוֹב", rightDisplay: "רַע" },
-  { leftEnglish: "Black", rightEnglish: "White", leftDisplay: "שָׁחוֹר", rightDisplay: "לָבָן" },
-  { leftEnglish: "Hot", rightEnglish: "Cold", leftDisplay: "חַם", rightDisplay: "קַר" },
-  { leftEnglish: "Up", rightEnglish: "Down", leftDisplay: "לְמַעְלָה", rightDisplay: "לְמַטָּה" },
-  { leftEnglish: "Big", rightEnglish: "Small", leftDisplay: "גָּדוֹל", rightDisplay: "קָטָן" },
-  { leftEnglish: "Cheap", rightEnglish: "Expensive", leftDisplay: "זוֹל", rightDisplay: "יָקָר" },
-  { leftEnglish: "Open", rightEnglish: "Closed", leftDisplay: "פָּתוּחַ", rightDisplay: "סָגוּר" },
-  { leftEnglish: "Fast", rightEnglish: "Slow", leftDisplay: "מָהִיר", rightDisplay: "אִטִּי" },
-  { leftEnglish: "Healthy", rightEnglish: "Sick", leftDisplay: "בָּרִיא", rightDisplay: "חוֹלֶה" },
-  { leftEnglish: "High", rightEnglish: "Low", leftDisplay: "גָּבוֹהַ", rightDisplay: "נָמוּךְ" },
-  { leftEnglish: "Inside", rightEnglish: "Outside", leftDisplay: "בִּפְנִים", rightDisplay: "בַּחוּץ" },
-  { leftEnglish: "New", rightEnglish: "Old (thing)", leftDisplay: "חָדָשׁ", rightDisplay: "יָשָׁן" },
-  { leftEnglish: "Rich", rightEnglish: "Poor", leftDisplay: "עָשִׁיר", rightDisplay: "עָנִי" },
-  {
-    leftEnglish: "Right (direction)",
-    rightEnglish: "Left (direction)",
-    leftDisplay: "יָמִינָה",
-    rightDisplay: "שְׂמֹאלָה",
-  },
-  { leftEnglish: "Strong", rightEnglish: "Weak", leftDisplay: "חָזָק", rightDisplay: "חַלָשׁ" },
-  { leftEnglish: "Beautiful", rightEnglish: "Ugly", leftDisplay: "יָפֶה", rightDisplay: "מְכֹעָר" },
-  { leftEnglish: "Here", rightEnglish: "There", leftDisplay: "פֹּה", rightDisplay: "שָׁם" },
-  { leftEnglish: "Early", rightEnglish: "Late", leftDisplay: "מוּקְדָּם", rightDisplay: "מְאֻחָר" },
-  { leftEnglish: "Easy", rightEnglish: "Difficult", leftDisplay: "קַל", rightDisplay: "קָשֶׁה" },
-  { leftEnglish: "First", rightEnglish: "Last, final", leftDisplay: "רִאשׁוֹן", rightDisplay: "אַחֲרוֹן" },
-  { leftEnglish: "Long (m.s.)", rightEnglish: "Short (m.s.)", leftDisplay: "אָרֹוךְ", rightDisplay: "קָצָר" },
-  { leftEnglish: "Near / next to", rightEnglish: "Far away", leftDisplay: "לְיַד", rightDisplay: "הַרְחֵק" },
-  {
-    leftEnglish: "Inside / interior / content",
-    rightEnglish: "Outside of",
-    leftDisplay: "תּוֹךְ",
-    rightDisplay: "מִחוּץ",
-  },
-];
-const REVIEW_FOCUS_SHARE = 0.2;
-const REVIEW_RECENCY_DECAY = 0.82;
-const SNAPSHOT_DATE_PATTERN = /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/;
-const CORE_SESSION_CATEGORIES = ["math", "hebrew"];
-const NON_CORE_SESSION_CATEGORIES = [
-  "science",
-  "science-evidence",
-  "time",
-  "statistics",
-  "algebra",
-  "applied-word-problems",
-  "visual-math",
-  "visual-measurement",
-  "logic",
-  "rationality",
-  "general-knowledge",
-  "geography",
-  "geography-map",
-  "population",
-  "financial-literacy",
-  "measurement",
-  "charts-and-graphs",
-  "calendar",
-  "estimation",
-  "probability",
-  "reading-comprehension",
-  "vocabulary-grammar",
-  "maps-and-directions",
-  "health-and-first-aid",
-  "nutrition",
-  "household-problem-solving",
-  "fractions",
-  "fractions-and-ratios",
-  "spatial-reasoning",
-];
-const REVIEW_FOCUS_ALLOWED_CATEGORIES = new Set([
-  "math",
-  "hebrew",
-  "time",
-  "statistics",
-  "algebra",
-  "applied-word-problems",
-  "visual-math",
-  "visual-measurement",
-  "measurement",
-  "charts-and-graphs",
-  "calendar",
-  "estimation",
-  "probability",
-  "vocabulary-grammar",
-  "maps-and-directions",
-  "fractions",
-  "fractions-and-ratios",
-  "spatial-reasoning",
-]);
-const SESSION_CATEGORY_ORDER = [...CORE_SESSION_CATEGORIES, ...NON_CORE_SESSION_CATEGORIES];
-const CORE_CATEGORY_SHARE = 0.45;
-
-function createUniformCategoryDifficulties(difficulty) {
-  const normalizedDifficulty = Math.max(
-    1,
-    Math.min(MAX_SESSION_DIFFICULTY, Number.parseInt(difficulty, 10) || 3)
-  );
-
-  return Object.fromEntries(
-    SESSION_CATEGORY_ORDER.map((category) => [category, normalizedDifficulty])
-  );
-}
-
-// Hard-code each child's per-category levels here.
-const USER_PROFILES = [
-  {
-    id: "guest",
-    name: "Guest",
-    defaultDifficulty: 1,
-    enableReviewFocus: false,
-    avatarStyle: "girlCurls",
-    palette: {
-      sky: "#f4ecff",
-      shirt: "#8f66cf",
-      hair: "#a8714d",
-      accent: "#f0b6cf",
-      eyes: "#6b452e",
-    },
-  },
-  {
-    id: "gabriel",
-    name: "Gabriel",
-    categoryDifficulties: {
-      math: 2,
-      hebrew: 2,
-      science: 2,
-      "science-evidence": 2,
-      time: 2,
-      statistics: 2,
-      algebra: 2,
-      "applied-word-problems": 2,
-      "visual-math": 2,
-      "visual-measurement": 2,
-      logic: 2,
-      rationality: 2,
-      "general-knowledge": 2,
-      geography: 2,
-      "geography-map": 2,
-      population: 2,
-      "financial-literacy": 2,
-      measurement: 2,
-      "charts-and-graphs": 2,
-      calendar: 2,
-      estimation: 2,
-      probability: 2,
-      "reading-comprehension": 2,
-      "vocabulary-grammar": 2,
-      "maps-and-directions": 2,
-      "health-and-first-aid": 2,
-      nutrition: 2,
-      "household-problem-solving": 2,
-      fractions: 2,
-      "fractions-and-ratios": 2,
-      "spatial-reasoning": 2,
-    },
-    enableReviewFocus: false,
-    avatarStyle: "lightCurls",
-    palette: {
-      sky: "#ecf7ea",
-      shirt: "#5ea96f",
-      hair: "#9b7653",
-      accent: "#ff9a84",
-      eyes: "#3a4f63",
-    },
-  },
-  {
-    id: "gideon",
-    name: "Gideon",
-    categoryDifficulties: {
-      math: 5,
-      hebrew: 5,
-      science: 5,
-      "science-evidence": 5,
-      time: 5,
-      statistics: 5,
-      algebra: 5,
-      "applied-word-problems": 5,
-      "visual-math": 5,
-      "visual-measurement": 5,
-      logic: 5,
-      rationality: 5,
-      "general-knowledge": 5,
-      geography: 5,
-      "geography-map": 5,
-      population: 5,
-      "financial-literacy": 5,
-      measurement: 5,
-      "charts-and-graphs": 5,
-      calendar: 5,
-      estimation: 5,
-      probability: 5,
-      "reading-comprehension": 5,
-      "vocabulary-grammar": 5,
-      "maps-and-directions": 5,
-      "health-and-first-aid": 5,
-      nutrition: 5,
-      "household-problem-solving": 5,
-      fractions: 5,
-      "fractions-and-ratios": 5,
-      "spatial-reasoning": 5,
-    },
-    enableReviewFocus: false,
-    avatarStyle: "curlyHair",
-    palette: {
-      sky: "#e6f6ff",
-      shirt: "#4f92d8",
-      hair: "#3f2f2a",
-      accent: "#f4c869",
-      eyes: "#243649",
-    },
-  },
-  {
-    id: "noga",
-    name: "Noga",
-    categoryDifficulties: {
-      math: 4,
-      hebrew: 4,
-      science: 4,
-      "science-evidence": 4,
-      time: 4,
-      statistics: 4,
-      algebra: 4,
-      "applied-word-problems": 4,
-      "visual-math": 4,
-      "visual-measurement": 4,
-      logic: 4,
-      rationality: 4,
-      "general-knowledge": 4,
-      geography: 4,
-      "geography-map": 4,
-      population: 4,
-      "financial-literacy": 4,
-      measurement: 4,
-      "charts-and-graphs": 4,
-      calendar: 4,
-      estimation: 4,
-      probability: 4,
-      "reading-comprehension": 4,
-      "vocabulary-grammar": 4,
-      "maps-and-directions": 4,
-      "health-and-first-aid": 4,
-      nutrition: 4,
-      "household-problem-solving": 4,
-      fractions: 4,
-      "fractions-and-ratios": 4,
-      "spatial-reasoning": 4,
-    },
-    enableReviewFocus: false,
-    avatarStyle: "longHair",
-    palette: {
-      sky: "#fff1d2",
-      shirt: "#e28a63",
-      hair: "#e1be5a",
-      accent: "#8fb8ff",
-      eyes: "#3e8a57",
-    },
-  },
-  {
-    id: ADULT_USER_ID,
-    name: "Miranda",
-    defaultDifficulty: FIXED_ADULT_SESSION_DIFFICULTY,
-    categoryDifficulties: createUniformCategoryDifficulties(FIXED_ADULT_SESSION_DIFFICULTY),
-    enableReviewFocus: false,
-    enableHebrewWritingTail: false,
-    avatarStyle: "adultBun",
-    palette: {
-      sky: "#f6ede8",
-      shirt: "#8c6f63",
-      hair: "#3b2a26",
-      accent: "#d7b19d",
-      eyes: "#2c3b49",
-    },
-  },
-];
-const CATEGORY_LABELS = {
-  math: "Math",
-  hebrew: "Hebrew",
-  "hebrew-writing": "Hebrew Writing",
-  science: "Science",
-  "science-evidence": "Science Evidence",
-  time: "Time",
-  statistics: "Statistics",
-  algebra: "Algebra",
-  "applied-word-problems": "Applied Word Problems",
-  "visual-math": "Visual Math",
-  "visual-measurement": "Visual Measurement",
-  logic: "Logic",
-  rationality: "Rationality",
-  "general-knowledge": "General Knowledge",
-  geography: "Geography",
-  "geography-map": "Geography Map",
-  population: "Population",
-  "financial-literacy": "Financial Literacy",
-  measurement: "Measurement",
-  "charts-and-graphs": "Charts and Graphs",
-  calendar: "Calendar",
-  estimation: "Estimation",
-  probability: "Probability",
-  "reading-comprehension": "Reading Comprehension",
-  "vocabulary-grammar": "Vocabulary / Grammar",
-  "maps-and-directions": "Maps and Directions",
-  "health-and-first-aid": "Health and First Aid",
-  nutrition: "Nutrition",
-  "household-problem-solving": "Household Problem Solving",
-  fractions: "Fractions",
-  "fractions-and-ratios": "Fractions and Ratios",
-  "spatial-reasoning": "Spatial Reasoning",
-};
-const USER_PROFILE_MAP = Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, profile]));
-const DIFFICULTY_LEVEL_STYLES = {
-  1: { accent: "#89d48c", text: "#17324a" },
-  2: { accent: "#b5de7a", text: "#17324a" },
-  3: { accent: "#f3d46b", text: "#17324a" },
-  4: { accent: "#f0ab63", text: "#17324a" },
-  5: { accent: "#e57a7a", text: "#ffffff" },
-  6: { accent: "#d96d8c", text: "#ffffff" },
-  7: { accent: "#ca67a4", text: "#ffffff" },
-  8: { accent: "#af63bc", text: "#ffffff" },
-  9: { accent: "#8b5fd0", text: "#ffffff" },
-  10: { accent: "#695ad9", text: "#ffffff" },
-};
-const NON_HEBREW_DIFFICULTY_WEIGHTS = {
-  1: { 1: 1 },
-  2: { 2: 0.75, 1: 0.25 },
-  3: { 3: 0.7, 2: 0.2, 1: 0.1 },
-
-  // From level 4 up:
-  // 70% current level, 20% one level below, 10% two levels below
-  4: { 4: 0.7, 3: 0.2, 2: 0.1 },
-  5: { 5: 0.7, 4: 0.2, 3: 0.1 },
-  6: { 6: 0.7, 5: 0.2, 4: 0.1 },
-  7: { 7: 0.7, 6: 0.2, 5: 0.1 },
-  8: { 8: 0.7, 7: 0.2, 6: 0.1 },
-  9: { 9: 0.7, 8: 0.2, 7: 0.1 },
-  10: { 10: 0.7, 9: 0.2, 8: 0.1 },
-};
-const EXTENDED_MATH_CATEGORIES = new Set([
-  "math",
-  "statistics",
-  "time",
-  "algebra",
-  "applied-word-problems",
-  "visual-math",
-  "visual-measurement",
-  "logic",
-  "measurement",
-  "charts-and-graphs",
-  "calendar",
-  "estimation",
-  "probability",
-  "fractions",
-  "fractions-and-ratios",
-  "spatial-reasoning",
-]);
-const SESSION_PRESETS = {
-  adaptive: "adaptive",
-  "math-heavy": "math-heavy",
-  hebrew: "hebrew",
-  custom: "custom",
-};
 const CHART_BAR_TEMPLATES = [
   {
     title: "Favorite Fruits",
@@ -2430,33 +2060,8 @@ const SCIENCE_EXCLUDED_PATTERNS = [
   /bacterial pathogen/i,
 ];
 
-const state = {
-  currentUserId: USER_PROFILES[0].id,
-  dashboardUserId: USER_PROFILES[0].id,
-  sessionPreset: SESSION_PRESETS.adaptive,
-  adaptiveReview: true,
-  selectedCategories: new Set(SESSION_CATEGORY_ORDER),
-  categoryDifficulties: createUniformCategoryDifficulties(3),
-  minDifficulty: 1,
-  totalQuestions: 0,
-  difficulty: 3,
-  hebrewOnly: false,
-  specialtyWordsOnly: false,
-  currentIndex: 0,
-  viewIndex: 0,
-  answeredCount: 0,
-  correctCount: 0,
-  answerResults: [],
-  answerSelections: [],
-  questions: [],
-  sessionRecords: [],
-  currentRound: "main",
-  speedRound: createEmptySpeedRoundState(),
-  sessionStartedAt: null,
-  feedbackMessage: "",
-  feedbackTone: "",
-  dragState: null,
-};
+const state = window.HomeworkApp.state.createInitialState();
+const { createEmptySpeedRoundState } = window.HomeworkApp.state;
 
 const confettiRuntime = {
   cleanupTimerId: null,
@@ -2469,92 +2074,16 @@ const confettiRuntime = {
   startTime: 0,
 };
 
-const elements = {
-  startScreen: document.getElementById("start-screen"),
-  quizScreen: document.getElementById("quiz-screen"),
-  resultsScreen: document.getElementById("results-screen"),
-  historyScreen: document.getElementById("history-screen"),
-  dashboardScreen: document.getElementById("dashboard-screen"),
-  startForm: document.getElementById("start-form"),
-  userSelector: document.getElementById("user-selector"),
-  startFeedback: document.getElementById("start-feedback"),
-  historyButton: document.getElementById("history-button"),
-  historyBackButton: document.getElementById("history-back-button"),
-  historyList: document.getElementById("history-list"),
-  historyEmpty: document.getElementById("history-empty"),
-  dashboardButton: document.getElementById("dashboard-button"),
-  dashboardBackButton: document.getElementById("dashboard-back-button"),
-  dashboardExportCsvButton: document.getElementById("dashboard-export-csv-button"),
-  dashboardShareCsvButton: document.getElementById("dashboard-share-csv-button"),
-  dashboardUserSelector: document.getElementById("dashboard-user-selector"),
-  dashboardContent: document.getElementById("dashboard-content"),
-  sessionModeLabel: document.getElementById("session-mode-label"),
-  questionCount: document.getElementById("question-count"),
-  questionCountButtons: Array.from(document.querySelectorAll(".question-count-button")),
-  hebrewOnly: document.getElementById("hebrew-only"),
-  hebrewOnlyButton: document.getElementById("hebrew-only-button"),
-  specialtyWordsOnly: document.getElementById("specialty-words-only"),
-  specialtyWordsButton: document.getElementById("specialty-words-button"),
-  difficultyMin: document.getElementById("difficulty-min"),
-  sessionBuilder: document.getElementById("session-builder"),
-  sessionPresetButtons: Array.from(document.querySelectorAll(".builder-preset-button")),
-  adaptiveReviewButton: document.getElementById("adaptive-review-button"),
-  categoryResetButton: document.getElementById("category-reset-button"),
-  categoryBuilderGrid: document.getElementById("category-builder-grid"),
-  difficultyLabel: document.getElementById("difficulty-label"),
-  difficultySelector: document.getElementById("difficulty-selector"),
-  difficultyLevel: document.getElementById("difficulty-level"),
-  difficultyValue: document.getElementById("difficulty-value"),
-  progressTracker: document.getElementById("progress-tracker"),
-  scoreText: document.getElementById("score-text"),
-  speedTimer: document.getElementById("speed-timer"),
-  speedTimerText: document.getElementById("speed-timer-text"),
-  speedTimerFill: document.getElementById("speed-timer-fill"),
-  feedback: document.getElementById("feedback"),
-  questionNumber: document.getElementById("question-number"),
-  questionPrompt: document.getElementById("question-prompt"),
-  questionMain: document.getElementById("question-main"),
-  questionVisual: document.getElementById("question-visual"),
-  questionExtra: document.getElementById("question-extra"),
-  answerForm: document.getElementById("answer-form"),
-  inputArea: document.getElementById("input-area"),
-  answerInput: document.getElementById("answer-input"),
-  answerSignButton: document.getElementById("answer-sign-button"),
-  answerSubmitButton: document.getElementById("answer-submit-button"),
-  choicesArea: document.getElementById("choices-area"),
-  dragArea: document.getElementById("drag-area"),
-  quizBackButton: document.getElementById("quiz-back-button"),
-  quizForwardButton: document.getElementById("quiz-forward-button"),
-  resultsTitle: document.getElementById("results-title"),
-  resultsSummary: document.getElementById("results-summary"),
-  resultsCategorySummary: document.getElementById("results-category-summary"),
-  resultsReviewList: document.getElementById("results-review-list"),
-  resultsBackButton: document.getElementById("results-back-button"),
-  resultsForwardButton: document.getElementById("results-forward-button"),
-  restartButton: document.getElementById("restart-button"),
-  appUpdateBanner: document.getElementById("app-update-banner"),
-  appUpdateButton: document.getElementById("app-update-button"),
-};
-
-function createEmptySpeedRoundState() {
-  return {
-    totalQuestions: SPEED_ROUND_QUESTION_COUNT,
-    currentIndex: 0,
-    viewIndex: 0,
-    answeredCount: 0,
-    correctCount: 0,
-    answerResults: [],
-    answerSelections: [],
-    questions: [],
-    records: [],
-    timerId: null,
-    tickId: null,
-    animationFrameId: null,
-    timerStartedAt: 0,
-    timerDeadline: 0,
-    timerToken: 0,
-  };
-}
+const elements = window.HomeworkApp.dom.getElements(document);
+const sessionHistoryStore = window.HomeworkApp.sessionHistory.createSessionHistoryStore({
+  adultUserId: ADULT_USER_ID,
+  csvMimeType: SESSION_HISTORY_CSV_MIME_TYPE,
+  getSessionPresetLabel,
+  isAdultUserId,
+  maxSavedSessions: MAX_SAVED_SESSIONS,
+  storageKey: SESSION_HISTORY_STORAGE_KEY,
+  userProfiles: USER_PROFILES,
+});
 
 function cleanupInteractiveDragState() {
   if (typeof state.dragState?.cleanup === "function") {
@@ -2616,119 +2145,35 @@ const adultReadingBlueprints = Array.isArray(adultHebrewModule.readingBlueprints
 const adultWritingPromptBank = normalizeAdultWritingPromptBank(
   Array.isArray(adultHebrewModule.writingPrompts) ? adultHebrewModule.writingPrompts : []
 );
-const scienceQuestionBank = buildScienceQuestionBank(
-  typeof SCIENCE_QUESTIONS !== "undefined" ? SCIENCE_QUESTIONS : []
-);
-const staticChoiceBankSources = [
-  {
-    category: "general-knowledge",
-    entries: typeof GENERAL_KNOWLEDGE_QUESTIONS !== "undefined" ? GENERAL_KNOWLEDGE_QUESTIONS : [],
-  },
-  {
-    category: "algebra",
-    entries: typeof ALGEBRA_QUESTIONS !== "undefined" ? ALGEBRA_QUESTIONS : [],
-  },
-  {
-    category: "applied-word-problems",
-    entries:
-      typeof APPLIED_WORD_PROBLEMS_QUESTIONS !== "undefined" ? APPLIED_WORD_PROBLEMS_QUESTIONS : [],
-  },
-  {
-    category: "reading-comprehension",
-    entries:
-      typeof READING_COMPREHENSION_QUESTIONS !== "undefined" ? READING_COMPREHENSION_QUESTIONS : [],
-  },
-  {
-    category: "science-evidence",
-    entries:
-      typeof SCIENCE_EVIDENCE_QUESTIONS !== "undefined" ? SCIENCE_EVIDENCE_QUESTIONS : [],
-  },
-  {
-    category: "visual-math",
-    entries: typeof VISUAL_MATH_QUESTIONS !== "undefined" ? VISUAL_MATH_QUESTIONS : [],
-  },
-  {
-    category: "visual-measurement",
-    entries: typeof VISUAL_MEASUREMENT_QUESTIONS !== "undefined" ? VISUAL_MEASUREMENT_QUESTIONS : [],
-  },
-  {
-    category: "vocabulary-grammar",
-    entries:
-      typeof VOCABULARY_GRAMMAR_QUESTIONS !== "undefined" ? VOCABULARY_GRAMMAR_QUESTIONS : [],
-  },
-  { category: "logic", entries: typeof LOGIC_QUESTIONS !== "undefined" ? LOGIC_QUESTIONS : [] },
-  {
-    category: "rationality",
-    entries: typeof RATIONALITY_QUESTIONS !== "undefined" ? RATIONALITY_QUESTIONS : [],
-  },
-  {
-    category: "geography",
-    entries: typeof GEOGRAPHY_QUESTIONS !== "undefined" ? GEOGRAPHY_QUESTIONS : [],
-  },
-  {
-    category: "population",
-    entries: typeof POPULATION_QUESTIONS !== "undefined" ? POPULATION_QUESTIONS : [],
-  },
-  {
-    category: "financial-literacy",
-    entries:
-      typeof FINANCIAL_LITERACY_QUESTIONS !== "undefined" ? FINANCIAL_LITERACY_QUESTIONS : [],
-  },
-  {
-    category: "measurement",
-    entries: typeof MEASUREMENT_QUESTIONS !== "undefined" ? MEASUREMENT_QUESTIONS : [],
-  },
-  {
-    category: "charts-and-graphs",
-    entries:
-      typeof CHARTS_AND_GRAPHS_QUESTIONS !== "undefined" ? CHARTS_AND_GRAPHS_QUESTIONS : [],
-  },
-  { category: "calendar", entries: typeof CALENDAR_QUESTIONS !== "undefined" ? CALENDAR_QUESTIONS : [] },
-  {
-    category: "estimation",
-    entries: typeof ESTIMATION_QUESTIONS !== "undefined" ? ESTIMATION_QUESTIONS : [],
-  },
-  {
-    category: "probability",
-    entries: typeof PROBABILITY_QUESTIONS !== "undefined" ? PROBABILITY_QUESTIONS : [],
-  },
-  {
-    category: "maps-and-directions",
-    entries:
-      typeof MAPS_AND_DIRECTIONS_QUESTIONS !== "undefined" ? MAPS_AND_DIRECTIONS_QUESTIONS : [],
-  },
-  {
-    category: "health-and-first-aid",
-    entries:
-      typeof HEALTH_AND_FIRST_AID_QUESTIONS !== "undefined"
-        ? HEALTH_AND_FIRST_AID_QUESTIONS
-        : [],
-  },
-  {
-    category: "nutrition",
-    entries: typeof NUTRITION_QUESTIONS !== "undefined" ? NUTRITION_QUESTIONS : [],
-  },
-  {
-    category: "household-problem-solving",
-    entries:
-      typeof HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS !== "undefined"
-        ? HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS
-        : [],
-  },
-  {
-    category: "fractions",
-    entries: typeof FRACTIONS_QUESTIONS !== "undefined" ? FRACTIONS_QUESTIONS : [],
-  },
-  {
-    category: "fractions-and-ratios",
-    entries:
-      typeof FRACTIONS_AND_RATIOS_QUESTIONS !== "undefined" ? FRACTIONS_AND_RATIOS_QUESTIONS : [],
-  },
-  {
-    category: "spatial-reasoning",
-    entries: typeof SPATIAL_REASONING_QUESTIONS !== "undefined" ? SPATIAL_REASONING_QUESTIONS : [],
-  },
-];
+const questionRegistry = globalThis.HomeworkQuestions || { get: () => null, list: () => [] };
+
+function getQuestionModule(category) {
+  return questionRegistry.get?.(category) || null;
+}
+
+function getRegisteredStaticQuestions(category) {
+  const questionModule = getQuestionModule(category);
+  const questions =
+    typeof questionModule?.getStaticQuestions === "function"
+      ? questionModule.getStaticQuestions()
+      : [];
+
+  return Array.isArray(questions) ? questions : [];
+}
+
+const scienceQuestionBank = buildScienceQuestionBank(getRegisteredStaticQuestions("science"));
+const staticChoiceBankSources = questionRegistry
+  .list()
+  .filter(
+    (questionModule) =>
+      questionModule.id !== "science" &&
+      SESSION_CATEGORY_ORDER.includes(questionModule.id) &&
+      typeof questionModule.getStaticQuestions === "function"
+  )
+  .map((questionModule) => ({
+    category: questionModule.id,
+    entries: getRegisteredStaticQuestions(questionModule.id),
+  }));
 const staticChoiceBanks = Object.fromEntries(
   staticChoiceBankSources.map(({ category, entries }) => [
     category,
@@ -2779,6 +2224,25 @@ function buildCombinedGeneratedEntryFactory(primaryFactory, extensionFactory, ex
   };
 }
 
+function createRegisteredGeneratedEntryFactory(questionModule) {
+  const primaryFactory =
+    typeof questionModule?.generatedEntryFactory === "function"
+      ? questionModule.generatedEntryFactory
+      : null;
+  const supplementalFactory =
+    typeof questionModule?.supplementalGeneratedEntryFactory === "function"
+      ? questionModule.supplementalGeneratedEntryFactory
+      : null;
+
+  return buildCombinedGeneratedEntryFactory(
+    primaryFactory,
+    supplementalFactory,
+    Number.isFinite(Number(questionModule?.supplementalShare))
+      ? Number(questionModule.supplementalShare)
+      : 0.45
+  );
+}
+
 const choiceCategoryConfigs = {
   hebrew: {
     bank: hebrewQuestionBank,
@@ -2793,178 +2257,26 @@ const choiceCategoryConfigs = {
       category,
       {
         bank: staticChoiceBanks[category],
-        createQuestion: (entry) => createBankChoiceQuestion(entry, `${category}-choice`),
+        createQuestion: (entry) => createBankChoiceQuestion(entry, category + "-choice"),
       },
     ])
   ),
 };
-const generatedChoiceCategoryConfigs = {
-  algebra: {
-    share: 0.85,
-    factory: typeof createAlgebraGeneratedEntry === "function" ? createAlgebraGeneratedEntry : null,
-  },
-  "applied-word-problems": {
-    share: 0.85,
-    factory:
-      typeof createAppliedWordProblemGeneratedEntry === "function"
-        ? createAppliedWordProblemGeneratedEntry
-        : null,
-  },
-  "reading-comprehension": {
-    share: 0.85,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createReadingComprehensionGeneratedEntry === "function"
-        ? createReadingComprehensionGeneratedEntry
-        : null,
-      getOptionalGlobalFunction("createReadingComprehensionSupplementalGeneratedEntry"),
-      0.45
-    ),
-  },
-  "science-evidence": {
-    share: 0.85,
-    factory: typeof createScienceEvidenceGeneratedEntry === "function" ? createScienceEvidenceGeneratedEntry : null,
-  },
-  "visual-math": {
-    share: 0.85,
-    factory:
-      typeof createVisualMathGeneratedEntry === "function" ? createVisualMathGeneratedEntry : null,
-  },
-  "visual-measurement": {
-    share: 0.85,
-    factory:
-      typeof createVisualMeasurementGeneratedEntry === "function"
-        ? createVisualMeasurementGeneratedEntry
-        : null,
-  },
-  "vocabulary-grammar": {
-    share: 0.85,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createVocabularyGrammarGeneratedEntry === "function"
-        ? createVocabularyGrammarGeneratedEntry
-        : null,
-      getOptionalGlobalFunction("createVocabularyGrammarSupplementalGeneratedEntry"),
-      0.45
-    ),
-  },
-  "financial-literacy": {
-    share: 0.85,
-    factory:
-      typeof createFinancialLiteracyGeneratedEntry === "function"
-        ? createFinancialLiteracyGeneratedEntry
-        : null,
-  },
-  geography: {
-    share: 0.85,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createGeographyGeneratedEntry === "function" ? createGeographyGeneratedEntry : null,
-      getOptionalGlobalFunction("createGeographyHistoryGeneratedEntry"),
-      0.45
-    ),
-  },
-  population: {
-    share: 0.8,
-    factory: typeof createPopulationGeneratedEntry === "function" ? createPopulationGeneratedEntry : null,
-  },
-  measurement: {
-    share: 0.85,
-    factory:
-      typeof createMeasurementGeneratedEntry === "function" ? createMeasurementGeneratedEntry : null,
-  },
-  estimation: {
-    share: 0.85,
-    factory:
-      typeof createEstimationGeneratedEntry === "function" ? createEstimationGeneratedEntry : null,
-  },
-  probability: {
-    share: 0.85,
-    factory:
-      typeof createProbabilityGeneratedEntry === "function" ? createProbabilityGeneratedEntry : null,
-  },
-  logic: {
-    share: 0.6,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createLogicGeneratedEntry === "function" ? createLogicGeneratedEntry : null,
-      getOptionalGlobalFunction("createLogicThinkingGeneratedEntry"),
-      0.45
-    ),
-  },
-  rationality: {
-    share: 0.7,
-    factory: typeof createRationalityGeneratedEntry === "function" ? createRationalityGeneratedEntry : null,
-  },
-  "general-knowledge": {
-    share: 0.6,
-    factory:
-      typeof createGeneralKnowledgeGeneratedEntry === "function"
-        ? createGeneralKnowledgeGeneratedEntry
-        : null,
-  },
-  science: {
-    share: 0.45,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createScienceGeneratedEntry === "function" ? createScienceGeneratedEntry : null,
-      getOptionalGlobalFunction("createScienceTopicGeneratedEntry"),
-      0.55
-    ),
-  },
-  calendar: {
-    share: 0.9,
-    factory: typeof createCalendarGeneratedEntry === "function" ? createCalendarGeneratedEntry : null,
-  },
-  "fractions-and-ratios": {
-    share: 0.85,
-    factory:
-      typeof createFractionsAndRatiosGeneratedEntry === "function"
-        ? createFractionsAndRatiosGeneratedEntry
-        : null,
-  },
-  "maps-and-directions": {
-    share: 0.85,
-    factory:
-      typeof createMapsAndDirectionsGeneratedEntry === "function"
-        ? createMapsAndDirectionsGeneratedEntry
-        : null,
-  },
-  "health-and-first-aid": {
-    share: 0.4,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createHealthAndFirstAidGeneratedEntry === "function"
-        ? createHealthAndFirstAidGeneratedEntry
-        : null,
-      getOptionalGlobalFunction("createHealthAndFirstAidPracticalGeneratedEntry"),
-      0.55
-    ),
-  },
-  nutrition: {
-    share: 0.55,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createNutritionGeneratedEntry === "function" ? createNutritionGeneratedEntry : null,
-      getOptionalGlobalFunction("createNutritionPracticalGeneratedEntry"),
-      0.35
-    ),
-  },
-  "household-problem-solving": {
-    share: 0.6,
-    factory: buildCombinedGeneratedEntryFactory(
-      typeof createHouseholdProblemSolvingGeneratedEntry === "function"
-        ? createHouseholdProblemSolvingGeneratedEntry
-        : null,
-      getOptionalGlobalFunction("createHouseholdPracticalGeneratedEntry"),
-      0.55
-    ),
-  },
-  fractions: {
-    share: 0.8,
-    factory: typeof createFractionsGeneratedEntry === "function" ? createFractionsGeneratedEntry : null,
-  },
-  "spatial-reasoning": {
-    share: 0.85,
-    factory:
-      typeof createSpatialReasoningGeneratedEntry === "function"
-        ? createSpatialReasoningGeneratedEntry
-        : null,
-  },
-};
+const generatedChoiceCategoryConfigs = Object.fromEntries(
+  questionRegistry
+    .list()
+    .filter((questionModule) => SESSION_CATEGORY_ORDER.includes(questionModule.id))
+    .map((questionModule) => [
+      questionModule.id,
+      {
+        share: Number.isFinite(Number(questionModule.generatedShare))
+          ? Number(questionModule.generatedShare)
+          : 0.85,
+        factory: createRegisteredGeneratedEntryFactory(questionModule),
+      },
+    ])
+    .filter(([, config]) => typeof config.factory === "function")
+);
 
 const mathInputGenerators = [
   createAdditionInputQuestion,
@@ -3072,60 +2384,7 @@ initializeSpecialtyWordsButton();
 initializeSessionBuilder();
 initializeDifficultyControl();
 updateStartControlsForCurrentUser();
-initializeOfflineApp();
-
-function initializeOfflineApp() {
-  if (!("serviceWorker" in navigator)) {
-    return;
-  }
-
-  let refreshingForUpdate = false;
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (refreshingForUpdate) {
-      return;
-    }
-    refreshingForUpdate = true;
-    window.location.reload();
-  });
-
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("service-worker.js")
-      .then((registration) => {
-        if (registration.waiting) {
-          showAppUpdatePrompt(registration.waiting);
-        }
-
-        registration.addEventListener("updatefound", () => {
-          const installingWorker = registration.installing;
-          if (!installingWorker) {
-            return;
-          }
-
-          installingWorker.addEventListener("statechange", () => {
-            if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
-              showAppUpdatePrompt(installingWorker);
-            }
-          });
-        });
-      })
-      .catch(() => {
-        // The app still works online or from a downloaded folder without service-worker support.
-      });
-  });
-}
-
-function showAppUpdatePrompt(worker) {
-  if (!elements.appUpdateBanner || !elements.appUpdateButton || !worker) {
-    return;
-  }
-
-  elements.appUpdateBanner.hidden = false;
-  elements.appUpdateButton.onclick = () => {
-    elements.appUpdateButton.disabled = true;
-    worker.postMessage({ type: "SKIP_WAITING" });
-  };
-}
+window.HomeworkApp.pwa.initializeOfflineApp(elements);
 
 function buildHebrewQuestionBank(entries) {
   const groupedEntries = new Map();
@@ -5391,8 +4650,9 @@ function countCategorySequence(categorySequence) {
 }
 
 function hasGeographyMapSupport() {
+  const geographyMapModule = getQuestionModule(RESERVED_MAP_CATEGORY);
   return (
-    typeof createGeographyMapGeneratedEntry === "function" &&
+    typeof geographyMapModule?.generatedEntryFactory === "function" &&
     Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES) &&
     globalThis.GEOGRAPHY_MAP_COUNTRIES.length > 0
   );
@@ -5485,7 +4745,7 @@ function createSessionQuestionForCategory(
   }
 
   if (category === "charts-and-graphs") {
-    if (getOptionalGlobalFunction("createChartsAndGraphsGeneratedEntry") && Math.random() < 0.45) {
+    if (generatedChoiceCategoryConfigs["charts-and-graphs"]?.factory && Math.random() < 0.45) {
       const generatedChartQuestion = createChartsAndGraphsGeneratedChoiceQuestion(effectiveDifficulty);
       if (generatedChartQuestion) {
         return generatedChartQuestion;
@@ -5525,7 +4785,7 @@ function createSessionQuestionForCategory(
 }
 
 function createChartsAndGraphsGeneratedChoiceQuestion(difficulty) {
-  const factory = getOptionalGlobalFunction("createChartsAndGraphsGeneratedEntry");
+  const factory = generatedChoiceCategoryConfigs["charts-and-graphs"]?.factory;
   const normalizedEntry = factory
     ? normalizeChoiceBankEntry(factory(difficulty), "charts-and-graphs-choice")
     : null;
@@ -5537,9 +4797,10 @@ function createChartsAndGraphsGeneratedChoiceQuestion(difficulty) {
 
 function createGeographyMapQuestion(difficulty, runtime, resources) {
   const excludedCountries = runtime?.mapCountries ? Array.from(runtime.mapCountries) : [];
+  const geographyMapModule = getQuestionModule(RESERVED_MAP_CATEGORY);
   const rawEntry =
-    typeof createGeographyMapGeneratedEntry === "function"
-      ? createGeographyMapGeneratedEntry(difficulty, excludedCountries)
+    typeof geographyMapModule?.generatedEntryFactory === "function"
+      ? geographyMapModule.generatedEntryFactory(difficulty, excludedCountries)
       : null;
   const normalizedEntry = normalizeChoiceBankEntry(rawEntry, "geography-choice");
 
@@ -10173,131 +9434,10 @@ function toggleAnswerInputSign() {
   elements.answerInput.setSelectionRange(cursorPosition, cursorPosition);
 }
 
-function buildNumericAnswerCandidates(rawValue, question) {
-  const strippedValue = stripAcceptedNumericAffixes(rawValue, question);
-  if (!strippedValue) {
-    return [];
-  }
-
-  return Array.from(parseFlexibleNumberCandidates(strippedValue));
-}
-
-function stripAcceptedNumericAffixes(rawValue, question) {
-  let value = normalizeFlexibleNumericInput(rawValue);
-  if (!value) {
-    return "";
-  }
-
-  value = value.replace(/[.!?]+$/g, "").trim();
-  value = stripAcceptedNumericPrefix(value, question?.acceptedAnswerPrefixes);
-  value = stripAcceptedNumericSuffix(value, question?.acceptedAnswerSuffixes);
-
-  return value.trim();
-}
-
-function stripAcceptedNumericPrefix(value, affixes) {
-  const options = Array.isArray(affixes)
-    ? [...affixes].map((affix) => String(affix).trim()).filter(Boolean).sort((left, right) => right.length - left.length)
-    : [];
-
-  for (const affix of options) {
-    const pattern = new RegExp(`^${escapeRegExp(affix)}\\s*`, "i");
-    if (pattern.test(value)) {
-      return value.replace(pattern, "").trimStart();
-    }
-  }
-
-  return value;
-}
-
-function stripAcceptedNumericSuffix(value, affixes) {
-  const options = Array.isArray(affixes)
-    ? [...affixes].map((affix) => String(affix).trim()).filter(Boolean).sort((left, right) => right.length - left.length)
-    : [];
-
-  for (const affix of options) {
-    const pattern = new RegExp(`\\s*${escapeRegExp(affix)}$`, "i");
-    if (pattern.test(value)) {
-      return value.replace(pattern, "").trimEnd();
-    }
-  }
-
-  return value;
-}
-
-function parseFlexibleNumberCandidates(rawValue) {
-  const candidates = new Set();
-  const normalized = normalizeFlexibleNumericInput(rawValue);
-  if (!normalized) {
-    return candidates;
-  }
-
-  const variants = new Set([normalized]);
-  const parenthesizedMatch = normalized.match(/^\(\s*(.+?)\s*\)$/);
-  if (parenthesizedMatch) {
-    const innerValue = parenthesizedMatch[1].trim();
-    if (innerValue) {
-      variants.add(innerValue);
-      if (!/^[+-]/.test(innerValue)) {
-        variants.add(`-${innerValue}`);
-      }
-    }
-  }
-
-  variants.forEach((variant) => {
-    const compactValue = variant.replace(/([+-])\s+/g, "$1").trim();
-    const directValue = Number(compactValue);
-    if (Number.isFinite(directValue)) {
-      candidates.add(directValue);
-    }
-
-    buildNormalizedFlexibleNumberStrings(compactValue).forEach((candidateText) => {
-      const parsedValue = Number(candidateText);
-      if (Number.isFinite(parsedValue)) {
-        candidates.add(parsedValue);
-      }
-    });
-  });
-
-  return candidates;
-}
-
-function buildNormalizedFlexibleNumberStrings(value) {
-  const candidates = new Set();
-  const compactValue = value.replace(/(\d)[\s_'’](?=\d)/g, "$1");
-  const addCandidate = (candidateText) => {
-    if (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(candidateText)) {
-      candidates.add(candidateText);
-    }
-  };
-
-  addCandidate(compactValue);
-
-  if (/^[+-]?\d{1,3}(?:,\d{3})+(?:\.\d+)?$/.test(compactValue)) {
-    addCandidate(compactValue.replace(/,/g, ""));
-  }
-
-  if (/^[+-]?\d{1,3}(?:\.\d{3})+(?:,\d+)?$/.test(compactValue)) {
-    addCandidate(compactValue.replace(/\./g, "").replace(",", "."));
-  }
-
-  if (/^[+-]?\d+,\d{1,2}$/.test(compactValue)) {
-    addCandidate(compactValue.replace(",", "."));
-  }
-
-  return candidates;
-}
-
-function normalizeFlexibleNumericInput(value) {
-  return String(value ?? "")
-    .replace(/[\u00a0\u202f]/g, " ")
-    .replace(/[−–—]/g, "-")
-    .trim();
-}
-
-function numericAnswersMatch(left, right) {
-  return Number.isFinite(left) && Number.isFinite(right) && Math.abs(left - right) < 0.000001;
-}
+const {
+  buildNumericAnswerCandidates,
+  numericAnswersMatch,
+} = window.HomeworkApp.scoring;
 
 function submitTypedAnswer(event) {
   event.preventDefault();
@@ -10904,6 +10044,11 @@ function getQuestionCategoryKey(question) {
 }
 
 function getCategoryLabel(category) {
+  const registeredLabel = getQuestionModule(category)?.label;
+  if (registeredLabel) {
+    return registeredLabel;
+  }
+
   if (CATEGORY_LABELS[category]) {
     return CATEGORY_LABELS[category];
   }
@@ -10999,242 +10144,35 @@ function saveSessionHistory() {
     return false;
   }
 
-  const historyByUser = loadAllSessionHistory();
-  const sessionHistory = historyByUser[state.currentUserId] || [];
-  sessionHistory.unshift(buildSessionHistoryEntry());
-  sessionHistory.splice(MAX_SAVED_SESSIONS);
-  historyByUser[state.currentUserId] = sessionHistory;
-
-  return writeSessionHistory(historyByUser);
+  return sessionHistoryStore.addSession(state.currentUserId, buildSessionHistoryEntry());
 }
 
 function loadAllSessionHistory() {
-  const storage = getSessionStorage();
-  if (!storage) {
-    return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
-  }
-
-  try {
-    const rawValue = storage.getItem(SESSION_HISTORY_STORAGE_KEY);
-    if (!rawValue) {
-      return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
-    }
-
-    const parsed = JSON.parse(rawValue);
-    if (Array.isArray(parsed)) {
-      return Object.fromEntries(
-        USER_PROFILES.map((profile) => [profile.id, profile.id === USER_PROFILES[0].id ? parsed : []])
-      );
-    }
-
-    if (!parsed || typeof parsed !== "object") {
-      return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
-    }
-
-    const legacyAdultHistory = Array.isArray(parsed.adult) ? parsed.adult : [];
-    return Object.fromEntries(
-      USER_PROFILES.map((profile) => [
-        profile.id,
-        Array.isArray(parsed[profile.id])
-          ? parsed[profile.id]
-          : profile.id === ADULT_USER_ID
-            ? legacyAdultHistory
-            : [],
-      ])
-    );
-  } catch (error) {
-    return Object.fromEntries(USER_PROFILES.map((profile) => [profile.id, []]));
-  }
+  return sessionHistoryStore.loadAll();
 }
 
 function loadSessionHistory() {
-  const historyByUser = loadAllSessionHistory();
-  return Array.isArray(historyByUser[state.currentUserId]) ? historyByUser[state.currentUserId] : [];
+  return sessionHistoryStore.loadForUser(state.currentUserId);
 }
 
 function writeSessionHistory(historyByUser) {
-  const storage = getSessionStorage();
-  if (!storage) {
-    return false;
-  }
-
-  try {
-    storage.setItem(SESSION_HISTORY_STORAGE_KEY, JSON.stringify(historyByUser));
-    return true;
-  } catch (error) {
-    return false;
-  }
+  return sessionHistoryStore.write(historyByUser);
 }
 
 function getSessionStorage() {
-  try {
-    return window.localStorage;
-  } catch (error) {
-    return null;
-  }
+  return sessionHistoryStore.getStorage();
 }
 
 function exportSessionHistoryCsv() {
-  downloadCsvFile(buildAllSessionHistoryCsv(), getSessionHistoryCsvFilename());
+  sessionHistoryStore.exportCsv();
 }
 
 async function shareSessionHistoryCsv() {
-  const csvText = buildAllSessionHistoryCsv();
-  const filename = getSessionHistoryCsvFilename();
-  if (typeof File !== "function") {
-    downloadCsvFile(csvText, filename);
-    return;
-  }
-
-  const file = new File([getCsvFileText(csvText)], filename, { type: SESSION_HISTORY_CSV_MIME_TYPE });
-  const shareData = {
-    files: [file],
-    title: "Homework Sessions CSV",
-    text: "Homework sessions CSV",
-  };
-
-  if (
-    typeof navigator !== "undefined" &&
-    typeof navigator.share === "function" &&
-    navigator.canShare?.({ files: [file] })
-  ) {
-    try {
-      await navigator.share(shareData);
-      return;
-    } catch (error) {
-      if (error?.name === "AbortError") {
-        return;
-      }
-    }
-  }
-
-  downloadCsvFile(csvText, filename);
+  await sessionHistoryStore.shareCsv();
 }
 
 function buildAllSessionHistoryCsv() {
-  const rows = [
-    [
-      "Student ID",
-      "Student",
-      "Session ID",
-      "Started At",
-      "Session Preset",
-      "Difficulty",
-      "Minimum Difficulty",
-      "Hebrew Only",
-      "Specialty Words Only",
-      "Adaptive Review",
-      "Selected Categories",
-      "Total Questions",
-      "Correct Count",
-      "Accuracy Percent",
-      "Speed Round Total",
-      "Speed Round Correct",
-      "Record Type",
-      "Question Number",
-      "Category",
-      "Category Label",
-      "Question Text",
-      "Chosen Answer",
-      "Correct Answer",
-      "Is Correct",
-      "Selected Tokens",
-    ],
-  ];
-  const historyByUser = loadAllSessionHistory();
-
-  USER_PROFILES.forEach((profile) => {
-    const sessions = Array.isArray(historyByUser[profile.id]) ? historyByUser[profile.id] : [];
-    sessions.forEach((session) => {
-      const records = [
-        ...(Array.isArray(session.records)
-          ? session.records.map((record) => ({ recordType: "main", record }))
-          : []),
-        ...(Array.isArray(session.speedRoundRecords)
-          ? session.speedRoundRecords.map((record) => ({ recordType: "speed", record }))
-          : []),
-      ];
-
-      if (!records.length) {
-        rows.push(buildSessionHistoryCsvRow(profile, session, null));
-        return;
-      }
-
-      records.forEach((entry) => {
-        rows.push(buildSessionHistoryCsvRow(profile, session, entry));
-      });
-    });
-  });
-
-  return rows.map((row) => row.map(escapeCsvCell).join(",")).join("\r\n") + "\r\n";
-}
-
-function buildSessionHistoryCsvRow(profile, session, entry) {
-  const record = entry?.record || {};
-  const totalQuestions = Number(session?.totalQuestions) || 0;
-  const correctCount = Number(session?.correctCount) || 0;
-  const accuracyPercent = totalQuestions ? Math.round((correctCount / totalQuestions) * 100) : "";
-  const selectedCategories = Array.isArray(session?.selectedCategories)
-    ? session.selectedCategories.join("|")
-    : "";
-  const selectedTokens = Array.isArray(record?.selectedTokens) ? record.selectedTokens.join("|") : "";
-
-  return [
-    profile.id,
-    session?.userName || profile.name,
-    session?.id || "",
-    session?.startedAt || "",
-    getSessionPresetLabel(session?.sessionPreset),
-    isAdultUserId(profile.id) ? "" : session?.difficulty || "",
-    isAdultUserId(profile.id) ? "" : session?.minDifficulty || "",
-    Boolean(session?.hebrewOnly),
-    Boolean(session?.specialtyWordsOnly),
-    Boolean(session?.adaptiveReview),
-    selectedCategories,
-    totalQuestions,
-    correctCount,
-    accuracyPercent,
-    Number.isFinite(Number(session?.speedRoundTotalQuestions)) ? Number(session.speedRoundTotalQuestions) : "",
-    Number.isFinite(Number(session?.speedRoundCorrectCount)) ? Number(session.speedRoundCorrectCount) : "",
-    entry?.recordType || "",
-    record?.questionNumber || "",
-    record?.category || "",
-    record?.categoryLabel || "",
-    record?.questionText || "",
-    record?.chosenAnswer || "",
-    record?.correctAnswer || "",
-    typeof record?.isCorrect === "boolean" ? record.isCorrect : "",
-    selectedTokens,
-  ];
-}
-
-function getSessionHistoryCsvFilename() {
-  return `homework-sessions-${new Date().toISOString().slice(0, 10)}.csv`;
-}
-
-function downloadCsvFile(csvText, filename) {
-  const blob = new Blob([getCsvFileText(csvText)], { type: SESSION_HISTORY_CSV_MIME_TYPE });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(url), 0);
-}
-
-function getCsvFileText(csvText) {
-  return `\ufeff${csvText}`;
-}
-
-function escapeCsvCell(value) {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  const text = String(value);
-  return /[",\r\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+  return sessionHistoryStore.buildCsv();
 }
 
 function showHistoryScreen() {
@@ -12753,6 +11691,7 @@ if (typeof globalThis !== "undefined") {
     createNumberPatternChoiceQuestion,
     createStatisticsChoiceQuestion,
     createTimeChoiceQuestion,
+    questionRegistry,
     state,
     validateHomeworkQuestionShape,
   };
