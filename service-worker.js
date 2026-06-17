@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-06-17-question-loader-1";
+const CACHE_VERSION = "homework-v2026-06-17-app-split-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
@@ -24,6 +24,18 @@ const CRITICAL_ASSETS = [
   "app/core/session-history.js",
   "app/pwa/updates.js",
   "app/app.js",
+  "app/main/constants.js",
+  "app/main/session.js",
+  "app/main/math-utils.js",
+  "app/main/init.js",
+  "app/generators/math.js",
+  "app/generators/hebrew.js",
+  "app/generators/time-and-choice.js",
+  "app/generators/supplemental-math.js",
+  "app/ui/drag-answers.js",
+  "app/ui/quiz.js",
+  "app/ui/results-history-dashboard.js",
+  "app/ui/confetti.js",
 ];
 
 const OPTIONAL_ASSETS = [
