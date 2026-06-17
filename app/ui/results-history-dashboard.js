@@ -364,6 +364,7 @@ function showPreviousQuizQuestion() {
 
     state.currentRound = "main";
     state.viewIndex = state.totalQuestions - 1;
+    switchScreen(elements.quizScreen);
     renderCurrentQuestion();
     return;
   }

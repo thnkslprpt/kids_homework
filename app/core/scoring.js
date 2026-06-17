@@ -132,9 +132,13 @@ function numericAnswersMatch(left, right) {
   }
 
   window.HomeworkApp.scoring = {
+    buildNormalizedFlexibleNumberStrings,
     buildNumericAnswerCandidates,
+    normalizeFlexibleNumericInput,
     numericAnswersMatch,
   };
 
+  globalThis.buildNormalizedFlexibleNumberStrings = buildNormalizedFlexibleNumberStrings;
   globalThis.buildNumericAnswerCandidates = buildNumericAnswerCandidates;
+  globalThis.normalizeFlexibleNumericInput = normalizeFlexibleNumericInput;
 })();

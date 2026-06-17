@@ -11,7 +11,9 @@
         <form id="start-form">
           <input id="hebrew-only" value="false">
           <input id="question-count" value="30">
+          <button type="button" class="question-count-button" data-question-count="20"></button>
           <button type="button" class="question-count-button active" data-question-count="30"></button>
+          <button type="button" class="question-count-button" data-question-count="40"></button>
           <input id="difficulty-level" value="3">
           <div id="difficulty-selector"></div>
           <output id="difficulty-value"></output>
@@ -61,10 +63,15 @@
       </section>
       <section id="dashboard-screen" hidden>
         <button id="dashboard-back-button"></button>
+        <button id="dashboard-export-csv-button"></button>
+        <button id="dashboard-share-csv-button"></button>
         <div id="dashboard-user-selector"></div>
         <div id="dashboard-content"></div>
       </section>
     </main>
+    <div id="app-update-banner" hidden>
+      <button id="app-update-button" type="button"></button>
+    </div>
     <pre id="result">running</pre>
 
     <script src="question-utils.js"></script>
@@ -84,6 +91,308 @@
       const result = document.getElementById("result");
       const api = globalThis.HOMEWORK_TEST_API;
       const failures = [];
+      const SMOKE_HISTORY_STORAGE_KEY = "homework-session-history-v2";
+      const SMOKE_SELECTED_USER_STORAGE_KEY = "homework-selected-user";
+      const CATEGORY_DRAG_FACTORY_CATEGORIES = new Set([
+        "reading-comprehension",
+        "fractions",
+        "fractions-and-ratios",
+        "science",
+        "financial-literacy",
+        "nutrition",
+        "estimation",
+        "measurement",
+        "visual-measurement",
+        "maps-and-directions",
+      ]);
+
+      function assert(condition, message) {
+        if (!condition) failures.push(message);
+      }
+
+      function getText(element) {
+        return String(element?.textContent || "").replace(/\s+/g, " ").trim();
+      }
+
+      function click(element, label) {
+        if (!element) {
+          failures.push(`${label}: missing element`);
+          return false;
+        }
+        element.click();
+        return true;
+      }
+
+      function submit(form, label) {
+        if (!form) {
+          failures.push(`${label}: missing form`);
+          return false;
+        }
+        form.dispatchEvent(new Event("submit", { bubbles: true, cancelable: true }));
+        return true;
+      }
+
+      function withStoragePreserved(keys, callback) {
+        const previousValues = Object.fromEntries(
+          keys.map((key) => [key, localStorage.getItem(key)])
+        );
+        const previousSessionValues = Object.fromEntries(
+          keys.map((key) => [key, sessionStorage.getItem(key)])
+        );
+
+        try {
+          return callback();
+        } finally {
+          keys.forEach((key) => {
+            if (previousValues[key] === null) localStorage.removeItem(key);
+            else localStorage.setItem(key, previousValues[key]);
+
+            if (previousSessionValues[key] === null) sessionStorage.removeItem(key);
+            else sessionStorage.setItem(key, previousSessionValues[key]);
+          });
+        }
+      }
+
+      function normalizeEntryQuestionText(entry) {
+        return String(entry?.question || entry?.questionText || "").trim();
+      }
+
+      function validateStaticEntries(module) {
+        if (typeof module?.getStaticQuestions !== "function") return;
+        const entries = module.getStaticQuestions();
+        assert(Array.isArray(entries), `${module.id}: getStaticQuestions must return an array`);
+        assert(entries.length > 0, `${module.id}: static question bank is empty`);
+        if (!Array.isArray(entries)) return;
+        entries.forEach((entry, index) => validateEntry(entry, `${module.id} static #${index + 1}`));
+      }
+
+      function validateGeneratedEntryFactory(factory, label, difficulties = [1, 2, 3, 5, 8, 10]) {
+        if (typeof factory !== "function") {
+          failures.push(`${label}: factory missing`);
+          return;
+        }
+
+        difficulties.forEach((difficulty) => {
+          for (let trial = 0; trial < 8; trial += 1) {
+            validateEntry(factory(difficulty), `${label} difficulty ${difficulty} trial ${trial + 1}`);
+          }
+        });
+      }
+
+      function validateRegistryModules() {
+        const modules = api.questionRegistry?.list?.() || [];
+        const moduleIds = new Set(modules.map((module) => module.id));
+        const manifestPaths = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
+          ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
+          : [];
+        assert(moduleIds.size === modules.length, "question registry should not contain duplicate ids");
+        api.SESSION_CATEGORY_ORDER
+          .filter((category) => !["math", "hebrew", "time", "statistics"].includes(category))
+          .forEach((category) => {
+            if (!moduleIds.has(category)) {
+              failures.push(`${category}: missing HomeworkQuestions registry entry`);
+            }
+          });
+        assert(manifestPaths.length > modules.length, "question manifest should load data and registry scripts");
+
+        modules.forEach((module) => {
+          assert(typeof module.id === "string" && module.id.trim(), "registry module has a blank id");
+          assert(typeof module.label === "string" && module.label.trim(), `${module.id}: missing label`);
+          validateStaticEntries(module);
+          if (typeof module.generatedEntryFactory === "function") {
+            validateGeneratedEntryFactory(module.generatedEntryFactory, `${module.id} generated`);
+          }
+          if (typeof module.supplementalGeneratedEntryFactory === "function") {
+            validateGeneratedEntryFactory(module.supplementalGeneratedEntryFactory, `${module.id} supplemental generated`, [2, 4, 7, 10]);
+          }
+          if (CATEGORY_DRAG_FACTORY_CATEGORIES.has(module.id)) {
+            assert(typeof globalThis.createCategoryGeneratedDragQuestion === "function", `${module.id}: drag factory missing`);
+            [2, 5, 8, 10].forEach((difficulty) => {
+              for (let trial = 0; trial < 5; trial += 1) {
+                validateQuestion(
+                  globalThis.createCategoryGeneratedDragQuestion(module.id, difficulty),
+                  `${module.id} drag difficulty ${difficulty} trial ${trial + 1}`
+                );
+              }
+            });
+          }
+        });
+      }
+
+      function assertVisibleScreen(screenId, label) {
+        ["start-screen", "quiz-screen", "results-screen", "history-screen", "dashboard-screen"].forEach((id) => {
+          const element = document.getElementById(id);
+          const shouldBeVisible = id === screenId;
+          assert(element.hidden !== shouldBeVisible, `${label}: ${id} visibility mismatch`);
+        });
+      }
+
+      function answerCurrentVisibleQuestion({ allowIntentionalWrong = false } = {}) {
+        const round = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
+        const question = round.questions[round.currentIndex];
+        if (!question) {
+          failures.push(`workflow: missing question at ${api.state.currentRound} index ${round.currentIndex}`);
+          return false;
+        }
+
+        validateQuestion(question, `workflow ${api.state.currentRound} #${round.currentIndex + 1}`);
+
+        if (question.mode === "choice") {
+          const options = Array.from(document.querySelectorAll("#choices-area .choice-button"));
+          const selectedValue =
+            allowIntentionalWrong
+              ? question.options.find((option) => String(option) !== String(question.answerValue))
+              : question.answerValue;
+          const button = options.find((option) => option.dataset.value === String(selectedValue));
+          return click(button, `workflow choice ${selectedValue}`);
+        }
+
+        if (question.mode === "input") {
+          const answerInput = document.getElementById("answer-input");
+          const answerValue = Number(question.answerValue);
+          answerInput.value = allowIntentionalWrong && Number.isFinite(answerValue)
+            ? String(answerValue + 1)
+            : String(question.answerValue);
+          return submit(document.getElementById("answer-form"), "workflow input submit");
+        }
+
+        if (question.mode === "practice") {
+          return click(document.querySelector("#choices-area .practice-button"), "workflow practice button");
+        }
+
+        if (question.mode === "drag") {
+          if (question.dragLayout === "matching") {
+            const leftAnchors = Array.from(document.querySelectorAll("#drag-area .matching-anchor.left"));
+            const rightRows = Array.from(document.querySelectorAll("#drag-area .matching-row.right"));
+            question.dragAnswerTokens.forEach((answerToken, index) => {
+              const rightAnchor = rightRows
+                .find((row) => getText(row.querySelector(".matching-card")) === String(answerToken))
+                ?.querySelector(".matching-anchor.right");
+              click(leftAnchors[index], `workflow matching left ${index + 1}`);
+              click(rightAnchor, `workflow matching right ${answerToken}`);
+            });
+          } else {
+            question.dragAnswerTokens.forEach((answerToken) => {
+              const tokenButton = Array.from(document.querySelectorAll("#drag-area .drag-token"))
+                .find((button) => getText(button) === String(answerToken));
+              click(tokenButton, `workflow drag token ${answerToken}`);
+            });
+          }
+          return click(document.querySelector("#drag-area .drag-check-button"), "workflow drag check");
+        }
+
+        failures.push(`workflow: unsupported question mode ${question.mode}`);
+        return false;
+      }
+
+      function completeVisibleSession() {
+        let answered = 0;
+        let usedIntentionalWrong = false;
+        while (document.getElementById("results-screen").hidden && answered < 80) {
+          const round = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
+          const question = round.questions[round.currentIndex];
+          const canAnswerWrong = !usedIntentionalWrong && question && ["choice", "input"].includes(question.mode);
+          const beforeRound = api.state.currentRound;
+          const beforeIndex = round.currentIndex;
+          answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
+          if (canAnswerWrong) usedIntentionalWrong = true;
+
+          const afterRound = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
+          const madeProgress =
+            api.state.currentRound !== beforeRound ||
+            afterRound.currentIndex !== beforeIndex ||
+            !document.getElementById("results-screen").hidden;
+          if (!madeProgress) {
+            failures.push(`workflow: answering ${beforeRound} question ${beforeIndex + 1} made no progress`);
+            break;
+          }
+          answered += 1;
+        }
+
+        assert(!document.getElementById("results-screen").hidden, "workflow: session did not reach results screen");
+        assert(usedIntentionalWrong, "workflow: did not find a choice/input question for wrong-answer coverage");
+      }
+
+      function runUiWorkflowSmokeTest() {
+        withStoragePreserved([SMOKE_HISTORY_STORAGE_KEY, SMOKE_SELECTED_USER_STORAGE_KEY], () => {
+          localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
+          sessionStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
+
+          const questionCount = document.getElementById("question-count");
+          const difficultyInput = document.getElementById("difficulty-level");
+          const startForm = document.getElementById("start-form");
+
+          questionCount.value = "13";
+          submit(startForm, "invalid count submit");
+          assertVisibleScreen("start-screen", "invalid count");
+          assert(getText(document.getElementById("start-feedback")).includes("Please choose"), "invalid count should show feedback");
+
+          click(document.querySelector('[data-user-id="guest"]'), "guest user button");
+          difficultyInput.value = "10";
+          difficultyInput.dispatchEvent(new Event("input", { bubbles: true }));
+          assert(document.getElementById("difficulty-value").textContent === "10", "guest difficulty value should update");
+          click(document.querySelector('[data-question-count="20"]'), "20 question button");
+          click(document.querySelector('[data-session-preset="math-heavy"]'), "math-heavy preset button");
+          assert(document.getElementById("hebrew-only").value === "false", "math-heavy preset should not enable Hebrew only");
+          submit(startForm, "workflow start submit");
+          assertVisibleScreen("quiz-screen", "started session");
+          assert(api.state.questions.length === 20, `workflow: expected 20 main questions, got ${api.state.questions.length}`);
+          assert(api.state.sessionPreset === api.SESSION_PRESETS["math-heavy"], "workflow: math-heavy preset was not stored");
+          assert(api.state.questions.some((question) => question.mode === "input"), "workflow: session should include input questions");
+          assert(api.state.questions.some((question) => question.mode === "choice"), "workflow: session should include choice questions");
+          assert(document.querySelectorAll("#progress-tracker .progress-box").length === 20, "workflow: progress tracker should render 20 boxes");
+
+          completeVisibleSession();
+          assertVisibleScreen("results-screen", "completed session");
+          assert(api.state.speedRound.records.filter(Boolean).length === api.SPEED_ROUND_QUESTION_COUNT, "workflow: speed records missing");
+          assert(api.state.sessionRecords.filter(Boolean).length === 20, "workflow: main records missing");
+          assert(!document.getElementById("results-category-summary").hidden, "workflow: wrong-answer category summary should be visible");
+          assert(getText(document.getElementById("results-summary")).includes("Speed round:"), "workflow: results should include speed summary");
+
+          const resultsBackButton = document.getElementById("results-back-button");
+          assert(!resultsBackButton.disabled, "workflow: results back button should be enabled");
+          click(document.getElementById("results-back-button"), "results back button");
+          const enteredReview = !document.getElementById("quiz-screen").hidden && document.getElementById("results-screen").hidden;
+          assert(
+            enteredReview,
+            `results review back: expected quiz review, got round=${api.state.currentRound} main=${api.state.viewIndex}/${api.state.currentIndex}/${api.state.totalQuestions} resultsHidden=${document.getElementById("results-screen").hidden} quizHidden=${document.getElementById("quiz-screen").hidden}`
+          );
+          if (enteredReview) {
+            assert(document.getElementById("answer-input").disabled || document.getElementById("answer-form").hidden, "workflow: reviewed answer should be locked");
+            click(document.getElementById("quiz-forward-button"), "quiz forward during review");
+            assert(api.state.viewIndex <= api.state.currentIndex, "workflow: review forward should stay within answered range");
+          }
+
+          click(document.getElementById("restart-button"), "restart button");
+          assertVisibleScreen("start-screen", "restart");
+          click(document.getElementById("history-button"), "history button");
+          assertVisibleScreen("history-screen", "history");
+          assert(document.querySelectorAll("#history-list .history-session").length === 1, "workflow: history should show one saved session");
+          assert(getText(document.getElementById("history-list")).includes("Speed"), "workflow: history should include speed metadata");
+          click(document.getElementById("history-back-button"), "history back");
+
+          click(document.getElementById("dashboard-button"), "dashboard button");
+          assertVisibleScreen("dashboard-screen", "dashboard");
+          assert(getText(document.getElementById("dashboard-content")).includes("Sessions"), "workflow: dashboard should render stats");
+          assert(document.querySelectorAll("#dashboard-user-selector .dashboard-user-button").length === api.USER_PROFILES.length, "workflow: dashboard user selector missing users");
+          click(document.getElementById("dashboard-back-button"), "dashboard back");
+          assertVisibleScreen("start-screen", "dashboard back");
+        });
+      }
+
+      function validateScoringHelpers() {
+        const cases = [
+          ["4,000", 4000, {}],
+          ["1 234", 1234, {}],
+          ["\u22123.5", -3.5, {}],
+          ["about 12 kg", 12, { acceptedAnswerPrefixes: ["about"], acceptedAnswerSuffixes: ["kg"] }],
+          ["(7)", -7, {}],
+        ];
+        cases.forEach(([rawValue, expected, question]) => {
+          const candidates = globalThis.buildNumericAnswerCandidates(rawValue, question);
+          assert(candidates.includes(expected), `numeric parser should accept ${JSON.stringify(rawValue)} as ${expected}`);
+        });
+      }
 
       function validateQuestion(question, label) {
         const errors = api.validateHomeworkQuestionShape(question, label);
@@ -96,9 +405,13 @@
           failures.push(`${label}: did not return an entry`);
           return;
         }
-        const options = Array.isArray(entry.options) ? entry.options.map(String) : [];
-        const answer = String(entry.answer || "");
-        if (!entry.question) failures.push(`${label}: missing question`);
+        const answer = String(entry.answer || entry.correctAnswer || "");
+        const options = Array.isArray(entry.options)
+          ? entry.options.map(String)
+          : [entry.correctAnswer, ...(Array.isArray(entry.incorrectAnswers) ? entry.incorrectAnswers : [])]
+              .filter((option) => option !== undefined && option !== null)
+              .map(String);
+        if (!normalizeEntryQuestionText(entry)) failures.push(`${label}: missing question`);
         if (!answer) failures.push(`${label}: missing answer`);
         if (options.length !== 4) failures.push(`${label}: expected 4 options, got ${options.length}`);
         if (new Set(options).size !== options.length) failures.push(`${label}: options are not unique`);
@@ -138,6 +451,8 @@
 
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
+        validateRegistryModules();
+        validateScoringHelpers();
         const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);
         api.SESSION_CATEGORY_ORDER
           .filter((category) => !["math", "hebrew", "time", "statistics"].includes(category))
@@ -279,10 +594,10 @@
         if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
         speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
 
-        const previousHistory = localStorage.getItem("homework-session-history-v2");
+        const previousHistory = localStorage.getItem(SMOKE_HISTORY_STORAGE_KEY);
         try {
           localStorage.setItem(
-            "homework-session-history-v2",
+            SMOKE_HISTORY_STORAGE_KEY,
             JSON.stringify({
               gabriel: [
                 {
@@ -329,11 +644,12 @@
           if (!csv.includes(",speed,1,math,Math,2 + 3,6,5,false,")) failures.push("CSV export missing speed row");
         } finally {
           if (previousHistory === null) {
-            localStorage.removeItem("homework-session-history-v2");
+            localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
           } else {
-            localStorage.setItem("homework-session-history-v2", previousHistory);
+            localStorage.setItem(SMOKE_HISTORY_STORAGE_KEY, previousHistory);
           }
         }
+        runUiWorkflowSmokeTest();
       } catch (error) {
         failures.push(error && error.stack ? error.stack : String(error));
       }
