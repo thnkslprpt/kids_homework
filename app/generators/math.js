@@ -33,11 +33,13 @@ function buildSpeedRoundQuestions() {
     ? normalizeSessionDifficulty(state.difficulty)
     : getCategoryDifficultyFromMap(state.categoryDifficulties, "math", state.difficulty);
   const questions = [];
+  const mathGenerators = hebrewOnly ? [] : shuffleArray(getSpeedMathGenerators(difficulty));
 
   for (let index = 0; index < SPEED_ROUND_QUESTION_COUNT; index += 1) {
+    const generator = mathGenerators[index % mathGenerators.length];
     const question = hebrewOnly
       ? createSpeedHebrewQuestion(index)
-      : randomChoice(getSpeedMathGenerators(difficulty))(index, difficulty);
+      : generator(index, difficulty);
 
     questions.push(question || createSpeedAdditionQuestion(index, difficulty));
   }
@@ -50,67 +52,94 @@ const SPEED_ROUND_MATH_CONFIGS = {
     add: { left: [1, 9], right: [1, 9] },
     subtract: { answer: [1, 9], right: [1, 8] },
     double: [2, 10],
+    half: [2, 10],
+    step: [1, 10],
     compare: { values: [1, 20], gap: 1 },
   },
   2: {
     add: { left: [5, 20], right: [2, 12] },
     subtract: { answer: [2, 18], right: [2, 12] },
     double: [4, 20],
+    half: [4, 20],
+    step: [10],
     compare: { values: [10, 80], gap: 4 },
   },
   3: {
     add: { left: [12, 45], right: [6, 25] },
     subtract: { answer: [5, 35], right: [5, 30] },
     double: [8, 35],
+    half: [8, 35],
+    step: [10],
     compare: { values: [25, 150], gap: 8 },
   },
   4: {
     add: { left: [25, 90], right: [12, 45] },
     subtract: { answer: [10, 80], right: [10, 55] },
     double: [12, 55],
+    half: [12, 55],
     multiply: { left: [3, 9], right: [3, 9] },
+    division: { divisor: [3, 9], quotient: [3, 9] },
+    step: [10, 100],
     compare: { values: [75, 350], gap: 15 },
   },
   5: {
     add: { left: [45, 140], right: [20, 85] },
     subtract: { answer: [20, 120], right: [18, 95] },
     double: [25, 80],
+    half: [25, 80],
     multiply: { left: [4, 11], right: [4, 11] },
+    division: { divisor: [4, 11], quotient: [4, 11] },
+    step: [10, 100],
     compare: { values: [150, 900], gap: 30 },
   },
   6: {
     add: { left: [90, 240], right: [35, 130] },
     subtract: { answer: [40, 220], right: [25, 160] },
     double: [40, 120],
+    half: [40, 120],
     multiply: { left: [6, 12], right: [4, 12] },
+    division: { divisor: [6, 12], quotient: [4, 12] },
+    step: [10, 100],
     compare: { values: [300, 1800], gap: 60 },
   },
   7: {
     add: { left: [140, 420], right: [45, 190] },
     subtract: { answer: [75, 360], right: [50, 240] },
     double: [60, 175],
+    half: [60, 175],
     multiply: { left: [7, 14], right: [5, 12] },
+    division: { divisor: [7, 14], quotient: [5, 12] },
+    step: [100, 1000],
     compare: { values: [600, 3500], gap: 125 },
   },
   8: {
     add: { left: [240, 700], right: [90, 320] },
     subtract: { answer: [120, 650], right: [80, 360] },
     double: [90, 260],
+    half: [90, 260],
     multiply: { left: [8, 16], right: [6, 14] },
+    division: { divisor: [8, 16], quotient: [6, 14] },
+    step: [100, 1000],
     compare: { values: [1200, 7500], gap: 250 },
   },
   9: {
     add: { left: [450, 1200], right: [150, 650] },
     subtract: { answer: [250, 1200], right: [130, 750] },
     double: [140, 420],
+    half: [140, 420],
     multiply: { left: [9, 18], right: [7, 15] },
+    division: { divisor: [9, 18], quotient: [7, 15] },
+    step: [100, 1000],
     compare: { values: [2500, 15000], gap: 500 },
   },
   10: {
     add: { left: [800, 2400], right: [300, 1200] },
     subtract: { answer: [500, 2500], right: [250, 1400] },
     double: [250, 750],
+    half: [250, 750],
     multiply: { left: [12, 24], right: [8, 16] },
+    division: { divisor: [12, 24], quotient: [8, 16] },
+    step: [100, 1000],
     compare: { values: [5000, 30000], gap: 1000 },
   },
 };
@@ -121,10 +150,15 @@ function getSpeedMathGenerators(difficulty) {
     createSpeedSubtractionQuestion,
     createSpeedComparisonQuestion,
     createSpeedDoublingQuestion,
+    createSpeedHalvingQuestion,
+    createSpeedStepQuestion,
+    createSpeedMissingAdditionQuestion,
+    createSpeedMissingSubtractionQuestion,
   ];
 
   if (difficulty >= 4) {
     generators.push(createSpeedMultiplicationQuestion);
+    generators.push(createSpeedDivisionQuestion);
   }
 
   return generators;
@@ -177,6 +211,38 @@ function createSpeedDoublingQuestion(index, difficulty = 1) {
   });
 }
 
+function createSpeedHalvingQuestion(index, difficulty = 1) {
+  const answer = randomInt(...getSpeedMathConfig(difficulty).half);
+  const value = answer * 2;
+  return createSpeedNumberChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "Half of it.",
+    displayText: formatGroupedNumber(value),
+    answer,
+    index,
+  });
+}
+
+function createSpeedStepQuestion(index, difficulty = 1) {
+  const config = getSpeedMathConfig(difficulty);
+  const step = randomChoice(config.step);
+  const valueRange = config.compare.values;
+  const askMore = Math.random() < 0.5;
+  const value = askMore
+    ? randomInt(valueRange[0], valueRange[1])
+    : randomInt(Math.max(step, valueRange[0]), valueRange[1]);
+  const answer = askMore ? value + step : value - step;
+  return createSpeedNumberChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: `${formatGroupedNumber(step)} ${askMore ? "more" : "less"}.`,
+    displayText: formatGroupedNumber(value),
+    answer,
+    index,
+  });
+}
+
 function createSpeedMultiplicationQuestion(index, difficulty = 4) {
   const config = getSpeedMathConfig(difficulty).multiply;
   const left = randomInt(...config.left);
@@ -187,6 +253,51 @@ function createSpeedMultiplicationQuestion(index, difficulty = 4) {
     difficulty,
     questionText: "",
     displayText: `${left} x ${right} =`,
+    answer,
+    index,
+  });
+}
+
+function createSpeedDivisionQuestion(index, difficulty = 4) {
+  const config = getSpeedMathConfig(difficulty).division;
+  const divisor = randomInt(...config.divisor);
+  const answer = randomInt(...config.quotient);
+  const dividend = divisor * answer;
+  return createSpeedNumberChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "",
+    displayText: `${formatGroupedNumber(dividend)} / ${formatGroupedNumber(divisor)} =`,
+    answer,
+    index,
+  });
+}
+
+function createSpeedMissingAdditionQuestion(index, difficulty = 1) {
+  const config = getSpeedMathConfig(difficulty).add;
+  const left = randomInt(...config.left);
+  const answer = randomInt(...config.right);
+  const total = left + answer;
+  return createSpeedNumberChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "What number is missing?",
+    displayText: `${formatGroupedNumber(left)} + __ = ${formatGroupedNumber(total)}`,
+    answer,
+    index,
+  });
+}
+
+function createSpeedMissingSubtractionQuestion(index, difficulty = 1) {
+  const config = getSpeedMathConfig(difficulty).subtract;
+  const answer = randomInt(...config.right);
+  const difference = randomInt(...config.answer);
+  const left = difference + answer;
+  return createSpeedNumberChoiceQuestion({
+    type: "math-choice",
+    difficulty,
+    questionText: "What number is missing?",
+    displayText: `${formatGroupedNumber(left)} - __ = ${formatGroupedNumber(difference)}`,
     answer,
     index,
   });
@@ -1468,4 +1579,3 @@ function renderRectangleMeasureVisual(length, width, measure) {
     </div>
   `;
 }
-

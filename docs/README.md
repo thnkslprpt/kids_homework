@@ -43,33 +43,56 @@ When updates are pushed to GitHub:
 
 ## Current Features
 
+- Static app: there is no build step. The browser loads `homework.html`, the question manifest, and
+  plain JavaScript files directly.
 - Works offline from a normal folder.
 - Lets you choose:
-  - how many questions to use for the session
+  - student profile
+  - `20`, `30`, or `40` main-session questions
   - difficulty level `1` to `10` for Guest sessions
-  - a minimum generated-question level for custom sessions
-  - a custom set of topic categories
+  - `Adaptive`, `Math`, or `Hebrew` session preset
 - Defaults to:
   - `30` questions
+  - the `Adaptive` preset
   - each student's hard-coded level per topic category
-- Student category levels are hard-coded in `app/app.js` in the `USER_PROFILES`
-  table. Edit each child's explicit `categoryDifficulties` object to change one category level.
+- Student category levels and profile settings are hard-coded in `app/core/config.js` in the
+  `USER_PROFILES` table. Edit each child's explicit `categoryDifficulties` object to change one
+  category level.
+- Guest sessions use the visible difficulty slider. Named child profiles use their per-category
+  levels instead.
+- Miranda has a fixed adult Hebrew-focused profile with optional specialty vocabulary support when
+  the corresponding UI control is present.
 - Tracks live progress with colored progress boxes and a score counter.
+- Runs a short `5` question speed round after the main session.
 - Multiple-choice questions check immediately when you click an answer.
+- Drag questions support sentence completion, category sorting, matching, and image vocabulary.
 - Typed math questions check when you press `Enter`.
+- Hebrew writing-practice prompts are added near the end of non-adult sessions.
 - Shows review feedback for wrong answers with the question, your answer, and the correct answer.
-- Shows a final results screen with praise text and confetti.
-- Includes an offline browser smoke test for generated-question quality and answer shape checks.
+- Shows a final results screen with category review, missed-question details, speed-round results,
+  praise text, and confetti.
+- Keeps previous sessions per student and includes a parent dashboard with CSV export/share.
+- Includes an offline browser smoke test for session generation, generated-question quality, speed
+  round shape, and CSV formatting.
 
 ## Question Mix
 
-The session is built by percentage, not by a fixed repeating slot number.
+The default `Adaptive` session is built by percentage, not by a fixed repeating slot number.
 
 - Math and Hebrew together make up about `40%` to `50%` of the session.
 - The current target is about `45%`, rounded to whole questions.
 - The remaining share is split as evenly as possible between the non-core categories.
 - If a session is short, the app uses a balanced shuffled subset of the non-core categories so the
   same few categories do not always appear first.
+- If adaptive review has enough previous-session data, up to about `20%` of the session is reserved
+  for recently weak categories, limited to categories that support focused review.
+
+Other presets:
+
+- `Math`: uses the extended math-like category set, including math, statistics, time, algebra,
+  visual math, visual measurement, measurement, charts, calendar, estimation, probability,
+  fractions, ratios, spatial reasoning, logic, and applied word problems.
+- `Hebrew`: uses only Hebrew questions and uses the longer Hebrew writing-practice tail.
 
 Within math, the app uses both:
 
@@ -98,19 +121,26 @@ Within math, the app uses both:
   - multiple-choice Hebrew word meaning questions
   - shows Hebrew words with nikud / vowel marks
   - transliteration is available behind a `Show transliteration` toggle
-  - final-letter drills, root families, gender / number agreement, prepositions, and verb-tense matching
+  - final-letter drills, root families, gender / number agreement, prepositions, verb-tense
+    matching, image vocabulary, sentence drag, opposites, homographs, reading, and writing practice
 - `Science`
   - offline multiple-choice science bank
   - generated practice for food webs, life cycles, classification, states of matter, circuits, forces,
     simple machines, weather, the water cycle, rocks / minerals, and astronomy scale
+- `Science Evidence`
+  - fair tests, claims, evidence, variables, tables, experimental design, and cautious conclusions
 - `Time`
   - questions like “In 15 minutes, what time will it be?”
 - `Statistics`
   - mean, median, mode, range, and simple data-reading questions
 - `Algebra`
   - basic one-step equations, simple two-step equations, substitution, and function-table style prompts
+- `Applied Word Problems`
+  - multi-step practical arithmetic, rates, money, scheduling, and everyday quantitative reasoning
 - `Visual Math`
   - coordinate grids, number lines, angle reading, pictographs / line plots, and grid area/perimeter visuals
+- `Visual Measurement`
+  - clocks, rulers, scales, containers, unit visuals, elapsed time, and practical measurement scenes
 - `Logic`
   - patterns, ordering, elimination, and deduction
 - `Rationality`
@@ -156,36 +186,41 @@ Within math, the app uses both:
   - paragraph ordering, main idea, evidence, inference, and summarization
 - `Vocabulary / Grammar`
   - spelling, syllables, punctuation, capitalization, parts of speech, roots, prefixes,
-    suffixes, and sentence combining
+    suffixes, sentence combining, and English sentence-drag questions
 
 Several general and practical categories also include generated questions for recipes, transit
 schedules, reading labels, tool safety, emergency decision trees, prioritization, planning steps,
 debugging mistakes, cause/effect chains, tradeoffs, risk/reward, evidence checks, timelines,
-latitude/longitude, climate zones, landforms, migration routes, and culture/holiday matching.
+latitude/longitude, climate zones, landforms, migration routes, culture/holiday matching, and
+category-sort drag questions.
 
 ## Difficulty
 
 The app supports session difficulty levels `1` through `10`.
 
-For all non-Hebrew categories, the session difficulty now mixes question levels like this:
+For non-Hebrew categories, the session difficulty mixes question levels like this:
 
 - Level `1`: only level `1` questions
 - Level `2`: `75%` level `2`, `25%` level `1`
 - Level `3`: `70%` level `3`, `20%` level `2`, `10%` level `1`
-- Level `4`: `60%` level `4`, `25%` level `3`, `10%` level `2`, `5%` level `1`
-- Level `5`: `70%` level `5`, `20%` level `4`, `5%` level `3`, `5%` level `2`
-- Level `6`: `65%` level `6`, `22%` level `5`, `8%` level `4`, `5%` level `3`
-- Level `7`: `68%` level `7`, `22%` level `6`, `7%` level `5`, `3%` level `4`
-- Level `8`: `68%` level `8`, `22%` level `7`, `7%` level `6`, `3%` level `5`
-- Level `9`: `68%` level `9`, `22%` level `8`, `7%` level `7`, `3%` level `6`
-- Level `10`: `68%` level `10`, `22%` level `9`, `7%` level `8`, `3%` level `7`
+- Level `4`: `70%` level `4`, `20%` level `3`, `10%` level `2`
+- Level `5`: `70%` level `5`, `20%` level `4`, `10%` level `3`
+- Level `6`: `70%` level `6`, `20%` level `5`, `10%` level `4`
+- Level `7`: `70%` level `7`, `20%` level `6`, `10%` level `5`
+- Level `8`: `70%` level `8`, `20%` level `7`, `10%` level `6`
+- Level `9`: `70%` level `9`, `20%` level `8`, `10%` level `7`
+- Level `10`: `70%` level `10`, `20%` level `9`, `10%` level `8`
 
 Hebrew uses a special rule:
 
 - Hebrew never goes above the chosen session difficulty.
-- A level `3` session can use Hebrew levels `1`, `2`, and `3`.
-- A level `10` session can use Hebrew levels `1` through `10`, when those levels exist in the Hebrew bank.
+- A level `3` session can use Hebrew levels `1`, `2`, and `3` by default.
+- A level `10` session can use Hebrew levels `1` through `10`, when those levels exist in the
+  Hebrew bank.
 - Allowed Hebrew levels are spread evenly, instead of being weighted toward the chosen level.
+
+When a minimum difficulty is supplied by an alternate/custom builder UI, the app raises the lower
+part of the difficulty mix to that minimum while keeping the chosen category maximum.
 
 Math generators scale with the effective question difficulty. That now includes broader arithmetic,
 decimals, place value, and rectangle-measure questions in both typed-answer and multiple-choice
@@ -203,47 +238,87 @@ cleared, but it reduces repeat questions across nearby homework sessions.
 ## Previous Sessions
 
 The app keeps the last `10` sessions in browser storage and shows them through the
-`Previous Sessions` button on the start screen.
+`Previous Sessions` button on the start screen. History is stored separately for each student.
 
 Each saved session includes:
 
 - date and time
+- student and session preset
 - chosen difficulty
 - per-category difficulty levels for that session
+- selected categories and adaptive-review setting
 - final score
-- each question
+- speed-round score
+- each main-session question
+- each speed-round question
 - chosen answer
 - correct answer
 - whether it was right or wrong
+- selected drag tokens, when the question used drag answers
 
 Important:
 
 - session history is stored in the browser profile on that computer
 - it is not saved as normal files in the homework folder
 - it will usually stay after closing Chrome, but can be lost if browser/site data is cleared
+- the parent dashboard reads this same browser-local history and can export/share a CSV
+- history is not synced between devices
 
 ## Files
 
+- `index.html`: redirects the repo root to `homework.html`
 - `homework.html`: main page
+- `manifest.json`: installable app metadata
+- `service-worker.js`: offline cache and update handling
 - `app/style.css`: visual design
-- `app/app.js`: quiz logic, storage, history screen, and confetti
+- `app/app.js`: script loader for the split runtime modules
 - `app/question-utils.js`: shared helpers and recent-question tracking for supplemental generators
+- `app/questions/manifest.js`: list of question-bank scripts to load
+- `app/questions/registry.js`: small registry used by question modules
+- `app/questions/load.js`: question-bank script loader
+- `app/core/namespace.js`: creates the shared `HomeworkApp` namespace
+- `app/core/config.js`: profile settings, category order, difficulty weights, and session constants
+- `app/core/state.js`: initial app and speed-round state
+- `app/core/dom.js`: DOM lookup map
+- `app/core/scoring.js`: answer normalization and scoring helpers
+- `app/core/session-history.js`: history storage, dashboard CSV export, and share/download helpers
+- `app/core/bootstrap-errors.js`: startup error reporting
+- `app/pwa/updates.js`: service-worker registration and reload prompt
+- `app/main/constants.js`: shared runtime constants and static Hebrew writing data
+- `app/main/session.js`: session building, presets, adaptive review, user controls, and history save flow
+- `app/main/math-utils.js`: math formatting helpers
+- `app/main/init.js`: runtime wiring, question-bank setup, event handlers, and smoke-test API
+- `app/generators/math.js`: core math generators
+- `app/generators/supplemental-math.js`: supplemental math and extended numeric generators
+- `app/generators/hebrew.js`: Hebrew generated questions and writing/drag helpers
+- `app/generators/time-and-choice.js`: time, statistics, and choice-question helpers
+- `app/ui/quiz.js`: rendering, answer handling, navigation, drag UI, and question review
+- `app/ui/drag-answers.js`: reusable drag-answer interaction helpers
+- `app/ui/results-history-dashboard.js`: results screen, previous sessions, dashboard, speed round, and audio tick
+- `app/ui/confetti.js`: results confetti
 - `app/hebrew-words.js`: bundled Hebrew vocabulary list
+- `app/hebrew-expanded-words.js`: expanded Hebrew vocabulary list
+- `app/hebrew-image-words.js`: Hebrew image-vocabulary mappings
 - `app/hebrew-questions.js`: Hebrew final letters, roots, agreement, prepositions, and tense matching
+- `app/adult-hebrew-module.js`: Miranda's adult Hebrew vocabulary, context, reading, sorting, and writing data
 - `app/science-questions.js`: bundled offline science bank
+- `app/science-evidence-questions.js`: evidence, experiment, and fair-test bank
 - `app/general-knowledge-questions.js`: bundled offline general knowledge bank
 - `app/algebra-questions.js`: algebra bank and generator
+- `app/applied-word-problems-questions.js`: applied word-problem bank
 - `app/charts-and-graphs-questions.js`: chart, graph, table, sampling, and outlier questions
 - `app/vocabulary-grammar-questions.js`: vocabulary, grammar, spelling, punctuation, and sentence combining
 - `app/reading-comprehension-questions.js`: reading passages, main idea, inference, evidence, and summaries
 - `app/visual-math-questions.js`: visual math bank and generator
+- `app/visual-measurement-questions.js`: visual measurement bank and generator
 - `app/logic-questions.js`: bundled offline logic bank
 - `app/rationality-questions.js`: bundled offline rationality bank
 - `app/geography-questions.js`: geography bank and generator
+- `app/geography-map-data.js`: generated map metadata and SVG source data
+- `app/geography-map-questions.js`: generated geography-map question renderer
 - `app/population-questions.js`: top-population country bank
 - `app/financial-literacy-questions.js`: money skills bank
 - `app/measurement-questions.js`: units and measurement bank
-- `app/charts-and-graphs-questions.js`: tables and graph-reading bank
 - `app/calendar-questions.js`: calendar and date bank
 - `app/estimation-questions.js`: estimation bank
 - `app/probability-questions.js`: probability bank
@@ -254,37 +329,12 @@ Important:
 - `app/fractions-questions.js`: fractions bank with visual models
 - `app/fractions-and-ratios-questions.js`: fractions and ratios bank
 - `app/spatial-reasoning-questions.js`: spatial reasoning bank
-- `app/smoke-test.html`: offline browser smoke test for session generation and generated-question shape
+- `app/category-drag-questions.js`: generated category-sort drag questions
+- `app/sentence-drag-english.js`: English sentence-drag bank and generator
+- `app/sentence-drag-hebrew.js`: Hebrew sentence-drag bank and generator
+- `app/assets/`: offline fonts, map assets, Hebrew image assets, and source snapshots
+- `app/icons/`: PWA and browser icons
+- `app/smoke-test.html`: offline browser smoke test for session generation, generated-question shape,
+  speed round, and CSV formatting
 - `app/scripts/`: helper scripts
 - `app/logs/`: saved generator/import logs
-
-## Sources
-
-Hebrew vocabulary source:
-
-- https://ehebrew.net/500-hebrew-words/
-
-Science bank started from Open Trivia DB and was then curated and expanded for this app:
-
-- https://opentdb.com/
-
-Some added fact-based questions were based on material from:
-
-- https://www.census.gov/popclock/world//
-- https://www.nasa.gov/learning-resources/for-kids-and-students/what-is-earth-grades-k-4
-- https://spaceplace.nasa.gov/how-orbits-works/en/all-about-the-moon/
-- https://spaceplace.nasa.gov/all-about-venus/en/
-- https://goes-r.noaa.gov/resources/education.html
-- https://www.usgs.gov/media/images/these-kids-water-magically-comes-out-ground
-- https://kidshealth.org/en/parents/brain-nervous-system.html
-
-The newer practical-skill banks were hand-authored for this app and informed by material from:
-
-- https://www.worldometers.info/geography/countries-of-the-world/
-- https://www.worldometers.info/world-population/population-by-country/
-- https://www.consumerfinance.gov/consumer-tools/educator-tools/youth-financial-education/teach/activities/exploring-saving-spending-game/
-- https://www.fda.gov/food/nutrition-facts-label/calories-nutrition-facts-label
-- https://consumer.ftc.gov/articles/heads-up
-- https://consumer.ftc.gov/articles/how-protect-your-child-identity-theft
-- https://education.nationalgeographic.org/resource/places-in-the-park/
-- https://www.redcross.org/take-a-class/resources/learn-first-aid
