@@ -5,7 +5,7 @@ const ROOT = path.resolve(__dirname, "..", "..");
 const APP_DIR = path.join(ROOT, "app");
 const ASSETS_DIR = path.join(APP_DIR, "assets");
 const OUTPUT_DIR = path.join(ASSETS_DIR, "geography-maps");
-const OUTPUT_DATA_FILE = path.join(APP_DIR, "geography-map-data.js");
+const OUTPUT_DATA_FILE = path.join(APP_DIR, "questions", "geography", "geography-map-data.js");
 const OUTPUT_GALLERY_FILE = path.join(ASSETS_DIR, "geography-map-gallery.html");
 const SNAPSHOT_DATE = "2026-03-24";
 

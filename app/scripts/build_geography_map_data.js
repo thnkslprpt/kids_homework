@@ -4,7 +4,7 @@ const path = require("path");
 const ROOT = path.resolve(__dirname, "..", "..");
 const APP_DIR = path.join(ROOT, "app");
 const ASSETS_DIR = path.join(APP_DIR, "assets");
-const OUTPUT_DATA_FILE = path.join(APP_DIR, "geography-map-data.js");
+const OUTPUT_DATA_FILE = path.join(APP_DIR, "questions", "geography", "geography-map-data.js");
 const OUTPUT_GALLERY_FILE = path.join(ASSETS_DIR, "geography-map-gallery.html");
 
 const SNAPSHOT_DATE = "2026-04-13";
@@ -181,8 +181,8 @@ function buildGalleryHtml() {
       <p class="intro">Shared-base geography map rendering for the top 101 countries by population, frozen to the ${SNAPSHOT_DATE} snapshot.</p>
       <section class="grid" id="gallery"></section>
     </main>
-    <script src="../geography-map-data.js"></script>
-    <script src="../geography-map-questions.js"></script>
+    <script src="../questions/geography/geography-map-data.js"></script>
+    <script src="../questions/geography/geography-map.js"></script>
     <script>
       const gallery = document.getElementById("gallery");
       const entries = Array.isArray(window.GEOGRAPHY_MAP_COUNTRIES) ? window.GEOGRAPHY_MAP_COUNTRIES : [];

@@ -296,42 +296,16 @@ Important:
 - `app/ui/drag-answers.js`: reusable drag-answer interaction helpers
 - `app/ui/results-history-dashboard.js`: results screen, previous sessions, dashboard, speed round, and audio tick
 - `app/ui/confetti.js`: results confetti
-- `app/hebrew-words.js`: bundled Hebrew vocabulary list
-- `app/hebrew-expanded-words.js`: expanded Hebrew vocabulary list
-- `app/hebrew-image-words.js`: Hebrew image-vocabulary mappings
-- `app/hebrew-questions.js`: Hebrew final letters, roots, agreement, prepositions, and tense matching
-- `app/adult-hebrew-module.js`: Miranda's adult Hebrew vocabulary, context, reading, sorting, and writing data
-- `app/science-questions.js`: bundled offline science bank
-- `app/science-evidence-questions.js`: evidence, experiment, and fair-test bank
-- `app/general-knowledge-questions.js`: bundled offline general knowledge bank
-- `app/algebra-questions.js`: algebra bank and generator
-- `app/applied-word-problems-questions.js`: applied word-problem bank
-- `app/charts-and-graphs-questions.js`: chart, graph, table, sampling, and outlier questions
-- `app/vocabulary-grammar-questions.js`: vocabulary, grammar, spelling, punctuation, and sentence combining
-- `app/reading-comprehension-questions.js`: reading passages, main idea, inference, evidence, and summaries
-- `app/visual-math-questions.js`: visual math bank and generator
-- `app/visual-measurement-questions.js`: visual measurement bank and generator
-- `app/logic-questions.js`: bundled offline logic bank
-- `app/rationality-questions.js`: bundled offline rationality bank
-- `app/geography-questions.js`: geography bank and generator
-- `app/geography-map-data.js`: generated map metadata and SVG source data
-- `app/geography-map-questions.js`: generated geography-map question renderer
-- `app/population-questions.js`: top-population country bank
-- `app/financial-literacy-questions.js`: money skills bank
-- `app/measurement-questions.js`: units and measurement bank
-- `app/calendar-questions.js`: calendar and date bank
-- `app/estimation-questions.js`: estimation bank
-- `app/probability-questions.js`: probability bank
-- `app/maps-and-directions-questions.js`: map-skills bank
-- `app/health-and-first-aid-questions.js`: health and first-aid bank
-- `app/nutrition-questions.js`: nutrition bank
-- `app/household-problem-solving-questions.js`: household skills bank
-- `app/fractions-questions.js`: fractions bank with visual models
-- `app/fractions-and-ratios-questions.js`: fractions and ratios bank
-- `app/spatial-reasoning-questions.js`: spatial reasoning bank
-- `app/category-drag-questions.js`: generated category-sort drag questions
-- `app/sentence-drag-english.js`: English sentence-drag bank and generator
-- `app/sentence-drag-hebrew.js`: Hebrew sentence-drag bank and generator
+- `app/questions/hebrew/`: Hebrew vocabulary, image words, adult Hebrew, sentence drag, and Hebrew bank
+- `app/questions/english/`: vocabulary/grammar, reading comprehension, and English sentence drag
+- `app/questions/math/`: algebra, applied word problems, visual math, measurement, charts, calendar,
+  estimation, probability, fractions, and ratios
+- `app/questions/science/`: bundled science and science-evidence banks
+- `app/questions/geography/`: geography, map data/rendering, population, and maps/directions banks
+- `app/questions/life-skills/`: financial literacy, health/first aid, nutrition, and household skills
+- `app/questions/reasoning/`: logic, rationality, and spatial reasoning banks
+- `app/questions/general-knowledge.js`: bundled offline general knowledge bank
+- `app/questions/category-drag.js`: generated category-sort drag questions
 - `app/assets/`: offline fonts, map assets, Hebrew image assets, and source snapshots
 - `app/icons/`: PWA and browser icons
 - `app/smoke-test.html`: offline browser smoke test for session generation, generated-question shape,
