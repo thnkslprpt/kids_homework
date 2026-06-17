@@ -459,7 +459,6 @@ function getSessionPresetLabel(preset) {
       [SESSION_PRESETS.adaptive]: "Adaptive",
       [SESSION_PRESETS["math-heavy"]]: "Math",
       [SESSION_PRESETS.hebrew]: "Hebrew",
-      [SESSION_PRESETS.custom]: "Custom",
     }[preset] || "Adaptive"
   );
 }
@@ -518,12 +517,8 @@ function buildSessionHistoryEntry() {
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
     categoryDifficulties: { ...state.categoryDifficulties },
-    minDifficulty: state.minDifficulty,
     hebrewOnly: Boolean(state.hebrewOnly),
-    specialtyWordsOnly: Boolean(state.specialtyWordsOnly),
-    adaptiveReview: Boolean(state.adaptiveReview),
     sessionPreset: state.sessionPreset,
-    selectedCategories: Array.from(state.selectedCategories || []),
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
     speedRoundTotalQuestions: state.speedRound.totalQuestions || SPEED_ROUND_QUESTION_COUNT,
@@ -547,10 +542,6 @@ function loadAllSessionHistory() {
 
 function loadSessionHistory() {
   return sessionHistoryStore.loadForUser(state.currentUserId);
-}
-
-function writeSessionHistory(historyByUser) {
-  return sessionHistoryStore.write(historyByUser);
 }
 
 function getSessionStorage() {
@@ -626,11 +617,7 @@ function formatSessionHistoryMeta(session) {
     );
   }
   if (!isAdultUserId(session?.userId)) {
-    parts.push(
-      session.minDifficulty && session.minDifficulty < session.difficulty
-        ? `Levels ${session.minDifficulty}-${session.difficulty}`
-        : `Difficulty ${session.difficulty}`
-    );
+    parts.push(`Difficulty ${session.difficulty}`);
   }
 
   if (session?.sessionPreset && session.sessionPreset !== SESSION_PRESETS.adaptive) {
@@ -639,10 +626,6 @@ function formatSessionHistoryMeta(session) {
 
   if (session?.hebrewOnly && session.sessionPreset !== SESSION_PRESETS.hebrew) {
     parts.push("Hebrew Only");
-  }
-
-  if (session?.specialtyWordsOnly) {
-    parts.push("Specialty Words");
   }
 
   return parts.join(" | ");

@@ -28,7 +28,7 @@ function createSupplementalMathChoiceQuestion(difficulty) {
 }
 
 function buildSpeedRoundQuestions() {
-  const hebrewOnly = Boolean(state.hebrewOnly || state.specialtyWordsOnly);
+  const hebrewOnly = Boolean(state.hebrewOnly);
   const difficulty = hebrewOnly
     ? normalizeSessionDifficulty(state.difficulty)
     : getCategoryDifficultyFromMap(state.categoryDifficulties, "math", state.difficulty);
@@ -372,10 +372,7 @@ function buildSpeedNumberOptions(answer) {
 }
 
 function createSpeedHebrewQuestion(index) {
-  const hebrewBanks = getSessionHebrewBanksForUser(state.currentUserId, {
-    specialtyWordsOnly: state.specialtyWordsOnly,
-    hebrewOnly: true,
-  });
+  const hebrewBanks = getSessionHebrewBanksForUser(state.currentUserId);
   const easyEntries = hebrewBanks.questionBank.filter((entry) => Number(entry.difficulty) <= 2);
   const entry = randomChoice(easyEntries.length ? easyEntries : hebrewBanks.questionBank);
   const question = createHebrewChoiceQuestion(entry, hebrewBanks.meanings);

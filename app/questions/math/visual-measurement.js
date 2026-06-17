@@ -2324,7 +2324,6 @@ function buildAngleSvg({ angle = 90 } = {}) {
 }
 
 function buildAnglePairSvg({ knownAngle = 65 } = {}) {
-  const missingAngle = 180 - knownAngle;
   const width = 280;
   const height = 150;
   const cx = 140;

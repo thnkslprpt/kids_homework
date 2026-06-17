@@ -58,7 +58,6 @@ const HEBREW_POINTED_WORD_LOOKUP = (() => {
 const adultHebrewModule =
   typeof ADULT_HEBREW_MODULE !== "undefined" && ADULT_HEBREW_MODULE ? ADULT_HEBREW_MODULE : {};
 const adultHebrewWordEntries = Array.isArray(adultHebrewModule.words) ? adultHebrewModule.words : [];
-const MIRANDA_SPECIALTY_HEBREW_BANKS = createHebrewBankBundle(adultHebrewWordEntries, rawHebrewImageWordEntries);
 const MIRANDA_HEBREW_BANKS = createHebrewBankBundle(
   mergeUserHebrewWordSets(adultHebrewWordEntries, rawHebrewWordEntries),
   rawHebrewImageWordEntries
@@ -318,7 +317,6 @@ elements.resultsForwardButton.addEventListener("click", showNextQuizQuestion);
 initializeUserSelector();
 initializeQuestionCountButtons();
 initializeHebrewOnlyButton();
-initializeSpecialtyWordsButton();
 initializeSessionBuilder();
 initializeDifficultyControl();
 updateStartControlsForCurrentUser();

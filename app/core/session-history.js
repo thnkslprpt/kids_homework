@@ -134,11 +134,7 @@
           "Started At",
           "Session Preset",
           "Difficulty",
-          "Minimum Difficulty",
           "Hebrew Only",
-          "Specialty Words Only",
-          "Adaptive Review",
-          "Selected Categories",
           "Total Questions",
           "Correct Count",
           "Accuracy Percent",
@@ -188,9 +184,6 @@
       const totalQuestions = Number(session?.totalQuestions) || 0;
       const correctCount = Number(session?.correctCount) || 0;
       const accuracyPercent = totalQuestions ? Math.round((correctCount / totalQuestions) * 100) : "";
-      const selectedCategories = Array.isArray(session?.selectedCategories)
-        ? session.selectedCategories.join("|")
-        : "";
       const selectedTokens = Array.isArray(record?.selectedTokens) ? record.selectedTokens.join("|") : "";
 
       return [
@@ -200,11 +193,7 @@
         session?.startedAt || "",
         getSessionPresetLabel(session?.sessionPreset),
         isAdultUserId(profile.id) ? "" : session?.difficulty || "",
-        isAdultUserId(profile.id) ? "" : session?.minDifficulty || "",
         Boolean(session?.hebrewOnly),
-        Boolean(session?.specialtyWordsOnly),
-        Boolean(session?.adaptiveReview),
-        selectedCategories,
         totalQuestions,
         correctCount,
         accuracyPercent,

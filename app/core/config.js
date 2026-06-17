@@ -394,7 +394,6 @@ const SESSION_PRESETS = {
   adaptive: "adaptive",
   "math-heavy": "math-heavy",
   hebrew: "hebrew",
-  custom: "custom",
 };
 
 

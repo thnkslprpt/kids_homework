@@ -1,6 +1,5 @@
 (() => {
   const {
-    SESSION_CATEGORY_ORDER,
     SESSION_PRESETS,
     SPEED_ROUND_QUESTION_COUNT,
     USER_PROFILES,
@@ -33,14 +32,10 @@ function createEmptySpeedRoundState() {
   currentUserId: USER_PROFILES[0].id,
   dashboardUserId: USER_PROFILES[0].id,
   sessionPreset: SESSION_PRESETS.adaptive,
-  adaptiveReview: true,
-  selectedCategories: new Set(SESSION_CATEGORY_ORDER),
   categoryDifficulties: createUniformCategoryDifficulties(3),
-  minDifficulty: 1,
   totalQuestions: 0,
   difficulty: 3,
   hebrewOnly: false,
-  specialtyWordsOnly: false,
   currentIndex: 0,
   viewIndex: 0,
   answeredCount: 0,

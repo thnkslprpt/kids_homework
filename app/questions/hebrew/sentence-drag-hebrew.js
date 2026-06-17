@@ -8,15 +8,6 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     return Math.min(10, Math.max(1, level));
   }
 
-  function shuffleArray(items) {
-    const copy = [...items];
-    for (let index = copy.length - 1; index > 0; index -= 1) {
-      const swapIndex = Math.floor(Math.random() * (index + 1));
-      [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
-    }
-    return copy;
-  }
-
   function uniqueStrings(values) {
     return Array.from(new Set(values.map((value) => String(value))));
   }

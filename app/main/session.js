@@ -877,35 +877,6 @@ function getCategoryDifficultyFromMap(categoryDifficulties, category, fallbackDi
   return normalizedMap[category] || normalizeSessionDifficulty(fallbackDifficulty, 3);
 }
 
-function getUserCategoryDifficulty(userId, category, fallbackDifficulty = 3) {
-  return getCategoryDifficultyFromMap(
-    getUserCategoryDifficultyMap(userId, fallbackDifficulty),
-    category,
-    fallbackDifficulty
-  );
-}
-
-function getUserMaxCategoryDifficulty(userId, fallbackDifficulty = 3) {
-  const profile = USER_PROFILE_MAP[userId];
-  const categoryDifficulties = getUserCategoryDifficultyMap(userId, fallbackDifficulty);
-  const normalizedDifficulties = Object.values(categoryDifficulties).map((difficulty) =>
-    normalizeSessionDifficulty(difficulty, fallbackDifficulty)
-  );
-
-  if (profile?.categoryDifficulties && typeof profile.categoryDifficulties === "object") {
-    return Math.max(...normalizedDifficulties);
-  }
-
-  return Math.max(
-    normalizeSessionDifficulty(fallbackDifficulty, 3),
-    ...normalizedDifficulties
-  );
-}
-
-function hasSpecialtyWordToggle(userId = state.currentUserId) {
-  return isAdultUserId(userId);
-}
-
 function isReviewFocusEnabledForUser(userId = state.currentUserId) {
   return USER_PROFILE_MAP[userId]?.enableReviewFocus !== false;
 }
@@ -914,22 +885,12 @@ function isHebrewWritingTailEnabledForUser(userId = state.currentUserId) {
   return USER_PROFILE_MAP[userId]?.enableHebrewWritingTail !== false;
 }
 
-function getSessionHebrewBanksForUser(userId, options = {}) {
-  const specialtyWordsOnly = Boolean(options.specialtyWordsOnly);
-
+function getSessionHebrewBanksForUser(userId) {
   if (isAdultUserId(userId)) {
-    return specialtyWordsOnly ? MIRANDA_SPECIALTY_HEBREW_BANKS : MIRANDA_HEBREW_BANKS;
+    return MIRANDA_HEBREW_BANKS;
   }
 
   return DEFAULT_HEBREW_BANKS;
-}
-
-function getSpecialtyWordListLabel(userId = state.currentUserId) {
-  if (isAdultUserId(userId)) {
-    return "pregnancy, birth, postpartum, and female anatomy";
-  }
-
-  return "";
 }
 
 function initializeUserSelector() {
@@ -969,7 +930,6 @@ function selectUser(userId) {
   }
 
   state.currentUserId = userId;
-  resetSpecialtyWordsOnlySelection();
   writeSelectedUserId(userId);
   applyUserDefaultDifficulty(userId);
   applyUserDefaultSessionMode();
@@ -993,11 +953,8 @@ function applyUserDefaultDifficulty(userId) {
 }
 
 function applyUserDefaultSessionMode() {
-  state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
-  state.adaptiveReview = true;
   setHebrewOnlySelection(false);
   setSessionPreset(SESSION_PRESETS.adaptive);
-  syncDifficultyRange();
 }
 
 function loadSelectedUserId() {
@@ -1149,24 +1106,14 @@ function getDifficultyPresentation(difficulty) {
 function updateStartControlsForCurrentUser() {
   const isAdult = isAdultUserSelected();
   const isGuest = isGuestUserSelected();
-  const isSpecialtyOnly = isAdult && isSpecialtyWordsOnlySelected();
   const currentUser = getCurrentUserProfile();
-  const builderLocked = isAdult || isSpecialtyOnly;
-  const hebrewPresetActive = isEffectiveHebrewOnlySelected();
+  const builderLocked = isAdult;
 
-  if (hebrewPresetActive) {
-    state.selectedCategories = new Set(["hebrew"]);
-    state.sessionPreset = SESSION_PRESETS.hebrew;
-    updateSessionPresetButtons();
-  }
+  syncSessionPresetForHebrewOnly();
 
   if (isAdult && elements.questionCount) {
     elements.questionCount.value = String(ADULT_SESSION_DEFAULT_QUESTION_COUNT);
     updateQuestionCountButtons();
-  }
-
-  if (elements.sessionModeLabel) {
-    elements.sessionModeLabel.textContent = "Session Mode";
   }
 
   if (elements.difficultyLabel) {
@@ -1174,21 +1121,8 @@ function updateStartControlsForCurrentUser() {
   }
 
   if (elements.hebrewOnlyButton) {
-    elements.hebrewOnlyButton.disabled = isSpecialtyOnly;
-    elements.hebrewOnlyButton.title =
-      isSpecialtyOnly ? `${currentUser.name}'s session settings are preset.` : "";
-    if (isAdult) {
-      if (isSpecialtyOnly) {
-        setButtonPressedState(elements.hebrewOnlyButton, true);
-      } else {
-        updateHebrewOnlyButton();
-      }
-    } else {
-      updateHebrewOnlyButton();
-    }
+    updateHebrewOnlyButton();
   }
-
-  updateSpecialtyWordsButton();
 
   if (elements.difficultyLevel) {
     elements.difficultyLevel.disabled = !isGuest;
@@ -1199,35 +1133,12 @@ function updateStartControlsForCurrentUser() {
 
   if (elements.sessionBuilder) {
     elements.sessionBuilder.classList.toggle("disabled", builderLocked);
-    elements.sessionBuilder.classList.toggle("hebrew-only", hebrewPresetActive);
   }
-
-  [
-    elements.difficultyMin,
-    elements.adaptiveReviewButton,
-    elements.categoryResetButton,
-  ].forEach((control) => {
-    if (control) {
-      const isLocked = builderLocked || hebrewPresetActive;
-      control.disabled = isLocked;
-      control.title = hebrewPresetActive
-        ? "Choose Adaptive or Math to edit topics."
-        : builderLocked
-          ? `${currentUser.name}'s session settings are preset.`
-          : "";
-    }
-  });
 
   elements.sessionPresetButtons.forEach((button) => {
     button.disabled = builderLocked;
     button.title = builderLocked ? `${currentUser.name}'s session settings are preset.` : "";
   });
-
-  updateCategoryBuilderButtons();
-
-  if (builderLocked) {
-    syncDifficultyRange();
-  }
 
   updateDifficultyControl();
 }
@@ -1259,34 +1170,12 @@ function updateQuestionCountButtons() {
 }
 
 function initializeSessionBuilder() {
-  renderCategoryBuilder();
-
   elements.sessionPresetButtons.forEach((button) => {
     button.addEventListener("click", () => {
       applySessionPreset(button.dataset.sessionPreset || SESSION_PRESETS.adaptive);
     });
   });
 
-  elements.difficultyMin?.addEventListener("change", () => {
-    state.minDifficulty = normalizeSessionDifficulty(elements.difficultyMin.value, 1);
-    syncDifficultyRange();
-    setSessionPreset(SESSION_PRESETS.custom);
-  });
-
-  elements.adaptiveReviewButton?.addEventListener("click", () => {
-    state.adaptiveReview = !state.adaptiveReview;
-    updateAdaptiveReviewButton();
-    setSessionPreset(state.adaptiveReview ? SESSION_PRESETS.adaptive : SESSION_PRESETS.custom);
-  });
-
-  elements.categoryResetButton?.addEventListener("click", () => {
-    state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
-    renderCategoryBuilder();
-    setSessionPreset(SESSION_PRESETS.adaptive);
-  });
-
-  syncDifficultyRange();
-  updateAdaptiveReviewButton();
   updateSessionPresetButtons();
 }
 
@@ -1303,24 +1192,14 @@ function applySessionPreset(preset) {
     : SESSION_PRESETS.adaptive;
 
   if (normalizedPreset === SESSION_PRESETS.adaptive) {
-    state.selectedCategories = new Set(SESSION_CATEGORY_ORDER);
-    state.adaptiveReview = true;
     setHebrewOnlySelection(false);
   } else if (normalizedPreset === SESSION_PRESETS["math-heavy"]) {
-    state.selectedCategories = new Set(
-      SESSION_CATEGORY_ORDER.filter((category) => EXTENDED_MATH_CATEGORIES.has(category))
-    );
-    state.adaptiveReview = true;
     setHebrewOnlySelection(false);
   } else if (normalizedPreset === SESSION_PRESETS.hebrew) {
-    state.selectedCategories = new Set(["hebrew"]);
-    state.adaptiveReview = true;
     setHebrewOnlySelection(true);
   }
 
   setSessionPreset(normalizedPreset);
-  renderCategoryBuilder();
-  updateAdaptiveReviewButton();
   updateStartControlsForCurrentUser();
 }
 
@@ -1337,96 +1216,23 @@ function updateSessionPresetButtons() {
   });
 }
 
-function updateAdaptiveReviewButton() {
-  setButtonPressedState(elements.adaptiveReviewButton, state.adaptiveReview);
-}
-
-function renderCategoryBuilder() {
-  if (!elements.categoryBuilderGrid) {
-    return;
+function getPresetCategories(preset = state.sessionPreset) {
+  if (preset === SESSION_PRESETS["math-heavy"]) {
+    return SESSION_CATEGORY_ORDER.filter((category) => EXTENDED_MATH_CATEGORIES.has(category));
   }
 
-  elements.categoryBuilderGrid.innerHTML = "";
-  SESSION_CATEGORY_ORDER.forEach((category) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "category-toggle-button";
-    button.dataset.category = category;
-    button.textContent = getCategoryLabel(category);
-    button.addEventListener("click", () => toggleSessionCategory(category));
-    elements.categoryBuilderGrid.appendChild(button);
-  });
-
-  updateCategoryBuilderButtons();
-}
-
-function toggleSessionCategory(category) {
-  if (!SESSION_CATEGORY_ORDER.includes(category)) {
-    return;
+  if (preset === SESSION_PRESETS.hebrew) {
+    return ["hebrew"];
   }
 
-  const nextCategories = new Set(state.selectedCategories);
-  if (nextCategories.has(category)) {
-    nextCategories.delete(category);
-  } else {
-    nextCategories.add(category);
-  }
-
-  if (!nextCategories.size) {
-    nextCategories.add(category);
-  }
-
-  state.selectedCategories = nextCategories;
-  setHebrewOnlySelection(false);
-  setSessionPreset(SESSION_PRESETS.custom);
-  updateCategoryBuilderButtons();
+  return SESSION_CATEGORY_ORDER;
 }
 
-function updateCategoryBuilderButtons() {
-  const isHebrewOnlyMode = isEffectiveHebrewOnlySelected();
-  const isBuilderLocked = isAdultUserSelected();
-  const currentUser = getCurrentUserProfile();
-
-  elements.categoryBuilderGrid?.querySelectorAll?.(".category-toggle-button").forEach((button) => {
-    const category = button.dataset.category;
-    const isActive = state.selectedCategories.has(category);
-    const isLocked = isBuilderLocked || (isHebrewOnlyMode && category !== "hebrew");
-
-    setButtonPressedState(button, isActive);
-    button.disabled = isLocked;
-    button.title =
-      isHebrewOnlyMode && category !== "hebrew"
-        ? "Turn off Hebrew Only to use this topic."
-        : isBuilderLocked
-          ? `${currentUser.name}'s session settings are preset.`
-          : "";
-  });
-}
-
-function syncDifficultyRange() {
-  const minDifficulty = normalizeSessionDifficulty(elements.difficultyMin?.value || state.minDifficulty || 1, 1);
-  const selectedDifficulty = normalizeSessionDifficulty(elements.difficultyLevel?.value || 3, 3);
-  const maxDifficulty = isGuestUserSelected()
-    ? selectedDifficulty
-    : getUserMaxCategoryDifficulty(state.currentUserId, selectedDifficulty);
-  state.minDifficulty = Math.min(minDifficulty, maxDifficulty);
-
-  if (elements.difficultyMin) {
-    elements.difficultyMin.max = String(maxDifficulty);
-    elements.difficultyMin.value = String(state.minDifficulty);
-  }
-}
-
-function getSessionBuilderOptions(maxDifficulty) {
-  syncDifficultyRange();
-  const selectedCategories = Array.from(state.selectedCategories).filter((category) =>
-    SESSION_CATEGORY_ORDER.includes(category)
-  );
-
+function getSessionBuilderOptions() {
   return {
-    minDifficulty: Math.min(state.minDifficulty, normalizeSessionDifficulty(maxDifficulty, 3)),
-    selectedCategories,
-    adaptiveReview: Boolean(state.adaptiveReview),
+    minDifficulty: 1,
+    selectedCategories: getPresetCategories(),
+    adaptiveReview: true,
     sessionPreset: state.sessionPreset,
   };
 }
@@ -1434,11 +1240,9 @@ function getSessionBuilderOptions(maxDifficulty) {
 function initializeDifficultyControl() {
   elements.difficultyLevel?.addEventListener("input", () => {
     updateDifficultyControl();
-    syncDifficultyRange();
   });
   elements.difficultyLevel?.addEventListener("change", () => {
     updateDifficultyControl();
-    syncDifficultyRange();
   });
 
   updateDifficultyControl();
@@ -1447,27 +1251,13 @@ function initializeDifficultyControl() {
 function initializeHebrewOnlyButton() {
   elements.hebrewOnlyButton?.addEventListener("click", () => {
     elements.hebrewOnly.value = String(!isHebrewOnlySelected());
-    syncSessionBuilderForHebrewOnly();
+    syncSessionPresetForHebrewOnly();
     updateHebrewOnlyButton();
     updateStartControlsForCurrentUser();
   });
 
-  syncSessionBuilderForHebrewOnly();
+  syncSessionPresetForHebrewOnly();
   updateHebrewOnlyButton();
-}
-
-function initializeSpecialtyWordsButton() {
-  elements.specialtyWordsButton?.addEventListener("click", () => {
-    if (!hasSpecialtyWordToggle()) {
-      return;
-    }
-
-    elements.specialtyWordsOnly.value = String(!isSpecialtyWordsOnlySelected());
-    updateSpecialtyWordsButton();
-    updateStartControlsForCurrentUser();
-  });
-
-  updateSpecialtyWordsButton();
 }
 
 function updateDifficultyControl() {
@@ -1494,19 +1284,12 @@ function isHebrewOnlySelected() {
   return String(elements.hebrewOnly?.value || "").toLowerCase() === "true";
 }
 
-function isEffectiveHebrewOnlySelected() {
-  return isHebrewOnlySelected() || isSpecialtyWordsOnlySelected();
-}
-
-function syncSessionBuilderForHebrewOnly() {
-  if (!isEffectiveHebrewOnlySelected()) {
+function syncSessionPresetForHebrewOnly() {
+  if (!isHebrewOnlySelected()) {
     return;
   }
 
-  state.selectedCategories = new Set(["hebrew"]);
-  state.sessionPreset = SESSION_PRESETS.hebrew;
-  updateSessionPresetButtons();
-  updateCategoryBuilderButtons();
+  setSessionPreset(SESSION_PRESETS.hebrew);
 }
 
 function updateHebrewOnlyButton() {
@@ -1515,56 +1298,8 @@ function updateHebrewOnlyButton() {
   elements.hebrewOnlyButton?.setAttribute("aria-pressed", isActive ? "true" : "false");
 }
 
-function isSpecialtyWordsOnlySelected() {
-  return String(elements.specialtyWordsOnly?.value || "").toLowerCase() === "true";
-}
-
-function resetSpecialtyWordsOnlySelection() {
-  if (elements.specialtyWordsOnly) {
-    elements.specialtyWordsOnly.value = "false";
-  }
-
-  updateSpecialtyWordsButton();
-}
-
-function updateSpecialtyWordsButton() {
-  if (!elements.specialtyWordsButton) {
-    return;
-  }
-
-  const isAvailable = hasSpecialtyWordToggle();
-  const isActive = isAvailable && isSpecialtyWordsOnlySelected();
-  const description = getSpecialtyWordListLabel();
-  const currentUser = getCurrentUserProfile();
-  const label = description
-    ? `${isActive ? "Using" : "Use"} only ${currentUser.name}'s ${description} word lists.`
-    : "Use only specialty Hebrew word lists.";
-
-  elements.specialtyWordsButton.hidden = !isAvailable;
-  elements.specialtyWordsButton.disabled = !isAvailable;
-  elements.specialtyWordsButton.title = isAvailable ? label : "";
-  elements.specialtyWordsButton.setAttribute("aria-label", label);
-  setButtonPressedState(elements.specialtyWordsButton, isActive);
-
-  if (isAdultUserSelected() && elements.hebrewOnlyButton) {
-    const currentUser = getCurrentUserProfile();
-    elements.hebrewOnlyButton.disabled = isActive;
-    elements.hebrewOnlyButton.title = isActive ? `${currentUser.name}'s session settings are preset.` : "";
-    if (isActive) {
-      setButtonPressedState(elements.hebrewOnlyButton, true);
-    } else {
-      updateHebrewOnlyButton();
-    }
-  }
-
-  syncSessionBuilderForHebrewOnly();
-}
-
 function hasAdultSessionResources(options = {}) {
-  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID, options);
-  if (options.specialtyWordsOnly) {
-    return hebrewBanks.questionBank.length > 0 && hebrewBanks.reverseQuestionBank.length > 0;
-  }
+  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID);
 
   if (options.hebrewOnly) {
     return hebrewBanks.questionBank.length > 0 && hebrewBanks.reverseQuestionBank.length > 0;
@@ -1660,7 +1395,6 @@ function startSession(event) {
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
   const selectedDifficulty = Number.parseInt(elements.difficultyLevel.value, 10);
   const selectedHebrewOnly = isHebrewOnlySelected();
-  const specialtyWordsOnly = hasSpecialtyWordToggle() && isSpecialtyWordsOnlySelected();
   const isAdult = isAdultUserSelected();
   const isGuest = isGuestUserSelected();
   const difficulty = isAdult
@@ -1668,13 +1402,10 @@ function startSession(event) {
     : isGuest
       ? selectedDifficulty
       : getUserSessionBaseDifficulty(state.currentUserId, selectedDifficulty);
-  const sessionMaxDifficulty = isGuest
-    ? difficulty
-    : getUserMaxCategoryDifficulty(state.currentUserId, difficulty);
   const categoryDifficulties = getUserCategoryDifficultyMap(state.currentUserId, difficulty);
   const hebrewCategoryDifficulty = getCategoryDifficultyFromMap(categoryDifficulties, "hebrew", difficulty);
-  const sessionBuilderOptions = getSessionBuilderOptions(sessionMaxDifficulty);
-  const hebrewOnly = specialtyWordsOnly ? true : selectedHebrewOnly;
+  const sessionBuilderOptions = getSessionBuilderOptions();
+  const hebrewOnly = selectedHebrewOnly;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
@@ -1686,13 +1417,8 @@ function startSession(event) {
     return;
   }
 
-  if (!(isAdult || hebrewOnly) && !sessionBuilderOptions.selectedCategories.length) {
-    showStartMessage("Please choose at least one topic.", "error");
-    return;
-  }
-
   if (isAdult) {
-    if (!hasAdultSessionResources({ specialtyWordsOnly, hebrewOnly })) {
+    if (!hasAdultSessionResources({ hebrewOnly })) {
       showStartMessage("Miranda's Hebrew module is missing required data.", "error");
       return;
     }
@@ -1715,8 +1441,6 @@ function startSession(event) {
   state.difficulty = difficulty;
   state.categoryDifficulties = categoryDifficulties;
   state.hebrewOnly = hebrewOnly;
-  state.specialtyWordsOnly = specialtyWordsOnly;
-  state.minDifficulty = sessionBuilderOptions.minDifficulty;
   state.currentRound = "main";
   state.speedRound = createEmptySpeedRoundState();
   state.currentIndex = 0;
@@ -1732,11 +1456,9 @@ function startSession(event) {
   let sessionQuestions;
   try {
     sessionQuestions = isAdult
-      ? specialtyWordsOnly
-        ? buildSpecialtyOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
-        : hebrewOnly
+      ? hebrewOnly
           ? buildHebrewOnlySessionQuestions(totalQuestions, ADULT_USER_ID)
-          : buildAdultSessionQuestions(totalQuestions, { specialtyWordsOnly })
+          : buildAdultSessionQuestions(totalQuestions)
       : isGeographyMapPrototypeMode()
         ? buildSessionQuestions(totalQuestions, difficulty, {
             hebrewOnly: false,
@@ -1770,9 +1492,9 @@ function startSession(event) {
   renderCurrentQuestion();
 }
 
-function buildAdultSessionQuestions(totalQuestions, options = {}) {
+function buildAdultSessionQuestions(totalQuestions) {
   const categorySequence = buildAdultSessionCategorySequence(totalQuestions);
-  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID, options);
+  const hebrewBanks = getSessionHebrewBanksForUser(ADULT_USER_ID);
   const resources = {
     hebrew: createPool(hebrewBanks.questionBank),
     hebrewReverse: createPool(hebrewBanks.reverseQuestionBank),
@@ -1807,16 +1529,6 @@ function buildAdultSessionQuestions(totalQuestions, options = {}) {
     mapCountries: new Set(),
   };
   return categorySequence.map((category) => createAdultSessionQuestion(category, resources, runtime));
-}
-
-function buildSpecialtyOnlySessionQuestions(totalQuestions, userId) {
-  const hebrewBanks = getSessionHebrewBanksForUser(userId, { specialtyWordsOnly: true });
-  return buildSessionQuestions(totalQuestions, FIXED_ADULT_SESSION_DIFFICULTY, {
-    hebrewOnly: true,
-    hebrewBanks,
-    hebrewQuestionMode: "bank-only",
-    userId,
-  });
 }
 
 function buildHebrewOnlySessionQuestions(totalQuestions, userId) {
@@ -2659,7 +2371,6 @@ function allocateCategoryCounts(
   }
 
   if (
-    sessionPreset === SESSION_PRESETS.custom ||
     sessionPreset === SESSION_PRESETS["math-heavy"] ||
     categories.length !== SESSION_CATEGORY_ORDER.length
   ) {
