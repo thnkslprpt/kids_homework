@@ -95,6 +95,80 @@ const RATIONALITY_QUESTIONS = [
     1
   ),
 
+  // Additional Level 1: expanded variety.
+  rationalityQuestion(
+    "A box has 7 green crayons and 2 purple crayons. Which color are you more likely to pull out without looking?",
+    ["Green", "Purple", "They are equally likely", "No color can be picked"],
+    "Green",
+    1
+  ),
+  rationalityQuestion(
+    "A cup looks full, but you want to know exactly how much water it has. Which tool should you use?",
+    ["Measuring cup", "Stopwatch", "Thermometer", "Calendar"],
+    "Measuring cup",
+    1
+  ),
+  rationalityQuestion(
+    "Six out of eight students chose drawing instead of reading. What can you safely say about that group?",
+    ["More students chose drawing than reading", "Every student chose drawing", "No one likes reading", "Drawing is best for everyone"],
+    "More students chose drawing than reading",
+    1
+  ),
+  rationalityQuestion(
+    "Which is the best way to check which string is longer?",
+    ["Lay them straight next to the same ruler", "Look at them from far away", "Pick the brighter string", "Ask which one feels lucky"],
+    "Lay them straight next to the same ruler",
+    1
+  ),
+  rationalityQuestion(
+    "You see dark clouds and hear thunder. What is the best thing to say?",
+    ["It may rain soon", "It cannot rain today", "It is definitely snowing", "Clouds make clocks stop"],
+    "It may rain soon",
+    1
+  ),
+  rationalityQuestion(
+    "A spinner has 5 yellow parts and 1 black part. Which color is more likely on one spin?",
+    ["Yellow", "Black", "They are equally likely", "Neither color can happen"],
+    "Yellow",
+    1
+  ),
+  rationalityQuestion(
+    "Which claim is based on evidence?",
+    ["The ball is heavier because the scale says 2 kilograms", "The ball is heavier because I like it", "The ball is heavier because it is red", "The ball is heavier because today is Tuesday"],
+    "The ball is heavier because the scale says 2 kilograms",
+    1
+  ),
+  rationalityQuestion(
+    "If two jars look similar but one feels heavier, what should you do to know for sure?",
+    ["Weigh both jars", "Choose the taller jar", "Pick the jar with a nicer lid", "Guess quickly"],
+    "Weigh both jars",
+    1
+  ),
+  rationalityQuestion(
+    "A light turns on every time you press the switch. What does that suggest?",
+    ["The switch may control the light", "The switch is useless", "The light cannot turn off", "Pressing any wall works"],
+    "The switch may control the light",
+    1
+  ),
+  rationalityQuestion(
+    "Which is the clearest observation?",
+    ["The tower has 12 blocks", "The tower is the best", "The tower feels happy", "The tower is lucky"],
+    "The tower has 12 blocks",
+    1
+  ),
+  rationalityQuestion(
+    "You want to know whether your plant grew overnight. What should you compare?",
+    ["Its height yesterday and today", "Its pot color and leaf color", "Your favorite plant and your favorite toy", "The weather and your homework"],
+    "Its height yesterday and today",
+    1
+  ),
+  rationalityQuestion(
+    "A bag has 4 star stickers and 4 heart stickers. Which sticker shape is more likely to be picked?",
+    ["They are equally likely", "Star", "Heart", "Neither can be picked"],
+    "They are equally likely",
+    1
+  ),
+
   // Level 2: fair tests, exceptions, and simple uncertainty.
   rationalityQuestion(
     "You want to know whether a new soap cleans better. Which is the fairest test?",
@@ -169,6 +243,80 @@ const RATIONALITY_QUESTIONS = [
     2
   ),
 
+  // Additional Level 2: expanded variety.
+  rationalityQuestion(
+    "You want to test which paper towel absorbs more water. What should stay the same?",
+    ["The amount of water used", "The brand name only", "The color of the table", "The person watching"],
+    "The amount of water used",
+    2
+  ),
+  rationalityQuestion(
+    "A die rolled a six twice in a row. What is true about the next roll?",
+    ["A six is still possible", "A six is impossible", "It must be a one", "The dice remembers the past"],
+    "A six is still possible",
+    2
+  ),
+  rationalityQuestion(
+    "Maya says, \"My dog barked before rain, so barking always causes rain.\" What is the best reply?",
+    ["One event before another does not prove cause", "Dogs always control weather", "Rain never happens after barking", "Barking is impossible"],
+    "One event before another does not prove cause",
+    2
+  ),
+  rationalityQuestion(
+    "Which is a fair way to compare two erasers?",
+    ["Erase the same pencil mark for the same amount of time", "Use one eraser on pen and one on pencil", "Use one eraser once and the other ten times", "Pick the eraser with the best smell"],
+    "Erase the same pencil mark for the same amount of time",
+    2
+  ),
+  rationalityQuestion(
+    "A sign says, \"Everyone loves our cookies.\" One person says they do not. What does that show?",
+    ["Not everyone loves the cookies", "No one loves the cookies", "The sign is always right", "Cookies cannot be liked"],
+    "Not everyone loves the cookies",
+    2
+  ),
+  rationalityQuestion(
+    "You want to know if music helps you read faster. What should you measure?",
+    ["Reading time with music and without music", "The color of the book cover", "How many songs you know", "The size of the headphones"],
+    "Reading time with music and without music",
+    2
+  ),
+  rationalityQuestion(
+    "A bag has 10 square tiles and 2 round tiles. Which shape is more likely to be picked?",
+    ["Square", "Round", "They are equally likely", "A triangle"],
+    "Square",
+    2
+  ),
+  rationalityQuestion(
+    "Which question is easiest to answer with a simple count?",
+    ["How many apples are in the bowl?", "Which apple is tastiest?", "Is red the best color?", "Which song is most fun?"],
+    "How many apples are in the bowl?",
+    2
+  ),
+  rationalityQuestion(
+    "A friend says a shortcut is fastest after trying it once. What is a careful response?",
+    ["Try or time it more than once", "Believe it must always be fastest", "Never use shortcuts", "Choose based only on the street name"],
+    "Try or time it more than once",
+    2
+  ),
+  rationalityQuestion(
+    "In a test of two toy boats, one gets a push and the other does not. Why is that unfair?",
+    ["The push changes more than just the boat", "Boats cannot be tested", "Water cannot be used", "The slower boat always wins"],
+    "The push changes more than just the boat",
+    2
+  ),
+  rationalityQuestion(
+    "You see one tall sunflower in a garden. What can you safely say?",
+    ["At least one sunflower is tall", "All sunflowers are tall", "No sunflowers are short", "The garden has only sunflowers"],
+    "At least one sunflower is tall",
+    2
+  ),
+  rationalityQuestion(
+    "Which is better evidence that a pencil sharpener works?",
+    ["It sharpens several dull pencils", "It has a shiny sticker", "It is near a pencil", "Someone hopes it works"],
+    "It sharpens several dull pencils",
+    2
+  ),
+
   // Level 3: samples, controls, stronger evidence, and basic fractions of groups.
   rationalityQuestion(
     "Which question can be answered best by measuring instead of guessing?",
@@ -183,9 +331,9 @@ const RATIONALITY_QUESTIONS = [
     3
   ),
   rationalityQuestion(
-    "To test whether a paper airplane flies farther from a taller launch point, what should stay the same?",
-    ["Only the launch height should change", "The plane shape should change too", "The thrower should switch arms", "The weather should change"],
-    "Only the launch height should change",
+    "To test whether a paper airplane flies farther from a taller launch point, what should be the only thing you change?",
+    ["The launch height", "The plane shape too", "The thrower's arm", "The weather"],
+    "The launch height",
     3
   ),
   rationalityQuestion(
@@ -240,6 +388,80 @@ const RATIONALITY_QUESTIONS = [
     "A spinner lands on yellow 6 times in 20 spins. Which statement is most careful?",
     ["Yellow happened 6 of the 20 times", "Yellow must happen every time now", "Yellow can never happen again", "The spinner is magic"],
     "Yellow happened 6 of the 20 times",
+    3
+  ),
+
+  // Additional Level 3: expanded variety.
+  rationalityQuestion(
+    "A class wants to know which fruit is most popular. Which plan gives better evidence?",
+    ["Ask every student in the class", "Ask one student only", "Ask the teacher to guess", "Look at one lunchbox"],
+    "Ask every student in the class",
+    3
+  ),
+  rationalityQuestion(
+    "What should a control plant receive in a plant-food experiment?",
+    ["The same care but no plant food", "No water at all", "Different soil and more sunlight", "A different kind of seed only"],
+    "The same care but no plant food",
+    3
+  ),
+  rationalityQuestion(
+    "If 14 of 20 students finished a puzzle, what is true?",
+    ["More than half finished", "Exactly half finished", "No students finished", "All students finished"],
+    "More than half finished",
+    3
+  ),
+  rationalityQuestion(
+    "Which is the best evidence that a glue is strong?",
+    ["Many matching tests show it holds the same weight", "The bottle is large", "The label says strong in big letters", "One person likes the color"],
+    "Many matching tests show it holds the same weight",
+    3
+  ),
+  rationalityQuestion(
+    "A survey asks only students sitting at the front of the room. What is a possible problem?",
+    ["It may not represent the whole class", "It asks too many people", "It is always random", "It measures the desks"],
+    "It may not represent the whole class",
+    3
+  ),
+  rationalityQuestion(
+    "To test whether bigger wheels make a toy car roll farther, what should stay the same?",
+    ["The ramp, car body, and starting height", "The wheel size", "Only the paint color", "Nothing should stay the same"],
+    "The ramp, car body, and starting height",
+    3
+  ),
+  rationalityQuestion(
+    "Which statement is most careful after one soccer win?",
+    ["Our team won this game", "Our team will always win", "The other team can never win", "Soccer has only one winner forever"],
+    "Our team won this game",
+    3
+  ),
+  rationalityQuestion(
+    "You measure a table three times: 100 cm, 101 cm, and 100 cm. What is a reasonable conclusion?",
+    ["The table is about 100 cm long", "The table is 500 cm long", "The ruler cannot measure", "The table has no length"],
+    "The table is about 100 cm long",
+    3
+  ),
+  rationalityQuestion(
+    "Which is a fair comparison of two reading apps?",
+    ["Have similar students use each app for the same time", "Give one app more time", "Use one app with easy words and one with hard words", "Pick the app with the funnier icon"],
+    "Have similar students use each app for the same time",
+    3
+  ),
+  rationalityQuestion(
+    "A spinner lands on blue 9 times in 30 spins. Which statement is safest?",
+    ["Blue happened 9 out of 30 spins", "Blue is impossible now", "Blue must happen next", "The spinner only has blue"],
+    "Blue happened 9 out of 30 spins",
+    3
+  ),
+  rationalityQuestion(
+    "Which question needs an opinion rather than a measurement?",
+    ["Which cake tastes best?", "Which cake weighs more?", "Which cake is taller?", "Which cake has more candles?"],
+    "Which cake tastes best?",
+    3
+  ),
+  rationalityQuestion(
+    "If two fair tests give different results, what should you do?",
+    ["Repeat the test and look for what changed", "Pick the result you like", "Throw away both results immediately", "Stop measuring forever"],
+    "Repeat the test and look for what changed",
     3
   ),
 
@@ -317,6 +539,80 @@ const RATIONALITY_QUESTIONS = [
     4
   ),
 
+  // Additional Level 4: expanded variety.
+  rationalityQuestion(
+    "A reading test compares students before and after a new method, but the book also got much easier. What is the problem?",
+    ["Another factor changed besides the method", "Reading cannot be measured", "Books are never different", "All tests are perfect"],
+    "Another factor changed besides the method",
+    4
+  ),
+  rationalityQuestion(
+    "Which is a representative sample for a school snack survey?",
+    ["Students from several grades and classes", "Only students in the snack club", "Only the principal", "Only the first two friends you see"],
+    "Students from several grades and classes",
+    4
+  ),
+  rationalityQuestion(
+    "A runner is fastest on the first try and slower later. Why should you use several trials?",
+    ["One try can be unusual", "Only the first try counts", "Running cannot be timed", "A stopwatch changes speed"],
+    "One try can be unusual",
+    4
+  ),
+  rationalityQuestion(
+    "Two classes use different math books. One class also has twice as much practice time. What can you not tell clearly?",
+    ["Whether the book or the practice time made the difference", "Whether numbers exist", "Whether practice time happened", "Whether books have pages"],
+    "Whether the book or the practice time made the difference",
+    4
+  ),
+  rationalityQuestion(
+    "A survey about library books is done only in the library. What bias might happen?",
+    ["It may include more students who already like the library", "It will include every student equally", "It cannot ask questions", "It measures book weight only"],
+    "It may include more students who already like the library",
+    4
+  ),
+  rationalityQuestion(
+    "Which result best supports that a seed type sprouts often?",
+    ["46 of 50 seeds sprouted", "1 of 1 seed sprouted", "A picture shows one sprout", "Someone says seeds are nice"],
+    "46 of 50 seeds sprouted",
+    4
+  ),
+  rationalityQuestion(
+    "You want to compare two basketballs for bounce height. What should stay the same?",
+    ["Drop height and floor surface", "Ball color only", "The name written on the ball", "The number of people watching"],
+    "Drop height and floor surface",
+    4
+  ),
+  rationalityQuestion(
+    "A chart shows students who ate breakfast scored higher. What should you be careful about?",
+    ["Other differences may explain the scores", "Breakfast cannot be eaten", "Scores cannot be counted", "Charts always prove causes"],
+    "Other differences may explain the scores",
+    4
+  ),
+  rationalityQuestion(
+    "Which conclusion fits this data: 7 of 8 batteries lasted over two hours?",
+    ["Most of the tested batteries lasted over two hours", "All batteries everywhere last over two hours", "No battery lasted long", "Exactly half lasted long"],
+    "Most of the tested batteries lasted over two hours",
+    4
+  ),
+  rationalityQuestion(
+    "Why is it useful to write down the plan before an experiment?",
+    ["It helps avoid changing the rules after seeing results", "It makes measuring unnecessary", "It proves the answer before testing", "It makes all results identical"],
+    "It helps avoid changing the rules after seeing results",
+    4
+  ),
+  rationalityQuestion(
+    "A new pencil grip helped one child write neater. What would be better evidence?",
+    ["Try it with many children and compare fairly", "Ask the child if the color is nice", "Use it only once more", "Stop checking because one story is enough"],
+    "Try it with many children and compare fairly",
+    4
+  ),
+  rationalityQuestion(
+    "Which is most likely to reduce bias in choosing survey answers?",
+    ["Ask the same neutral question to everyone", "Explain which answer you want first", "Ask only your closest friends", "Skip people who disagree"],
+    "Ask the same neutral question to everyone",
+    4
+  ),
+
   // Level 5: overclaims, biased samples, and evaluating simple studies.
   rationalityQuestion(
     "Three kids say a park is \"always empty,\" but you visit once and it is full. What does that show?",
@@ -388,6 +684,80 @@ const RATIONALITY_QUESTIONS = [
     "A toy review says, \"Best toy ever!\" but gives no details. What is missing?",
     ["Reasons or evidence", "More capital letters", "A louder opinion", "A shorter sentence"],
     "Reasons or evidence",
+    5
+  ),
+
+  // Additional Level 5: expanded variety.
+  rationalityQuestion(
+    "An ad says, \"This pencil makes every student write perfectly.\" What is the biggest warning sign?",
+    ["The claim is too absolute and needs evidence", "Pencils cannot be bought", "Writing cannot improve", "Students never write"],
+    "The claim is too absolute and needs evidence",
+    5
+  ),
+  rationalityQuestion(
+    "Which study gives better evidence about a new homework method?",
+    ["Many similar classes are compared fairly", "One student tells a success story", "The worksheet has bright colors", "The teacher likes the title"],
+    "Many similar classes are compared fairly",
+    5
+  ),
+  rationalityQuestion(
+    "A survey asks, \"Don't you agree our team is wonderful?\" What is wrong with it?",
+    ["It is a leading question", "It has no words", "It asks about numbers only", "It is perfectly neutral"],
+    "It is a leading question",
+    5
+  ),
+  rationalityQuestion(
+    "A company posts only happy customer comments. What should you ask for?",
+    ["All results or a fair sample of reviews", "Only comments with more exclamation marks", "The biggest logo", "No information at all"],
+    "All results or a fair sample of reviews",
+    5
+  ),
+  rationalityQuestion(
+    "Which claim is most testable?",
+    ["This ball bounces higher than that ball when dropped from 1 meter", "This ball is more awesome", "This ball feels lucky", "This ball has the best personality"],
+    "This ball bounces higher than that ball when dropped from 1 meter",
+    5
+  ),
+  rationalityQuestion(
+    "A student says a new snack improves focus because they focused well once after eating it. What is the best response?",
+    ["One time is not enough to show the snack caused it", "The snack definitely works for everyone", "Focus cannot change", "Food never affects anyone"],
+    "One time is not enough to show the snack caused it",
+    5
+  ),
+  rationalityQuestion(
+    "A tiny survey of 3 people says everyone likes a game. What is a careful conclusion?",
+    ["Those 3 people liked it", "Everyone in the world likes it", "No one dislikes it", "The game must be perfect"],
+    "Those 3 people liked it",
+    5
+  ),
+  rationalityQuestion(
+    "What is the best way to check a surprising fact online?",
+    ["Look for reliable sources that agree and explain evidence", "Trust the first colorful page", "Only read the headline", "Pick the source with the funniest picture"],
+    "Look for reliable sources that agree and explain evidence",
+    5
+  ),
+  rationalityQuestion(
+    "A graph uses pictures of coins, but the coin pictures are not the same size. What is the risk?",
+    ["The picture sizes may make differences look misleading", "Pictures always make data perfect", "Coins cannot be counted", "Graphs cannot use pictures"],
+    "The picture sizes may make differences look misleading",
+    5
+  ),
+  rationalityQuestion(
+    "Which evidence is weakest for a health claim?",
+    ["One anonymous story with no details", "A careful comparison of many people", "Repeated measurements", "Clear data from a fair test"],
+    "One anonymous story with no details",
+    5
+  ),
+  rationalityQuestion(
+    "A claim says, \"No one ever forgets after using this trick.\" One user forgot. What does that prove?",
+    ["The claim is not true as stated", "The trick never helps anyone", "Forgetting is impossible", "The user cannot count"],
+    "The claim is not true as stated",
+    5
+  ),
+  rationalityQuestion(
+    "Why should an experiment keep notes about failures too?",
+    ["Leaving failures out can make the result look better than it is", "Failures are not data", "Only successes can teach anything", "Notes change the result"],
+    "Leaving failures out can make the result look better than it is",
     5
   ),
 
@@ -465,6 +835,80 @@ const RATIONALITY_QUESTIONS = [
     6
   ),
 
+  // Additional Level 6: expanded variety.
+  rationalityQuestion(
+    "A class average is 80, but scores are 78, 79, 80, 81, and 82. What does the average show here?",
+    ["A typical score is near 80", "Everyone scored exactly 80", "No one passed", "The highest score was 80"],
+    "A typical score is near 80",
+    6
+  ),
+  rationalityQuestion(
+    "A class average is 80, but scores are 40, 90, 90, 90, and 90. What should you notice?",
+    ["The average hides that one score is much lower", "Everyone scored 80", "The average is impossible", "There are no high scores"],
+    "The average hides that one score is much lower",
+    6
+  ),
+  rationalityQuestion(
+    "Two juice boxes cost the same. One has 200 ml and one has 250 ml. Which comparison matters most?",
+    ["Cost per milliliter", "Box color", "Straw length", "Alphabetical order"],
+    "Cost per milliliter",
+    6
+  ),
+  rationalityQuestion(
+    "A report says tablet users got higher grades, but tablet users were already in advanced classes. What is the hidden issue?",
+    ["The groups were different before the comparison", "Tablets cannot be used", "Grades cannot be compared", "Advanced classes have no students"],
+    "The groups were different before the comparison",
+    6
+  ),
+  rationalityQuestion(
+    "Which question has the clearest definition?",
+    ["How many pages can you read correctly in 10 minutes?", "Are you good at reading?", "Is reading fun enough?", "Do books feel nice?"],
+    "How many pages can you read correctly in 10 minutes?",
+    6
+  ),
+  rationalityQuestion(
+    "A survey asks only people leaving a candy shop about favorite snacks. What should you suspect?",
+    ["It may overrepresent people who like candy", "It is guaranteed to represent everyone", "It cannot have answers", "It measures shop doors"],
+    "It may overrepresent people who like candy",
+    6
+  ),
+  rationalityQuestion(
+    "A prediction says the bus will arrive between 8:05 and 8:10. Why is that useful?",
+    ["It gives a clear range instead of pretending exact certainty", "It means the bus cannot arrive", "It avoids time completely", "It proves every bus is late"],
+    "It gives a clear range instead of pretending exact certainty",
+    6
+  ),
+  rationalityQuestion(
+    "A game score average goes up after one very high score. What should you check?",
+    ["The individual scores, not just the average", "Only the biggest score", "The color of the scoreboard", "Whether scores are words"],
+    "The individual scores, not just the average",
+    6
+  ),
+  rationalityQuestion(
+    "Why is \"Did the new rule reduce hallway running by 20% this month?\" clearer than \"Is the rule good?\"",
+    ["It says what outcome and time period to measure", "It uses shorter words", "It avoids numbers", "It cannot be tested"],
+    "It says what outcome and time period to measure",
+    6
+  ),
+  rationalityQuestion(
+    "A farmer tests fertilizer only on the best soil patch. What is the problem?",
+    ["The soil may be helping, not just the fertilizer", "Fertilizer cannot be tested", "Plants do not grow in soil", "The best patch has no plants"],
+    "The soil may be helping, not just the fertilizer",
+    6
+  ),
+  rationalityQuestion(
+    "Which statement handles uncertainty best?",
+    ["Based on this small test, the red car may be faster", "The red car is certainly fastest forever", "Speed cannot be measured", "The blue car is impossible"],
+    "Based on this small test, the red car may be faster",
+    6
+  ),
+  rationalityQuestion(
+    "A class has 3 left-handed students out of 30. What is the best way to express that?",
+    ["1 out of 10 students are left-handed", "Half the class is left-handed", "Everyone is left-handed", "No one is left-handed"],
+    "1 out of 10 students are left-handed",
+    6
+  ),
+
   // Level 7: conditional reasoning, incentives, experiments versus observations, and expected outcomes.
   rationalityQuestion(
     "A store says, \"Nine out of ten shoppers recommend this toy.\" What important detail should you ask?",
@@ -536,6 +980,80 @@ const RATIONALITY_QUESTIONS = [
     "A new game has 100 online reviews, but 90 were posted on the release day by accounts with no other reviews. What should you do?",
     ["Be cautious because the reviews may not be independent", "Assume all reviews are perfect", "Count only the star color", "Ignore the number of reviews"],
     "Be cautious because the reviews may not be independent",
+    7
+  ),
+
+  // Additional Level 7: expanded variety.
+  rationalityQuestion(
+    "A toy company lets only prize winners review its contest. What issue should you consider?",
+    ["The reviewers may not represent all players", "Prize winners cannot speak", "Reviews are always random", "Contests have no results"],
+    "The reviewers may not represent all players",
+    7
+  ),
+  rationalityQuestion(
+    "Two groups try different study plans, but one group has older students. What question matters?",
+    ["Were the groups similar before the study?", "Which group has nicer pencils?", "Was the paper brighter?", "Did both groups have names?"],
+    "Were the groups similar before the study?",
+    7
+  ),
+  rationalityQuestion(
+    "A box gives a 3 in 10 chance of a sticker worth 5 points and otherwise 0 points. What is the average points per try?",
+    ["1.5 points", "3 points", "5 points", "10 points"],
+    "1.5 points",
+    7
+  ),
+  rationalityQuestion(
+    "A school tries a new lunch menu and satisfaction rises, but recess time also gets longer. What is the problem?",
+    ["Two changes happened at once", "Lunch cannot affect satisfaction", "Recess cannot be measured", "Menus cannot change"],
+    "Two changes happened at once",
+    7
+  ),
+  rationalityQuestion(
+    "A website earns money when people click scary headlines. What should a careful reader notice?",
+    ["The site may have an incentive to exaggerate", "The site must always be true", "Headlines cannot be checked", "Money removes all bias"],
+    "The site may have an incentive to exaggerate",
+    7
+  ),
+  rationalityQuestion(
+    "Which plan best tests whether quiet music helps homework accuracy?",
+    ["Randomly assign similar students to music or no music and compare accuracy", "Ask only students who love music", "Use music for everyone and guess", "Change the homework and the music together"],
+    "Randomly assign similar students to music or no music and compare accuracy",
+    7
+  ),
+  rationalityQuestion(
+    "If all squares have four sides and this shape is a square, what follows?",
+    ["This shape has four sides", "Every four-sided shape is this square", "This shape has five sides", "No squares have sides"],
+    "This shape has four sides",
+    7
+  ),
+  rationalityQuestion(
+    "A rare blue card appears once in a pack. What should you conclude?",
+    ["A rare card can appear sometimes", "All cards are blue", "Blue cards are now common", "Cards cannot be rare"],
+    "A rare card can appear sometimes",
+    7
+  ),
+  rationalityQuestion(
+    "A runner improves after new shoes, but also practiced more for two weeks. What is the issue?",
+    ["Practice is another possible cause", "Shoes cannot matter", "Running cannot improve", "Two weeks is not time"],
+    "Practice is another possible cause",
+    7
+  ),
+  rationalityQuestion(
+    "A review says, \"I received a free toy for writing this.\" Why is that useful to know?",
+    ["It reveals an incentive that could affect the review", "It proves the review is false", "It means toys cannot be reviewed", "It removes all bias"],
+    "It reveals an incentive that could affect the review",
+    7
+  ),
+  rationalityQuestion(
+    "Which result is an expected value calculation?",
+    ["A 1 in 4 chance of 8 points is worth 2 points on average", "Eight points is always won", "Four chances means no risk", "Average points cannot be estimated"],
+    "A 1 in 4 chance of 8 points is worth 2 points on average",
+    7
+  ),
+  rationalityQuestion(
+    "A graph compares two classes but starts one class after extra lessons began. What should you ask for?",
+    ["Data from before the lessons for both classes", "A different graph color", "A shorter class name", "No labels"],
+    "Data from before the lessons for both classes",
     7
   ),
 
@@ -613,6 +1131,80 @@ const RATIONALITY_QUESTIONS = [
     8
   ),
 
+  // Additional Level 8: expanded variety.
+  rationalityQuestion(
+    "A student gets the highest score in the school one week, then a more ordinary score next week. What may be happening?",
+    ["Regression toward a more typical result", "The school changed all answers", "High scores cause low scores", "Scores cannot vary"],
+    "Regression toward a more typical result",
+    8
+  ),
+  rationalityQuestion(
+    "A test is good but not perfect. The thing it tests for is very uncommon. What is wise after a positive result?",
+    ["Confirm with more evidence", "Assume certainty immediately", "Ignore how common the thing is", "Throw away all tests"],
+    "Confirm with more evidence",
+    8
+  ),
+  rationalityQuestion(
+    "A researcher tries 40 comparisons and reports only one that looks exciting. What is the concern?",
+    ["The result may be a chance finding from many tries", "Forty comparisons guarantee truth", "One exciting result is always enough", "Comparisons cannot be reported"],
+    "The result may be a chance finding from many tries",
+    8
+  ),
+  rationalityQuestion(
+    "Why can random assignment help in a classroom experiment?",
+    ["It spreads hidden differences more evenly between groups", "It makes students identical", "It removes all mistakes forever", "It means no one needs instructions"],
+    "It spreads hidden differences more evenly between groups",
+    8
+  ),
+  rationalityQuestion(
+    "A headline says risk doubled from 1 in 1,000 to 2 in 1,000. What is the careful reading?",
+    ["The relative change is large, but the absolute change is 1 in 1,000", "The risk is now 100%", "The risk disappeared", "Doubling always means many people"],
+    "The relative change is large, but the absolute change is 1 in 1,000",
+    8
+  ),
+  rationalityQuestion(
+    "A scorer knows which essays came from the favorite class. What could reduce bias?",
+    ["Hide class names before scoring", "Make the scorer guess louder", "Show only the favorite class", "Stop using a rubric"],
+    "Hide class names before scoring",
+    8
+  ),
+  rationalityQuestion(
+    "A poll says 60% support a rule, but it was posted on a website for rule supporters. What is the problem?",
+    ["The sample may be biased toward supporters", "Sixty percent means no one supports it", "Websites cannot ask polls", "Rules cannot be supported"],
+    "The sample may be biased toward supporters",
+    8
+  ),
+  rationalityQuestion(
+    "Which evidence best supports a claim after an unusual result?",
+    ["The same result appears in new, well-run tests", "The first result is surprising", "The title says it is amazing", "One friend repeats the rumor"],
+    "The same result appears in new, well-run tests",
+    8
+  ),
+  rationalityQuestion(
+    "A chart makes a tiny difference look huge by using a very short axis range. What should you inspect?",
+    ["The axis scale", "The font name", "The page number", "The color of the border"],
+    "The axis scale",
+    8
+  ),
+  rationalityQuestion(
+    "A person is 95% confident in many predictions. What should happen for good calibration?",
+    ["About 95% of those predictions should be correct", "Every prediction must be wrong", "Exactly half should be correct", "Confidence cannot be checked"],
+    "About 95% of those predictions should be correct",
+    8
+  ),
+  rationalityQuestion(
+    "A blog gives a strong conclusion but does not describe its data or method. What is missing?",
+    ["Enough information to check the claim", "A louder headline", "More emojis", "A shorter conclusion"],
+    "Enough information to check the claim",
+    8
+  ),
+  rationalityQuestion(
+    "A lottery ticket has a 1 in 100 chance to win 50 shekels. What is the average prize value before cost?",
+    ["0.5 shekels", "1 shekel", "50 shekels", "100 shekels"],
+    "0.5 shekels",
+    8
+  ),
+
   // Level 9: Bayesian-style updating, uncertainty, causal mechanisms, and decision quality.
   rationalityQuestion(
     "A very rare prize is won by someone in a city of one million people. Why is that not automatically suspicious?",
@@ -684,6 +1276,80 @@ const RATIONALITY_QUESTIONS = [
     "A source admits what it is unsure about and explains its method. What does that usually signal?",
     ["More trustworthiness than pretending to know everything", "Weakness because uncertainty is never allowed", "That the method is hidden", "That the source has no evidence"],
     "More trustworthiness than pretending to know everything",
+    9
+  ),
+
+  // Additional Level 9: expanded variety.
+  rationalityQuestion(
+    "A city has many thousands of students. One student guesses 10 coin flips correctly. Why might that happen without cheating?",
+    ["With many students, unlikely streaks can occur", "Ten correct guesses are impossible", "Coins stop being random", "Every student must get ten right"],
+    "With many students, unlikely streaks can occur",
+    9
+  ),
+  rationalityQuestion(
+    "You think a claim is likely true, but new careful evidence repeatedly goes against it. What should you do?",
+    ["Lower your confidence in the claim", "Ignore all new evidence", "Become more certain automatically", "Only count evidence you like"],
+    "Lower your confidence in the claim",
+    9
+  ),
+  rationalityQuestion(
+    "A study links more piano lessons with better math scores. Which hidden variable could matter?",
+    ["Families with more time or resources may support both", "Pianos solve math problems", "Math scores cannot be measured", "Lesson rooms have no numbers"],
+    "Families with more time or resources may support both",
+    9
+  ),
+  rationalityQuestion(
+    "Which explanation has a useful mechanism?",
+    ["The bridge is stronger because the triangle shapes spread the weight", "The bridge is strong because it is awesome", "The bridge is strong because bridges win", "The bridge is strong because the word is long"],
+    "The bridge is stronger because the triangle shapes spread the weight",
+    9
+  ),
+  rationalityQuestion(
+    "A poll shows 51% for A and 49% for B with a margin of error of 3%. What is careful?",
+    ["The result is too close to be certain who is ahead", "A is definitely far ahead", "B has no chance", "The poll says nothing at all"],
+    "The result is too close to be certain who is ahead",
+    9
+  ),
+  rationalityQuestion(
+    "You bought a movie ticket but feel sick before the movie starts. Staying only because you paid is an example of what?",
+    ["Sunk cost thinking", "Random sampling", "Blinding", "Calibration"],
+    "Sunk cost thinking",
+    9
+  ),
+  rationalityQuestion(
+    "Which choice shows opportunity cost?",
+    ["Practicing violin means missing the chess club meeting at the same time", "A violin has strings", "Chess uses pieces", "A meeting starts at 4"],
+    "Practicing violin means missing the chess club meeting at the same time",
+    9
+  ),
+  rationalityQuestion(
+    "A theory explains old data but makes no new predictions. What would make it stronger?",
+    ["Correctly predicting new data before it is seen", "Using harder words", "Being more surprising", "Ignoring future tests"],
+    "Correctly predicting new data before it is seen",
+    9
+  ),
+  rationalityQuestion(
+    "Two explanations fit the facts, but one needs many extra assumptions. Which should you prefer for now?",
+    ["The one with fewer extra assumptions that still fits", "The one with the longest name", "The one that sounds strangest", "The one you heard first"],
+    "The one with fewer extra assumptions that still fits",
+    9
+  ),
+  rationalityQuestion(
+    "A tutoring program reports big gains, but only for students who chose to join. What question matters?",
+    ["Were those students already more motivated?", "Was the poster colorful?", "Were pencils available?", "Did the program have a name?"],
+    "Were those students already more motivated?",
+    9
+  ),
+  rationalityQuestion(
+    "A source says, \"Here is what would change my mind.\" What does that often show?",
+    ["The claim is open to being tested", "The source has no opinion", "The source refuses evidence", "The answer is automatically true"],
+    "The claim is open to being tested",
+    9
+  ),
+  rationalityQuestion(
+    "A choice has a small chance of a very bad outcome. What should good decision-making include?",
+    ["Both the probability and the size of the harm", "Only the chance of good outcomes", "Only whether it sounds fun", "Ignoring rare outcomes"],
+    "Both the probability and the size of the harm",
     9
   ),
 
@@ -760,6 +1426,80 @@ const RATIONALITY_QUESTIONS = [
     "It predicts new clues correctly before they are checked",
     10
   ),
+  // Additional Level 10: expanded variety.
+  rationalityQuestion(
+    "A medicine study assigns patients randomly, uses a placebo group, and hides group labels from evaluators. What does this design reduce?",
+    ["Bias and confounding", "The need for data", "All uncertainty forever", "The number of patients to zero"],
+    "Bias and confounding",
+    10
+  ),
+  rationalityQuestion(
+    "A model says an event has a 1% chance each day. After 100 days, what is a careful statement?",
+    ["The event is not guaranteed, but there have been many chances", "The event must happen exactly once", "The event is impossible", "One percent means always"],
+    "The event is not guaranteed, but there have been many chances",
+    10
+  ),
+  rationalityQuestion(
+    "A researcher changes the main outcome after seeing which result looked best. Why is that risky?",
+    ["It can turn a chance result into a misleading headline", "It always improves accuracy", "Outcomes cannot be chosen", "Data disappears after testing"],
+    "It can turn a chance result into a misleading headline",
+    10
+  ),
+  rationalityQuestion(
+    "A result is repeated in three independent labs using similar methods. What should happen to confidence?",
+    ["Confidence should increase", "Confidence should drop to zero", "Confidence should ignore replication", "The result becomes impossible"],
+    "Confidence should increase",
+    10
+  ),
+  rationalityQuestion(
+    "A study shows a small average benefit but a large cost for each person. What should a decision-maker ask?",
+    ["Whether the benefit is worth the cost", "Whether costs are numbers", "Whether averages are forbidden", "Whether small benefits are always enough"],
+    "Whether the benefit is worth the cost",
+    10
+  ),
+  rationalityQuestion(
+    "A school wants to know if a new schedule improves learning. Which plan is strongest?",
+    ["Compare similar groups with and without the schedule while measuring the same outcomes", "Ask only students who like the schedule", "Use the new schedule for one day and guess", "Change the schedule and the tests at the same time"],
+    "Compare similar groups with and without the schedule while measuring the same outcomes",
+    10
+  ),
+  rationalityQuestion(
+    "A forecast says 80% chance of rain for many different days. How should calibration look?",
+    ["It rains on about 80% of those days", "It rains on every one of those days", "It rains on none of those days", "Calibration means the forecast is pretty"],
+    "It rains on about 80% of those days",
+    10
+  ),
+  rationalityQuestion(
+    "A news story gives equal space to a careful expert review and to a claim with no evidence. What problem can that create?",
+    ["False balance", "Random assignment", "A control group", "A larger sample"],
+    "False balance",
+    10
+  ),
+  rationalityQuestion(
+    "A complex explanation fits one old event but cannot explain other similar events. What is the weakness?",
+    ["It may be overfit to one case", "It is automatically best", "Old events cannot be explained", "Complexity always proves truth"],
+    "It may be overfit to one case",
+    10
+  ),
+  rationalityQuestion(
+    "A test has many false positives when used on a very low-risk group. What should be considered?",
+    ["The base rate and confirmatory testing", "Only the test name", "Only the positive label", "Whether low risk means impossible"],
+    "The base rate and confirmatory testing",
+    10
+  ),
+  rationalityQuestion(
+    "Which policy decision uses expected value thinking?",
+    ["Choose the option whose likely benefits outweigh likely costs and risks", "Choose the option with the nicest slogan", "Ignore low-probability harms", "Always choose the newest idea"],
+    "Choose the option whose likely benefits outweigh likely costs and risks",
+    10
+  ),
+  rationalityQuestion(
+    "A claim survives attempts to disprove it and predicts new findings. What should happen compared with a claim that only explains old facts?",
+    ["It should be taken more seriously", "It should be ignored because predictions are bad", "It is weaker because it was tested", "Both claims are always equal"],
+    "It should be taken more seriously",
+    10
+  ),
+
 ];
 
 function createRationalityGeneratedEntry(difficulty) {

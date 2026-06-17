@@ -2,7 +2,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
   // Level 1: single-step addition, subtraction, groups, time, and money.
   {
     question: "How much money is left?",
-    displayText: "Lina has 20 shekels. She spends 7 shekels on a snack and then gets 5 shekels as change from another purchase.",
+    displayText: "Lina has 20 shekels. She spends 7 shekels on a snack, then receives 5 shekels back. How much money does she have now?",
     options: ["10 shekels", "15 shekels", "18 shekels", "22 shekels"],
     answer: "18 shekels",
     difficulty: 1,
@@ -40,6 +40,49 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     displayText: "A short book has 18 pages. Dan reads 8 pages.",
     options: ["8 pages", "9 pages", "10 pages", "12 pages"],
     answer: "10 pages",
+    difficulty: 1,
+  },
+
+  {
+    question: "How many toy cars are there altogether?",
+    displayText: "Eli has 8 toy cars. His friend gives him 5 more toy cars.",
+    options: ["11 toy cars", "12 toy cars", "13 toy cars", "14 toy cars"],
+    answer: "13 toy cars",
+    difficulty: 1,
+  },
+  {
+    question: "How many cookies are left?",
+    displayText: "There are 15 cookies on a plate. The children eat 6 cookies.",
+    options: ["7 cookies", "8 cookies", "9 cookies", "10 cookies"],
+    answer: "9 cookies",
+    difficulty: 1,
+  },
+  {
+    question: "How many pencils are there altogether?",
+    displayText: "There are 4 red pencils, 3 blue pencils, and 2 green pencils.",
+    options: ["7 pencils", "8 pencils", "9 pencils", "10 pencils"],
+    answer: "9 pencils",
+    difficulty: 1,
+  },
+  {
+    question: "How many stickers are there?",
+    displayText: "There are 2 sheets with 5 stickers on each sheet.",
+    options: ["7 stickers", "10 stickers", "12 stickers", "15 stickers"],
+    answer: "10 stickers",
+    difficulty: 1,
+  },
+  {
+    question: "How many minutes does reading take in all?",
+    displayText: "Sam reads for 10 minutes before lunch and 15 minutes after lunch.",
+    options: ["20 minutes", "25 minutes", "30 minutes", "35 minutes"],
+    answer: "25 minutes",
+    difficulty: 1,
+  },
+  {
+    question: "How much money does Ruth have now?",
+    displayText: "Ruth has 12 shekels. She earns 6 more shekels.",
+    options: ["16 shekels", "18 shekels", "20 shekels", "22 shekels"],
+    answer: "18 shekels",
     difficulty: 1,
   },
 
@@ -87,6 +130,49 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 2,
   },
 
+  {
+    question: "How many oranges are left?",
+    displayText: "A basket has 24 oranges. 8 oranges are used for juice, and 5 oranges are packed for lunch.",
+    options: ["9 oranges", "11 oranges", "13 oranges", "16 oranges"],
+    answer: "11 oranges",
+    difficulty: 2,
+  },
+  {
+    question: "How many beads are needed?",
+    displayText: "There are 5 bracelets. Each bracelet uses 4 beads, and 3 extra beads are needed for a necklace.",
+    options: ["20 beads", "23 beads", "25 beads", "28 beads"],
+    answer: "23 beads",
+    difficulty: 2,
+  },
+  {
+    question: "How much money is left?",
+    displayText: "Avi has 70 shekels. He buys a game for 35 shekels and a drink for 8 shekels.",
+    options: ["25 shekels", "27 shekels", "29 shekels", "35 shekels"],
+    answer: "27 shekels",
+    difficulty: 2,
+  },
+  {
+    question: "How many students are on the bus now?",
+    displayText: "There are 18 students on a bus. 7 more students get on, and 4 students get off.",
+    options: ["19 students", "21 students", "25 students", "29 students"],
+    answer: "21 students",
+    difficulty: 2,
+  },
+  {
+    question: "How many minutes did the practice take?",
+    displayText: "Soccer practice has a 30-minute drill, a 20-minute game, and 5 minutes to stretch.",
+    options: ["45 minutes", "50 minutes", "55 minutes", "60 minutes"],
+    answer: "55 minutes",
+    difficulty: 2,
+  },
+  {
+    question: "How many muffins are there altogether?",
+    displayText: "There are 3 trays with 6 muffins on each tray, and 4 more muffins on a plate.",
+    options: ["18 muffins", "20 muffins", "22 muffins", "24 muffins"],
+    answer: "22 muffins",
+    difficulty: 2,
+  },
+
   // Level 3: two-step stories with multiplication, time, and simple fractions.
   {
     question: "How much money is left?",
@@ -131,6 +217,49 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 3,
   },
 
+  {
+    question: "How many cards are left?",
+    displayText: "Tamar has 4 packs with 8 cards in each pack. She gives 10 cards to friends.",
+    options: ["20 cards", "22 cards", "24 cards", "32 cards"],
+    answer: "22 cards",
+    difficulty: 3,
+  },
+  {
+    question: "How much money is spent in all?",
+    displayText: "A lunch costs 18 shekels. A drink costs 7 shekels. A dessert costs 9 shekels.",
+    options: ["25 shekels", "31 shekels", "34 shekels", "36 shekels"],
+    answer: "34 shekels",
+    difficulty: 3,
+  },
+  {
+    question: "How many minutes are left before the bell?",
+    displayText: "A lesson is 50 minutes long. The class reads for 18 minutes and writes for 12 minutes.",
+    options: ["15 minutes", "20 minutes", "25 minutes", "30 minutes"],
+    answer: "20 minutes",
+    difficulty: 3,
+  },
+  {
+    question: "How many meters of ribbon are used?",
+    displayText: "Nina cuts 3 pieces of ribbon. Each piece is 4 meters long. Then she cuts 2 more meters.",
+    options: ["12 meters", "14 meters", "16 meters", "18 meters"],
+    answer: "14 meters",
+    difficulty: 3,
+  },
+  {
+    question: "How many books are on the shelf now?",
+    displayText: "A shelf has 17 books. 6 books are added, then 4 books are taken away.",
+    options: ["17 books", "19 books", "21 books", "23 books"],
+    answer: "19 books",
+    difficulty: 3,
+  },
+  {
+    question: "How many liters of juice are in the pitcher?",
+    displayText: "The pitcher has 1/2 liter of apple juice, 1/4 liter of orange juice, and 1/4 liter of water.",
+    options: ["1/2 liter", "3/4 liter", "1 liter", "1 1/4 liters"],
+    answer: "1 liter",
+    difficulty: 3,
+  },
+
   // Level 4: multi-step totals, tables, and comparisons.
   {
     question: "How many people chose soccer?",
@@ -161,7 +290,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
   },
   {
     question: "Which plan uses the fewest total minutes?",
-    displayText: "",
+    displayText: "Add the two reading times in each option.",
     options: [
       "Read 20 minutes and then 15 minutes",
       "Read 25 minutes and then 8 minutes",
@@ -189,6 +318,66 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     displayText: "A cooler needs 18 liters of water. Each bottle holds 3 liters.",
     options: ["4 bottles", "5 bottles", "6 bottles", "7 bottles"],
     answer: "6 bottles",
+    difficulty: 4,
+  },
+
+  {
+    question: "How many more apples than bananas were sold?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Fruit sold", [
+      ["Fruit", "Sold"],
+      ["Apples", "14"],
+      ["Bananas", "9"],
+      ["Pears", "11"],
+    ]),
+    options: ["3 apples", "5 apples", "9 apples", "14 apples"],
+    answer: "5 apples",
+    difficulty: 4,
+  },
+  {
+    question: "How much money is left?",
+    displayText: "A class has 200 shekels. It buys 3 packs of paper for 22 shekels each and tape for 18 shekels.",
+    options: ["112 shekels", "116 shekels", "126 shekels", "134 shekels"],
+    answer: "116 shekels",
+    difficulty: 4,
+  },
+  {
+    question: "How many pencils are needed?",
+    displayText: "There are 7 desks. Each desk needs 4 pencils. The teacher keeps 5 extra pencils.",
+    options: ["28 pencils", "32 pencils", "33 pencils", "35 pencils"],
+    answer: "33 pencils",
+    difficulty: 4,
+  },
+  {
+    question: "Which choice has the greatest total distance?",
+    displayText: "Add the two distances in each option. Remember that 1 km = 1,000 m.",
+    options: [
+      "Walk 1 km and then 700 m",
+      "Walk 1.5 km and then 100 m",
+      "Walk 900 m and then 600 m",
+      "Walk 1.2 km and then 400 m",
+    ],
+    answer: "Walk 1 km and then 700 m",
+    difficulty: 4,
+  },
+  {
+    question: "How many pages are read altogether?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Reading log", [
+      ["Day", "Pages"],
+      ["Monday", "18"],
+      ["Tuesday", "22"],
+      ["Wednesday", "15"],
+    ]),
+    options: ["50 pages", "55 pages", "58 pages", "60 pages"],
+    answer: "55 pages",
+    difficulty: 4,
+  },
+  {
+    question: "How many groups can be made?",
+    displayText: "36 students are split equally into groups of 6.",
+    options: ["5 groups", "6 groups", "7 groups", "8 groups"],
+    answer: "6 groups",
     difficulty: 4,
   },
 
@@ -247,6 +436,60 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 5,
   },
 
+  {
+    question: "How many kilograms are there in all?",
+    displayText: "A bag has 1.2 kg of rice. Another bag has 0.8 kg of rice. A third bag has 2 kg of rice.",
+    options: ["3 kg", "3.5 kg", "4 kg", "4.2 kg"],
+    answer: "4 kg",
+    difficulty: 5,
+  },
+  {
+    question: "What is the total cost?",
+    displayText: "A store sells 4 notebooks for 7.5 shekels each and 3 pens for 4 shekels each.",
+    options: ["30 shekels", "40 shekels", "42 shekels", "45 shekels"],
+    answer: "42 shekels",
+    difficulty: 5,
+  },
+  {
+    question: "How much ribbon is left?",
+    displayText: "Mira has 5 meters of ribbon. She uses 1.5 meters for a gift and 2 meters for a craft.",
+    options: ["1 meter", "1.5 meters", "2 meters", "2.5 meters"],
+    answer: "1.5 meters",
+    difficulty: 5,
+  },
+  {
+    question: "How many snacks were ordered altogether?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Snack order", [
+      ["Item", "Number"],
+      ["Sandwiches", "12"],
+      ["Apples", "18"],
+      ["Drinks", "15"],
+    ]),
+    options: ["42 snacks", "45 snacks", "48 snacks", "50 snacks"],
+    answer: "45 snacks",
+    difficulty: 5,
+  },
+  {
+    question: "Which option has the lower price per folder?",
+    displayText: "Compare 6 folders for 36 shekels with 5 folders for 35 shekels.",
+    options: [
+      "6 folders for 36 shekels",
+      "5 folders for 35 shekels",
+      "They cost the same per folder",
+      "There is not enough information",
+    ],
+    answer: "6 folders for 36 shekels",
+    difficulty: 5,
+  },
+  {
+    question: "How much flour is needed?",
+    displayText: "One pizza dough needs 2/3 cup of flour. Lior makes 3 doughs.",
+    options: ["1 cup", "1 1/2 cups", "2 cups", "3 cups"],
+    answer: "2 cups",
+    difficulty: 5,
+  },
+
   // Level 6: rates, averages, scaling, and clearer distractors.
   {
     question: "How many kilometers are left?",
@@ -297,6 +540,55 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 6,
   },
 
+  {
+    question: "What is the average score?",
+    displayText: "The scores are 16, 20, and 24.",
+    options: ["18", "20", "22", "24"],
+    answer: "20",
+    difficulty: 6,
+  },
+  {
+    question: "How many packs are needed?",
+    displayText: "A class needs 68 paper plates. Plates come in packs of 10, and every student needs a plate.",
+    options: ["6 packs", "7 packs", "8 packs", "10 packs"],
+    answer: "7 packs",
+    difficulty: 6,
+  },
+  {
+    question: "How many students walk to school?",
+    displayText: "2/5 of 80 students walk to school.",
+    options: ["16 students", "30 students", "32 students", "40 students"],
+    answer: "32 students",
+    difficulty: 6,
+  },
+  {
+    question: "What is the perimeter of the playground?",
+    displayText: "A rectangular playground is 12 meters long and 7 meters wide.",
+    options: ["19 meters", "38 meters", "42 meters", "84 meters"],
+    answer: "38 meters",
+    difficulty: 6,
+  },
+  {
+    question: "How many kilometers are left?",
+    displayText: "A bike trail is 25 km long. Dana rides 8.5 km in the morning and 7.5 km in the afternoon.",
+    options: ["8 km", "9 km", "10 km", "17 km"],
+    answer: "9 km",
+    difficulty: 6,
+  },
+  {
+    question: "What is the average amount of water used per day?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Water used", [
+      ["Day", "Liters"],
+      ["Monday", "18"],
+      ["Tuesday", "24"],
+      ["Wednesday", "30"],
+    ]),
+    options: ["22 liters", "24 liters", "26 liters", "30 liters"],
+    answer: "24 liters",
+    difficulty: 6,
+  },
+
   // Level 7: percent, proportional reasoning, mixed quantities, and elapsed time.
   {
     question: "What is the sale price?",
@@ -321,8 +613,7 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
   },
   {
     question: "Which option has the lowest cost per marker?",
-    displayText: "",
-    displayText: "",
+    displayText: "Find the price for one marker in each option.",
     options: [
       "6 markers for 30 shekels",
       "8 markers for 44 shekels",
@@ -350,6 +641,60 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     ]),
     options: ["9 cm", "12 cm", "15 cm", "27 cm"],
     answer: "15 cm",
+    difficulty: 7,
+  },
+
+  {
+    question: "What is the sale price?",
+    displayText: "A backpack costs 240 shekels and is on sale for 15% off.",
+    options: ["180 shekels", "204 shekels", "216 shekels", "225 shekels"],
+    answer: "204 shekels",
+    difficulty: 7,
+  },
+  {
+    question: "How many blue beads are there?",
+    displayText: "Red and blue beads are in a 4:5 ratio. There are 72 beads altogether.",
+    options: ["32 blue beads", "36 blue beads", "40 blue beads", "45 blue beads"],
+    answer: "40 blue beads",
+    difficulty: 7,
+  },
+  {
+    question: "What time does practice end?",
+    displayText: "Practice starts at 2:45 and lasts 1 hour 25 minutes.",
+    options: ["3:50", "4:00", "4:10", "4:20"],
+    answer: "4:10",
+    difficulty: 7,
+  },
+  {
+    question: "Which option has the lowest cost per liter?",
+    displayText: "Find the price for one liter in each option.",
+    options: [
+      "3 liters for 27 shekels",
+      "4 liters for 40 shekels",
+      "5 liters for 55 shekels",
+      "6 liters for 66 shekels",
+    ],
+    answer: "3 liters for 27 shekels",
+    difficulty: 7,
+  },
+  {
+    question: "How many milliliters of syrup are needed?",
+    displayText: "A drink uses 2 parts syrup to 5 parts water. The finished drink has 700 mL total.",
+    options: ["100 mL", "200 mL", "250 mL", "500 mL"],
+    answer: "200 mL",
+    difficulty: 7,
+  },
+  {
+    question: "How much did the tree grow from Month 1 to Month 3?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Tree height", [
+      ["Month", "Height"],
+      ["1", "45 cm"],
+      ["2", "52 cm"],
+      ["3", "61 cm"],
+    ]),
+    options: ["9 cm", "14 cm", "16 cm", "61 cm"],
+    answer: "16 cm",
     difficulty: 7,
   },
 
@@ -394,6 +739,49 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     displayText: "A class buys supplies for 95 shekels and sells 24 bracelets for 8 shekels each.",
     options: ["87 shekels", "95 shekels", "97 shekels", "192 shekels"],
     answer: "97 shekels",
+    difficulty: 8,
+  },
+
+  {
+    question: "How much will 10 notebooks cost?",
+    displayText: "A store sells 4 notebooks for 32 shekels. The price per notebook stays the same.",
+    options: ["64 shekels", "72 shekels", "80 shekels", "96 shekels"],
+    answer: "80 shekels",
+    difficulty: 8,
+  },
+  {
+    question: "How many pages are left after two reading sessions?",
+    displayText: "A book has 300 pages. Omar reads 20% of the book on Monday and 1/4 of the book on Tuesday.",
+    options: ["150 pages", "165 pages", "180 pages", "195 pages"],
+    answer: "165 pages",
+    difficulty: 8,
+  },
+  {
+    question: "What is the total distance?",
+    displayText: "A runner completes 2 laps of 1.75 km, then runs another 600 meters.",
+    options: ["3.5 km", "4.1 km", "4.6 km", "5.1 km"],
+    answer: "4.1 km",
+    difficulty: 8,
+  },
+  {
+    question: "How many boxes are needed?",
+    displayText: "A food drive packs 185 cans. Each box holds 16 cans. Every can must be packed.",
+    options: ["11 boxes", "12 boxes", "13 boxes", "16 boxes"],
+    answer: "12 boxes",
+    difficulty: 8,
+  },
+  {
+    question: "How much profit was made?",
+    displayText: "A class buys supplies for 140 shekels and sells 35 candles for 7 shekels each.",
+    options: ["95 shekels", "105 shekels", "140 shekels", "245 shekels"],
+    answer: "105 shekels",
+    difficulty: 8,
+  },
+  {
+    question: "How much does one family ticket cost?",
+    displayText: "Three child tickets cost 54 shekels. A family ticket costs 3 times as much as one child ticket.",
+    options: ["18 shekels", "36 shekels", "54 shekels", "72 shekels"],
+    answer: "54 shekels",
     difficulty: 8,
   },
 
@@ -448,6 +836,56 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     difficulty: 9,
   },
 
+  {
+    question: "What was the original price?",
+    displayText: "After a 25% discount, a suitcase costs 150 shekels.",
+    options: ["175 shekels", "190 shekels", "200 shekels", "225 shekels"],
+    answer: "200 shekels",
+    difficulty: 9,
+  },
+  {
+    question: "How many students chose robotics?",
+    displayText: "",
+    visualHtml: buildAppliedWordProblemTable("Club choices", [
+      ["Club", "Students"],
+      ["Art", "21"],
+      ["Chess", "34"],
+      ["Robotics", "?"],
+      ["Total", "96"],
+    ]),
+    options: ["39 students", "41 students", "43 students", "46 students"],
+    answer: "41 students",
+    difficulty: 9,
+  },
+  {
+    question: "How many small boxes are needed?",
+    displayText: "A library has 150 books. Large boxes hold 20 books. After filling 5 large boxes, the rest go into small boxes that hold 12 books each.",
+    options: ["4 small boxes", "5 small boxes", "6 small boxes", "8 small boxes"],
+    answer: "5 small boxes",
+    difficulty: 9,
+  },
+  {
+    question: "What is the weighted average score?",
+    displayText: "A grade is 70% quiz and 30% project. The quiz score is 80 and the project score is 90.",
+    options: ["83", "85", "86", "87"],
+    answer: "83",
+    difficulty: 9,
+  },
+  {
+    question: "How many kilometers per hour did the runner average?",
+    displayText: "A runner travels 45 kilometers in 2.5 hours.",
+    options: ["16 km/h", "18 km/h", "20 km/h", "22 km/h"],
+    answer: "18 km/h",
+    difficulty: 9,
+  },
+  {
+    question: "How many adult tickets were sold?",
+    displayText: "A museum sold 50 tickets. Adult tickets cost 20 shekels and child tickets cost 12 shekels. The total money collected was 760 shekels.",
+    options: ["15 adult tickets", "20 adult tickets", "25 adult tickets", "30 adult tickets"],
+    answer: "20 adult tickets",
+    difficulty: 9,
+  },
+
   // Level 10: multi-constraint optimization and algebra-like word problems.
   {
     question: "Which plan is cheapest?",
@@ -489,6 +927,48 @@ const APPLIED_WORD_PROBLEMS_QUESTIONS = [
     displayText: "A club starts with 500 shekels, spends 35% on equipment, earns 120 shekels from tickets, and then pays 45 shekels for cleaning.",
     options: ["375 shekels", "390 shekels", "400 shekels", "425 shekels"],
     answer: "400 shekels",
+    difficulty: 10,
+  },
+  {
+    question: "Which plan is cheapest?",
+    displayText: "Plan A costs 60 shekels plus 4 shekels per class. Plan B costs 25 shekels plus 8 shekels per class. The student takes 12 classes.",
+    options: ["Plan A is cheaper", "Plan B is cheaper", "They cost the same", "There is not enough information"],
+    answer: "Plan A is cheaper",
+    difficulty: 10,
+  },
+  {
+    question: "How many small jars can be filled?",
+    displayText: "A cook has 6 liters of sauce. She fills 5 large jars of 750 mL each, then uses the rest for small 250 mL jars.",
+    options: ["8 small jars", "9 small jars", "10 small jars", "12 small jars"],
+    answer: "9 small jars",
+    difficulty: 10,
+  },
+  {
+    question: "What is the length of each other side?",
+    displayText: "A rectangle has two sides that are 22 cm each. The perimeter is 70 cm.",
+    options: ["11 cm", "13 cm", "16 cm", "22 cm"],
+    answer: "13 cm",
+    difficulty: 10,
+  },
+  {
+    question: "How many tables are needed?",
+    displayText: "A dinner has 118 guests. Each guest table seats 9 people. 3 more tables are reserved for supplies and cannot seat guests.",
+    options: ["15 tables", "16 tables", "17 tables", "18 tables"],
+    answer: "17 tables",
+    difficulty: 10,
+  },
+  {
+    question: "How many blue beads are in the final necklace?",
+    displayText: "A necklace starts with red and blue beads in a 5:7 ratio, 96 beads total. Then 10 more blue beads are added.",
+    options: ["56 blue beads", "64 blue beads", "66 blue beads", "72 blue beads"],
+    answer: "66 blue beads",
+    difficulty: 10,
+  },
+  {
+    question: "What is the final balance?",
+    displayText: "A club starts with 800 shekels, spends 25% on supplies, earns 150 shekels from tickets, and then pays 90 shekels for cleaning.",
+    options: ["600 shekels", "650 shekels", "660 shekels", "710 shekels"],
+    answer: "660 shekels",
     difficulty: 10,
   },
 ];

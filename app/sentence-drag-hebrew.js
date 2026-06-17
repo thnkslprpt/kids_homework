@@ -297,6 +297,209 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
       distractors: ["מרימים", "מנקים", "קופצים"],
       difficulty: 5,
     },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הציפור ", " על העץ."],
+      answer: ["שרה"],
+      distractors: ["רצה", "כותב", "שותה"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["אבא ", " עיתון בסלון."],
+      answer: ["קורא"],
+      distractors: ["בועט", "קופצת", "ישן"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הסוס ", " עשב בשדה."],
+      answer: ["אוכל"],
+      distractors: ["כותב", "פותח", "שר"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הילד ", " בית במחברת."],
+      answer: ["מצייר"],
+      distractors: ["שותה", "רץ", "ישן"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["דנה ", " מעיל כחול."],
+      answer: ["לובשת"],
+      distractors: ["אוכלת", "קוראת", "זורקת"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["אנחנו ", " שיר שמח."],
+      answer: ["שרים"],
+      distractors: ["שותים", "קופצים", "ישנים"],
+      difficulty: 1,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הילד עומד ", " הדלת."],
+      answer: ["ליד"],
+      distractors: ["בתוך", "על", "מתחת"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["בחורף אנחנו ", " מעילים."],
+      answer: ["לובשים"],
+      distractors: ["אוכלים", "שותים", "שרים"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["בבוקר אני ", " את המיטה."],
+      answer: ["מסדר"],
+      distractors: ["שותה", "רץ", "צובע"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הילדים ", " בחצר אחרי הלימודים."],
+      answer: ["משחקים"],
+      distractors: ["מבשלים", "ישנים", "כותבים"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הצלחת נמצאת ", " השולחן."],
+      answer: ["על"],
+      distractors: ["בתוך", "מאחורי", "מתחת"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["אחרי הגשם יש ", " ברחוב."],
+      answer: ["שלוליות"],
+      distractors: ["עפרונות", "ספרים", "כיסאות"],
+      difficulty: 2,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["כדי לשמוע טוב, אנחנו ", " בשקט."],
+      answer: ["מקשיבים"],
+      distractors: ["מדברים", "קופצים", "אוכלים"],
+      difficulty: 3,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["יונתן ", " מחברת חדשה לכיתה."],
+      answer: ["מביא"],
+      distractors: ["שובר", "שוחה", "צובע"],
+      difficulty: 3,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["המשפחה יושבת ", " השולחן לארוחת ערב."],
+      answer: ["סביב"],
+      distractors: ["בתוך", "מתחת", "מעל"],
+      difficulty: 3,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["אחרי המשחק השחקנים ", " מים."],
+      answer: ["שותים"],
+      distractors: ["כותבים", "מציירים", "זורקים"],
+      difficulty: 3,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["כשקר בחוץ, אנחנו ", " את החלון."],
+      answer: ["סוגרים"],
+      distractors: ["מציירים", "קוראים", "שוברים"],
+      difficulty: 3,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הילדים ", " את הצעצועים ו", " את החדר."],
+      answer: ["אוספים", "מסדרים"],
+      distractors: ["שוברים", "קוראים", "אופים"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הטבח ", " את הירקות ואז ", " אותם לסלט."],
+      answer: ["שוטף", "חותך"],
+      distractors: ["מצייר", "זורק", "שר"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["לפני המסיבה אנחנו ", " בלונים ו", " קישוטים."],
+      answer: ["מנפחים", "תולים"],
+      distractors: ["מוחקים", "קוראים", "שוחים"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הילדה ", " את המפתח ו", " אותו בתיק."],
+      answer: ["מחפשת", "מוצאת"],
+      distractors: ["אופה", "צובעת", "קופצת"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["הגשם הפסיק, ולכן הילדים ", " החוצה לשחק."],
+      answer: ["יוצאים"],
+      distractors: ["קוראים", "שוברים", "אופים"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["המדריך ", " את הכללים ו", " על השאלות."],
+      answer: ["מסביר", "עונה"],
+      distractors: ["מוחק", "זורק", "שותה"],
+      difficulty: 4,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["כדי להכין כריך, דניאל ", " לחם, ", " גבינה ו", " ירקות."],
+      answer: ["פורסת", "מורחת", "מוסיפה"],
+      distractors: ["שוטפת", "צובעת", "קופצת"],
+      difficulty: 5,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["לפני שהאורחים מגיעים, המשפחה ", " את הסלון, ", " את השולחן ו", " נרות."],
+      answer: ["מנקה", "מסדרת", "מדליקה"],
+      distractors: ["שוחה", "שוברת", "מציירת"],
+      difficulty: 5,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["במהלך הניסוי התלמידים ", " את החומרים, ", " זמן ו", " תוצאות."],
+      answer: ["מערבבים", "מודדים", "כותבים"],
+      distractors: ["רצים", "שרים", "זורקים"],
+      difficulty: 5,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["בדרך לבית הספר נעם ", " חבר, ", " אותו ו", " ללכת."],
+      answer: ["פוגש", "מברך", "ממשיך"],
+      distractors: ["צובע", "שובר", "אופה"],
+      difficulty: 5,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["כשהילד לא מבין, הוא ", " את ההוראה שוב, ", " שאלה ו", " את התשובה."],
+      answer: ["קורא", "שואל", "מסמן"],
+      distractors: ["קופץ", "שוטף", "שובר"],
+      difficulty: 5,
+    },
+    {
+      question: "השלימו את המשפט.",
+      templateParts: ["בגינה הילדים ", " את הצמחים, ", " עשבים ו", " עלים."],
+      answer: ["משקים", "עוקרים", "אוספים"],
+      distractors: ["מדליקים", "מבשלים", "כותבים"],
+      difficulty: 5,
+    },
   ];
 
   const STATIC_BANK = STATIC_BLUEPRINTS.map(materializeBlueprint);
@@ -328,6 +531,306 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
             templateParts: ["אנחנו ", " לשיעור."],
             answer: ["נכנסים"],
             distractors: ["מציירים", "שוברים", "מבשלים"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["התינוק ", " בעריסה."],
+            answer: ["בוכה"],
+            distractors: ["קורא", "בועט", "כותב"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["הדג ", " במים."],
+            answer: ["שוחה"],
+            distractors: ["מצייר", "ישן", "פותח"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["הילדה ", " בקול."],
+            answer: ["צוחקת"],
+            distractors: ["בונה", "שותה", "כותבת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אבא ", " סנדוויץ'."],
+            answer: ["מכין"],
+            distractors: ["רץ", "ישן", "קורא"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["המעיל ", " על הקולב."],
+            answer: ["תלוי"],
+            distractors: ["יושב", "שוחה", "כותב"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי המשחק הילדים ", " את הכדורים."],
+            answer: ["אוספים"],
+            distractors: ["אוכלים", "כותבים", "שותים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["בצהריים אנחנו ", " מרק חם."],
+            answer: ["אוכלים"],
+            distractors: ["קוראים", "רצים", "מציירים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["המחברת נמצאת ", " התיק."],
+            answer: ["בתוך"],
+            distractors: ["ליד", "מעל", "מתחת"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["הילדים ", " בתור לפני הכניסה."],
+            answer: ["עומדים"],
+            distractors: ["שוחים", "אופים", "כותבים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["מיכל ", " לחברתה את המשחק."],
+            answer: ["מסבירה"],
+            distractors: ["שותה", "קופצת", "שוברת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["המשפחה ", " ליד הים בשבת."],
+            answer: ["מטיילת"],
+            distractors: ["כותבת", "מנקה", "מבשלת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כשיש רעש, אנחנו מבקשים ", "."],
+            answer: ["שקט"],
+            distractors: ["עיפרון", "כיסא", "חלון"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["הספרנית ", " את הספרים למדף ו", " את השולחן."],
+            answer: ["מחזירה", "מסדרת"],
+            distractors: ["שוחה", "בועטת", "שוברת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי הציור הילדים ", " את המכחולים ו", " את הצבעים."],
+            answer: ["שוטפים", "סוגרים"],
+            distractors: ["אופים", "שרים", "מוחקים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["השליח ", " בדלת ו", " את החבילה."],
+            answer: ["מצלצל", "מוסר"],
+            distractors: ["מצייר", "קופץ", "שוטף"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["המדריכה ", " את הרשימה ו", " מדבקות."],
+            answer: ["בודקת", "מחלקת"],
+            distractors: ["ישנה", "זורקת", "אופה"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לפני האימון השחקנים ", " נעליים, ", " בקבוקים ו", " למגרש."],
+            answer: ["נועלים", "ממלאים", "רצים"],
+            distractors: ["מציירים", "מוחקים", "ישנים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["במטבח רותי ", " ירקות, ", " סלט ו", " אותו לשולחן."],
+            answer: ["שוטפת", "חותכת", "מגישה"],
+            distractors: ["קופצת", "מסתירה", "שורקת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כשהכיתה יוצאת לסיור, המורה ", " תלמידים, ", " כללים ו", " את הקבוצה."],
+            answer: ["סופרת", "מזכירה", "מובילה"],
+            distractors: ["צובעת", "אופה", "שוברת"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי הקריאה התלמידים ", " את הסיפור, ", " על שאלות ו", " דעות."],
+            answer: ["מסכמים", "עונים", "משתפים"],
+            distractors: ["מכבסים", "קופצים", "שוברים"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לפני פתיחת החנות העובדים ", " מדפים, ", " מחירים ו", " את הקופה."],
+            answer: ["מסדרים", "בודקים", "פותחים"],
+            distractors: ["שוחים", "צובעים", "מסתתרים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כאשר התוכנית השתנתה, המדריך ", " את הקבוצה, ", " מסלול אחר ו", " אישור."],
+            answer: ["עדכן", "הציע", "ביקש"],
+            distractors: ["שבר", "אפה", "קפץ"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כדי לשמור על סדר, הילדים ", " את הקלפים, ", " אותם ו", " לקופסה."],
+            answer: ["ממיינים", "סופרים", "מחזירים"],
+            distractors: ["מבשלים", "צובעים", "שוחים"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אם הכדור נעלם, כדאי ", " מתחת לספסל ו", " את הילדים ליד המגרש."],
+            answer: ["לחפש", "לשאול"],
+            distractors: ["לאפות", "למחוק", "לקפוץ"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי שהמצגת לא נפתחה, תמר ", " את הקובץ, ", " מחשב ו", " להסביר."],
+            answer: ["בדקה", "החליפה", "המשיכה"],
+            distractors: ["אפתה", "קיפלה", "צבעה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כדי לחסוך זמן, הצוות ", " משימות, ", " לוח זמנים ו", " לעבוד מיד."],
+            answer: ["חילק", "קבע", "התחיל"],
+            distractors: ["שטף", "שבר", "שר"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כשהילד נפצע קלות, המדריך ", " את המשחק, ", " את השריטה ו", " להורים."],
+            answer: ["עצר", "ניקה", "קרא"],
+            distractors: ["צייר", "אפה", "טיפס"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לפני שליחת המכתב, דנה ", " אותו שוב ו", " שגיאת כתיב אחת."],
+            answer: ["קראה", "תיקנה"],
+            distractors: ["זרקה", "שטפה", "קפצה"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי שהמדריך הבחין בסכנה, הוא ", " את הקבוצה, ", " את הבעיה ו", " דרך בטוחה יותר."],
+            answer: ["עצר", "הסביר", "בחר"],
+            distractors: ["אפה", "צבע", "שחה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כדי להכין את הניסוי, התלמידים ", " שאלה, ", " ציוד ו", " את השלבים."],
+            answer: ["ניסחו", "אספו", "תיעדו"],
+            distractors: ["שברו", "רקדו", "מחקו"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כאשר התוצאות היו שונות מהצפוי, החוקרת ", " את המדידה, ", " על הניסוי ו", " נתונים."],
+            answer: ["בדקה", "חזרה", "השוותה"],
+            distractors: ["קפצה", "צבעה", "אפתה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["בסיום הפרויקט הקבוצה ", " את המסקנות, ", " למשוב ו", " את הדוח."],
+            answer: ["הציגה", "הקשיבה", "תיקנה"],
+            distractors: ["שטפה", "הסתירה", "קשרה"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כדי לפתור את התקלה, הטכנאי ", " את מקור הבעיה, ", " את החשמל ו", " חלק פגום."],
+            answer: ["זיהה", "ניתק", "החליף"],
+            distractors: ["אפה", "צייר", "קפץ"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לאחר שהתקבלו הצעות שונות, הוועדה ", " עלויות, ", " סיכונים ו", " פתרון מאוזן."],
+            answer: ["השוותה", "בדקה", "בחרה"],
+            distractors: ["צבעה", "שברה", "שטפה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כאשר התברר שהמידע חסר, החוקרים ", " מקור נוסף, ", " את הפרטים ו", " את הטבלה."],
+            answer: ["חיפשו", "אימתו", "עדכנו"],
+            distractors: ["שחו", "אפו", "קפצו"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לפני פרסום ההודעה, הצוות ", " גרסה קצרה, ", " משפט מבלבל ו", " שאין טעויות."],
+            answer: ["ניסח", "מחק", "בדק"],
+            distractors: ["קפץ", "אפה", "שחה"],
+          },
+        ];
+
+        return materializeBlueprint(pick(prompts), level);
+      },
+      (level) => {
+        const prompts = [
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["אחרי שהנתונים סתרו את ההשערה, החוקרת ", " את השיטה, ", " גורם חריג ו", " מסקנה זהירה."],
+            answer: ["בחנה", "זיהתה", "ניסחה"],
+            distractors: ["קיפלה", "צבעה", "שברה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כדי ליישב את המחלוקת, המגשר ", " לשני הצדדים, ", " בין עובדות לדעות ו", " פשרה."],
+            answer: ["הקשיב", "הפריד", "הציע"],
+            distractors: ["אפה", "קפץ", "צבע"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["לפני קבלת ההחלטה, ההנהלה ", " חלופות, ", " השלכות ו", " מדדים להצלחה."],
+            answer: ["בחנה", "העריכה", "קבעה"],
+            distractors: ["שטפה", "שכחה", "קפצה"],
+          },
+          {
+            question: "השלימו את המשפט.",
+            templateParts: ["כאשר התהליך התארך, הצוות ", " דרישות, ", " החלטות ו", " נושאים מורכבים לשלב הבא."],
+            answer: ["צמצם", "תיעד", "השאיר"],
+            distractors: ["צבע", "אפה", "קיפל"],
           },
         ];
 

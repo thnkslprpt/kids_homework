@@ -72,6 +72,73 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 1,
   },
 
+  {
+    question: "How long is the crayon shown on the ruler?",
+    visualHtml: buildVisualMeasurementCard(
+      "Ruler",
+      buildRulerSvg({ start: 0, end: 3 }),
+      "The crayon starts at 0 cm."
+    ),
+    options: ["2 cm", "3 cm", "4 cm", "5 cm"],
+    answer: "3 cm",
+    difficulty: 1,
+  },
+  {
+    question: "What time is shown on the clock?",
+    visualHtml: buildVisualMeasurementCard(
+      "Clock",
+      buildClockSvg({ hour: 7, minute: 0 }),
+      "Look at the hands."
+    ),
+    options: ["6:00", "7:00", "8:00", "7:30"],
+    answer: "7:00",
+    difficulty: 1,
+  },
+  {
+    question: "How much water is in the cup?",
+    visualHtml: buildVisualMeasurementCard(
+      "Measuring Cup",
+      buildMeasuringCupSvg({ amount: 300, maxAmount: 600, step: 100 }),
+      CUP_DETAIL_TEXT
+    ),
+    options: ["200 mL", "300 mL", "400 mL", "600 mL"],
+    answer: "300 mL",
+    difficulty: 1,
+  },
+  {
+    question: "What does this clock help you measure?",
+    visualHtml: buildVisualMeasurementCard(
+      "Clock",
+      buildClockSvg({ hour: 5, minute: 0 }),
+      "A clock shows time."
+    ),
+    options: ["Time", "Mass", "Length", "Capacity"],
+    answer: "Time",
+    difficulty: 1,
+  },
+  {
+    question: "What temperature is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: 30 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About 10\u00b0C", "About 20\u00b0C", "About 30\u00b0C", "About 40\u00b0C"],
+    answer: "About 30\u00b0C",
+    difficulty: 1,
+  },
+  {
+    question: "Which scale reading is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Kitchen Scale",
+      buildScaleSvg({ value: 600, max: 1000, unit: "g" }),
+      SCALE_DETAIL_TEXT
+    ),
+    options: ["200 g", "400 g", "600 g", "800 g"],
+    answer: "600 g",
+    difficulty: 1,
+  },
+
   // Level 2: half hours, half centimeters, symmetry, and common readings.
   {
     question: "Which thermometer reading is closest to a cool day?",
@@ -145,6 +212,78 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 2,
   },
 
+  {
+    question: "Which thermometer reading is closest to a mild day?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: 18 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About 8\u00b0C", "About 18\u00b0C", "About 28\u00b0C", "About 38\u00b0C"],
+    answer: "About 18\u00b0C",
+    difficulty: 2,
+  },
+  {
+    question: "How long is the ribbon shown on the ruler?",
+    visualHtml: buildVisualMeasurementCard(
+      "Ruler",
+      buildRulerSvg({ start: 0, end: 4.5 }),
+      "The ribbon starts at 0 cm."
+    ),
+    options: ["3.5 cm", "4 cm", "4.5 cm", "5.5 cm"],
+    answer: "4.5 cm",
+    difficulty: 2,
+  },
+  {
+    question: "What time is shown on the clock?",
+    visualHtml: buildVisualMeasurementCard(
+      "Clock",
+      buildClockSvg({ hour: 1, minute: 30 }),
+      "The long hand points to 6."
+    ),
+    options: ["1:00", "1:30", "2:30", "12:30"],
+    answer: "1:30",
+    difficulty: 2,
+  },
+  {
+    question: "Which sentence is true about the line of symmetry?",
+    visualHtml: buildVisualMeasurementCard(
+      "Shape",
+      buildSymmetrySvg({ type: "heart" }),
+      "The dashed line shows the fold line."
+    ),
+    options: [
+      "The two sides match if folded on the line",
+      "The dashed line measures weight",
+      "The shape is a rectangle",
+      "The line shows the time",
+    ],
+    answer: "The two sides match if folded on the line",
+    difficulty: 2,
+  },
+  {
+    question: "How much water is in the cup?",
+    visualHtml: buildVisualMeasurementCard(
+      "Measuring Cup",
+      buildMeasuringCupSvg({ amount: 600, maxAmount: 800, step: 200 }),
+      CUP_DETAIL_TEXT
+    ),
+    options: ["200 mL", "400 mL", "600 mL", "800 mL"],
+    answer: "600 mL",
+    difficulty: 2,
+  },
+  {
+    question: "How much mass is shown on the scale?",
+    visualHtml: buildVisualMeasurementCard(
+      "Kitchen Scale",
+      buildScaleSvg({ value: 900, max: 1000, unit: "g" }),
+      SCALE_DETAIL_TEXT
+    ),
+    options: ["500 g", "700 g", "900 g", "1,000 g"],
+    answer: "900 g",
+    difficulty: 2,
+  },
+
   // Level 3: non-zero starts, simple unit prices, grid perimeter, and quarter turns.
   {
     question: "What temperature is shown?",
@@ -209,6 +348,76 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     visualHtml: buildVisualMeasurementCard(
       "Turn",
       buildTurnSvg({ start: "up", turn: "right" }),
+      "The arrow turns one quarter-turn clockwise."
+    ),
+    options: ["A quarter-turn clockwise", "A half-turn", "A full turn", "A quarter-turn counterclockwise"],
+    answer: "A quarter-turn clockwise",
+    difficulty: 3,
+  },
+
+  {
+    question: "What temperature is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: 22 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About 12\u00b0C", "About 18\u00b0C", "About 22\u00b0C", "About 32\u00b0C"],
+    answer: "About 22\u00b0C",
+    difficulty: 3,
+  },
+  {
+    question: "Which apple deal costs less per apple?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["3 apples", "12 shekels"],
+        ["5 apples", "18 shekels"],
+      ]),
+      "Compare the price for one apple."
+    ),
+    options: ["3 apples for 12 shekels", "5 apples for 18 shekels", "They cost the same", "Cannot tell"],
+    answer: "5 apples for 18 shekels",
+    difficulty: 3,
+  },
+  {
+    question: "How many centimeters long is the line?",
+    visualHtml: buildVisualMeasurementCard(
+      "Ruler",
+      buildRulerSvg({ start: -2, end: 5 }),
+      "The line begins at -2 cm."
+    ),
+    options: ["5 cm", "6 cm", "7 cm", "8 cm"],
+    answer: "7 cm",
+    difficulty: 3,
+  },
+  {
+    question: "What is the perimeter of the rectangle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Grid Rectangle",
+      buildGridRectangleSvg({ widthCells: 5, heightCells: 3 }),
+      "Each grid square side is 1 cm."
+    ),
+    options: ["8 cm", "15 cm", "16 cm", "20 cm"],
+    answer: "16 cm",
+    difficulty: 3,
+  },
+  {
+    question: "What time is shown on the clock?",
+    visualHtml: buildVisualMeasurementCard(
+      "Clock",
+      buildClockSvg({ hour: 11, minute: 15 }),
+      "The minute hand points to 3."
+    ),
+    options: ["10:15", "11:00", "11:15", "11:30"],
+    answer: "11:15",
+    difficulty: 3,
+  },
+  {
+    question: "Which turn is shown by the arrow?",
+    visualHtml: buildVisualMeasurementCard(
+      "Turn",
+      buildTurnSvg({ start: "right", turn: "down" }),
       "The arrow turns one quarter-turn clockwise."
     ),
     options: ["A quarter-turn clockwise", "A half-turn", "A full turn", "A quarter-turn counterclockwise"],
@@ -287,6 +496,77 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 4,
   },
 
+  {
+    question: "What time is shown on the clock?",
+    visualHtml: buildVisualMeasurementCard(
+      "Clock",
+      buildClockSvg({ hour: 4, minute: 45 }),
+      "The minute hand points to 9."
+    ),
+    options: ["3:45", "4:15", "4:45", "5:45"],
+    answer: "4:45",
+    difficulty: 4,
+  },
+  {
+    question: "Which bottle has the lower price per milliliter?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["250 mL", "4 shekels"],
+        ["500 mL", "7 shekels"],
+        ["1 liter", "15 shekels"],
+      ]),
+      "Compare the price per milliliter."
+    ),
+    options: ["250 mL for 4 shekels", "500 mL for 7 shekels", "1 liter for 15 shekels", "They cost the same"],
+    answer: "500 mL for 7 shekels",
+    difficulty: 4,
+  },
+  {
+    question: "Which temperature is closest?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: 24 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About 14\u00b0C", "About 24\u00b0C", "About 34\u00b0C", "About 44\u00b0C"],
+    answer: "About 24\u00b0C",
+    difficulty: 4,
+  },
+  {
+    question: "Which figure shows a reflection across the dotted line?",
+    visualHtml: buildVisualMeasurementCard(
+      "Reflection",
+      buildSymmetrySvg({ type: "arrow" }),
+      "The two sides should match as mirror images."
+    ),
+    options: ["The mirrored arrow", "A bigger arrow", "A rotated triangle", "A measuring cup"],
+    answer: "The mirrored arrow",
+    difficulty: 4,
+  },
+  {
+    question: "What is the area of the rectangle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Grid Rectangle",
+      buildGridRectangleSvg({ widthCells: 6, heightCells: 4, shadeSquares: true }),
+      "Each small square is 1 square cm."
+    ),
+    options: ["10 square cm", "20 square cm", "24 square cm", "28 square cm"],
+    answer: "24 square cm",
+    difficulty: 4,
+  },
+  {
+    question: "What angle is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angle",
+      buildAngleSvg({ angle: 60 }),
+      "The arc shows the angle being measured."
+    ),
+    options: ["30\u00b0", "45\u00b0", "60\u00b0", "90\u00b0"],
+    answer: "60\u00b0",
+    difficulty: 4,
+  },
+
   // Level 5: half-centimeter intervals, rotations, map scales, and larger capacity.
   {
     question: "How many centimeters long is the line?",
@@ -355,6 +635,73 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 5,
   },
 
+  {
+    question: "How many centimeters long is the line?",
+    visualHtml: buildVisualMeasurementCard(
+      "Ruler",
+      buildRulerSvg({ start: -4, end: 3.5 }),
+      "The line begins at -4 cm."
+    ),
+    options: ["6.5 cm", "7 cm", "7.5 cm", "8.5 cm"],
+    answer: "7.5 cm",
+    difficulty: 5,
+  },
+  {
+    question: "Which description matches the picture?",
+    visualHtml: buildVisualMeasurementCard(
+      "Transformations",
+      buildRotationCard(),
+      "The rectangle is turned halfway around."
+    ),
+    options: ["A half-turn of a rectangle", "A reflection of a triangle", "A full turn of a circle", "A larger rectangle"],
+    answer: "A half-turn of a rectangle",
+    difficulty: 5,
+  },
+  {
+    question: "What is the best estimate for the temperature?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: 36 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About 16\u00b0C", "About 26\u00b0C", "About 36\u00b0C", "About 46\u00b0C"],
+    answer: "About 36\u00b0C",
+    difficulty: 5,
+  },
+  {
+    question: "The map scale is 1 cm = 5 km. How far is the route?",
+    visualHtml: buildVisualMeasurementCard(
+      "Map Scale",
+      buildMapScaleSvg({ routeCm: 4, kmPerCm: 5 }),
+      "Multiply the map length by the scale."
+    ),
+    options: ["9 km", "16 km", "20 km", "25 km"],
+    answer: "20 km",
+    difficulty: 5,
+  },
+  {
+    question: "How much water is in the jug?",
+    visualHtml: buildVisualMeasurementCard(
+      "Measuring Jug",
+      buildMeasuringCupSvg({ amount: 1500, maxAmount: 2000, step: 500 }),
+      CUP_DETAIL_TEXT
+    ),
+    options: ["1,000 mL", "1,250 mL", "1,500 mL", "2,000 mL"],
+    answer: "1,500 mL",
+    difficulty: 5,
+  },
+  {
+    question: "What angle is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angle",
+      buildAngleSvg({ angle: 150 }),
+      "The arc shows the angle being measured."
+    ),
+    options: ["90\u00b0", "120\u00b0", "150\u00b0", "180\u00b0"],
+    answer: "150\u00b0",
+    difficulty: 5,
+  },
+
   // Level 6: elapsed time, negative temperatures, conversions, and mixed metric readings.
   {
     question: "How much time passed between the two clocks?",
@@ -420,6 +767,73 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     ),
     options: ["1.5 kg", "2 kg", "2.5 kg", "3.5 kg"],
     answer: "2.5 kg",
+    difficulty: 6,
+  },
+
+  {
+    question: "How much time passed between the two clocks?",
+    visualHtml: buildVisualMeasurementCard(
+      "Elapsed Time",
+      buildClockPairSvg({ startHour: 8, startMinute: 10, endHour: 9, endMinute: 15 }),
+      "Count from the first clock to the second clock."
+    ),
+    options: ["55 minutes", "1 hour", "1 hour 5 minutes", "1 hour 15 minutes"],
+    answer: "1 hour 5 minutes",
+    difficulty: 6,
+  },
+  {
+    question: "What temperature is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Thermometer",
+      buildThermometerSvg({ temperature: -8 }),
+      THERMOMETER_DETAIL_TEXT
+    ),
+    options: ["About -8\u00b0C", "About -3\u00b0C", "About 8\u00b0C", "About 18\u00b0C"],
+    answer: "About -8\u00b0C",
+    difficulty: 6,
+  },
+  {
+    question: "How many grams is 3.5 kg?",
+    visualHtml: buildVisualMeasurementCard(
+      "Conversion",
+      buildConversionCardHtml("1 kg = 1,000 g", "3.5 kg = ? g"),
+      "Use the conversion fact."
+    ),
+    options: ["350 g", "3,050 g", "3,500 g", "35,000 g"],
+    answer: "3,500 g",
+    difficulty: 6,
+  },
+  {
+    question: "Which container has more liquid?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Capacity",
+      buildCupComparisonSvg({ leftAmount: 1.25, rightAmount: 1000, leftUnit: "L", rightUnit: "mL" }),
+      "Convert 1.25 L to 1,250 mL."
+    ),
+    options: ["1.25 L", "1,000 mL", "They are equal", "Cannot tell"],
+    answer: "1.25 L",
+    difficulty: 6,
+  },
+  {
+    question: "What is the perimeter of the rectangle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Grid Rectangle",
+      buildGridRectangleSvg({ widthCells: 6, heightCells: 3 }),
+      "Each grid square side is 1 cm."
+    ),
+    options: ["9 cm", "18 cm", "20 cm", "24 cm"],
+    answer: "18 cm",
+    difficulty: 6,
+  },
+  {
+    question: "What mass is shown on the scale?",
+    visualHtml: buildVisualMeasurementCard(
+      "Scale",
+      buildScaleSvg({ value: 3.5, max: 5, unit: "kg" }),
+      SCALE_DETAIL_TEXT
+    ),
+    options: ["2.5 kg", "3 kg", "3.5 kg", "4.5 kg"],
+    answer: "3.5 kg",
     difficulty: 6,
   },
 
@@ -495,6 +909,77 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 7,
   },
 
+  {
+    question: "The map scale is 1 cm = 4 km. How far is the route?",
+    visualHtml: buildVisualMeasurementCard(
+      "Map Scale",
+      buildMapScaleSvg({ routeCm: 5.5, kmPerCm: 4 }),
+      "Multiply 5.5 by 4."
+    ),
+    options: ["18 km", "20 km", "22 km", "24 km"],
+    answer: "22 km",
+    difficulty: 7,
+  },
+  {
+    question: "Which bag has the lowest price per kilogram?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["1 kg", "9 shekels"],
+        ["2 kg", "17 shekels"],
+        ["3 kg", "27 shekels"],
+      ]),
+      "Compare the price for 1 kg."
+    ),
+    options: ["1 kg for 9 shekels", "2 kg for 17 shekels", "3 kg for 27 shekels", "They are equal"],
+    answer: "2 kg for 17 shekels",
+    difficulty: 7,
+  },
+  {
+    question: "How much more water is in Cup A than Cup B?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Capacity",
+      buildCupComparisonSvg({ leftAmount: 1.2, rightAmount: 850, leftUnit: "L", rightUnit: "mL" }),
+      "Convert 1.2 L to 1,200 mL, then subtract."
+    ),
+    options: ["250 mL", "300 mL", "350 mL", "450 mL"],
+    answer: "350 mL",
+    difficulty: 7,
+  },
+  {
+    question: "What is the area of the rectangle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Grid Rectangle",
+      buildGridRectangleSvg({ widthCells: 9, heightCells: 4, shadeSquares: true }),
+      "Each small square is 1 square cm."
+    ),
+    options: ["26 square cm", "32 square cm", "36 square cm", "40 square cm"],
+    answer: "36 square cm",
+    difficulty: 7,
+  },
+  {
+    question: "What angle is shown?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angle",
+      buildAngleSvg({ angle: 150 }),
+      "The arc shows the angle being measured."
+    ),
+    options: ["60\u00b0", "90\u00b0", "135\u00b0", "150\u00b0"],
+    answer: "150\u00b0",
+    difficulty: 7,
+  },
+  {
+    question: "What is 4.6 meters in centimeters?",
+    visualHtml: buildVisualMeasurementCard(
+      "Conversion",
+      buildConversionCardHtml("1 m = 100 cm", "4.6 m = ? cm"),
+      "Multiply meters by 100."
+    ),
+    options: ["46 cm", "406 cm", "460 cm", "4,600 cm"],
+    answer: "460 cm",
+    difficulty: 7,
+  },
+
   // Level 8: multi-step time, comparing mixed units, and complementary angles.
   {
     question: "How much time passed between the two clocks?",
@@ -564,6 +1049,77 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     ),
     options: ["0.175 L", "1.75 L", "17.5 L", "175 L"],
     answer: "1.75 L",
+    difficulty: 8,
+  },
+
+  {
+    question: "How much time passed between the two clocks?",
+    visualHtml: buildVisualMeasurementCard(
+      "Elapsed Time",
+      buildClockPairSvg({ startHour: 7, startMinute: 50, endHour: 9, endMinute: 5 }),
+      "Count through the hour."
+    ),
+    options: ["1 hour", "1 hour 15 minutes", "1 hour 25 minutes", "2 hours 15 minutes"],
+    answer: "1 hour 15 minutes",
+    difficulty: 8,
+  },
+  {
+    question: "Which amount of liquid is larger?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Measurements",
+      buildConversionCardHtml("1 L = 1,000 mL", "A: 1.2 L  |  B: 1,150 mL"),
+      "Convert to the same unit before comparing."
+    ),
+    options: ["1.2 L", "1,150 mL", "They are equal", "Cannot tell"],
+    answer: "1.2 L",
+    difficulty: 8,
+  },
+  {
+    question: "The map scale is 1 cm = 6 km. How far is the route?",
+    visualHtml: buildVisualMeasurementCard(
+      "Map Scale",
+      buildMapScaleSvg({ routeCm: 7.5, kmPerCm: 6 }),
+      "Multiply 7.5 by 6."
+    ),
+    options: ["42 km", "45 km", "48 km", "54 km"],
+    answer: "45 km",
+    difficulty: 8,
+  },
+  {
+    question: "If the whole straight line is 180\u00b0, what is the missing angle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angles on a Line",
+      buildAnglePairSvg({ knownAngle: 75 }),
+      "Angles on a straight line add to 180\u00b0."
+    ),
+    options: ["75\u00b0", "95\u00b0", "105\u00b0", "115\u00b0"],
+    answer: "105\u00b0",
+    difficulty: 8,
+  },
+  {
+    question: "Which jar has the lower price per 100 g?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["400 g", "16 shekels"],
+        ["600 g", "21 shekels"],
+        ["800 g", "32 shekels"],
+      ]),
+      "Compare unit prices."
+    ),
+    options: ["400 g for 16 shekels", "600 g for 21 shekels", "800 g for 32 shekels", "They are equal"],
+    answer: "600 g for 21 shekels",
+    difficulty: 8,
+  },
+  {
+    question: "How many liters is 2,250 mL?",
+    visualHtml: buildVisualMeasurementCard(
+      "Conversion",
+      buildConversionCardHtml("1 L = 1,000 mL", "2,250 mL = ? L"),
+      "Divide milliliters by 1,000."
+    ),
+    options: ["0.225 L", "2.25 L", "22.5 L", "225 L"],
+    answer: "2.25 L",
     difficulty: 8,
   },
 
@@ -639,6 +1195,77 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     difficulty: 9,
   },
 
+  {
+    question: "What is the total distance of the two map routes?",
+    visualHtml: buildVisualMeasurementCard(
+      "Map Scale",
+      buildDoubleMapScaleSvg({ firstCm: 2.5, secondCm: 6, kmPerCm: 8 }),
+      "Add the map lengths, then multiply by the scale."
+    ),
+    options: ["60 km", "64 km", "68 km", "72 km"],
+    answer: "68 km",
+    difficulty: 9,
+  },
+  {
+    question: "How much heavier is Box A than Box B?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Mass",
+      buildScaleComparisonSvg({ leftValue: 4.25, rightValue: 2.5, max: 5, unit: "kg" }),
+      "Subtract the smaller mass from the larger mass."
+    ),
+    options: ["0.75 kg", "1.25 kg", "1.75 kg", "2 kg"],
+    answer: "1.75 kg",
+    difficulty: 9,
+  },
+  {
+    question: "What is the missing angle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angles on a Line",
+      buildAnglePairSvg({ knownAngle: 52 }),
+      "Angles on a straight line add to 180\u00b0."
+    ),
+    options: ["118\u00b0", "128\u00b0", "132\u00b0", "142\u00b0"],
+    answer: "128\u00b0",
+    difficulty: 9,
+  },
+  {
+    question: "Which rectangle has the larger area?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Areas",
+      buildAreaComparisonSvg({ leftW: 8, leftH: 5, rightW: 6, rightH: 6 }),
+      "Find width times height for each rectangle."
+    ),
+    options: ["Rectangle A", "Rectangle B", "They are equal", "Cannot tell"],
+    answer: "Rectangle A",
+    difficulty: 9,
+  },
+  {
+    question: "Which option has the lowest price per liter?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["1 L", "11 shekels"],
+        ["1.5 L", "15 shekels"],
+        ["2.5 L", "28 shekels"],
+      ]),
+      "Compare price per liter."
+    ),
+    options: ["1 L for 11 shekels", "1.5 L for 15 shekels", "2.5 L for 28 shekels", "They are equal"],
+    answer: "1.5 L for 15 shekels",
+    difficulty: 9,
+  },
+  {
+    question: "How many grams is 4.25 kg?",
+    visualHtml: buildVisualMeasurementCard(
+      "Conversion",
+      buildConversionCardHtml("1 kg = 1,000 g", "4.25 kg = ? g"),
+      "Multiply kilograms by 1,000."
+    ),
+    options: ["425 g", "4,025 g", "4,250 g", "42,500 g"],
+    answer: "4,250 g",
+    difficulty: 9,
+  },
+
   // Level 10: multi-step visual measurement and high-confidence estimation.
   {
     question: "A trip follows both routes. How far is the trip in real life?",
@@ -708,6 +1335,77 @@ const VISUAL_MEASUREMENT_QUESTIONS = [
     ),
     options: ["Rectangle A", "Rectangle B", "They are equal", "Cannot tell"],
     answer: "Rectangle A",
+    difficulty: 10,
+  },
+
+  {
+    question: "A trip follows both routes. How far is the trip in real life?",
+    visualHtml: buildVisualMeasurementCard(
+      "Map Scale",
+      buildDoubleMapScaleSvg({ firstCm: 5.5, secondCm: 2.5, kmPerCm: 15 }),
+      "Add the map lengths, then multiply by 15 km per cm."
+    ),
+    options: ["105 km", "112.5 km", "120 km", "135 km"],
+    answer: "120 km",
+    difficulty: 10,
+  },
+  {
+    question: "How much time passed between the two clocks?",
+    visualHtml: buildVisualMeasurementCard(
+      "Elapsed Time",
+      buildClockPairSvg({ startHour: 10, startMinute: 45, endHour: 12, endMinute: 30 }),
+      "Count across 12:00."
+    ),
+    options: ["1 hour 15 minutes", "1 hour 30 minutes", "1 hour 45 minutes", "2 hours"],
+    answer: "1 hour 45 minutes",
+    difficulty: 10,
+  },
+  {
+    question: "Which container has the lowest price per liter?",
+    visualHtml: buildVisualMeasurementCard(
+      "Receipt",
+      buildReceiptHtml([
+        ["900 mL", "9 shekels"],
+        ["1.5 L", "14 shekels"],
+        ["2.5 L", "25 shekels"],
+      ]),
+      "Convert 900 mL to 0.9 L, then compare."
+    ),
+    options: ["900 mL for 9 shekels", "1.5 L for 14 shekels", "2.5 L for 25 shekels", "They are equal"],
+    answer: "1.5 L for 14 shekels",
+    difficulty: 10,
+  },
+  {
+    question: "What is the missing angle?",
+    visualHtml: buildVisualMeasurementCard(
+      "Angles on a Line",
+      buildAnglePairSvg({ knownAngle: 73 }),
+      "Angles on a straight line add to 180\u00b0."
+    ),
+    options: ["97\u00b0", "107\u00b0", "117\u00b0", "127\u00b0"],
+    answer: "107\u00b0",
+    difficulty: 10,
+  },
+  {
+    question: "A box weighs 3.08 kg. How many grams is that?",
+    visualHtml: buildVisualMeasurementCard(
+      "Conversion",
+      buildConversionCardHtml("1 kg = 1,000 g", "3.08 kg = ? g"),
+      "Multiply kilograms by 1,000."
+    ),
+    options: ["308 g", "3,008 g", "3,080 g", "30,800 g"],
+    answer: "3,080 g",
+    difficulty: 10,
+  },
+  {
+    question: "Which rectangle has the smaller perimeter?",
+    visualHtml: buildVisualMeasurementCard(
+      "Compare Perimeters",
+      buildAreaComparisonSvg({ leftW: 7, leftH: 6, rightW: 9, rightH: 3 }),
+      "Find 2 x (width + height) for each rectangle."
+    ),
+    options: ["Rectangle A", "Rectangle B", "They are equal", "Cannot tell"],
+    answer: "Rectangle B",
     difficulty: 10,
   },
 ];

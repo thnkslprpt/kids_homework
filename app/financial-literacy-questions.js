@@ -32,6 +32,19 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("Which coin pile has the most money?", ["Two 10-shekel coins", "One 10-shekel coin", "Three 1-shekel coins", "Four 2-shekel coins"], "Two 10-shekel coins", 1),
   financialLiteracyQuestion("What should you do before buying something expensive?", ["Think if you really need it", "Buy it as fast as possible", "Ignore the price", "Throw away the receipt"], "Think if you really need it", 1),
 
+  financialLiteracyQuestion("You have 5 shekels and get 5 more shekels. How much do you have now?", ["5 shekels", "8 shekels", "10 shekels", "15 shekels"], "10 shekels", 1),
+  financialLiteracyQuestion("A snack costs 6 shekels. You pay with 10 shekels. How much change should you get?", ["2 shekels", "3 shekels", "4 shekels", "6 shekels"], "4 shekels", 1),
+  financialLiteracyQuestion("Which item is a need, not a want?", ["Healthy food", "Extra candy", "A toy drone", "A sticker pack"], "Healthy food", 1),
+  financialLiteracyQuestion("Which item is a want, not a need?", ["Clean water", "Medicine when sick", "A safe place to live", "Extra candy"], "Extra candy", 1),
+  financialLiteracyQuestion("What does a price tag tell you?", ["How much an item costs", "Who made your homework", "How old the store is", "Which shelf is tallest"], "How much an item costs", 1),
+  financialLiteracyQuestion("If you save 2 shekels each day for 3 days, how much do you save?", ["4 shekels", "5 shekels", "6 shekels", "8 shekels"], "6 shekels", 1),
+  financialLiteracyQuestion("Which choice costs the least?", ["A pencil for 7 shekels", "A pencil for 4 shekels", "A pencil for 9 shekels", "A pencil for 6 shekels"], "A pencil for 4 shekels", 1),
+  financialLiteracyQuestion("You want a ball that costs 15 shekels. You have 10 shekels. How much more do you need?", ["3 shekels", "5 shekels", "10 shekels", "25 shekels"], "5 shekels", 1),
+  financialLiteracyQuestion("Which is a good saving habit?", ["Put some allowance aside before spending", "Spend all money right away", "Ignore your money", "Buy every toy you see"], "Put some allowance aside before spending", 1),
+  financialLiteracyQuestion("What is money mainly used for?", ["Paying for things people buy", "Making the weather sunny", "Changing homework answers", "Making toys clean themselves"], "Paying for things people buy", 1),
+  financialLiteracyQuestion("Two same-size notebooks are the same quality. Which is the better price?", ["20 shekels", "25 shekels", "30 shekels", "35 shekels"], "20 shekels", 1),
+  financialLiteracyQuestion("Why should you keep your money in a safe place?", ["So it is less likely to get lost", "So it turns into candy", "So prices disappear", "So every item becomes free"], "So it is less likely to get lost", 1),
+
   // Level 2: budgets, change, simple goals, and planned spending.
   financialLiteracyQuestion("Which is more like a need than a want?", ["A winter coat", "A toy robot", "Extra candy", "A new video game"], "A winter coat", 2),
   financialLiteracyQuestion("Which pencil option has the lowest price per pencil?", ["3 pencils for 12 shekels", "1 pencil for 5 shekels", "2 pencils for 11 shekels", "5 pencils for 30 shekels"], "3 pencils for 12 shekels", 2),
@@ -46,12 +59,25 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("What is income?", ["Money you receive", "Money you throw away", "A store shelf", "A list of toys"], "Money you receive", 2),
   financialLiteracyQuestion("What is an expense?", ["Money you spend", "A free gift", "A kind of homework", "Money that appears by magic"], "Money you spend", 2),
 
+  financialLiteracyQuestion("You have 40 shekels. You spend 12 shekels on a notebook and 8 shekels on a pen. How much is left?", ["16 shekels", "20 shekels", "24 shekels", "28 shekels"], "20 shekels", 2),
+  financialLiteracyQuestion("A pencil costs 7 shekels. You pay with 10 shekels. How much change should you get?", ["1 shekel", "2 shekels", "3 shekels", "4 shekels"], "3 shekels", 2),
+  financialLiteracyQuestion("If you save 15 shekels each week for 5 weeks, how much will you save?", ["60 shekels", "65 shekels", "75 shekels", "80 shekels"], "75 shekels", 2),
+  financialLiteracyQuestion("You want a backpack that costs 80 shekels. You have 50 shekels. How much more do you need?", ["20 shekels", "25 shekels", "30 shekels", "40 shekels"], "30 shekels", 2),
+  financialLiteracyQuestion("Which is the best example of planned spending?", ["Saving for two weeks before buying a game", "Buying candy without checking the price", "Spending all your money by accident", "Choosing the first toy you see"], "Saving for two weeks before buying a game", 2),
+  financialLiteracyQuestion("Which item is most like a school need?", ["Notebooks for class", "A giant candy bag", "A toy spaceship", "A new video game"], "Notebooks for class", 2),
+  financialLiteracyQuestion("Which is an example of income?", ["Allowance you receive", "Money paid for lunch", "Coins lost on the bus", "A price tag in a store"], "Allowance you receive", 2),
+  financialLiteracyQuestion("Which is an example of an expense?", ["Paying 15 shekels for lunch", "Getting 20 shekels as a gift", "Finding a coin", "Saving money in a jar"], "Paying 15 shekels for lunch", 2),
+  financialLiteracyQuestion("Which eraser option has the lowest price per eraser?", ["4 erasers for 12 shekels", "3 erasers for 12 shekels", "2 erasers for 10 shekels", "5 erasers for 20 shekels"], "4 erasers for 12 shekels", 2),
+  financialLiteracyQuestion("Why is a savings goal useful?", ["It helps you know how much to save", "It makes every item free", "It hides all prices", "It means you never need money"], "It helps you know how much to save", 2),
+  financialLiteracyQuestion("You receive 25 shekels, get 15 more shekels, and spend 20 shekels. How much is left?", ["15 shekels", "20 shekels", "25 shekels", "40 shekels"], "20 shekels", 2),
+  financialLiteracyQuestion("Which country uses the yen?", ["Japan", "China", "Brazil", "Turkey"], "Japan", 2),
+
   // Level 3: multi-step spending, discounts, opportunity cost, and value.
   financialLiteracyQuestion("You want a 90-shekel game. If you save 15 shekels each week, about how many weeks will it take?", ["4 weeks", "5 weeks", "6 weeks", "8 weeks"], "6 weeks", 3),
   financialLiteracyQuestion("A snack costs 8 shekels each school day for 5 days. How much is that for one week of school?", ["13 shekels", "32 shekels", "40 shekels", "48 shekels"], "40 shekels", 3),
   financialLiteracyQuestion("A shirt costs 40 shekels and is 50% off. What is the sale price?", ["10 shekels", "20 shekels", "25 shekels", "30 shekels"], "20 shekels", 3),
   financialLiteracyQuestion("A bus card costs 18 shekels and a snack costs 9 shekels. How much do 2 bus cards and 1 snack cost altogether?", ["36 shekels", "45 shekels", "54 shekels", "63 shekels"], "45 shekels", 3),
-  financialLiteracyQuestion("Which plan saves the most in 3 months?", ["Save 20 shekels each month", "Save 10 shekels each week", "Save 15 shekels every 2 weeks", "Save 5 shekels each week"], "Save 10 shekels each week", 3),
+  financialLiteracyQuestion("Which plan saves the most in 3 months? Assume 1 month = 4 weeks.", ["Save 20 shekels each month", "Save 10 shekels each week", "Save 15 shekels every 2 weeks", "Save 5 shekels each week"], "Save 10 shekels each week", 3),
   financialLiteracyQuestion("What does opportunity cost mean?", ["What you give up when you choose one thing instead of another", "A coupon that never expires", "A price that is always zero", "Money that cannot be counted"], "What you give up when you choose one thing instead of another", 3),
   financialLiteracyQuestion("Which country uses the dirham?", ["United Arab Emirates", "Saudi Arabia", "Switzerland", "Indonesia"], "United Arab Emirates", 3),
   financialLiteracyQuestion("A game costs 80 shekels and is 25% off. What is the sale price?", ["50 shekels", "55 shekels", "60 shekels", "65 shekels"], "60 shekels", 3),
@@ -60,9 +86,22 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A child earns 25 shekels for chores and spends 9 shekels. How much can be saved?", ["14 shekels", "16 shekels", "25 shekels", "34 shekels"], "16 shekels", 3),
   financialLiteracyQuestion("What is a short-term savings goal?", ["Saving for a book next month", "Saving for retirement", "Buying every candy today", "Ignoring all prices"], "Saving for a book next month", 3),
 
+  financialLiteracyQuestion("A pack of 6 pens costs 24 shekels. What is the price per pen?", ["3 shekels", "4 shekels", "5 shekels", "6 shekels"], "4 shekels", 3),
+  financialLiteracyQuestion("You have 120 shekels. You buy 2 books for 35 shekels each and a pencil for 10 shekels. How much is left?", ["30 shekels", "40 shekels", "50 shekels", "80 shekels"], "40 shekels", 3),
+  financialLiteracyQuestion("A bag costs 60 shekels and is 25% off. What is the sale price?", ["35 shekels", "40 shekels", "45 shekels", "50 shekels"], "45 shekels", 3),
+  financialLiteracyQuestion("A toy costs 100 shekels and is 10% off. What is the sale price?", ["80 shekels", "85 shekels", "90 shekels", "95 shekels"], "90 shekels", 3),
+  financialLiteracyQuestion("You want to save 140 shekels. If you save 20 shekels each week, how many weeks will it take?", ["5 weeks", "6 weeks", "7 weeks", "8 weeks"], "7 weeks", 3),
+  financialLiteracyQuestion("You can go to a movie or play at the arcade, but not both. If you choose the movie, what is the opportunity cost?", ["Playing at the arcade", "The movie you chose", "Both activities becoming free", "The price of popcorn only"], "Playing at the arcade", 3),
+  financialLiteracyQuestion("Which notebook pack has the lowest price per notebook?", ["3 notebooks for 18 shekels", "4 notebooks for 20 shekels", "5 notebooks for 30 shekels", "2 notebooks for 14 shekels"], "4 notebooks for 20 shekels", 3),
+  financialLiteracyQuestion("You budget 100 shekels for snacks this month. You spend 18 shekels, 22 shekels, and 25 shekels. How much is left?", ["25 shekels", "30 shekels", "35 shekels", "45 shekels"], "35 shekels", 3),
+  financialLiteracyQuestion("Which plan saves the most in 6 weeks?", ["Save 10 shekels each week", "Save 12 shekels each week", "Save 15 shekels each week", "Save 20 shekels every 2 weeks"], "Save 15 shekels each week", 3),
+  financialLiteracyQuestion("A price rises from 50 shekels to 55 shekels. How much did the price increase?", ["3 shekels", "5 shekels", "10 shekels", "15 shekels"], "5 shekels", 3),
+  financialLiteracyQuestion("What does good value for money mean?", ["The item is useful for its price", "The item is always the biggest", "The item has no price", "The item must be red"], "The item is useful for its price", 3),
+  financialLiteracyQuestion("A receipt says subtotal 48 shekels and delivery 7 shekels. What is the total?", ["41 shekels", "48 shekels", "55 shekels", "57 shekels"], "55 shekels", 3),
+
   // Level 4: percentages, longer budgets, currency codes, and receipts.
   financialLiteracyQuestion("You have 100 shekels. A book costs 35 shekels and a puzzle costs 25 shekels. How much money is left after buying both?", ["30 shekels", "35 shekels", "40 shekels", "65 shekels"], "40 shekels", 4),
-  financialLiteracyQuestion("Which plan saves the most money after 2 months?", ["Save 15 shekels each week", "Save 50 shekels each month", "Save 20 shekels every 2 weeks", "Save 5 shekels each week"], "Save 15 shekels each week", 4),
+  financialLiteracyQuestion("Which plan saves the most money after 2 months? Assume 1 month = 4 weeks.", ["Save 15 shekels each week", "Save 50 shekels each month", "Save 20 shekels every 2 weeks", "Save 5 shekels each week"], "Save 15 shekels each week", 4),
   financialLiteracyQuestion("You buy 2 notebooks that cost 18 shekels each. How much change should you get from 50 shekels?", ["12 shekels", "14 shekels", "16 shekels", "18 shekels"], "14 shekels", 4),
   financialLiteracyQuestion("Which cereal option has the lowest price per gram?", ["500 grams for 20 shekels", "300 grams for 15 shekels", "250 grams for 14 shekels", "750 grams for 33 shekels"], "500 grams for 20 shekels", 4),
   financialLiteracyQuestion("A notebook costs 50 shekels and is 20% off. What is the sale price?", ["30 shekels", "35 shekels", "40 shekels", "45 shekels"], "40 shekels", 4),
@@ -73,6 +112,19 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("You have 180 shekels. You spend 1/3 of it on a gift. How much do you spend?", ["45 shekels", "60 shekels", "90 shekels", "120 shekels"], "60 shekels", 4),
   financialLiteracyQuestion("Which action helps avoid impulse buying?", ["Wait a day before buying a want", "Buy the first thing you see", "Never read the price", "Only use the biggest bill"], "Wait a day before buying a want", 4),
   financialLiteracyQuestion("If a store offers buy 1, get 1 free on a 12-shekel item, what is the cost for 2 items?", ["6 shekels", "12 shekels", "18 shekels", "24 shekels"], "12 shekels", 4),
+
+  financialLiteracyQuestion("You buy 3 notebooks that cost 16 shekels each. How much change should you get from 60 shekels?", ["8 shekels", "10 shekels", "12 shekels", "16 shekels"], "12 shekels", 4),
+  financialLiteracyQuestion("A 200-shekel budget puts 25% into savings. How much is saved?", ["25 shekels", "40 shekels", "50 shekels", "75 shekels"], "50 shekels", 4),
+  financialLiteracyQuestion("A jacket costs 120 shekels and is 10% off. What is the sale price?", ["100 shekels", "108 shekels", "110 shekels", "112 shekels"], "108 shekels", 4),
+  financialLiteracyQuestion("A game costs 150 shekels and is 20% off. What is the sale price?", ["110 shekels", "115 shekels", "120 shekels", "130 shekels"], "120 shekels", 4),
+  financialLiteracyQuestion("A store offers buy 2, get 1 free on a 15-shekel item. What is the cost for 3 items?", ["15 shekels", "30 shekels", "35 shekels", "45 shekels"], "30 shekels", 4),
+  financialLiteracyQuestion("Which rice option has the lowest price per gram?", ["400 grams for 16 shekels", "500 grams for 25 shekels", "600 grams for 30 shekels", "300 grams for 15 shekels"], "400 grams for 16 shekels", 4),
+  financialLiteracyQuestion("Which currency code belongs to the United States dollar?", ["USD", "ILS", "JPY", "EUR"], "USD", 4),
+  financialLiteracyQuestion("You have a 320-shekel budget. You spend 90 shekels on needs and 70 shekels on wants. How much is left for savings?", ["120 shekels", "140 shekels", "160 shekels", "180 shekels"], "160 shekels", 4),
+  financialLiteracyQuestion("A receipt shows 95 shekels before a 15-shekel discount. What is the price after the discount?", ["70 shekels", "75 shekels", "80 shekels", "85 shekels"], "80 shekels", 4),
+  financialLiteracyQuestion("Which is the best example of a long-term savings goal?", ["Saving for university years from now", "Buying candy after school today", "Spending coins right away", "Ignoring every price tag"], "Saving for university years from now", 4),
+  financialLiteracyQuestion("You spend 1/4 of 200 shekels on a gift. How much do you spend?", ["25 shekels", "40 shekels", "50 shekels", "100 shekels"], "50 shekels", 4),
+  financialLiteracyQuestion("Which action helps you avoid overspending?", ["Track spending against your budget", "Buy first and count later", "Throw away receipts immediately", "Choose only the brightest package"], "Track spending against your budget", 4),
 
   // Level 5: tax, subscriptions, recurring spending, and consumer records.
   financialLiteracyQuestion("A toy costs 80 shekels and is 25% off. What is the sale price?", ["55 shekels", "60 shekels", "65 shekels", "70 shekels"], "60 shekels", 5),
@@ -88,6 +140,19 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A family pays 25 shekels each month for an app they no longer use. What is a good money habit?", ["Cancel unused subscriptions", "Pay forever without checking", "Buy another app first", "Ignore monthly costs"], "Cancel unused subscriptions", 5),
   financialLiteracyQuestion("Which is the best example of a variable expense?", ["Snacks that cost different amounts each week", "Rent that is always the same", "A fixed bus pass", "A yearly school fee already paid"], "Snacks that cost different amounts each week", 5),
 
+  financialLiteracyQuestion("An item costs 250 shekels and 10% tax is added. What is the total price?", ["260 shekels", "275 shekels", "285 shekels", "300 shekels"], "275 shekels", 5),
+  financialLiteracyQuestion("A toy costs 80 shekels and is 15% off. What is the sale price?", ["60 shekels", "64 shekels", "68 shekels", "72 shekels"], "68 shekels", 5),
+  financialLiteracyQuestion("A subscription costs 18 shekels per month. How much does it cost for 6 months?", ["96 shekels", "100 shekels", "108 shekels", "118 shekels"], "108 shekels", 5),
+  financialLiteracyQuestion("You budget 400 shekels. You plan 180 for needs, 100 for savings, and the rest for wants. How much is for wants?", ["100 shekels", "110 shekels", "120 shekels", "140 shekels"], "120 shekels", 5),
+  financialLiteracyQuestion("Which cost is most likely a variable expense?", ["Electricity that changes each month", "A rent payment that never changes", "A fixed monthly bus pass", "A yearly fee already paid"], "Electricity that changes each month", 5),
+  financialLiteracyQuestion("Which is the best example of a fixed expense?", ["A 45-shekel phone plan paid every month", "Snacks that cost different amounts", "A surprise gift", "A one-time toy purchase"], "A 45-shekel phone plan paid every month", 5),
+  financialLiteracyQuestion("A toy costs 100 shekels and is 20% off. Delivery costs 10 shekels. What is the final cost?", ["80 shekels", "85 shekels", "90 shekels", "100 shekels"], "90 shekels", 5),
+  financialLiteracyQuestion("Which drink option has the lowest price per liter?", ["1 liter for 9 shekels", "2 liters for 20 shekels", "500 milliliters for 6 shekels", "3 liters for 33 shekels"], "1 liter for 9 shekels", 5),
+  financialLiteracyQuestion("Why might you keep a receipt after buying a school bag?", ["To prove what you paid if you need to return it", "To make the bag weigh less", "To change the color of the bag", "To make all bags free"], "To prove what you paid if you need to return it", 5),
+  financialLiteracyQuestion("You receive 600 shekels and save 15% of it. How much do you save?", ["60 shekels", "75 shekels", "90 shekels", "120 shekels"], "90 shekels", 5),
+  financialLiteracyQuestion("Canceling an unused app saves 25 shekels each month. How much is saved in 4 months?", ["75 shekels", "90 shekels", "100 shekels", "125 shekels"], "100 shekels", 5),
+  financialLiteracyQuestion("Which list shows only expenses?", ["Lunch, bus fare, notebook", "Allowance, gift money, wages", "Savings, income, donation received", "Birthday money, interest, prize"], "Lunch, bus fare, notebook", 5),
+
   // Level 6: income, expenses, simple interest, emergency funds, and planning.
   financialLiteracyQuestion("You earn 300 shekels in a month and spend 210 shekels. How much can you save?", ["70 shekels", "80 shekels", "90 shekels", "110 shekels"], "90 shekels", 6),
   financialLiteracyQuestion("A savings account pays 5% simple interest for one year. If you save 200 shekels, how much interest do you earn?", ["5 shekels", "10 shekels", "15 shekels", "20 shekels"], "10 shekels", 6),
@@ -99,6 +164,17 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("What is a bank account mainly used for?", ["Keeping and managing money", "Making homework disappear", "Changing coins into candy", "Hiding prices in a store"], "Keeping and managing money", 6),
   financialLiteracyQuestion("You plan to spend 240 shekels over 6 weeks. What is the average weekly spending limit?", ["30 shekels", "35 shekels", "40 shekels", "45 shekels"], "40 shekels", 6),
   financialLiteracyQuestion("A class fundraiser earns 900 shekels and has 250 shekels in costs. What is the profit?", ["550 shekels", "600 shekels", "650 shekels", "700 shekels"], "650 shekels", 6),
+
+  financialLiteracyQuestion("You earn 800 shekels in a month and spend 520 shekels. How much can you save?", ["240 shekels", "260 shekels", "280 shekels", "320 shekels"], "280 shekels", 6),
+  financialLiteracyQuestion("A savings account pays 4% simple interest for one year. If you save 500 shekels, how much interest do you earn?", ["10 shekels", "20 shekels", "40 shekels", "50 shekels"], "20 shekels", 6),
+  financialLiteracyQuestion("A phone plan costs 55 shekels per month plus a 30-shekel setup fee. What is the total for the first 4 months?", ["220 shekels", "240 shekels", "250 shekels", "280 shekels"], "250 shekels", 6),
+  financialLiteracyQuestion("Which expense is a good reason to use an emergency fund?", ["An unexpected important bike repair", "A bigger candy bag", "A second video game", "A toy bought because it is shiny"], "An unexpected important bike repair", 6),
+  financialLiteracyQuestion("A tablet costs 750 shekels. You have 150 shekels and save 75 shekels each month. How many more months do you need?", ["6 months", "7 months", "8 months", "10 months"], "8 months", 6),
+  financialLiteracyQuestion("Which cost is most likely a fixed expense?", ["A rent payment that stays the same", "Ice cream bought once", "A birthday gift chosen today", "Snacks with changing prices"], "A rent payment that stays the same", 6),
+  financialLiteracyQuestion("You receive 900 shekels and save 10% of it. How much do you save?", ["90 shekels", "100 shekels", "180 shekels", "810 shekels"], "90 shekels", 6),
+  financialLiteracyQuestion("A fundraiser earns 1,200 shekels and has 450 shekels in costs. What is the profit?", ["650 shekels", "700 shekels", "750 shekels", "850 shekels"], "750 shekels", 6),
+  financialLiteracyQuestion("You plan to spend 360 shekels over 9 weeks. What is the average weekly spending limit?", ["30 shekels", "35 shekels", "40 shekels", "45 shekels"], "40 shekels", 6),
+  financialLiteracyQuestion("What does a bank statement help you check?", ["Money added to and taken from an account", "The color of every coin", "Which store has the tallest door", "How to make homework shorter"], "Money added to and taken from an account", 6),
 
   // Level 7: borrowing, inflation, unit prices, and risk.
   financialLiteracyQuestion("You borrow 300 shekels and pay back 330 shekels. How much interest did you pay?", ["20 shekels", "30 shekels", "60 shekels", "330 shekels"], "30 shekels", 7),
@@ -112,6 +188,17 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("Which choice is usually the safest online payment habit for a child?", ["Ask a trusted adult before entering payment details", "Share card numbers in a game chat", "Click every prize link", "Save passwords on a public computer"], "Ask a trusted adult before entering payment details", 7),
   financialLiteracyQuestion("A 40-shekel item has a 5-shekel shipping fee. What is the delivered cost?", ["35 shekels", "40 shekels", "45 shekels", "50 shekels"], "45 shekels", 7),
 
+  financialLiteracyQuestion("You borrow 500 shekels and pay back 560 shekels. How much interest did you pay?", ["40 shekels", "50 shekels", "60 shekels", "560 shekels"], "60 shekels", 7),
+  financialLiteracyQuestion("A price rises from 100 shekels to 110 shekels. What percent increase is that?", ["5%", "10%", "15%", "20%"], "10%", 7),
+  financialLiteracyQuestion("Which example shows diversification?", ["Putting savings into several different investments", "Putting all savings into one company", "Spending all savings today", "Ignoring every fee"], "Putting savings into several different investments", 7),
+  financialLiteracyQuestion("An 800-shekel budget puts 15% into savings. How much is saved?", ["80 shekels", "100 shekels", "120 shekels", "150 shekels"], "120 shekels", 7),
+  financialLiteracyQuestion("8 notebooks cost 56 shekels. What is the cost per notebook?", ["6 shekels", "7 shekels", "8 shekels", "9 shekels"], "7 shekels", 7),
+  financialLiteracyQuestion("A used bike worth 250 shekels loses 20% of its value. What is its new value?", ["180 shekels", "190 shekels", "200 shekels", "230 shekels"], "200 shekels", 7),
+  financialLiteracyQuestion("Which action helps build a good credit history?", ["Paying borrowed money back on time", "Missing payments often", "Borrowing without a plan", "Ignoring every bill"], "Paying borrowed money back on time", 7),
+  financialLiteracyQuestion("You borrow 1,000 shekels. Fees are 50 shekels and interest is 100 shekels. What is the extra cost of the loan?", ["50 shekels", "100 shekels", "150 shekels", "1,150 shekels"], "150 shekels", 7),
+  financialLiteracyQuestion("Which is a safe online buying habit?", ["Use trusted websites with an adult's help", "Share passwords in a chat", "Click unknown prize links", "Enter card details on any pop-up"], "Use trusted websites with an adult's help", 7),
+  financialLiteracyQuestion("An online item costs 75 shekels and shipping costs 12 shekels. What is the delivered cost?", ["75 shekels", "82 shekels", "87 shekels", "90 shekels"], "87 shekels", 7),
+
   // Level 8: compound growth, fees, exchange rates, and spending plans.
   financialLiteracyQuestion("You save 1,000 shekels at 10% compound interest for 2 years. How much do you have?", ["1,100 shekels", "1,200 shekels", "1,210 shekels", "1,220 shekels"], "1,210 shekels", 8),
   financialLiteracyQuestion("An account charges a 5-shekel fee every month. How much is that in a year?", ["50 shekels", "55 shekels", "60 shekels", "65 shekels"], "60 shekels", 8),
@@ -123,6 +210,17 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A subscription costs 29 shekels per month. About how much is that for 12 months?", ["About 120 shekels", "About 240 shekels", "About 350 shekels", "About 500 shekels"], "About 350 shekels", 8),
   financialLiteracyQuestion("What is an exchange rate?", ["How much one currency is worth in another currency", "A store's opening time", "The number of items in a cart", "A fee for losing a receipt"], "How much one currency is worth in another currency", 8),
   financialLiteracyQuestion("A savings goal is 1,200 shekels in 8 months. How much should be saved each month?", ["100 shekels", "120 shekels", "150 shekels", "200 shekels"], "150 shekels", 8),
+
+  financialLiteracyQuestion("You save 2,000 shekels at 10% compound interest for 2 years. How much do you have?", ["2,200 shekels", "2,300 shekels", "2,400 shekels", "2,420 shekels"], "2,420 shekels", 8),
+  financialLiteracyQuestion("An account charges an 8-shekel fee every month. How much is that in a year?", ["80 shekels", "88 shekels", "96 shekels", "108 shekels"], "96 shekels", 8),
+  financialLiteracyQuestion("You exchange 50 dollars at 3.6 shekels per dollar. How many shekels do you receive before fees?", ["150 shekels", "160 shekels", "180 shekels", "200 shekels"], "180 shekels", 8),
+  financialLiteracyQuestion("A budget has 3,000 shekels. If 25% goes to rent, how much is rent?", ["600 shekels", "700 shekels", "750 shekels", "900 shekels"], "750 shekels", 8),
+  financialLiteracyQuestion("A 400-shekel item has 15% tax added. What is the final price?", ["440 shekels", "450 shekels", "460 shekels", "480 shekels"], "460 shekels", 8),
+  financialLiteracyQuestion("Why can a small monthly fee matter?", ["It adds up over many months", "It always becomes free", "It makes the account larger by itself", "It removes all other prices"], "It adds up over many months", 8),
+  financialLiteracyQuestion("If 1 euro is worth 4 shekels, how many shekels are 10 euros worth before fees?", ["14 shekels", "25 shekels", "40 shekels", "400 shekels"], "40 shekels", 8),
+  financialLiteracyQuestion("A subscription costs 49 shekels per month. How much does it cost for 12 months?", ["490 shekels", "548 shekels", "588 shekels", "600 shekels"], "588 shekels", 8),
+  financialLiteracyQuestion("A savings goal is 2,400 shekels in 12 months. How much should be saved each month?", ["120 shekels", "150 shekels", "200 shekels", "240 shekels"], "200 shekels", 8),
+  financialLiteracyQuestion("What is the usual tradeoff with higher potential investment returns?", ["They often come with higher risk", "They always have no risk", "They remove all fees", "They guarantee the same result"], "They often come with higher risk", 8),
 
   // Level 9: credit cards, sinking funds, taxes after discounts, and long-term tradeoffs.
   financialLiteracyQuestion("A credit card balance is 1,000 shekels and interest is 3% for the month. How much interest is added?", ["3 shekels", "30 shekels", "100 shekels", "300 shekels"], "30 shekels", 9),
@@ -136,6 +234,17 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A 600-shekel bill is split 50% needs, 30% wants, and 20% savings. How much goes to savings?", ["60 shekels", "100 shekels", "120 shekels", "180 shekels"], "120 shekels", 9),
   financialLiteracyQuestion("Which plan has the lowest total cost?", ["10 payments of 55 shekels", "5 payments of 120 shekels", "12 payments of 50 shekels", "1 payment of 575 shekels"], "10 payments of 55 shekels", 9),
 
+  financialLiteracyQuestion("A credit card balance is 1,500 shekels and interest is 2% for the month. How much interest is added?", ["20 shekels", "30 shekels", "50 shekels", "300 shekels"], "30 shekels", 9),
+  financialLiteracyQuestion("A family wants 3,600 shekels in 18 months. How much should they save each month?", ["150 shekels", "180 shekels", "200 shekels", "240 shekels"], "200 shekels", 9),
+  financialLiteracyQuestion("An item costs 800 shekels, gets a 25% discount, and then 10% tax is added. What is the final price?", ["600 shekels", "640 shekels", "660 shekels", "700 shekels"], "660 shekels", 9),
+  financialLiteracyQuestion("A loan has 8 payments of 175 shekels. What is the total paid?", ["1,200 shekels", "1,300 shekels", "1,400 shekels", "1,500 shekels"], "1,400 shekels", 9),
+  financialLiteracyQuestion("A product loses 30% of its value from 1,000 shekels. What is its new value?", ["600 shekels", "650 shekels", "700 shekels", "800 shekels"], "700 shekels", 9),
+  financialLiteracyQuestion("Why can minimum credit card payments lead to a bigger total cost?", ["Interest may keep adding to the unpaid balance", "The balance always disappears", "The card stops charging money", "The bank pays every bill for you"], "Interest may keep adding to the unpaid balance", 9),
+  financialLiteracyQuestion("Which asset is usually the most liquid?", ["Cash in a bank account", "A house", "A rare painting", "A car that must be sold first"], "Cash in a bank account", 9),
+  financialLiteracyQuestion("A price rises by 15% from 200 shekels. What is the new price?", ["215 shekels", "220 shekels", "230 shekels", "240 shekels"], "230 shekels", 9),
+  financialLiteracyQuestion("A 1,500-shekel budget uses 50% for needs, 30% for wants, and 20% for savings. How much goes to savings?", ["150 shekels", "250 shekels", "300 shekels", "450 shekels"], "300 shekels", 9),
+  financialLiteracyQuestion("Which payment plan has the lowest total cost?", ["10 payments of 110 shekels", "24 payments of 50 shekels", "6 payments of 190 shekels", "1 payment of 1,050 shekels"], "1 payment of 1,050 shekels", 9),
+
   // Level 10: combined real-life finance scenarios.
   financialLiteracyQuestion("You exchange 200 dollars at 3.5 shekels per dollar and pay a 20-shekel fee. How many shekels do you receive?", ["680 shekels", "700 shekels", "720 shekels", "750 shekels"], "680 shekels", 10),
   financialLiteracyQuestion("An item costs 500 shekels, gets a 30% discount, and then 20% tax is added to the discounted price. What is the final price?", ["350 shekels", "400 shekels", "420 shekels", "450 shekels"], "420 shekels", 10),
@@ -147,6 +256,16 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A project costs 3,600 shekels in 9 months. How much should be saved each month?", ["300 shekels", "350 shekels", "400 shekels", "450 shekels"], "400 shekels", 10),
   financialLiteracyQuestion("You invest in only one company. What risk is higher than if you diversify?", ["One bad result can hurt all your investment", "You will always earn more", "Your money cannot lose value", "Fees become impossible"], "One bad result can hurt all your investment", 10),
   financialLiteracyQuestion("A 1,200-shekel item has a 15% discount. How much is the discount?", ["120 shekels", "150 shekels", "180 shekels", "240 shekels"], "180 shekels", 10),
+  financialLiteracyQuestion("You exchange 300 dollars at 3.4 shekels per dollar and pay a 30-shekel fee. How many shekels do you receive?", ["960 shekels", "990 shekels", "1,020 shekels", "1,050 shekels"], "990 shekels", 10),
+  financialLiteracyQuestion("An item costs 800 shekels, gets a 25% discount, and then 20% tax is added to the discounted price. What is the final price?", ["600 shekels", "680 shekels", "720 shekels", "760 shekels"], "720 shekels", 10),
+  financialLiteracyQuestion("A loan has 24 payments of 180 shekels plus a 200-shekel setup fee. What is the total cost?", ["4,320 shekels", "4,420 shekels", "4,520 shekels", "4,700 shekels"], "4,520 shekels", 10),
+  financialLiteracyQuestion("A savings account grows from 5,000 shekels to 5,525 shekels. How much growth was added?", ["425 shekels", "500 shekels", "525 shekels", "625 shekels"], "525 shekels", 10),
+  financialLiteracyQuestion("A family earns 8,000 shekels. They spend 55% on needs, 25% on wants, and save the rest. How much do they save?", ["1,200 shekels", "1,400 shekels", "1,600 shekels", "2,000 shekels"], "1,600 shekels", 10),
+  financialLiteracyQuestion("A product worth 3,000 shekels loses 35% of its value. What is the new value?", ["1,650 shekels", "1,800 shekels", "1,950 shekels", "2,100 shekels"], "1,950 shekels", 10),
+  financialLiteracyQuestion("Loan A costs 400 shekels per month for 10 months. Loan B costs 350 shekels per month for 12 months. Which loan costs less overall?", ["Loan A", "Loan B", "They cost the same", "There is not enough information"], "Loan A", 10),
+  financialLiteracyQuestion("A project costs 7,200 shekels in 18 months. How much should be saved each month?", ["300 shekels", "350 shekels", "400 shekels", "450 shekels"], "400 shekels", 10),
+  financialLiteracyQuestion("You put all your savings into one investment instead of several. What risk is higher?", ["One bad result can hurt all of the savings", "The savings cannot lose value", "Fees become impossible", "Returns are guaranteed"], "One bad result can hurt all of the savings", 10),
+  financialLiteracyQuestion("A 2,400-shekel item has a 20% discount. How much is the discount?", ["240 shekels", "360 shekels", "480 shekels", "600 shekels"], "480 shekels", 10),
 ];
 
 const FINANCIAL_CURRENCY_FACTS = [

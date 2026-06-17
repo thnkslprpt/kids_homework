@@ -115,6 +115,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("Which unit is best for measuring the amount of juice in a cup?", ["Milliliters", "Kilometers", "Grams", "Hours"], "Milliliters", 1),
   measurementQuestion("1 liter is the same as:", ["10 milliliters", "100 milliliters", "1,000 milliliters", "10,000 milliliters"], "1,000 milliliters", 1),
 
+  // Level 1 extra questions: choosing sensible units and tools.
+  measurementQuestion("Which unit is best for measuring the length of a shoe?", ["Centimeters", "Liters", "Kilograms", "Hours"], "Centimeters", 1),
+  measurementQuestion("Which unit is best for measuring the mass of a school backpack?", ["Kilograms", "Meters", "Liters", "Seconds"], "Kilograms", 1),
+  measurementQuestion("Which tool measures the length of a sheet of paper?", ["Ruler", "Scale", "Thermometer", "Clock"], "Ruler", 1),
+  measurementQuestion("How many milliliters are in 1 liter?", ["10", "100", "1,000", "10,000"], "1,000", 1),
+  measurementQuestion("Which unit is best for measuring temperature on a weather report?", ["Degrees Celsius", "Kilograms", "Liters", "Meters"], "Degrees Celsius", 1),
+  measurementQuestion("Which unit is best for measuring how long it takes to brush your teeth?", ["Minutes", "Meters", "Grams", "Liters"], "Minutes", 1),
+  measurementQuestion("Which of these is a unit of length?", ["Meter", "Gram", "Liter", "Degree Celsius"], "Meter", 1),
+  measurementQuestion("Which tool is best for measuring the amount of water for a recipe?", ["Measuring cup", "Ruler", "Thermometer", "Compass"], "Measuring cup", 1),
+  measurementQuestion("Which unit is best for measuring the height of a child?", ["Meters", "Liters", "Kilograms", "Seconds"], "Meters", 1),
+  measurementQuestion("Which unit is best for measuring the length of a crayon?", ["Centimeters", "Kilometers", "Liters", "Kilograms"], "Centimeters", 1),
+
   // Level 2: whole-number metric conversions and simple comparisons.
   measurementQuestion("How many grams are in 1 kilogram?", ["100", "500", "1,000", "10,000"], "1,000", 2),
   measurementQuestion("3 kilograms is the same as how many grams?", ["300", "3,000", "30,000", "300,000"], "3,000", 2),
@@ -126,6 +138,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("300 centimeters is the same as:", ["2 meters", "3 meters", "4 meters", "5 meters"], "3 meters", 2),
   measurementQuestion("Which is heavier?", ["2 kilograms", "1,800 grams", "They are equal", "It depends on the color"], "2 kilograms", 2),
   measurementQuestion("Which is the best estimate for the mass of an apple?", ["About 10 grams", "About 100 grams", "About 1 kilogram", "About 10 kilograms"], "About 100 grams", 2),
+
+  // Level 2 extra questions: whole-number metric conversions and simple comparisons.
+  measurementQuestion("5 kilograms is the same as how many grams?", ["50", "500", "5,000", "50,000"], "5,000", 2),
+  measurementQuestion("4 meters is the same as how many centimeters?", ["40", "400", "4,000", "40,000"], "400", 2),
+  measurementQuestion("Which holds more liquid: 900 milliliters or 2 liters?", ["900 milliliters", "2 liters", "They are equal", "It depends on the container shape"], "2 liters", 2),
+  measurementQuestion("Which is longer: 120 centimeters or 1 meter?", ["120 centimeters", "1 meter", "They are equal", "It depends on the color"], "120 centimeters", 2),
+  measurementQuestion("2 liters is the same as how many milliliters?", ["20", "200", "2,000", "20,000"], "2,000", 2),
+  measurementQuestion("Which is the best estimate for the mass of a house cat?", ["About 4 grams", "About 40 grams", "About 4 kilograms", "About 400 kilograms"], "About 4 kilograms", 2),
+  measurementQuestion("Which is heavier: 700 grams or 1 kilogram?", ["700 grams", "1 kilogram", "They are equal", "It depends on the color"], "1 kilogram", 2),
+  measurementQuestion("5 meters is the same as:", ["50 centimeters", "500 centimeters", "5,000 centimeters", "50,000 centimeters"], "500 centimeters", 2),
+  measurementQuestion("Which is the best estimate for the height of a kitchen table?", ["About 1 centimeter", "About 1 meter", "About 10 meters", "About 100 meters"], "About 1 meter", 2),
+  measurementQuestion("Which container is most likely to hold about 1 liter?", ["A large water bottle", "A medicine dropper", "A bathtub", "A swimming pool"], "A large water bottle", 2),
 
   // Level 3: combining amounts and reading common measurements.
   measurementQuestion("2 meters is the same as how many centimeters?", ["20", "200", "2,000", "20,000"], "200", 3),
@@ -139,6 +163,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("Which is longer: 4 meters or 350 centimeters?", ["4 meters", "350 centimeters", "They are equal", "It depends on the color"], "4 meters", 3),
   measurementQuestion("900 milliliters plus 200 milliliters equals:", ["1 liter", "1.1 liters", "1.5 liters", "2 liters"], "1.1 liters", 3),
 
+  // Level 3 extra questions: combining amounts and reading common measurements.
+  measurementQuestion("300 milliliters plus 700 milliliters equals:", ["600 milliliters", "900 milliliters", "1 liter", "2 liters"], "1 liter", 3),
+  measurementQuestion("500 grams plus 500 grams equals:", ["500 grams", "1 kilogram", "1.5 kilograms", "2 kilograms"], "1 kilogram", 3),
+  measurementQuestion("2 meters plus 50 centimeters equals:", ["150 centimeters", "200 centimeters", "250 centimeters", "500 centimeters"], "250 centimeters", 3),
+  measurementQuestion("Which is shorter: 90 centimeters or 1 meter?", ["90 centimeters", "1 meter", "They are equal", "It depends on the color"], "90 centimeters", 3),
+  measurementQuestion("A thermometer reads 18°C, then rises to 23°C. How much did it rise?", ["3°C", "5°C", "18°C", "41°C"], "5°C", 3),
+  measurementQuestion("1 liter plus 500 milliliters equals:", ["1.05 liters", "1.5 liters", "2 liters", "5 liters"], "1.5 liters", 3),
+  measurementQuestion("Which tool is best for measuring the width of a book?", ["Ruler", "Scale", "Thermometer", "Measuring cup"], "Ruler", 3),
+  measurementQuestion("250 milliliters plus 250 milliliters plus 500 milliliters equals:", ["750 milliliters", "1 liter", "1.25 liters", "2 liters"], "1 liter", 3),
+  measurementQuestion("How many 500-milliliter bottles make 2 liters?", ["2 bottles", "3 bottles", "4 bottles", "5 bottles"], "4 bottles", 3),
+  measurementQuestion("3 kilograms is heavier than 2 kilograms by how much?", ["100 grams", "500 grams", "1 kilogram", "5 kilograms"], "1 kilogram", 3),
+
   // Level 4: decimal metric conversions and real-world estimates.
   measurementQuestion("1,500 milliliters is the same as:", ["0.15 liters", "1.5 liters", "15 liters", "150 liters"], "1.5 liters", 4),
   measurementQuestion("Which temperature is closest to a warm room?", ["About 0°C", "About 10°C", "About 22°C", "About 80°C"], "About 22°C", 4),
@@ -150,6 +186,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("3.5 meters is the same as:", ["35 centimeters", "350 centimeters", "3,500 centimeters", "35,000 centimeters"], "350 centimeters", 4),
   measurementQuestion("1,250 milliliters is the same as:", ["1.25 liters", "12.5 liters", "125 liters", "0.125 liters"], "1.25 liters", 4),
   measurementQuestion("6 kilograms is the same as:", ["600 grams", "6,000 grams", "60,000 grams", "600,000 grams"], "6,000 grams", 4),
+
+  // Level 4 extra questions: decimal metric conversions and real-world estimates.
+  measurementQuestion("175 centimeters is the same as:", ["0.175 meters", "1.75 meters", "17.5 meters", "175 meters"], "1.75 meters", 4),
+  measurementQuestion("0.5 liters is the same as:", ["50 milliliters", "500 milliliters", "5,000 milliliters", "50,000 milliliters"], "500 milliliters", 4),
+  measurementQuestion("2.75 kilograms is the same as:", ["275 grams", "2,075 grams", "2,750 grams", "27,500 grams"], "2,750 grams", 4),
+  measurementQuestion("3 liters plus 250 milliliters equals:", ["3.25 liters", "3.5 liters", "4.25 liters", "5.5 liters"], "3.25 liters", 4),
+  measurementQuestion("Which temperature is closest to a warm day?", ["About -5°C", "About 5°C", "About 25°C", "About 85°C"], "About 25°C", 4),
+  measurementQuestion("Which is the best estimate for the height of a bicycle?", ["About 10 centimeters", "About 1 meter", "About 10 meters", "About 100 meters"], "About 1 meter", 4),
+  measurementQuestion("0.75 kilograms is the same as:", ["75 grams", "750 grams", "7,500 grams", "75,000 grams"], "750 grams", 4),
+  measurementQuestion("4.5 meters is the same as:", ["45 centimeters", "450 centimeters", "4,500 centimeters", "45,000 centimeters"], "450 centimeters", 4),
+  measurementQuestion("2,000 milliliters is the same as:", ["0.2 liters", "2 liters", "20 liters", "200 liters"], "2 liters", 4),
+  measurementQuestion("Which is greater: 1.25 meters or 125 centimeters?", ["1.25 meters", "125 centimeters", "They are equal", "It depends on the object"], "They are equal", 4),
 
   // Level 5: multi-step metric conversion and simple application.
   measurementQuestion("2.5 kilograms is the same as:", ["250 grams", "2,050 grams", "2,500 grams", "25,000 grams"], "2,500 grams", 5),
@@ -163,6 +211,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("Which is longer: 1.8 meters or 170 centimeters?", ["1.8 meters", "170 centimeters", "They are equal", "It depends on the color"], "1.8 meters", 5),
   measurementQuestion("9 liters is the same as:", ["90 milliliters", "900 milliliters", "9,000 milliliters", "90,000 milliliters"], "9,000 milliliters", 5),
 
+  // Level 5 extra questions: multi-step metric conversion and simple application.
+  measurementQuestion("Three 750-milliliter bottles contain how much liquid in total?", ["1.5 liters", "2 liters", "2.25 liters", "3 liters"], "2.25 liters", 5),
+  measurementQuestion("4.5 kilograms minus 500 grams equals:", ["3 kilograms", "4 kilograms", "4.5 kilograms", "5 kilograms"], "4 kilograms", 5),
+  measurementQuestion("2.4 meters plus 60 centimeters equals:", ["2.46 meters", "2.6 meters", "3 meters", "8.4 meters"], "3 meters", 5),
+  measurementQuestion("A 5-liter jug is poured into 250-milliliter cups. How many cups can it fill?", ["10 cups", "15 cups", "20 cups", "25 cups"], "20 cups", 5),
+  measurementQuestion("1,250 grams is the same as:", ["0.125 kilograms", "1.25 kilograms", "12.5 kilograms", "125 kilograms"], "1.25 kilograms", 5),
+  measurementQuestion("Three 1.5-liter bottles contain how much liquid in total?", ["3 liters", "4 liters", "4.5 liters", "5 liters"], "4.5 liters", 5),
+  measurementQuestion("Which is heavier: 2.05 kilograms or 2,500 grams?", ["2.05 kilograms", "2,500 grams", "They are equal", "It depends on the package"], "2,500 grams", 5),
+  measurementQuestion("7.5 kilometers is the same as:", ["750 meters", "7,500 meters", "75,000 meters", "750,000 meters"], "7,500 meters", 5),
+  measurementQuestion("A ribbon is 6 meters long. If 150 centimeters are cut off, how much is left?", ["3.5 meters", "4 meters", "4.5 meters", "5.5 meters"], "4.5 meters", 5),
+  measurementQuestion("2 liters plus 750 milliliters equals:", ["2.075 liters", "2.5 liters", "2.75 liters", "3.75 liters"], "2.75 liters", 5),
+
   // Level 6: perimeter, area, and practical unit planning.
   measurementQuestion("A rectangle is 6 meters long and 4 meters wide. What is its perimeter?", ["10 meters", "20 meters", "24 meters", "48 meters"], "20 meters", 6),
   measurementQuestion("A square garden has sides of 5 meters. What is its area?", ["10 square meters", "20 square meters", "25 square meters", "50 square meters"], "25 square meters", 6),
@@ -174,6 +234,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("A runner jogs 2 kilometers. How many meters is that?", ["20 meters", "200 meters", "2,000 meters", "20,000 meters"], "2,000 meters", 6),
   measurementQuestion("A classroom is 8 meters by 6 meters. What is its area?", ["14 square meters", "28 square meters", "48 square meters", "96 square meters"], "48 square meters", 6),
   measurementQuestion("A fever thermometer reads 39°C. Compared with 37°C, how much higher is it?", ["1°C", "2°C", "3°C", "4°C"], "2°C", 6),
+
+  // Level 6 extra questions: perimeter, area, and practical unit planning.
+  measurementQuestion("A rectangle is 9 meters long and 5 meters wide. What is its perimeter?", ["14 meters", "28 meters", "45 meters", "90 meters"], "28 meters", 6),
+  measurementQuestion("A square garden has sides of 6 meters. What is its area?", ["12 square meters", "24 square meters", "36 square meters", "60 square meters"], "36 square meters", 6),
+  measurementQuestion("A 4-liter jug fills 200-milliliter cups. How many cups can it fill?", ["10 cups", "16 cups", "20 cups", "24 cups"], "20 cups", 6),
+  measurementQuestion("3 kilometers is the same as how many meters?", ["30 meters", "300 meters", "3,000 meters", "30,000 meters"], "3,000 meters", 6),
+  measurementQuestion("A room is 7 meters by 6 meters. What is its area?", ["13 square meters", "26 square meters", "42 square meters", "84 square meters"], "42 square meters", 6),
+  measurementQuestion("A triangular fence has sides of 3 meters, 4 meters, and 5 meters. What is its perimeter?", ["6 meters", "10 meters", "12 meters", "20 meters"], "12 meters", 6),
+  measurementQuestion("A rectangle is 10 meters long and 3 meters wide. What is its perimeter?", ["13 meters", "26 meters", "30 meters", "60 meters"], "26 meters", 6),
+  measurementQuestion("Which unit is best for the volume of a shoebox?", ["Cubic centimeters", "Degrees Celsius", "Kilograms", "Kilometers"], "Cubic centimeters", 6),
+  measurementQuestion("One lap of a track is 400 meters. How far are 5 laps?", ["1 kilometer", "2 kilometers", "4 kilometers", "20 kilometers"], "2 kilometers", 6),
+  measurementQuestion("A temperature rises from 12°C to 18°C. How much higher is it?", ["4°C", "6°C", "12°C", "30°C"], "6°C", 6),
 
   // Level 7: rates, scale, and mixed metric work.
   measurementQuestion("A map scale says 1 centimeter = 5 kilometers. Two towns are 6 centimeters apart. How far apart are they?", ["11 kilometers", "20 kilometers", "30 kilometers", "60 kilometers"], "30 kilometers", 7),
@@ -187,6 +259,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("A recipe uses 0.75 liters of milk per cake. How much milk is needed for 4 cakes?", ["1.5 liters", "2 liters", "3 liters", "4 liters"], "3 liters", 7),
   measurementQuestion("A plant grew from 18 cm to 42 cm. How much did it grow?", ["14 cm", "20 cm", "24 cm", "60 cm"], "24 cm", 7),
 
+  // Level 7 extra questions: rates, scale, and mixed metric work.
+  measurementQuestion("A map scale says 1 centimeter = 2 kilometers. Two towns are 7 centimeters apart. How far apart are they?", ["9 kilometers", "14 kilometers", "21 kilometers", "70 kilometers"], "14 kilometers", 7),
+  measurementQuestion("A car travels 150 kilometers in 3 hours. What is its average speed?", ["30 km/h", "50 km/h", "75 km/h", "450 km/h"], "50 km/h", 7),
+  measurementQuestion("A box is 6 cm long, 5 cm wide, and 2 cm high. What is its volume?", ["13 cubic cm", "30 cubic cm", "60 cubic cm", "120 cubic cm"], "60 cubic cm", 7),
+  measurementQuestion("A rectangle has area 48 square meters and length 8 meters. What is its width?", ["4 meters", "6 meters", "8 meters", "40 meters"], "6 meters", 7),
+  measurementQuestion("A recipe uses 0.5 liters of milk per batch. How much milk is needed for 5 batches?", ["1 liter", "2 liters", "2.5 liters", "5 liters"], "2.5 liters", 7),
+  measurementQuestion("A plant grew from 12 cm to 55 cm. How much did it grow?", ["33 cm", "43 cm", "55 cm", "67 cm"], "43 cm", 7),
+  measurementQuestion("A cyclist rides 24 kilometers in 1.5 hours. What is the average speed?", ["12 km/h", "16 km/h", "24 km/h", "36 km/h"], "16 km/h", 7),
+  measurementQuestion("Which is heavier: 2.4 kilograms or 2,400 grams?", ["2.4 kilograms", "2,400 grams", "They are equal", "It depends on the package"], "They are equal", 7),
+  measurementQuestion("A 3.6-liter jug is poured into 300-milliliter cups. How many full cups are there?", ["8", "10", "12", "15"], "12", 7),
+  measurementQuestion("A map scale says 1 centimeter = 5 kilometers. A route is 9 centimeters on the map. How long is the real route?", ["14 kilometers", "25 kilometers", "45 kilometers", "90 kilometers"], "45 kilometers", 7),
+
   // Level 8: unit rates, area conversion, and compound measurements.
   measurementQuestion("A pool gains 12 liters of water each minute. How much water is added in 15 minutes?", ["120 liters", "150 liters", "180 liters", "240 liters"], "180 liters", 8),
   measurementQuestion("1 square meter equals how many square centimeters?", ["100", "1,000", "10,000", "100,000"], "10,000", 8),
@@ -198,6 +282,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("A 1.5-liter bottle is 60% full. How much liquid is inside?", ["600 milliliters", "750 milliliters", "900 milliliters", "1,200 milliliters"], "900 milliliters", 8),
   measurementQuestion("A hallway is 12 meters long. Tiles are 50 centimeters long. How many tiles fit along the hallway?", ["12", "18", "24", "50"], "24", 8),
   measurementQuestion("A thermometer rises from -3°C to 8°C. How many degrees did it rise?", ["5°C", "8°C", "11°C", "13°C"], "11°C", 8),
+
+  // Level 8 extra questions: unit rates, area conversion, and compound measurements.
+  measurementQuestion("A pump adds 18 liters of water each minute. How much water is added in 7 minutes?", ["25 liters", "72 liters", "126 liters", "180 liters"], "126 liters", 8),
+  measurementQuestion("A rectangle is 2 meters long and 150 centimeters wide. What is its area?", ["2 square meters", "3 square meters", "30 square meters", "300 square meters"], "3 square meters", 8),
+  measurementQuestion("2 square meters equals how many square centimeters?", ["200", "2,000", "20,000", "200,000"], "20,000", 8),
+  measurementQuestion("A 2.5-liter bottle is 40% full. How much liquid is inside?", ["500 milliliters", "1,000 milliliters", "1,500 milliliters", "2,500 milliliters"], "1,000 milliliters", 8),
+  measurementQuestion("A garden is 5 m by 4 m. A shed takes up 3 square meters. How much area is left?", ["12 square meters", "17 square meters", "20 square meters", "23 square meters"], "17 square meters", 8),
+  measurementQuestion("A train travels 135 km in 2.25 hours. What is its average speed?", ["45 km/h", "60 km/h", "90 km/h", "135 km/h"], "60 km/h", 8),
+  measurementQuestion("A rectangular prism is 6 cm by 5 cm by 4 cm. What is its volume?", ["15 cubic cm", "30 cubic cm", "90 cubic cm", "120 cubic cm"], "120 cubic cm", 8),
+  measurementQuestion("A hallway is 9 meters long. Tiles are 30 centimeters long. How many tiles fit along the hallway?", ["18", "27", "30", "90"], "30", 8),
+  measurementQuestion("A thermometer rises from -7°C to 6°C. How many degrees did it rise?", ["1°C", "7°C", "13°C", "14°C"], "13°C", 8),
+  measurementQuestion("A bag contains 3.5 kg of flour. If 750 g are used, how much flour is left?", ["2.25 kg", "2.5 kg", "2.75 kg", "3.25 kg"], "2.75 kg", 8),
 
   // Level 9: precision, density, volume, and non-metric reference conversions.
   measurementQuestion("A cube has side length 4 cm. What is its volume?", ["16 cubic cm", "32 cubic cm", "48 cubic cm", "64 cubic cm"], "64 cubic cm", 9),
@@ -211,6 +307,18 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("A rectangular tank is 50 cm by 40 cm by 30 cm. How many liters does it hold?", ["6 liters", "60 liters", "600 liters", "6,000 liters"], "60 liters", 9),
   measurementQuestion("A map scale is 1:100,000. One centimeter on the map represents how much real distance?", ["100 meters", "1 kilometer", "10 kilometers", "100 kilometers"], "1 kilometer", 9),
 
+  // Level 9 extra questions: precision, density, volume, and non-metric reference conversions.
+  measurementQuestion("A cube has side length 5 cm. What is its volume?", ["25 cubic cm", "75 cubic cm", "100 cubic cm", "125 cubic cm"], "125 cubic cm", 9),
+  measurementQuestion("An object has mass 360 grams and volume 90 cubic centimeters. What is its density?", ["2 g/cm³", "4 g/cm³", "9 g/cm³", "270 g/cm³"], "4 g/cm³", 9),
+  measurementQuestion("About how many centimeters are in 12 inches if 1 inch is about 2.54 centimeters?", ["24.0 cm", "30.48 cm", "48.0 cm", "304.8 cm"], "30.48 cm", 9),
+  measurementQuestion("A tank holds 1.3 cubic meters of water. How many liters is that?", ["130 liters", "1,300 liters", "13,000 liters", "130,000 liters"], "1,300 liters", 9),
+  measurementQuestion("A room is 6.5 meters by 2.4 meters. What is its area?", ["8.9 square meters", "15.6 square meters", "17.8 square meters", "31.2 square meters"], "15.6 square meters", 9),
+  measurementQuestion("A measuring bottle marks every 0.25 liter. Which amount can it measure exactly?", ["1.6 liters", "1.75 liters", "1.8 liters", "1.9 liters"], "1.75 liters", 9),
+  measurementQuestion("A scale reads to the nearest 0.01 kg. Which reading is possible?", ["2.371 kg", "2.37 kg", "2.375 kg", "2.377 kg"], "2.37 kg", 9),
+  measurementQuestion("A runner finishes 8 kilometers in 48 minutes. What is the pace per kilometer?", ["4 minutes per km", "6 minutes per km", "8 minutes per km", "12 minutes per km"], "6 minutes per km", 9),
+  measurementQuestion("A rectangular tank is 80 cm by 50 cm by 25 cm. How many liters does it hold?", ["10 liters", "100 liters", "1,000 liters", "10,000 liters"], "100 liters", 9),
+  measurementQuestion("A map scale is 1:50,000. One centimeter on the map represents how much real distance?", ["50 meters", "500 meters", "5 kilometers", "50 kilometers"], "500 meters", 9),
+
   // Level 10: advanced applied measurement and dimensional reasoning.
   measurementQuestion("A car uses 6 liters of fuel for 100 kilometers. How much fuel is needed for 350 kilometers?", ["18 liters", "21 liters", "24 liters", "30 liters"], "21 liters", 10),
   measurementQuestion("A box measures 0.5 m by 0.4 m by 0.3 m. What is its volume?", ["0.006 cubic meters", "0.06 cubic meters", "0.6 cubic meters", "6 cubic meters"], "0.06 cubic meters", 10),
@@ -222,6 +330,17 @@ const MEASUREMENT_QUESTIONS = [
   measurementQuestion("A square has area 81 square centimeters. What is the length of one side?", ["8 cm", "9 cm", "18 cm", "40.5 cm"], "9 cm", 10),
   measurementQuestion("A 3D printer uses 18 cm of filament per minute. How long to use 270 cm?", ["12 minutes", "15 minutes", "18 minutes", "20 minutes"], "15 minutes", 10),
   measurementQuestion("A temperature changes from -6°C to 9°C, then drops 4°C. What is the final temperature?", ["-1°C", "5°C", "9°C", "19°C"], "5°C", 10),
+  // Level 10 extra questions: advanced applied measurement and dimensional reasoning.
+  measurementQuestion("A car uses 7 liters of fuel for 100 kilometers. How much fuel is needed for 450 kilometers?", ["28 liters", "31.5 liters", "35 liters", "45 liters"], "31.5 liters", 10),
+  measurementQuestion("A box measures 0.8 m by 0.5 m by 0.25 m. What is its volume?", ["0.01 cubic meters", "0.1 cubic meters", "1 cubic meter", "10 cubic meters"], "0.1 cubic meters", 10),
+  measurementQuestion("Water flows at 3.2 liters per minute for 15 minutes. How much water flows?", ["18.2 liters", "32 liters", "48 liters", "96 liters"], "48 liters", 10),
+  measurementQuestion("A model boat is 8 cm long. The real boat is 6.4 m long. What scale is the model?", ["1:8", "1:80", "1:800", "80:1"], "1:80", 10),
+  measurementQuestion("A material has density 2.7 g/cm³ and volume 100 cm³. What is its mass?", ["27 grams", "102.7 grams", "270 grams", "2,700 grams"], "270 grams", 10),
+  measurementQuestion("A recipe for 8 people uses 1.2 liters of soup. How much soup is needed for 12 people?", ["1.5 liters", "1.8 liters", "2.4 liters", "9.6 liters"], "1.8 liters", 10),
+  measurementQuestion("A square has area 144 square centimeters. What is the length of one side?", ["10 cm", "12 cm", "24 cm", "72 cm"], "12 cm", 10),
+  measurementQuestion("A machine uses 24 cm of tape per minute. How long will it take to use 360 cm of tape?", ["12 minutes", "15 minutes", "18 minutes", "24 minutes"], "15 minutes", 10),
+  measurementQuestion("A temperature changes from -12°C up by 20°C, then drops 15°C. What is the final temperature?", ["-7°C", "-3°C", "8°C", "23°C"], "-7°C", 10),
+  measurementQuestion("A speed of 72 km/h is the same as about how many meters per second?", ["10 m/s", "20 m/s", "36 m/s", "72 m/s"], "20 m/s", 10),
 ];
 
 function createMeasurementGeneratedEntry(difficulty) {

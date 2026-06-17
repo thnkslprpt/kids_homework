@@ -35,6 +35,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(1, "Which shape has 5 sides?", ["Triangle", "Square", "Pentagon", "Hexagon"], "Pentagon"),
     q(1, "Which shape has 4 equal sides?", ["Square", "Triangle", "Circle", "Oval"], "Square"),
 
+
+    q(1, "Which shape has 6 sides?", ["Hexagon", "Pentagon", "Triangle", "Circle"], "Hexagon"),
+    q(1, "Which shape has exactly 4 corners?", ["Square", "Triangle", "Circle", "Pentagon"], "Square"),
+    q(1, "Which shape has exactly 3 corners?", ["Triangle", "Square", "Circle", "Rectangle"], "Triangle"),
+    q(1, "Which shape is stretched out and round like an egg?", ["Oval", "Square", "Triangle", "Cube"], "Oval"),
+    q(1, "Which everyday object is most like a cube?", ["A dice", "A ball", "A can", "A cone"], "A dice"),
+    q(1, "Which everyday object is most like a rectangular prism?", ["A shoebox", "A ball", "A plate", "A cone"], "A shoebox"),
+    q(1, "Which shape has 3 straight sides and 3 corners?", ["Triangle", "Square", "Circle", "Hexagon"], "Triangle"),
+    q(1, "Which shape has no straight sides?", ["Circle", "Triangle", "Square", "Rectangle"], "Circle"),
+    q(1, "How many sides does a rectangle have?", ["3", "4", "5", "6"], "4"),
+    q(1, "How many sides does a triangle have?", ["2", "3", "4", "5"], "3"),
+    q(1, "How many sides does a pentagon have?", ["4", "5", "6", "8"], "5"),
+    q(1, "Which solid shape is like a box?", ["Cube", "Sphere", "Cone", "Circle"], "Cube"),
+
     // Level 2: simple turns, directions, and solid-object matching.
     q(2, "An arrow is pointing up. If it turns a quarter-turn clockwise, which way will it point?", ["Left", "Right", "Down", "Up"], "Right"),
     q(2, "An arrow is pointing left. If it turns a half-turn clockwise, which way will it point?", ["Up", "Down", "Left", "Right"], "Right"),
@@ -48,6 +62,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(2, "How many flat faces does a cube have?", ["4", "5", "6", "8"], "6"),
     q(2, "Which shape has 5 corners?", ["Triangle", "Square", "Pentagon", "Circle"], "Pentagon"),
     q(2, "Which direction is opposite north?", ["East", "South", "West", "Northeast"], "South"),
+
+
+    q(2, "An arrow is pointing right. If it turns a quarter-turn clockwise, which way will it point?", ["Down", "Up", "Left", "Right"], "Down"),
+    q(2, "An arrow is pointing down. If it turns a half-turn, which way will it point?", ["Up", "Down", "Left", "Right"], "Up"),
+    q(2, "An arrow is pointing left. If it turns a quarter-turn counterclockwise, which way will it point?", ["Down", "Up", "Left", "Right"], "Down"),
+    q(2, "If you face west and turn right, which direction are you facing?", ["North", "South", "East", "West"], "North"),
+    q(2, "If you face south and turn right, which direction are you facing?", ["West", "East", "North", "South"], "West"),
+    q(2, "Which direction is opposite east?", ["West", "North", "South", "Northeast"], "West"),
+    q(2, "Which 3D shape has only flat square faces?", ["Cube", "Sphere", "Cylinder", "Cone"], "Cube"),
+    q(2, "Which 3D shape has a point and a circular base?", ["Cone", "Cube", "Sphere", "Rectangular prism"], "Cone"),
+    q(2, "Which object is most like a sphere?", ["A marble", "A book", "A soup can", "A door"], "A marble"),
+    q(2, "Which object is most like a cylinder?", ["A paper towel roll", "A football", "A pyramid", "A cube"], "A paper towel roll"),
+    q(2, "How many equal square faces does a cube have?", ["4", "5", "6", "8"], "6"),
+    q(2, "Which shape has 4 sides but does not need all sides to be equal?", ["Rectangle", "Circle", "Triangle", "Pentagon"], "Rectangle"),
 
     // Level 3: properties of 2D/3D shapes, simple symmetry, and orientation.
     q(3, "How many faces does a cube have?", ["4", "5", "6", "8"], "6"),
@@ -63,6 +91,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(3, "Which shape has exactly one pair of parallel sides?", ["Trapezoid", "Circle", "Triangle", "Pentagon"], "Trapezoid"),
     q(3, "Which shape has all sides the same length but no right angles are required?", ["Rhombus", "Rectangle", "Circle", "Triangle"], "Rhombus"),
 
+
+    q(3, "How many sides does an octagon have?", ["6", "7", "8", "9"], "8"),
+    q(3, "Which shape has exactly 2 pairs of parallel sides?", ["Rectangle", "Triangle", "Pentagon", "Circle"], "Rectangle"),
+    q(3, "Which shape has all points the same distance from its center?", ["Circle", "Square", "Triangle", "Rectangle"], "Circle"),
+    q(3, "Which capital letter has a horizontal line of symmetry?", ["B", "F", "R", "N"], "B"),
+    q(3, "Which capital letter has no line of symmetry?", ["F", "A", "H", "O"], "F"),
+    q(3, "How many lines of symmetry does a square have?", ["1", "2", "4", "6"], "4"),
+    q(3, "Which 3D shape has no flat faces?", ["Sphere", "Cube", "Cylinder", "Cone"], "Sphere"),
+    q(3, "Which 3D shape has 1 curved surface and 2 circular faces?", ["Cylinder", "Sphere", "Cube", "Square pyramid"], "Cylinder"),
+    q(3, "If you face west and turn left, which direction are you facing?", ["South", "North", "East", "West"], "South"),
+    q(3, "If a shape has 7 sides, what is it called?", ["Heptagon", "Hexagon", "Octagon", "Pentagon"], "Heptagon"),
+    q(3, "Which shape is a quadrilateral?", ["Rectangle", "Triangle", "Circle", "Oval"], "Rectangle"),
+    q(3, "Which solid has two circular faces that are parallel?", ["Cylinder", "Cone", "Sphere", "Cube"], "Cylinder"),
+
     // Level 4: decomposing, composing, prisms, diagonals, and multi-step direction.
     q(4, "If you cut a square from one corner to the opposite corner, what 2 shapes do you make?", ["2 circles", "2 triangles", "2 pentagons", "2 rectangles"], "2 triangles"),
     q(4, "How many faces does a rectangular prism have?", ["4", "5", "6", "8"], "6"),
@@ -76,6 +118,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(4, "Which solid has 5 faces, 5 vertices, and 8 edges?", ["Square pyramid", "Cube", "Cylinder", "Cone"], "Square pyramid"),
     q(4, "Which shape can be split into 2 equal triangles by drawing one diagonal?", ["Square", "Circle", "Oval", "Pentagon"], "Square"),
     q(4, "If you start at a point and move 2 squares east and 1 square north, where are you from the start?", ["Northeast", "Northwest", "Southeast", "Southwest"], "Northeast"),
+
+
+    q(4, "If you draw one diagonal in a rectangle, how many triangles are formed?", ["2", "3", "4", "6"], "2"),
+    q(4, "Which shape can be made by joining two equal right triangles along their longest side?", ["Rectangle", "Circle", "Pentagon", "Cone"], "Rectangle"),
+    q(4, "You are facing east. If you turn left and then left again, which direction are you facing now?", ["West", "North", "South", "East"], "West"),
+    q(4, "You are facing west. If you turn right and then right again, which direction are you facing now?", ["East", "North", "South", "West"], "East"),
+    q(4, "Which solid has 6 faces, 8 vertices, and 12 edges?", ["Cube", "Cone", "Cylinder", "Square pyramid"], "Cube"),
+    q(4, "Which solid has 1 square base and 4 triangular faces?", ["Square pyramid", "Cube", "Cylinder", "Triangular prism"], "Square pyramid"),
+    q(4, "Which shape has two pairs of equal opposite sides and four right angles?", ["Rectangle", "Trapezoid", "Triangle", "Pentagon"], "Rectangle"),
+    q(4, "If you start at a point and move 3 squares west and 2 squares south, where are you from the start?", ["Southwest", "Southeast", "Northwest", "Northeast"], "Southwest"),
+    q(4, "Which shape can be split into 4 equal small squares by one vertical and one horizontal line?", ["Square", "Triangle", "Circle", "Pentagon"], "Square"),
+    q(4, "A square has one diagonal drawn. What shape is each half?", ["Triangle", "Circle", "Pentagon", "Oval"], "Triangle"),
+    q(4, "Which solid has flat faces only and no curved surfaces?", ["Rectangular prism", "Sphere", "Cylinder", "Cone"], "Rectangular prism"),
+    q(4, "Which 2D shape is the face of a cube?", ["Square", "Circle", "Triangle", "Oval"], "Square"),
 
     // Level 5: stronger solid geometry, symmetry, rotations, and coordinate ideas.
     q(5, "How many vertices does a triangular prism have?", ["4", "5", "6", "8"], "6"),
@@ -91,6 +147,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(5, "Point A is at row 2, column 3. Which tells its position correctly?", ["Row 2, column 3", "Row 3, column 2", "Row 2 only", "Column 3 only"], "Row 2, column 3"),
     q(5, "Which solid has 6 rectangular faces?", ["Rectangular prism", "Cone", "Sphere", "Square pyramid"], "Rectangular prism"),
 
+
+    q(5, "How many faces does a square pyramid have?", ["4", "5", "6", "8"], "5"),
+    q(5, "How many edges does a square pyramid have?", ["5", "6", "8", "10"], "8"),
+    q(5, "Which shape has 10 sides?", ["Decagon", "Octagon", "Hexagon", "Pentagon"], "Decagon"),
+    q(5, "If you start facing north, turn right, then turn left, which direction are you facing?", ["North", "East", "South", "West"], "North"),
+    q(5, "If an arrow points right and turns 270 degrees clockwise, which way will it point?", ["Up", "Down", "Left", "Right"], "Up"),
+    q(5, "If an arrow points left and turns 180 degrees, which way will it point?", ["Right", "Left", "Up", "Down"], "Right"),
+    q(5, "A triangle is reflected over a horizontal line. What changes?", ["Top and bottom swap", "It becomes a circle", "It loses one side", "It becomes a cube"], "Top and bottom swap"),
+    q(5, "Which capital letter has both vertical and horizontal symmetry?", ["H", "F", "G", "R"], "H"),
+    q(5, "Which shape has exactly 2 lines of symmetry?", ["Rectangle", "Scalene triangle", "Parallelogram", "Pentagon"], "Rectangle"),
+    q(5, "Point B is at row 4, column 1. Which tells its position correctly?", ["Row 4, column 1", "Row 1, column 4", "Column 4, row 1", "Row 4 only"], "Row 4, column 1"),
+    q(5, "Which solid has 2 triangular faces and 3 rectangular faces?", ["Triangular prism", "Cube", "Cone", "Square pyramid"], "Triangular prism"),
+    q(5, "Which transformation flips a shape to make a mirror image?", ["Reflection", "Rotation", "Translation", "Volume"], "Reflection"),
+
     // Level 6: nets, cross-sections, coordinate turns, and cube stacks.
     q(6, "Which 3D shape can be made from 6 equal square faces?", ["Cube", "Cone", "Cylinder", "Triangular prism"], "Cube"),
     q(6, "A cube is sliced straight across parallel to one face. What shape is the cross-section?", ["Square", "Triangle", "Circle", "Pentagon"], "Square"),
@@ -104,6 +174,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(6, "A shape is moved 4 squares right without turning. What transformation is this?", ["Translation", "Reflection", "Rotation", "Cross-section"], "Translation"),
     q(6, "A shape is flipped over a mirror line. What transformation is this?", ["Reflection", "Translation", "Rotation", "Stacking"], "Reflection"),
     q(6, "A shape is turned around a point. What transformation is this?", ["Rotation", "Reflection", "Translation", "Net"], "Rotation"),
+
+
+    q(6, "A net has 6 congruent squares. Which solid can it make?", ["Cube", "Cone", "Cylinder", "Triangular prism"], "Cube"),
+    q(6, "A cylinder is sliced straight from top to bottom through its center. What shape can the cross-section be?", ["Rectangle", "Circle", "Triangle", "Pentagon"], "Rectangle"),
+    q(6, "A cone is sliced straight through the tip and center of the base. What shape is the cross-section?", ["Triangle", "Circle", "Square", "Hexagon"], "Triangle"),
+    q(6, "A 4 by 1 rectangle of unit squares is rotated a quarter-turn. What are its new dimensions?", ["1 by 4", "4 by 1", "2 by 2", "5 by 1"], "1 by 4"),
+    q(6, "A stack has 3 cubes on the bottom and 2 cubes on top. How many cubes are in the stack?", ["5", "4", "6", "8"], "5"),
+    q(6, "A shape is moved 2 squares left and 3 squares down without turning. What transformation is this?", ["Translation", "Rotation", "Reflection", "Net"], "Translation"),
+    q(6, "A shape is turned 180 degrees around a point. What transformation is this?", ["Rotation", "Reflection", "Translation", "Cross-section"], "Rotation"),
+    q(6, "Point A is 2 squares right and 4 squares up from the start. After a quarter-turn clockwise around the start, where is A?", ["4 squares right and 2 squares down", "2 squares right and 4 squares down", "4 squares left and 2 squares up", "2 squares left and 4 squares up"], "4 squares right and 2 squares down"),
+    q(6, "Point A is 1 square right and 3 squares up from the start. After a quarter-turn counterclockwise around the start, where is A?", ["3 squares left and 1 square up", "3 squares right and 1 square down", "1 square left and 3 squares up", "1 square right and 3 squares down"], "3 squares left and 1 square up"),
+    q(6, "Which view of a rectangular prism can look like a rectangle?", ["Front view", "No view", "Only corner view", "Only curved view"], "Front view"),
+    q(6, "A net has 2 circles and 1 rectangle. Which solid does it make?", ["Cylinder", "Cone", "Cube", "Square pyramid"], "Cylinder"),
+    q(6, "A cube is sliced parallel to its top face. Which shape is made by the slice?", ["Square", "Circle", "Triangle", "Oval"], "Square"),
 
     // Level 7: nets, projections, more complex turns, and surface thinking.
     q(7, "A cube has side length 1 unit. How many unit square faces cover the outside?", ["4", "5", "6", "8"], "6"),
@@ -119,6 +203,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(7, "Which net could fold into a cube?", ["6 squares connected edge-to-edge", "4 triangles only", "2 circles and 1 rectangle", "1 square and 4 triangles"], "6 squares connected edge-to-edge"),
     q(7, "A top view of a cylinder looks like which shape?", ["Circle", "Triangle", "Rectangle", "Pentagon"], "Circle"),
 
+
+    q(7, "A rectangular prism is 3 cubes long, 2 cubes wide, and 1 cube high. How many small cubes make it?", ["6", "5", "8", "12"], "6"),
+    q(7, "A rectangular prism is 2 cubes long, 2 cubes wide, and 2 cubes high. How many small cubes make it?", ["8", "6", "10", "12"], "8"),
+    q(7, "A cube has side length 2 units. How many small unit cubes fill it?", ["8", "4", "6", "12"], "8"),
+    q(7, "A cylinder is sliced parallel to its side through the middle. What shape can the cross-section be?", ["Rectangle", "Circle", "Triangle", "Pentagon"], "Rectangle"),
+    q(7, "A square pyramid is sliced straight down through its top point and the middle of its base. What shape can the cross-section be?", ["Triangle", "Circle", "Hexagon", "Oval"], "Triangle"),
+    q(7, "Point B is 2 squares right and 5 squares down from the start. After a half-turn around the start, where is B?", ["2 squares left and 5 squares up", "5 squares right and 2 squares up", "2 squares right and 5 squares up", "5 squares left and 2 squares down"], "2 squares left and 5 squares up"),
+    q(7, "A shape is reflected over a vertical line. What swaps?", ["Left and right", "Top and bottom only", "Faces and edges", "Area and perimeter"], "Left and right"),
+    q(7, "If a shape turns 90 degrees counterclockwise three times, how far has it turned?", ["270 degrees counterclockwise", "90 degrees clockwise", "180 degrees clockwise", "360 degrees clockwise"], "270 degrees counterclockwise"),
+    q(7, "Which net could fold into a square pyramid?", ["1 square and 4 triangles", "6 squares", "2 circles and 1 rectangle", "3 rectangles and 2 triangles"], "1 square and 4 triangles"),
+    q(7, "A side view of a cone often looks like which shape?", ["Triangle", "Circle", "Square", "Hexagon"], "Triangle"),
+    q(7, "Which solid has two congruent polygon bases connected by rectangles?", ["Prism", "Sphere", "Cone", "Circle"], "Prism"),
+    q(7, "A top view of a square pyramid is usually which shape?", ["Square", "Circle", "Triangle", "Rectangle only"], "Square"),
+
     // Level 8: coordinate transformations, cube arrays, and reasoning from views.
     q(8, "Point (2, 3) is reflected over the y-axis. What is the new point?", ["(-2, 3)", "(2, -3)", "(-3, 2)", "(3, 2)"], "(-2, 3)"),
     q(8, "Point (2, 3) is reflected over the x-axis. What is the new point?", ["(2, -3)", "(-2, 3)", "(-3, 2)", "(3, 2)"], "(2, -3)"),
@@ -132,6 +230,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(8, "A regular hexagon is divided from its center to all vertices. How many triangles are made?", ["4", "5", "6", "8"], "6"),
     q(8, "A square is rotated 90 degrees around its center. Which shape does it look like after the turn?", ["A square", "A triangle", "A circle", "A pentagon"], "A square"),
     q(8, "Which transformation keeps a figure the same size and shape?", ["Rotation", "Stretching", "Squashing", "Cutting"], "Rotation"),
+
+
+    q(8, "Point (-3, 4) is reflected over the y-axis. What is the new point?", ["(3, 4)", "(-3, -4)", "(4, -3)", "(3, -4)"], "(3, 4)"),
+    q(8, "Point (-2, -5) is reflected over the x-axis. What is the new point?", ["(-2, 5)", "(2, -5)", "(5, -2)", "(2, 5)"], "(-2, 5)"),
+    q(8, "Point (4, 1) is translated 2 units left and 3 units up. What is the new point?", ["(2, 4)", "(6, 4)", "(2, -2)", "(1, 4)"], "(2, 4)"),
+    q(8, "Point (-1, 3) is translated 5 units right and 1 unit down. What is the new point?", ["(4, 2)", "(-6, 2)", "(4, 4)", "(2, 4)"], "(4, 2)"),
+    q(8, "A rectangle is 2 units wide and 6 units tall. After a 90-degree rotation, what can its dimensions be?", ["6 units wide and 2 units tall", "2 units wide and 6 units tall", "8 units wide and 1 unit tall", "12 units wide and 1 unit tall"], "6 units wide and 2 units tall"),
+    q(8, "A 4 by 2 by 1 rectangular prism is built from unit cubes. How many cubes are used?", ["8", "6", "10", "12"], "8"),
+    q(8, "A 3 by 3 by 2 rectangular prism is built from unit cubes. How many cubes are used?", ["18", "12", "15", "27"], "18"),
+    q(8, "A solid has a front view that is a square and a top view that is a square. Which solid could it be?", ["Cube", "Cone", "Cylinder", "Sphere"], "Cube"),
+    q(8, "A solid has a front view that is a rectangle and a side view that is a triangle. Which solid could it be?", ["Triangular prism", "Cylinder", "Sphere", "Cube"], "Triangular prism"),
+    q(8, "A regular pentagon is divided from its center to all vertices. How many triangles are made?", ["5", "4", "6", "10"], "5"),
+    q(8, "Which transformation changes a figure's position but not its size or shape?", ["Translation", "Stretching", "Squashing", "Cutting"], "Translation"),
+    q(8, "A shape is reflected and then slid without changing size. Which property stays the same?", ["Shape size", "Color only", "Number of dimensions", "Grid labels"], "Shape size"),
 
     // Level 9: advanced mental rotation, cross-sections, nets, and spatial counting.
     q(9, "Point (3, 1) is rotated 90 degrees counterclockwise around the origin. What is the new point?", ["(-1, 3)", "(1, -3)", "(3, -1)", "(-3, 1)"], "(-1, 3)"),
@@ -147,6 +259,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(9, "A figure is reflected over the y-axis, then reflected over the x-axis. This matches which single transformation?", ["180-degree rotation", "90-degree rotation", "Translation right", "No movement"], "180-degree rotation"),
     q(9, "A square pyramid is sliced parallel to its base. What shape is the cross-section?", ["Square", "Circle", "Triangle", "Hexagon"], "Square"),
 
+
+    q(9, "Point (1, 5) is rotated 90 degrees counterclockwise around the origin. What is the new point?", ["(-5, 1)", "(5, -1)", "(-1, -5)", "(1, -5)"], "(-5, 1)"),
+    q(9, "Point (-2, 3) is rotated 90 degrees clockwise around the origin. What is the new point?", ["(3, 2)", "(-3, -2)", "(2, -3)", "(-2, -3)"], "(3, 2)"),
+    q(9, "Point (-4, -1) is rotated 180 degrees around the origin. What is the new point?", ["(4, 1)", "(-4, 1)", "(1, 4)", "(4, -1)"], "(4, 1)"),
+    q(9, "A 4 by 3 by 1 rectangular prism is built from unit cubes. How many cubes are used?", ["12", "8", "10", "16"], "12"),
+    q(9, "A 4 by 2 by 2 rectangular prism is built from unit cubes. How many cubes are used?", ["16", "12", "18", "24"], "16"),
+    q(9, "A 3 by 3 by 3 cube is painted on the outside. How many small cubes have exactly 3 painted faces?", ["8", "6", "12", "27"], "8"),
+    q(9, "A 2 by 3 by 4 rectangular prism has what volume in unit cubes?", ["24", "18", "20", "32"], "24"),
+    q(9, "A plane slices a cube parallel to a face. What shape is the cross-section?", ["Square", "Circle", "Triangle", "Oval"], "Square"),
+    q(9, "A plane slices a sphere. What shape is the cross-section?", ["Circle", "Triangle", "Rectangle", "Square"], "Circle"),
+    q(9, "A figure is rotated 90 degrees clockwise, then 90 degrees clockwise again. This matches which single transformation?", ["180-degree rotation", "90-degree rotation", "Reflection", "Translation"], "180-degree rotation"),
+    q(9, "A figure is reflected over a vertical line, then reflected over the same vertical line again. What is the final position?", ["Back at the start", "Rotated 90 degrees", "Moved farther left", "Upside down"], "Back at the start"),
+    q(9, "A cone is sliced parallel to its circular base. What shape is the cross-section?", ["Circle", "Triangle", "Rectangle", "Hexagon"], "Circle"),
+
     // Level 10: challenging coordinate geometry, cube nets, projections, and composed transformations.
     q(10, "Point (4, -2) is rotated 90 degrees counterclockwise around the origin. What is the new point?", ["(2, 4)", "(-2, -4)", "(-4, 2)", "(4, 2)"], "(2, 4)"),
     q(10, "Point (-3, 5) is rotated 90 degrees clockwise around the origin. What is the new point?", ["(5, 3)", "(-5, -3)", "(3, -5)", "(-3, -5)"], "(5, 3)"),
@@ -160,6 +286,20 @@ const SPATIAL_REASONING_QUESTIONS = (() => {
     q(10, "A shape is rotated 90 degrees clockwise and then reflected over the x-axis. What should you do to track a point accurately?", ["Apply the rotation first, then the reflection", "Reflect first no matter what", "Ignore the order", "Only count the corners"], "Apply the rotation first, then the reflection"),
     q(10, "A square with vertices (0,0), (2,0), (2,2), and (0,2) is translated 3 units right. Which point is a new vertex?", ["(3,0)", "(-3,0)", "(2,3)", "(0,3)"], "(3,0)"),
     q(10, "A solid's top view is a rectangle, front view is a rectangle, and side view is a rectangle. Which solid best matches?", ["Rectangular prism", "Cone", "Sphere", "Square pyramid"], "Rectangular prism"),
+
+    q(10, "Point (6, 1) is rotated 90 degrees counterclockwise around the origin. What is the new point?", ["(-1, 6)", "(1, -6)", "(-6, -1)", "(6, -1)"], "(-1, 6)"),
+    q(10, "Point (-4, -2) is rotated 90 degrees clockwise around the origin. What is the new point?", ["(-2, 4)", "(2, -4)", "(4, 2)", "(-4, 2)"], "(-2, 4)"),
+    q(10, "Point (3, -7) is reflected over the line y = x. What is the new point?", ["(-7, 3)", "(7, -3)", "(3, 7)", "(-3, 7)"], "(-7, 3)"),
+    q(10, "Point (-6, 2) is reflected over the line y = -x. What is the new point?", ["(-2, 6)", "(2, -6)", "(6, -2)", "(-6, -2)"], "(-2, 6)"),
+    q(10, "A 5 by 3 by 2 rectangular prism is built from unit cubes. How many unit cubes are used?", ["30", "24", "28", "40"], "30"),
+    q(10, "A 5 by 5 by 5 cube is painted on the outside. How many small cubes have no painted faces?", ["27", "8", "9", "64"], "27"),
+    q(10, "A 3 by 3 by 3 cube is painted on the outside. How many small cubes have exactly 2 painted faces?", ["12", "8", "6", "24"], "12"),
+    q(10, "A 4 by 4 by 4 cube is painted on the outside. How many small cubes have exactly 3 painted faces?", ["8", "16", "24", "32"], "8"),
+    q(10, "A cube net must have how many square faces?", ["6", "4", "5", "8"], "6"),
+    q(10, "A point is reflected over y = x and then reflected over y = x again. What is the final point?", ["The original point", "The opposite point", "A point on the x-axis", "A point on the y-axis"], "The original point"),
+    q(10, "A shape is translated 4 units right and then rotated 90 degrees around the origin. What should you do to track a point accurately?", ["Apply the translation first, then the rotation", "Rotate first no matter what", "Ignore the translation", "Only count the faces"], "Apply the translation first, then the rotation"),
+    q(10, "A solid's top view is a circle, front view is a rectangle, and side view is a rectangle. Which solid best matches?", ["Cylinder", "Cone", "Sphere", "Square pyramid"], "Cylinder"),
+
   ];
 })();
 

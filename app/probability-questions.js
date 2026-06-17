@@ -175,6 +175,68 @@ const PROBABILITY_QUESTIONS = [
     1
   ),
 
+  // Additional Level 1 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A bag has 3 red marbles and 1 green marble. Which color are you more likely to pick?",
+    "Red",
+    ["Green", "They are equally likely", "Neither color can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 6 equal parts and only 1 part is black. What is the chance of landing on black?",
+    "1/6",
+    ["1/2", "1/3", "1/4"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A jar has only star stickers. How likely is it to pick a star sticker?",
+    "Certain",
+    ["Impossible", "Unlikely", "Equally likely"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A box has only red cubes. How likely is it to pick a blue cube?",
+    "Impossible",
+    ["Certain", "Likely", "Equally likely"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A basket has 2 pears and 6 oranges. Which fruit are you more likely to pick without looking?",
+    "Orange",
+    ["Pear", "They are equally likely", "Neither can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A fair spinner has 2 equal sections, one yellow and one pink. What is true?",
+    "Yellow and pink are equally likely",
+    ["Yellow is more likely", "Pink is more likely", "Neither can happen"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A bag has 1 black counter and 5 white counters. Which color are you less likely to pick?",
+    "Black",
+    ["White", "They are equally likely", "Neither can be picked"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "If you flip a fair coin once, which result is possible?",
+    "Tails",
+    ["Purple", "7", "A sandwich"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A box has 5 square blocks and no circle blocks. How likely is it to pick a circle block?",
+    "Impossible",
+    ["Certain", "Likely", "Equally likely"],
+    1
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 3 green sections and 3 purple sections. Which statement is true?",
+    "Green and purple are equally likely",
+    ["Green is more likely", "Purple is more likely", "Neither can happen"],
+    1
+  ),
+
   // Level 2: simple die facts and simple fractions out of a total.
   probabilityStaticQuestion(
     "Which result is impossible on a standard 6-sided die?",
@@ -234,6 +296,68 @@ const PROBABILITY_QUESTIONS = [
     "A bowl has 2 chocolate cookies and 6 vanilla cookies. Which cookie is more likely to be picked?",
     "Vanilla",
     ["Chocolate", "They are equally likely", "Neither can be picked"],
+    2
+  ),
+
+  // Additional Level 2 questions: expanded variety.
+  probabilityStaticQuestion(
+    "What is the chance of rolling a 3 on a standard 6-sided die?",
+    "1/6",
+    ["1/2", "1/3", "1/4"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red marbles and 6 blue marbles. What is the chance of picking red?",
+    "1/3",
+    ["1/2", "2/3", "3/6"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 4 red sections and 4 green sections. What is true?",
+    "Red and green are equally likely",
+    ["Red is more likely", "Green is more likely", "Neither can happen"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of rolling a number less than 3 on a standard 6-sided die?",
+    "1/3",
+    ["1/6", "1/2", "2/3"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bag has 7 blue marbles and 1 yellow marble. Which color is less likely to be picked?",
+    "Yellow",
+    ["Blue", "They are equally likely", "Neither can be picked"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A small deck has 2 sun cards and 6 star cards. What is the chance of picking a sun card?",
+    "1/4",
+    ["1/2", "1/3", "3/4"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 10 equal sections and 5 sections are shaded. What is the chance of landing on a shaded section?",
+    "1/2",
+    ["1/5", "1/10", "3/10"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "Which result is impossible on a standard 6-sided die?",
+    "9",
+    ["1", "4", "6"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "When flipping a fair coin, how likely is it to land on red?",
+    "Impossible",
+    ["Certain", "Equally likely", "Likely"],
+    2
+  ),
+  probabilityStaticQuestion(
+    "A bag has 3 red marbles and 3 blue marbles. What is the chance of picking red?",
+    "1/2",
+    ["1/3", "1/6", "2/3"],
     2
   ),
 
@@ -307,6 +431,68 @@ const PROBABILITY_QUESTIONS = [
     3
   ),
 
+  // Additional Level 3 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A bag has 4 red marbles and 6 blue marbles. What is the chance of picking red?",
+    "2/5",
+    ["3/5", "1/2", "4/6"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 8 equal sections, and 5 of them are red. What is the chance of red?",
+    "5/8",
+    ["3/8", "1/2", "1/8"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "Bag A has 6 blue marbles and 4 red marbles. Bag B has 4 blue marbles and 6 red marbles. Which bag gives a better chance of picking blue?",
+    "Bag A",
+    ["Bag B", "They are equally likely", "Neither bag can give blue"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "If you flip 2 fair coins, what is the chance that both coins show the same side?",
+    "1/2",
+    ["1/4", "3/4", "1/3"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of rolling an odd number on a standard 6-sided die?",
+    "1/2",
+    ["1/6", "1/3", "2/3"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A box has 2 red balls, 3 blue balls, and 5 green balls. Which color is most likely to be picked?",
+    "Green",
+    ["Red", "Blue", "All are equally likely"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from cards 1 through 10. What is the chance of choosing an even number?",
+    "1/2",
+    ["1/5", "2/5", "3/5"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 12 equal sections, and 3 of them are blue. What is the chance of blue?",
+    "1/4",
+    ["1/3", "1/2", "3/4"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A bag has 1 red marble, 4 blue marbles, and 5 yellow marbles. Which color is least likely to be picked?",
+    "Red",
+    ["Blue", "Yellow", "All are equally likely"],
+    3
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 4 equal color sections, and 1 section is green. What is the chance of not landing on green?",
+    "3/4",
+    ["1/4", "1/2", "1/3"],
+    3
+  ),
+
   // Level 4: die events, complements, and sample spaces.
   probabilityStaticQuestion(
     "What is the chance of rolling an even number on a standard 6-sided die?",
@@ -366,6 +552,68 @@ const PROBABILITY_QUESTIONS = [
     "A normal die is rolled. Which is more likely?",
     "Rolling a number greater than 2",
     ["Rolling a 1", "They are equally likely", "Rolling a 7"],
+    4
+  ),
+
+  // Additional Level 4 questions: expanded variety.
+  probabilityStaticQuestion(
+    "What is the chance of not rolling a 6 on a standard 6-sided die?",
+    "5/6",
+    ["1/6", "1/2", "2/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from cards 1 through 6. What is the chance of choosing a number greater than 3?",
+    "1/2",
+    ["1/6", "1/3", "2/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 red marbles, 5 blue marbles, and 3 green marbles. What is the chance of picking blue?",
+    "1/2",
+    ["1/5", "3/10", "5/8"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "If you toss 4 fair coins, how many possible outcomes are there altogether?",
+    "16",
+    ["8", "12", "24"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 6 equal sections, and 2 sections are red. What is the chance of not landing on red?",
+    "2/3",
+    ["1/3", "1/2", "1/6"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "What is the chance of rolling a prime number on a standard 6-sided die?",
+    "1/2",
+    ["1/6", "1/3", "2/3"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A bag has 5 red marbles and 0 blue marbles. How likely is it to pick a blue marble?",
+    "Impossible",
+    ["Certain", "Equally likely", "Likely"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from cards 1 through 8. What is the chance of choosing an odd number?",
+    "1/2",
+    ["1/4", "3/4", "1/8"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "A normal die is rolled. Which is more likely?",
+    "Rolling a number less than 5",
+    ["Rolling a 6", "They are equally likely", "Rolling a 7"],
+    4
+  ),
+  probabilityStaticQuestion(
+    "If you toss 3 fair coins, what is the chance that all 3 coins show heads?",
+    "1/8",
+    ["1/2", "1/4", "3/8"],
     4
   ),
 
@@ -431,6 +679,68 @@ const PROBABILITY_QUESTIONS = [
     5
   ),
 
+  // Additional Level 5 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A box has 3 blue balls out of 12 balls. What percentage of the balls are blue?",
+    "25%",
+    ["20%", "30%", "75%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "You flip one fair coin and spin a spinner with 5 equal sections. How many equally likely outcomes are there?",
+    "10",
+    ["5", "7", "12"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 red marbles, 3 blue marbles, and 3 green marbles. Which color is most likely to be picked?",
+    "Red",
+    ["Blue", "Green", "All are equally likely"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 8 equal sections and 2 are star shapes. What is the chance of landing on a star?",
+    "1/4",
+    ["1/8", "1/2", "3/4"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "At lunch, 15 students chose pizza and 5 students chose salad. What percentage chose salad?",
+    "25%",
+    ["20%", "50%", "75%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "You roll one die and pick one card from 3 color cards. How many equally likely outcomes are there?",
+    "18",
+    ["9", "12", "36"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A bus was late 2 days out of 10. What is the experimental probability that it was late?",
+    "20%",
+    ["10%", "50%", "80%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A bag has 6 red marbles and 4 blue marbles. What percentage of the marbles are blue?",
+    "40%",
+    ["30%", "50%", "60%"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "If you flip 2 fair coins, what is the chance of getting exactly one head?",
+    "1/2",
+    ["1/4", "3/4", "1/3"],
+    5
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 10 equal sections and 7 are winning sections. What is the chance of landing on a winning section?",
+    "70%",
+    ["30%", "50%", "7%"],
+    5
+  ),
+
   // Level 6: complements, probability lines, and changing totals after one draw.
   probabilityStaticQuestion(
     "A bag has 4 red marbles and 6 blue marbles. What is the chance of not picking red?",
@@ -490,6 +800,68 @@ const PROBABILITY_QUESTIONS = [
     "A bag has 5 green cubes and 3 yellow cubes. One green cube is removed. What is the chance of picking green now?",
     "4/7",
     ["5/8", "3/7", "1/2"],
+    6
+  ),
+
+  // Additional Level 6 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A bag has 5 red marbles and 15 blue marbles. What is the chance of not picking red?",
+    "3/4",
+    ["1/4", "1/2", "5/15"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A weather report says there is a 60% chance of rain. Which fraction is the same chance?",
+    "3/5",
+    ["2/5", "1/2", "3/4"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A number card is chosen from cards 1 through 12. What is the chance of choosing a multiple of 4?",
+    "1/4",
+    ["1/3", "1/2", "3/4"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 9 equal sections, and 3 sections are green. What is the chance of not landing on green?",
+    "2/3",
+    ["1/3", "1/2", "3/9"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A bag starts with 4 red and 3 blue marbles. One red marble is removed. What is the chance of picking red now?",
+    "1/2",
+    ["4/7", "3/7", "3/4"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "Which event has probability 0?",
+    "Picking blue from a bag with no blue marbles",
+    ["Rolling an even number", "Flipping heads once", "Picking red from a bag with red marbles"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "Which event has probability 1?",
+    "Rolling a number less than 7 on a standard 6-sided die",
+    ["Rolling a 7", "Flipping heads once", "Picking blue from a mixed bag"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A raffle has 9 winning tickets and 21 losing tickets. What is the chance of picking a winning ticket?",
+    "3/10",
+    ["7/10", "9/21", "1/2"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A standard deck has 52 cards and 26 are black. What is the chance of picking a black card?",
+    "1/2",
+    ["1/4", "3/4", "1/13"],
+    6
+  ),
+  probabilityStaticQuestion(
+    "A class has 18 boys and 12 girls. If one student is chosen, what is the chance the student is not a girl?",
+    "3/5",
+    ["2/5", "1/2", "18/12"],
     6
   ),
 
@@ -555,6 +927,68 @@ const PROBABILITY_QUESTIONS = [
     7
   ),
 
+  // Additional Level 7 questions: expanded variety.
+  probabilityStaticQuestion(
+    "You flip a fair coin and spin a 5-section spinner with 1 red section. What is the chance of heads and red?",
+    "1/10",
+    ["1/2", "1/5", "1/7"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner lands on red 1/4 of the time. About how many reds would you expect in 80 spins?",
+    "20",
+    ["10", "40", "60"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A fair die is rolled 120 times. About how many times would you expect an even number?",
+    "60",
+    ["20", "40", "120"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 red and 8 blue marbles. You pick a marble, put it back, and pick again. What is the chance of red then blue?",
+    "4/25",
+    ["1/5", "2/5", "8/10"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A game uses a fair die. Ana wins on odd numbers, and Ben wins on even numbers. Is the game fair?",
+    "Yes, both players have the same chance.",
+    ["No, Ana is more likely to win.", "No, Ben is more likely to win.", "No one can win."],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A card is picked from 6 numbered cards, then a fair coin is flipped. How many equally likely outcomes are there?",
+    "12",
+    ["6", "8", "18"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A card is picked from cards numbered 1 to 12. What is the chance of picking a number greater than 9?",
+    "1/4",
+    ["1/3", "1/2", "3/4"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 3 green sections out of 6 equal sections. About how many greens would you expect in 30 spins?",
+    "15",
+    ["5", "10", "20"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "A spinner pays 8 points on 1 of its 4 equal sections and 0 points otherwise. What is the expected score per spin?",
+    "2 points",
+    ["0 points", "4 points", "8 points"],
+    7
+  ),
+  probabilityStaticQuestion(
+    "Two independent events have chances 1/2 and 1/5. What is the chance both happen?",
+    "1/10",
+    ["1/2", "1/5", "3/10"],
+    7
+  ),
+
   // Level 8: dependent events, simple conditional probability, and at-least-one reasoning.
   probabilityStaticQuestion(
     "A bag has 3 red and 2 blue marbles. You pick one red marble and do not put it back. What is the chance the next marble is red?",
@@ -581,7 +1015,7 @@ const PROBABILITY_QUESTIONS = [
     8
   ),
   probabilityStaticQuestion(
-    "A box has 5 animal cards: cat, dog, fish, bird, and horse. You pick 2 cards without replacement. How many ordered outcomes are possible?",
+    "A box has 5 animal cards: cat, dog, fish, bird, and horse. You pick 2 cards without replacement. Order matters, so cat then dog is different from dog then cat. How many ordered outcomes are possible?",
     "20",
     ["10", "25", "5"],
     8
@@ -614,6 +1048,68 @@ const PROBABILITY_QUESTIONS = [
     "Two dice are rolled. What is the chance the sum is 2?",
     "1/36",
     ["1/6", "1/12", "2/36"],
+    8
+  ),
+
+  // Additional Level 8 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A bag has 5 red and 3 blue marbles. You pick one red marble and do not put it back. What is the chance the next marble is blue?",
+    "3/7",
+    ["3/8", "5/7", "1/2"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Three fair coins are flipped. What is the chance of getting at least one head?",
+    "7/8",
+    ["1/8", "1/2", "3/4"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that the sum is 12?",
+    "1/36",
+    ["1/6", "1/12", "2/36"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A bag has 6 red tokens and 4 blue tokens. You draw 2 tokens without replacement. What is the chance both are red?",
+    "1/3",
+    ["3/5", "1/2", "2/3"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 4 red, 3 blue, and 2 green sections. If you know it did not land on green, what is the chance it landed on blue?",
+    "3/7",
+    ["3/9", "4/7", "1/2"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A student answered 24 questions correctly out of 40. What is the experimental probability of a correct answer?",
+    "3/5",
+    ["2/5", "1/2", "24/100"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A box has 6 animal cards. You pick 2 cards without replacement. Order matters. How many ordered outcomes are possible?",
+    "30",
+    ["12", "15", "36"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A bag has 2 red tokens and 3 blue tokens. You draw 2 tokens without replacement. What is the chance both are red?",
+    "1/10",
+    ["2/5", "1/5", "1/2"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "A fair die is rolled twice. What is the chance of rolling an odd number first and then a 6?",
+    "1/12",
+    ["1/6", "1/9", "1/36"],
+    8
+  ),
+  probabilityStaticQuestion(
+    "Two fair coins are flipped. What is the chance of getting no heads?",
+    "1/4",
+    ["1/2", "3/4", "1/3"],
     8
   ),
 
@@ -679,6 +1175,68 @@ const PROBABILITY_QUESTIONS = [
     9
   ),
 
+  // Additional Level 9 questions: expanded variety.
+  probabilityStaticQuestion(
+    "Four fair coins are flipped. What is the chance of getting exactly two heads?",
+    "3/8",
+    ["1/4", "1/2", "1/16"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that the sum is 5?",
+    "1/9",
+    ["1/6", "1/12", "5/36"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A game pays 10 points if a fair coin lands on heads and 0 points otherwise. What is the expected score?",
+    "5 points",
+    ["0 points", "2 points", "10 points"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "In a simulation, green appeared 72 times in 120 trials. Which is the best estimate of the experimental probability of green?",
+    "60%",
+    ["40%", "72%", "120%"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A password uses one letter A-C followed by one digit 0-9. How many possible passwords are there?",
+    "30",
+    ["13", "20", "90"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A bag has 5 red, 4 blue, and 1 green marble. If you know the marble is not blue, what is the chance it is green?",
+    "1/6",
+    ["1/10", "1/5", "5/6"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A deck has 5 red cards and 5 black cards. You draw 2 cards without replacement. What is the chance both cards are the same color?",
+    "4/9",
+    ["1/2", "5/9", "2/5"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A spinner has probability 3/8 of landing on yellow. About how many yellows should you expect in 160 spins?",
+    "60",
+    ["40", "80", "120"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. What is the chance that the sum is at most 4?",
+    "1/6",
+    ["1/12", "1/9", "1/4"],
+    9
+  ),
+  probabilityStaticQuestion(
+    "A game pays 9 points if a fair die lands on a multiple of 3 and 0 points otherwise. What is the expected score?",
+    "3 points",
+    ["1 point", "6 points", "9 points"],
+    9
+  ),
+
   // Level 10: advanced conditional probability, fairness, and multi-step reasoning.
   probabilityStaticQuestion(
     "A school club has 30 soccer players. Of those soccer players, 12 are girls. If one soccer player is chosen, what is the chance the player is a girl?",
@@ -740,6 +1298,68 @@ const PROBABILITY_QUESTIONS = [
     ["5/12", "7/12", "35/144"],
     10
   ),
+  // Additional Level 10 questions: expanded variety.
+  probabilityStaticQuestion(
+    "A survey has 50 students: 30 like music, 20 like sports, and 12 like both. How many like music or sports?",
+    "38",
+    ["26", "42", "62"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A jar has 6 red and 4 blue marbles. You draw 2 without replacement. What is the chance they are different colors?",
+    "8/15",
+    ["1/2", "4/15", "6/10"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "Five fair coins are flipped. What is the chance of getting exactly two heads?",
+    "5/16",
+    ["1/4", "3/8", "10/25"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A game costs 4 points to play. You win 18 points on a 6 and 0 points otherwise. What is the expected net result per fair die roll?",
+    "Lose 1 point on average",
+    ["Win 14 points on average", "Break even exactly", "Lose 4 points every time"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A bag has 4 red and 6 blue marbles. You draw 2 without replacement. What is the chance both are blue?",
+    "1/3",
+    ["3/5", "1/2", "2/3"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "Two events are independent. Event A has chance 2/5 and Event B has chance 3/10. What is the chance both happen?",
+    "3/25",
+    ["1/5", "1/2", "6/15"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A spinner has 3 red and 2 blue sections. It is spun 4 times. What is the chance of red all 4 times?",
+    "81/625",
+    ["3/5", "12/20", "16/625"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "Two fair dice are rolled. Given that the sum is 7, what is the chance that one die shows 6?",
+    "1/3",
+    ["1/6", "1/2", "2/7"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A game costs 5 points to play. You win 24 points if two fair dice sum to 12, and 0 otherwise. What is the expected net result?",
+    "Lose 4 1/3 points on average",
+    ["Win 19 points on average", "Break even exactly", "Lose 5 points every time"],
+    10
+  ),
+  probabilityStaticQuestion(
+    "A bag has 5 red, 4 blue, and 3 green tiles. You draw 3 without replacement. What is the chance of drawing one tile of each color?",
+    "3/11",
+    ["1/3", "5/12", "1/11"],
+    10
+  ),
+
 ];
 
 function createProbabilityGeneratedEntry(difficulty, options = {}) {

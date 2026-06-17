@@ -164,7 +164,7 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     5
   ),
   mapsQuestion(
-    "A trail starts at the cabin. You walk south, then west, then north. Where are you compared with the cabin?",
+    "A trail starts at the cabin. You walk 1 block south, 1 block west, then 1 block north. Where are you compared with the cabin?",
     ["East", "West", "North", "South"],
     "West",
     5
@@ -224,7 +224,7 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
     "(7, 1)",
     7
   ),
-  mapsQuestion("A route goes north, east, south, east. Which direction from the start matters after the north and south cancel?", ["East", "West", "North", "South"], "East", 7),
+  mapsQuestion("A route goes 1 block north, 1 block east, 1 block south, then 1 block east. Which direction from the start matters after the north and south cancel?", ["East", "West", "North", "South"], "East", 7),
   mapsQuestion("A map key says 1 blue square = 5 water fountains. If the park has 4 blue squares, how many fountains are shown?", ["9", "15", "20", "25"], "20", 7),
   mapsQuestion("If the sun is rising directly in front of you, which direction are you facing?", ["North", "East", "South", "West"], "East", 7),
   mapsQuestion("Which map would best help you compare the heights of hills?", ["Topographic map", "Road map", "Weather map", "Political map"], "Topographic map", 7),

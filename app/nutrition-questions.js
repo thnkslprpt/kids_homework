@@ -85,6 +85,57 @@ const NUTRITION_QUESTIONS = [
     1
   ),
 
+
+  // Additional Level 1 questions: food and drink basics.
+  nutritionQuestion(
+    "Which food is a dairy food?",
+    ["Milk", "Chicken", "Bread", "Soda"],
+    "Milk",
+    1
+  ),
+  nutritionQuestion(
+    "Which food is a grain?",
+    ["Rice", "Egg", "Apple", "Carrot"],
+    "Rice",
+    1
+  ),
+  nutritionQuestion(
+    "Which snack includes a vegetable?",
+    ["Carrot sticks", "Gummy worms", "Soda", "Cotton candy"],
+    "Carrot sticks",
+    1
+  ),
+  nutritionQuestion(
+    "Which food is usually in the protein group?",
+    ["Chicken", "Lemonade", "Jelly beans", "Frosting"],
+    "Chicken",
+    1
+  ),
+  nutritionQuestion(
+    "Which drink has no added sugar by itself?",
+    ["Plain water", "Soda", "Fruit punch", "Chocolate syrup"],
+    "Plain water",
+    1
+  ),
+  nutritionQuestion(
+    "Which choice has a fruit in it?",
+    ["Orange slices", "Potato chips", "Plain crackers", "Cheese cubes"],
+    "Orange slices",
+    1
+  ),
+  nutritionQuestion(
+    "Which food is usually a better everyday snack than a candy bar?",
+    ["Pear slices", "A candy bar", "A bag of marshmallows", "A cup of soda"],
+    "Pear slices",
+    1
+  ),
+  nutritionQuestion(
+    "Which plate has more variety?",
+    ["Rice, beans, broccoli, and fruit", "Only candy", "Only soda", "Only chips"],
+    "Rice, beans, broccoli, and fruit",
+    1
+  ),
+
   // Level 2: simple label math and nutrient jobs.
   nutritionQuestion(
     "A package has 2 servings and 150 calories per serving. How many calories are in the whole package?",
@@ -142,6 +193,57 @@ const NUTRITION_QUESTIONS = [
       "It makes labels disappear",
     ],
     "Different foods give different nutrients",
+    2
+  ),
+
+
+  // Additional Level 2 questions: simple label math and nutrient jobs.
+  nutritionQuestion(
+    "A snack has 3 servings and 100 calories per serving. How many calories are in the whole snack?",
+    ["100", "200", "300", "400"],
+    "300",
+    2
+  ),
+  nutritionQuestion(
+    "What does calcium help build and keep strong?",
+    ["Bones and teeth", "Soda bubbles", "Candy wrappers", "Food coloring"],
+    "Bones and teeth",
+    2
+  ),
+  nutritionQuestion(
+    "Which snack gives both protein and a grain?",
+    ["Peanut butter on whole-grain toast", "Soda with ice", "Candy with frosting", "Gum with water"],
+    "Peanut butter on whole-grain toast",
+    2
+  ),
+  nutritionQuestion(
+    "Which choice is whole fruit instead of a sugary drink?",
+    ["Orange wedges", "Fruit punch", "Soda", "Candy syrup"],
+    "Orange wedges",
+    2
+  ),
+  nutritionQuestion(
+    "A food has 4 grams of fiber per serving. If you eat 2 servings, how much fiber is that?",
+    ["4 grams", "6 grams", "8 grams", "12 grams"],
+    "8 grams",
+    2
+  ),
+  nutritionQuestion(
+    "Which label line tells how many servings are in the package?",
+    ["Servings per container", "Mascot name", "Package color", "Store aisle"],
+    "Servings per container",
+    2
+  ),
+  nutritionQuestion(
+    "Which food usually gives natural sweetness plus fiber?",
+    ["A pear", "A soda", "A lollipop", "A spoon of sugar"],
+    "A pear",
+    2
+  ),
+  nutritionQuestion(
+    "Which label number tells how much energy a food gives?",
+    ["Calories", "Barcode", "Package width", "Brand slogan"],
+    "Calories",
     2
   ),
 
@@ -215,6 +317,57 @@ const NUTRITION_QUESTIONS = [
     3
   ),
 
+
+  // Additional Level 3 questions: added sugar, fiber, and fair comparisons.
+  nutritionQuestion(
+    "Two cereals have the same serving size. Which has less added sugar?",
+    ["Cereal A: 4 grams", "Cereal B: 11 grams", "The cereal with stars", "The cereal in a taller box"],
+    "Cereal A: 4 grams",
+    3
+  ),
+  nutritionQuestion(
+    "Which drink is usually the better everyday choice based on added sugar?",
+    ["Water: 0 grams added sugar", "Fruit drink: 18 grams added sugar", "Soda: 25 grams added sugar", "Sweet tea: 20 grams added sugar"],
+    "Water: 0 grams added sugar",
+    3
+  ),
+  nutritionQuestion(
+    "A granola bar has 7 grams of added sugar per serving. If you eat 2 servings, how much added sugar is that?",
+    ["7 grams", "10 grams", "14 grams", "21 grams"],
+    "14 grams",
+    3
+  ),
+  nutritionQuestion(
+    "When comparing two snack labels, what should be the same first?",
+    ["Serving size", "Wrapper color", "Picture size", "Shelf height"],
+    "Serving size",
+    3
+  ),
+  nutritionQuestion(
+    "If sugar is the first ingredient on a snack label, what does that usually mean?",
+    ["Sugar is one of the main ingredients", "The snack has no sugar", "The package is empty", "The food is a vegetable"],
+    "Sugar is one of the main ingredients",
+    3
+  ),
+  nutritionQuestion(
+    "Which snack is most likely to give fiber?",
+    ["Whole-grain crackers with pear slices", "Hard candy", "Soda", "Cotton candy"],
+    "Whole-grain crackers with pear slices",
+    3
+  ),
+  nutritionQuestion(
+    "Which label clue can help you choose a cereal that may keep you full longer?",
+    ["More fiber per serving", "A brighter box", "A bigger cartoon", "A longer brand name"],
+    "More fiber per serving",
+    3
+  ),
+  nutritionQuestion(
+    "What does total sugar include on a Nutrition Facts label?",
+    ["Natural sugar plus added sugar", "Only package color", "Only salt", "Only protein"],
+    "Natural sugar plus added sugar",
+    3
+  ),
+
   // Level 4: balanced plates, ingredients, and sodium basics.
   nutritionQuestion(
     "On a balanced plate, about what should fill half the plate?",
@@ -280,6 +433,57 @@ const NUTRITION_QUESTIONS = [
     4
   ),
 
+
+  // Additional Level 4 questions: balanced plates, ingredients, and sodium basics.
+  nutritionQuestion(
+    "On a balanced plate, about one quarter can be a protein food. Which choice is a protein food?",
+    ["Beans", "Soda", "Gummy candy", "Frosting"],
+    "Beans",
+    4
+  ),
+  nutritionQuestion(
+    "If the first ingredient on a cookie label is sugar, what does that usually suggest?",
+    ["Sugar is a main ingredient", "The cookie has no calories", "The cookie is a vegetable", "The package is water"],
+    "Sugar is a main ingredient",
+    4
+  ),
+  nutritionQuestion(
+    "Which soup has less sodium per serving?",
+    ["Soup A: 240 mg", "Soup B: 480 mg", "Soup C: 650 mg", "Soup D: 900 mg"],
+    "Soup A: 240 mg",
+    4
+  ),
+  nutritionQuestion(
+    "A soup has 250 mg of sodium per serving and 3 servings in the can. How much sodium is in the whole can?",
+    ["250 mg", "500 mg", "750 mg", "1,000 mg"],
+    "750 mg",
+    4
+  ),
+  nutritionQuestion(
+    "Which lunch includes fruit, a vegetable, a grain, and protein?",
+    ["Chicken wrap with lettuce and apple slices", "Only cookies", "Only soda", "Only plain chips"],
+    "Chicken wrap with lettuce and apple slices",
+    4
+  ),
+  nutritionQuestion(
+    "Which bread choice is most clearly whole grain?",
+    ["100% whole wheat bread", "White bread", "Candy bread", "Soda crackers with frosting"],
+    "100% whole wheat bread",
+    4
+  ),
+  nutritionQuestion(
+    "Why can choosing lower-sodium foods be helpful?",
+    ["It can support healthy blood pressure", "It turns food into water", "It removes all calories", "It makes labels unnecessary"],
+    "It can support healthy blood pressure",
+    4
+  ),
+  nutritionQuestion(
+    "Which ingredient list sounds least processed?",
+    ["Oats, raisins, cinnamon", "Sugar, syrup, dye, candy", "Soda flavor, dye, bubbles", "Frosting, sprinkles, syrup"],
+    "Oats, raisins, cinnamon",
+    4
+  ),
+
   // Level 5: multi-serving label calculations and everyday choices.
   nutritionQuestion(
     "Which snack is usually the better everyday choice?",
@@ -337,6 +541,57 @@ const NUTRITION_QUESTIONS = [
       "Eat only sugar",
     ],
     "Add protein or fiber, like nuts or fruit",
+    5
+  ),
+
+
+  // Additional Level 5 questions: multi-serving label calculations and everyday choices.
+  nutritionQuestion(
+    "A snack box has 3 servings and 130 calories per serving. How many calories are in the whole box?",
+    ["130", "260", "390", "520"],
+    "390",
+    5
+  ),
+  nutritionQuestion(
+    "A yogurt has 6 grams of protein per serving. If you eat 3 servings, how much protein is that?",
+    ["6 grams", "12 grams", "18 grams", "24 grams"],
+    "18 grams",
+    5
+  ),
+  nutritionQuestion(
+    "Which snack has the least added sugar?",
+    ["Unsweetened applesauce", "Fruit snacks", "Soda", "Chocolate cookies"],
+    "Unsweetened applesauce",
+    5
+  ),
+  nutritionQuestion(
+    "Which dinner has the best mix of food groups?",
+    ["Salmon, quinoa, green beans, and orange slices", "Only candy", "Only soda", "Only white bread"],
+    "Salmon, quinoa, green beans, and orange slices",
+    5
+  ),
+  nutritionQuestion(
+    "Which snack combines protein and fiber?",
+    ["Greek yogurt with apple slices", "Soda", "Cotton candy", "Plain hard candy"],
+    "Greek yogurt with apple slices",
+    5
+  ),
+  nutritionQuestion(
+    "Which bread label is usually better for getting more fiber?",
+    ["Fiber: 4 grams", "Fiber: 1 gram", "Added sugar: 18 grams", "Sodium: 700 mg"],
+    "Fiber: 4 grams",
+    5
+  ),
+  nutritionQuestion(
+    "Pretzels have 160 mg of sodium per serving. If you eat 2 servings, how much sodium is that?",
+    ["160 mg", "240 mg", "320 mg", "480 mg"],
+    "320 mg",
+    5
+  ),
+  nutritionQuestion(
+    "Which swap adds a vegetable to lunch?",
+    ["Add cucumber slices to a sandwich", "Replace water with soda", "Remove the apple", "Eat only candy"],
+    "Add cucumber slices to a sandwich",
     5
   ),
 
@@ -405,15 +660,66 @@ const NUTRITION_QUESTIONS = [
     6
   ),
 
+
+  // Additional Level 6 questions: label trade-offs and percentages.
+  nutritionQuestion(
+    "A drink has 12 grams of added sugar per serving and 3 servings in the bottle. How much added sugar is in the bottle?",
+    ["12 grams", "24 grams", "36 grams", "48 grams"],
+    "36 grams",
+    6
+  ),
+  nutritionQuestion(
+    "A label says Iron: 20% Daily Value. What does that mean?",
+    ["One serving gives about one fifth of a day's suggested amount", "The package is 20% iron", "You must eat 20 servings", "The food has 20 colors"],
+    "One serving gives about one fifth of a day's suggested amount",
+    6
+  ),
+  nutritionQuestion(
+    "Which food gives the most fiber per serving?",
+    ["Split peas: 8 grams", "White rice: 1 gram", "Soda: 0 grams", "Hard candy: 0 grams"],
+    "Split peas: 8 grams",
+    6
+  ),
+  nutritionQuestion(
+    "Which food pairing gives carbohydrates plus protein?",
+    ["Whole-wheat pita with hummus", "Soda and candy", "Ice and salt", "Gum and water"],
+    "Whole-wheat pita with hummus",
+    6
+  ),
+  nutritionQuestion(
+    "A bottle has 2 servings and 250 calories per serving. How many calories are in the whole bottle?",
+    ["250 calories", "375 calories", "500 calories", "750 calories"],
+    "500 calories",
+    6
+  ),
+  nutritionQuestion(
+    "Which soup has less sodium per serving?",
+    ["Soup A: 360 mg", "Soup B: 620 mg", "Soup C: 780 mg", "Soup D: 900 mg"],
+    "Soup A: 360 mg",
+    6
+  ),
+  nutritionQuestion(
+    "What does % Daily Value help you compare?",
+    ["How much of a nutrient one serving provides", "How bright the package is", "How loud the food crunches", "How tall the box is"],
+    "How much of a nutrient one serving provides",
+    6
+  ),
+  nutritionQuestion(
+    "Based only on these labels, which snack is the better everyday choice?",
+    ["Fiber 5 g, added sugar 4 g", "Fiber 1 g, added sugar 18 g", "Fiber 0 g, added sugar 20 g", "Fiber 2 g, added sugar 16 g"],
+    "Fiber 5 g, added sugar 4 g",
+    6
+  ),
+
   // Level 7: unit comparisons and ingredient reasoning.
   nutritionQuestion(
-    "Two yogurts have the same serving size. Yogurt A has 6 grams of added sugar and Yogurt B has 14 grams. Which is usually the better everyday choice?",
+    "Two yogurts have the same serving size. Yogurt A has 6 grams of added sugar and Yogurt B has 14 grams. Based only on these label facts, which is the better everyday choice?",
     ["Yogurt A", "Yogurt B", "Whichever has a cartoon", "Whichever has a bigger lid"],
     "Yogurt A",
     7
   ),
   nutritionQuestion(
-    "A cereal serving has 4 grams of fiber and 8 grams of added sugar. A second cereal has 1 gram of fiber and 15 grams of added sugar. Which is usually better for fiber and sugar?",
+    "A cereal serving has 4 grams of fiber and 8 grams of added sugar. A second cereal has 1 gram of fiber and 15 grams of added sugar. Based only on these label facts, which is better for fiber and sugar?",
     ["The first cereal", "The second cereal", "They are identical", "The box color decides"],
     "The first cereal",
     7
@@ -447,7 +753,7 @@ const NUTRITION_QUESTIONS = [
     7
   ),
   nutritionQuestion(
-    "A granola bar has 180 calories, 2 grams fiber, and 14 grams added sugar. A fruit-and-nut bar has 170 calories, 5 grams fiber, and 5 grams added sugar. Which is usually the better everyday choice?",
+    "A granola bar has 180 calories, 2 grams fiber, and 14 grams added sugar. A fruit-and-nut bar has 170 calories, 5 grams fiber, and 5 grams added sugar. Based only on these label facts, which is the better everyday choice?",
     ["The fruit-and-nut bar", "The granola bar", "They are exactly the same", "The taller wrapper"],
     "The fruit-and-nut bar",
     7
@@ -472,6 +778,57 @@ const NUTRITION_QUESTIONS = [
       "Only a spoon of sugar",
     ],
     "Whole-grain pita, eggs, cucumber, and water",
+    7
+  ),
+
+
+  // Additional Level 7 questions: unit comparisons and ingredient reasoning.
+  nutritionQuestion(
+    "Two yogurts have the same serving size. Which is better based on more protein and less added sugar?",
+    ["Yogurt A: 12 g protein, 5 g added sugar", "Yogurt B: 6 g protein, 13 g added sugar", "The yogurt with a cartoon", "The yogurt with a bigger lid"],
+    "Yogurt A: 12 g protein, 5 g added sugar",
+    7
+  ),
+  nutritionQuestion(
+    "A label says 12% Daily Value for vitamin D per serving. If you eat 2 servings, about how much Daily Value is that?",
+    ["12%", "18%", "24%", "36%"],
+    "24%",
+    7
+  ),
+  nutritionQuestion(
+    "Which ingredient list suggests the most whole-grain bread?",
+    ["Whole wheat flour, water, yeast", "Sugar, white flour, syrup", "Corn syrup, frosting, dye", "Salt, candy pieces, oil"],
+    "Whole wheat flour, water, yeast",
+    7
+  ),
+  nutritionQuestion(
+    "Why is the word \"multigrain\" not enough by itself to prove a bread is whole grain?",
+    ["It may have several grains that are not whole grains", "It means the bread has no calories", "It proves the bread is a dessert", "It replaces the ingredient list"],
+    "It may have several grains that are not whole grains",
+    7
+  ),
+  nutritionQuestion(
+    "A bar has 160 calories, 6 g fiber, and 3 g added sugar. Another bar has 160 calories, 1 g fiber, and 14 g added sugar. Which is better based on fiber and added sugar?",
+    ["The first bar", "The second bar", "They are identical", "The wrapper color decides"],
+    "The first bar",
+    7
+  ),
+  nutritionQuestion(
+    "Which choice best explains why nuts can make a snack filling?",
+    ["They provide protein and healthy fats", "They contain no energy", "They are only decorations", "They turn into water"],
+    "They provide protein and healthy fats",
+    7
+  ),
+  nutritionQuestion(
+    "Which meal would give steady energy for a school morning?",
+    ["Oatmeal, milk, berries, and water", "Only soda", "Only candy", "Only frosting"],
+    "Oatmeal, milk, berries, and water",
+    7
+  ),
+  nutritionQuestion(
+    "Two crackers have the same serving size. Which is the better choice based on sodium?",
+    ["Cracker A: 110 mg sodium", "Cracker B: 320 mg sodium", "The cracker with the shinier bag", "The cracker with a bigger logo"],
+    "Cracker A: 110 mg sodium",
     7
   ),
 
@@ -532,7 +889,7 @@ const NUTRITION_QUESTIONS = [
     8
   ),
   nutritionQuestion(
-    "Which food label would usually be best for a high-fiber cereal?",
+    "Based only on the label information shown, which food label is best for a high-fiber cereal?",
     [
       "Fiber 7 g, added sugar 4 g",
       "Fiber 1 g, added sugar 18 g",
@@ -562,6 +919,57 @@ const NUTRITION_QUESTIONS = [
       "Carbohydrates are the same as water",
     ],
     "Whole-grain and high-fiber carbohydrates can be useful energy foods",
+    8
+  ),
+
+
+  // Additional Level 8 questions: meal planning and label analysis.
+  nutritionQuestion(
+    "A snack pack has 4 servings. Each serving has 95 calories and 5 grams of added sugar. What are the totals for the whole pack?",
+    ["380 calories and 20 grams added sugar", "95 calories and 20 grams added sugar", "380 calories and 5 grams added sugar", "190 calories and 10 grams added sugar"],
+    "380 calories and 20 grams added sugar",
+    8
+  ),
+  nutritionQuestion(
+    "Which lunch is most balanced for everyday eating?",
+    ["Turkey, brown rice, spinach salad, peach, and water", "Only fries and soda", "Only cookies", "Only white rice"],
+    "Turkey, brown rice, spinach salad, peach, and water",
+    8
+  ),
+  nutritionQuestion(
+    "Based only on the label information shown, which cereal is best for fiber and added sugar?",
+    ["Fiber 8 g, added sugar 5 g", "Fiber 1 g, added sugar 19 g", "Fiber 0 g, added sugar 22 g", "Fiber 2 g, added sugar 17 g"],
+    "Fiber 8 g, added sugar 5 g",
+    8
+  ),
+  nutritionQuestion(
+    "Which choice adds healthy fat to a balanced meal?",
+    ["Avocado slices", "Soda", "Cotton candy", "Hard candy"],
+    "Avocado slices",
+    8
+  ),
+  nutritionQuestion(
+    "Which statement about whole grains is most accurate?",
+    ["They can provide fiber and useful energy", "They are the same as candy", "They contain no nutrients", "They replace drinking water"],
+    "They can provide fiber and useful energy",
+    8
+  ),
+  nutritionQuestion(
+    "A soup has 650 mg sodium per serving and 3 servings per container. What is the sodium total for the container?",
+    ["650 mg", "1,300 mg", "1,950 mg", "2,600 mg"],
+    "1,950 mg",
+    8
+  ),
+  nutritionQuestion(
+    "Two snacks have the same serving size. Which label is the stronger everyday choice?",
+    ["Protein 8 g, fiber 5 g, added sugar 3 g", "Protein 2 g, fiber 1 g, added sugar 18 g", "Protein 0 g, fiber 0 g, added sugar 22 g", "Protein 1 g, fiber 1 g, added sugar 20 g"],
+    "Protein 8 g, fiber 5 g, added sugar 3 g",
+    8
+  ),
+  nutritionQuestion(
+    "What is a good way to make a fruit smoothie more balanced?",
+    ["Add plain yogurt for protein", "Add only candy syrup", "Remove all fruit", "Use soda instead of milk"],
+    "Add plain yogurt for protein",
     8
   ),
 
@@ -617,7 +1025,7 @@ const NUTRITION_QUESTIONS = [
     9
   ),
   nutritionQuestion(
-    "Which label would usually be best for an everyday soup choice?",
+    "Based only on the label information shown, which label is best for an everyday soup choice?",
     [
       "Lower sodium, vegetables, and some protein",
       "Highest sodium and no vegetables",
@@ -650,6 +1058,57 @@ const NUTRITION_QUESTIONS = [
     9
   ),
 
+
+  // Additional Level 9 questions: claims, trade-offs, and nutrition decisions.
+  nutritionQuestion(
+    "A cookie package says \"organic\" but has 16 grams of added sugar per serving. What should you do?",
+    ["Check the whole label before deciding", "Assume it has no sugar", "Ignore the serving size", "Eat the package label"],
+    "Check the whole label before deciding",
+    9
+  ),
+  nutritionQuestion(
+    "Why can trail mix be filling in a small serving?",
+    ["It can provide protein, fiber, and healthy fats", "It contains no energy", "It is mostly air", "It is always a drink"],
+    "It can provide protein, fiber, and healthy fats",
+    9
+  ),
+  nutritionQuestion(
+    "Which food has the lowest added sugar per 100 grams?",
+    ["Food A: 3 g", "Food B: 8 g", "Food C: 13 g", "Food D: 18 g"],
+    "Food A: 3 g",
+    9
+  ),
+  nutritionQuestion(
+    "A child has sports practice in one hour. Which snack is usually a reasonable choice?",
+    ["Whole-grain toast with banana and water", "Only an energy drink", "Only candy", "Nothing but salt"],
+    "Whole-grain toast with banana and water",
+    9
+  ),
+  nutritionQuestion(
+    "Which evidence best supports choosing one soup more often?",
+    ["It has lower sodium, vegetables, and beans", "It has the brightest can", "It has the biggest logo", "It is on the tallest shelf"],
+    "It has lower sodium, vegetables, and beans",
+    9
+  ),
+  nutritionQuestion(
+    "Why can a small bag of chips still have a lot of calories or sodium?",
+    ["The bag may contain more than one serving", "Small bags never have labels", "Sodium disappears in small bags", "Calories only count in big boxes"],
+    "The bag may contain more than one serving",
+    9
+  ),
+  nutritionQuestion(
+    "Two yogurts have the same serving size. Which has more protein?",
+    ["Yogurt A: 14 g protein", "Yogurt B: 8 g protein", "The yogurt with the blue lid", "The yogurt with a bigger picture"],
+    "Yogurt A: 14 g protein",
+    9
+  ),
+  nutritionQuestion(
+    "A juice drink says \"contains vitamin C\" but has 28 grams of added sugar. What is the best conclusion?",
+    ["The claim is only one fact, so check the full label", "The added sugar does not count", "It must be exactly the same as water", "The serving size is always one sip"],
+    "The claim is only one fact, so check the full label",
+    9
+  ),
+
   // Level 10: multi-step reasoning and evidence-based food choices.
   nutritionQuestion(
     "A label says 4 servings per bag, 160 calories per serving, and 5 grams of fiber per serving. What are the totals for the whole bag?",
@@ -663,7 +1122,7 @@ const NUTRITION_QUESTIONS = [
     10
   ),
   nutritionQuestion(
-    "Which cereal is usually the strongest everyday choice?",
+    "Based only on the label information shown, which cereal is the strongest everyday choice?",
     [
       "Fiber 6 g, added sugar 3 g, whole oats first",
       "Fiber 0 g, added sugar 18 g, sugar first",
@@ -739,6 +1198,57 @@ const NUTRITION_QUESTIONS = [
     "420 calories, 18 grams added sugar, 500 mg sodium",
     10
   ),
+
+  // Additional Level 10 questions: multi-step reasoning and evidence-based food choices.
+  nutritionQuestion(
+    "A label says 5 servings per box, 140 calories per serving, and 4 grams of fiber per serving. What are the totals for the whole box?",
+    ["700 calories and 20 grams fiber", "140 calories and 20 grams fiber", "700 calories and 4 grams fiber", "560 calories and 16 grams fiber"],
+    "700 calories and 20 grams fiber",
+    10
+  ),
+  nutritionQuestion(
+    "Based only on the label information shown, which cereal is the strongest everyday choice?",
+    ["Fiber 7 g, added sugar 2 g, whole wheat first", "Fiber 0 g, added sugar 20 g, sugar first", "Fiber 1 g, added sugar 16 g, syrup first", "Fiber 2 g, added sugar 15 g, candy pieces"],
+    "Fiber 7 g, added sugar 2 g, whole wheat first",
+    10
+  ),
+  nutritionQuestion(
+    "A smoothie has fruit, plain yogurt, and no added sugar. A soda has 40 grams of added sugar and no protein. Which evidence supports choosing the smoothie more often?",
+    ["It provides fruit and protein with no added sugar", "It has fewer bubbles", "It is served in a cup", "It can use a shorter straw"],
+    "It provides fruit and protein with no added sugar",
+    10
+  ),
+  nutritionQuestion(
+    "Which statement shows the best nutrition reasoning?",
+    ["Healthy eating is about patterns, portions, and variety over time", "One food decides health forever", "All packaged foods are identical", "Green packages are always healthiest"],
+    "Healthy eating is about patterns, portions, and variety over time",
+    10
+  ),
+  nutritionQuestion(
+    "A child had a salty lunch. Which dinner choice best balances the day?",
+    ["Beans, roasted vegetables, fruit, and water", "Extra salty chips and soda", "Only candy", "Only crackers"],
+    "Beans, roasted vegetables, fruit, and water",
+    10
+  ),
+  nutritionQuestion(
+    "Which food claim should be checked most carefully against the Nutrition Facts label?",
+    ["A sweet snack says \"made with whole grains\"", "A banana is yellow", "A plain egg has a shell", "A cucumber contains water"],
+    "A sweet snack says \"made with whole grains\"",
+    10
+  ),
+  nutritionQuestion(
+    "Which lunch best balances energy, protein, fiber, and vegetables?",
+    ["Bean chili, brown rice, salad, berries, and water", "Soda, candy, and chips", "Only white bread", "Only dessert"],
+    "Bean chili, brown rice, salad, berries, and water",
+    10
+  ),
+  nutritionQuestion(
+    "A snack has 3 servings. Each serving has 180 calories, 6 grams added sugar, and 210 mg sodium. What are the package totals?",
+    ["540 calories, 18 grams added sugar, 630 mg sodium", "180 calories, 18 grams added sugar, 210 mg sodium", "540 calories, 6 grams added sugar, 210 mg sodium", "630 calories, 18 grams added sugar, 540 mg sodium"],
+    "540 calories, 18 grams added sugar, 630 mg sodium",
+    10
+  ),
+
 ];
 
 function createNutritionGeneratedEntry(difficulty) {
@@ -945,7 +1455,7 @@ function nutritionCreateSugarComparisonQuestion() {
   const right = left + nutritionRandomChoice([2, 3, 4, 5]);
 
   return nutritionQuestion(
-    "Which cereal is usually the better choice if you want less added sugar?",
+    "Based only on added sugar, which cereal is the better choice?",
     [
       `Cereal A: ${left} grams of added sugar`,
       `Cereal B: ${right} grams of added sugar`,
@@ -1122,7 +1632,7 @@ function nutritionCreateCarbProteinPairQuestion() {
 
 function nutritionCreateTwoNutrientComparisonQuestion() {
   return nutritionQuestion(
-    "Which cereal is usually better for fiber and added sugar?",
+    "Based only on fiber and added sugar, which cereal is better?",
     [
       "Cereal A: 5 g fiber, 4 g added sugar",
       "Cereal B: 1 g fiber, 15 g added sugar",
@@ -1211,7 +1721,7 @@ function nutritionCreateMealPlanningQuestion() {
 
 function nutritionCreateHighFiberCerealQuestion() {
   return nutritionQuestion(
-    "Which food label would usually be best for a high-fiber cereal?",
+    "Based only on the label information shown, which food label is best for a high-fiber cereal?",
     [
       "Fiber 7 g, added sugar 4 g",
       "Fiber 1 g, added sugar 18 g",
@@ -1317,7 +1827,7 @@ function nutritionCreateMultiNutrientTotalsQuestion() {
 
 function nutritionCreateBestCerealQuestion() {
   return nutritionQuestion(
-    "Which cereal is usually the strongest everyday choice?",
+    "Based only on the label information shown, which cereal is the strongest everyday choice?",
     [
       "Fiber 6 g, added sugar 3 g, whole oats first",
       "Fiber 0 g, added sugar 18 g, sugar first",

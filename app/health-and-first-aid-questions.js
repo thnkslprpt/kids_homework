@@ -57,7 +57,7 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away?",
+    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away? If there are serious symptoms, call emergency services.",
     options: [
       "Israel Poison Information Center: 04-777-1900",
       "The pizza shop",
@@ -173,7 +173,7 @@ const HEALTH_AND_FIRST_AID_QUESTIONS = [
     difficulty: 4,
   },
   {
-    question: "If someone may be poisoned in Israel but is awake and breathing normally, what is the correct action?",
+    question: "If someone may be poisoned in Israel but is awake and breathing normally, what is the correct action? If there are serious symptoms, call emergency services.",
     options: [
       "Call the Israel Poison Information Center at 04-777-1900",
       "Call the toy store",
@@ -335,7 +335,7 @@ function healthCreateBandageQuestion() {
 
 function healthCreatePoisonQuestion() {
   return {
-    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away?",
+    question: "If someone may have swallowed poison in Israel and they are awake with no serious symptoms, who should you call right away? If there are serious symptoms, call emergency services.",
     options: [
       "Israel Poison Information Center: 04-777-1900",
       "The pizza shop",

@@ -67,7 +67,7 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("Start on January 5. After 10 full days pass, what date is it?", "January 15", ["January 13", "January 14", "January 15", "January 16"], 3),
 
   // Level 4: longer offsets, month offsets, and school-week thinking.
-  calendarStatic("School starts on Monday and lasts for 5 school days. On which day does it end?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
+  calendarStatic("School starts on Monday. Counting Monday as day 1, it lasts for 5 school days. On which day does it end?", "Friday", ["Thursday", "Friday", "Saturday", "Sunday"], 4),
   calendarStatic("Start on August 12. After 7 full days pass, what date is it?", "August 19", ["August 17", "August 18", "August 19", "August 20"], 4),
   calendarStatic("Which month is 3 months after February?", "May", ["April", "May", "June", "July"], 4),
   calendarStatic("If today is Sunday, what day will it be in 9 days?", "Tuesday", ["Monday", "Tuesday", "Wednesday", "Thursday"], 4),
