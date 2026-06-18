@@ -999,10 +999,11 @@ function createMoneyStoryQuestion(difficulty = 1) {
   const spend = appliedWordProblemRandomChoice(ranges.spends.filter((value) => value < start));
   const bonus = appliedWordProblemRandomChoice(ranges.bonuses);
   const answer = start - spend + bonus;
+  const bonusClause = bonus === 0 ? "" : `, and then gets ${bonus} shekels back`;
 
   return appliedWordProblemBuildQuestion({
     question: "How much money is left?",
-    displayText: `A child has ${start} shekels, spends ${spend} shekels, and then gets ${bonus} shekels back.`,
+    displayText: `A child has ${start} shekels, spends ${spend} shekels${bonusClause}.`,
     options: appliedWordProblemBuildNumericOptions(answer, "shekels", [answer - 10, answer - 5, answer + 5]),
     answer: `${answer} shekels`,
     difficulty,
@@ -1015,10 +1016,13 @@ function createGroupingQuestion(difficulty = 1) {
   const each = appliedWordProblemRandomInt(2, difficulty <= 2 ? 5 : 8);
   const extra = appliedWordProblemRandomInt(0, difficulty <= 2 ? 3 : 6);
   const answer = groups * each + extra;
+  const extraClause = extra === 0
+    ? ""
+    : `, and ${appliedWordProblemCountNoun(extra, "more item")} ${appliedWordProblemBeForCount(extra)} added`;
 
   return appliedWordProblemBuildQuestion({
     question: "How many items are there altogether?",
-    displayText: `There are ${groups} groups with ${each} items in each group, and ${extra} more items are added.`,
+    displayText: `There are ${groups} groups with ${each} items in each group${extraClause}.`,
     options: appliedWordProblemBuildNumericOptions(answer, "", [answer - groups, answer - each, answer + extra + 1]),
     answer: String(answer),
     difficulty,
@@ -1228,10 +1232,13 @@ function createRecipeScalingQuestion(difficulty = 5) {
   const perBatch = appliedWordProblemRandomChoice([2, 3, 4, 5]);
   const extra = appliedWordProblemRandomChoice([0, 1, 2]);
   const answer = batches * perBatch + extra;
+  const extraClause = extra === 0
+    ? ""
+    : ` and adds ${appliedWordProblemCountNoun(extra, "extra cup")}`;
 
   return appliedWordProblemBuildQuestion({
     question: "How many cups are needed in all?",
-    displayText: `One batch needs ${perBatch} cups of flour. The baker makes ${batches} batches and adds ${extra} extra cups.`,
+    displayText: `One batch needs ${perBatch} cups of flour. The baker makes ${batches} batches${extraClause}.`,
     options: appliedWordProblemBuildNumericOptions(answer, "cups", [answer - perBatch, answer - 1, answer + 2]),
     answer: `${answer} cups`,
     difficulty,
@@ -1536,19 +1543,21 @@ function createPlanComparisonQuestion(difficulty = 10) {
 
 function createContainerRemainderQuestion(difficulty = 10) {
   const totalMl = appliedWordProblemRandomChoice([4000, 5000, 6000]);
-  const largeCount = appliedWordProblemRandomChoice([4, 5, 6]);
   const largeMl = appliedWordProblemRandomChoice([500, 750]);
+  const maxLargeCount = Math.floor(totalMl / largeMl);
+  const largeCount = appliedWordProblemRandomChoice([4, 5, 6].filter((count) => count <= maxLargeCount));
   const smallMl = 250;
   const remaining = totalMl - largeCount * largeMl;
   const answer = Math.floor(remaining / smallMl);
+  const smallJarText = (value) => appliedWordProblemCountNoun(value, "small jar");
 
   return appliedWordProblemBuildQuestion({
     question: "How many small jars can be filled?",
     displayText: `A cook has ${formatAppliedNumber(totalMl / 1000)} liters of sauce. She fills ${largeCount} large jars of ${largeMl} mL each, then uses the rest for small ${smallMl} mL jars.`,
-    options: appliedWordProblemBuildNumericOptions(answer, "small jars", [answer - 2, answer - 1, answer + 1]),
-    answer: `${answer} small jars`,
+    options: appliedWordProblemBuildNumericOptions(answer, smallJarText, [answer - 2, answer - 1, answer + 1]),
+    answer: smallJarText(answer),
     difficulty,
-    visualSummary: `${remaining} mL remain, enough for ${answer} small jars.`,
+    visualSummary: `${remaining} mL remain, enough for ${smallJarText(answer)}.`,
   });
 }
 
@@ -1575,7 +1584,7 @@ function createOptimizationSeatingQuestion(difficulty = 10) {
 
   return appliedWordProblemBuildQuestion({
     question: "How many tables are needed?",
-    displayText: `A dinner has ${guests} guests. Each table seats ${seats} people. ${reserved} tables are reserved for supplies and cannot seat guests.`,
+    displayText: `A dinner has ${guests} guests. Each table seats ${seats} people. ${appliedWordProblemCountNoun(reserved, "table")} ${appliedWordProblemBeForCount(reserved)} reserved for supplies and cannot seat guests.`,
     options: appliedWordProblemBuildNumericOptions(answer, "tables", [answer - 2, answer - 1, answer + 1]),
     answer: `${answer} tables`,
     difficulty,
@@ -1615,13 +1624,12 @@ function appliedWordProblemFirstUniqueOptions(answer, candidates, count = 3) {
 }
 
 function appliedWordProblemBuildOptions(answer, candidates, suffix = "") {
-  const normalizedAnswer = suffix ? `${answer} ${suffix}`.trim() : String(answer).trim();
+  const formatOption = appliedWordProblemOptionFormatter(suffix);
+  const normalizedAnswer = formatOption(answer);
   const options = Array.from(
     new Set([
       normalizedAnswer,
-      ...candidates.map((candidate) =>
-        suffix ? `${candidate} ${suffix}`.trim() : String(candidate).trim()
-      ),
+      ...candidates.map(formatOption),
     ])
   );
 
@@ -1665,6 +1673,28 @@ function appliedWordProblemBuildNumericOptions(answer, suffix = "", preferredDis
   ].forEach(addDistractor);
 
   return appliedWordProblemBuildOptions(formatAppliedNumber(numericAnswer), Array.from(distractorSet).slice(0, 3), suffix);
+}
+
+function appliedWordProblemNounForCount(count, singular, plural = `${singular}s`) {
+  return Number(count) === 1 ? singular : plural;
+}
+
+function appliedWordProblemCountNoun(count, singular, plural = `${singular}s`) {
+  return `${count} ${appliedWordProblemNounForCount(count, singular, plural)}`;
+}
+
+function appliedWordProblemBeForCount(count) {
+  return Number(count) === 1 ? "is" : "are";
+}
+
+function appliedWordProblemOptionFormatter(suffix) {
+  if (typeof suffix === "function") {
+    return (value) => String(suffix(Number(value))).trim();
+  }
+  if (suffix && typeof suffix === "object") {
+    return (value) => appliedWordProblemCountNoun(value, suffix.singular, suffix.plural).trim();
+  }
+  return (value) => (suffix ? `${value} ${suffix}` : String(value)).trim();
 }
 
 function buildAppliedWordProblemTable(title, rows) {

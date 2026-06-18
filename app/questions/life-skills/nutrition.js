@@ -1917,6 +1917,14 @@ function nutritionClampDifficulty(difficulty) {
   return Math.min(10, Math.max(1, value));
 }
 
+function nutritionNounForCount(count, singular, plural = `${singular}s`) {
+  return Number(count) === 1 ? singular : plural;
+}
+
+function nutritionCountNoun(count, singular, plural = `${singular}s`) {
+  return `${count} ${nutritionNounForCount(count, singular, plural)}`;
+}
+
 function nutritionPick(values) {
   return nutritionRandomChoice(values);
 }
@@ -1954,12 +1962,13 @@ function nutritionShuffle(values) {
     const amount = randomChoice([1, 2, 3, 4]);
     const batches = randomInt(2, difficulty >= 6 ? 5 : 3);
     const answer = amount * batches;
+    const cupText = (value) => nutritionCountNoun(value, "cup");
     return entry({
       topic: "nutrition-recipes",
       difficulty,
-      question: `A recipe needs ${amount} cups of ${ingredient} for one batch. How much for ${batches} batches?`,
-      answer: `${answer} cups`,
-      options: numberOptions(answer, [-amount, -1, 1, amount, batches], 1).map((value) => `${value} cups`),
+      question: `A recipe needs ${cupText(amount)} of ${ingredient} for one batch. How much for ${batches} batches?`,
+      answer: cupText(answer),
+      options: numberOptions(answer, [-amount, -1, 1, amount, batches], 1).map(cupText),
     });
   }
 
@@ -1972,7 +1981,7 @@ function nutritionShuffle(values) {
       topic: "nutrition-reading-labels",
       difficulty,
       question: askCalories ? "How many calories are in two servings?" : "Which label item tells you the amount counted as one serving?",
-      visualHtml: renderTable("Snack label", [["Serving size", `${serving} cup`], ["Calories", calories], ["Added sugar", `${sugar} g`]]),
+      visualHtml: renderTable("Snack label", [["Serving size", nutritionCountNoun(serving, "cup")], ["Calories", calories], ["Added sugar", `${sugar} g`]]),
       answer: askCalories ? `${calories * 2} calories` : "Serving size",
       options: askCalories
         ? [`${calories * 2} calories`, `${calories} calories`, `${calories + 2} calories`, `${sugar * 2} calories`]

@@ -514,16 +514,16 @@ function spatialGenerateCoordinateTurn(difficulty) {
   const y = spatialRandomInt(1, 4);
   const clockwise = Math.random() < 0.5;
   const answer = clockwise
-    ? `${y} squares right and ${x} squares down`
-    : `${y} squares left and ${x} squares up`;
+    ? `${spatialStepText(y, "right")} and ${spatialStepText(x, "down")}`
+    : `${spatialStepText(y, "left")} and ${spatialStepText(x, "up")}`;
   return spatialMakeEntry(
     difficulty,
-    `Point A is ${x} squares right and ${y} squares up from the start. After a quarter-turn ${clockwise ? "clockwise" : "counterclockwise"} around the start, where is A?`,
+    `Point A is ${spatialStepText(x, "right")} and ${spatialStepText(y, "up")} from the start. After a quarter-turn ${clockwise ? "clockwise" : "counterclockwise"} around the start, where is A?`,
     answer,
     [
-      `${x} squares right and ${y} squares down`,
-      `${y} squares right and ${x} squares up`,
-      `${x} squares left and ${y} squares up`,
+      `${spatialStepText(x, "right")} and ${spatialStepText(y, "down")}`,
+      `${spatialStepText(y, "right")} and ${spatialStepText(x, "up")}`,
+      `${spatialStepText(x, "left")} and ${spatialStepText(y, "up")}`,
     ]
   );
 }
@@ -535,10 +535,22 @@ function spatialGenerateCubeCount(difficulty) {
   const answer = length * width * height;
   return spatialMakeEntry(
     difficulty,
-    `A rectangular prism is ${length} cubes long, ${width} cubes wide, and ${height} cubes high. How many small cubes make it?`,
+    `A rectangular prism is ${spatialCountNoun(length, "cube")} long, ${spatialCountNoun(width, "cube")} wide, and ${spatialCountNoun(height, "cube")} high. How many small cubes make it?`,
     String(answer),
     spatialNumericDistractors(answer, [length + width + height, length * width, answer + 2])
   );
+}
+
+function spatialNounForCount(count, singular, plural = `${singular}s`) {
+  return Number(count) === 1 ? singular : plural;
+}
+
+function spatialCountNoun(count, singular, plural = `${singular}s`) {
+  return `${count} ${spatialNounForCount(count, singular, plural)}`;
+}
+
+function spatialStepText(count, direction) {
+  return `${spatialCountNoun(count, "square")} ${direction}`;
 }
 
 function spatialGenerateReflectionFact(difficulty) {

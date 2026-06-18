@@ -344,8 +344,25 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     return values;
   }
 
+  const UNIT_SINGULARS = {
+    minutes: "minute",
+    shots: "shot",
+    degrees: "degree",
+    shekels: "shekel",
+    votes: "vote",
+    riders: "rider",
+  };
+
+  function formatValueWithUnit(value, unit = "") {
+    if (!unit) {
+      return String(value);
+    }
+    const label = Number(value) === 1 ? UNIT_SINGULARS[unit] || unit : unit;
+    return `${value} ${label}`;
+  }
+
   function valuesSummary(values, unit = "") {
-    return values.map((point) => `${point.label}: ${point.value}${unit ? ` ${unit}` : ""}`).join(", ");
+    return values.map((point) => `${point.label}: ${formatValueWithUnit(point.value, unit)}`).join(", ");
   }
 
   function mean(values) {

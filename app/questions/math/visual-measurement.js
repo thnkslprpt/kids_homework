@@ -2398,12 +2398,12 @@ function visualMeasurementFormatDuration(totalMinutes) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
   if (hours === 0) {
-    return `${minutes} minutes`;
+    return `${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
   }
   if (minutes === 0) {
     return hours === 1 ? "1 hour" : `${hours} hours`;
   }
-  return `${hours === 1 ? "1 hour" : `${hours} hours`} ${minutes} minutes`;
+  return `${hours === 1 ? "1 hour" : `${hours} hours`} ${minutes} ${minutes === 1 ? "minute" : "minutes"}`;
 }
 
 function clockHand(cx, cy, length, angleDegrees) {

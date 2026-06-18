@@ -1718,7 +1718,7 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
           const total = green + yellow + purple;
           const answer = probabilityFormatFraction(green + yellow, total);
           return {
-            question: `A bag has ${green} green cubes, ${yellow} yellow cubes, and ${purple} purple cubes. What is the chance of picking green or yellow?`,
+            question: `A bag has ${plural(green, "green cube")}, ${plural(yellow, "yellow cube")}, and ${plural(purple, "purple cube")}. What is the chance of picking green or yellow?`,
             answer,
             distractors: [probabilityFormatFraction(purple, total), probabilityFormatFraction(green, total), probabilityFormatFraction(yellow, total)],
           };
@@ -1733,7 +1733,7 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
           const total = pencils + erasers + stickers;
           const answer = probabilityFormatFraction(total - stickers, total);
           return {
-            question: `A prize box has ${pencils} pencils, ${erasers} erasers, and ${stickers} stickers. What is the chance of not picking a sticker?`,
+            question: `A prize box has ${plural(pencils, "pencil")}, ${plural(erasers, "eraser")}, and ${plural(stickers, "sticker")}. What is the chance of not picking a sticker?`,
             answer,
             distractors: [probabilityFormatFraction(stickers, total), probabilityFormatFraction(pencils, total), "1/2"],
           };
@@ -2117,7 +2117,7 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
         ];
         const setup = probabilityRandomChoice(setups);
         return buildEntry({
-          question: `A box has ${setup.blue} blue balls out of ${setup.total} balls. What percentage of the balls are blue?`,
+          question: `A box has ${plural(setup.blue, "blue ball")} out of ${plural(setup.total, "ball")}. What percentage of the balls are blue?`,
           answer: probabilityFormatPercent(setup.blue, setup.total),
           distractors: ["10%", "20%", "30%", "40%", "50%", "60%"].filter((choice) => choice !== probabilityFormatPercent(setup.blue, setup.total)),
         });
