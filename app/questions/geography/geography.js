@@ -281,11 +281,33 @@ if (typeof module !== "undefined" && module.exports) {
   if (!questionUtils) {
     return;
   }
-  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+  const { buildShuffledLetteredEntry, entry, pickGeneratedEntry, randomChoice } = questionUtils;
 
   const blueprints = [
-    { topic: "history-timelines", difficulty: 1, question: "Which comes first on a timeline?", displayText: "A: Plant a seed. B: Water the sprout. C: Pick the tomato.", answer: "A", options: ["A", "B", "C", "They happen together"] },
-    { topic: "history-timelines", difficulty: 4, question: "Which comes first on a timeline?", displayText: "A: Build a house. B: Move into the house. C: Paint the rooms after moving in.", answer: "A", options: ["A", "B", "C", "They happen at the same time"] },
+    {
+      difficulty: 1,
+      create: () =>
+        buildShuffledLetteredEntry({
+          topic: "history-timelines",
+          difficulty: 1,
+          question: "Which comes first on a timeline?",
+          items: ["Plant a seed", "Water the sprout", "Pick the tomato"],
+          correctIndex: 0,
+          extraOptions: ["They happen together"],
+        }),
+    },
+    {
+      difficulty: 4,
+      create: () =>
+        buildShuffledLetteredEntry({
+          topic: "history-timelines",
+          difficulty: 4,
+          question: "Which comes first on a timeline?",
+          items: ["Build a house", "Move into the house", "Paint the rooms after moving in"],
+          correctIndex: 0,
+          extraOptions: ["They happen at the same time"],
+        }),
+    },
     { topic: "history-timelines", difficulty: 9, question: "Which timeline order is correct?", answer: "Cause, event, consequence", options: ["Cause, event, consequence", "Consequence, cause, event", "Event, consequence, cause", "All timelines ignore order"] },
     { topic: "geography-latitude-longitude", difficulty: 3, question: "What do latitude lines measure?", answer: "Distance north or south of the equator", options: ["Distance north or south of the equator", "Height of a mountain", "Population of a city", "Depth of an ocean"] },
     { topic: "geography-latitude-longitude", difficulty: 5, question: "Which line is longitude?", answer: "A line measuring east or west of the prime meridian", options: ["A line measuring east or west of the prime meridian", "A line measuring temperature", "A line showing only rivers", "A line around one classroom"] },
@@ -308,7 +330,8 @@ if (typeof module !== "undefined" && module.exports) {
 
   function createBlueprintEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    return entry(randomChoice(blueprints.filter((item) => item.difficulty <= level)));
+    const blueprint = randomChoice(blueprints.filter((item) => item.difficulty <= level));
+    return typeof blueprint.create === "function" ? blueprint.create() : entry(blueprint);
   }
 
   globalThis.createGeographyHistoryGeneratedEntry = (difficulty) =>

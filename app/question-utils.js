@@ -245,6 +245,39 @@
     };
   }
 
+  function buildShuffledLetteredEntry(config) {
+    const {
+      items,
+      correctIndex = 0,
+      extraOptions = [],
+      punctuation = ".",
+      ...entryConfig
+    } = config;
+    const letters = ["A", "B", "C", "D"];
+    const orderedItems = (items || []).map((text, originalIndex) => ({
+      text: String(text || "").trim(),
+      originalIndex,
+    }));
+    const shownItems = shuffle(orderedItems);
+    const displayText = shownItems
+      .map((item, index) => {
+        const suffix = punctuation && !/[.!?]$/.test(item.text) ? punctuation : "";
+        return `${letters[index]}: ${item.text}${suffix}`;
+      })
+      .join(" ");
+    const answerIndex = shownItems.findIndex((item) => item.originalIndex === correctIndex);
+    if (answerIndex < 0) {
+      return null;
+    }
+
+    return entry({
+      ...entryConfig,
+      displayText,
+      answer: letters[answerIndex],
+      options: letters.slice(0, shownItems.length).concat(extraOptions),
+    });
+  }
+
   function pickGeneratedEntry(generators, difficulty, attempts = 40) {
     const level = clampDifficulty(difficulty);
     const eligible = generators.filter((generator) => !generator.minLevel || generator.minLevel <= level);
@@ -269,6 +302,7 @@
   }
 
   globalThis.HomeworkQuestionUtils = {
+    buildShuffledLetteredEntry,
     clampDifficulty,
     entry,
     fractionText,

@@ -351,11 +351,22 @@ function logicShuffle(values) {
   if (!questionUtils) {
     return;
   }
-  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+  const { buildShuffledLetteredEntry, entry, pickGeneratedEntry, randomChoice } = questionUtils;
 
   const blueprints = [
     { topic: "thinking-prioritization", difficulty: 1, question: "Which should you do first before building a model?", answer: "Check what the goal is", options: ["Check what the goal is", "Throw away the parts", "Guess without looking", "Make it harder on purpose"] },
-    { topic: "thinking-prioritization", difficulty: 3, question: "Which task should be done first?", displayText: "A: due tomorrow and important. B: due next month and easy. C: optional.", answer: "A", options: ["A", "B", "C", "Do none"] },
+    {
+      difficulty: 3,
+      create: () =>
+        buildShuffledLetteredEntry({
+          topic: "thinking-prioritization",
+          difficulty: 3,
+          question: "Which task should be done first?",
+          items: ["due tomorrow and important", "due next month and easy", "optional"],
+          correctIndex: 0,
+          extraOptions: ["Do none"],
+        }),
+    },
     { topic: "thinking-prioritization", difficulty: 7, question: "Which reason is best for doing the urgent important task first?", answer: "It has a close deadline and matters", options: ["It has a close deadline and matters", "It is the most fun", "It has the brightest color", "It can be ignored forever"] },
     { topic: "thinking-planning", difficulty: 1, question: "What is a good first planning step?", answer: "List what needs to be done", options: ["List what needs to be done", "Skip the directions", "Start at the final step", "Hide the materials"] },
     { topic: "thinking-planning", difficulty: 4, question: "Which plan is in the best order?", answer: "Read goal, gather materials, build, check", options: ["Read goal, gather materials, build, check", "Build, ignore goal, gather materials, check", "Check, build, read goal, gather", "Gather, hide materials, stop, build"] },
@@ -374,7 +385,8 @@ function logicShuffle(values) {
 
   function createBlueprintEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    return entry(randomChoice(blueprints.filter((item) => item.difficulty <= level)));
+    const blueprint = randomChoice(blueprints.filter((item) => item.difficulty <= level));
+    return typeof blueprint.create === "function" ? blueprint.create() : entry(blueprint);
   }
 
   globalThis.createLogicThinkingGeneratedEntry = (difficulty) =>
