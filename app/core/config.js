@@ -160,7 +160,7 @@ const USER_PROFILES = [
     name: "Gabriel",
     categoryDifficulties: {
       math: 3,
-      hebrew: 3,
+      hebrew: 2,
       science: 3,
       "science-evidence": 3,
       time: 3,
