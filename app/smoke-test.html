@@ -96,9 +96,15 @@
       const SMOKE_REPORT_QUEUE_STORAGE_KEY = "homework-google-sheets-report-queue-v1";
       const smokeRealFetch = typeof globalThis.fetch === "function" ? globalThis.fetch.bind(globalThis) : null;
       let smokeReportPostCount = 0;
+      let smokeLastReportPayload = null;
       globalThis.fetch = (url, options) => {
         if (String(url).includes("script.google.com/macros/s/")) {
           smokeReportPostCount += 1;
+          try {
+            smokeLastReportPayload = JSON.parse(options?.body || "{}");
+          } catch {
+            smokeLastReportPayload = null;
+          }
           return Promise.resolve({ type: "opaque" });
         }
 
@@ -365,6 +371,10 @@
             assert(api.state.speedRound.records.filter(Boolean).length === api.SPEED_ROUND_QUESTION_COUNT, "workflow: speed records missing");
             assert(api.state.sessionRecords.filter(Boolean).length === 20, "workflow: main records missing");
             assert(smokeReportPostCount === 1, `workflow: expected one stubbed report POST, got ${smokeReportPostCount}`);
+            const reportJson = JSON.stringify(smokeLastReportPayload?.session || {});
+            assert(!reportJson.includes("reviewHtml"), "workflow: report payload should not include reviewHtml");
+            assert(reportJson.includes("reviewText"), "workflow: report payload should include readable reviewText");
+            assert(!reportJson.includes("feedback-review"), "workflow: report payload should not include feedback-review HTML");
             assert(!document.getElementById("results-category-summary").hidden, "workflow: wrong-answer category summary should be visible");
             assert(getText(document.getElementById("results-summary")).includes("Speed round:"), "workflow: results should include speed summary");
 

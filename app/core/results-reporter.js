@@ -26,7 +26,7 @@
       const payload = {
         source,
         schemaVersion,
-        session,
+        session: sanitizeSessionForReport(session),
       };
 
       if (reportSecret) {
@@ -34,6 +34,50 @@
       }
 
       return payload;
+    }
+
+    function sanitizeSessionForReport(session) {
+      const sanitizedSession = { ...(session || {}) };
+      sanitizedSession.records = sanitizeRecords(session?.records);
+      sanitizedSession.speedRoundRecords = sanitizeRecords(session?.speedRoundRecords);
+      return sanitizedSession;
+    }
+
+    function sanitizeRecords(records) {
+      return Array.isArray(records) ? records.map(sanitizeRecordForReport) : [];
+    }
+
+    function sanitizeRecordForReport(record) {
+      const { reviewHtml, ...sanitizedRecord } = record || {};
+      if (!sanitizedRecord.reviewText) {
+        sanitizedRecord.reviewText = buildRecordReviewText(sanitizedRecord);
+      }
+
+      return sanitizedRecord;
+    }
+
+    function buildRecordReviewText(record) {
+      const lines = [];
+      addReviewLine(lines, "Question", record?.questionText);
+      addReviewLine(lines, "Your answer", record?.chosenAnswer);
+      addReviewLine(lines, "Correct answer", record?.correctAnswer);
+
+      if (typeof record?.isCorrect === "boolean") {
+        addReviewLine(lines, "Result", record.isCorrect ? "Correct" : "Wrong");
+      }
+
+      if (Array.isArray(record?.selectedTokens) && record.selectedTokens.length) {
+        addReviewLine(lines, "Selected tokens", record.selectedTokens.join(" | "));
+      }
+
+      return lines.join("\n");
+    }
+
+    function addReviewLine(lines, label, value) {
+      const text = String(value ?? "").trim();
+      if (text) {
+        lines.push(`${label}: ${text}`);
+      }
     }
 
     async function flushQueue() {
