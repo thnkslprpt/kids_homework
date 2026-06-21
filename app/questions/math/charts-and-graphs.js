@@ -4,7 +4,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
   }
 
   return [
-    makeQuestion("A class voted for pets: dogs 9, cats 6, fish 3, birds 5. Which pet got the most votes?", ["Dogs", "Cats", "Fish", "Birds"], "Dogs", 1),
+    makeQuestion("A class voted for pets: 9 dogs, 6 cats, 3 fish, 5 birds. Which pet got the most votes?", ["Dogs", "Cats", "Fish", "Birds"], "Dogs", 1),
     makeQuestion("A chart shows books read this month: Noga 4, Gideon 7, Gabriel 5, Eden 6. How many books were read altogether?", ["18", "20", "22", "24"], "22", 1),
     makeQuestion("A fruit chart shows apples 5, bananas 3, grapes 7, oranges 4. Which fruit has the fewest votes?", ["Apples", "Bananas", "Grapes", "Oranges"], "Bananas", 1),
     makeQuestion("A weather chart shows temperatures: Mon 18, Tue 21, Wed 17, Thu 20. What was the temperature on Tuesday?", ["17", "18", "20", "21"], "21", 1),
@@ -104,7 +104,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     makeQuestion("A toy car chart shows red 2, blue 6, green 5, yellow 1. How many blue cars are shown?", ["1", "2", "5", "6"], "6", 1),
     makeQuestion("A reading chart shows Amir 3, Maya 5, Leo 4, Sara 2. How many books did Maya read?", ["2", "3", "4", "5"], "5", 1),
     makeQuestion("A fruit table shows apples 11, bananas 7, oranges 9, pears 5. How many more apples than pears are there?", ["4", "5", "6", "7"], "6", 2),
-    makeQuestion("A pet survey shows dogs 8, cats 8, fish 4, birds 6. Which two pets are tied?", ["Dogs and cats", "Cats and fish", "Fish and birds", "Dogs and birds"], "Dogs and cats", 2),
+    makeQuestion("A pet survey shows 8 dogs, 8 cats, 4 fish, 6 birds. Which two pets are tied?", ["Dogs and cats", "Cats and fish", "Fish and birds", "Dogs and birds"], "Dogs and cats", 2),
     makeQuestion("A game-score chart shows Blue 13, Red 15, Green 10, Yellow 8. Which team scored the most?", ["Blue", "Red", "Green", "Yellow"], "Red", 2),
     makeQuestion("A water chart shows cups drunk: Mon 6, Tue 5, Wed 8, Thu 7. How many cups were drunk on Wednesday and Thursday together?", ["13", "14", "15", "16"], "15", 2),
     makeQuestion("A library chart shows visits: Class A 18, Class B 12, Class C 16, Class D 9. Which class had the fewest visits?", ["Class A", "Class B", "Class C", "Class D"], "Class D", 2),

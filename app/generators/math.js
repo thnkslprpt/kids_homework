@@ -1038,6 +1038,7 @@ function createStatisticsDataQuestion(difficulty) {
   const askType = randomChoice(
     difficulty <= 2 ? ["most", "fewest", "total"] : ["most", "fewest", "total", "difference"]
   );
+  const countsText = counts.map(formatPetCountEntry).join(", ");
 
   if (askType === "most" || askType === "fewest") {
     const sorted = [...counts].sort((left, right) => left.count - right.count);
@@ -1046,9 +1047,7 @@ function createStatisticsDataQuestion(difficulty) {
       type: "statistics-choice",
       difficulty,
       mode: "choice",
-      questionText: `A class counted pets: ${counts
-        .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
-        .join(", ")}. Which pet was counted ${askType === "most" ? "the most" : "the fewest"}?`,
+      questionText: `A class counted pets: ${countsText}. Which pet was counted ${askType === "most" ? "the most" : "the fewest"}?`,
       displayText: "",
       extraText: "",
       options: shuffleArray(categories.map(capitalize)),
@@ -1063,9 +1062,7 @@ function createStatisticsDataQuestion(difficulty) {
     return createNumericChoiceQuestion({
       type: "statistics-choice",
       difficulty,
-      questionText: `A class counted pets: ${counts
-        .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
-        .join(", ")}. How many pets were counted in total?`,
+      questionText: `A class counted pets: ${countsText}. How many pets were counted in total?`,
       displayText: "",
       answer,
     });
@@ -1076,12 +1073,21 @@ function createStatisticsDataQuestion(difficulty) {
   return createNumericChoiceQuestion({
     type: "statistics-choice",
     difficulty,
-    questionText: `A class counted pets: ${counts
-      .map((entry) => `${capitalize(entry.category)} ${entry.count}`)
-      .join(", ")}. How many more ${sorted[0].category} than ${sorted[1].category} were counted?`,
+    questionText: `A class counted pets: ${countsText}. How many more ${sorted[0].category} than ${sorted[1].category} were counted?`,
     displayText: "",
     answer,
   });
+}
+
+function formatPetCountEntry(entry) {
+  const singularPets = {
+    dogs: "dog",
+    cats: "cat",
+    fish: "fish",
+    birds: "bird",
+  };
+  const pet = Number(entry.count) === 1 ? singularPets[entry.category] || entry.category : entry.category;
+  return `${entry.count} ${pet}`;
 }
 
 function createChartsAndGraphsQuestion(difficulty) {
@@ -1388,7 +1394,7 @@ function buildChartSummary(template, items) {
     return `${template.title}: ${items.map((item) => template.summaryItem(item)).join(", ")}`;
   }
 
-  return `${template.title}: ${items.map((item) => `${item.label} ${item.value}`).join(", ")}`;
+  return `${template.title}: ${items.map((item) => `${item.label}: ${item.value}`).join(", ")}`;
 }
 
 function renderBarChartVisual(dataset) {
