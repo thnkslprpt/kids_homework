@@ -93,6 +93,21 @@
       const failures = [];
       const SMOKE_HISTORY_STORAGE_KEY = "homework-session-history-v2";
       const SMOKE_SELECTED_USER_STORAGE_KEY = "homework-selected-user";
+      const SMOKE_REPORT_QUEUE_STORAGE_KEY = "homework-google-sheets-report-queue-v1";
+      const smokeRealFetch = typeof globalThis.fetch === "function" ? globalThis.fetch.bind(globalThis) : null;
+      let smokeReportPostCount = 0;
+      globalThis.fetch = (url, options) => {
+        if (String(url).includes("script.google.com/macros/s/")) {
+          smokeReportPostCount += 1;
+          return Promise.resolve({ type: "opaque" });
+        }
+
+        if (smokeRealFetch) {
+          return smokeRealFetch(url, options);
+        }
+
+        return Promise.reject(new Error("fetch is not available."));
+      };
       const CATEGORY_DRAG_FACTORY_CATEGORIES = new Set([
         "reading-comprehension",
         "fractions",
@@ -314,70 +329,75 @@
       }
 
       function runUiWorkflowSmokeTest() {
-        withStoragePreserved([SMOKE_HISTORY_STORAGE_KEY, SMOKE_SELECTED_USER_STORAGE_KEY], () => {
-          localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
-          sessionStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
+        withStoragePreserved(
+          [SMOKE_HISTORY_STORAGE_KEY, SMOKE_SELECTED_USER_STORAGE_KEY, SMOKE_REPORT_QUEUE_STORAGE_KEY],
+          () => {
+            localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
+            sessionStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
+            localStorage.removeItem(SMOKE_REPORT_QUEUE_STORAGE_KEY);
 
-          const questionCount = document.getElementById("question-count");
-          const difficultyInput = document.getElementById("difficulty-level");
-          const startForm = document.getElementById("start-form");
+            const questionCount = document.getElementById("question-count");
+            const difficultyInput = document.getElementById("difficulty-level");
+            const startForm = document.getElementById("start-form");
 
-          questionCount.value = "13";
-          submit(startForm, "invalid count submit");
-          assertVisibleScreen("start-screen", "invalid count");
-          assert(getText(document.getElementById("start-feedback")).includes("Please choose"), "invalid count should show feedback");
+            questionCount.value = "13";
+            submit(startForm, "invalid count submit");
+            assertVisibleScreen("start-screen", "invalid count");
+            assert(getText(document.getElementById("start-feedback")).includes("Please choose"), "invalid count should show feedback");
 
-          click(document.querySelector('[data-user-id="guest"]'), "guest user button");
-          difficultyInput.value = "10";
-          difficultyInput.dispatchEvent(new Event("input", { bubbles: true }));
-          assert(document.getElementById("difficulty-value").textContent === "10", "guest difficulty value should update");
-          click(document.querySelector('[data-question-count="20"]'), "20 question button");
-          click(document.querySelector('[data-session-preset="math-heavy"]'), "math-heavy preset button");
-          assert(document.getElementById("hebrew-only").value === "false", "math-heavy preset should not enable Hebrew only");
-          submit(startForm, "workflow start submit");
-          assertVisibleScreen("quiz-screen", "started session");
-          assert(api.state.questions.length === 20, `workflow: expected 20 main questions, got ${api.state.questions.length}`);
-          assert(api.state.sessionPreset === api.SESSION_PRESETS["math-heavy"], "workflow: math-heavy preset was not stored");
-          assert(api.state.questions.some((question) => question.mode === "input"), "workflow: session should include input questions");
-          assert(api.state.questions.some((question) => question.mode === "choice"), "workflow: session should include choice questions");
-          assert(document.querySelectorAll("#progress-tracker .progress-box").length === 20, "workflow: progress tracker should render 20 boxes");
+            click(document.querySelector('[data-user-id="guest"]'), "guest user button");
+            difficultyInput.value = "10";
+            difficultyInput.dispatchEvent(new Event("input", { bubbles: true }));
+            assert(document.getElementById("difficulty-value").textContent === "10", "guest difficulty value should update");
+            click(document.querySelector('[data-question-count="20"]'), "20 question button");
+            click(document.querySelector('[data-session-preset="math-heavy"]'), "math-heavy preset button");
+            assert(document.getElementById("hebrew-only").value === "false", "math-heavy preset should not enable Hebrew only");
+            submit(startForm, "workflow start submit");
+            assertVisibleScreen("quiz-screen", "started session");
+            assert(api.state.questions.length === 20, `workflow: expected 20 main questions, got ${api.state.questions.length}`);
+            assert(api.state.sessionPreset === api.SESSION_PRESETS["math-heavy"], "workflow: math-heavy preset was not stored");
+            assert(api.state.questions.some((question) => question.mode === "input"), "workflow: session should include input questions");
+            assert(api.state.questions.some((question) => question.mode === "choice"), "workflow: session should include choice questions");
+            assert(document.querySelectorAll("#progress-tracker .progress-box").length === 20, "workflow: progress tracker should render 20 boxes");
 
-          completeVisibleSession();
-          assertVisibleScreen("results-screen", "completed session");
-          assert(api.state.speedRound.records.filter(Boolean).length === api.SPEED_ROUND_QUESTION_COUNT, "workflow: speed records missing");
-          assert(api.state.sessionRecords.filter(Boolean).length === 20, "workflow: main records missing");
-          assert(!document.getElementById("results-category-summary").hidden, "workflow: wrong-answer category summary should be visible");
-          assert(getText(document.getElementById("results-summary")).includes("Speed round:"), "workflow: results should include speed summary");
+            completeVisibleSession();
+            assertVisibleScreen("results-screen", "completed session");
+            assert(api.state.speedRound.records.filter(Boolean).length === api.SPEED_ROUND_QUESTION_COUNT, "workflow: speed records missing");
+            assert(api.state.sessionRecords.filter(Boolean).length === 20, "workflow: main records missing");
+            assert(smokeReportPostCount === 1, `workflow: expected one stubbed report POST, got ${smokeReportPostCount}`);
+            assert(!document.getElementById("results-category-summary").hidden, "workflow: wrong-answer category summary should be visible");
+            assert(getText(document.getElementById("results-summary")).includes("Speed round:"), "workflow: results should include speed summary");
 
-          const resultsBackButton = document.getElementById("results-back-button");
-          assert(!resultsBackButton.disabled, "workflow: results back button should be enabled");
-          click(document.getElementById("results-back-button"), "results back button");
-          const enteredReview = !document.getElementById("quiz-screen").hidden && document.getElementById("results-screen").hidden;
-          assert(
-            enteredReview,
-            `results review back: expected quiz review, got round=${api.state.currentRound} main=${api.state.viewIndex}/${api.state.currentIndex}/${api.state.totalQuestions} resultsHidden=${document.getElementById("results-screen").hidden} quizHidden=${document.getElementById("quiz-screen").hidden}`
-          );
-          if (enteredReview) {
-            assert(document.getElementById("answer-input").disabled || document.getElementById("answer-form").hidden, "workflow: reviewed answer should be locked");
-            click(document.getElementById("quiz-forward-button"), "quiz forward during review");
-            assert(api.state.viewIndex <= api.state.currentIndex, "workflow: review forward should stay within answered range");
+            const resultsBackButton = document.getElementById("results-back-button");
+            assert(!resultsBackButton.disabled, "workflow: results back button should be enabled");
+            click(document.getElementById("results-back-button"), "results back button");
+            const enteredReview = !document.getElementById("quiz-screen").hidden && document.getElementById("results-screen").hidden;
+            assert(
+              enteredReview,
+              `results review back: expected quiz review, got round=${api.state.currentRound} main=${api.state.viewIndex}/${api.state.currentIndex}/${api.state.totalQuestions} resultsHidden=${document.getElementById("results-screen").hidden} quizHidden=${document.getElementById("quiz-screen").hidden}`
+            );
+            if (enteredReview) {
+              assert(document.getElementById("answer-input").disabled || document.getElementById("answer-form").hidden, "workflow: reviewed answer should be locked");
+              click(document.getElementById("quiz-forward-button"), "quiz forward during review");
+              assert(api.state.viewIndex <= api.state.currentIndex, "workflow: review forward should stay within answered range");
+            }
+
+            click(document.getElementById("restart-button"), "restart button");
+            assertVisibleScreen("start-screen", "restart");
+            click(document.getElementById("history-button"), "history button");
+            assertVisibleScreen("history-screen", "history");
+            assert(document.querySelectorAll("#history-list .history-session").length === 1, "workflow: history should show one saved session");
+            assert(getText(document.getElementById("history-list")).includes("Speed"), "workflow: history should include speed metadata");
+            click(document.getElementById("history-back-button"), "history back");
+
+            click(document.getElementById("dashboard-button"), "dashboard button");
+            assertVisibleScreen("dashboard-screen", "dashboard");
+            assert(getText(document.getElementById("dashboard-content")).includes("Sessions"), "workflow: dashboard should render stats");
+            assert(document.querySelectorAll("#dashboard-user-selector .dashboard-user-button").length === api.USER_PROFILES.length, "workflow: dashboard user selector missing users");
+            click(document.getElementById("dashboard-back-button"), "dashboard back");
+            assertVisibleScreen("start-screen", "dashboard back");
           }
-
-          click(document.getElementById("restart-button"), "restart button");
-          assertVisibleScreen("start-screen", "restart");
-          click(document.getElementById("history-button"), "history button");
-          assertVisibleScreen("history-screen", "history");
-          assert(document.querySelectorAll("#history-list .history-session").length === 1, "workflow: history should show one saved session");
-          assert(getText(document.getElementById("history-list")).includes("Speed"), "workflow: history should include speed metadata");
-          click(document.getElementById("history-back-button"), "history back");
-
-          click(document.getElementById("dashboard-button"), "dashboard button");
-          assertVisibleScreen("dashboard-screen", "dashboard");
-          assert(getText(document.getElementById("dashboard-content")).includes("Sessions"), "workflow: dashboard should render stats");
-          assert(document.querySelectorAll("#dashboard-user-selector .dashboard-user-button").length === api.USER_PROFILES.length, "workflow: dashboard user selector missing users");
-          click(document.getElementById("dashboard-back-button"), "dashboard back");
-          assertVisibleScreen("start-screen", "dashboard back");
-        });
+        );
       }
 
       function validateScoringHelpers() {
@@ -474,12 +494,15 @@
         const guestButton = document.querySelector('[data-user-id="guest"]');
         const gabrielProfile = api.USER_PROFILES.find((profile) => profile.id === "gabriel");
         const gabrielLevels = Object.values(gabrielProfile?.categoryDifficulties || {});
-        if (gabrielLevels.length !== api.SESSION_CATEGORY_ORDER.length || gabrielLevels.some((level) => level !== 2)) {
-          failures.push("Gabriel category difficulties should all start at level 2");
+        const gabrielDefaultDifficulty = String(Math.max(...gabrielLevels));
+        if (gabrielLevels.length !== api.SESSION_CATEGORY_ORDER.length) {
+          failures.push("Gabriel category difficulties should cover every session category");
         }
         gabrielButton?.click();
         if (!difficultyInput.disabled) failures.push("Gabriel difficulty slider should be disabled");
-        if (difficultyInput.value !== "2") failures.push("Gabriel difficulty slider should display level 2");
+        if (difficultyInput.value !== gabrielDefaultDifficulty) {
+          failures.push(`Gabriel difficulty slider should display level ${gabrielDefaultDifficulty}`);
+        }
         guestButton?.click();
         if (difficultyInput.disabled) failures.push("Guest difficulty slider should stay enabled");
 

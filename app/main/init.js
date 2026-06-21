@@ -22,6 +22,13 @@ const sessionHistoryStore = window.HomeworkApp.sessionHistory.createSessionHisto
   storageKey: SESSION_HISTORY_STORAGE_KEY,
   userProfiles: USER_PROFILES,
 });
+const resultsReporter = window.HomeworkApp.resultsReporter.createResultsReporter({
+  endpointUrl: GOOGLE_SHEETS_REPORT_WEB_APP_URL,
+  queueStorageKey: GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY,
+  reportSecret: GOOGLE_SHEETS_REPORT_SECRET,
+  schemaVersion: GOOGLE_SHEETS_REPORT_SCHEMA_VERSION,
+  source: GOOGLE_SHEETS_REPORT_SOURCE,
+});
 
 function cleanupInteractiveDragState() {
   if (typeof state.dragState?.cleanup === "function") {
@@ -326,10 +333,12 @@ if (typeof globalThis !== "undefined") {
     ADULT_USER_ID,
     SESSION_CATEGORY_ORDER,
     SESSION_PRESETS,
+    GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY,
     SPEED_ROUND_QUESTION_COUNT,
     USER_PROFILES,
     buildAdultSessionQuestions,
     buildAllSessionHistoryCsv,
+    buildSessionHistoryEntry,
     buildSessionQuestions,
     buildSpeedRoundQuestions,
     createChartsAndGraphsQuestion,
@@ -343,6 +352,7 @@ if (typeof globalThis !== "undefined") {
     createStatisticsChoiceQuestion,
     createTimeChoiceQuestion,
     questionRegistry,
+    resultsReporter,
     state,
     validateHomeworkQuestionShape,
   };

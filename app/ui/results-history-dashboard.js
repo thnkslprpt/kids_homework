@@ -518,6 +518,7 @@ function buildSessionHistoryEntry() {
     userName: getCurrentUserProfile().name,
     difficulty: state.difficulty,
     categoryDifficulties: { ...state.categoryDifficulties },
+    selectedCategories: Array.isArray(state.selectedCategories) ? [...state.selectedCategories] : [],
     hebrewOnly: Boolean(state.hebrewOnly),
     sessionPreset: state.sessionPreset,
     totalQuestions: state.totalQuestions,
@@ -534,7 +535,10 @@ function saveSessionHistory() {
     return false;
   }
 
-  return sessionHistoryStore.addSession(state.currentUserId, buildSessionHistoryEntry());
+  const sessionEntry = buildSessionHistoryEntry();
+  const saved = sessionHistoryStore.addSession(state.currentUserId, sessionEntry);
+  resultsReporter.reportSession(sessionEntry);
+  return saved;
 }
 
 function loadAllSessionHistory() {

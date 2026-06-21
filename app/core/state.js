@@ -33,6 +33,7 @@ function createEmptySpeedRoundState() {
   dashboardUserId: USER_PROFILES[0].id,
   sessionPreset: SESSION_PRESETS.adaptive,
   categoryDifficulties: createUniformCategoryDifficulties(3),
+  selectedCategories: [],
   totalQuestions: 0,
   difficulty: 3,
   hebrewOnly: false,

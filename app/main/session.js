@@ -1406,6 +1406,7 @@ function startSession(event) {
   const hebrewCategoryDifficulty = getCategoryDifficultyFromMap(categoryDifficulties, "hebrew", difficulty);
   const sessionBuilderOptions = getSessionBuilderOptions();
   const hebrewOnly = selectedHebrewOnly;
+  const selectedCategories = hebrewOnly ? ["hebrew"] : sessionBuilderOptions.selectedCategories;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
@@ -1440,6 +1441,7 @@ function startSession(event) {
   clearSpeedRoundTimer();
   state.difficulty = difficulty;
   state.categoryDifficulties = categoryDifficulties;
+  state.selectedCategories = selectedCategories;
   state.hebrewOnly = hebrewOnly;
   state.currentRound = "main";
   state.speedRound = createEmptySpeedRoundState();

@@ -8,6 +8,7 @@
     "generators/math.js",
     "generators/hebrew.js",
     "generators/time-and-choice.js",
+    "core/results-reporter.js",
     "ui/drag-answers.js",
     "ui/quiz.js",
     "ui/results-history-dashboard.js",
