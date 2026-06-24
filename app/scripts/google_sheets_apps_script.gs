@@ -367,6 +367,7 @@ function formatSheet_(sheet, name, headers, options) {
   if (name === "Sessions") {
     trimColumns_(sheet, headers.length);
     sheet.getRange(1, 1, lastRow, headers.length).setVerticalAlignment("middle");
+    sheet.getRange(1, 1, lastRow, headers.length).setHorizontalAlignment("center");
     sheet.getRange(1, 1, lastRow, headers.length).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
     sheet.getRange(1, 1, lastRow, headers.length).setWrap(false);
     sheet.getRange(2, 1, lastRow - 1, 1).setNumberFormat("@");

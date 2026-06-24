@@ -371,9 +371,49 @@
         choices: ["cool", "sip", "bounce", "shout"],
       },
       {
+        templateParts: ["Maya could not find her pencil, so she checked inside her ", " before starting to ", "."],
+        answer: ["desk", "write"],
+        choices: ["desk", "write", "cloud", "swim"],
+      },
+      {
+        templateParts: ["The bell rang, and the students walked ", " to their ", "."],
+        answer: ["quietly", "classroom"],
+        choices: ["quietly", "classroom", "hungry", "river"],
+      },
+      {
+        templateParts: ["Noah saw dark clouds, so he put on his ", " before going ", "."],
+        answer: ["raincoat", "outside"],
+        choices: ["raincoat", "outside", "blanket", "under"],
+      },
+      {
+        templateParts: ["The glass fell from the counter, but it did not ", " because it landed on the ", "."],
+        answer: ["break", "rug"],
+        choices: ["break", "rug", "sing", "sky"],
+      },
+      {
+        templateParts: ["Ava heard the timer beep, so she took the cookies out of the ", " and let them ", "."],
+        answer: ["oven", "cool"],
+        choices: ["oven", "cool", "garden", "jump"],
+      },
+      {
         templateParts: ["Rain was falling, so Eden opened an ", " and walked ", " to the car."],
         answer: ["umbrella", "quickly"],
         choices: ["umbrella", "quickly", "pillow", "quietly"],
+      },
+      {
+        templateParts: ["The library was quiet, so Jonah used a ", " voice while he looked for a ", "."],
+        answer: ["soft", "book"],
+        choices: ["soft", "book", "loud", "spoon"],
+      },
+      {
+        templateParts: ["Lena dropped her ice cream, so her dad helped her clean the ", " with a ", "."],
+        answer: ["floor", "napkin"],
+        choices: ["floor", "napkin", "moon", "basket"],
+      },
+      {
+        templateParts: ["The puppy was thirsty after playing, so Sam filled its ", " with fresh ", "."],
+        answer: ["bowl", "water"],
+        choices: ["bowl", "water", "shoe", "music"],
       },
     ];
     const inferenceSentences = [
