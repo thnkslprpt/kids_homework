@@ -1954,7 +1954,7 @@ function nutritionShuffle(values) {
   if (!questionUtils) {
     return;
   }
-  const { entry, numberOptions, pickGeneratedEntry, randomChoice, randomInt, renderTable } =
+  const { entry, numberOptions, pickGeneratedEntry, randomChoice, randomInt, renderTable, shuffle } =
     questionUtils;
 
   function createRecipeQuestion(difficulty) {
@@ -1989,8 +1989,87 @@ function nutritionShuffle(values) {
     });
   }
 
+  const labelReaderFoods = [
+    { name: "Crunchy Oat Cereal", serving: "1 cup", servings: "7", calories: "140", sugar: "5 g", protein: "4 g", fiber: "5 g" },
+    { name: "Berry Yogurt Cup", serving: "1 container", servings: "1", calories: "130", sugar: "8 g", protein: "9 g", fiber: "0 g" },
+    { name: "Bean Snack Box", serving: "1 box", servings: "1", calories: "180", sugar: "2 g", protein: "8 g", fiber: "6 g" },
+    { name: "Whole-Grain Crackers", serving: "12 crackers", servings: "4", calories: "120", sugar: "1 g", protein: "3 g", fiber: "3 g" },
+    { name: "Apple Cinnamon Bar", serving: "1 bar", servings: "5", calories: "110", sugar: "6 g", protein: "2 g", fiber: "4 g" },
+    { name: "Lentil Soup Cup", serving: "1 cup", servings: "2", calories: "160", sugar: "3 g", protein: "10 g", fiber: "7 g" },
+    { name: "Trail Mix Packet", serving: "1/4 cup", servings: "6", calories: "170", sugar: "4 g", protein: "6 g", fiber: "3 g" },
+  ];
+
+  function renderNutritionFactsCard(food, rows) {
+    const body = rows
+      .map(
+        (row) =>
+          `<tr><th scope="row">${row.label}</th><td>${row.value}</td></tr>`
+      )
+      .join("");
+    return `
+      <div class="nutrition-label-card" role="img" aria-label="Nutrition Facts label for ${food.name}">
+        <strong>Nutrition Facts</strong>
+        <span>${food.name}</span>
+        <table><tbody>${body}</tbody></table>
+      </div>
+    `;
+  }
+
+  function createLabelReaderChallengeEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const food = randomChoice(labelReaderFoods);
+    const labelRows = [
+      { label: "Serving size", value: food.serving, minDifficulty: 1 },
+      { label: "Servings per container", value: food.servings, minDifficulty: 3 },
+      { label: "Calories", value: food.calories, minDifficulty: 2 },
+      { label: "Added sugar", value: food.sugar, minDifficulty: 1 },
+      { label: "Protein", value: food.protein, minDifficulty: 2 },
+      { label: "Fiber", value: food.fiber, minDifficulty: 2 },
+    ];
+    const targetChoices = labelRows.filter((row) => row.minDifficulty <= level);
+    const target = randomChoice(targetChoices);
+    const visibleRows = shuffle(labelRows);
+    const answerIndex = visibleRows.findIndex((row) => row.label === target.label);
+    const answer = `${target.label}: ${target.value}`;
+
+    if (answerIndex < 0) {
+      return null;
+    }
+
+    return {
+      mode: "interactive",
+      topic: "nutrition-label-reader",
+      difficulty: level,
+      question: `Label Reader Challenge: tap the row that shows ${target.label.toLowerCase()}.`,
+      displayText: "Use the Nutrition Facts label to find the exact row.",
+      visualHtml: renderNutritionFactsCard(food, labelRows),
+      visualSummary: `${food.name} Nutrition Facts: ${labelRows.map((row) => `${row.label} ${row.value}`).join(", ")}`,
+      reviewText: answer,
+      answer,
+      answerLabel: answer,
+      interactive: {
+        layout: "part-select",
+        prompt: "Tap one label row.",
+        parts: visibleRows.map((row) => ({
+          label: row.label,
+          summary: `${row.label}: ${row.value}`,
+        })),
+        answerIndexes: [answerIndex],
+        minSelected: 1,
+        maxSelected: 1,
+        selectedLabel: "Selected row",
+        checkLabel: "Check Label",
+      },
+    };
+  }
+
   globalThis.createNutritionPracticalGeneratedEntry = (difficulty) =>
-    pickGeneratedEntry([createRecipeQuestion, createLabelQuestion], difficulty);
+    pickGeneratedEntry([createRecipeQuestion, createLabelQuestion, createLabelReaderChallengeEntry], difficulty);
+
+  globalThis.NUTRITION_GENERATOR_COVERAGE = {
+    ...(globalThis.NUTRITION_GENERATOR_COVERAGE || {}),
+    labelReaderChallenge: createLabelReaderChallengeEntry,
+  };
 })();
 
 globalThis.HomeworkQuestions?.register({

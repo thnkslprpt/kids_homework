@@ -748,6 +748,48 @@ function buildStaticDragQuestionBank(entries, type) {
 
 function normalizeChoiceBankEntry(entry, type) {
   const difficulty = getEntryDifficulty(entry?.difficulty);
+  const mode = String(entry?.mode || "").trim();
+  if (mode === "interactive") {
+    const answer = String(entry?.answer || entry?.answerLabel || "");
+    const interactive = entry?.interactive && typeof entry.interactive === "object" ? entry.interactive : null;
+    const answerIndexes = Array.isArray(interactive?.answerIndexes)
+      ? interactive.answerIndexes.map((value) => Number.parseInt(value, 10)).filter(Number.isFinite)
+      : [];
+    const answerSequence = Array.isArray(interactive?.answerSequence)
+      ? interactive.answerSequence.map((value) => String(value).trim()).filter(Boolean)
+      : [];
+
+    if (
+      difficulty === null ||
+      !String(entry?.question || "").trim() ||
+      !answer ||
+      !interactive ||
+      (!answerIndexes.length && !(interactive.layout === "command-sequence" && answerSequence.length))
+    ) {
+      return null;
+    }
+
+    return {
+      question: String(entry.question),
+      answer,
+      answerLabel: String(entry?.answerLabel || answer),
+      difficulty,
+      type,
+      mode: "interactive",
+      visualHtml: typeof entry?.visualHtml === "string" ? entry.visualHtml : "",
+      visualSummary: typeof entry?.visualSummary === "string" ? entry.visualSummary : "",
+      displayText: typeof entry?.displayText === "string" ? entry.displayText : "",
+      extraText: typeof entry?.extraText === "string" ? entry.extraText : "",
+      extraHtml: typeof entry?.extraHtml === "string" ? entry.extraHtml : "",
+      reviewText: typeof entry?.reviewText === "string" ? entry.reviewText : "",
+      interactive: {
+        ...interactive,
+        answerIndexes,
+        answerSequence,
+      },
+    };
+  }
+
   const options = Array.from(new Set((entry?.options || []).map(String)));
   const answer = String(entry?.answer || "");
   if (
@@ -1385,7 +1427,7 @@ function validateHomeworkQuestionShape(question, context = "question") {
     return [`${context}: missing question object`];
   }
 
-  if (!["choice", "input", "drag", "practice"].includes(question.mode)) {
+  if (!["choice", "input", "drag", "practice", "interactive"].includes(question.mode)) {
     addError(`unsupported mode "${question.mode}"`);
   }
 
@@ -1429,6 +1471,70 @@ function validateHomeworkQuestionShape(question, context = "question") {
 
     if (!Array.isArray(question.dragAnswerTokens) || !question.dragAnswerTokens.length) {
       addError("drag questions need answer tokens");
+    } else {
+      const answerTokens = question.dragAnswerTokens.map((token) => String(token));
+      if (new Set(answerTokens).size !== answerTokens.length) {
+        addError("drag answer tokens must be unique");
+      }
+    }
+  }
+
+  if (question.mode === "interactive") {
+    const interactive = question.interactive && typeof question.interactive === "object"
+      ? question.interactive
+      : null;
+    const answerIndexes = Array.isArray(interactive?.answerIndexes)
+      ? interactive.answerIndexes.map((value) => Number.parseInt(value, 10)).filter(Number.isFinite)
+      : [];
+    const answerSequence = Array.isArray(interactive?.answerSequence)
+      ? interactive.answerSequence.map((value) => String(value).trim()).filter(Boolean)
+      : [];
+    if (!interactive) {
+      addError("interactive questions need interactive config");
+    } else if (!["option-select", "part-select", "command-sequence", "paired-select"].includes(interactive.layout)) {
+      addError("interactive questions need a supported layout");
+    } else if (interactive.layout === "command-sequence") {
+      const grid = interactive.grid && typeof interactive.grid === "object" ? interactive.grid : null;
+      if (!answerSequence.length) {
+        addError("interactive command questions need an answer sequence");
+      }
+      if (!grid || !Number.isFinite(Number(grid.rows)) || !Number.isFinite(Number(grid.cols))) {
+        addError("interactive command questions need a grid");
+      }
+    } else if (!answerIndexes.length) {
+      addError("interactive questions need answer indexes");
+    } else if (new Set(answerIndexes).size !== answerIndexes.length) {
+      addError("interactive answer indexes must be unique");
+    } else if (
+      interactive.layout === "option-select" &&
+      (!Array.isArray(interactive.choices) || interactive.choices.length < 2)
+    ) {
+      addError("interactive option questions need choices");
+    } else if (
+      interactive.layout === "part-select" &&
+      (!Array.isArray(interactive.parts) || interactive.parts.length < 2)
+    ) {
+      addError("interactive part questions need parts");
+    } else if (interactive.layout === "paired-select") {
+      const items = Array.isArray(interactive.items) ? interactive.items : [];
+      const reasons = Array.isArray(interactive.reasons) ? interactive.reasons : [];
+      const answerItemIndex = Number.parseInt(interactive.answerItemIndex, 10);
+      const answerReasonIndex = Number.parseInt(interactive.answerReasonIndex, 10);
+      if (items.length < 2) {
+        addError("interactive paired questions need items");
+      }
+      if (reasons.length < 2) {
+        addError("interactive paired questions need reasons");
+      }
+      if (!Number.isFinite(answerItemIndex) || answerItemIndex < 0 || answerItemIndex >= items.length) {
+        addError("interactive paired questions need a valid answer item");
+      }
+      if (!Number.isFinite(answerReasonIndex) || answerReasonIndex < 0 || answerReasonIndex >= reasons.length) {
+        addError("interactive paired questions need a valid answer reason");
+      }
+    }
+    if (String(question.answerValue ?? "").trim() === "") {
+      addError("interactive questions need an answer");
     }
   }
 
@@ -2187,6 +2293,10 @@ function createGeographyMapQuestion(difficulty, runtime, resources) {
     typeof geographyMapModule?.generatedEntryFactory === "function"
       ? geographyMapModule.generatedEntryFactory(difficulty, excludedCountries)
       : null;
+  if (rawEntry?.mode === "drag") {
+    return rawEntry;
+  }
+
   const normalizedEntry = normalizeChoiceBankEntry(rawEntry, "geography-choice");
 
   if (normalizedEntry) {

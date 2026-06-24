@@ -248,6 +248,7 @@
       !questionText ||
       !normalizedTargets.length ||
       normalizedTargets.length !== normalizedAnswer.length ||
+      uniqueStrings(normalizedAnswer).length !== normalizedAnswer.length ||
       !normalizedAnswer.every((token) => normalizedChoices.includes(token))
     ) {
       return null;
@@ -300,7 +301,15 @@
       : [];
     const flatAnswers = normalizedBuckets.flatMap((bucket) => bucket.answers);
 
-    if (!type || !questionText || !normalizedBuckets.length || !flatAnswers.length) return null;
+    if (
+      !type ||
+      !questionText ||
+      !normalizedBuckets.length ||
+      !flatAnswers.length ||
+      uniqueStrings(flatAnswers).length !== flatAnswers.length
+    ) {
+      return null;
+    }
 
     return {
       type,
@@ -357,8 +366,213 @@
     });
   }
 
+  function buildReadingMiniPassage(title, lines) {
+    const body = lines.map((line, index) => `${index + 1}. ${line}`).join("\n");
+    return `${title}\n${body}`;
+  }
+
+  function createReadingTimelineBuilderQuestion(type, difficulty) {
+    const stories = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 3,
+        title: "Garden Morning",
+        events: ["Maya filled the watering can", "She watered the seedlings", "Tiny drops sparkled on the leaves"],
+      },
+      {
+        minDifficulty: 1,
+        maxDifficulty: 4,
+        title: "Lost Hat",
+        events: ["Eli noticed his hat was missing", "He checked the coat hooks", "He found the hat under his backpack"],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 5,
+        title: "Class Pet",
+        events: ["The food bowl was empty", "Noah poured seeds into the bowl", "The hamster came out to eat"],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 7,
+        title: "Bridge Test",
+        events: ["The team built a bridge from straws", "They placed coins on the bridge one at a time", "The bridge bent at twenty coins", "They wrote the result in their chart"],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 10,
+        title: "Revised Report",
+        events: ["Talia found two sources about city trees", "She noticed one source used old data", "She checked a newer city report", "She revised her conclusion with current evidence"],
+      },
+    ];
+    const story = chooseByLevel(stories, difficulty);
+    const labels = story.events.length === 3
+      ? ["Beginning", "Middle", "Ending"]
+      : ["Beginning", "Early middle", "Late middle", "Ending"];
+
+    return createTargetsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Story Timeline Builder: drag the events into the order they happened.",
+      extraText: `${story.title}: put the event cards in story order.`,
+      targetArrangement: "rows",
+      targets: labels.map((label) => ({ text: label, reviewLabel: label })),
+      answer: story.events,
+      choices: story.events,
+      dragPlaceholderText: "Drop event",
+    });
+  }
+
+  function createReadingInferenceDetectiveDragQuestion(type, difficulty) {
+    const cases = [
+      {
+        minDifficulty: 2,
+        maxDifficulty: 4,
+        inference: "The soccer field is probably wet.",
+        support: ["Players wore rain boots", "Puddles covered the goal line", "The coach moved cones away from the mud"],
+        distractors: ["The scoreboard has big numbers", "The team has blue shirts", "The game starts at four"],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 5,
+        inference: "Nina is nervous about speaking.",
+        support: ["She practiced her first sentence twice", "Her hands shook as she held the note card", "She took a deep breath before walking to the front"],
+        distractors: ["The classroom has windows", "The poster is yellow", "Her backpack has a zipper"],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 7,
+        inference: "The trail may be difficult after the storm.",
+        support: ["Branches covered part of the path", "The map warned about slippery rocks", "A ranger told hikers to move slowly"],
+        distractors: ["The parking lot had ten spaces", "The sign used green paint", "The picnic table was square"],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 10,
+        inference: "The article is trying to persuade readers.",
+        support: ["It asks readers to support the garden plan", "It gives reasons the garden would help students", "It ends with a call to vote yes"],
+        distractors: ["It mentions the garden is near the gym", "It uses three paragraph breaks", "It names the month of the vote"],
+      },
+    ];
+    const caseFile = chooseByLevel(cases, difficulty);
+    const supportCount = difficulty >= 6 ? 3 : 2;
+    const distractorCount = difficulty >= 5 ? 3 : 2;
+
+    return createBucketsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Inference Detective: sort the clue cards.",
+      extraText: `Inference: ${caseFile.inference}\nPut only clues that support the inference in the evidence bucket.`,
+      buckets: [
+        { label: "Supports the inference", answers: takeRandom(caseFile.support, supportCount) },
+        { label: "Does not support it", answers: takeRandom(caseFile.distractors, distractorCount) },
+      ],
+    });
+  }
+
+  function createReadingCauseEffectChainQuestion(type, difficulty) {
+    const pairs = takeUniqueAnswerPairs([
+      { text: "The library lights flickered off", answer: "The librarian opened the blinds" },
+      { text: "The recipe needed softer butter", answer: "Jon left the butter on the counter" },
+      { text: "The puppy tracked mud inside", answer: "Dad wiped the floor by the door" },
+      { text: "The class ran out of poster paper", answer: "They taped two smaller sheets together" },
+      { text: "The bridge model sagged in the middle", answer: "The team added a support underneath" },
+      { text: "The survey had answers from only one club", answer: "Mira said the evidence was too narrow" },
+      { text: "The instructions skipped a step", answer: "Several students built the model incorrectly" },
+      { text: "The graph showed sales dropping each week", answer: "The store tested a new display" },
+    ], difficulty >= 7 ? 5 : difficulty >= 4 ? 4 : 3);
+
+    return createMatchingDragQuestion({
+      type,
+      difficulty,
+      questionText: "Cause-Effect Chain: connect each cause to its effect.",
+      extraText: "Click a cause, then click the effect that happened because of it.",
+      leftItems: pairs,
+      rightItems: pairs.map((pair) => pair.answer),
+    });
+  }
+
+  function createReadingPointOfViewCameraQuestion(type, difficulty) {
+    const scenes = [
+      {
+        minDifficulty: 3,
+        maxDifficulty: 5,
+        title: "The Missing Sketch",
+        lines: [
+          "Ari put his sketch inside a blue folder before recess.",
+          "Lina saw the folder slide under the art shelf.",
+          "Mr. Park only knew that Ari looked worried when class began.",
+        ],
+        facts: [
+          { text: "Who knows where the folder slid?", answer: "Lina" },
+          { text: "Who knows the sketch was inside the blue folder?", answer: "Ari" },
+          { text: "Who knows Ari looked worried?", answer: "Mr. Park" },
+        ],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 8,
+        title: "The Locked Gate",
+        lines: [
+          "Maya heard the gate click shut after soccer practice.",
+          "Noah found the spare key in the coach's desk drawer.",
+          "The coach was still in the gym and did not know the gate was locked.",
+        ],
+        facts: [
+          { text: "Who knows the gate clicked shut?", answer: "Maya" },
+          { text: "Who knows where the spare key is?", answer: "Noah" },
+          { text: "Who does not know the gate is locked?", answer: "The coach" },
+        ],
+      },
+      {
+        minDifficulty: 7,
+        maxDifficulty: 10,
+        title: "Two Reports",
+        lines: [
+          "Sam read a website that said the pond was clean last year.",
+          "Nora read this month's water test and saw high bacteria levels.",
+          "The mayor had only seen Sam's older source before the meeting.",
+        ],
+        facts: [
+          { text: "Who knows the newest water test result?", answer: "Nora" },
+          { text: "Who knows what the older website claimed?", answer: "Sam" },
+          { text: "Who has not seen the newest source yet?", answer: "The mayor" },
+        ],
+      },
+    ];
+    const scene = chooseByLevel(scenes, difficulty);
+    const names = uniqueStrings(scene.facts.map((fact) => fact.answer));
+
+    return createTargetsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Point of View Camera: label who knows each fact.",
+      extraText: buildReadingMiniPassage(scene.title, scene.lines),
+      targetArrangement: "rows",
+      targets: scene.facts.map((fact) => ({ text: fact.text, reviewLabel: fact.text })),
+      answer: scene.facts.map((fact) => fact.answer),
+      choices: names,
+      dragPlaceholderText: "Who knows?",
+    });
+  }
+
   function createReadingComprehensionDragQuestion(category, difficulty) {
     const type = `${category}-drag`;
+    if (difficulty <= 3 && Math.random() < 0.35) {
+      return createReadingTimelineBuilderQuestion(type, difficulty);
+    }
+
+    if (difficulty >= 2 && difficulty <= 8 && Math.random() < 0.3) {
+      return createReadingInferenceDetectiveDragQuestion(type, difficulty);
+    }
+
+    if (difficulty >= 3 && Math.random() < 0.3) {
+      return createReadingCauseEffectChainQuestion(type, difficulty);
+    }
+
+    if (difficulty >= 4 && Math.random() < 0.25) {
+      return createReadingPointOfViewCameraQuestion(type, difficulty);
+    }
+
     const easySentences = [
       {
         templateParts: ["Luca found a puppy. He wrapped ", " in a towel because ", " fur was wet."],
@@ -861,6 +1075,229 @@
     });
   }
 
+  function createHouseholdRecipeSequenceQuestion(type, difficulty) {
+    const recipes = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 2,
+        title: "cracker snack",
+        steps: ["Wash your hands", "Put a plate on the table", "Put crackers on the plate", "Add cheese slices"],
+      },
+      {
+        minDifficulty: 1,
+        maxDifficulty: 3,
+        title: "simple sandwich",
+        steps: ["Wash your hands", "Put bread on a plate", "Add the filling", "Put the second slice on top"],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 4,
+        title: "fruit plate",
+        steps: ["Wash your hands", "Rinse the fruit", "Ask an adult to cut large pieces", "Put the fruit on a plate"],
+      },
+      {
+        minDifficulty: 3,
+        maxDifficulty: 6,
+        title: "toast with adult help",
+        steps: [
+          "Ask an adult before using the toaster",
+          "Put bread in the toaster",
+          "Wait until the toast pops up",
+          "Use tongs or adult help to move the toast",
+        ],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 7,
+        title: "pasta salad",
+        steps: [
+          "Read the recipe all the way through",
+          "Gather the ingredients and tools",
+          "Measure the ingredients",
+          "Mix everything in a bowl",
+          "Put leftovers in the refrigerator",
+        ],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 10,
+        title: "muffins with adult help",
+        steps: [
+          "Read the recipe and safety notes",
+          "Preheat the oven with adult help",
+          "Mix the dry ingredients",
+          "Add the wet ingredients",
+          "Spoon batter into the pan",
+          "Bake with adult supervision",
+        ],
+      },
+      {
+        minDifficulty: 7,
+        maxDifficulty: 10,
+        title: "dinner prep plan",
+        steps: [
+          "Read the recipe and check allergies",
+          "Wash hands and clear the counter",
+          "Set out ingredients",
+          "Prepare raw meat on a separate board",
+          "Wash hands and surfaces",
+          "Cook food to the safe temperature",
+        ],
+      },
+    ];
+    const recipe = chooseByLevel(recipes, difficulty);
+    const labels = ["First", "Second", "Third", "Fourth", "Fifth", "Sixth"].slice(0, recipe.steps.length);
+
+    return createTargetsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Recipe Step Sequencer: drag the cooking steps into a safe order.",
+      extraText: `Plan the ${recipe.title} from start to finish.`,
+      targetArrangement: "rows",
+      targets: labels.map((label) => ({ text: label, reviewLabel: label })),
+      answer: recipe.steps,
+      choices: recipe.steps,
+      dragPlaceholderText: "Drop step",
+      answerLabel: recipe.steps.join(" -> "),
+      reviewText: `Safe order: ${recipe.steps.join(" -> ")}`,
+    });
+  }
+
+  function createHouseholdToolMatchQuestion(type, difficulty) {
+    const pairs = takeUniqueAnswerPairs([
+      { text: "Wipe a small water spill", answer: "towel" },
+      { text: "Sweep crumbs from the floor", answer: "broom" },
+      { text: "Pick up dust after sweeping", answer: "dustpan" },
+      { text: "Cut paper for a craft", answer: "scissors" },
+      { text: "Measure a shelf", answer: "tape measure" },
+      { text: "Tighten a loose screw", answer: "screwdriver" },
+      { text: "Protect hands from a warm tray", answer: "oven mitts" },
+      { text: "Open a can with adult help", answer: "can opener" },
+      { text: "Clean a high window safely", answer: "ask an adult for a step stool" },
+      { text: "Check if a flashlight needs power", answer: "matching batteries" },
+      { text: "Label food before storing it", answer: "marker and tape" },
+    ], difficulty >= 8 ? 5 : difficulty >= 4 ? 4 : 3);
+
+    return createMatchingDragQuestion({
+      type,
+      difficulty,
+      questionText: "Tool Match: connect each household task to the right tool.",
+      extraText: difficulty >= 6
+        ? "Choose the tool that solves the task safely and directly."
+        : "Pick the everyday tool that fits each job.",
+      leftItems: pairs,
+      rightItems: pairs.map((pair) => pair.answer),
+    });
+  }
+
+  function createHouseholdPackingChecklistQuestion(type, difficulty) {
+    const checklists = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 3,
+        title: "School Bag",
+        prompt: "Pack for a regular school day.",
+        buckets: [
+          { label: "Pack", answers: ["homework folder", "pencil case", "water bottle"] },
+          { label: "Leave at home", answers: ["TV remote", "pillow", "kitchen sponge"] },
+        ],
+      },
+      {
+        minDifficulty: 1,
+        maxDifficulty: 4,
+        title: "Rainy Walk",
+        prompt: "Pack for walking to school in rain.",
+        buckets: [
+          { label: "Pack", answers: ["raincoat", "umbrella", "dry socks"] },
+          { label: "Leave at home", answers: ["beach ball", "snow sled", "ice skates"] },
+        ],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 5,
+        title: "Sports Practice",
+        prompt: "Pack for practice after school.",
+        buckets: [
+          { label: "Pack", answers: ["sports shoes", "water bottle", "team shirt"] },
+          { label: "Leave at home", answers: ["glass vase", "heavy blanket", "board game box"] },
+        ],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 7,
+        title: "Overnight Bag",
+        prompt: "Pack for one night away from home.",
+        buckets: [
+          { label: "Must pack", answers: ["toothbrush", "pajamas", "clean clothes"] },
+          { label: "Optional", answers: ["small book", "card game"] },
+          { label: "Leave at home", answers: ["full laundry basket", "open snack bowl"] },
+        ],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 10,
+        title: "Hot Weather Day Trip",
+        prompt: "Pack for a sunny day trip where you will walk outside.",
+        buckets: [
+          { label: "Health and safety", answers: ["water bottle", "hat", "sunscreen"] },
+          { label: "Useful extras", answers: ["map", "small snack"] },
+          { label: "Leave at home", answers: ["winter coat", "glass cup", "family medicine bottle"] },
+        ],
+      },
+      {
+        minDifficulty: 8,
+        maxDifficulty: 10,
+        title: "Fix the Checklist",
+        prompt: "A friend packed too much. Sort what belongs in the emergency outing bag.",
+        buckets: [
+          { label: "Essential", answers: ["charged phone", "water", "needed medicine with adult approval"] },
+          { label: "Helpful", answers: ["small snack", "light jacket"] },
+          { label: "Remove", answers: ["loose glass jar", "heavy toy collection", "unknown pills"] },
+        ],
+      },
+    ];
+    const checklist = chooseByLevel(checklists, difficulty);
+
+    return createBucketsDragQuestion({
+      type,
+      difficulty,
+      questionText: `Packing Checklist Builder: ${checklist.title}`,
+      extraText: checklist.prompt,
+      buckets: checklist.buckets,
+      dragPlaceholderText: "Drop item",
+      reviewText: checklist.prompt,
+    });
+  }
+
+  function createHouseholdProblemSolvingDragQuestion(category, difficulty) {
+    const type = `${category}-drag`;
+
+    if (difficulty <= 2) {
+      return Math.random() < 0.5
+        ? createHouseholdPackingChecklistQuestion(type, difficulty)
+        : createHouseholdToolMatchQuestion(type, difficulty);
+    }
+
+    if (difficulty <= 4) {
+      const options = [
+        createHouseholdPackingChecklistQuestion,
+        createHouseholdToolMatchQuestion,
+        createHouseholdRecipeSequenceQuestion,
+      ];
+      return randomChoiceLocal(options)(type, difficulty);
+    }
+
+    if (difficulty <= 7) {
+      if (Math.random() < 0.35) return createHouseholdRecipeSequenceQuestion(type, difficulty);
+      if (Math.random() < 0.55) return createHouseholdToolMatchQuestion(type, difficulty);
+      return createHouseholdPackingChecklistQuestion(type, difficulty);
+    }
+
+    if (Math.random() < 0.4) return createHouseholdPackingChecklistQuestion(type, difficulty);
+    if (Math.random() < 0.65) return createHouseholdRecipeSequenceQuestion(type, difficulty);
+    return createHouseholdToolMatchQuestion(type, difficulty);
+  }
+
   function createEstimationDragQuestion(category, difficulty) {
     const type = `${category}-drag`;
     if (difficulty <= 3 && Math.random() < 0.55) {
@@ -1304,10 +1741,273 @@
     });
   }
 
+  function createVocabularyGrammarDragQuestion(category, difficulty) {
+    const type = `${category}-drag`;
+    const generatorSpecs = [
+      { minDifficulty: 1, build: createPartOfSpeechSortQuestion },
+      { minDifficulty: 1, build: createPartOfSpeechSortQuestion },
+      { minDifficulty: 1, build: createAffixFactoryQuestion },
+      { minDifficulty: 1, build: createSentenceSurgeryQuestion },
+      { minDifficulty: 2, build: createWordLadderQuestion },
+      { minDifficulty: 3, build: createSynonymStrengthQuestion },
+    ].filter((spec) => difficulty >= spec.minDifficulty);
+    const generator = randomChoiceLocal(generatorSpecs).build;
+
+    return generator(type, difficulty) || createPartOfSpeechSortQuestion(type, difficulty);
+  }
+
+  function createPartOfSpeechSortQuestion(type, difficulty) {
+    const sets = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 2,
+        sentence: "The small dog runs home.",
+        buckets: [
+          { label: "Nouns", answers: ["dog", "home"] },
+          { label: "Verbs", answers: ["runs"] },
+          { label: "Adjectives", answers: ["small"] },
+        ],
+      },
+      {
+        minDifficulty: 1,
+        maxDifficulty: 3,
+        sentence: "A bright bird sings loudly.",
+        buckets: [
+          { label: "Nouns", answers: ["bird"] },
+          { label: "Verbs", answers: ["sings"] },
+          { label: "Adjectives", answers: ["bright"] },
+          { label: "Adverbs", answers: ["loudly"] },
+        ],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 4,
+        sentence: "Maya carefully packed the heavy bag.",
+        buckets: [
+          { label: "Nouns", answers: ["Maya", "bag"] },
+          { label: "Verbs", answers: ["packed"] },
+          { label: "Adjectives", answers: ["heavy"] },
+          { label: "Adverbs", answers: ["carefully"] },
+        ],
+      },
+      {
+        minDifficulty: 3,
+        maxDifficulty: 5,
+        sentence: "The kitten slept under the warm blanket.",
+        buckets: [
+          { label: "Nouns", answers: ["kitten", "blanket"] },
+          { label: "Verbs", answers: ["slept"] },
+          { label: "Adjectives", answers: ["warm"] },
+          { label: "Prepositions", answers: ["under"] },
+        ],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 6,
+        sentence: "They quickly built a sturdy bridge.",
+        buckets: [
+          { label: "Pronouns", answers: ["They"] },
+          { label: "Verbs", answers: ["built"] },
+          { label: "Adjectives", answers: ["sturdy"] },
+          { label: "Adverbs", answers: ["quickly"] },
+        ],
+      },
+      {
+        minDifficulty: 5,
+        maxDifficulty: 7,
+        sentence: "Noga read quietly because the baby slept.",
+        buckets: [
+          { label: "Nouns", answers: ["Noga", "baby"] },
+          { label: "Verbs", answers: ["read", "slept"] },
+          { label: "Adverbs", answers: ["quietly"] },
+          { label: "Conjunctions", answers: ["because"] },
+        ],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 8,
+        sentence: "Although the trail was muddy, the hikers continued safely.",
+        buckets: [
+          { label: "Nouns", answers: ["trail", "hikers"] },
+          { label: "Verbs", answers: ["was", "continued"] },
+          { label: "Adjectives", answers: ["muddy"] },
+          { label: "Adverbs", answers: ["safely"] },
+          { label: "Conjunctions", answers: ["Although"] },
+        ],
+      },
+      {
+        minDifficulty: 7,
+        maxDifficulty: 10,
+        sentence: "The curious scientist examined samples inside the quiet lab.",
+        buckets: [
+          { label: "Nouns", answers: ["scientist", "samples", "lab"] },
+          { label: "Verbs", answers: ["examined"] },
+          { label: "Adjectives", answers: ["curious", "quiet"] },
+          { label: "Prepositions", answers: ["inside"] },
+        ],
+      },
+      {
+        minDifficulty: 8,
+        maxDifficulty: 10,
+        sentence: "When evidence changes, careful writers revise their claims.",
+        buckets: [
+          { label: "Nouns", answers: ["evidence", "writers", "claims"] },
+          { label: "Verbs", answers: ["changes", "revise"] },
+          { label: "Adjectives", answers: ["careful"] },
+          { label: "Pronouns", answers: ["their"] },
+          { label: "Conjunctions", answers: ["When"] },
+        ],
+      },
+    ];
+    const item = chooseByLevel(sets, difficulty);
+    return createBucketsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Part-of-speech color sort: sort each word into the correct group.",
+      extraText: `Sentence: ${item.sentence}`,
+      buckets: item.buckets,
+    });
+  }
+
+  function createAffixFactoryQuestion(type, difficulty) {
+    const sets = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 3,
+        items: [
+          { text: "happy -> not happy", answer: "un-" },
+          { text: "do -> do again", answer: "re-" },
+          { text: "play -> full of play", answer: "-ful" },
+        ],
+        choices: ["un-", "re-", "-ful", "-less"],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 5,
+        items: [
+          { text: "read -> read wrongly", answer: "mis-" },
+          { text: "heat -> heat before", answer: "pre-" },
+          { text: "care -> without care", answer: "-less" },
+          { text: "kind -> state of being kind", answer: "-ness" },
+        ],
+        choices: ["mis-", "pre-", "-less", "-ness", "un-"],
+      },
+      {
+        minDifficulty: 4,
+        maxDifficulty: 7,
+        items: [
+          { text: "cook -> cook too much", answer: "over-" },
+          { text: "water -> below water", answer: "under-" },
+          { text: "move -> act or result of moving", answer: "-ment" },
+          { text: "wash -> able to be washed", answer: "-able" },
+        ],
+        choices: ["over-", "under-", "-ment", "-able", "-ful"],
+      },
+      {
+        minDifficulty: 6,
+        maxDifficulty: 10,
+        items: [
+          { text: "social -> against social behavior", answer: "anti-" },
+          { text: "national -> between nations", answer: "inter-" },
+          { text: "science -> person who practices science", answer: "-ist" },
+          { text: "biology -> person who studies biology", answer: "-logist" },
+        ],
+        choices: ["anti-", "inter-", "-ist", "-logist", "sub-"],
+      },
+    ];
+    const item = chooseByLevel(sets, difficulty);
+    return createTargetsDragQuestion({
+      type,
+      difficulty,
+      questionText: "Prefix/Suffix Factory: choose the block that builds each meaning.",
+      targetArrangement: "rows",
+      targets: item.items.map((entry) => ({ text: entry.text, reviewLabel: entry.text })),
+      answer: item.items.map((entry) => entry.answer),
+      choices: item.choices,
+      dragPlaceholderText: "Block",
+    });
+  }
+
+  function createSentenceSurgeryQuestion(type, difficulty) {
+    const repairs = [
+      { minDifficulty: 1, text: "i like apples", answer: "I like apples." },
+      { minDifficulty: 1, text: "she go to school", answer: "She goes to school." },
+      { minDifficulty: 2, text: "the dog are barking", answer: "The dog is barking." },
+      { minDifficulty: 3, text: "maya and i was late", answer: "Maya and I were late." },
+      { minDifficulty: 4, text: "before lunch we washed our hands", answer: "Before lunch, we washed our hands." },
+      { minDifficulty: 5, text: "the recipe needs flour sugar and salt", answer: "The recipe needs flour, sugar, and salt." },
+      { minDifficulty: 6, text: "the lights went out but we stayed calm", answer: "The lights went out, but we stayed calm." },
+      { minDifficulty: 7, text: "although the test was hard maya finished it", answer: "Although the test was hard, Maya finished it." },
+      { minDifficulty: 8, text: "the report was clear however it needed evidence", answer: "The report was clear; however, it needed evidence." },
+      { minDifficulty: 9, text: "each student need to cite their source", answer: "Each student needs to cite his or her source." },
+    ];
+    const count = difficulty >= 7 ? 4 : 3;
+    const availableRepairs = repairs.filter(
+      (item) =>
+        difficulty >= (item.minDifficulty || 1) &&
+        difficulty <= (item.maxDifficulty || 10)
+    );
+    const pairs = takeUniqueAnswerPairs((availableRepairs.length ? availableRepairs : repairs).map((item) => ({
+      text: item.text,
+      answer: item.answer,
+    })), count);
+    return createMatchingDragQuestion({
+      type,
+      difficulty,
+      questionText: "Sentence Surgery: match each broken sentence to its clean repair.",
+      extraText: "Look for capitalization, punctuation, tense, and agreement.",
+      leftItems: pairs,
+      rightItems: pairs.map((pair) => pair.answer),
+    });
+  }
+
+  function createWordLadderQuestion(type, difficulty) {
+    const ladders = [
+      { minDifficulty: 2, maxDifficulty: 4, start: "cat", end: "dog", steps: ["cot", "dot"] },
+      { minDifficulty: 2, maxDifficulty: 5, start: "hit", end: "cog", steps: ["hot", "cot"] },
+      { minDifficulty: 4, maxDifficulty: 7, start: "cold", end: "warm", steps: ["cord", "card", "ward"] },
+      { minDifficulty: 5, maxDifficulty: 8, start: "lead", end: "gold", steps: ["load", "goad"] },
+      { minDifficulty: 7, maxDifficulty: 10, start: "head", end: "tail", steps: ["heal", "teal", "tell", "tall"] },
+    ];
+    const item = chooseByLevel(ladders, difficulty);
+    return createOrderQuestion({
+      type,
+      difficulty,
+      questionText: "Word Ladder Builder: place the words so each step changes one letter.",
+      extraText: `Start at ${item.start}. End at ${item.end}.`,
+      values: item.steps,
+      startLabel: item.start,
+      endLabel: item.end,
+    });
+  }
+
+  function createSynonymStrengthQuestion(type, difficulty) {
+    const scales = [
+      { minDifficulty: 3, maxDifficulty: 5, start: "Weak", end: "Strong", values: ["cool", "cold", "freezing"] },
+      { minDifficulty: 3, maxDifficulty: 6, start: "Weak", end: "Strong", values: ["glad", "happy", "thrilled"] },
+      { minDifficulty: 4, maxDifficulty: 7, start: "Weak", end: "Strong", values: ["small", "tiny", "microscopic"] },
+      { minDifficulty: 5, maxDifficulty: 8, start: "Weak", end: "Strong", values: ["look", "notice", "examine"] },
+      { minDifficulty: 6, maxDifficulty: 10, start: "Weak", end: "Strong", values: ["good", "strong", "excellent", "exceptional"] },
+      { minDifficulty: 8, maxDifficulty: 10, start: "Weak", end: "Strong", values: ["suggest", "show", "prove", "confirm"] },
+    ];
+    const item = chooseByLevel(scales, difficulty);
+    return createOrderQuestion({
+      type,
+      difficulty,
+      questionText: "Synonym Strength Meter: place the words from weakest to strongest.",
+      extraText: "Words can be close in meaning but different in intensity.",
+      values: item.values,
+      startLabel: item.start,
+      endLabel: item.end,
+    });
+  }
+
   globalThis.createCategoryGeneratedDragQuestion = function createCategoryGeneratedDragQuestion(category, difficulty) {
     const level = clampDifficulty(difficulty);
 
     switch (category) {
+      case "vocabulary-grammar":
+        return createVocabularyGrammarDragQuestion(category, level);
       case "reading-comprehension":
         return createReadingComprehensionDragQuestion(category, level);
       case "fractions":
@@ -1319,6 +2019,8 @@
         return createFinancialLiteracyDragQuestion(category, level);
       case "nutrition":
         return createNutritionDragQuestion(category, level);
+      case "household-problem-solving":
+        return createHouseholdProblemSolvingDragQuestion(category, level);
       case "estimation":
         return createEstimationDragQuestion(category, level);
       case "measurement":

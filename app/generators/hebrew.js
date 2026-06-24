@@ -1056,6 +1056,26 @@ function buildHebrewImageTargetHtml(entry) {
 
 function createBankChoiceQuestion(entry, type, isHebrew = false) {
   const point = (value) => (isHebrew ? applyHebrewSentenceNikkud(value) : value);
+  if (entry?.mode === "interactive") {
+    const answer = point(entry.answer || entry.answerLabel || "");
+    return {
+      type,
+      difficulty: entry.difficulty,
+      mode: "interactive",
+      questionText: point(entry.question),
+      displayText: point(entry.displayText || ""),
+      extraText: point(entry.extraText || ""),
+      extraHtml: entry.extraHtml || "",
+      visualHtml: entry.visualHtml || "",
+      visualSummary: point(entry.visualSummary || ""),
+      reviewText: point(entry.reviewText || ""),
+      interactive: entry.interactive || {},
+      answerValue: answer,
+      answerLabel: point(entry.answerLabel || answer),
+      isHebrew,
+    };
+  }
+
   const options = isHebrew ? entry.options.map((option) => applyHebrewSentenceNikkud(option)) : [...entry.options];
   const answer = point(entry.answer);
   return {

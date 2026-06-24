@@ -999,6 +999,12 @@ const FRACTIONS_QUESTIONS = (() => {
 
   globalThis.createFractionsGeneratedEntry = function createFractionsGeneratedEntry(difficulty) {
     const level = fractionsClampDifficulty(difficulty);
+    if (
+      typeof globalThis.createFractionVisualInteractiveEntry === "function" &&
+      Math.random() < 0.35
+    ) {
+      return globalThis.createFractionVisualInteractiveEntry(level);
+    }
     const factories = FRACTIONS_GENERATED_FACTORIES[level] || FRACTIONS_GENERATED_FACTORIES[3];
     return {
       ...fractionsRandomChoice(factories)(),

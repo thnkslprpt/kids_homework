@@ -5,7 +5,12 @@ function createGeneratedCategoryQuestion(category, difficulty) {
   }
 
   try {
-    const normalizedEntry = normalizeChoiceBankEntry(config.factory(difficulty), `${category}-choice`);
+    const generatedEntry = config.factory(difficulty);
+    if (generatedEntry?.mode === "drag") {
+      return generatedEntry;
+    }
+
+    const normalizedEntry = normalizeChoiceBankEntry(generatedEntry, `${category}-choice`);
     return normalizedEntry ? createBankChoiceQuestion(normalizedEntry, `${category}-choice`) : null;
   } catch {
     return null;
@@ -362,4 +367,3 @@ function createVisualChoiceQuestion({
     isHebrew: false,
   };
 }
-

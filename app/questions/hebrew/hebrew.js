@@ -15,6 +15,23 @@
     return values.map(point);
   }
 
+  function uniqueStrings(values) {
+    return Array.from(new Set((values || []).map((value) => String(value || "").trim()).filter(Boolean)));
+  }
+
+  function escapeHtml(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
+
+  function pointRootLabel(root) {
+    return point(`שֹׁרֶשׁ ${Array.from(String(root || "").trim()).join("-")}`);
+  }
+
   function choiceBlueprint(blueprint) {
     return entry({
       ...blueprint,
@@ -35,6 +52,167 @@
     }
     const eligible = items.filter((item) => item.difficulty <= level);
     return eligible.length ? eligible : items;
+  }
+
+  function getCumulativeEligible(items, difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const eligible = items.filter((item) => item.difficulty <= level);
+    return eligible.length ? eligible : items;
+  }
+
+  function createHebrewTargetsDragActivity({
+    topic,
+    difficulty,
+    questionText,
+    extraText = "",
+    targets,
+    answer,
+    choices,
+    dragPlaceholderText = "גררו לכאן",
+    targetArrangement = "rows",
+    lineStartLabel = "",
+    lineEndLabel = "",
+    showTargetLabels = true,
+  }) {
+    const normalizedTargets = (targets || [])
+      .map((target) => ({
+        text: point(String(target?.text || "").trim()),
+        reviewLabel: point(String(target?.reviewLabel || target?.text || "").trim()),
+      }))
+      .filter((target) => target.text || target.reviewLabel);
+    const answerTokens = pointList(answer || []).map((token) => String(token || "").trim()).filter(Boolean);
+    const choiceTexts = uniqueStrings([...pointList(choices || []), ...answerTokens]);
+
+    if (!questionText || normalizedTargets.length !== answerTokens.length || choiceTexts.length < answerTokens.length) {
+      return null;
+    }
+
+    return {
+      topic,
+      question: point(questionText),
+      type: "hebrew-drag",
+      difficulty,
+      mode: "drag",
+      questionText: point(questionText),
+      displayText: "",
+      extraText: point(extraText),
+      extraHtml: "",
+      visualHtml: "",
+      visualSummary: normalizedTargets.map((target) => target.reviewLabel).join(", "),
+      dragLayout: "targets",
+      dragTargetArrangement: targetArrangement,
+      dragTargets: normalizedTargets,
+      dragChoices: shuffle(
+        choiceTexts.map((text, index) => ({
+          id: `${topic}-${difficulty}-${index}-${text}`,
+          text,
+        }))
+      ),
+      dragAnswerTokens: answerTokens,
+      dragPlaceholderText: point(dragPlaceholderText),
+      dragLineStartLabel: point(lineStartLabel),
+      dragLineEndLabel: point(lineEndLabel),
+      dragShowTargetLabels: showTargetLabels,
+      reviewText: answerTokens.join(" | "),
+      answer: answerTokens.join(" | "),
+      answerValue: answerTokens.join(" | "),
+      answerLabel: normalizedTargets
+        .map((target, index) => `${target.reviewLabel || index + 1}: ${answerTokens[index]}`)
+        .join(" | "),
+      isHebrew: true,
+    };
+  }
+
+  function createHebrewBucketsDragActivity({ topic, difficulty, questionText, extraText = "", buckets }) {
+    const normalizedBuckets = (buckets || [])
+      .map((bucket) => ({
+        label: point(String(bucket?.label || "").trim()),
+        answers: pointList(bucket?.answers || []).map((answer) => String(answer || "").trim()).filter(Boolean),
+      }))
+      .filter((bucket) => bucket.label && bucket.answers.length);
+    const flatAnswers = normalizedBuckets.flatMap((bucket) => bucket.answers);
+
+    if (!questionText || !normalizedBuckets.length || flatAnswers.length !== uniqueStrings(flatAnswers).length) {
+      return null;
+    }
+
+    return {
+      topic,
+      question: point(questionText),
+      type: "hebrew-drag",
+      difficulty,
+      mode: "drag",
+      questionText: point(questionText),
+      displayText: "",
+      extraText: point(extraText),
+      extraHtml: "",
+      visualHtml: "",
+      visualSummary: normalizedBuckets.map((bucket) => bucket.label).join(", "),
+      dragLayout: "buckets",
+      dragBucketColumns: normalizedBuckets,
+      dragChoices: shuffle(
+        flatAnswers.map((text, index) => ({
+          id: `${topic}-${difficulty}-${index}-${text}`,
+          text,
+        }))
+      ),
+      dragAnswerTokens: flatAnswers,
+      dragPlaceholderText: point("גררו לכאן"),
+      reviewText: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
+      answer: flatAnswers.join(" | "),
+      answerValue: flatAnswers.join(" | "),
+      answerLabel: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
+      isHebrew: true,
+    };
+  }
+
+  function createHebrewMatchingDragActivity({ topic, difficulty, questionText, extraText = "", pairs }) {
+    const normalizedPairs = (pairs || [])
+      .map((pair) => ({
+        text: point(String(pair?.text || "").trim()),
+        answer: point(String(pair?.answer || "").trim()),
+      }))
+      .filter((pair) => pair.text && pair.answer);
+    const answerTokens = normalizedPairs.map((pair) => pair.answer);
+
+    if (
+      !questionText ||
+      normalizedPairs.length < 2 ||
+      answerTokens.length !== uniqueStrings(answerTokens).length ||
+      normalizedPairs.map((pair) => pair.text).length !== uniqueStrings(normalizedPairs.map((pair) => pair.text)).length
+    ) {
+      return null;
+    }
+
+    return {
+      topic,
+      question: point(questionText),
+      type: "hebrew-drag",
+      difficulty,
+      mode: "drag",
+      questionText: point(questionText),
+      displayText: "",
+      extraText: point(extraText),
+      extraHtml: "",
+      visualHtml: "",
+      visualSummary: normalizedPairs.map((pair) => pair.text).join(", "),
+      dragLayout: "matching",
+      dragChoices: [],
+      dragAnswerTokens: answerTokens,
+      matchLeftItems: normalizedPairs.map((pair, index) => ({
+        id: `${topic}-left-${difficulty}-${index}`,
+        text: pair.text,
+      })),
+      matchRightItems: shuffle(normalizedPairs).map((pair, index) => ({
+        id: `${topic}-right-${difficulty}-${index}`,
+        text: pair.answer,
+      })),
+      reviewText: normalizedPairs.map((pair) => `${pair.text}: ${pair.answer}`).join(" | "),
+      answer: answerTokens.join(" | "),
+      answerValue: answerTokens.join(" | "),
+      answerLabel: normalizedPairs.map((pair) => `${pair.text}: ${pair.answer}`).join(" | "),
+      isHebrew: true,
+    };
   }
 
   function createStaticBlueprintEntry(difficulty) {
@@ -154,6 +332,26 @@
     });
   }
 
+  function createShoreshTreeQuestion(difficulty) {
+    const count = difficulty >= 6 ? 3 : 2;
+    const wordsPerRoot = difficulty >= 7 ? 3 : 2;
+    const families = shuffle(getEligible(ROOT_FAMILIES, difficulty)).slice(0, count);
+    if (families.length !== count) {
+      return null;
+    }
+
+    return createHebrewBucketsDragActivity({
+      topic: "hebrew-shoresh-tree",
+      difficulty,
+      questionText: "Shoresh Tree: drag each Hebrew word to its root tree.",
+      extraText: "Words from the same Hebrew root belong on the same tree.",
+      buckets: families.map((family) => ({
+        label: pointRootLabel(family.root),
+        answers: shuffle(family.words).slice(0, wordsPerRoot),
+      })),
+    });
+  }
+
   const VERB_FORM_BLUEPRINTS = [
     { difficulty: 1, prompt: "Choose the verb that agrees with the subject.", displayText: "הילד ___ בחצר.", answer: "רץ", options: ["רץ", "רצה", "רצים", "רצות"], reviewText: "הילד רץ בחצר." },
     { difficulty: 1, prompt: "Choose the verb that agrees with the subject.", displayText: "הילדה ___ ספר.", answer: "קוראת", options: ["קורא", "קוראת", "קוראים", "קוראות"], reviewText: "הילדה קוראת ספר." },
@@ -188,6 +386,38 @@
     });
   }
 
+  const VERB_TIMELINE_BLUEPRINTS = [
+    { difficulty: 3, past: "כתב", present: "כותב", future: "יכתוב" },
+    { difficulty: 3, past: "קראה", present: "קוראת", future: "תקרא" },
+    { difficulty: 4, past: "הלך", present: "הולך", future: "ילך" },
+    { difficulty: 4, past: "פתחה", present: "פותחת", future: "תפתח" },
+    { difficulty: 5, past: "למדו", present: "לומדים", future: "ילמדו" },
+    { difficulty: 6, past: "בדקנו", present: "בודקים", future: "נבדוק" },
+    { difficulty: 7, past: "הסבירה", present: "מסבירה", future: "תסביר" },
+    { difficulty: 8, past: "החליטו", present: "מחליטים", future: "יחליטו" },
+  ];
+
+  function createVerbTimelineQuestion(difficulty) {
+    const item = randomChoice(getEligible(VERB_TIMELINE_BLUEPRINTS, difficulty));
+    return createHebrewTargetsDragActivity({
+      topic: "hebrew-verb-timeline",
+      difficulty: item.difficulty,
+      questionText: "Verb Tense Timeline: drag each verb to past, present, or future.",
+      extraText: "Use the time position to show what the verb means.",
+      targetArrangement: "line",
+      targets: [
+        { text: "עָבָר" },
+        { text: "הוֹוֶה" },
+        { text: "עָתִיד" },
+      ],
+      answer: [item.past, item.present, item.future],
+      choices: [item.past, item.present, item.future],
+      dragPlaceholderText: "פֹּעַל",
+      lineStartLabel: "אָז",
+      lineEndLabel: "אַחַר כָּךְ",
+    });
+  }
+
   const NUMBER_FORM_BLUEPRINTS = [
     { difficulty: 1, question: "Choose the plural form.", displayText: "ילד -> ___", answer: "ילדים", options: ["ילדים", "ילדות", "ילד", "ילדה"], reviewText: "ילד -> ילדים" },
     { difficulty: 1, question: "Choose the singular form.", displayText: "ילדות -> ___", answer: "ילדה", options: ["ילדה", "ילד", "ילדים", "ילדות"], reviewText: "ילדות -> ילדה" },
@@ -210,6 +440,61 @@
     return choiceBlueprint({
       topic: "hebrew-singular-plural",
       ...randomChoice(getEligible(NUMBER_FORM_BLUEPRINTS, difficulty)),
+    });
+  }
+
+  const GENDER_CLOSET_BLUEPRINTS = [
+    {
+      difficulty: 1,
+      adjective: "גָּדוֹל",
+      items: [
+        { noun: "הַיֶּלֶד", answer: "גָּדוֹל" },
+        { noun: "הַיַּלְדָּה", answer: "גְּדוֹלָה" },
+      ],
+    },
+    {
+      difficulty: 2,
+      adjective: "שָׂמֵחַ",
+      items: [
+        { noun: "הַיֶּלֶד", answer: "שָׂמֵחַ" },
+        { noun: "הַיַּלְדָּה", answer: "שְׂמֵחָה" },
+        { noun: "הַיְלָדִים", answer: "שְׂמֵחִים" },
+        { noun: "הַיְלָדוֹת", answer: "שְׂמֵחוֹת" },
+      ],
+    },
+    {
+      difficulty: 4,
+      adjective: "חָדָשׁ",
+      items: [
+        { noun: "סֵפֶר", answer: "חָדָשׁ" },
+        { noun: "מַחְבֶּרֶת", answer: "חֲדָשָׁה" },
+        { noun: "סְפָרִים", answer: "חֲדָשִׁים" },
+        { noun: "מַחְבָּרוֹת", answer: "חֲדָשׁוֹת" },
+      ],
+    },
+    {
+      difficulty: 6,
+      adjective: "פָּתוּחַ",
+      items: [
+        { noun: "חַלּוֹן", answer: "פָּתוּחַ" },
+        { noun: "דֶּלֶת", answer: "פְּתוּחָה" },
+        { noun: "חַלּוֹנוֹת", answer: "פְּתוּחִים" },
+        { noun: "דְּלָתוֹת", answer: "פְּתוּחוֹת" },
+      ],
+    },
+  ];
+
+  function createGenderAgreementClosetQuestion(difficulty) {
+    const item = randomChoice(getEligible(GENDER_CLOSET_BLUEPRINTS, difficulty));
+    return createHebrewTargetsDragActivity({
+      topic: "hebrew-gender-closet",
+      difficulty: item.difficulty,
+      questionText: "Gender Agreement Closet: dress each noun with the adjective form that fits.",
+      extraText: `Use the adjective family for ${item.adjective}.`,
+      targets: item.items.map((part) => ({ text: part.noun, reviewLabel: part.noun })),
+      answer: item.items.map((part) => part.answer),
+      choices: item.items.map((part) => part.answer),
+      dragPlaceholderText: "תֹּאַר",
     });
   }
 
@@ -241,6 +526,48 @@
       answer: blueprint.answer,
       options: blueprint.options,
       reviewText: blueprint.reviewText,
+    });
+  }
+
+  const PREPOSITION_SCENE_BLUEPRINTS = [
+    {
+      difficulty: 2,
+      places: [
+        { place: "עַל הַשֻּׁלְחָן", object: "הַסֵּפֶר" },
+        { place: "מִתַּחַת לַשֻּׁלְחָן", object: "הַכַּדּוּר" },
+        { place: "לְיַד הַדֶּלֶת", object: "הַתִּיק" },
+      ],
+    },
+    {
+      difficulty: 3,
+      places: [
+        { place: "בְּתוֹךְ הַתִּיק", object: "הָעִפָּרוֹן" },
+        { place: "עַל הַכִּסֵּא", object: "הֶחָתוּל" },
+        { place: "לְיַד הַמִּטָּה", object: "הַנַּעֲלַיִם" },
+      ],
+    },
+    {
+      difficulty: 5,
+      places: [
+        { place: "בֵּין הַכִּסֵּא לַשֻּׁלְחָן", object: "הַתִּיק" },
+        { place: "מֵעַל הַמַּדָּף", object: "הַתְּמוּנָה" },
+        { place: "מִתַּחַת לַמִּטָּה", object: "הַכַּדּוּר" },
+        { place: "בְּתוֹךְ הָאָרוֹן", object: "הַחוּלְצָה" },
+      ],
+    },
+  ];
+
+  function createPrepositionSceneBuilderQuestion(difficulty) {
+    const item = randomChoice(getEligible(PREPOSITION_SCENE_BLUEPRINTS, difficulty));
+    return createHebrewTargetsDragActivity({
+      topic: "hebrew-preposition-scene",
+      difficulty: item.difficulty,
+      questionText: "Preposition Scene Builder: place each object where the Hebrew phrase says it belongs.",
+      extraText: "Read the location words, then move the object card.",
+      targets: item.places.map((part) => ({ text: part.place, reviewLabel: part.place })),
+      answer: item.places.map((part) => part.object),
+      choices: item.places.map((part) => part.object),
+      dragPlaceholderText: "חֵפֶץ",
     });
   }
 
@@ -328,6 +655,144 @@
     });
   }
 
+  const OPPOSITE_MEMORY_PAIRS = [
+    { difficulty: 1, left: "גָּדוֹל", right: "קָטָן" },
+    { difficulty: 1, left: "חַם", right: "קַר" },
+    { difficulty: 2, left: "לְמַעְלָה", right: "לְמַטָּה" },
+    { difficulty: 2, left: "יוֹם", right: "לַיְלָה" },
+    { difficulty: 3, left: "פָּתוּחַ", right: "סָגוּר" },
+    { difficulty: 3, left: "מָהִיר", right: "אִטִּי" },
+    { difficulty: 4, left: "קָרוֹב", right: "רָחוֹק" },
+    { difficulty: 5, left: "זוֹכֵר", right: "שׁוֹכֵחַ" },
+    { difficulty: 6, left: "הַתְחָלָה", right: "סוֹף" },
+    { difficulty: 7, left: "מַסְכִּים", right: "מִתְנַגֵּד" },
+  ];
+
+  function createOppositePairsMemoryQuestion(difficulty) {
+    const count = difficulty >= 5 ? 4 : 3;
+    const pairs = shuffle(getCumulativeEligible(OPPOSITE_MEMORY_PAIRS, difficulty)).slice(0, count);
+    if (pairs.length !== count) {
+      return null;
+    }
+
+    return createHebrewMatchingDragActivity({
+      topic: "hebrew-opposite-memory",
+      difficulty,
+      questionText: "Opposite Pairs Memory: match each Hebrew word with its opposite.",
+      extraText: "Click a word, then click the card that means the opposite.",
+      pairs: pairs.map((pair) => ({ text: pair.left, answer: pair.right })),
+    });
+  }
+
+  const HOMOGRAPH_CONTEXT_BLUEPRINTS = [
+    {
+      difficulty: 5,
+      spelling: "ספר",
+      sentence: "דנה קוראת ספר חדש.",
+      pointedSentence: "דָּנָה קוֹרֵאת סֵפֶר חָדָשׁ.",
+      answer: "book",
+      options: ["book", "counted", "barber", "border"],
+    },
+    {
+      difficulty: 5,
+      spelling: "ספר",
+      sentence: "יוסי ספר שלושה כדורים.",
+      pointedSentence: "יוֹסִי סָפַר שְׁלוֹשָׁה כַּדּוּרִים.",
+      answer: "counted",
+      options: ["counted", "book", "story", "school"],
+    },
+    {
+      difficulty: 6,
+      spelling: "אור",
+      sentence: "האור בחדר חזק.",
+      pointedSentence: "הָאוֹר בַּחֶדֶר חָזָק.",
+      answer: "light",
+      options: ["light", "skin", "city", "lesson"],
+    },
+    {
+      difficulty: 7,
+      spelling: "שבע",
+      sentence: "אכלתי מספיק, ואני שבע.",
+      pointedSentence: "אָכַלְתִּי מַסְפִּיק, וַאֲנִי שָׂבֵעַ.",
+      answer: "full from eating",
+      options: ["full from eating", "the number seven", "painted", "heard"],
+    },
+    {
+      difficulty: 7,
+      spelling: "שבע",
+      sentence: "יש שבע מחברות על השולחן.",
+      pointedSentence: "יֵשׁ שֶׁבַע מַחְבָּרוֹת עַל הַשֻּׁלְחָן.",
+      answer: "the number seven",
+      options: ["the number seven", "full from eating", "a week", "a promise"],
+    },
+  ];
+
+  function createHomographContextChoiceQuestion(difficulty) {
+    const item = randomChoice(getEligible(HOMOGRAPH_CONTEXT_BLUEPRINTS, difficulty));
+    return choiceBlueprint({
+      topic: "hebrew-homograph-context",
+      difficulty: item.difficulty,
+      question: "Homograph Context Choice: choose the meaning that fits the Hebrew sentence.",
+      extraText: "The same Hebrew spelling can have different meanings. Use the sentence context.",
+      visualHtml: `
+        <div class="mini-data-card" dir="rtl">
+          <strong>${escapeHtml(item.spelling)}</strong>
+          <div>${escapeHtml(item.sentence)}</div>
+        </div>
+      `,
+      visualSummary: item.pointedSentence,
+      answer: item.answer,
+      options: item.options,
+      reviewText: `${item.pointedSentence} = ${item.answer}`,
+    });
+  }
+
+  const FINAL_LETTER_GATE_BLUEPRINTS = [
+    { difficulty: 1, word: "שָׁלוֹ□", answer: "ם", options: ["ם", "מ", "ן", "ף"], reviewText: "שָׁלוֹם" },
+    { difficulty: 1, word: "קָטָ□", answer: "ן", options: ["ן", "נ", "ם", "ץ"], reviewText: "קָטָן" },
+    { difficulty: 1, word: "ע□", answer: "ץ", options: ["ץ", "צ", "ך", "ף"], reviewText: "עֵץ" },
+    { difficulty: 2, word: "מֶלֶ□", answer: "ך", options: ["ך", "כ", "ף", "ם"], reviewText: "מֶלֶךְ" },
+    { difficulty: 2, word: "חוֹ□", answer: "ף", options: ["ף", "פ", "ץ", "ן"], reviewText: "חוֹף" },
+    { difficulty: 3, word: "מִכְתָּ□", answer: "ב", options: ["ב", "ם", "ף", "ך"], reviewText: "מִכְתָּב" },
+  ];
+
+  function createFinalLetterGateQuestion(difficulty) {
+    const item = randomChoice(getEligible(FINAL_LETTER_GATE_BLUEPRINTS, difficulty));
+    return choiceBlueprint({
+      topic: "hebrew-final-letter-gate",
+      difficulty: item.difficulty,
+      question: "Final Letter Gate: choose the letter that lets the word pass.",
+      displayText: item.word,
+      answer: item.answer,
+      options: item.options,
+      reviewText: item.reviewText,
+    });
+  }
+
+  function createHebrewChoiceSessionQuestion(picked) {
+    if (!picked) {
+      return null;
+    }
+
+    return {
+      type: "hebrew-choice",
+      difficulty: picked.difficulty,
+      mode: "choice",
+      questionText: picked.question,
+      displayText: picked.displayText || "",
+      extraText: picked.extraText || "",
+      extraHtml: "",
+      visualHtml: picked.visualHtml || "",
+      visualSummary: picked.visualSummary || "",
+      reviewText: picked.reviewText || "",
+      options: shuffle(picked.options),
+      answerValue: picked.answer,
+      answerLabel: picked.answer,
+      isHebrew: true,
+      forceCompactMain: true,
+    };
+  }
+
   const CLOZE_BLUEPRINTS = [
     { difficulty: 1, displayText: "אני ___ מים.", answer: "שותה", options: ["שותה", "קורא", "רץ", "ישן"], reviewText: "אני שותה מים." },
     { difficulty: 1, displayText: "הילד ___ כדור.", answer: "זורק", options: ["זורק", "שותה", "קוראת", "ישנה"], reviewText: "הילד זורק כדור." },
@@ -362,14 +827,21 @@
   globalThis.createHebrewGeneratedSessionQuestion = (difficulty) => {
     const picked = pickGeneratedEntry(
       [
+        createFinalLetterGateQuestion,
+        createGenderAgreementClosetQuestion,
+        createOppositePairsMemoryQuestion,
         createStaticBlueprintEntry,
         { minLevel: 2, create: createRootFamilyEntry },
+        { minLevel: 2, create: createShoreshTreeQuestion },
+        { minLevel: 2, create: createPrepositionSceneBuilderQuestion },
         createVerbFormEntry,
+        { minLevel: 3, create: createVerbTimelineQuestion },
         createNumberFormEntry,
         createPrepositionEntry,
         createReadingEntry,
         { minLevel: 2, create: createCorrectionEntry },
         createRelationEntry,
+        { minLevel: 5, create: createHomographContextChoiceQuestion },
         createClozeEntry,
       ],
       difficulty
@@ -377,22 +849,19 @@
     if (!picked) {
       return null;
     }
-    return {
-      type: "hebrew-choice",
-      difficulty: picked.difficulty,
-      mode: "choice",
-      questionText: picked.question,
-      displayText: picked.displayText || "",
-      extraText: picked.extraText || "",
-      extraHtml: "",
-      visualHtml: picked.visualHtml || "",
-      visualSummary: picked.visualSummary || "",
-      reviewText: picked.reviewText || "",
-      options: shuffle(picked.options),
-      answerValue: picked.answer,
-      answerLabel: picked.answer,
-      isHebrew: true,
-      forceCompactMain: true,
-    };
+    if (picked.mode === "drag") {
+      return picked;
+    }
+    return createHebrewChoiceSessionQuestion(picked);
+  };
+
+  globalThis.HEBREW_GENERATOR_COVERAGE = {
+    finalLetterGate: (difficulty) => createHebrewChoiceSessionQuestion(createFinalLetterGateQuestion(difficulty)),
+    genderAgreementCloset: createGenderAgreementClosetQuestion,
+    shoreshTree: createShoreshTreeQuestion,
+    prepositionSceneBuilder: createPrepositionSceneBuilderQuestion,
+    verbTenseTimeline: createVerbTimelineQuestion,
+    oppositePairsMemory: createOppositePairsMemoryQuestion,
+    homographContextChoice: (difficulty) => createHebrewChoiceSessionQuestion(createHomographContextChoiceQuestion(difficulty)),
   };
 })();

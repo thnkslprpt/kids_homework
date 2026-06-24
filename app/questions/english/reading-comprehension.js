@@ -496,6 +496,103 @@ function readingShuffleArray(values) {
   }
   const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
 
+  const inferenceDetectiveInteractiveBlueprints = [
+    {
+      minDifficulty: 2,
+      maxDifficulty: 4,
+      passage: [
+        "The hallway floor was shiny with puddles.",
+        "Jada shook water from her umbrella before hanging it by the door.",
+        "Her class folder stayed dry inside her backpack.",
+      ],
+      inference: "It was raining when Jada came inside.",
+      supportingClues: ["The hallway had puddles.", "Jada shook water from her umbrella."],
+      distractors: ["The folder stayed dry.", "The door had a hook."],
+    },
+    {
+      minDifficulty: 3,
+      maxDifficulty: 6,
+      passage: [
+        "Ben stared at the spelling list before the quiz.",
+        "He covered the words with his hand and whispered each one twice.",
+        "When the quiz began, he smiled at the first word.",
+      ],
+      inference: "Ben prepared for the spelling quiz.",
+      supportingClues: ["He studied the spelling list.", "He whispered each word twice.", "He smiled at the first quiz word."],
+      distractors: ["The quiz began in class.", "The words were on a list.", "Ben had a hand."],
+    },
+    {
+      minDifficulty: 5,
+      maxDifficulty: 8,
+      passage: [
+        "The article says the school garden should stay open after classes.",
+        "It explains that students can observe insects there and harvest vegetables for the cafeteria.",
+        "The last sentence asks families to sign a support letter.",
+      ],
+      inference: "The article is trying to persuade readers.",
+      supportingClues: ["It says the garden should stay open.", "It gives reasons the garden helps students.", "It asks families to sign a support letter."],
+      distractors: ["The garden is at school.", "The cafeteria is mentioned.", "The article has a last sentence."],
+    },
+    {
+      minDifficulty: 7,
+      maxDifficulty: 10,
+      passage: [
+        "A report claimed the new filter made pond water safe.",
+        "Mira asked whether the class tested more than one water sample.",
+        "She also asked if they compared results before and after filtering.",
+      ],
+      inference: "Mira is questioning whether the evidence is strong enough.",
+      supportingClues: ["She asked about testing more than one sample.", "She asked about comparing before and after results."],
+      distractors: ["The report was about pond water.", "The class used a filter.", "Mira spoke after the report."],
+    },
+  ];
+
+  function chooseInferenceDetectiveBlueprint(level) {
+    const choices = inferenceDetectiveInteractiveBlueprints.filter(
+      (blueprint) => level >= blueprint.minDifficulty && level <= blueprint.maxDifficulty
+    );
+    return randomChoice(choices.length ? choices : inferenceDetectiveInteractiveBlueprints);
+  }
+
+  function createInferenceDetectiveInteractiveEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const blueprint = chooseInferenceDetectiveBlueprint(level);
+    const clueCards = readingShuffleArray([
+      ...blueprint.supportingClues.map((summary) => ({ summary, supports: true })),
+      ...blueprint.distractors.map((summary) => ({ summary, supports: false })),
+    ]);
+    const answerIndexes = clueCards
+      .map((card, index) => (card.supports ? index : null))
+      .filter((index) => index !== null);
+    const answerLabel = answerIndexes.map((index) => clueCards[index].summary).join(", ");
+    const passageHtml = buildReadingPassageCard("Case File", blueprint.passage);
+
+    return {
+      mode: "interactive",
+      difficulty: level,
+      question: "Inference Detective: tap every clue that supports the inference.",
+      displayText: `Inference: ${blueprint.inference}`,
+      visualHtml: passageHtml,
+      visualSummary: blueprint.passage.join(" "),
+      reviewText: blueprint.passage.join(" "),
+      answer: answerLabel,
+      answerLabel,
+      interactive: {
+        layout: "part-select",
+        prompt: "Choose only the clue cards that prove the inference.",
+        parts: clueCards.map((card, index) => ({
+          label: `Clue ${String.fromCharCode(65 + index)}`,
+          summary: card.summary,
+        })),
+        answerIndexes,
+        minSelected: answerIndexes.length,
+        maxSelected: answerIndexes.length,
+        selectedLabel: "Chosen clues",
+        checkLabel: "Check Clues",
+      },
+    };
+  }
+
   const readingComprehensionSupplementalBlueprints = [
     { topic: "reading-main-idea", difficulty: 1, question: "What is the main idea?", displayText: "Sam feeds the dog, fills its water bowl, and brushes its fur.", answer: "Sam takes care of the dog.", options: ["Sam takes care of the dog.", "Sam loses the dog.", "The dog is at school.", "The bowl is broken."] },
     { topic: "reading-paragraph-ordering", difficulty: 1, question: "Which comes first?", displayText: "A: Eat the sandwich. B: Make the sandwich. C: Put the plate away.", answer: "B", options: ["A", "B", "C", "They are all first"] },
@@ -512,6 +609,10 @@ function readingShuffleArray(values) {
 
   function createSupplementalReadingComprehensionEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    if (level >= 2 && Math.random() < 0.45) {
+      return createInferenceDetectiveInteractiveEntry(level);
+    }
+
     const choices = readingComprehensionSupplementalBlueprints.filter((item) => item.difficulty <= level);
     return entry(randomChoice(choices));
   }

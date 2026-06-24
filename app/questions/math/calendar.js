@@ -178,12 +178,14 @@ function createCalendarGeneratedEntry(difficulty) {
       calendarGenerateShortDayOffset,
       calendarGenerateAdjacentMonth,
       calendarGenerateWeeksToDays,
+      calendarGenerateDragPlanner,
       calendarGenerateSeasonQuestion,
     ],
     3: [
       calendarGenerateDateShiftWithinMonth,
       calendarGenerateWeeksToDays,
       calendarGenerateDaysBetween,
+      calendarGenerateMonthlyPatternHunt,
       calendarGenerateLeapFebruary,
     ],
     4: [
@@ -202,24 +204,28 @@ function createCalendarGeneratedEntry(difficulty) {
       calendarGenerateMonthNotFourWeeks,
       calendarGenerateWeeksToDays,
       calendarGenerateEveryOtherWeek,
+      calendarGenerateTransitTimetable,
       calendarGenerateSchoolDaysInWeeks,
     ],
     7: [
       calendarGenerateAdvancedWeekOffset,
       calendarGenerateDeadlineBefore,
       calendarGenerateQuarterQuestion,
+      calendarGenerateDragPlanner,
       calendarGenerateRecurringDays,
     ],
     8: [
       calendarGenerateLeapYearChoice,
       calendarGenerateQuarterlySchedule,
       calendarGenerateCalendarGridRows,
+      calendarGenerateTransitTimetable,
       calendarGenerateDateShiftWithYear,
     ],
     9: [
       calendarGenerateLeapDayShift,
       calendarGenerateBusinessDaysRange,
       calendarGenerateBiweeklyDate,
+      calendarGenerateMonthlyPatternHunt,
       calendarGenerateCalendarGridRows,
     ],
     10: [
@@ -237,7 +243,19 @@ function calendarStatic(question, answer, options, difficulty) {
   return calendarBuildEntry({ question, answer, options, difficulty, family: "static" });
 }
 
-function calendarBuildEntry({ question, answer, options, difficulty, family = "calendar" }) {
+function calendarBuildEntry({
+  question,
+  answer,
+  options,
+  difficulty,
+  family = "calendar",
+  displayText = "",
+  visualHtml = "",
+  visualSummary = "",
+  extraText = "",
+  extraHtml = "",
+  reviewText = "",
+}) {
   const normalizedQuestion = String(question || "").trim();
   const normalizedAnswer = String(answer);
   const normalizedOptions = calendarUniqueStrings(options || []);
@@ -259,16 +277,23 @@ function calendarBuildEntry({ question, answer, options, difficulty, family = "c
     category: "Calendar",
     type: "calendar-choice",
     family,
+    displayText,
+    visualHtml,
+    visualSummary,
+    extraText,
+    extraHtml,
+    reviewText,
   };
 }
 
-function calendarBuildGeneratedEntry({ question, answer, distractors, difficulty, family }) {
+function calendarBuildGeneratedEntry({ question, answer, distractors, difficulty, family, ...rest }) {
   return calendarBuildEntry({
     question,
     answer,
     options: calendarMakeChoiceOptions(answer, distractors),
     difficulty,
     family,
+    ...rest,
   });
 }
 
@@ -410,6 +435,75 @@ function calendarGenerateDateShiftWithinMonth(level) {
   });
 }
 
+function calendarGenerateDragPlanner(level) {
+  const blueprints = [
+    {
+      minLevel: 2,
+      maxLevel: 4,
+      title: "March Planner",
+      year: 2026,
+      monthIndex: 2,
+      startDayIndex: 0,
+      days: 31,
+      clues: [
+        { event: "Soccer practice", day: 5, clue: "Soccer is 3 days after Monday, March 2." },
+        { event: "Library visit", day: 10, clue: "The library visit is the Tuesday after March 9." },
+        { event: "Dentist", day: 13, clue: "The dentist is on Friday the 13th." },
+      ],
+    },
+    {
+      minLevel: 4,
+      maxLevel: 7,
+      title: "April Planner",
+      year: 2026,
+      monthIndex: 3,
+      startDayIndex: 3,
+      days: 30,
+      clues: [
+        { event: "Science fair", day: 8, clue: "The science fair is 1 week after April 1." },
+        { event: "Piano lesson", day: 14, clue: "Piano is the Tuesday after April 13." },
+        { event: "Field trip", day: 24, clue: "The field trip is 10 days after piano." },
+      ],
+    },
+    {
+      minLevel: 7,
+      maxLevel: 10,
+      title: "June Planner",
+      year: 2026,
+      monthIndex: 5,
+      startDayIndex: 1,
+      days: 30,
+      clues: [
+        { event: "Project checkpoint", day: 9, clue: "The checkpoint is 8 days after Monday, June 1." },
+        { event: "Bus-card pickup", day: 16, clue: "Bus-card pickup is 1 week after the checkpoint." },
+        { event: "Camp starts", day: 22, clue: "Camp starts on the Monday after June 21." },
+        { event: "Pack bags", day: 28, clue: "Pack bags 6 days after camp starts." },
+      ],
+    },
+  ];
+  const blueprint = calendarChooseByLevel(blueprints, level);
+  const events = level >= 7 ? blueprint.clues : blueprint.clues.slice(0, 3);
+  const choices = events.map((event) => event.event);
+  const targets = events.map((event) => ({
+    html: calendarRenderDateTarget(blueprint, event.day),
+    reviewLabel: calendarFormatMonthDay(blueprint.monthIndex, event.day),
+  }));
+
+  return calendarBuildTargetsDragQuestion({
+    difficulty: level,
+    family: "calendar-drag-planner",
+    questionText: "Calendar Drag Planner: put each event on the correct date.",
+    extraText: `${blueprint.title}\n${events.map((event) => `- ${event.clue}`).join("\n")}`,
+    visualHtml: calendarRenderMiniCalendar(blueprint, events.map((event) => event.day)),
+    visualSummary: `${blueprint.title}: ${events.map((event) => `${event.event} on ${calendarFormatMonthDay(blueprint.monthIndex, event.day)}`).join(", ")}.`,
+    targets,
+    answer: choices,
+    choices,
+    answerLabel: events.map((event) => `${calendarFormatMonthDay(blueprint.monthIndex, event.day)}: ${event.event}`).join(" | "),
+    dragPlaceholderText: "Drop event",
+  });
+}
+
 function calendarGenerateDaysBetween(level) {
   const start = calendarRandomInt(1, 20);
   const distance = calendarRandomInt(3, level >= 7 ? 14 : 8);
@@ -522,6 +616,70 @@ function calendarGenerateSchoolDaysInWeeks(level) {
   });
 }
 
+function calendarGenerateMonthlyPatternHunt(level) {
+  const patterns = [
+    {
+      minLevel: 3,
+      maxLevel: 5,
+      title: "May 2026",
+      year: 2026,
+      monthIndex: 4,
+      startDayIndex: 5,
+      days: 31,
+      prompt: "Monthly Pattern Hunt: drag every Tuesday into the Pattern Days bucket.",
+      patternLabel: "Tuesdays",
+      patternDays: [5, 12, 19, 26],
+      distractorDays: [3, 8, 17, 24],
+    },
+    {
+      minLevel: 4,
+      maxLevel: 7,
+      title: "February 2026",
+      year: 2026,
+      monthIndex: 1,
+      startDayIndex: 0,
+      days: 28,
+      prompt: "Monthly Pattern Hunt: drag every weekend date into the Weekend bucket.",
+      patternLabel: "Weekend dates",
+      patternDays: [1, 7, 8, 14, 15, 21, 22, 28],
+      distractorDays: [2, 5, 10, 18],
+    },
+    {
+      minLevel: 7,
+      maxLevel: 10,
+      title: "July 2026",
+      year: 2026,
+      monthIndex: 6,
+      startDayIndex: 3,
+      days: 31,
+      prompt: "Monthly Pattern Hunt: sort the dates that fit an every-other-day plan starting July 3.",
+      patternLabel: "Every other day from July 3",
+      patternDays: [3, 5, 7, 9, 11, 13],
+      distractorDays: [4, 6, 8, 10, 12, 14],
+    },
+  ];
+  const pattern = calendarChooseByLevel(patterns, level);
+  const patternCount = level >= 7 ? 6 : level >= 4 ? 4 : 3;
+  const selectedPatternDays = pattern.patternDays.slice(0, patternCount);
+  const selectedDistractorDays = pattern.distractorDays.slice(0, Math.min(patternCount, pattern.distractorDays.length));
+  const patternAnswers = selectedPatternDays.map((day) => calendarFormatMonthDay(pattern.monthIndex, day));
+  const distractorAnswers = selectedDistractorDays.map((day) => calendarFormatMonthDay(pattern.monthIndex, day));
+
+  return calendarBuildBucketsDragQuestion({
+    difficulty: level,
+    family: "monthly-pattern-hunt",
+    questionText: pattern.prompt,
+    extraText: `${pattern.title}. Use the calendar to find the dates that match the pattern.`,
+    visualHtml: calendarRenderMiniCalendar(pattern, [...selectedPatternDays, ...selectedDistractorDays]),
+    visualSummary: `${pattern.patternLabel}: ${patternAnswers.join(", ")}.`,
+    buckets: [
+      { label: pattern.patternLabel, answers: patternAnswers },
+      { label: "Not in the pattern", answers: distractorAnswers },
+    ],
+    dragPlaceholderText: "Drop date",
+  });
+}
+
 function calendarGenerateDeadlineBefore(level) {
   const year = 2026;
   const monthIndex = calendarRandomInt(2, 10);
@@ -594,6 +752,67 @@ function calendarGenerateQuarterlySchedule(level) {
   ];
   const [question, answer, options] = calendarRandomChoice(facts);
   return calendarBuildEntry({ question, answer, options, difficulty: level, family: "schedule-vocabulary" });
+}
+
+function calendarGenerateTransitTimetable(level) {
+  const routes = [
+    {
+      minLevel: 5,
+      maxLevel: 7,
+      title: "Bus 42 to Swim Class",
+      deadline: 16 * 60 + 10,
+      rows: [
+        { route: "Bus A", depart: 15 * 60 + 20, arrive: 15 * 60 + 55 },
+        { route: "Bus B", depart: 15 * 60 + 35, arrive: 16 * 60 + 5 },
+        { route: "Bus C", depart: 15 * 60 + 50, arrive: 16 * 60 + 18 },
+        { route: "Bus D", depart: 16 * 60 + 0, arrive: 16 * 60 + 30 },
+      ],
+      answer: "Bus B",
+      question: "Transit Timetable Challenge: which bus arrives before swim class starts and leaves latest?",
+    },
+    {
+      minLevel: 6,
+      maxLevel: 9,
+      title: "Train to the Museum",
+      deadline: 10 * 60,
+      rows: [
+        { route: "Train A", depart: 8 * 60 + 35, arrive: 9 * 60 + 25 },
+        { route: "Train B", depart: 8 * 60 + 55, arrive: 9 * 60 + 45 },
+        { route: "Train C", depart: 9 * 60 + 20, arrive: 10 * 60 + 5 },
+        { route: "Train D", depart: 9 * 60 + 35, arrive: 10 * 60 + 20 },
+      ],
+      answer: "Train B",
+      question: "Transit Timetable Challenge: choose the latest train that still arrives before the museum tour.",
+    },
+    {
+      minLevel: 8,
+      maxLevel: 10,
+      title: "Bus to the Robotics Club",
+      deadline: 18 * 60 + 15,
+      rows: [
+        { route: "Bus A", depart: 17 * 60 + 5, arrive: 17 * 60 + 48 },
+        { route: "Bus B", depart: 17 * 60 + 30, arrive: 18 * 60 + 9 },
+        { route: "Bus C", depart: 17 * 60 + 50, arrive: 18 * 60 + 16 },
+        { route: "Bus D", depart: 18 * 60 + 3, arrive: 18 * 60 + 31 },
+      ],
+      answer: "Bus B",
+      question: "Transit Timetable Challenge: pick the latest option that arrives before robotics begins.",
+    },
+  ];
+  const timetable = calendarChooseByLevel(routes, level);
+  const answerRow = timetable.rows.find((row) => row.route === timetable.answer);
+
+  return calendarBuildGeneratedEntry({
+    question: `${timetable.question} Deadline: ${calendarFormatTime(timetable.deadline)}.`,
+    answer: timetable.answer,
+    distractors: timetable.rows.map((row) => row.route).filter((route) => route !== timetable.answer),
+    difficulty: level,
+    family: "transit-timetable",
+    displayText: `${timetable.title}\n${timetable.rows.map((row) => `${row.route}: leaves ${calendarFormatTime(row.depart)}, arrives ${calendarFormatTime(row.arrive)}`).join("\n")}`,
+    visualHtml: calendarRenderTransitTable(timetable),
+    visualSummary: `${timetable.title}: ${timetable.answer} arrives at ${calendarFormatTime(answerRow.arrive)}, before ${calendarFormatTime(timetable.deadline)}.`,
+    reviewText: `${timetable.answer} is the latest option that arrives before ${calendarFormatTime(timetable.deadline)}.`,
+  });
 }
 
 function calendarGenerateCalendarGridRows(level) {
@@ -715,6 +934,153 @@ function calendarGenerateAdvancedRecurringEvent(level) {
   });
 }
 
+function calendarBuildTargetsDragQuestion({
+  difficulty,
+  family,
+  questionText,
+  extraText = "",
+  visualHtml = "",
+  visualSummary = "",
+  targets,
+  answer,
+  choices,
+  answerLabel = "",
+  dragPlaceholderText = "",
+}) {
+  const normalizedTargets = targets.map((target) => ({
+    text: String(target?.text || ""),
+    html: String(target?.html || ""),
+    reviewLabel: String(target?.reviewLabel || ""),
+  }));
+  const normalizedAnswer = answer.map(String);
+  const normalizedChoices = calendarUniqueStrings([...choices.map(String), ...normalizedAnswer]);
+
+  return {
+    type: "calendar-drag",
+    category: "Calendar",
+    family,
+    difficulty,
+    mode: "drag",
+    questionText,
+    displayText: "",
+    extraText,
+    extraHtml: "",
+    visualHtml,
+    visualSummary,
+    dragLayout: "targets",
+    dragTargetArrangement: "rows",
+    dragTargets: normalizedTargets,
+    dragChoices: calendarBuildDragChoiceTokens(normalizedChoices),
+    dragAnswerTokens: normalizedAnswer,
+    dragPlaceholderText,
+    reviewText: answerLabel,
+    answerValue: normalizedAnswer.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function calendarBuildBucketsDragQuestion({
+  difficulty,
+  family,
+  questionText,
+  extraText = "",
+  visualHtml = "",
+  visualSummary = "",
+  buckets,
+  dragPlaceholderText = "",
+}) {
+  const normalizedBuckets = buckets.map((bucket) => ({
+    label: String(bucket.label),
+    answers: calendarUniqueStrings(bucket.answers.map(String)),
+  }));
+  const flatAnswers = normalizedBuckets.flatMap((bucket) => bucket.answers);
+
+  return {
+    type: "calendar-drag",
+    category: "Calendar",
+    family,
+    difficulty,
+    mode: "drag",
+    questionText,
+    displayText: "",
+    extraText,
+    extraHtml: "",
+    visualHtml,
+    visualSummary,
+    dragLayout: "buckets",
+    dragBucketColumns: normalizedBuckets,
+    dragChoices: calendarBuildDragChoiceTokens(flatAnswers),
+    dragAnswerTokens: flatAnswers,
+    dragPlaceholderText,
+    reviewText: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
+    answerValue: flatAnswers.join(" | "),
+    answerLabel: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
+    isHebrew: false,
+  };
+}
+
+function calendarBuildDragChoiceTokens(values) {
+  return calendarShuffle(calendarUniqueStrings(values)).map((text, index) => ({
+    id: `calendar-drag-${index}-${calendarSlugify(text)}`,
+    text,
+  }));
+}
+
+function calendarRenderMiniCalendar(config, markedDays = []) {
+  const marked = new Set(markedDays.map(Number));
+  const leading = config.startDayIndex;
+  const cells = [];
+  for (let index = 0; index < leading; index += 1) {
+    cells.push('<span class="calendar-mini-day empty" aria-hidden="true"></span>');
+  }
+  for (let day = 1; day <= config.days; day += 1) {
+    const markedClass = marked.has(day) ? " marked" : "";
+    cells.push(`<span class="calendar-mini-day${markedClass}">${day}</span>`);
+  }
+
+  return `
+    <div class="calendar-mini-card">
+      <div class="calendar-mini-title">${calendarEscapeHtml(config.title)}</div>
+      <div class="calendar-mini-weekdays" aria-hidden="true">${CALENDAR_DAY_NAMES.map((day) => `<span>${day.slice(0, 3)}</span>`).join("")}</div>
+      <div class="calendar-mini-grid">${cells.join("")}</div>
+    </div>
+  `;
+}
+
+function calendarRenderDateTarget(config, day) {
+  const dayIndex = calendarWrap(config.startDayIndex + day - 1, 7);
+  return `
+    <div class="calendar-date-target">
+      <span>${CALENDAR_DAY_NAMES[dayIndex].slice(0, 3)}</span>
+      <strong>${CALENDAR_MONTHS[config.monthIndex].name.slice(0, 3)} ${day}</strong>
+    </div>
+  `;
+}
+
+function calendarRenderTransitTable(timetable) {
+  const rows = timetable.rows.map((row) => `
+    <tr>
+      <th scope="row">${calendarEscapeHtml(row.route)}</th>
+      <td>${calendarFormatTime(row.depart)}</td>
+      <td>${calendarFormatTime(row.arrive)}</td>
+    </tr>
+  `).join("");
+
+  return `
+    <div class="calendar-transit-card">
+      <div class="calendar-transit-title">${calendarEscapeHtml(timetable.title)}</div>
+      <table class="calendar-transit-table">
+        <thead>
+          <tr><th scope="col">Option</th><th scope="col">Leaves</th><th scope="col">Arrives</th></tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="calendar-transit-deadline">Deadline: ${calendarFormatTime(timetable.deadline)}</div>
+    </div>
+  `;
+}
+
 function calendarMakeChoiceOptions(answer, candidates) {
   return calendarBuildOptions(answer, candidates);
 }
@@ -782,6 +1148,15 @@ function calendarFormatFullDate(year, monthIndex, day) {
   return `${CALENDAR_MONTHS[monthIndex].name} ${day}, ${year}`;
 }
 
+function calendarFormatTime(totalMinutes) {
+  const normalized = calendarWrap(totalMinutes, 24 * 60);
+  const hour24 = Math.floor(normalized / 60);
+  const minute = normalized % 60;
+  const suffix = hour24 >= 12 ? "PM" : "AM";
+  const hour12 = hour24 % 12 || 12;
+  return `${hour12}:${String(minute).padStart(2, "0")} ${suffix}`;
+}
+
 function calendarFormatOrdinal(day) {
   const remainder100 = day % 100;
   if (remainder100 >= 11 && remainder100 <= 13) {
@@ -823,6 +1198,29 @@ function calendarUniqueStrings(values) {
   return Array.from(new Set(values.map((value) => String(value))));
 }
 
+function calendarChooseByLevel(blueprints, level) {
+  const available = blueprints.filter((blueprint) =>
+    level >= (blueprint.minLevel || 1) && level <= (blueprint.maxLevel || 10)
+  );
+  return calendarRandomChoice(available.length ? available : blueprints);
+}
+
+function calendarEscapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;");
+}
+
+function calendarSlugify(value) {
+  const slug = String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "token";
+}
+
 function calendarRandomChoice(values) {
   return values[calendarRandomInt(0, values.length - 1)];
 }
@@ -847,3 +1245,9 @@ globalThis.HomeworkQuestions?.register({
   generatedEntryFactory: createCalendarGeneratedEntry,
   generatedShare: 0.9,
 });
+
+globalThis.CALENDAR_GENERATOR_COVERAGE = {
+  dragPlanner: calendarGenerateDragPlanner,
+  monthlyPatternHunt: calendarGenerateMonthlyPatternHunt,
+  transitTimetable: calendarGenerateTransitTimetable,
+};

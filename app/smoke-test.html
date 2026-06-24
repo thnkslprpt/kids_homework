@@ -114,11 +114,13 @@
       };
       const CATEGORY_DRAG_FACTORY_CATEGORIES = new Set([
         "reading-comprehension",
+        "vocabulary-grammar",
         "fractions",
         "fractions-and-ratios",
         "science",
         "financial-literacy",
         "nutrition",
+        "household-problem-solving",
         "estimation",
         "measurement",
         "visual-measurement",
@@ -238,6 +240,122 @@
         });
       }
 
+      function validateVocabularyGrammarActivityCoverage() {
+        const module = api.questionRegistry?.get?.("vocabulary-grammar");
+        if (!module || typeof module.generatedEntryFactory !== "function") {
+          failures.push("vocabulary-grammar: generated factory missing");
+          return;
+        }
+
+        const choiceFamilies = new Set();
+        for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
+          for (let trial = 0; trial < 80; trial += 1) {
+            const entry = module.generatedEntryFactory(difficulty);
+            validateEntry(entry, `vocabulary-grammar coverage ${difficulty}-${trial + 1}`);
+            const text = `${entry?.question || ""} ${entry?.displayText || ""}`;
+            if (text.includes("Homophone Door Game")) choiceFamilies.add("Homophone Door Game");
+            if (text.includes("Punctuation Traffic Lights")) choiceFamilies.add("Punctuation Traffic Lights");
+          }
+        }
+        ["Homophone Door Game", "Punctuation Traffic Lights"].forEach((label) => {
+          assert(choiceFamilies.has(label), `vocabulary-grammar: ${label} did not generate`);
+        });
+
+        if (typeof globalThis.createCategoryGeneratedDragQuestion !== "function") {
+          failures.push("vocabulary-grammar: category drag factory missing");
+          return;
+        }
+
+        const dragFamilies = new Set();
+        for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
+          for (let trial = 0; trial < 80; trial += 1) {
+            const question = globalThis.createCategoryGeneratedDragQuestion("vocabulary-grammar", difficulty);
+            validateQuestion(question, `vocabulary-grammar drag coverage ${difficulty}-${trial + 1}`);
+            const label = String(question?.questionText || "").split(":")[0];
+            if (label) dragFamilies.add(label);
+          }
+        }
+        [
+          "Part-of-speech color sort",
+          "Prefix/Suffix Factory",
+          "Sentence Surgery",
+          "Word Ladder Builder",
+          "Synonym Strength Meter",
+        ].forEach((label) => {
+          assert(dragFamilies.has(label), `vocabulary-grammar: ${label} did not generate`);
+        });
+      }
+
+      function validateHouseholdProblemSolvingActivityCoverage() {
+        if (typeof globalThis.createCategoryGeneratedDragQuestion !== "function") {
+          failures.push("household-problem-solving: category drag factory missing");
+          return;
+        }
+
+        const cases = [
+          ["Packing Checklist Builder", 1, 0.01, "#drag-area .drag-buckets"],
+          ["Tool Match", 1, 0.99, "#drag-area .matching-stage"],
+          ["Recipe Step Sequencer", 3, 0.99, "#drag-area .drag-targets.rows"],
+        ];
+
+        cases.forEach(([label, difficulty, randomValue, selector]) => {
+          const question = withFixedRandom(randomValue, () =>
+            globalThis.createCategoryGeneratedDragQuestion("household-problem-solving", difficulty)
+          );
+          validateQuestion(question, `household ${label}`);
+          if (!String(question?.questionText || "").startsWith(label)) {
+            failures.push(`household-problem-solving: ${label} did not generate`);
+          }
+          if (new Set(question?.dragAnswerTokens || []).size !== (question?.dragAnswerTokens || []).length) {
+            failures.push(`household-problem-solving ${label}: answer tokens must be unique`);
+          }
+          renderSmokeQuestion(question, `household ${label} render`);
+          if (!document.querySelector(selector)) {
+            failures.push(`household-problem-solving ${label}: expected renderer ${selector} did not appear`);
+          }
+        });
+
+        for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
+          for (let trial = 0; trial < 20; trial += 1) {
+            const question = globalThis.createCategoryGeneratedDragQuestion("household-problem-solving", difficulty);
+            validateQuestion(question, `household generated ${difficulty}-${trial + 1}`);
+            if (new Set(question?.dragAnswerTokens || []).size !== (question?.dragAnswerTokens || []).length) {
+              failures.push(`household generated ${difficulty}-${trial + 1}: answer tokens must be unique`);
+            }
+          }
+        }
+      }
+
+      function validateGeneralKnowledgeWorldModelCoverage() {
+        const coverage = globalThis.GENERAL_KNOWLEDGE_GENERATOR_COVERAGE || {};
+        [
+          ["sizeSort", 5, "#drag-area .drag-targets.line", "general-knowledge-size-sort"],
+          ["causeEffect", 4, "#drag-area .matching-stage", "general-knowledge-cause-effect"],
+        ].forEach(([name, difficulty, selector, family]) => {
+          const factory = coverage[name];
+          if (typeof factory !== "function") {
+            failures.push(`general-knowledge ${name}: factory missing`);
+            return;
+          }
+
+          const question = factory(difficulty);
+          validateQuestion(question, `general-knowledge ${name}`);
+          if (question?.family !== family) {
+            failures.push(`general-knowledge ${name}: expected family ${family}`);
+          }
+          if (question?.mode !== "drag") {
+            failures.push(`general-knowledge ${name}: expected drag question`);
+          }
+          if (new Set(question?.dragAnswerTokens || []).size !== (question?.dragAnswerTokens || []).length) {
+            failures.push(`general-knowledge ${name}: answer tokens must be unique`);
+          }
+          renderSmokeQuestion(question, `general-knowledge ${name} render`);
+          if (!document.querySelector(selector)) {
+            failures.push(`general-knowledge ${name}: expected renderer ${selector} did not appear`);
+          }
+        });
+      }
+
       function assertVisibleScreen(screenId, label) {
         ["start-screen", "quiz-screen", "results-screen", "history-screen", "dashboard-screen"].forEach((id) => {
           const element = document.getElementById(id);
@@ -277,6 +395,44 @@
 
         if (question.mode === "practice") {
           return click(document.querySelector("#choices-area .practice-button"), "workflow practice button");
+        }
+
+        if (question.mode === "interactive") {
+          if (question.interactive?.layout === "command-sequence") {
+            const sequence = Array.isArray(question.interactive?.answerSequence)
+              ? question.interactive.answerSequence
+              : [];
+            sequence.forEach((command) => {
+              click(
+                document.querySelector(`#choices-area .command-button[data-command="${String(command).toUpperCase()}"]`),
+                `workflow command ${command}`
+              );
+            });
+            return click(document.querySelector("#choices-area .interactive-check-button"), "workflow command check");
+          }
+
+          if (question.interactive?.layout === "paired-select") {
+            click(
+              document.querySelector(`#choices-area .paired-select-option[data-group="items"][data-index="${question.interactive.answerItemIndex}"]`),
+              `workflow paired item ${question.interactive.answerItemIndex}`
+            );
+            click(
+              document.querySelector(`#choices-area .paired-select-option[data-group="reasons"][data-index="${question.interactive.answerReasonIndex}"]`),
+              `workflow paired reason ${question.interactive.answerReasonIndex}`
+            );
+            return click(document.querySelector("#choices-area .interactive-check-button"), "workflow paired check");
+          }
+
+          const answerIndexes = Array.isArray(question.interactive?.answerIndexes)
+            ? question.interactive.answerIndexes.map(Number)
+            : [];
+          answerIndexes.forEach((answerIndex) => {
+            click(
+              document.querySelector(`#choices-area .interactive-option[data-index="${answerIndex}"]`),
+              `workflow interactive option ${answerIndex}`
+            );
+          });
+          return click(document.querySelector("#choices-area .interactive-check-button"), "workflow interactive check");
         }
 
         if (question.mode === "drag") {
@@ -478,6 +634,61 @@
           failures.push(`${label}: did not return an entry`);
           return;
         }
+        if (entry.mode === "drag") {
+          if (!normalizeEntryQuestionText(entry)) failures.push(`${label}: missing question`);
+          if (!Array.isArray(entry.dragAnswerTokens) || !entry.dragAnswerTokens.length) {
+            failures.push(`${label}: missing drag answer tokens`);
+          } else if (new Set(entry.dragAnswerTokens.map(String)).size !== entry.dragAnswerTokens.length) {
+            failures.push(`${label}: drag answer tokens must be unique`);
+          }
+          if (entry.dragLayout !== "matching" && (!Array.isArray(entry.dragChoices) || !entry.dragChoices.length)) {
+            failures.push(`${label}: drag entry needs choices`);
+          }
+          return;
+        }
+        if (entry.mode === "interactive") {
+          const interactive = entry.interactive && typeof entry.interactive === "object" ? entry.interactive : null;
+          const answerIndexes = Array.isArray(interactive?.answerIndexes)
+            ? interactive.answerIndexes.map(Number).filter(Number.isFinite)
+            : [];
+          const answerSequence = Array.isArray(interactive?.answerSequence)
+            ? interactive.answerSequence.map(String).filter(Boolean)
+            : [];
+          if (!normalizeEntryQuestionText(entry)) failures.push(`${label}: missing question`);
+          if (!String(entry.answer || entry.answerLabel || "").trim()) failures.push(`${label}: missing answer`);
+          if (!interactive) failures.push(`${label}: missing interactive config`);
+          if (!answerIndexes.length && !(interactive?.layout === "command-sequence" && answerSequence.length)) {
+            failures.push(`${label}: missing interactive answer indexes`);
+          }
+          if (answerIndexes.length && new Set(answerIndexes).size !== answerIndexes.length) {
+            failures.push(`${label}: interactive answer indexes must be unique`);
+          }
+          if (interactive?.layout === "option-select" && (!Array.isArray(interactive.choices) || interactive.choices.length < 2)) {
+            failures.push(`${label}: interactive option-select needs choices`);
+          }
+          if (interactive?.layout === "part-select" && (!Array.isArray(interactive.parts) || interactive.parts.length < 2)) {
+            failures.push(`${label}: interactive part-select needs parts`);
+          }
+          if (interactive?.layout === "command-sequence" && !answerSequence.length) {
+            failures.push(`${label}: interactive command-sequence needs answer sequence`);
+          }
+          if (interactive?.layout === "paired-select") {
+            const items = Array.isArray(interactive.items) ? interactive.items : [];
+            const reasons = Array.isArray(interactive.reasons) ? interactive.reasons : [];
+            const answerItemIndex = Number(interactive.answerItemIndex);
+            const answerReasonIndex = Number(interactive.answerReasonIndex);
+            if (items.length < 2) failures.push(`${label}: interactive paired-select needs items`);
+            if (reasons.length < 2) failures.push(`${label}: interactive paired-select needs reasons`);
+            if (!Number.isInteger(answerItemIndex) || answerItemIndex < 0 || answerItemIndex >= items.length) {
+              failures.push(`${label}: interactive paired-select has invalid answer item`);
+            }
+            if (!Number.isInteger(answerReasonIndex) || answerReasonIndex < 0 || answerReasonIndex >= reasons.length) {
+              failures.push(`${label}: interactive paired-select has invalid answer reason`);
+            }
+          }
+          failures.push(...validateCalendarQuestionClarity(entry, label));
+          return;
+        }
         const answer = String(entry.answer || entry.correctAnswer || "");
         const options = Array.isArray(entry.options)
           ? entry.options.map(String)
@@ -505,6 +716,31 @@
         adultQuestions.forEach((question, index) => {
           validateQuestion(question, `Adult Hebrew nikud #${index + 1}`);
           validateHebrewQuestionNikkud(question, `Adult Hebrew nikud #${index + 1}`);
+        });
+      }
+
+      function validateHebrewActivityCoverage() {
+        const coverage = globalThis.HEBREW_GENERATOR_COVERAGE || {};
+        [
+          ["finalLetterGate", 1],
+          ["genderAgreementCloset", 2],
+          ["shoreshTree", 3],
+          ["prepositionSceneBuilder", 3],
+          ["verbTenseTimeline", 4],
+          ["oppositePairsMemory", 3],
+          ["homographContextChoice", 5],
+        ].forEach(([label, difficulty]) => {
+          const factory = coverage[label];
+          if (typeof factory !== "function") {
+            failures.push(`Hebrew activity ${label}: factory missing`);
+            return;
+          }
+
+          for (let trial = 0; trial < 6; trial += 1) {
+            const question = factory(difficulty);
+            validateQuestion(question, `Hebrew activity ${label} trial ${trial + 1}`);
+            validateHebrewQuestionNikkud(question, `Hebrew activity ${label} trial ${trial + 1}`);
+          }
         });
       }
 
@@ -538,11 +774,256 @@
         return errors;
       }
 
+      function withFixedRandom(value, callback) {
+        const originalRandom = Math.random;
+        Math.random = () => value;
+        try {
+          return callback();
+        } finally {
+          Math.random = originalRandom;
+        }
+      }
+
+      function validateCalendarPlanningCoverage() {
+        const coverage = globalThis.CALENDAR_GENERATOR_COVERAGE || {};
+        [
+          ["dragPlanner", 4, "#drag-area .drag-targets.rows", "#question-visual .calendar-mini-card"],
+          ["monthlyPatternHunt", 5, "#drag-area .drag-buckets", "#question-visual .calendar-mini-card"],
+        ].forEach(([label, difficulty, dragSelector, visualSelector]) => {
+          const factory = coverage[label];
+          if (typeof factory !== "function") {
+            failures.push(`calendar ${label}: factory missing`);
+            return;
+          }
+          const question = factory(difficulty);
+          validateQuestion(question, `calendar ${label}`);
+          if (question?.mode !== "drag") {
+            failures.push(`calendar ${label}: expected drag question`);
+          }
+          if (new Set(question?.dragAnswerTokens || []).size !== (question?.dragAnswerTokens || []).length) {
+            failures.push(`calendar ${label}: answer tokens must be unique`);
+          }
+          renderSmokeQuestion(question, `calendar ${label} render`);
+          if (!document.querySelector(dragSelector)) {
+            failures.push(`calendar ${label}: expected renderer ${dragSelector} did not appear`);
+          }
+          if (!document.querySelector(visualSelector)) {
+            failures.push(`calendar ${label}: expected visual ${visualSelector} did not appear`);
+          }
+        });
+
+        const transitFactory = coverage.transitTimetable;
+        if (typeof transitFactory !== "function") {
+          failures.push("calendar transitTimetable: factory missing");
+        } else {
+          const entry = transitFactory(8);
+          validateEntry(entry, "calendar transitTimetable");
+          if (!String(entry?.question || "").includes("Deadline:")) {
+            failures.push("calendar transitTimetable: prompt should include the arrival deadline");
+          }
+          if (typeof normalizeChoiceBankEntry === "function" && typeof createBankChoiceQuestion === "function") {
+            const normalizedEntry = normalizeChoiceBankEntry(entry, "calendar-choice");
+            if (!normalizedEntry) {
+              failures.push("calendar transitTimetable: could not normalize for render");
+            } else {
+              const question = createBankChoiceQuestion(normalizedEntry, "calendar-choice");
+              renderSmokeQuestion(question, "calendar transitTimetable render");
+              if (!document.querySelector("#question-visual .calendar-transit-card")) {
+                failures.push("calendar transitTimetable: timetable visual did not render");
+              }
+              if (document.querySelectorAll("#choices-area .choice-button").length !== 4) {
+                failures.push("calendar transitTimetable: should render four route choices");
+              }
+            }
+          }
+        }
+
+        const calendarModule = api.questionRegistry?.get?.("calendar");
+        for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
+          for (let trial = 0; trial < 24; trial += 1) {
+            const entry = calendarModule?.generatedEntryFactory?.(difficulty);
+            validateEntry(entry, `calendar generated planning variety ${difficulty}-${trial + 1}`);
+          }
+        }
+        [
+          [2, "calendar-drag-planner"],
+          [3, "monthly-pattern-hunt"],
+          [6, "transit-timetable"],
+        ].forEach(([difficulty, family]) => {
+          const entry = withFixedRandom(0.7, () => calendarModule?.generatedEntryFactory?.(difficulty));
+          validateEntry(entry, `calendar generated deterministic ${family}`);
+          assert(entry?.family === family, `calendar generated deterministic should include ${family}`);
+        });
+      }
+
+      function validateGeographyMapPuzzleCoverage() {
+        const mapsModule = api.questionRegistry?.get?.("maps-and-directions");
+        const robotEntry = withFixedRandom(0.01, () => mapsModule?.generatedEntryFactory?.(3));
+        validateEntry(robotEntry, "maps-and-directions Compass Robot coverage");
+        if (robotEntry?.interactive?.layout !== "command-sequence") {
+          failures.push("maps-and-directions: Compass Robot command-sequence did not generate");
+        }
+        if (!Array.isArray(robotEntry?.interactive?.answerSequence) || robotEntry.interactive.answerSequence.length < 3) {
+          failures.push("maps-and-directions: Compass Robot needs a clear command sequence");
+        }
+        if (typeof normalizeChoiceBankEntry === "function" && typeof createBankChoiceQuestion === "function") {
+          const robotQuestion = createBankChoiceQuestion(
+            normalizeChoiceBankEntry(robotEntry, "maps-and-directions-choice"),
+            "maps-and-directions-choice"
+          );
+          renderSmokeQuestion(robotQuestion, "maps-and-directions Compass Robot render");
+          if (!document.querySelector("#choices-area .command-grid")) {
+            failures.push("maps-and-directions: Compass Robot grid did not render");
+          }
+          if (!document.querySelector("#choices-area .command-button[data-command='N']")) {
+            failures.push("maps-and-directions: Compass Robot command buttons did not render");
+          }
+        }
+
+        const geographyMapModule = api.questionRegistry?.get?.("geography-map");
+        const continentEntry = withFixedRandom(0.01, () => geographyMapModule?.generatedEntryFactory?.(3, []));
+        validateEntry(continentEntry, "geography-map Continent Drag Map coverage");
+        if (continentEntry?.mode !== "drag" || !String(continentEntry?.questionText || "").includes("Continent Drag Map")) {
+          failures.push("geography-map: Continent Drag Map did not generate");
+        }
+        if ((continentEntry?.dragTargets || []).length !== (continentEntry?.dragAnswerTokens || []).length) {
+          failures.push("geography-map: continent targets and answers should align one-to-one");
+        }
+        renderSmokeQuestion(continentEntry, "geography-map Continent Drag Map render");
+        if (!document.querySelector("#drag-area .continent-shape-svg")) {
+          failures.push("geography-map: continent shape targets did not render");
+        }
+      }
+
+      function validateNutritionLabelReaderCoverage() {
+        const coverage = globalThis.NUTRITION_GENERATOR_COVERAGE || {};
+        const factory = coverage.labelReaderChallenge;
+        if (typeof factory !== "function") {
+          failures.push("nutrition Label Reader Challenge: factory missing");
+          return;
+        }
+
+        [
+          ["serving size", 0.01],
+          ["added sugar", 0.58],
+          ["protein", 0.74],
+          ["fiber", 0.92],
+        ].forEach(([target, randomValue]) => {
+          const entry = withFixedRandom(randomValue, () => factory(3));
+          validateEntry(entry, `nutrition Label Reader Challenge ${target}`);
+          if (entry?.mode !== "interactive" || entry?.interactive?.layout !== "part-select") {
+            failures.push(`nutrition Label Reader Challenge ${target}: expected part-select interactive entry`);
+          }
+          if (!String(entry?.question || "").toLowerCase().includes(target)) {
+            failures.push(`nutrition Label Reader Challenge ${target}: prompt does not name target row`);
+          }
+          if ((entry?.interactive?.answerIndexes || []).length !== 1) {
+            failures.push(`nutrition Label Reader Challenge ${target}: should have exactly one correct row`);
+          }
+          if (typeof normalizeChoiceBankEntry === "function" && typeof createBankChoiceQuestion === "function") {
+            const normalizedEntry = normalizeChoiceBankEntry(entry, "nutrition-choice");
+            if (!normalizedEntry) {
+              failures.push(`nutrition Label Reader Challenge ${target}: could not normalize for render`);
+              return;
+            }
+            const question = createBankChoiceQuestion(normalizedEntry, "nutrition-choice");
+            renderSmokeQuestion(question, `nutrition Label Reader Challenge ${target} render`);
+            if (!document.querySelector("#question-visual .nutrition-label-card")) {
+              failures.push(`nutrition Label Reader Challenge ${target}: nutrition label card did not render`);
+            }
+            if (document.querySelectorAll("#choices-area .interactive-option").length < 6) {
+              failures.push(`nutrition Label Reader Challenge ${target}: tap rows did not render`);
+            }
+          }
+        });
+      }
+
+      function validateLogicSpatialPuzzleCoverage() {
+        const coverage = globalThis.LOGIC_SPATIAL_PUZZLE_COVERAGE || {};
+        [
+          ["patternMachine", 2, ".puzzle-pattern-svg", "option-select"],
+          ["shapeRotationMatch", 6, ".puzzle-rotation-svg", "option-select"],
+          ["pathProgramming", 5, ".command-grid", "command-sequence"],
+          ["oddOneOutWhy", 4, ".paired-select-board", "paired-select"],
+          ["constraintPuzzle", 7, ".constraint-board-svg", "option-select"],
+        ].forEach(([label, difficulty, selector, layout]) => {
+          const factory = coverage[label];
+          if (typeof factory !== "function") {
+            failures.push(`logic-spatial puzzle ${label}: factory missing`);
+            return;
+          }
+
+          const entry = factory(difficulty);
+          validateEntry(entry, `logic-spatial puzzle ${label}`);
+          if (entry?.mode !== "interactive" || entry?.interactive?.layout !== layout) {
+            failures.push(`logic-spatial puzzle ${label}: expected ${layout} interactive entry`);
+          }
+
+          if (layout === "option-select" && (entry?.interactive?.answerIndexes || []).length !== 1) {
+            failures.push(`logic-spatial puzzle ${label}: should have exactly one correct option`);
+          }
+
+          if (typeof normalizeChoiceBankEntry === "function" && typeof createBankChoiceQuestion === "function") {
+            const normalizedEntry = normalizeChoiceBankEntry(entry, "logic-choice");
+            if (!normalizedEntry) {
+              failures.push(`logic-spatial puzzle ${label}: could not normalize for render`);
+              return;
+            }
+            const question = createBankChoiceQuestion(normalizedEntry, "logic-choice");
+            renderSmokeQuestion(question, `logic-spatial puzzle ${label} render`);
+            if (!document.querySelector(selector)) {
+              failures.push(`logic-spatial puzzle ${label}: expected renderer ${selector} did not appear`);
+            }
+            if (!document.querySelector("#choices-area .interactive-check-button")) {
+              failures.push(`logic-spatial puzzle ${label}: check button did not render`);
+            }
+          }
+        });
+
+        const logicModule = api.questionRegistry?.get?.("logic");
+        const spatialModule = api.questionRegistry?.get?.("spatial-reasoning");
+        [logicModule, spatialModule].forEach((module) => {
+          if (typeof module?.generatedEntryFactory !== "function") {
+            failures.push(`${module?.id || "logic/spatial"}: blended puzzle factory missing`);
+            return;
+          }
+          for (let trial = 0; trial < 20; trial += 1) {
+            validateEntry(module.generatedEntryFactory(6), `${module.id} blended puzzle trial ${trial + 1}`);
+          }
+        });
+      }
+
+      function renderSmokeQuestion(question, label) {
+        validateQuestion(question, label);
+        api.state.currentRound = "main";
+        api.state.questions = [question];
+        api.state.totalQuestions = 1;
+        api.state.currentIndex = 0;
+        api.state.viewIndex = 0;
+        api.state.answerResults = [];
+        api.state.answerSelections = [];
+        api.state.feedbackMessage = "";
+        api.state.feedbackTone = "";
+        if (typeof renderCurrentQuestion === "function") {
+          renderCurrentQuestion();
+        } else {
+          failures.push(`${label}: renderCurrentQuestion missing`);
+        }
+      }
+
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
         validateRegistryModules();
+        validateVocabularyGrammarActivityCoverage();
+        validateHouseholdProblemSolvingActivityCoverage();
+        validateGeneralKnowledgeWorldModelCoverage();
+        validateCalendarPlanningCoverage();
+        validateGeographyMapPuzzleCoverage();
+        validateNutritionLabelReaderCoverage();
+        validateLogicSpatialPuzzleCoverage();
         validateScoringHelpers();
         validateGeneratedHebrewNikkudCoverage();
+        validateHebrewActivityCoverage();
         const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);
         api.SESSION_CATEGORY_ORDER
           .filter((category) => !["math", "hebrew", "time", "statistics"].includes(category))
@@ -599,6 +1080,7 @@
           ["nutrition practical", globalThis.createNutritionPracticalGeneratedEntry],
           ["health practical", globalThis.createHealthAndFirstAidPracticalGeneratedEntry],
           ["household practical", globalThis.createHouseholdPracticalGeneratedEntry],
+          ["financial literacy", globalThis.createFinancialLiteracyGeneratedEntry],
         ];
         const chartGeneratedCoverage = globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE || {};
         [
@@ -616,10 +1098,54 @@
             validateEntry(factory(difficulty), `charts generated ${label}`);
           }
         });
+        const financialGeneratedCoverage = globalThis.FINANCIAL_LITERACY_GENERATOR_COVERAGE || {};
+        [
+          ["groceryShelf", 1],
+          ["groceryShelf", 5],
+          ["groceryShelf", 10],
+          ["backpack", 2],
+          ["changeMaking", 3],
+          ["saleSign", 5],
+          ["subscriptionTrap", 8],
+          ["goalThermometer", 4],
+          ["receiptDetective", 7],
+        ].forEach(([label, difficulty]) => {
+          const factory = financialGeneratedCoverage[label];
+          if (typeof factory !== "function") {
+            failures.push(`financial generated ${label}: factory missing`);
+          } else {
+            const entry = factory(difficulty);
+            validateEntry(entry, `financial generated ${label}`);
+            if (typeof normalizeChoiceBankEntry === "function" && typeof createBankChoiceQuestion === "function") {
+              const normalizedEntry = normalizeChoiceBankEntry(entry, "financial-literacy-choice");
+              if (!normalizedEntry) {
+                failures.push(`financial generated ${label}: could not normalize for render`);
+              } else {
+                const question = createBankChoiceQuestion(normalizedEntry, "financial-literacy-choice");
+                renderSmokeQuestion(question, `financial generated ${label} render`);
+                if (!document.querySelector("#question-visual .financial-visual-card")) {
+                  failures.push(`financial generated ${label}: visual card did not render`);
+                }
+              }
+            }
+          }
+        });
         if (typeof CALENDAR_QUESTIONS === "undefined") {
           failures.push("calendar static bank: CALENDAR_QUESTIONS missing");
         } else {
           CALENDAR_QUESTIONS.forEach((entry, index) => validateEntry(entry, `calendar static #${index + 1}`));
+        }
+
+        if (typeof getFractionVisualInteractiveCoverageEntries !== "function") {
+          failures.push("fraction visual interactive coverage factory missing");
+        } else {
+          const visualFractionEntries = getFractionVisualInteractiveCoverageEntries();
+          if (visualFractionEntries.length < 60) {
+            failures.push(`fraction visual interactive coverage expected at least 60 entries, got ${visualFractionEntries.length}`);
+          }
+          visualFractionEntries.forEach((entry, index) => {
+            validateEntry(entry, `fraction visual interactive coverage #${index + 1}`);
+          });
         }
 
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((difficulty) => {
@@ -693,6 +1219,7 @@
       }
 
       result.textContent = failures.length ? `FAIL\n${failures.join("\n")}` : "PASS";
+      document.body.replaceChildren(result);
     </script>
   </body>
 </html>

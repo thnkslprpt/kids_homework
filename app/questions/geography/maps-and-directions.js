@@ -272,6 +272,10 @@ const MAPS_AND_DIRECTIONS_QUESTIONS = [
 
 function createMapsAndDirectionsGeneratedEntry(difficulty) {
   const level = mapsClampDifficulty(difficulty);
+  if (Math.random() < 0.28) {
+    return createCompassRobotGeneratedEntry(level);
+  }
+
   const exactPool = MAPS_AND_DIRECTIONS_QUESTIONS.filter((entry) => entry.difficulty === level);
   const fallbackPool = MAPS_AND_DIRECTIONS_QUESTIONS.filter((entry) => entry.difficulty <= level);
   const selected = mapsRandomChoice(exactPool.length ? exactPool : fallbackPool);
@@ -279,6 +283,102 @@ function createMapsAndDirectionsGeneratedEntry(difficulty) {
   return {
     ...selected,
     options: mapsShuffle(selected.options),
+  };
+}
+
+function createCompassRobotGeneratedEntry(difficulty) {
+  const routes = [
+    {
+      minDifficulty: 1,
+      maxDifficulty: 3,
+      rows: 3,
+      cols: 3,
+      start: { row: 2, col: 0 },
+      treasure: { row: 1, col: 2 },
+      sequence: ["E", "E", "N"],
+      clue: "Use the shortest route. Go east before you go north.",
+    },
+    {
+      minDifficulty: 1,
+      maxDifficulty: 4,
+      rows: 3,
+      cols: 3,
+      start: { row: 0, col: 0 },
+      treasure: { row: 2, col: 1 },
+      sequence: ["S", "S", "E"],
+      clue: "Use the shortest route. Go south before you go east.",
+    },
+    {
+      minDifficulty: 2,
+      maxDifficulty: 5,
+      rows: 4,
+      cols: 4,
+      start: { row: 3, col: 0 },
+      treasure: { row: 1, col: 3 },
+      sequence: ["E", "E", "E", "N", "N"],
+      clue: "Use the shortest route. Finish the east moves before the north moves.",
+    },
+    {
+      minDifficulty: 3,
+      maxDifficulty: 6,
+      rows: 4,
+      cols: 4,
+      start: { row: 0, col: 3 },
+      treasure: { row: 3, col: 1 },
+      sequence: ["S", "S", "S", "W", "W"],
+      clue: "Use the shortest route. Go south first, then west.",
+    },
+    {
+      minDifficulty: 5,
+      maxDifficulty: 8,
+      rows: 5,
+      cols: 5,
+      start: { row: 4, col: 1 },
+      treasure: { row: 1, col: 4 },
+      sequence: ["E", "E", "E", "N", "N", "N"],
+      clue: "Use the shortest route. Move east until you line up with the treasure, then move north.",
+    },
+    {
+      minDifficulty: 6,
+      maxDifficulty: 10,
+      rows: 5,
+      cols: 5,
+      start: { row: 1, col: 4 },
+      treasure: { row: 4, col: 0 },
+      sequence: ["W", "W", "W", "W", "S", "S", "S"],
+      clue: "Use the shortest route. Complete the west moves before the south moves.",
+    },
+  ];
+  const availableRoutes = routes.filter(
+    (route) => difficulty >= route.minDifficulty && difficulty <= route.maxDifficulty
+  );
+  const route = mapsRandomChoice(availableRoutes.length ? availableRoutes : routes);
+  const answer = route.sequence.join(" ");
+
+  return {
+    mode: "interactive",
+    question: "Compass Robot: build the commands that move the robot to the treasure.",
+    answer,
+    answerLabel: answer,
+    difficulty,
+    displayText: "",
+    extraText: `${route.clue}\nS = start. R = robot. T = treasure.`,
+    reviewText: `Compass Robot route: ${answer}.`,
+    visualSummary: `Grid route from start to treasure using ${answer}.`,
+    interactive: {
+      layout: "command-sequence",
+      prompt: "Tap N, E, S, and W in order.",
+      commands: ["N", "E", "S", "W"],
+      answerSequence: route.sequence,
+      answerIndexes: [0],
+      maxCommands: route.sequence.length + 2,
+      grid: {
+        rows: route.rows,
+        cols: route.cols,
+        start: route.start,
+        treasure: route.treasure,
+      },
+    },
   };
 }
 

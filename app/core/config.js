@@ -29,11 +29,13 @@ const HEBREW_MATCHING_PAIR_COUNT = 4;
 const HEBREW_OPPOSITES_PAIR_COUNT = 2;
 const GENERATED_CATEGORY_DRAG_SHARES = {
   "reading-comprehension": 0.32,
+  "vocabulary-grammar": 0.28,
   fractions: 0.28,
   "fractions-and-ratios": 0.24,
   science: 0.2,
   "financial-literacy": 0.18,
   nutrition: 0.22,
+  "household-problem-solving": 0.34,
   estimation: 0.22,
   measurement: 0.26,
   "visual-measurement": 0.3,

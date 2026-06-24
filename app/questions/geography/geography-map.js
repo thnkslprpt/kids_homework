@@ -301,8 +301,109 @@
     };
   }
 
+  const CONTINENT_SHAPES = {
+    Africa:
+      "M54 10 C75 16 86 34 82 53 C77 76 64 93 54 112 C43 94 31 76 27 56 C24 35 34 16 54 10 Z",
+    Asia:
+      "M20 38 C37 14 80 8 108 27 C129 41 124 73 99 78 C83 81 73 69 61 79 C45 92 19 79 14 59 C11 50 13 43 20 38 Z",
+    Europe:
+      "M25 52 C29 29 52 18 76 22 C98 26 111 42 103 62 C91 69 83 61 73 70 C59 83 33 78 25 64 Z",
+    "North America":
+      "M18 31 C39 13 79 14 103 35 C112 50 101 69 78 68 C63 67 56 83 39 78 C21 72 10 47 18 31 Z",
+    "South America":
+      "M51 12 C72 23 78 45 64 63 C55 75 58 91 45 110 C30 91 26 70 33 54 C40 39 34 24 51 12 Z",
+    Oceania:
+      "M25 66 C42 47 75 46 95 62 C84 82 43 85 25 66 Z M89 34 C98 28 111 31 116 40 C107 47 94 45 89 34 Z",
+    Antarctica:
+      "M14 76 C33 58 55 70 72 60 C88 51 107 65 119 78 C91 90 40 91 14 76 Z",
+  };
+  const CONTINENT_LABELS = Object.keys(CONTINENT_SHAPES);
+
+  function buildContinentShapeHtml(continent) {
+    const path = CONTINENT_SHAPES[continent];
+    return `
+      <div class="continent-shape-card">
+        <svg class="continent-shape-svg" viewBox="0 0 132 124" role="img" aria-label="${escapeHtml(continent)} outline">
+          <path d="${path}"></path>
+        </svg>
+      </div>
+    `;
+  }
+
+  function createContinentDragGeneratedEntry(difficulty) {
+    const sets = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 2,
+        continents: ["Africa", "Asia", "North America", "South America"],
+      },
+      {
+        minDifficulty: 2,
+        maxDifficulty: 4,
+        continents: ["Africa", "Asia", "Europe", "South America"],
+      },
+      {
+        minDifficulty: 3,
+        maxDifficulty: 6,
+        continents: ["Africa", "Asia", "Europe", "North America", "Oceania"],
+      },
+      {
+        minDifficulty: 5,
+        maxDifficulty: 8,
+        continents: ["Africa", "Asia", "Europe", "North America", "South America", "Oceania"],
+      },
+      {
+        minDifficulty: 7,
+        maxDifficulty: 10,
+        continents: ["Africa", "Asia", "Europe", "North America", "South America", "Oceania", "Antarctica"],
+      },
+    ];
+    const availableSets = sets.filter(
+      (set) => difficulty >= set.minDifficulty && difficulty <= set.maxDifficulty
+    );
+    const selectedSet = randomChoice(availableSets.length ? availableSets : sets);
+    const continents = selectedSet.continents;
+    const distractorCount = difficulty <= 3 ? 1 : 0;
+    const distractors = shuffle(CONTINENT_LABELS.filter((continent) => !continents.includes(continent))).slice(
+      0,
+      distractorCount
+    );
+
+    return {
+      type: "geography-map-drag",
+      difficulty,
+      mode: "drag",
+      questionText: "Continent Drag Map: drag each label to the matching continent shape.",
+      displayText: "",
+      extraText: "Use the outline shape. Not every label has to be used.",
+      extraHtml: "",
+      visualHtml: "",
+      visualSummary: `Continent label puzzle for ${continents.join(", ")}.`,
+      dragLayout: "targets",
+      dragTargetArrangement: "rows",
+      dragTargets: continents.map((continent) => ({
+        html: buildContinentShapeHtml(continent),
+        reviewLabel: continent,
+      })),
+      dragChoices: shuffle([...continents, ...distractors]).map((continent, index) => ({
+        id: `continent-${difficulty}-${index}-${continent.toLowerCase().replace(/[^a-z]+/g, "-")}`,
+        text: continent,
+      })),
+      dragAnswerTokens: continents,
+      dragPlaceholderText: "Continent",
+      reviewText: `Continent labels: ${continents.join(", ")}.`,
+      answerValue: continents.join(" | "),
+      answerLabel: continents.map((continent) => `${continent}: ${continent}`).join(" | "),
+      isHebrew: false,
+    };
+  }
+
   function buildGeneratedEntry(difficulty, excludedCountries = []) {
     const level = clampDifficulty(difficulty);
+    if (!excludedCountries.length && level <= 8 && Math.random() < 0.22) {
+      return createContinentDragGeneratedEntry(level);
+    }
+
     const pool = getEligibleEntries(level);
     const excluded = new Set(excludedCountries.map(String));
     const available = pool.filter((entry) => !excluded.has(entry.country));

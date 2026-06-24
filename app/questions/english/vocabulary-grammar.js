@@ -988,17 +988,57 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     { prompt: "Which word best fits an analytical essay?", sentence: "The final paragraph ___ the author's main argument.", answer: "reinforces", distractors: ["sort of repeats", "yells about", "messes with", "draws around"], minDifficulty: 10 },
   ];
 
+  const HOMOPHONE_DOORS = [
+    { sentence: "The library books are over ___ by the window.", answer: "there", distractors: ["their", "they're", "then", "than"], minDifficulty: 2 },
+    { sentence: "The children hung ___ coats on the hooks.", answer: "their", distractors: ["there", "they're", "then", "them"], minDifficulty: 2 },
+    { sentence: "I think ___ ready for the spelling game.", answer: "they're", distractors: ["there", "their", "then", "than"], minDifficulty: 3 },
+    { sentence: "Please put the folders ___ the table.", answer: "on", distractors: ["one", "won", "own", "in"], minDifficulty: 3 },
+    { sentence: "We walked ___ the quiet hallway.", answer: "through", distractors: ["threw", "true", "though", "to"], minDifficulty: 4 },
+    { sentence: "The team ___ the final round.", answer: "won", distractors: ["one", "on", "own", "when"], minDifficulty: 4 },
+    { sentence: "Please ___ your name at the top.", answer: "write", distractors: ["right", "rite", "wrote", "rate"], minDifficulty: 5 },
+    { sentence: "The answer is on the ___ side of the page.", answer: "right", distractors: ["write", "rite", "wrote", "bright"], minDifficulty: 5 },
+    { sentence: "The principal explained the safety ___ clearly.", answer: "principle", distractors: ["principal", "practice", "princess", "possible"], minDifficulty: 6 },
+    { sentence: "The school ___ greeted students at the door.", answer: "principal", distractors: ["principle", "practice", "princess", "possible"], minDifficulty: 6 },
+    { sentence: "The cold air made it hard to ___.", answer: "breathe", distractors: ["breath", "breadth", "brief", "breeze"], minDifficulty: 7 },
+    { sentence: "Take one deep ___ before you speak.", answer: "breath", distractors: ["breathe", "breadth", "brief", "breeze"], minDifficulty: 7 },
+    { sentence: "The new rule may ___ how teams are chosen.", answer: "affect", distractors: ["effect", "except", "accept", "effort"], minDifficulty: 8 },
+    { sentence: "The strongest ___ of practice was better teamwork.", answer: "effect", distractors: ["affect", "except", "accept", "effort"], minDifficulty: 8 },
+    { sentence: "Everyone finished the quiz ___ Noah, who was absent.", answer: "except", distractors: ["accept", "effect", "affect", "expect"], minDifficulty: 9 },
+    { sentence: "The coach will ___ the team's apology.", answer: "accept", distractors: ["except", "effect", "affect", "expect"], minDifficulty: 9 },
+  ];
+
+  const PUNCTUATION_TRAFFIC_LIGHTS = [
+    { sentence: "The puppy is asleep", answer: ".", distractors: ["?", "!", ","], minDifficulty: 1 },
+    { sentence: "Where did you put the scissors", answer: "?", distractors: [".", "!", ","], minDifficulty: 1 },
+    { sentence: "Watch out", answer: "!", distractors: [".", "?", ","], minDifficulty: 2 },
+    { sentence: "After lunch ___ we went outside.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 2 },
+    { sentence: "Can you help me carry this box", answer: "?", distractors: [".", "!", ","], minDifficulty: 3 },
+    { sentence: "The class measured the plant each day", answer: ".", distractors: ["?", "!", ","], minDifficulty: 3 },
+    { sentence: "Before the timer rang ___ Maya checked her answer.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 4 },
+    { sentence: "What a huge rainbow", answer: "!", distractors: [".", "?", ","], minDifficulty: 4 },
+    { sentence: "When the rain stopped ___ the team restarted practice.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 5 },
+    { sentence: "Which graph shows the highest temperature", answer: "?", distractors: [".", "!", ","], minDifficulty: 5 },
+    { sentence: "Although the puzzle was hard ___ Gideon solved it.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 6 },
+    { sentence: "The evidence supports the claim", answer: ".", distractors: ["?", "!", ","], minDifficulty: 6 },
+    { sentence: "If the data changes ___ revise the conclusion.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 7 },
+    { sentence: "How could the source be checked", answer: "?", distractors: [".", "!", ","], minDifficulty: 7 },
+    { sentence: "After reviewing both sources ___ the writer qualified the claim.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 8 },
+    { sentence: "The result contradicted the prediction", answer: ".", distractors: ["?", "!", ","], minDifficulty: 8 },
+    { sentence: "Because the sample size was small ___ the conclusion should be cautious.", answer: ",", distractors: [".", "?", "!"], minDifficulty: 9 },
+    { sentence: "Can a biased source still provide useful evidence", answer: "?", distractors: [".", "!", ","], minDifficulty: 10 },
+  ];
+
   const GENERATOR_TYPES = {
-    1: ["prefix", "synonym", "antonym", "cloze", "context", "partsOfSpeech", "editing"],
-    2: ["prefix", "suffix", "synonym", "antonym", "cloze", "context", "homophone", "editing"],
-    3: ["suffix", "root", "homophone", "context", "cloze", "partsOfSpeech", "punctuation", "editing"],
-    4: ["root", "homophone", "context", "editing", "sentenceCombining", "wordChoice", "punctuation"],
-    5: ["root", "suffix", "context", "figurative", "homophone", "editing", "partsOfSpeech"],
+    1: ["prefix", "synonym", "antonym", "cloze", "context", "partsOfSpeech", "editing", "punctuationTraffic"],
+    2: ["prefix", "suffix", "synonym", "antonym", "cloze", "context", "homophone", "homophoneDoor", "editing", "punctuationTraffic"],
+    3: ["suffix", "root", "homophone", "homophoneDoor", "context", "cloze", "partsOfSpeech", "punctuation", "punctuationTraffic", "editing"],
+    4: ["root", "homophone", "homophoneDoor", "context", "editing", "sentenceCombining", "wordChoice", "punctuation", "punctuationTraffic"],
+    5: ["root", "suffix", "context", "figurative", "homophone", "homophoneDoor", "editing", "partsOfSpeech", "punctuationTraffic"],
     6: ["prefix", "suffix", "root", "context", "figurative", "transition", "pronounReference", "sentenceCombining", "editing"],
     7: ["prefix", "root", "context", "figurative", "transition", "pronounReference", "clause", "wordChoice", "editing"],
-    8: ["prefix", "suffix", "root", "homophone", "context", "clause", "pronounReference", "sentenceCombining", "editing"],
-    9: ["prefix", "root", "homophone", "context", "transition", "punctuation", "wordChoice", "sentenceCombining", "editing"],
-    10: ["root", "antonym", "context", "clause", "pronounReference", "punctuation", "wordChoice", "editing"],
+    8: ["prefix", "suffix", "root", "homophone", "homophoneDoor", "context", "clause", "pronounReference", "sentenceCombining", "editing", "punctuationTraffic"],
+    9: ["prefix", "root", "homophone", "homophoneDoor", "context", "transition", "punctuation", "punctuationTraffic", "wordChoice", "sentenceCombining", "editing"],
+    10: ["root", "antonym", "context", "clause", "pronounReference", "punctuation", "punctuationTraffic", "wordChoice", "editing"],
   };
 
   function createPrefixQuestion(level) {
@@ -1062,6 +1102,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     });
   }
 
+  function createHomophoneDoorQuestion(level) {
+    const item = pick(eligible(HOMOPHONE_DOORS, level));
+    return buildQuestion({
+      question: "Homophone Door Game: which door opens the correct sentence?",
+      displayText: item.sentence,
+      options: makeOptions(item.answer, item.distractors),
+      answer: item.answer,
+      difficulty: level,
+    });
+  }
+
   function createClozeQuestion(level) {
     const item = pick(eligible(CLOZES, level));
     return buildQuestion({
@@ -1110,6 +1161,17 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     const item = pick(eligible(PUNCTUATION, level));
     return buildQuestion({
       question: item.prompt,
+      options: makeOptions(item.answer, item.distractors),
+      answer: item.answer,
+      difficulty: level,
+    });
+  }
+
+  function createPunctuationTrafficQuestion(level) {
+    const item = pick(eligible(PUNCTUATION_TRAFFIC_LIGHTS, level));
+    return buildQuestion({
+      question: "Punctuation Traffic Lights: choose the signal that belongs in the sentence.",
+      displayText: item.sentence,
       options: makeOptions(item.answer, item.distractors),
       answer: item.answer,
       difficulty: level,
@@ -1189,11 +1251,13 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     synonym: createSynonymQuestion,
     antonym: createAntonymQuestion,
     homophone: createHomophoneQuestion,
+    homophoneDoor: createHomophoneDoorQuestion,
     cloze: createClozeQuestion,
     context: createContextClueQuestion,
     editing: createSentenceEditingQuestion,
     partsOfSpeech: createPartsOfSpeechQuestion,
     punctuation: createPunctuationQuestion,
+    punctuationTraffic: createPunctuationTrafficQuestion,
     figurative: createFigurativeQuestion,
     transition: createTransitionQuestion,
     sentenceCombining: createSentenceCombiningQuestion,

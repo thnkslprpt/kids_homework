@@ -658,8 +658,233 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(10, "What is the tragedy of the commons?", ["Overuse of a shared resource when individuals act in self-interest", "A play performed in a park", "A law requiring shared gardens", "A map showing public roads"], "Overuse of a shared resource when individuals act in self-interest"),
 ];
 
+function generalKnowledgeShuffle(values) {
+  const copy = [...values];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+function generalKnowledgeSlugify(value) {
+  const slug = String(value)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+  return slug || "item";
+}
+
+function generalKnowledgeChoiceTokens(type, difficulty, values) {
+  return generalKnowledgeShuffle(Array.from(new Set(values.map(String)))).map((text, index) => ({
+    id: `${type}-${difficulty}-${index}-${generalKnowledgeSlugify(text)}`,
+    text,
+  }));
+}
+
+function generalKnowledgeBuildMatchingAnswerLabel(leftItems, answers) {
+  return leftItems.map((item, index) => `${item.text}: ${answers[index] || ""}`).join(" | ");
+}
+
+const GENERAL_KNOWLEDGE_SIZE_SORTS = [
+  {
+    minDifficulty: 1,
+    maxDifficulty: 2,
+    items: ["ant", "cat", "car"],
+    extraText: "Put the cards in order by their usual real-world size.",
+  },
+  {
+    minDifficulty: 1,
+    maxDifficulty: 3,
+    items: ["grape", "school bag", "person"],
+    extraText: "Think about normal size, not a toy or a picture.",
+  },
+  {
+    minDifficulty: 2,
+    maxDifficulty: 4,
+    items: ["coin", "book", "desk", "classroom"],
+    extraText: "Use ballpark reasoning: which things fit inside the others?",
+  },
+  {
+    minDifficulty: 3,
+    maxDifficulty: 5,
+    items: ["bee", "bird", "bicycle", "bus"],
+    extraText: "Sort by the size of a typical example.",
+  },
+  {
+    minDifficulty: 4,
+    maxDifficulty: 6,
+    items: ["orange", "dog", "car", "building", "mountain"],
+    extraText: "Compare ordinary examples, then build the smallest-to-largest model.",
+  },
+  {
+    minDifficulty: 5,
+    maxDifficulty: 8,
+    items: ["ant", "cat", "car", "building", "mountain", "Earth"],
+    extraText: "This is approximate scale reasoning, not measuring exact centimeters.",
+  },
+  {
+    minDifficulty: 6,
+    maxDifficulty: 10,
+    items: ["raindrop", "tennis ball", "child", "tree", "skyscraper", "city"],
+    extraText: "Use common real-world scale. A city covers much more space than one building.",
+  },
+  {
+    minDifficulty: 7,
+    maxDifficulty: 10,
+    items: ["house", "neighborhood", "city", "country", "continent", "Earth"],
+    extraText: "Build a nested model from local place to whole planet.",
+  },
+];
+
+const GENERAL_KNOWLEDGE_CAUSE_EFFECT_SETS = [
+  {
+    minDifficulty: 1,
+    maxDifficulty: 3,
+    pairs: [
+      { text: "Ice is left in the sun", answer: "It melts into liquid water" },
+      { text: "A cup tips over", answer: "The drink spills" },
+      { text: "A light switch is turned on", answer: "The room gets brighter" },
+      { text: "A plant is not watered for many days", answer: "Its leaves wilt" },
+      { text: "A ball is kicked", answer: "The ball starts moving" },
+    ],
+  },
+  {
+    minDifficulty: 2,
+    maxDifficulty: 5,
+    pairs: [
+      { text: "Rain falls on dry soil", answer: "The soil gets wet" },
+      { text: "A door is pushed open", answer: "People can walk through" },
+      { text: "Food is left in a warm place too long", answer: "It may spoil faster" },
+      { text: "A pencil point breaks", answer: "The writing gets messy" },
+      { text: "A bike tire loses air", answer: "The bike is harder to ride" },
+      { text: "A pot of water is heated", answer: "The water gets hotter" },
+    ],
+  },
+  {
+    minDifficulty: 4,
+    maxDifficulty: 7,
+    pairs: [
+      { text: "A shadow is made when light is blocked", answer: "The area behind the object is darker" },
+      { text: "More people move into a small town", answer: "The town's population increases" },
+      { text: "A road is closed for repairs", answer: "Drivers need another route" },
+      { text: "A magnet is placed near iron paper clips", answer: "The paper clips are attracted" },
+      { text: "A person practices a skill every day", answer: "The skill usually improves" },
+      { text: "A river gets heavy rain upstream", answer: "Water level downstream can rise" },
+    ],
+  },
+  {
+    minDifficulty: 6,
+    maxDifficulty: 10,
+    pairs: [
+      { text: "Demand for a popular toy rises before a holiday", answer: "Stores may run out or raise prices" },
+      { text: "A city adds a safe bike lane", answer: "More people may choose to bike" },
+      { text: "A source uses old data", answer: "Its conclusion may no longer fit today" },
+      { text: "A bridge design has extra supports", answer: "It can usually hold more weight" },
+      { text: "A heat wave lasts for many days", answer: "People may use more electricity for cooling" },
+      { text: "A survey asks only one small group", answer: "The results may not represent everyone" },
+    ],
+  },
+];
+
+function generalKnowledgeChooseBlueprint(blueprints, difficulty) {
+  const available = blueprints.filter(
+    (blueprint) => difficulty >= (blueprint.minDifficulty || 1) && difficulty <= (blueprint.maxDifficulty || 10)
+  );
+  return generalKnowledgeRandomChoice(available.length ? available : blueprints);
+}
+
+function createGeneralKnowledgeSizeSortEntry(difficulty) {
+  const level = generalKnowledgeClampDifficulty(difficulty);
+  const type = "general-knowledge-drag";
+  const blueprint = generalKnowledgeChooseBlueprint(GENERAL_KNOWLEDGE_SIZE_SORTS, level);
+  const targets = blueprint.items.map((item, index) => ({
+    text: "",
+    reviewLabel: `${index + 1}`,
+  }));
+  const answerLabel = `Smallest to largest: ${blueprint.items.join(", ")}`;
+
+  return {
+    type,
+    family: "general-knowledge-size-sort",
+    difficulty: level,
+    mode: "drag",
+    questionText: "Size Sort: build a smallest-to-largest model.",
+    displayText: "",
+    extraText: blueprint.extraText,
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: answerLabel,
+    dragLayout: "targets",
+    dragTargetArrangement: "line",
+    dragTargets: targets,
+    dragChoices: generalKnowledgeChoiceTokens(type, level, blueprint.items),
+    dragAnswerTokens: blueprint.items,
+    dragPlaceholderText: "\u00a0",
+    dragLineStartLabel: "Smallest",
+    dragLineEndLabel: "Largest",
+    dragShowTargetLabels: false,
+    reviewText: answerLabel,
+    answerValue: blueprint.items.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function createGeneralKnowledgeCauseEffectEntry(difficulty) {
+  const level = generalKnowledgeClampDifficulty(difficulty);
+  const type = "general-knowledge-drag";
+  const blueprint = generalKnowledgeChooseBlueprint(GENERAL_KNOWLEDGE_CAUSE_EFFECT_SETS, level);
+  const pairCount = level >= 7 ? 5 : level >= 4 ? 4 : 3;
+  const pairs = generalKnowledgeShuffle(blueprint.pairs).slice(0, pairCount);
+  const leftItems = pairs.map((pair, index) => ({
+    id: `${type}-cause-${level}-${index}-${generalKnowledgeSlugify(pair.text)}`,
+    text: pair.text,
+  }));
+  const answers = pairs.map((pair) => pair.answer);
+  const answerLabel = generalKnowledgeBuildMatchingAnswerLabel(leftItems, answers);
+
+  return {
+    type,
+    family: "general-knowledge-cause-effect",
+    difficulty: level,
+    mode: "drag",
+    questionText: "Cause and Effect: connect each everyday cause to its likely effect.",
+    displayText: "",
+    extraText: "Click a cause, then click the effect that best follows from it.",
+    extraHtml: "",
+    visualHtml: "",
+    visualSummary: "Every cause has one matching effect.",
+    dragLayout: "matching",
+    dragChoices: [],
+    dragAnswerTokens: answers,
+    matchLeftItems: leftItems,
+    matchRightItems: generalKnowledgeShuffle(answers).map((text, index) => ({
+      id: `${type}-effect-${level}-${index}-${generalKnowledgeSlugify(text)}`,
+      text,
+    })),
+    reviewText: answerLabel,
+    answerValue: answers.join(" | "),
+    answerLabel,
+    isHebrew: false,
+  };
+}
+
+function createGeneralKnowledgeWorldModelEntry(difficulty) {
+  const level = generalKnowledgeClampDifficulty(difficulty);
+  if (Math.random() < 0.48) {
+    return createGeneralKnowledgeSizeSortEntry(level);
+  }
+
+  return createGeneralKnowledgeCauseEffectEntry(level);
+}
+
 function createGeneralKnowledgeGeneratedEntry(difficulty) {
   const level = generalKnowledgeClampDifficulty(difficulty);
+  if (Math.random() < 0.45) {
+    return createGeneralKnowledgeWorldModelEntry(level);
+  }
+
   const exactEntries = GENERAL_KNOWLEDGE_QUESTIONS.filter((entry) => entry.difficulty === level);
   const eligibleEntries = GENERAL_KNOWLEDGE_QUESTIONS.filter((entry) => entry.difficulty <= level);
   const source = exactEntries.length ? exactEntries : eligibleEntries.length ? eligibleEntries : GENERAL_KNOWLEDGE_QUESTIONS;
@@ -692,3 +917,8 @@ globalThis.HomeworkQuestions?.register({
   generatedEntryFactory: createGeneralKnowledgeGeneratedEntry,
   generatedShare: 0.6,
 });
+
+globalThis.GENERAL_KNOWLEDGE_GENERATOR_COVERAGE = {
+  sizeSort: createGeneralKnowledgeSizeSortEntry,
+  causeEffect: createGeneralKnowledgeCauseEffectEntry,
+};

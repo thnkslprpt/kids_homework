@@ -128,6 +128,22 @@ function renderCurrentQuestion() {
     return;
   }
 
+  if (question.mode === "interactive") {
+    elements.answerInput.value = "";
+    elements.answerInput.disabled = false;
+    elements.answerSignButton.disabled = false;
+    elements.answerSubmitButton.disabled = false;
+    elements.answerForm.hidden = true;
+    elements.inputArea.hidden = true;
+    elements.choicesArea.hidden = false;
+    elements.dragArea.hidden = true;
+    renderInteractiveQuestion(question, {
+      readOnly: reviewingPreviousQuestion,
+      selectedTokens: Array.isArray(answerSelection?.tokens) ? answerSelection.tokens : [],
+    });
+    return;
+  }
+
   elements.answerInput.value = "";
   elements.answerInput.disabled = false;
   elements.answerSignButton.disabled = false;
@@ -146,6 +162,548 @@ function renderCurrentQuestion() {
   } else {
     renderSpeedRoundTimer();
   }
+}
+
+function renderInteractiveQuestion(question, { readOnly = false, selectedTokens = [] } = {}) {
+  elements.choicesArea.innerHTML = "";
+
+  const config = question.interactive && typeof question.interactive === "object"
+    ? question.interactive
+    : {};
+  const layout = config.layout || "option-select";
+  if (layout === "command-sequence") {
+    renderCommandSequenceQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "paired-select") {
+    renderPairedSelectQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+
+  const answerIndexes = new Set(
+    (Array.isArray(config.answerIndexes) ? config.answerIndexes : [])
+      .map((value) => Number.parseInt(value, 10))
+      .filter(Number.isFinite)
+  );
+  const selectedIndexes = new Set(
+    (Array.isArray(selectedTokens) ? selectedTokens : [])
+      .map((value) => Number.parseInt(value, 10))
+      .filter(Number.isFinite)
+  );
+  const maxSelected = Math.max(1, Number.parseInt(config.maxSelected, 10) || answerIndexes.size || 1);
+  const minSelected = Math.max(1, Number.parseInt(config.minSelected, 10) || answerIndexes.size || 1);
+
+  const shell = document.createElement("div");
+  shell.className = "interactive-question";
+
+  if (config.prompt) {
+    const prompt = document.createElement("div");
+    prompt.className = "interactive-prompt";
+    prompt.textContent = String(config.prompt);
+    shell.appendChild(prompt);
+  }
+
+  const board = document.createElement("div");
+  board.className = `interactive-board ${layout}`;
+  shell.appendChild(board);
+
+  const status = document.createElement("div");
+  status.className = "interactive-status";
+
+  const syncStatus = () => {
+    if (readOnly) {
+      status.textContent = selectedIndexes.size
+        ? `${config.selectedLabel || "Selected"}: ${Array.from(selectedIndexes).map((index) => index + 1).join(", ")}`
+        : "";
+      return;
+    }
+    status.textContent = `${selectedIndexes.size} selected`;
+  };
+
+  const buildSelectedValue = () => {
+    const labels = Array.from(selectedIndexes)
+      .sort((left, right) => left - right)
+      .map((index) => {
+        if (layout === "option-select") {
+          return config.choices?.[index]?.summary || config.choices?.[index]?.label || String(index + 1);
+        }
+        return config.parts?.[index]?.summary || config.parts?.[index]?.label || `Part ${index + 1}`;
+      });
+    return labels.join(", ");
+  };
+
+  const isSelectionCorrect = () => {
+    if (selectedIndexes.size !== answerIndexes.size) {
+      return false;
+    }
+    return Array.from(answerIndexes).every((index) => selectedIndexes.has(index));
+  };
+
+  const syncButtons = () => {
+    board.querySelectorAll(".interactive-option").forEach((button) => {
+      const index = Number.parseInt(button.dataset.index, 10);
+      const isSelected = selectedIndexes.has(index);
+      const isCorrect = answerIndexes.has(index);
+      button.classList.toggle("selected", isSelected);
+      if (readOnly) {
+        button.disabled = true;
+        button.classList.toggle("is-correct", isCorrect);
+        button.classList.toggle("is-wrong", isSelected && !isCorrect);
+      }
+      button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+    });
+    syncStatus();
+  };
+
+  const toggleIndex = (index) => {
+    if (readOnly) {
+      return;
+    }
+    if (layout === "option-select") {
+      selectedIndexes.clear();
+      selectedIndexes.add(index);
+    } else if (selectedIndexes.has(index)) {
+      selectedIndexes.delete(index);
+    } else {
+      if (selectedIndexes.size >= maxSelected) {
+        const [firstIndex] = Array.from(selectedIndexes);
+        selectedIndexes.delete(firstIndex);
+      }
+      selectedIndexes.add(index);
+    }
+    syncButtons();
+  };
+
+  const items = layout === "part-select" ? config.parts || [] : config.choices || [];
+  items.forEach((item, index) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "interactive-option";
+    button.dataset.index = String(index);
+    button.disabled = readOnly;
+    button.setAttribute("aria-pressed", selectedIndexes.has(index) ? "true" : "false");
+
+    const label = document.createElement("span");
+    label.className = "interactive-option-label";
+    label.textContent = layout === "option-select" ? `${item?.label || OPTION_LABELS[index]})` : item?.label || String(index + 1);
+    button.appendChild(label);
+
+    const body = document.createElement("span");
+    body.className = "interactive-option-body";
+    if (item?.html) {
+      body.innerHTML = item.html;
+    } else {
+      body.textContent = item?.summary || item?.label || String(index + 1);
+    }
+    button.appendChild(body);
+
+    if (!readOnly) {
+      button.addEventListener("click", () => toggleIndex(index));
+    }
+    board.appendChild(button);
+  });
+
+  if (!readOnly) {
+    const checkButton = document.createElement("button");
+    checkButton.type = "button";
+    checkButton.className = "primary-button interactive-check-button";
+    checkButton.textContent = config.checkLabel || "Check Answer";
+    checkButton.addEventListener("click", () => {
+      if (selectedIndexes.size < minSelected) {
+        state.feedbackMessage =
+          minSelected === 1 ? "Choose an answer before checking." : `Choose ${minSelected} items before checking.`;
+        state.feedbackTone = "error";
+        renderFeedback();
+        return;
+      }
+      const tokens = Array.from(selectedIndexes)
+        .sort((left, right) => left - right)
+        .map(String);
+      handleAnswer(question, isSelectionCorrect(), buildSelectedValue(), { tokens });
+    });
+    shell.appendChild(status);
+    shell.appendChild(checkButton);
+  } else {
+    shell.appendChild(status);
+  }
+
+  elements.choicesArea.appendChild(shell);
+  syncButtons();
+}
+
+function renderPairedSelectQuestion(question, config, { readOnly = false, selectedTokens = [] } = {}) {
+  const items = Array.isArray(config.items) ? config.items : [];
+  const reasons = Array.isArray(config.reasons) ? config.reasons : [];
+  const answerItemIndex = Number.parseInt(config.answerItemIndex, 10);
+  const answerReasonIndex = Number.parseInt(config.answerReasonIndex, 10);
+  const selectedItemToken = selectedTokens.find((token) => String(token).startsWith("item:"));
+  const selectedReasonToken = selectedTokens.find((token) => String(token).startsWith("reason:"));
+  let selectedItemIndex = Number.parseInt(String(selectedItemToken || "").replace("item:", ""), 10);
+  let selectedReasonIndex = Number.parseInt(String(selectedReasonToken || "").replace("reason:", ""), 10);
+
+  if (!Number.isFinite(selectedItemIndex)) selectedItemIndex = -1;
+  if (!Number.isFinite(selectedReasonIndex)) selectedReasonIndex = -1;
+
+  const shell = document.createElement("div");
+  shell.className = "interactive-question paired-select-question";
+
+  if (config.prompt) {
+    const prompt = document.createElement("div");
+    prompt.className = "interactive-prompt";
+    prompt.textContent = String(config.prompt);
+    shell.appendChild(prompt);
+  }
+
+  const board = document.createElement("div");
+  board.className = "paired-select-board";
+  shell.appendChild(board);
+
+  const status = document.createElement("div");
+  status.className = "interactive-status";
+
+  function selectedLabel(collection, index) {
+    return collection[index]?.summary || collection[index]?.label || String(index + 1);
+  }
+
+  function buildColumn(title, collection, selectedIndex, correctIndex, group) {
+    const column = document.createElement("div");
+    column.className = `paired-select-column ${group}`;
+
+    const heading = document.createElement("div");
+    heading.className = "paired-select-heading";
+    heading.textContent = title;
+    column.appendChild(heading);
+
+    collection.forEach((item, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "interactive-option paired-select-option";
+      button.dataset.group = group;
+      button.dataset.index = String(index);
+      button.disabled = readOnly;
+
+      const isSelected = index === selectedIndex;
+      const isCorrect = index === correctIndex;
+      button.classList.toggle("selected", isSelected);
+      if (readOnly) {
+        button.classList.toggle("is-correct", isCorrect);
+        button.classList.toggle("is-wrong", isSelected && !isCorrect);
+      }
+      button.setAttribute("aria-pressed", isSelected ? "true" : "false");
+
+      const label = document.createElement("span");
+      label.className = "interactive-option-label";
+      label.textContent = item?.label || String(index + 1);
+      button.appendChild(label);
+
+      const body = document.createElement("span");
+      body.className = "interactive-option-body";
+      if (item?.html) {
+        body.innerHTML = item.html;
+      } else {
+        body.textContent = item?.summary || item?.label || String(index + 1);
+      }
+      button.appendChild(body);
+
+      if (!readOnly) {
+        button.addEventListener("click", () => {
+          if (group === "items") {
+            selectedItemIndex = index;
+          } else {
+            selectedReasonIndex = index;
+          }
+          sync();
+        });
+      }
+
+      column.appendChild(button);
+    });
+
+    return column;
+  }
+
+  function sync() {
+    board.innerHTML = "";
+    board.appendChild(buildColumn(config.itemHeading || "Pick one", items, selectedItemIndex, answerItemIndex, "items"));
+    board.appendChild(buildColumn(config.reasonHeading || "Pick why", reasons, selectedReasonIndex, answerReasonIndex, "reasons"));
+
+    if (readOnly) {
+      status.textContent =
+        selectedItemIndex >= 0 && selectedReasonIndex >= 0
+          ? `Answer: ${selectedLabel(items, selectedItemIndex)} because ${selectedLabel(reasons, selectedReasonIndex)}`
+          : "";
+      return;
+    }
+
+    const itemDone = selectedItemIndex >= 0 ? "item selected" : "pick an item";
+    const reasonDone = selectedReasonIndex >= 0 ? "reason selected" : "pick a reason";
+    status.textContent = `${itemDone}; ${reasonDone}`;
+  }
+
+  if (!readOnly) {
+    const checkButton = document.createElement("button");
+    checkButton.type = "button";
+    checkButton.className = "primary-button interactive-check-button";
+    checkButton.textContent = config.checkLabel || "Check Answer";
+    checkButton.addEventListener("click", () => {
+      if (selectedItemIndex < 0 || selectedReasonIndex < 0) {
+        state.feedbackMessage = "Choose one item and one reason before checking.";
+        state.feedbackTone = "error";
+        renderFeedback();
+        return;
+      }
+
+      const isCorrect = selectedItemIndex === answerItemIndex && selectedReasonIndex === answerReasonIndex;
+      const selectedValue = `${selectedLabel(items, selectedItemIndex)} because ${selectedLabel(reasons, selectedReasonIndex)}`;
+      handleAnswer(question, isCorrect, selectedValue, {
+        tokens: [`item:${selectedItemIndex}`, `reason:${selectedReasonIndex}`],
+      });
+    });
+    shell.appendChild(status);
+    shell.appendChild(checkButton);
+  } else {
+    shell.appendChild(status);
+  }
+
+  elements.choicesArea.appendChild(shell);
+  sync();
+}
+
+function renderCommandSequenceQuestion(question, config, { readOnly = false, selectedTokens = [] } = {}) {
+  const grid = config.grid && typeof config.grid === "object" ? config.grid : {};
+  const rows = Math.max(2, Math.min(6, Number.parseInt(grid.rows, 10) || 4));
+  const cols = Math.max(2, Math.min(6, Number.parseInt(grid.cols, 10) || 4));
+  const start = normalizeGridPoint(grid.start, rows, cols, { row: rows - 1, col: 0 });
+  const treasure = normalizeGridPoint(grid.treasure, rows, cols, { row: 0, col: cols - 1 });
+  const landmarks = Array.isArray(grid.landmarks) ? grid.landmarks : [];
+  const answerSequence = Array.isArray(config.answerSequence)
+    ? config.answerSequence.map((value) => String(value).toUpperCase()).filter(Boolean)
+    : [];
+  const selectedSequence = Array.isArray(selectedTokens)
+    ? selectedTokens.map((value) => String(value).toUpperCase()).filter(Boolean)
+    : [];
+  const currentSequence = readOnly ? selectedSequence : [];
+  const maxCommands = Math.max(answerSequence.length + 2, Number.parseInt(config.maxCommands, 10) || answerSequence.length + 2);
+  const commandLabels = {
+    N: "North",
+    E: "East",
+    S: "South",
+    W: "West",
+  };
+  const commandDelta = {
+    N: { row: -1, col: 0 },
+    E: { row: 0, col: 1 },
+    S: { row: 1, col: 0 },
+    W: { row: 0, col: -1 },
+  };
+
+  const shell = document.createElement("div");
+  shell.className = "interactive-question command-sequence-question";
+
+  if (config.prompt) {
+    const prompt = document.createElement("div");
+    prompt.className = "interactive-prompt";
+    prompt.textContent = String(config.prompt);
+    shell.appendChild(prompt);
+  }
+
+  const board = document.createElement("div");
+  board.className = "command-grid";
+  board.style.setProperty("--command-grid-cols", String(cols));
+  shell.appendChild(board);
+
+  const sequencePanel = document.createElement("div");
+  sequencePanel.className = "command-sequence-panel";
+  shell.appendChild(sequencePanel);
+
+  const actions = document.createElement("div");
+  actions.className = "command-actions";
+
+  const status = document.createElement("div");
+  status.className = "interactive-status";
+
+  function samePoint(left, right) {
+    return left.row === right.row && left.col === right.col;
+  }
+
+  function pointKey(point) {
+    return `${point.row},${point.col}`;
+  }
+
+  function getPath(sequence) {
+    const path = [start];
+    let current = start;
+    sequence.forEach((command) => {
+      const delta = commandDelta[command];
+      if (!delta) {
+        path.push(current);
+        return;
+      }
+      const next = {
+        row: Math.max(0, Math.min(rows - 1, current.row + delta.row)),
+        col: Math.max(0, Math.min(cols - 1, current.col + delta.col)),
+      };
+      path.push(next);
+      current = next;
+    });
+    return path;
+  }
+
+  function getLandmarkLabel(row, col) {
+    const landmark = landmarks.find((item) => {
+      const point = normalizeGridPoint(item, rows, cols, null);
+      return point && point.row === row && point.col === col;
+    });
+    return landmark?.label || "";
+  }
+
+  function renderBoard() {
+    board.innerHTML = "";
+    const path = getPath(currentSequence);
+    const pathKeys = new Set(path.map(pointKey));
+    const current = path[path.length - 1] || start;
+
+    for (let row = 0; row < rows; row += 1) {
+      for (let col = 0; col < cols; col += 1) {
+        const cellPoint = { row, col };
+        const cell = document.createElement("div");
+        cell.className = "command-cell";
+        cell.classList.toggle("is-path", pathKeys.has(pointKey(cellPoint)));
+        cell.classList.toggle("is-start", samePoint(cellPoint, start));
+        cell.classList.toggle("is-treasure", samePoint(cellPoint, treasure));
+        cell.classList.toggle("is-current", samePoint(cellPoint, current));
+
+        const marker = document.createElement("span");
+        marker.className = "command-cell-marker";
+        if (samePoint(cellPoint, current)) {
+          marker.textContent = config.robotLabel || "R";
+        } else if (samePoint(cellPoint, treasure)) {
+          marker.textContent = config.treasureLabel || "T";
+        } else if (samePoint(cellPoint, start)) {
+          marker.textContent = "S";
+        } else {
+          marker.textContent = getLandmarkLabel(row, col);
+        }
+        cell.appendChild(marker);
+        board.appendChild(cell);
+      }
+    }
+  }
+
+  function renderSequence() {
+    sequencePanel.innerHTML = "";
+    const label = document.createElement("div");
+    label.className = "command-sequence-label";
+    label.textContent = "Commands";
+    sequencePanel.appendChild(label);
+
+    const slots = document.createElement("div");
+    slots.className = "command-sequence-slots";
+    const slotCount = Math.max(answerSequence.length, currentSequence.length, 1);
+    for (let index = 0; index < slotCount; index += 1) {
+      const slot = document.createElement("span");
+      slot.className = "command-sequence-slot";
+      slot.textContent = currentSequence[index] || "";
+      slots.appendChild(slot);
+    }
+    sequencePanel.appendChild(slots);
+  }
+
+  function sync() {
+    renderBoard();
+    renderSequence();
+    status.textContent = readOnly
+      ? currentSequence.length
+        ? `Answer: ${currentSequence.join(" ")}`
+        : ""
+      : `${currentSequence.length} command${currentSequence.length === 1 ? "" : "s"}`;
+  }
+
+  function addCommand(command) {
+    if (readOnly || currentSequence.length >= maxCommands) {
+      return;
+    }
+    currentSequence.push(command);
+    sync();
+  }
+
+  if (!readOnly) {
+    (Array.isArray(config.commands) ? config.commands : ["N", "E", "S", "W"]).forEach((rawCommand) => {
+      const command = String(rawCommand).toUpperCase();
+      if (!commandDelta[command]) {
+        return;
+      }
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "command-button";
+      button.dataset.command = command;
+      button.textContent = command;
+      button.setAttribute("aria-label", commandLabels[command]);
+      button.addEventListener("click", () => addCommand(command));
+      actions.appendChild(button);
+    });
+
+    const undoButton = document.createElement("button");
+    undoButton.type = "button";
+    undoButton.className = "secondary-button command-edit-button";
+    undoButton.textContent = "Undo";
+    undoButton.addEventListener("click", () => {
+      currentSequence.pop();
+      sync();
+    });
+    actions.appendChild(undoButton);
+
+    const clearButton = document.createElement("button");
+    clearButton.type = "button";
+    clearButton.className = "secondary-button command-edit-button";
+    clearButton.textContent = "Clear";
+    clearButton.addEventListener("click", () => {
+      currentSequence.length = 0;
+      sync();
+    });
+    actions.appendChild(clearButton);
+  }
+
+  if (!readOnly) {
+    const checkButton = document.createElement("button");
+    checkButton.type = "button";
+    checkButton.className = "primary-button interactive-check-button";
+    checkButton.textContent = config.checkLabel || "Check Answer";
+    checkButton.addEventListener("click", () => {
+      if (!currentSequence.length) {
+        state.feedbackMessage = "Add commands before checking.";
+        state.feedbackTone = "error";
+        renderFeedback();
+        return;
+      }
+      const selectedValue = currentSequence.join(" ");
+      const isCorrect =
+        currentSequence.length === answerSequence.length &&
+        currentSequence.every((command, index) => command === answerSequence[index]);
+      handleAnswer(question, isCorrect, selectedValue, { tokens: currentSequence.slice() });
+    });
+    shell.appendChild(actions);
+    shell.appendChild(status);
+    shell.appendChild(checkButton);
+  } else {
+    shell.appendChild(status);
+  }
+
+  elements.choicesArea.appendChild(shell);
+  sync();
+}
+
+function normalizeGridPoint(value, rows, cols, fallback) {
+  const row = Number.parseInt(value?.row, 10);
+  const col = Number.parseInt(value?.col, 10);
+  if (!Number.isFinite(row) || !Number.isFinite(col)) {
+    return fallback;
+  }
+
+  return {
+    row: Math.max(0, Math.min(rows - 1, row)),
+    col: Math.max(0, Math.min(cols - 1, col)),
+  };
 }
 
 function renderChoiceButtons(question, { readOnly = false, selectedValue = "" } = {}) {
@@ -1178,4 +1736,3 @@ function formatQuestionReview(question, selectedValue, { isCorrect = false } = {
 
   return `<div class="feedback-review">${lines.join("")}</div>`;
 }
-

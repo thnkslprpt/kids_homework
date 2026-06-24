@@ -1,4 +1,4 @@
-function financialLiteracyQuestion(question, options, answer, difficulty) {
+function financialLiteracyQuestion(question, options, answer, difficulty, extras = {}) {
   const normalizedOptions = Array.from(new Set(options.map(String)));
   const normalizedAnswer = String(answer);
 
@@ -14,6 +14,7 @@ function financialLiteracyQuestion(question, options, answer, difficulty) {
     options: normalizedOptions,
     answer: normalizedAnswer,
     difficulty: clampFinancialDifficulty(difficulty),
+    ...extras,
   };
 }
 
@@ -300,23 +301,343 @@ const FINANCIAL_PURCHASE_TEMPLATES = [
   { items: ["a puzzle", "markers"], prices: [42, 28] },
   { items: ["a game", "a drink"], prices: [65, 10] },
 ];
+const FINANCIAL_GROCERY_ITEMS = [
+  { singular: "apple", plural: "apples" },
+  { singular: "banana", plural: "bananas" },
+  { singular: "juice box", plural: "juice boxes" },
+  { singular: "yogurt cup", plural: "yogurt cups" },
+  { singular: "snack bar", plural: "snack bars" },
+  { singular: "roll", plural: "rolls" },
+  { singular: "pita", plural: "pitas" },
+  { singular: "cucumber", plural: "cucumbers" },
+  { singular: "cheese stick", plural: "cheese sticks" },
+];
+const FINANCIAL_BACKPACK_ITEMS = [
+  { item: "water bottle", price: 8, priority: "need", clue: "staying hydrated" },
+  { item: "sandwich", price: 14, priority: "need", clue: "lunch" },
+  { item: "bus card", price: 12, priority: "need", clue: "getting home" },
+  { item: "notebook", price: 10, priority: "need", clue: "class notes" },
+  { item: "rain poncho", price: 9, priority: "need", clue: "rainy forecast" },
+  { item: "map printout", price: 4, priority: "need", clue: "finding the meeting point" },
+  { item: "bandage pack", price: 6, priority: "need", clue: "small first-aid need" },
+  { item: "extra candy", price: 11, priority: "want", clue: "treat" },
+  { item: "sticker pack", price: 7, priority: "want", clue: "decoration" },
+  { item: "toy keychain", price: 13, priority: "want", clue: "souvenir" },
+  { item: "arcade card", price: 18, priority: "want", clue: "game time" },
+  { item: "fancy pen", price: 16, priority: "want", clue: "style upgrade" },
+  { item: "comic book", price: 15, priority: "want", clue: "extra entertainment" },
+  { item: "mini puzzle", price: 17, priority: "want", clue: "optional game" },
+];
+const FINANCIAL_CASH_DENOMINATIONS = [50, 20, 10, 5, 2, 1];
 
 function createFinancialLiteracyGeneratedEntry(difficulty) {
   const level = clampFinancialDifficulty(difficulty);
   const generatorsByDifficulty = {
-    1: [createFinancialNeedWantQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialCurrencyQuestion, createFinancialBestValueQuestion, createFinancialBudgetConceptQuestion],
-    2: [createFinancialNeedWantQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialGoalQuestion, createFinancialCurrencyQuestion, createFinancialBudgetConceptQuestion],
-    3: [createFinancialCurrencyQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialOpportunityCostQuestion],
-    4: [createFinancialCurrencyCodeQuestion, createFinancialSpendingQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialPlanComparisonQuestion, createFinancialBudgetPercentQuestion],
-    5: [createFinancialCurrencyCodeQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialPlanComparisonQuestion, createFinancialSpendingQuestion, createFinancialSubscriptionQuestion, createFinancialTaxQuestion],
-    6: [createFinancialNetIncomeQuestion, createFinancialSimpleInterestQuestion, createFinancialSubscriptionQuestion, createFinancialGoalQuestion, createFinancialDiscountQuestion, createFinancialSafetyQuestion, createFinancialFixedExpenseQuestion],
-    7: [createFinancialLoanInterestQuestion, createFinancialSubscriptionQuestion, createFinancialInflationQuestion, createFinancialNetIncomeQuestion, createFinancialRiskQuestion, createFinancialUnitPriceQuestion, createFinancialBudgetPercentQuestion],
-    8: [createFinancialCompoundInterestQuestion, createFinancialFeeQuestion, createFinancialBudgetPercentQuestion, createFinancialExchangeQuestion, createFinancialTaxQuestion, createFinancialRiskQuestion, createFinancialInflationQuestion],
-    9: [createFinancialCompoundInterestQuestion, createFinancialCreditCardInterestQuestion, createFinancialLoanPaymentQuestion, createFinancialSinkingFundQuestion, createFinancialInflationQuestion, createFinancialTaxDiscountQuestion, createFinancialRiskQuestion],
-    10: [createFinancialCompoundInterestQuestion, createFinancialLoanPaymentQuestion, createFinancialBudgetPercentQuestion, createFinancialTaxDiscountQuestion, createFinancialExchangeQuestion, createFinancialRiskQuestion, createFinancialDepreciationQuestion, createFinancialSubscriptionQuestion],
+    1: [createFinancialGroceryShelfQuestion, createFinancialNeedWantQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialCurrencyQuestion, createFinancialBackpackQuestion, createFinancialChangeMakingQuestion, createFinancialGoalThermometerQuestion, createFinancialBestValueQuestion, createFinancialBudgetConceptQuestion],
+    2: [createFinancialGroceryShelfQuestion, createFinancialNeedWantQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialGoalQuestion, createFinancialBackpackQuestion, createFinancialChangeMakingQuestion, createFinancialReceiptDetectiveQuestion, createFinancialCurrencyQuestion, createFinancialBudgetConceptQuestion],
+    3: [createFinancialGroceryShelfQuestion, createFinancialCurrencyQuestion, createFinancialSavingsQuestion, createFinancialSpendingQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialChangeMakingQuestion, createFinancialGoalThermometerQuestion, createFinancialReceiptDetectiveQuestion, createFinancialOpportunityCostQuestion],
+    4: [createFinancialGroceryShelfQuestion, createFinancialCurrencyCodeQuestion, createFinancialSpendingQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialSaleSignDecoderQuestion, createFinancialReceiptDetectiveQuestion, createFinancialPlanComparisonQuestion, createFinancialBudgetPercentQuestion],
+    5: [createFinancialGroceryShelfQuestion, createFinancialCurrencyCodeQuestion, createFinancialBestValueQuestion, createFinancialDiscountQuestion, createFinancialSaleSignDecoderQuestion, createFinancialReceiptDetectiveQuestion, createFinancialPlanComparisonQuestion, createFinancialSpendingQuestion, createFinancialSubscriptionTrapQuestion, createFinancialTaxQuestion],
+    6: [createFinancialGroceryShelfQuestion, createFinancialNetIncomeQuestion, createFinancialSimpleInterestQuestion, createFinancialSubscriptionQuestion, createFinancialGoalQuestion, createFinancialSaleSignDecoderQuestion, createFinancialReceiptDetectiveQuestion, createFinancialSubscriptionTrapQuestion, createFinancialDiscountQuestion, createFinancialSafetyQuestion, createFinancialFixedExpenseQuestion],
+    7: [createFinancialGroceryShelfQuestion, createFinancialLoanInterestQuestion, createFinancialSubscriptionQuestion, createFinancialInflationQuestion, createFinancialNetIncomeQuestion, createFinancialRiskQuestion, createFinancialUnitPriceQuestion, createFinancialReceiptDetectiveQuestion, createFinancialSubscriptionTrapQuestion, createFinancialBudgetPercentQuestion],
+    8: [createFinancialGroceryShelfQuestion, createFinancialCompoundInterestQuestion, createFinancialFeeQuestion, createFinancialBudgetPercentQuestion, createFinancialExchangeQuestion, createFinancialTaxQuestion, createFinancialReceiptDetectiveQuestion, createFinancialSubscriptionTrapQuestion, createFinancialRiskQuestion, createFinancialInflationQuestion],
+    9: [createFinancialGroceryShelfQuestion, createFinancialCompoundInterestQuestion, createFinancialCreditCardInterestQuestion, createFinancialLoanPaymentQuestion, createFinancialSinkingFundQuestion, createFinancialInflationQuestion, createFinancialTaxDiscountQuestion, createFinancialReceiptDetectiveQuestion, createFinancialSubscriptionTrapQuestion, createFinancialRiskQuestion],
+    10: [createFinancialGroceryShelfQuestion, createFinancialCompoundInterestQuestion, createFinancialLoanPaymentQuestion, createFinancialBudgetPercentQuestion, createFinancialTaxDiscountQuestion, createFinancialExchangeQuestion, createFinancialReceiptDetectiveQuestion, createFinancialSubscriptionTrapQuestion, createFinancialRiskQuestion, createFinancialDepreciationQuestion, createFinancialSubscriptionQuestion],
   };
 
   return randomFinancialChoice(generatorsByDifficulty[level])(level);
+}
+
+function createFinancialGroceryShelfQuestion(difficulty) {
+  if (difficulty >= 5 && Math.random() < 0.55) {
+    return createFinancialGrocerySaleShelfQuestion(difficulty);
+  }
+
+  const item = randomFinancialChoice(FINANCIAL_GROCERY_ITEMS);
+  const counts = shuffleFinancialArray(difficulty <= 2 ? [2, 3, 4, 5] : [3, 4, 5, 6]);
+  const unitPrices = shuffleFinancialArray(difficulty >= 7 ? [4, 5, 6, 7] : difficulty >= 4 ? [3, 4, 5, 6] : [2, 3, 4, 5]);
+  const labels = ["A", "B", "C", "D"];
+  const deals = counts.map((count, index) => ({
+    label: labels[index],
+    itemText: count === 1 ? item.singular : item.plural,
+    count,
+    price: count * unitPrices[index],
+    unitPrice: unitPrices[index],
+  }));
+  const answerDeal = deals.reduce((best, deal) => (deal.unitPrice < best.unitPrice ? deal : best));
+  const answer = `${answerDeal.label}: ${answerDeal.count} ${answerDeal.itemText} for ${formatFinancialShekels(answerDeal.price)}`;
+
+  return financialLiteracyQuestion(
+    "Best Deal Grocery Shelf: same quality items. Which deal has the lowest price for one item?",
+    deals.map((deal) => `${deal.label}: ${deal.count} ${deal.itemText} for ${formatFinancialShekels(deal.price)}`),
+    answer,
+    difficulty,
+    {
+      visualHtml: buildFinancialShelfHtml("Grocery shelf", deals.map((deal) => [deal.label, `${deal.count} ${deal.itemText}`, formatFinancialShekels(deal.price)]), ["Deal", "Size", "Shelf price"]),
+      visualSummary: deals.map((deal) => `${deal.label}: ${deal.count} for ${formatFinancialShekels(deal.price)}`).join("; "),
+      reviewText: `${answer} costs ${formatFinancialShekels(answerDeal.unitPrice)} per item.`,
+    }
+  );
+}
+
+function createFinancialGrocerySaleShelfQuestion(difficulty) {
+  const item = randomFinancialChoice(["granola bar", "yogurt cup", "juice box", "notebook", "marker"]);
+  const basePrice = randomFinancialChoice(difficulty >= 8 ? [12, 15, 20, 24] : [6, 8, 10, 12]);
+  const fourPackDiscount = randomFinancialChoice([2, 4, 6]);
+  const deals = [
+    {
+      label: "A",
+      text: `1 ${item} at ${formatFinancialShekels(basePrice)} each`,
+      quantity: 1,
+      total: basePrice,
+    },
+    {
+      label: "B",
+      text: `20% off 1 ${item} priced ${formatFinancialShekels(basePrice + 5)}`,
+      quantity: 1,
+      total: (basePrice + 5) * 0.8,
+    },
+    {
+      label: "C",
+      text: `Buy 2, get 1 free at ${formatFinancialShekels(basePrice - 1)} each`,
+      quantity: 3,
+      total: (basePrice - 1) * 2,
+    },
+    {
+      label: "D",
+      text: `4-pack for ${formatFinancialShekels(basePrice * 4 - fourPackDiscount)}`,
+      quantity: 4,
+      total: basePrice * 4 - fourPackDiscount,
+    },
+  ];
+  const rankedDeals = deals.map((deal) => ({ ...deal, unitPrice: deal.total / deal.quantity }));
+  const answerDeal = rankedDeals.reduce((best, deal) => (deal.unitPrice < best.unitPrice ? deal : best));
+  const answer = `${answerDeal.label}: ${answerDeal.text}`;
+
+  return financialLiteracyQuestion(
+    "Best Deal Grocery Shelf: compare the sale signs. Which deal has the lowest price for one item?",
+    rankedDeals.map((deal) => `${deal.label}: ${deal.text}`),
+    answer,
+    difficulty,
+    {
+      visualHtml: buildFinancialShelfHtml("Sale shelf", rankedDeals.map((deal) => [deal.label, deal.text, `${formatFinancialShekels(deal.total)} total`]), ["Deal", "Sale sign", "Cost before tax"]),
+      visualSummary: rankedDeals.map((deal) => `${deal.label}: ${deal.text}`).join("; "),
+      reviewText: `${answer} is lowest at about ${formatFinancialShekels(answerDeal.unitPrice)} per item.`,
+    }
+  );
+}
+
+function createFinancialBackpackQuestion(difficulty) {
+  const needItems = shuffleFinancialArray(FINANCIAL_BACKPACK_ITEMS.filter((item) => item.priority === "need")).slice(0, 3);
+  const wantItems = shuffleFinancialArray(FINANCIAL_BACKPACK_ITEMS.filter((item) => item.priority === "want")).slice(0, 3);
+  const choices = shuffleFinancialArray([...needItems, ...wantItems]);
+  const budget = needItems.reduce((sum, item) => sum + item.price, 0) + (difficulty >= 3 ? 4 : 0);
+  const answerIndexes = choices
+    .map((item, index) => (item.priority === "need" ? index : -1))
+    .filter((index) => index >= 0);
+  const answerLabel = needItems.map((item) => item.item).join(", ");
+
+  return financialInteractiveQuestion({
+    difficulty,
+    question: `Needs/Wants Backpack: pack the needed trip items without going over ${formatFinancialShekels(budget)}.`,
+    answerLabel,
+    visualHtml: buildFinancialShelfHtml("Backpack choices", choices.map((item) => [item.item, formatFinancialShekels(item.price), item.clue]), ["Item", "Price", "Clue"]),
+    visualSummary: choices.map((item) => `${item.item}: ${formatFinancialShekels(item.price)} (${item.clue})`).join("; "),
+    reviewText: `The needed items cost ${formatFinancialShekels(needItems.reduce((sum, item) => sum + item.price, 0))}: ${answerLabel}.`,
+    interactive: {
+      layout: "part-select",
+      prompt: "Tap the items that are needs for the trip.",
+      minSelected: answerIndexes.length,
+      maxSelected: answerIndexes.length,
+      answerIndexes,
+      parts: choices.map((item) => ({
+        label: item.item,
+        summary: `${item.item}: ${formatFinancialShekels(item.price)}`,
+      })),
+    },
+  });
+}
+
+function createFinancialChangeMakingQuestion(difficulty) {
+  const cases = difficulty <= 2
+    ? [
+        { price: 15, paid: 20, answer: [5] },
+        { price: 17, paid: 20, answer: [2, 1] },
+        { price: 13, paid: 20, answer: [5, 2] },
+      ]
+    : difficulty <= 5
+      ? [
+          { price: 34, paid: 50, answer: [10, 5, 1] },
+          { price: 47, paid: 60, answer: [10, 2, 1] },
+          { price: 68, paid: 100, answer: [20, 10, 2] },
+        ]
+      : [
+          { price: 118, paid: 200, answer: [50, 20, 10, 2] },
+          { price: 137, paid: 200, answer: [50, 10, 2, 1] },
+          { price: 245, paid: 300, answer: [50, 5] },
+        ];
+  const entry = randomFinancialChoice(cases);
+  const change = entry.paid - entry.price;
+  const answerTokens = entry.answer.map(formatFinancialCashToken);
+  const choices = buildFinancialCashChoices(entry.answer);
+  const answerIndexes = choices
+    .map((choice, index) => (answerTokens.includes(choice.token) ? index : -1))
+    .filter((index) => index >= 0);
+
+  return financialInteractiveQuestion({
+    difficulty,
+    question: `Change-Making Cash Register: an item costs ${formatFinancialShekels(entry.price)}. You pay ${formatFinancialShekels(entry.paid)}. Tap the bills or coins for the change.`,
+    answerLabel: answerTokens.join(" + "),
+    visualHtml: buildFinancialReceiptHtml("Cash register", [["Price", formatFinancialShekels(entry.price)], ["Paid", formatFinancialShekels(entry.paid)], ["Change", formatFinancialShekels(change)]]),
+    visualSummary: `Price ${formatFinancialShekels(entry.price)}, paid ${formatFinancialShekels(entry.paid)}, change ${formatFinancialShekels(change)}.`,
+    reviewText: `The change is ${formatFinancialShekels(change)}: ${answerTokens.join(" + ")}.`,
+    interactive: {
+      layout: "part-select",
+      prompt: `Make exactly ${formatFinancialShekels(change)} in change.`,
+      minSelected: answerIndexes.length,
+      maxSelected: answerIndexes.length,
+      answerIndexes,
+      parts: choices.map((choice) => ({ label: choice.token, summary: choice.token })),
+    },
+  });
+}
+
+function createFinancialSaleSignDecoderQuestion(difficulty) {
+  const price = randomFinancialChoice(difficulty >= 6 ? [30, 45, 60, 90] : [12, 15, 20, 24]);
+  const quantity = randomFinancialChoice([3, 4]);
+  const percentOff = randomFinancialChoice([10, 20, 25, 50]);
+  const percentTotal = price * quantity * (1 - percentOff / 100);
+  const bundleFreeCount = quantity >= 3 ? 1 : 0;
+  const bundleTotal = price * (quantity - bundleFreeCount);
+  const answer =
+    percentTotal < bundleTotal
+      ? `${percentOff}% off`
+      : bundleTotal < percentTotal
+        ? `Buy ${quantity - bundleFreeCount}, get ${bundleFreeCount} free`
+        : "They cost the same";
+
+  return financialLiteracyQuestion(
+    `Sale Sign Decoder: you need ${quantity} items at ${formatFinancialShekels(price)} each. Which sale costs less before tax?`,
+    buildFinancialOptions(answer, [
+      `${percentOff}% off`,
+      `Buy ${quantity - bundleFreeCount}, get ${bundleFreeCount} free`,
+      "No sale",
+      "The highest original price",
+    ].filter((option) => option !== answer)),
+    answer,
+    difficulty,
+    {
+      visualHtml: buildFinancialShelfHtml("Sale signs", [["Percent sale", `${percentOff}% off`, formatFinancialShekels(percentTotal)], ["Bundle sale", `Pay for ${quantity - bundleFreeCount} of ${quantity}`, formatFinancialShekels(bundleTotal)]], ["Option", "Sign", "Cost"]),
+      visualSummary: `${percentOff}% off costs ${formatFinancialShekels(percentTotal)}; bundle costs ${formatFinancialShekels(bundleTotal)}.`,
+      reviewText: `The lower total is ${answer}.`,
+    }
+  );
+}
+
+function createFinancialSubscriptionTrapQuestion(difficulty) {
+  const monthly = randomFinancialChoice(difficulty >= 8 ? [19, 29, 49, 79] : [8, 12, 15, 20]);
+  const months = difficulty >= 7 ? 12 : randomFinancialChoice([3, 6, 12]);
+  const budgetItems = [
+    { label: "Music app", cost: `${formatFinancialShekels(monthly)} each month`, recurring: true },
+    { label: "Book", cost: formatFinancialShekels(monthly + 6), recurring: false },
+    { label: "Snack", cost: formatFinancialShekels(9), recurring: false },
+    { label: "Art set", cost: formatFinancialShekels(monthly * 2), recurring: false },
+  ];
+  const answerIndex = budgetItems.findIndex((item) => item.recurring);
+
+  return financialInteractiveQuestion({
+    difficulty,
+    question: "Subscription Trap: which budget item keeps charging again and again?",
+    answerLabel: `${budgetItems[answerIndex].label}: ${formatFinancialShekels(monthly * months)} over ${months} months`,
+    visualHtml: buildFinancialShelfHtml("Pretend budget", budgetItems.map((item) => [item.label, item.cost]), ["Item", "Cost"]),
+    visualSummary: budgetItems.map((item) => `${item.label}: ${item.cost}`).join("; "),
+    reviewText: `${budgetItems[answerIndex].label} is recurring, so ${formatFinancialShekels(monthly)} each month costs ${formatFinancialShekels(monthly * months)} over ${months} months.`,
+    interactive: {
+      layout: "option-select",
+      prompt: "Tap the recurring cost.",
+      answerIndexes: [answerIndex],
+      choices: budgetItems.map((item) => ({
+        label: item.label,
+        summary: `${item.label}: ${item.cost}`,
+      })),
+    },
+  });
+}
+
+function createFinancialGoalThermometerQuestion(difficulty) {
+  const weekly = randomFinancialChoice(difficulty >= 6 ? [20, 25, 30, 40, 50] : [5, 10, 15, 20]);
+  const weeks = randomFinancialChoice(difficulty >= 6 ? [6, 8, 10, 12] : [3, 4, 5, 6]);
+  const saved = randomFinancialChoice(difficulty >= 6 ? [40, 60, 80, 100] : [5, 10, 15, 20]);
+  const goal = saved + weekly * weeks;
+  const percent = Math.round((saved / goal) * 100);
+
+  return financialLiteracyQuestion(
+    `Goal Thermometer: you have ${formatFinancialShekels(saved)} saved for a goal of ${formatFinancialShekels(goal)}. If you save ${formatFinancialShekels(weekly)} each week, how many more weeks are needed?`,
+    buildFinancialOptions(`${weeks} weeks`, makeFinancialNumberWordDistractors(weeks, "weeks")),
+    `${weeks} weeks`,
+    difficulty,
+    {
+      visualHtml: buildFinancialThermometerHtml(percent, saved, goal),
+      visualSummary: `${formatFinancialShekels(saved)} saved out of ${formatFinancialShekels(goal)}.`,
+      reviewText: `${formatFinancialShekels(goal - saved)} left divided by ${formatFinancialShekels(weekly)} per week is ${weeks} weeks.`,
+    }
+  );
+}
+
+function createFinancialReceiptDetectiveQuestion(difficulty) {
+  const itemA = randomFinancialChoice([
+    ["Notebook", 18],
+    ["Book", 35],
+    ["Lunch", 24],
+    ["Markers", 28],
+    ["Water bottle", 32],
+    ["Headphones", 45],
+    ["Art pad", 22],
+  ]);
+  const itemB = randomFinancialChoice([
+    ["Pencil", 7],
+    ["Juice", 11],
+    ["Bookmark", 8],
+    ["Bus card", 18],
+    ["Eraser", 5],
+    ["Snack", 9],
+    ["Sticker sheet", 6],
+  ]);
+  const discount = difficulty >= 4 ? randomFinancialChoice([0, 5, 10, 15]) : 0;
+  const tax = difficulty >= 6 ? randomFinancialChoice([0, 5, 10]) : 0;
+  const subtotal = itemA[1] + itemB[1];
+  const afterDiscount = subtotal - discount;
+  const taxAmount = (afterDiscount * tax) / 100;
+  const total = afterDiscount + taxAmount;
+  const questionType = randomFinancialChoice(tax ? ["total", "tax", "discount"] : discount ? ["total", "discount"] : ["total"]);
+  const answers = {
+    total: formatFinancialShekels(total),
+    tax: formatFinancialShekels(taxAmount),
+    discount: formatFinancialShekels(discount),
+  };
+  const prompts = {
+    total: "What should the receipt total be?",
+    tax: "How much tax was added?",
+    discount: "How much was subtracted as a discount?",
+  };
+
+  return financialLiteracyQuestion(
+    `Receipt Detective: ${prompts[questionType]}`,
+    buildFinancialMoneyOptions(Number(answers[questionType].split(" ")[0]), [5, 10, -5, -10, subtotal]),
+    answers[questionType],
+    difficulty,
+    {
+      visualHtml: buildFinancialReceiptHtml("Receipt", [
+        [itemA[0], formatFinancialShekels(itemA[1])],
+        [itemB[0], formatFinancialShekels(itemB[1])],
+        ["Subtotal", formatFinancialShekels(subtotal)],
+        ["Discount", `-${formatFinancialShekels(discount)}`],
+        ["Tax", formatFinancialShekels(taxAmount)],
+      ]),
+      visualSummary: `${itemA[0]} ${formatFinancialShekels(itemA[1])}; ${itemB[0]} ${formatFinancialShekels(itemB[1])}; discount ${formatFinancialShekels(discount)}; tax ${formatFinancialShekels(taxAmount)}.`,
+      reviewText: `The correct ${questionType} is ${answers[questionType]}.`,
+    }
+  );
 }
 
 function createFinancialCurrencyQuestion(difficulty) {
@@ -657,6 +978,93 @@ function createFinancialDepreciationQuestion(difficulty) {
   );
 }
 
+function financialInteractiveQuestion({ difficulty, question, answerLabel, interactive, ...extras }) {
+  const answer = String(answerLabel || "").trim();
+  if (!String(question || "").trim() || !answer || !interactive || typeof interactive !== "object") {
+    throw new Error("Financial interactive question is missing required fields.");
+  }
+
+  return {
+    question: String(question),
+    answer,
+    answerLabel: answer,
+    difficulty: clampFinancialDifficulty(difficulty),
+    mode: "interactive",
+    interactive,
+    ...extras,
+  };
+}
+
+function buildFinancialShelfHtml(title, rows, headers) {
+  const headerHtml = headers
+    .map((header) => `<th scope="col">${escapeFinancialHtml(header)}</th>`)
+    .join("");
+  const rowHtml = rows
+    .map((row) => `<tr>${row.map((cell) => `<td>${escapeFinancialHtml(cell)}</td>`).join("")}</tr>`)
+    .join("");
+  return `
+    <div class="financial-visual-card">
+      <div class="financial-visual-title">${escapeFinancialHtml(title)}</div>
+      <table class="financial-table">
+        <thead><tr>${headerHtml}</tr></thead>
+        <tbody>${rowHtml}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function buildFinancialReceiptHtml(title, rows) {
+  const rowHtml = rows
+    .map(([label, value]) => `<tr><th scope="row">${escapeFinancialHtml(label)}</th><td>${escapeFinancialHtml(value)}</td></tr>`)
+    .join("");
+  return `
+    <div class="financial-visual-card financial-receipt">
+      <div class="financial-visual-title">${escapeFinancialHtml(title)}</div>
+      <table class="financial-table">
+        <tbody>${rowHtml}</tbody>
+      </table>
+    </div>
+  `;
+}
+
+function buildFinancialThermometerHtml(percent, saved, goal) {
+  const cappedPercent = Math.max(0, Math.min(100, Number(percent) || 0));
+  return `
+    <div class="financial-visual-card financial-thermometer-card">
+      <div class="financial-visual-title">Savings goal</div>
+      <div class="financial-thermometer" aria-hidden="true">
+        <span class="financial-thermometer-fill" style="width: ${cappedPercent}%"></span>
+      </div>
+      <div class="financial-thermometer-labels">
+        <span>${escapeFinancialHtml(formatFinancialShekels(saved))}</span>
+        <span>${escapeFinancialHtml(formatFinancialShekels(goal))}</span>
+      </div>
+    </div>
+  `;
+}
+
+function buildFinancialCashChoices(answerValues) {
+  const answerTokens = answerValues.map(formatFinancialCashToken);
+  const distractorTokens = FINANCIAL_CASH_DENOMINATIONS
+    .map(formatFinancialCashToken)
+    .filter((token) => !answerTokens.includes(token));
+  const tokens = shuffleFinancialArray(uniqueFinancialStrings([...answerTokens, ...distractorTokens]).slice(0, 4));
+  return tokens.map((token) => ({ token }));
+}
+
+function formatFinancialCashToken(value) {
+  return `${value} ${value === 1 ? "shekel" : "shekels"}`;
+}
+
+function escapeFinancialHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
 function buildFinancialMoneyOptions(answerValue, preferredOffsets) {
   const answer = formatFinancialShekels(answerValue);
   const offsets = [...preferredOffsets, -500, -250, -200, -100, -50, -25, -20, -15, -10, -5, 5, 10, 15, 20, 25, 50, 100, 200, 250, 500];
@@ -748,6 +1156,16 @@ function shuffleFinancialArray(values) {
 function uniqueFinancialStrings(values) {
   return Array.from(new Set(values.map((value) => String(value)).filter((value) => value.trim())));
 }
+
+globalThis.FINANCIAL_LITERACY_GENERATOR_COVERAGE = {
+  groceryShelf: createFinancialGroceryShelfQuestion,
+  backpack: createFinancialBackpackQuestion,
+  changeMaking: createFinancialChangeMakingQuestion,
+  saleSign: createFinancialSaleSignDecoderQuestion,
+  subscriptionTrap: createFinancialSubscriptionTrapQuestion,
+  goalThermometer: createFinancialGoalThermometerQuestion,
+  receiptDetective: createFinancialReceiptDetectiveQuestion,
+};
 
 globalThis.HomeworkQuestions?.register({
   id: "financial-literacy",
