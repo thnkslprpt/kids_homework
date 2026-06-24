@@ -9,9 +9,7 @@ const SESSION_HEADERS = [
   "Questions",
   "Correct",
   "Accuracy",
-  "Speed Round",
-  "Incorrect Questions",
-  "Raw Session JSON"
+  "Speed Round"
 ];
 
 const QUESTION_HEADERS = [
@@ -34,28 +32,12 @@ const QUESTION_HEADERS = [
   "Review Text"
 ];
 
-const CATEGORY_HEADERS = [
-  "Received At",
-  "Session ID",
-  "Started At",
-  "Student ID",
-  "Student Name",
-  "Record Type",
-  "Category",
-  "Category Label",
-  "Attempts",
-  "Correct",
-  "Incorrect",
-  "Accuracy Percent",
-  "Configured Category Difficulty"
-];
-
 function setup() {
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
 
-  ensureSheet_(spreadsheet, "Sessions", SESSION_HEADERS);
+  ensureSheet_(spreadsheet, "Sessions", SESSION_HEADERS, { applyDefaultColumnWidths: true });
   ensureSheet_(spreadsheet, "QuestionResults", QUESTION_HEADERS);
-  ensureSheet_(spreadsheet, "CategorySummary", CATEGORY_HEADERS);
+  removeSheetIfExists_(spreadsheet, "CategorySummary");
 }
 
 function doGet() {
@@ -105,9 +87,8 @@ function doPost(e) {
     const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
     const sessionsSheet = ensureSheet_(spreadsheet, "Sessions", SESSION_HEADERS);
     const questionsSheet = ensureSheet_(spreadsheet, "QuestionResults", QUESTION_HEADERS);
-    const categoriesSheet = ensureSheet_(spreadsheet, "CategorySummary", CATEGORY_HEADERS);
 
-    if (hasExistingSession_(questionsSheet, session.id)) {
+    if (hasExistingSession_(sessionsSheet, questionsSheet, session.id)) {
       return json_({
         ok: true,
         duplicate: true,
@@ -117,23 +98,20 @@ function doPost(e) {
 
     const records = getRecords_(session);
 
-    appendRows_(sessionsSheet, [buildSessionRow_(receivedAt, session)]);
+    const sessionRow = appendRows_(sessionsSheet, [buildSessionRow_(receivedAt, session)]);
+    setSessionIdNote_(sessionsSheet, sessionRow, session.id);
     formatSheet_(sessionsSheet, "Sessions", SESSION_HEADERS);
 
-    const questionRows = records.map((record) =>
-      buildQuestionRow_(receivedAt, session, record)
-    );
+    const questionRows = records
+      .filter((record) => record && record.isCorrect === false)
+      .map((record) => buildQuestionRow_(receivedAt, session, record));
 
     appendRows_(questionsSheet, questionRows);
-
-    const categoryRows = buildCategoryRows_(receivedAt, session, records);
-    appendRows_(categoriesSheet, categoryRows);
 
     return json_({
       ok: true,
       sessionId: session.id,
-      questionRows: questionRows.length,
-      categoryRows: categoryRows.length
+      questionRows: questionRows.length
     });
   } catch (error) {
     return json_({
@@ -157,7 +135,8 @@ function parsePayload_(e) {
   return JSON.parse(e.postData.contents);
 }
 
-function ensureSheet_(spreadsheet, name, headers) {
+function ensureSheet_(spreadsheet, name, headers, options) {
+  options = options || {};
   const sheet = spreadsheet.getSheetByName(name) || spreadsheet.insertSheet(name);
 
   if (name === "Sessions") {
@@ -176,11 +155,45 @@ function ensureSheet_(spreadsheet, name, headers) {
   }
 
   sheet.setFrozenRows(1);
-  formatSheet_(sheet, name, headers);
+  formatSheet_(sheet, name, headers, {
+    applyDefaultColumnWidths: Boolean(options.applyDefaultColumnWidths)
+  });
   return sheet;
 }
 
-function hasExistingSession_(sheet, sessionId) {
+function removeSheetIfExists_(spreadsheet, name) {
+  const sheet = spreadsheet.getSheetByName(name);
+
+  if (!sheet || spreadsheet.getSheets().length <= 1) {
+    return;
+  }
+
+  spreadsheet.deleteSheet(sheet);
+}
+
+function hasExistingSession_(sessionsSheet, questionsSheet, sessionId) {
+  if (!sessionId) {
+    return false;
+  }
+
+  if (hasSessionIdNote_(sessionsSheet, sessionId)) {
+    return true;
+  }
+
+  return hasQuestionResultSession_(questionsSheet, sessionId);
+}
+
+function hasSessionIdNote_(sheet, sessionId) {
+  const lastRow = sheet.getLastRow();
+  if (lastRow < 2) {
+    return false;
+  }
+
+  const notes = sheet.getRange(2, 1, lastRow - 1, 1).getNotes();
+  return notes.some((row) => row[0] === sessionIdNote_(sessionId));
+}
+
+function hasQuestionResultSession_(sheet, sessionId) {
   const lastRow = sheet.getLastRow();
   if (lastRow < 2) {
     return false;
@@ -190,6 +203,18 @@ function hasExistingSession_(sheet, sessionId) {
   const values = sheet.getRange(2, sessionIdColumn, lastRow - 1, 1).getValues();
 
   return values.some((row) => row[0] === sessionId);
+}
+
+function setSessionIdNote_(sheet, rowIndex, sessionId) {
+  if (!rowIndex || !sessionId) {
+    return;
+  }
+
+  sheet.getRange(rowIndex, 1).setNote(sessionIdNote_(sessionId));
+}
+
+function sessionIdNote_(sessionId) {
+  return `Session ID: ${sessionId}`;
 }
 
 function buildSessionRow_(receivedAt, session) {
@@ -207,9 +232,7 @@ function buildSessionRow_(receivedAt, session) {
     totalQuestions,
     correctCount,
     percentOrBlank_(accuracyPercent),
-    speedRoundPercent_(session),
-    buildIncorrectQuestionsText_(session),
-    jsonString_(session, 45000)
+    speedRoundPercent_(session)
   ];
 }
 
@@ -235,59 +258,6 @@ function buildQuestionRow_(receivedAt, session, record) {
   ];
 }
 
-function buildCategoryRows_(receivedAt, session, records) {
-  const grouped = new Map();
-  const categoryDifficulties = session.categoryDifficulties || {};
-
-  records.forEach((record) => {
-    const recordType = text_(record.recordType || "main");
-    const category = text_(record.category || "unknown");
-    const key = `${recordType}|${category}`;
-
-    if (!grouped.has(key)) {
-      grouped.set(key, {
-        recordType,
-        category,
-        categoryLabel: text_(record.categoryLabel || category),
-        attempts: 0,
-        correct: 0,
-        incorrect: 0
-      });
-    }
-
-    const entry = grouped.get(key);
-    entry.attempts += 1;
-
-    if (record.isCorrect === true) {
-      entry.correct += 1;
-    } else {
-      entry.incorrect += 1;
-    }
-  });
-
-  return Array.from(grouped.values()).map((entry) => {
-    const accuracyPercent = entry.attempts
-      ? Math.round((entry.correct / entry.attempts) * 100)
-      : "";
-
-    return [
-      receivedAt,
-      text_(session.id),
-      dateOrText_(session.startedAt),
-      text_(session.userId),
-      text_(session.userName),
-      entry.recordType,
-      entry.category,
-      entry.categoryLabel,
-      entry.attempts,
-      entry.correct,
-      entry.incorrect,
-      accuracyPercent,
-      numberOrBlank_(categoryDifficulties[entry.category])
-    ];
-  });
-}
-
 function getRecords_(session) {
   const mainRecords = Array.isArray(session.records)
     ? session.records.map((record) => ({
@@ -308,12 +278,14 @@ function getRecords_(session) {
 
 function appendRows_(sheet, rows) {
   if (!rows.length) {
-    return;
+    return null;
   }
 
+  const startRow = sheet.getLastRow() + 1;
   sheet
-    .getRange(sheet.getLastRow() + 1, 1, rows.length, rows[0].length)
+    .getRange(startRow, 1, rows.length, rows[0].length)
     .setValues(rows);
+  return startRow;
 }
 
 function json_(value) {
@@ -345,10 +317,6 @@ function text_(value, maxLength) {
   const limit = Number(maxLength) || 5000;
 
   return text.length > limit ? text.slice(0, limit) : text;
-}
-
-function singleLine_(value, maxLength) {
-  return text_(value, maxLength).replace(/\s+/g, " ").trim();
 }
 
 function number_(value) {
@@ -389,42 +357,8 @@ function speedRoundPercent_(session) {
   return correct / total;
 }
 
-function buildIncorrectQuestionsText_(session) {
-  const records = Array.isArray(session.records) ? session.records : [];
-  const incorrectRecords = records.filter((record) => record && record.isCorrect === false);
-
-  if (!incorrectRecords.length) {
-    return "";
-  }
-
-  return text_(
-    incorrectRecords.map((record, index) => formatIncorrectQuestion_(record, index)).join("          ---          "),
-    45000
-  );
-}
-
-function formatIncorrectQuestion_(record, index) {
-  const lines = [];
-  const questionNumber = numberOrBlank_(record.questionNumber) || index + 1;
-
-  lines.push(`${questionNumber}. ${singleLine_(record.questionText, 10000)}`);
-
-  const options = Array.isArray(record.answerOptions) ? record.answerOptions.map(String).filter(Boolean) : [];
-  if (options.length) {
-    lines.push(`Options: ${options.map((option, optionIndex) => `${String.fromCharCode(65 + optionIndex)}) ${singleLine_(option)}`).join(" | ")}`);
-  }
-
-  if (Array.isArray(record.selectedTokens) && record.selectedTokens.length) {
-    lines.push(`Selected tokens: ${record.selectedTokens.map((token) => singleLine_(token)).join(" | ")}`);
-  }
-
-  lines.push(`Wrong answer: ${singleLine_(record.chosenAnswer, 5000)}`);
-  lines.push(`Correct answer: ${singleLine_(record.correctAnswer, 5000)}`);
-
-  return lines.join(" | ");
-}
-
-function formatSheet_(sheet, name, headers) {
+function formatSheet_(sheet, name, headers, options) {
+  options = options || {};
   const lastRow = Math.max(sheet.getLastRow(), 2);
   const lastColumn = Math.max(sheet.getLastColumn(), headers.length);
 
@@ -432,17 +366,17 @@ function formatSheet_(sheet, name, headers) {
 
   if (name === "Sessions") {
     trimColumns_(sheet, headers.length);
-    normalizeSessionsSummaryRows_(sheet, lastRow);
     sheet.getRange(1, 1, lastRow, headers.length).setVerticalAlignment("middle");
     sheet.getRange(1, 1, lastRow, headers.length).setWrapStrategy(SpreadsheetApp.WrapStrategy.CLIP);
     sheet.getRange(1, 1, lastRow, headers.length).setWrap(false);
     sheet.getRange(2, 1, lastRow - 1, 1).setNumberFormat("@");
     sheet.getRange(2, 2, lastRow - 1, 1).setNumberFormat("@");
     sheet.getRange(2, 7, lastRow - 1, 2).setNumberFormat("0%");
-    sheet.autoResizeColumns(1, headers.length);
-    sheet.setColumnWidths(1, 8, 90);
-    sheet.setColumnWidth(9, 520);
-    sheet.setColumnWidth(10, 520);
+    if (options.applyDefaultColumnWidths) {
+      sheet.autoResizeColumns(1, headers.length);
+      sheet.setColumnWidths(1, 8, 90);
+    }
+
     sheet.setRowHeights(2, lastRow - 1, 24);
     return;
   }
@@ -468,18 +402,6 @@ function trimColumns_(sheet, desiredColumnCount) {
   if (maxColumns > desiredColumnCount) {
     sheet.deleteColumns(desiredColumnCount + 1, maxColumns - desiredColumnCount);
   }
-}
-
-function normalizeSessionsSummaryRows_(sheet, lastRow) {
-  if (lastRow < 2) {
-    return;
-  }
-
-  const range = sheet.getRange(2, 9, lastRow - 1, 1);
-  const values = range.getValues();
-  const normalizedValues = values.map((row) => [singleLine_(row[0], 45000)]);
-
-  range.setValues(normalizedValues);
 }
 
 function migrateSessionsSheetIfNeeded_(sheet) {
@@ -518,9 +440,7 @@ function migrateSessionsSheetIfNeeded_(sheet) {
       speedRoundPercent_(session.speedRoundTotalQuestions ? session : {
         speedRoundCorrectCount: row[14],
         speedRoundTotalQuestions: row[13]
-      }),
-      buildIncorrectQuestionsText_(session),
-      rawSessionJson
+      })
     ];
   });
 
@@ -576,10 +496,6 @@ function getOrdinalDay_(date) {
   };
 
   return `${day}${suffixes[day % 10] || "th"}`;
-}
-
-function jsonString_(value, maxLength) {
-  return text_(JSON.stringify(value || {}), maxLength || 25000);
 }
 
 function stripHtml_(value) {

@@ -55,8 +55,8 @@ Repo files:
 - `app/core/results-reporter.js`: builds the sanitized session payload, removes review HTML, queues
   reports, and POSTs them to the Apps Script web app.
 - `app/scripts/google_sheets_apps_script.gs`: repo copy of the Apps Script code attached to the
-  Google Sheet. It receives POSTs, writes parent-friendly summary rows to `Sessions`, detailed rows
-  to `QuestionResults`, and category rollups to `CategorySummary`.
+  Google Sheet. It receives POSTs, writes parent-friendly summary rows to `Sessions`, and writes
+  incorrect question rows to `QuestionResults`.
 
 The `Sessions` tab is intentionally compact:
 
@@ -68,11 +68,11 @@ The `Sessions` tab is intentionally compact:
 6. `Correct`
 7. `Accuracy`
 8. `Speed Round`
-9. `Incorrect Questions`
-10. `Raw Session JSON`
 
 The Apps Script `setup()` function also migrates the old wide `Sessions` layout into this compact
-layout when it sees the previous `Received At` header.
+layout when it sees the previous `Received At` header. Routine report submissions do not reset
+manual column widths. Running `setup()` can reapply the default `Sessions` column widths and remove
+the old `CategorySummary` sheet.
 
 The repo copy of `app/scripts/google_sheets_apps_script.gs` does not update Google Apps Script by
 itself. When changing the receiver, update both places:
