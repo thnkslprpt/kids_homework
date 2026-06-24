@@ -2617,20 +2617,33 @@ function buildHebrewDifficultyQueue(totalCount, sessionDifficulty, entries, minD
     return [];
   }
 
-  const availableLevels = [];
+  const availableLevels = new Set();
   for (let difficulty = Math.max(1, minDifficulty); difficulty <= sessionDifficulty; difficulty += 1) {
     if (entries.some((entry) => entry.difficulty === difficulty)) {
-      availableLevels.push(difficulty);
+      availableLevels.add(difficulty);
     }
   }
 
-  if (!availableLevels.length) {
+  if (!availableLevels.size) {
     return [sessionDifficulty];
   }
 
-  const counts = allocateEvenCounts(availableLevels, totalCount);
+  const defaultWeights = { [sessionDifficulty]: 1 };
+  const weightMap = applyMinimumDifficultyWeightMap(
+    HEBREW_DIFFICULTY_WEIGHTS[sessionDifficulty] || defaultWeights,
+    minDifficulty
+  );
+  const availableWeightEntries = Object.entries(weightMap).filter(([difficulty]) =>
+    availableLevels.has(Number(difficulty))
+  );
+  const counts = allocateWeightedCounts(
+    totalCount,
+    availableWeightEntries.length
+      ? Object.fromEntries(availableWeightEntries)
+      : { [Math.max(...availableLevels)]: 1 }
+  );
   return shuffleArray(
-    availableLevels.flatMap((difficulty) => Array(counts[difficulty]).fill(difficulty))
+    Object.entries(counts).flatMap(([difficulty, count]) => Array(count).fill(Number(difficulty)))
   );
 }
 

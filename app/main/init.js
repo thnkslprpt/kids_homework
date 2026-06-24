@@ -15,9 +15,6 @@ const confettiRuntime = {
 const elements = window.HomeworkApp.dom.getElements(document);
 const sessionHistoryStore = window.HomeworkApp.sessionHistory.createSessionHistoryStore({
   adultUserId: ADULT_USER_ID,
-  csvMimeType: SESSION_HISTORY_CSV_MIME_TYPE,
-  getSessionPresetLabel,
-  isAdultUserId,
   maxSavedSessions: MAX_SAVED_SESSIONS,
   storageKey: SESSION_HISTORY_STORAGE_KEY,
   userProfiles: USER_PROFILES,
@@ -322,8 +319,6 @@ elements.historyButton.addEventListener("click", showHistoryScreen);
 elements.historyBackButton.addEventListener("click", showStartScreen);
 elements.dashboardButton?.addEventListener("click", showDashboardScreen);
 elements.dashboardBackButton?.addEventListener("click", showStartScreen);
-elements.dashboardExportCsvButton?.addEventListener("click", exportSessionHistoryCsv);
-elements.dashboardShareCsvButton?.addEventListener("click", shareSessionHistoryCsv);
 elements.quizBackButton.addEventListener("click", showPreviousQuizQuestion);
 elements.quizForwardButton.addEventListener("click", showNextQuizQuestion);
 elements.resultsBackButton.addEventListener("click", showPreviousQuizQuestion);
@@ -345,7 +340,6 @@ if (typeof globalThis !== "undefined") {
     SPEED_ROUND_QUESTION_COUNT,
     USER_PROFILES,
     buildAdultSessionQuestions,
-    buildAllSessionHistoryCsv,
     buildSessionHistoryEntry,
     buildSessionQuestions,
     buildSpeedRoundQuestions,

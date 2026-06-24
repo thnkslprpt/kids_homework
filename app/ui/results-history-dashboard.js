@@ -471,12 +471,17 @@ function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, 
     category,
     categoryLabel: getCategoryLabel(category),
     questionText: formatQuestionForLog(question),
+    answerOptions: formatAnswerOptionsForLog(question),
     chosenAnswer: selectedValue === "" ? "(no answer)" : String(selectedValue),
     ...(Array.isArray(selectedMeta?.tokens) ? { selectedTokens: [...selectedMeta.tokens] } : {}),
     correctAnswer: question.answerLabel,
     isCorrect,
     reviewHtml: formatQuestionReview(question, selectedValue, { isCorrect }),
   };
+}
+
+function formatAnswerOptionsForLog(question) {
+  return Array.isArray(question?.options) ? question.options.map((option) => String(option)) : [];
 }
 
 function formatQuestionForLog(question) {
@@ -551,18 +556,6 @@ function loadSessionHistory() {
 
 function getSessionStorage() {
   return sessionHistoryStore.getStorage();
-}
-
-function exportSessionHistoryCsv() {
-  sessionHistoryStore.exportCsv();
-}
-
-async function shareSessionHistoryCsv() {
-  await sessionHistoryStore.shareCsv();
-}
-
-function buildAllSessionHistoryCsv() {
-  return sessionHistoryStore.buildCsv();
 }
 
 function showHistoryScreen() {

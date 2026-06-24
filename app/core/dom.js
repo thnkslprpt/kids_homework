@@ -16,8 +16,6 @@
   historyEmpty: document.getElementById("history-empty"),
   dashboardButton: document.getElementById("dashboard-button"),
   dashboardBackButton: document.getElementById("dashboard-back-button"),
-  dashboardExportCsvButton: document.getElementById("dashboard-export-csv-button"),
-  dashboardShareCsvButton: document.getElementById("dashboard-share-csv-button"),
   dashboardUserSelector: document.getElementById("dashboard-user-selector"),
   dashboardContent: document.getElementById("dashboard-content"),
   questionCount: document.getElementById("question-count"),

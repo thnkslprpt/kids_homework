@@ -41,6 +41,61 @@ When updates are pushed to GitHub:
 - If the app is already open while a new version becomes ready, it shows a `Reload` prompt.
 - Session history remains stored in that browser/device; it is not synced between devices.
 
+## Google Sheets Results Reporting
+
+Completed sessions are sent to a Google Sheets Apps Script web app when the hosted homework app has
+network access. The app also keeps a small local retry queue so a report can be sent later if the
+device is temporarily offline.
+
+Repo files:
+
+- `app/core/config.js`: stores the deployed Apps Script `/exec` URL in
+  `GOOGLE_SHEETS_REPORT_WEB_APP_URL`, plus the report source, schema version, retry queue key, and
+  optional shared secret.
+- `app/core/results-reporter.js`: builds the sanitized session payload, removes review HTML, queues
+  reports, and POSTs them to the Apps Script web app.
+- `app/scripts/google_sheets_apps_script.gs`: repo copy of the Apps Script code attached to the
+  Google Sheet. It receives POSTs, writes parent-friendly summary rows to `Sessions`, detailed rows
+  to `QuestionResults`, and category rollups to `CategorySummary`.
+
+The `Sessions` tab is intentionally compact:
+
+1. `Date`
+2. `Time`
+3. `Name`
+4. `Difficulty`
+5. `Questions`
+6. `Correct`
+7. `Accuracy`
+8. `Speed Round`
+9. `Incorrect Questions`
+10. `Raw Session JSON`
+
+The Apps Script `setup()` function also migrates the old wide `Sessions` layout into this compact
+layout when it sees the previous `Received At` header.
+
+The repo copy of `app/scripts/google_sheets_apps_script.gs` does not update Google Apps Script by
+itself. When changing the receiver, update both places:
+
+1. Edit and commit `app/scripts/google_sheets_apps_script.gs` in this repo so the current receiver
+   code is documented with the app.
+2. Open the bound Apps Script project from the Google Sheet.
+3. Paste the same code into the Apps Script editor.
+4. Save the Apps Script project with `Ctrl+S` or `Cmd+S`.
+5. Select `setup` in the function dropdown and run it once after header, sheet, or date-format
+   changes. Authorize it if Google asks.
+6. Go to `Deploy` -> `Manage deployments`.
+7. Edit the existing web app deployment.
+8. Set `Version` to `New version`, add a short description, then click `Deploy`.
+
+Editing the existing deployment keeps the same `/exec` URL, so `GOOGLE_SHEETS_REPORT_WEB_APP_URL`
+usually does not need to change. If a brand-new deployment is created instead, copy its new `/exec`
+URL into `GOOGLE_SHEETS_REPORT_WEB_APP_URL` in `app/core/config.js`, then push the app update so
+future homework sessions post to the new receiver.
+
+To check the receiver, open the deployed `/exec` URL in a browser. It should return a JSON response
+saying the homework results receiver is running.
+
 ## Current Features
 
 - Static app: there is no build step. The browser loads `homework.html`, the question manifest, and
@@ -71,9 +126,9 @@ When updates are pushed to GitHub:
 - Shows review feedback for wrong answers with the question, your answer, and the correct answer.
 - Shows a final results screen with category review, missed-question details, speed-round results,
   praise text, and confetti.
-- Keeps previous sessions per student and includes a parent dashboard with CSV export/share.
+- Keeps previous sessions per student and includes a parent dashboard.
 - Includes an offline browser smoke test for session generation, generated-question quality, speed
-  round shape, and CSV formatting.
+  round shape, and results reporting.
 
 ## Question Mix
 
@@ -214,10 +269,12 @@ For non-Hebrew categories, the session difficulty mixes question levels like thi
 Hebrew uses a special rule:
 
 - Hebrew never goes above the chosen session difficulty.
-- A level `3` session can use Hebrew levels `1`, `2`, and `3` by default.
-- A level `10` session can use Hebrew levels `1` through `10`, when those levels exist in the
-  Hebrew bank.
-- Allowed Hebrew levels are spread evenly, instead of being weighted toward the chosen level.
+- Lower Hebrew levels stay deliberately gentle: level `1` uses only level `1`, level `2` uses mostly
+  levels `1` and `2`, and level `3` still keeps most questions at levels `1` and `2`.
+- From level `4` upward, Hebrew uses a narrow weighted band around the selected level instead of
+  sampling every lower level evenly.
+- A level `10` Hebrew session mostly uses levels `9` and `10`, with a small amount of level `8`
+  review when those levels exist in the Hebrew bank.
 
 When a minimum difficulty is supplied by an alternate/custom builder UI, the app raises the lower
 part of the difficulty mix to that minimum while keeping the chosen category maximum.
@@ -261,7 +318,7 @@ Important:
 - session history is stored in the browser profile on that computer
 - it is not saved as normal files in the homework folder
 - it will usually stay after closing Chrome, but can be lost if browser/site data is cleared
-- the parent dashboard reads this same browser-local history and can export/share a CSV
+- the parent dashboard reads this same browser-local history
 - history is not synced between devices
 
 ## Files
@@ -281,7 +338,8 @@ Important:
 - `app/core/state.js`: initial app and speed-round state
 - `app/core/dom.js`: DOM lookup map
 - `app/core/scoring.js`: answer normalization and scoring helpers
-- `app/core/session-history.js`: history storage, dashboard CSV export, and share/download helpers
+- `app/core/session-history.js`: browser-local history storage
+- `app/core/results-reporter.js`: Google Sheets report queue and web-app POST sender
 - `app/core/bootstrap-errors.js`: startup error reporting
 - `app/pwa/updates.js`: service-worker registration and reload prompt
 - `app/main/constants.js`: shared runtime constants and static Hebrew writing data
@@ -309,6 +367,6 @@ Important:
 - `app/assets/`: offline fonts, map assets, Hebrew image assets, and source snapshots
 - `app/icons/`: PWA and browser icons
 - `app/smoke-test.html`: offline browser smoke test for session generation, generated-question shape,
-  speed round, and CSV formatting
-- `app/scripts/`: helper scripts
+  speed round, and results reporting
+- `app/scripts/`: helper scripts, including the Google Sheets Apps Script receiver copy
 - `app/logs/`: saved generator/import logs

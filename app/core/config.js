@@ -1,7 +1,6 @@
 (() => {
 const OPTION_LABELS = ["A", "B", "C", "D"];
 const SESSION_HISTORY_STORAGE_KEY = "homework-session-history-v2";
-const SESSION_HISTORY_CSV_MIME_TYPE = "text/csv;charset=utf-8";
 const SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
 const GOOGLE_SHEETS_REPORT_WEB_APP_URL =
   "https://script.google.com/macros/s/AKfycbw3bO2JJBvAxy0m0iwxxz7oZeZuIznjt3jX977A9fU0St_YqOVxuKcr_OLWOcng9m5y0Q/exec";
@@ -378,6 +377,18 @@ const NON_HEBREW_DIFFICULTY_WEIGHTS = {
   9: { 9: 0.7, 8: 0.2, 7: 0.1 },
   10: { 10: 0.7, 9: 0.2, 8: 0.1 },
 };
+const HEBREW_DIFFICULTY_WEIGHTS = {
+  1: { 1: 1 },
+  2: { 2: 0.4, 1: 0.6 },
+  3: { 3: 0.2, 2: 0.45, 1: 0.35 },
+  4: { 4: 0.3, 3: 0.45, 2: 0.25 },
+  5: { 5: 0.3, 4: 0.45, 3: 0.25 },
+  6: { 6: 0.35, 5: 0.45, 4: 0.2 },
+  7: { 7: 0.4, 6: 0.4, 5: 0.2 },
+  8: { 8: 0.45, 7: 0.4, 6: 0.15 },
+  9: { 9: 0.5, 8: 0.35, 7: 0.15 },
+  10: { 10: 0.6, 9: 0.3, 8: 0.1 },
+};
 const EXTENDED_MATH_CATEGORIES = new Set([
   "math",
   "statistics",
@@ -406,7 +417,6 @@ const SESSION_PRESETS = {
   window.HomeworkApp.config = {
     OPTION_LABELS,
     SESSION_HISTORY_STORAGE_KEY,
-    SESSION_HISTORY_CSV_MIME_TYPE,
     SELECTED_USER_STORAGE_KEY,
     GOOGLE_SHEETS_REPORT_WEB_APP_URL,
     GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY,
@@ -448,6 +458,7 @@ const SESSION_PRESETS = {
     USER_PROFILE_MAP,
     DIFFICULTY_LEVEL_STYLES,
     NON_HEBREW_DIFFICULTY_WEIGHTS,
+    HEBREW_DIFFICULTY_WEIGHTS,
     EXTENDED_MATH_CATEGORIES,
     SESSION_PRESETS,
   };

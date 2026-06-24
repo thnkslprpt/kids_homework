@@ -63,8 +63,6 @@
       </section>
       <section id="dashboard-screen" hidden>
         <button id="dashboard-back-button"></button>
-        <button id="dashboard-export-csv-button"></button>
-        <button id="dashboard-share-csv-button"></button>
         <div id="dashboard-user-selector"></div>
         <div id="dashboard-content"></div>
       </section>
@@ -689,61 +687,6 @@
         if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
         speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
 
-        const previousHistory = localStorage.getItem(SMOKE_HISTORY_STORAGE_KEY);
-        try {
-          localStorage.setItem(
-            SMOKE_HISTORY_STORAGE_KEY,
-            JSON.stringify({
-              gabriel: [
-                {
-                  id: "session,1",
-                  startedAt: "2026-06-14T07:00:00.000Z",
-                  userId: "gabriel",
-                  userName: "Gabriel",
-                  difficulty: 3,
-                  sessionPreset: api.SESSION_PRESETS.adaptive,
-                  totalQuestions: 1,
-                  correctCount: 1,
-                  speedRoundTotalQuestions: 1,
-                  speedRoundCorrectCount: 0,
-                  records: [
-                    {
-                      questionNumber: 1,
-                      category: "math",
-                      categoryLabel: "Math",
-                      questionText: 'Line "one"\nLine two',
-                      chosenAnswer: "4",
-                      correctAnswer: "4",
-                      isCorrect: true,
-                    },
-                  ],
-                  speedRoundRecords: [
-                    {
-                      questionNumber: 1,
-                      category: "math",
-                      categoryLabel: "Math",
-                      questionText: "2 + 3",
-                      chosenAnswer: "6",
-                      correctAnswer: "5",
-                      isCorrect: false,
-                    },
-                  ],
-                },
-              ],
-            })
-          );
-          const csv = api.buildAllSessionHistoryCsv();
-          if (!csv.startsWith("Student ID,Student,Session ID")) failures.push("CSV export missing header");
-          if (!csv.includes('"session,1"')) failures.push("CSV export did not quote comma cells");
-          if (!csv.includes('"Line ""one""\nLine two"')) failures.push("CSV export did not quote multiline cells");
-          if (!csv.includes(",speed,1,math,Math,2 + 3,6,5,false,")) failures.push("CSV export missing speed row");
-        } finally {
-          if (previousHistory === null) {
-            localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
-          } else {
-            localStorage.setItem(SMOKE_HISTORY_STORAGE_KEY, previousHistory);
-          }
-        }
         runUiWorkflowSmokeTest();
       } catch (error) {
         failures.push(error && error.stack ? error.stack : String(error));

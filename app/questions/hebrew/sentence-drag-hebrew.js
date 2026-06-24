@@ -94,14 +94,14 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["נוגה ", " ספר בספריה."],
+      templateParts: ["נוגה ", " ספר."],
       answer: ["קוראת"],
       distractors: ["רץ", "מציירת", "קופצת"],
       difficulty: 1,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אנחנו ", " לבית הספר בבוקר."],
+      templateParts: ["אנחנו ", " הביתה."],
       answer: ["הולכים"],
       distractors: ["אוכלים", "שרים", "קופצים"],
       difficulty: 1,
@@ -115,14 +115,14 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אמא ", " עוגה במטבח."],
+      templateParts: ["אמא ", " עוגה."],
       answer: ["אופה"],
       distractors: ["זורקת", "מנקה", "מציירת"],
       difficulty: 1,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הילדה ", " מים קרים."],
+      templateParts: ["הילדה ", " מים."],
       answer: ["שותה"],
       distractors: ["שומעת", "קוראת", "מטפסת"],
       difficulty: 1,
@@ -297,14 +297,14 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אבא ", " עיתון בסלון."],
+      templateParts: ["אבא ", " עיתון."],
       answer: ["קורא"],
       distractors: ["בועט", "קופצת", "ישן"],
       difficulty: 1,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הסוס ", " עשב בשדה."],
+      templateParts: ["הסוס ", " עשב."],
       answer: ["אוכל"],
       distractors: ["כותב", "פותח", "שר"],
       difficulty: 1,
@@ -318,14 +318,14 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["דנה ", " מעיל כחול."],
+      templateParts: ["דנה ", " מעיל."],
       answer: ["לובשת"],
       distractors: ["אוכלת", "קוראת", "זורקת"],
       difficulty: 1,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אנחנו ", " שיר שמח."],
+      templateParts: ["אנחנו ", " שיר."],
       answer: ["שרים"],
       distractors: ["שותים", "קופצים", "ישנים"],
       difficulty: 1,
@@ -519,7 +519,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["אנחנו ", " לשיעור."],
+            templateParts: ["אנחנו ", " לכיתה."],
             answer: ["נכנסים"],
             distractors: ["מציירים", "שוברים", "מבשלים"],
           },
@@ -567,13 +567,13 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["אחרי המשחק הילדים ", " את הכדורים."],
+            templateParts: ["הילדים ", " כדורים."],
             answer: ["אוספים"],
             distractors: ["אוכלים", "כותבים", "שותים"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["בצהריים אנחנו ", " מרק חם."],
+            templateParts: ["אנחנו ", " מרק."],
             answer: ["אוכלים"],
             distractors: ["קוראים", "רצים", "מציירים"],
           },
@@ -591,27 +591,27 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
         const prompts = [
           {
             question: "השלימו את המשפט.",
-            templateParts: ["הילדים ", " בתור לפני הכניסה."],
+            templateParts: ["הילדים ", " בתור."],
             answer: ["עומדים"],
             distractors: ["שוחים", "אופים", "כותבים"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["מיכל ", " לחברתה את המשחק."],
-            answer: ["מסבירה"],
+            templateParts: ["מיכל ", " משחק."],
+            answer: ["משחקת"],
             distractors: ["שותה", "קופצת", "שוברת"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["המשפחה ", " ליד הים בשבת."],
-            answer: ["מטיילת"],
+            templateParts: ["המשפחה ", " בבית."],
+            answer: ["יושבת"],
             distractors: ["כותבת", "מנקה", "מבשלת"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["כשיש רעש, אנחנו מבקשים ", "."],
-            answer: ["שקט"],
-            distractors: ["עיפרון", "כיסא", "חלון"],
+            templateParts: ["אנחנו ", " שקט."],
+            answer: ["רוצים"],
+            distractors: ["שותים", "קופצים", "אוכלים"],
           },
         ];
 
