@@ -1,5 +1,10 @@
 const SPREADSHEET_ID = "12_2emb-3BBLrdGVg4PYAOeaBWbe6ysBVbLLCbpedYVo";
 const SPEED_ROUND_QUESTION_COUNT = 5;
+const SESSION_COMPLETE_EMAIL_RECIPIENTS = [
+  "sendavianemail@gmail.com",
+  "mirandajweiss@gmail.com"
+];
+const SESSION_COMPLETE_EMAIL_SUBJECT_PREFIX = "[Homework Alert]";
 
 const SESSION_HEADERS = [
   "Date",
@@ -107,6 +112,7 @@ function doPost(e) {
       .map((record) => buildQuestionRow_(receivedAt, session, record));
 
     appendRows_(questionsSheet, questionRows);
+    notifySessionComplete_(session);
 
     return json_({
       ok: true,
@@ -220,9 +226,7 @@ function sessionIdNote_(sessionId) {
 function buildSessionRow_(receivedAt, session) {
   const totalQuestions = number_(session.totalQuestions);
   const correctCount = number_(session.correctCount);
-  const accuracyPercent = totalQuestions
-    ? Math.round((correctCount / totalQuestions) * 100)
-    : "";
+  const accuracyPercent = accuracyPercent_(session);
 
   return [
     formatDateOnly_(receivedAt),
@@ -234,6 +238,41 @@ function buildSessionRow_(receivedAt, session) {
     percentOrBlank_(accuracyPercent),
     speedRoundPercent_(session)
   ];
+}
+
+function notifySessionComplete_(session) {
+  if (!SESSION_COMPLETE_EMAIL_RECIPIENTS.length) {
+    return;
+  }
+
+  const studentName = text_(session.userName) || "Student";
+  const accuracyPercent = accuracyPercent_(session);
+  const accuracyText = accuracyPercent === "" ? "unknown%" : `${accuracyPercent}%`;
+  const totalQuestions = number_(session.totalQuestions);
+  const correctCount = number_(session.correctCount);
+  const subject = `${SESSION_COMPLETE_EMAIL_SUBJECT_PREFIX} ${studentName} - ${accuracyText} correct`;
+  const body = [
+    `${studentName} finished a homework session with ${accuracyText} correct.`,
+    totalQuestions ? `${correctCount} out of ${totalQuestions} questions correct.` : ""
+  ].filter(Boolean).join("\n");
+
+  try {
+    MailApp.sendEmail({
+      to: SESSION_COMPLETE_EMAIL_RECIPIENTS.join(","),
+      subject,
+      body
+    });
+  } catch (error) {
+    console.warn(`Could not send homework completion email: ${error}`);
+  }
+}
+
+function accuracyPercent_(session) {
+  const totalQuestions = number_(session.totalQuestions);
+  const correctCount = number_(session.correctCount);
+  return totalQuestions
+    ? Math.round((correctCount / totalQuestions) * 100)
+    : "";
 }
 
 function buildQuestionRow_(receivedAt, session, record) {

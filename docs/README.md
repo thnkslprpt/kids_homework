@@ -56,7 +56,9 @@ Repo files:
   reports, and POSTs them to the Apps Script web app.
 - `app/scripts/google_sheets_apps_script.gs`: repo copy of the Apps Script code attached to the
   Google Sheet. It receives POSTs, writes parent-friendly summary rows to `Sessions`, and writes
-  incorrect question rows to `QuestionResults`.
+  incorrect question rows to `QuestionResults`. It also sends a completion email to the configured
+  parent addresses after a new session is saved. Completion emails use the `[Homework Alert]`
+  subject prefix so Gmail can label and notify on only these messages.
 
 The `Sessions` tab is intentionally compact:
 
@@ -83,7 +85,8 @@ itself. When changing the receiver, update both places:
 3. Paste the same code into the Apps Script editor.
 4. Save the Apps Script project with `Ctrl+S` or `Cmd+S`.
 5. Select `setup` in the function dropdown and run it once after header, sheet, or date-format
-   changes. Authorize it if Google asks.
+   changes. Authorize it if Google asks, including the MailApp permission needed for completion
+   emails.
 6. Go to `Deploy` -> `Manage deployments`.
 7. Edit the existing web app deployment.
 8. Set `Version` to `New version`, add a short description, then click `Deploy`.
