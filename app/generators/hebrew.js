@@ -8,13 +8,13 @@ function createHebrewChoiceQuestion(entry, meaningPool = hebrewMeanings) {
     difficulty: entry.difficulty,
     mode: "choice",
     questionText: "What does this Hebrew word mean?",
-    displayText: entry.hebrewDisplay,
+    displayText: applyHebrewSentenceNikkud(entry.hebrewDisplay),
     extraText: "",
     extraHtml: "",
     options: buildHebrewOptions(entry.english, meaningPool),
     answerValue: entry.english,
     answerLabel: entry.english,
-    reviewText: entry.hebrewDisplay,
+    reviewText: applyHebrewSentenceNikkud(entry.hebrewDisplay),
     isHebrew: true,
   };
 }
@@ -29,13 +29,13 @@ function createAdultHebrewChoiceQuestion(entry) {
     difficulty: entry.difficulty,
     mode: "choice",
     questionText: "What does this Hebrew term mean?",
-    displayText: entry.hebrewDisplay,
+    displayText: applyHebrewSentenceNikkud(entry.hebrewDisplay),
     extraText: "",
     extraHtml: "",
     options: buildAdultEnglishOptions(entry.english),
     answerValue: entry.english,
     answerLabel: entry.english,
-    reviewText: entry.hebrewDisplay,
+    reviewText: applyHebrewSentenceNikkud(entry.hebrewDisplay),
     isHebrew: true,
   };
 }
@@ -108,8 +108,9 @@ function createHebrewChoiceModeQuestion({
   forceCompactMain = false,
   isHebrewMain = false,
 }) {
-  const normalizedOptions = Array.from(new Set((options || []).map((option) => String(option).trim()))).filter(Boolean);
-  const normalizedAnswer = String(answer || "").trim();
+  const point = (value) => applyHebrewSentenceNikkud(String(value || "").trim());
+  const normalizedOptions = Array.from(new Set((options || []).map(point))).filter(Boolean);
+  const normalizedAnswer = point(answer);
   if (normalizedOptions.length !== 4 || !normalizedAnswer || !normalizedOptions.includes(normalizedAnswer)) {
     return null;
   }
@@ -118,16 +119,16 @@ function createHebrewChoiceModeQuestion({
     type: "hebrew-choice",
     difficulty,
     mode: "choice",
-    questionText,
-    displayText,
-    extraText,
+    questionText: applyHebrewSentenceNikkud(questionText),
+    displayText: point(displayText),
+    extraText: applyHebrewSentenceNikkud(extraText),
     extraHtml: "",
     visualHtml,
-    visualSummary,
-    reviewText,
+    visualSummary: point(visualSummary),
+    reviewText: applyHebrewSentenceNikkud(reviewText),
     options: shuffleArray([...normalizedOptions]),
     answerValue: normalizedAnswer,
-    answerLabel: String(answerLabel || normalizedAnswer),
+    answerLabel: point(answerLabel || normalizedAnswer),
     forceCompactMain,
     isHebrew: Boolean(isHebrewMain),
   };
@@ -179,7 +180,7 @@ function createHebrewTargetsDragQuestion({
     extraText: applyHebrewSentenceNikkud(extraText),
     extraHtml: "",
     visualHtml: "",
-    visualSummary,
+    visualSummary: applyHebrewSentenceNikkud(visualSummary),
     dragLayout: "targets",
     dragTargetArrangement: "rows",
     dragTargets: normalizedTargets,
@@ -236,7 +237,7 @@ function createHebrewBucketsDragQuestion({
     extraText: applyHebrewSentenceNikkud(extraText),
     extraHtml: "",
     visualHtml: "",
-    visualSummary,
+    visualSummary: applyHebrewSentenceNikkud(visualSummary),
     dragLayout: "buckets",
     dragBucketColumns: normalizedBuckets,
     dragChoices: shuffleArray(
@@ -375,9 +376,13 @@ function createHebrewMatchingQuestion(resources, difficulty) {
     return null;
   }
 
-  const rightEntries = shuffleArray([...entries]);
-  const answerTokens = entries.map((entry) => entry.hebrewDisplay);
-  const answerLabel = buildHebrewMatchingAnswerText(entries, answerTokens);
+  const normalizedEntries = entries.map((entry) => ({
+    ...entry,
+    hebrewDisplay: applyHebrewSentenceNikkud(entry.hebrewDisplay),
+  }));
+  const rightEntries = shuffleArray([...normalizedEntries]);
+  const answerTokens = normalizedEntries.map((entry) => entry.hebrewDisplay);
+  const answerLabel = buildHebrewMatchingAnswerText(normalizedEntries, answerTokens);
 
   return {
     type: "hebrew-drag",
@@ -388,11 +393,11 @@ function createHebrewMatchingQuestion(resources, difficulty) {
     extraText: "Click a word or dot on one side, then click the matching word or dot on the other side.",
     extraHtml: "",
     visualHtml: "",
-    visualSummary: entries.map((entry) => entry.english).join(", "),
+    visualSummary: normalizedEntries.map((entry) => entry.english).join(", "),
     dragLayout: "matching",
     dragChoices: [],
     dragAnswerTokens: answerTokens,
-    matchLeftItems: entries.map((entry, index) => ({
+    matchLeftItems: normalizedEntries.map((entry, index) => ({
       id: `hebrew-match-left-${difficulty}-${index}`,
       text: entry.english,
     })),
@@ -415,9 +420,13 @@ function createAdultMatchingQuestion(resources) {
     return null;
   }
 
-  const rightEntries = shuffleArray([...entries]);
-  const answerTokens = entries.map((entry) => entry.hebrewDisplay);
-  const answerLabel = buildHebrewMatchingAnswerText(entries, answerTokens);
+  const normalizedEntries = entries.map((entry) => ({
+    ...entry,
+    hebrewDisplay: applyHebrewSentenceNikkud(entry.hebrewDisplay),
+  }));
+  const rightEntries = shuffleArray([...normalizedEntries]);
+  const answerTokens = normalizedEntries.map((entry) => entry.hebrewDisplay);
+  const answerLabel = buildHebrewMatchingAnswerText(normalizedEntries, answerTokens);
 
   return {
     type: "hebrew-drag",
@@ -428,11 +437,11 @@ function createAdultMatchingQuestion(resources) {
     extraText: "Click a term or dot on one side, then click the matching term or dot on the other side.",
     extraHtml: "",
     visualHtml: "",
-    visualSummary: entries.map((entry) => entry.english).join(", "),
+    visualSummary: normalizedEntries.map((entry) => entry.english).join(", "),
     dragLayout: "matching",
     dragChoices: [],
     dragAnswerTokens: answerTokens,
-    matchLeftItems: entries.map((entry, index) => ({
+    matchLeftItems: normalizedEntries.map((entry, index) => ({
       id: `adult-hebrew-match-left-${index}`,
       text: entry.english,
     })),
@@ -731,7 +740,7 @@ function createAdultCategorySortQuestion() {
     difficulty: 1,
     questionText: "מיינו את המונחים לקבוצות הנכונות.",
     extraText: "כל קבוצה שייכת לתחום אחר ברשימת המונחים.",
-    visualSummary: buckets.map((bucket) => bucket.label).join(", "),
+    visualSummary: buckets.map((bucket) => applyHebrewSentenceNikkud(bucket.label)).join(", "),
     buckets,
     reviewText: "מיון מונחים לפי נושא.",
     dragPlaceholderText: "גררו לכאן",
@@ -822,9 +831,10 @@ function findHebrewLetterMaskIndex(letters, expectedLetter) {
 }
 
 function buildHebrewLetterTargetHtml(maskedWord, hintLabel) {
+  const pointedMaskedWord = applyHebrewSentenceNikkud(maskedWord);
   return `
     <div class="hebrew-letter-target">
-      <div class="hebrew-letter-target-word" dir="rtl">${escapeHtml(maskedWord)}</div>
+      <div class="hebrew-letter-target-word" dir="rtl">${escapeHtml(pointedMaskedWord)}</div>
       <div class="hebrew-letter-target-hint">${escapeHtml(applyHebrewSentenceNikkud(hintLabel))}</div>
     </div>
   `;
@@ -867,15 +877,18 @@ function createAdultReadingComprehensionQuestion() {
     return null;
   }
 
-  const passage = lines.join(" ");
+  const pointedLines = applyHebrewSentenceNikkudList(lines);
+  const passage = pointedLines.join(" ");
+  const pointedOptions = options.map((option) => applyHebrewSentenceNikkud(option));
+  const pointedAnswer = applyHebrewSentenceNikkud(answer);
   return createHebrewChoiceModeQuestion({
     difficulty: 1,
-    questionText: String(blueprint.question || "").trim(),
-    visualHtml: buildHebrewReadingCard(lines),
+    questionText: applyHebrewSentenceNikkud(String(blueprint.question || "").trim()),
+    visualHtml: buildHebrewReadingCard(pointedLines),
     visualSummary: passage,
-    options,
-    answer,
-    answerLabel: answer,
+    options: pointedOptions,
+    answer: pointedAnswer,
+    answerLabel: pointedAnswer,
     reviewText: passage,
   });
 }
@@ -1042,20 +1055,23 @@ function buildHebrewImageTargetHtml(entry) {
 }
 
 function createBankChoiceQuestion(entry, type, isHebrew = false) {
+  const point = (value) => (isHebrew ? applyHebrewSentenceNikkud(value) : value);
+  const options = isHebrew ? entry.options.map((option) => applyHebrewSentenceNikkud(option)) : [...entry.options];
+  const answer = point(entry.answer);
   return {
     type,
     difficulty: entry.difficulty,
     mode: "choice",
-    questionText: entry.question,
-    displayText: entry.displayText || "",
-    extraText: entry.extraText || "",
+    questionText: point(entry.question),
+    displayText: point(entry.displayText || ""),
+    extraText: point(entry.extraText || ""),
     extraHtml: entry.extraHtml || "",
     visualHtml: entry.visualHtml || "",
-    visualSummary: entry.visualSummary || "",
-    reviewText: entry.reviewText || "",
-    options: shuffleArray([...entry.options]),
-    answerValue: entry.answer,
-    answerLabel: entry.answer,
+    visualSummary: point(entry.visualSummary || ""),
+    reviewText: point(entry.reviewText || ""),
+    options: shuffleArray(options),
+    answerValue: answer,
+    answerLabel: answer,
     isHebrew,
   };
 }

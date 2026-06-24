@@ -102,9 +102,13 @@
 
   function buildSharedBaseStyle(sourceKey, ids, scopeClass) {
     const selectors = selectorsForIds(ids);
+    const suppressAnswerTooltip = suppressNativeSvgTooltipRule(scopeClass, selectors);
     switch (sourceKey) {
       case "europe":
-        return rule(scopeClass, selectors, `fill:${BLUE} !important;stroke:${WHITE};stroke-width:0.4`);
+        return [
+          rule(scopeClass, selectors, `fill:${BLUE} !important;stroke:${WHITE};stroke-width:0.4`),
+          suppressAnswerTooltip,
+        ].join("\n");
       case "americas":
         return [
           rule(
@@ -115,6 +119,7 @@
           rule(scopeClass, `.coast`, `fill:${GREY} !important`),
           rule(scopeClass, `.ocean,#ocean`, `fill:${OCEAN} !important`),
           rule(scopeClass, selectors, `fill:${BLUE} !important`),
+          suppressAnswerTooltip,
         ].join("\n");
       case "africa":
         return [
@@ -125,6 +130,7 @@
           ),
           rule(scopeClass, `.coast`, `fill:${GREY} !important`),
           rule(scopeClass, selectors, `fill:${BLUE} !important`),
+          suppressAnswerTooltip,
         ].join("\n");
       case "asia":
         return [
@@ -141,6 +147,7 @@
             selectors,
             `fill:${BLUE} !important;stroke:${WHITE} !important;stroke-width:0.5 !important`
           ),
+          suppressAnswerTooltip,
         ].join("\n");
       case "oceania-australia":
       case "oceania-png":
@@ -155,6 +162,7 @@
             `[fill="#C12737"]`,
             `fill:${BLUE} !important;stroke:${WHITE} !important;stroke-width:0.8 !important`
           ),
+          rule(scopeClass, `[fill="#C12737"],[fill="#C12737"] *`, `pointer-events:none !important`),
           rule(scopeClass, `#ocean,[fill="#C8EBFF"]`, `fill:${OCEAN} !important`),
         ].join("\n");
       default:
@@ -168,6 +176,10 @@
 
   function selectorsForIds(ids) {
     return ids.flatMap((id) => [`#${escapeCssId(id)}`, `#${escapeCssId(id)} *`]).join(",");
+  }
+
+  function suppressNativeSvgTooltipRule(scopeClass, selectorList) {
+    return rule(scopeClass, selectorList, `pointer-events:none !important`);
   }
 
   function scopeSelectorList(scopeClass, selectorList) {

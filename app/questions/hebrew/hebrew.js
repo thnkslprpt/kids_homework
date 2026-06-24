@@ -18,6 +18,7 @@
   function choiceBlueprint(blueprint) {
     return entry({
       ...blueprint,
+      question: point(blueprint.question || ""),
       displayText: point(blueprint.displayText || ""),
       extraText: point(blueprint.extraText || ""),
       reviewText: point(blueprint.reviewText || ""),
@@ -213,18 +214,18 @@
   }
 
   const PREPOSITION_BLUEPRINTS = [
-    { difficulty: 1, displayText: "אני הולך ___ בית הספר.", answer: "ל", options: ["ל", "ב", "על", "עם"], reviewText: "אני הולך לבית הספר." },
-    { difficulty: 1, displayText: "הספר נמצא ___ התיק.", answer: "ב", options: ["ב", "על", "מן", "אל"], reviewText: "הספר נמצא בתיק." },
+    { difficulty: 1, displayText: "אני הולך ___.", answer: "לבית הספר", options: ["לבית הספר", "בבית הספר", "על בית הספר", "עם בית הספר"], reviewText: "אני הולך לבית הספר." },
+    { difficulty: 1, displayText: "הספר נמצא ___.", answer: "בתיק", options: ["בתיק", "על התיק", "מהתיק", "אל התיק"], reviewText: "הספר נמצא בתיק." },
     { difficulty: 2, displayText: "הכוס עומדת ___ השולחן.", answer: "על", options: ["על", "עם", "אל", "מן"], reviewText: "הכוס עומדת על השולחן." },
     { difficulty: 2, displayText: "דנה משחקת ___ נועה.", answer: "עם", options: ["עם", "על", "מן", "ב"], reviewText: "דנה משחקת עם נועה." },
     { difficulty: 3, displayText: "הילד יושב ___ הכיסא.", answer: "על", options: ["על", "אל", "מן", "של"], reviewText: "הילד יושב על הכיסא." },
-    { difficulty: 3, displayText: "החתול מתחבא ___ המיטה.", answer: "מתחת ל", options: ["מתחת ל", "על", "אחרי", "לפני"], reviewText: "החתול מתחבא מתחת למיטה." },
+    { difficulty: 3, displayText: "החתול מתחבא ___.", answer: "מתחת למיטה", options: ["מתחת למיטה", "על המיטה", "אחרי המיטה", "לפני המיטה"], reviewText: "החתול מתחבא מתחת למיטה." },
     { difficulty: 4, displayText: "אנחנו חוזרים ___ הטיול בערב.", answer: "מן", options: ["מן", "אל", "על", "בין"], reviewText: "אנחנו חוזרים מן הטיול בערב." },
     { difficulty: 4, displayText: "הילדה עומדת ___ הדלת.", answer: "ליד", options: ["ליד", "בתוך", "מעל", "בלי"], reviewText: "הילדה עומדת ליד הדלת." },
     { difficulty: 5, displayText: "המורה כותבת ___ הלוח.", answer: "על", options: ["על", "אל", "מן", "אצל"], reviewText: "המורה כותבת על הלוח." },
     { difficulty: 5, displayText: "הילדים נכנסו ___ הכיתה.", answer: "אל", options: ["אל", "מן", "על", "של"], reviewText: "הילדים נכנסו אל הכיתה." },
     { difficulty: 6, displayText: "הספר של יעל נמצא ___ דני.", answer: "אצל", options: ["אצל", "על", "מעל", "בלי"], reviewText: "הספר של יעל נמצא אצל דני." },
-    { difficulty: 6, displayText: "הכדור התגלגל ___ השולחן.", answer: "מתחת ל", options: ["מתחת ל", "מעל", "בגלל", "לפני"], reviewText: "הכדור התגלגל מתחת לשולחן." },
+    { difficulty: 6, displayText: "הכדור התגלגל ___.", answer: "מתחת לשולחן", options: ["מתחת לשולחן", "מעל השולחן", "בגלל השולחן", "לפני השולחן"], reviewText: "הכדור התגלגל מתחת לשולחן." },
     { difficulty: 7, displayText: "הגענו מאוחר ___ הגשם.", answer: "בגלל", options: ["בגלל", "למרות", "אצל", "בין"], reviewText: "הגענו מאוחר בגלל הגשם." },
     { difficulty: 8, displayText: "___ הרעש, התלמידים המשיכו לעבוד.", answer: "למרות", options: ["למרות", "בגלל", "אצל", "מתחת ל"], reviewText: "למרות הרעש, התלמידים המשיכו לעבוד." },
     { difficulty: 9, displayText: "הפגישה נקבעה ___ המנהלת והמורה.", answer: "בין", options: ["בין", "בתוך", "מעל", "בלי"], reviewText: "הפגישה נקבעה בין המנהלת והמורה." },
@@ -235,7 +236,7 @@
     return choiceBlueprint({
       topic: "hebrew-prepositions",
       difficulty: blueprint.difficulty,
-      question: "Choose the Hebrew preposition that best completes the sentence.",
+      question: "Choose the Hebrew word or phrase that best completes the sentence.",
       displayText: blueprint.displayText,
       answer: blueprint.answer,
       options: blueprint.options,

@@ -430,6 +430,51 @@
         failures.push(...validateCalendarQuestionClarity(question, label));
       }
 
+      function collectQuestionTextValues(value, values = []) {
+        if (value === null || value === undefined) return values;
+        if (typeof value === "string" || typeof value === "number") {
+          values.push(String(value));
+          return values;
+        }
+        if (Array.isArray(value)) {
+          value.forEach((item) => collectQuestionTextValues(item, values));
+          return values;
+        }
+        if (typeof value === "object") {
+          Object.entries(value).forEach(([key, item]) => {
+            if (key === "id" || key === "imageSrc" || key === "imageAlt" || key === "visualHtml") return;
+            collectQuestionTextValues(item, values);
+          });
+        }
+        return values;
+      }
+
+      function findUnpointedHebrewWords(value) {
+        const text = String(value || "");
+        if (!/[\u05D0-\u05EA]/.test(text)) return [];
+        const tokens = text.match(/[\u05D0-\u05EA][\u0591-\u05C7\u05D0-\u05EA]*/g) || [];
+        return tokens.filter((token) => {
+          const stripped = token.replace(/[\u0591-\u05C7]/g, "");
+          return stripped.length > 1 && !/[\u0591-\u05C7]/.test(token);
+        });
+      }
+
+      function validateHebrewQuestionNikkud(question, label) {
+        if (!question || question.mode === "practice") return;
+        const isHebrewQuestion =
+          question.isHebrew ||
+          String(question.type || "").includes("hebrew") ||
+          collectQuestionTextValues(question).some((value) => /[\u05D0-\u05EA]/.test(value));
+        if (!isHebrewQuestion) return;
+
+        collectQuestionTextValues(question).forEach((value) => {
+          const unpointedWords = findUnpointedHebrewWords(value);
+          if (unpointedWords.length) {
+            failures.push(`${label}: Hebrew text missing nikud: ${Array.from(new Set(unpointedWords)).join(", ")} in "${String(value).slice(0, 120)}"`);
+          }
+        });
+      }
+
       function validateEntry(entry, label) {
         if (!entry || typeof entry !== "object") {
           failures.push(`${label}: did not return an entry`);
@@ -447,6 +492,22 @@
         if (new Set(options).size !== options.length) failures.push(`${label}: options are not unique`);
         if (!options.includes(answer)) failures.push(`${label}: answer is not in options`);
         failures.push(...validateCalendarQuestionClarity(entry, label));
+      }
+
+      function validateGeneratedHebrewNikkudCoverage() {
+        for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
+          const questions = api.buildSessionQuestions(18, difficulty, { hebrewOnly: true });
+          questions.forEach((question, index) => {
+            validateQuestion(question, `Hebrew nikud level ${difficulty} #${index + 1}`);
+            validateHebrewQuestionNikkud(question, `Hebrew nikud level ${difficulty} #${index + 1}`);
+          });
+        }
+
+        const adultQuestions = api.buildAdultSessionQuestions(24);
+        adultQuestions.forEach((question, index) => {
+          validateQuestion(question, `Adult Hebrew nikud #${index + 1}`);
+          validateHebrewQuestionNikkud(question, `Adult Hebrew nikud #${index + 1}`);
+        });
       }
 
       function validateCalendarQuestionClarity(question, label) {
@@ -483,6 +544,7 @@
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
         validateRegistryModules();
         validateScoringHelpers();
+        validateGeneratedHebrewNikkudCoverage();
         const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);
         api.SESSION_CATEGORY_ORDER
           .filter((category) => !["math", "hebrew", "time", "statistics"].includes(category))

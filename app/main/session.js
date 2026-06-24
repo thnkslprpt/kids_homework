@@ -592,7 +592,7 @@ function shouldAddHebrewSheva(letter, nextLetter) {
 
 function applyHebrewSentenceNikkud(value) {
   const rawText = String(value || "");
-  if (!rawText || /[\u0591-\u05C7]/.test(rawText) || !/[\u05D0-\u05EA]/.test(rawText)) {
+  if (!rawText || !/[\u05D0-\u05EA]/.test(rawText)) {
     return rawText;
   }
 
@@ -614,25 +614,84 @@ function applyHebrewSentenceNikkud(value) {
     pointedText = pointedText.replace(pattern, (match, prefix) => `${prefix}${target}`);
   });
 
-  return pointedText.replace(/[\u05D0-\u05EA]+/g, (word) => {
-    if (HEBREW_SENTENCE_NIKKUD_OVERRIDES[word]) {
-      return HEBREW_SENTENCE_NIKKUD_OVERRIDES[word];
-    }
-
-    if (HEBREW_POINTED_WORD_LOOKUP.has(word)) {
-      return HEBREW_POINTED_WORD_LOOKUP.get(word);
-    }
-
-    if (HEBREW_NIKKUD_OVERRIDES[word]) {
-      return HEBREW_NIKKUD_OVERRIDES[word];
-    }
-
-    return word;
-  });
+  return pointedText.replace(/[\u05D0-\u05EA][\u0591-\u05C7\u05D0-\u05EA]*/g, pointHebrewToken);
 }
 
 function applyHebrewSentenceNikkudList(values) {
   return Array.isArray(values) ? values.map((value) => applyHebrewSentenceNikkud(value)) : [];
+}
+
+function pointHebrewToken(token) {
+  const strippedWord = stripHebrewDiacritics(token);
+  if (!strippedWord) {
+    return token;
+  }
+
+  const exact = getExactPointedHebrewToken(strippedWord);
+  if (exact) {
+    return exact;
+  }
+
+  const prefixed = pointPrefixedHebrewToken(strippedWord);
+  if (prefixed) {
+    return prefixed;
+  }
+
+  return addFallbackHebrewNikkud(strippedWord);
+}
+
+function getExactPointedHebrewToken(strippedWord) {
+  if (HEBREW_SENTENCE_NIKKUD_OVERRIDES[strippedWord]) {
+    return HEBREW_SENTENCE_NIKKUD_OVERRIDES[strippedWord];
+  }
+
+  if (HEBREW_POINTED_WORD_LOOKUP.has(strippedWord)) {
+    return HEBREW_POINTED_WORD_LOOKUP.get(strippedWord);
+  }
+
+  if (HEBREW_NIKKUD_OVERRIDES[strippedWord]) {
+    return HEBREW_NIKKUD_OVERRIDES[strippedWord];
+  }
+
+  return "";
+}
+
+function pointPrefixedHebrewToken(strippedWord) {
+  if (strippedWord.length < 3) {
+    return "";
+  }
+
+  const prefixRules = [
+    ["ו", "וְ"],
+    ["ה", "הַ"],
+    ["ב", "בְּ"],
+    ["כ", "כְּ"],
+    ["ל", "לְ"],
+    ["מ", "מִ"],
+    ["ש", "שֶׁ"],
+  ];
+
+  for (const [prefix, pointedPrefix] of prefixRules) {
+    if (!strippedWord.startsWith(prefix)) {
+      continue;
+    }
+
+    const remainder = strippedWord.slice(prefix.length);
+    const pointedRemainder = getExactPointedHebrewToken(remainder) || pointPrefixedHebrewToken(remainder);
+    if (pointedRemainder) {
+      return `${pointedPrefix}${pointedRemainder}`;
+    }
+  }
+
+  return "";
+}
+
+function addFallbackHebrewNikkud(strippedWord) {
+  if (strippedWord.length < 2) {
+    return strippedWord;
+  }
+
+  return strippedWord.replace(/[\u05D0-\u05EA]/, (letter) => `${letter}ְ`);
 }
 
 function shouldHideHebrewDragPrompt(questionText) {

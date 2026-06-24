@@ -43,25 +43,6 @@ const rawHebrewImageWordEntries = typeof HEBREW_IMAGE_WORD_BANK !== "undefined" 
 const DEFAULT_HEBREW_BANKS = createHebrewBankBundle(rawHebrewWordEntries, rawHebrewImageWordEntries);
 const hebrewQuestionBank = DEFAULT_HEBREW_BANKS.questionBank;
 const hebrewMeanings = DEFAULT_HEBREW_BANKS.meanings;
-const HEBREW_POINTED_WORD_LOOKUP = (() => {
-  const lookup = new Map();
-
-  hebrewQuestionBank.forEach((entry) => {
-    const rawHebrew = String(entry?.hebrew || "").trim();
-    const displayHebrew = String(entry?.hebrewDisplay || "").trim();
-    const strippedHebrew = stripHebrewDiacritics(rawHebrew).trim();
-
-    if (rawHebrew && displayHebrew && !lookup.has(rawHebrew)) {
-      lookup.set(rawHebrew, displayHebrew);
-    }
-
-    if (strippedHebrew && displayHebrew && !lookup.has(strippedHebrew)) {
-      lookup.set(strippedHebrew, displayHebrew);
-    }
-  });
-
-  return lookup;
-})();
 const adultHebrewModule =
   typeof ADULT_HEBREW_MODULE !== "undefined" && ADULT_HEBREW_MODULE ? ADULT_HEBREW_MODULE : {};
 const adultHebrewWordEntries = Array.isArray(adultHebrewModule.words) ? adultHebrewModule.words : [];
@@ -89,6 +70,33 @@ const adultReadingBlueprints = Array.isArray(adultHebrewModule.readingBlueprints
 const adultWritingPromptBank = normalizeAdultWritingPromptBank(
   Array.isArray(adultHebrewModule.writingPrompts) ? adultHebrewModule.writingPrompts : []
 );
+const HEBREW_POINTED_WORD_LOOKUP = (() => {
+  const lookup = new Map();
+
+  [
+    ...hebrewQuestionBank,
+    ...MIRANDA_HEBREW_BANKS.questionBank,
+    ...adultHebrewQuestionBank,
+  ].forEach((entry) => {
+    const rawHebrew = String(entry?.hebrew || "").trim();
+    const displayHebrew = String(entry?.hebrewDisplay || "").trim();
+    const strippedHebrew = stripHebrewDiacritics(rawHebrew).trim();
+
+    if (!hasHebrewNikkud(displayHebrew)) {
+      return;
+    }
+
+    if (rawHebrew && displayHebrew && !lookup.has(rawHebrew)) {
+      lookup.set(rawHebrew, displayHebrew);
+    }
+
+    if (strippedHebrew && displayHebrew && !lookup.has(strippedHebrew)) {
+      lookup.set(strippedHebrew, displayHebrew);
+    }
+  });
+
+  return lookup;
+})();
 const questionRegistry = globalThis.HomeworkQuestions || { get: () => null, list: () => [] };
 
 function getQuestionModule(category) {

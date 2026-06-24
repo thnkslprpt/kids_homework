@@ -664,6 +664,32 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     { sentence: "Although it was late, the team continued working.", target: "Although", answer: "conjunction", distractors: ["noun", "verb", "adverb", "article"], minDifficulty: 9 },
   ];
 
+  const PARTS_OF_SPEECH_REGRESSION_CHECKS = [
+    ["A tiny frog jumped into the pond.", "tiny", "adjective"],
+    ["The train moved slowly through the tunnel.", "slowly", "adverb"],
+    ["The bright kite flew above the park.", "bright", "adjective"],
+    ["The children sang softly during the show.", "softly", "adverb"],
+    ["The determined runner finished the race proudly.", "determined", "adjective"],
+    ["Several students presented their projects confidently.", "confidently", "adverb"],
+  ];
+
+  function validatePartsOfSpeechData() {
+    PARTS_OF_SPEECH_REGRESSION_CHECKS.forEach(([sentence, target, expectedAnswer]) => {
+      const item = PARTS_OF_SPEECH.find(
+        (candidate) => candidate.sentence === sentence && candidate.target === target
+      );
+
+      if (!item || item.answer !== expectedAnswer) {
+        const actualAnswer = item ? item.answer : "missing";
+        throw new Error(
+          `Parts-of-speech regression: "${target}" in "${sentence}" should be "${expectedAnswer}", got "${actualAnswer}".`
+        );
+      }
+    });
+  }
+
+  validatePartsOfSpeechData();
+
   const PUNCTUATION = [
     {
       prompt: "Which sentence uses punctuation correctly?",

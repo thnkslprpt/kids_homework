@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-06-21-google-sheets-reporting-1";
+const CACHE_VERSION = "homework-v2026-06-23-pos-regression-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
