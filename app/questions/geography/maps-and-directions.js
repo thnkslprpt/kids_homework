@@ -296,7 +296,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 2, col: 0 },
       treasure: { row: 1, col: 2 },
       sequence: ["E", "E", "N"],
-      clue: "Use the shortest route. Go east before you go north.",
+      clue: "Use any shortest route to reach the treasure.",
     },
     {
       minDifficulty: 1,
@@ -306,7 +306,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 0, col: 0 },
       treasure: { row: 2, col: 1 },
       sequence: ["S", "S", "E"],
-      clue: "Use the shortest route. Go south before you go east.",
+      clue: "Use any shortest route to reach the treasure.",
     },
     {
       minDifficulty: 2,
@@ -316,7 +316,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 3, col: 0 },
       treasure: { row: 1, col: 3 },
       sequence: ["E", "E", "E", "N", "N"],
-      clue: "Use the shortest route. Finish the east moves before the north moves.",
+      clue: "Use any shortest route to reach the treasure.",
     },
     {
       minDifficulty: 3,
@@ -326,7 +326,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 0, col: 3 },
       treasure: { row: 3, col: 1 },
       sequence: ["S", "S", "S", "W", "W"],
-      clue: "Use the shortest route. Go south first, then west.",
+      clue: "Use any shortest route to reach the treasure.",
     },
     {
       minDifficulty: 5,
@@ -336,7 +336,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 4, col: 1 },
       treasure: { row: 1, col: 4 },
       sequence: ["E", "E", "E", "N", "N", "N"],
-      clue: "Use the shortest route. Move east until you line up with the treasure, then move north.",
+      clue: "Use any shortest route to reach the treasure.",
     },
     {
       minDifficulty: 6,
@@ -346,7 +346,7 @@ function createCompassRobotGeneratedEntry(difficulty) {
       start: { row: 1, col: 4 },
       treasure: { row: 4, col: 0 },
       sequence: ["W", "W", "W", "W", "S", "S", "S"],
-      clue: "Use the shortest route. Complete the west moves before the south moves.",
+      clue: "Use any shortest route to reach the treasure.",
     },
   ];
   const availableRoutes = routes.filter(
@@ -363,10 +363,12 @@ function createCompassRobotGeneratedEntry(difficulty) {
     difficulty,
     displayText: "",
     extraText: `${route.clue}\nS = start. R = robot. T = treasure.`,
-    reviewText: `Compass Robot route: ${answer}.`,
+    reviewText: `One shortest Compass Robot route is ${answer}.`,
     visualSummary: `Grid route from start to treasure using ${answer}.`,
     interactive: {
       layout: "command-sequence",
+      validationMode: "shortest-path-to-treasure",
+      requireShortestPath: true,
       prompt: "Tap N, E, S, and W in order.",
       commands: ["N", "E", "S", "W"],
       answerSequence: route.sequence,

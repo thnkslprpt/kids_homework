@@ -283,7 +283,7 @@
         start: { row: 3, col: 0 },
         treasure: { row: 1, col: 2 },
         sequence: ["N", "N", "E", "E"],
-        clue: "Move north first, then east.",
+        clue: "Use any shortest path to reach the treasure.",
       },
       {
         min: 3,
@@ -293,7 +293,7 @@
         start: { row: 4, col: 1 },
         treasure: { row: 1, col: 4 },
         sequence: ["N", "N", "N", "E", "E", "E"],
-        clue: "Use the shortest path. Do all north moves before east moves.",
+        clue: "Use any shortest path to reach the treasure.",
       },
       {
         min: 4,
@@ -303,7 +303,7 @@
         start: { row: 2, col: 0 },
         treasure: { row: 0, col: 3 },
         sequence: ["E", "E", "E", "N", "N"],
-        clue: "Use the shortest path. Move east first, then north.",
+        clue: "Use any shortest path to reach the treasure.",
       },
       {
         min: 6,
@@ -312,7 +312,7 @@
         start: { row: 0, col: 0 },
         treasure: { row: 4, col: 3 },
         sequence: ["E", "E", "E", "S", "S", "S", "S"],
-        clue: "Use the shortest path. Do all east moves before south moves.",
+        clue: "Use any shortest path to reach the treasure.",
       },
       {
         min: 7,
@@ -321,7 +321,7 @@
         start: { row: 5, col: 5 },
         treasure: { row: 2, col: 1 },
         sequence: ["W", "W", "W", "W", "N", "N", "N"],
-        clue: "Use the shortest path. Move west until the robot lines up, then north.",
+        clue: "Use any shortest path to reach the treasure.",
       },
     ];
     const route = randomChoice(routes.filter((item) => level >= (item.min || 1) && level <= (item.max || 10)));
@@ -333,11 +333,13 @@
       answerLabel: answer,
       difficulty: level,
       extraText: `${route.clue}\nS = start. R = robot. T = treasure.`,
-      reviewText: `The working command sequence is ${answer}.`,
+      reviewText: `One shortest command sequence is ${answer}.`,
       visualSummary: `A grid path from start to treasure using ${answer}.`,
       interactive: {
         type: "path-programming",
         layout: "command-sequence",
+        validationMode: "shortest-path-to-treasure",
+        requireShortestPath: true,
         prompt: "Tap N, E, S, and W in order.",
         commands: ["N", "E", "S", "W"],
         answerSequence: route.sequence,

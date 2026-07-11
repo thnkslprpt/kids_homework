@@ -677,9 +677,12 @@ function renderCommandSequenceQuestion(question, config, { readOnly = false, sel
         return;
       }
       const selectedValue = currentSequence.join(" ");
+      const path = getPath(currentSequence);
+      const finalPoint = path[path.length - 1] || start;
+      const shortestPathLength =
+        Math.abs(treasure.row - start.row) + Math.abs(treasure.col - start.col);
       const isCorrect =
-        currentSequence.length === answerSequence.length &&
-        currentSequence.every((command, index) => command === answerSequence[index]);
+        samePoint(finalPoint, treasure) && currentSequence.length === shortestPathLength;
       handleAnswer(question, isCorrect, selectedValue, { tokens: currentSequence.slice() });
     });
     shell.appendChild(actions);

@@ -878,6 +878,20 @@
           if (!document.querySelector("#choices-area .command-button[data-command='N']")) {
             failures.push("maps-and-directions: Compass Robot command buttons did not render");
           }
+          const alternateSequence = [...robotEntry.interactive.answerSequence].reverse();
+          alternateSequence.forEach((command) => {
+            click(
+              document.querySelector(`#choices-area .command-button[data-command="${String(command).toUpperCase()}"]`),
+              `maps-and-directions alternate shortest-path command ${command}`
+            );
+          });
+          click(
+            document.querySelector("#choices-area .interactive-check-button"),
+            "maps-and-directions alternate shortest-path check"
+          );
+          if (api.state.answerResults[0] !== true) {
+            failures.push("maps-and-directions: an alternate shortest path should be accepted");
+          }
         }
 
         const geographyMapModule = api.questionRegistry?.get?.("geography-map");
