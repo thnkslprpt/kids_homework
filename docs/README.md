@@ -4,6 +4,7 @@ This is a plain homework app that works in two modes:
 
 - Folder mode: put the whole folder on a computer or Chromebook, then open
   [`homework.html`](../homework.html) in Chrome.
+  Full link: [https://thnkslprpt.github.io/kids_homework/homework.html](https://thnkslprpt.github.io/kids_homework/homework.html)
 - Hosted phone mode: publish the repo with GitHub Pages, then open the Pages URL on a phone.
 
 The hosted version is installable and works offline after the first successful online load.
