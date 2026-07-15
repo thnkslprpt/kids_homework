@@ -787,6 +787,8 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
   const isComparisonLayout = dragLayout === "comparison";
   const isTargetsLayout = dragLayout === "targets";
   const isBucketLayout = dragLayout === "buckets";
+  const isMapTargetsLayout = isTargetsLayout && question.dragTargetArrangement === "map";
+  let activeTokenId = "";
   const dragQuestionIsHebrew =
     Boolean(question.isHebrew) ||
     containsHebrewText(question.questionText) ||
@@ -828,6 +830,10 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
     const token = choiceLookup.get(tokenId);
     if (!token) {
       return;
+    }
+
+    if (activeTokenId === tokenId) {
+      activeTokenId = "";
     }
 
     const existingIndex = slotValues.findIndex((value) => value?.id === tokenId);
@@ -877,6 +883,10 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       slotButton.addEventListener("click", () => {
         if (slotValues[slotIndex]) {
           clearSlot(slotIndex);
+        } else if (isMapTargetsLayout && activeTokenId) {
+          const tokenId = activeTokenId;
+          activeTokenId = "";
+          placeToken(slotIndex, tokenId);
         }
       });
       slotButton.addEventListener("dragover", (event) => {
@@ -1078,7 +1088,42 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
     return compass;
   }
 
+  function createTargetsMapLayout() {
+    const map = document.createElement("div");
+    map.className = "drag-targets map";
+
+    const canvas = document.createElement("div");
+    canvas.className = "drag-map-canvas";
+
+    const background = document.createElement("div");
+    background.className = "drag-map-background";
+    background.innerHTML = question.dragMapHtml || "";
+    canvas.appendChild(background);
+
+    question.dragTargets.forEach((target, index) => {
+      const targetPosition = document.createElement("div");
+      targetPosition.className = "drag-map-target";
+      targetPosition.style.left = `${Number(target?.x) || 50}%`;
+      targetPosition.style.top = `${Number(target?.y) || 50}%`;
+
+      const slot = createSlotButton(index, {
+        placeholderText: question.dragPlaceholderText || "Drop here",
+        extraClass: "target map",
+      });
+      slot.setAttribute("aria-label", `Map label spot ${index + 1}`);
+      targetPosition.appendChild(slot);
+      canvas.appendChild(targetPosition);
+    });
+
+    map.appendChild(canvas);
+    return map;
+  }
+
   function createTargetsLayout() {
+    if (question.dragTargetArrangement === "map") {
+      return createTargetsMapLayout();
+    }
+
     if (question.dragTargetArrangement === "line") {
       return createTargetsLineLayout();
     }
@@ -1154,7 +1199,20 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
         .join(" ");
       tokenButton.draggable = true;
       tokenButton.textContent = token.text;
-      tokenButton.addEventListener("click", () => placeTokenInFirstOpenSlot(token.id));
+      if (isMapTargetsLayout) {
+        if (activeTokenId === token.id) {
+          tokenButton.classList.add("selected");
+          tokenButton.setAttribute("aria-pressed", "true");
+        } else {
+          tokenButton.setAttribute("aria-pressed", "false");
+        }
+        tokenButton.addEventListener("click", () => {
+          activeTokenId = activeTokenId === token.id ? "" : token.id;
+          sync();
+        });
+      } else {
+        tokenButton.addEventListener("click", () => placeTokenInFirstOpenSlot(token.id));
+      }
       tokenButton.addEventListener("dragstart", (event) => {
         if (event.dataTransfer) {
           event.dataTransfer.effectAllowed = "move";

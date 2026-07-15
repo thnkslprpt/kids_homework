@@ -904,8 +904,26 @@
           failures.push("geography-map: continent targets and answers should align one-to-one");
         }
         renderSmokeQuestion(continentEntry, "geography-map Continent Drag Map render");
-        if (!document.querySelector("#drag-area .continent-shape-svg")) {
-          failures.push("geography-map: continent shape targets did not render");
+        if (!document.querySelector("#drag-area .drag-map-canvas .continent-world-map-svg")) {
+          failures.push("geography-map: continent world map did not render");
+        }
+        if ((continentEntry?.dragChoices || []).length !== 7) {
+          failures.push("geography-map: continent map should use all seven labels");
+        }
+        if (document.querySelectorAll("#drag-area .drag-slot.target.map").length !== 7) {
+          failures.push("geography-map: continent map should render seven positioned drop spots");
+        }
+        const firstContinentToken = document.querySelector("#drag-area .drag-token.targets");
+        const firstContinentText = firstContinentToken?.textContent || "";
+        const matchingTargetIndex = (continentEntry?.dragAnswerTokens || []).indexOf(firstContinentText);
+        click(firstContinentToken, "geography-map first continent label");
+        if (!document.querySelector("#drag-area .drag-token.targets.selected")) {
+          failures.push("geography-map: tapping a continent label should select it");
+        }
+        const matchingMapTarget = document.querySelectorAll("#drag-area .drag-slot.target.map")[matchingTargetIndex];
+        click(matchingMapTarget, "geography-map matching continent spot");
+        if (matchingMapTarget && document.querySelectorAll("#drag-area .drag-slot.target.map")[matchingTargetIndex]?.textContent !== firstContinentText) {
+          failures.push("geography-map: tapping a map spot should place the selected continent label");
         }
       }
 
