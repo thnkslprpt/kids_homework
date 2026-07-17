@@ -302,6 +302,46 @@ const LOGIC_QUESTIONS = [
   logicMakeQuestion("A rule changes an input to n squared minus n. Which input gives 42?", ["6", "7", "8", "9"], "7", 10),
 ];
 
+// Practical prioritization: choose by safety, consequence, and real deadlines.
+LOGIC_QUESTIONS.push(
+  logicMakeQuestion(
+    "You smell smoke while doing homework. What should you do first?",
+    ["Leave the area and alert an adult", "Finish the current question", "Pack every schoolbook", "Open a game message"],
+    "Leave the area and alert an adult",
+    3
+  ),
+  logicMakeQuestion(
+    "Your appointment starts in 30 minutes, and travel takes 25 minutes. A video has 10 minutes left. What should you do first?",
+    ["Leave for the appointment now", "Finish the video, then leave", "Start another video", "Wait until the appointment time"],
+    "Leave for the appointment now",
+    4
+  ),
+  logicMakeQuestion(
+    "Water is moving toward a plugged-in power strip. The phone is ringing, and clean laundry needs folding. Which task has highest priority?",
+    ["Keep away and alert an adult about the water", "Answer the phone", "Fold the laundry", "Sort tomorrow's clothes"],
+    "Keep away and alert an adult about the water",
+    5
+  ),
+  logicMakeQuestion(
+    "A form is complete and due online in 10 minutes. Its cover could look nicer. What is the best next step?",
+    ["Check required fields and submit it", "Spend 20 minutes decorating it", "Start the form again", "Wait until after the deadline"],
+    "Check required fields and submit it",
+    6
+  ),
+  logicMakeQuestion(
+    "Which task should be done first when you have limited time?",
+    ["Take time-sensitive medicine exactly as directed by a responsible adult", "Rearrange books that are already tidy", "Choose a new phone wallpaper", "Watch an optional video"],
+    "Take time-sensitive medicine exactly as directed by a responsible adult",
+    7
+  ),
+  logicMakeQuestion(
+    "Four tasks remain: report a strong gas smell, reply to a message due tomorrow, wash a cup, and organize photos. Which ranking rule is best?",
+    ["Handle the immediate safety danger first, then the nearest meaningful deadline", "Do the most enjoyable task first", "Always do the longest task first", "Choose tasks in alphabetical order"],
+    "Handle the immediate safety danger first, then the nearest meaningful deadline",
+    8
+  )
+);
+
 function createLogicGeneratedEntry(difficulty) {
   const level = logicClampDifficulty(difficulty);
   const exactPool = LOGIC_QUESTIONS.filter((entry) => entry.difficulty === level);

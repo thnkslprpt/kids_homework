@@ -165,6 +165,46 @@ const CALENDAR_QUESTIONS = [
   calendarStatic("A date is moved forward by 400 years in the Gregorian calendar. What usually stays the same?", "The leap-year pattern repeats", ["Every month becomes 28 days", "The leap-year pattern repeats", "Weeks disappear", "The year becomes shorter"], 10),
 ];
 
+// Practical appointment literacy: notices, preparation, travel, and cancellation rules.
+CALENDAR_QUESTIONS.push(
+  calendarStatic(
+    "An appointment notice says: Tuesday, June 16 at 14:30, North Clinic, Room 3. Where should you go?",
+    "North Clinic, Room 3",
+    ["North Clinic, Room 3", "North Clinic, Room 16", "South Clinic, Room 3", "North Clinic at 16:00"],
+    3
+  ),
+  calendarStatic(
+    "Your appointment starts at 15:30, and the notice asks you to arrive 15 minutes early. What time should you arrive?",
+    "15:15",
+    ["15:00", "15:15", "15:30", "15:45"],
+    4
+  ),
+  calendarStatic(
+    "An appointment is at 9:00. Travel takes 25 minutes, and you should arrive 10 minutes early. What is the latest time to leave?",
+    "8:25",
+    ["8:15", "8:25", "8:35", "8:45"],
+    5
+  ),
+  calendarStatic(
+    "A test is at 12:00, and the instructions say not to eat for 4 hours beforehand. What is the latest time to finish eating?",
+    "8:00",
+    ["7:00", "8:00", "10:00", "12:00"],
+    6
+  ),
+  calendarStatic(
+    "A Tuesday appointment is at 10:00. The policy says to cancel at least 24 hours before. What is the latest cancellation time that follows the rule?",
+    "Monday at 10:00",
+    ["Monday at 10:00", "Monday at 12:00", "Tuesday at 9:00", "Tuesday at 10:00"],
+    7
+  ),
+  calendarStatic(
+    "An appointment begins at 14:20 and is expected to last 45 minutes. When should it end?",
+    "15:05",
+    ["14:55", "15:00", "15:05", "15:15"],
+    5
+  )
+);
+
 function createCalendarGeneratedEntry(difficulty) {
   const level = calendarClampDifficulty(difficulty);
   const generators = {

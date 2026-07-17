@@ -15,6 +15,8 @@ globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS = [
   "questions/geography/geography-map.js",
   "questions/geography/geography.js",
   "questions/geography/population.js",
+  "questions/history/history.js",
+  "questions/computing/computing.js",
   "questions/life-skills/financial-literacy.js",
   "questions/math/measurement.js",
   "questions/math/charts-and-graphs.js",

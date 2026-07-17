@@ -233,6 +233,9 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
   };
 
   const isSelectionCorrect = () => {
+    if (config.acceptAnySelection) {
+      return selectedIndexes.size === answerIndexes.size;
+    }
     if (selectedIndexes.size !== answerIndexes.size) {
       return false;
     }
@@ -243,7 +246,7 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
     board.querySelectorAll(".interactive-option").forEach((button) => {
       const index = Number.parseInt(button.dataset.index, 10);
       const isSelected = selectedIndexes.has(index);
-      const isCorrect = answerIndexes.has(index);
+      const isCorrect = config.acceptAnySelection ? isSelected : answerIndexes.has(index);
       button.classList.toggle("selected", isSelected);
       if (readOnly) {
         button.disabled = true;

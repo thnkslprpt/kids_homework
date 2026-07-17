@@ -125,6 +125,7 @@
         "measurement",
         "visual-measurement",
         "maps-and-directions",
+        "history",
       ]);
 
       function assert(condition, message) {
@@ -238,6 +239,50 @@
             });
           }
         });
+      }
+
+      function validateEnglishSentenceDragTenseCoverage() {
+        const data = globalThis.SENTENCE_DRAG_ENGLISH_DATA;
+        if (!data || !Array.isArray(data.bank)) {
+          failures.push("sentence-drag English: data bank missing");
+          return;
+        }
+
+        const tenseCases = [
+          ["The boy ", "kicked", "Complete the sentence in the simple past tense."],
+          ["The bird ", "sits", "Complete the sentence in the simple present tense."],
+          ["The children ", "play", "Complete the sentence in the simple present tense."],
+          ["A fish ", "swims", "Complete the sentence in the simple present tense."],
+          ["The girl ", "washed", "Complete the sentence in the simple past tense."],
+          ["The ducks ", "swim", "Complete the sentence in the simple present tense."],
+          ["The sun ", "rises", "Complete the sentence in the simple present tense."],
+          ["The fox ", "runs", "Complete the sentence in the simple present tense."],
+          ["The dogs ", "bark", "Complete the sentence in the simple present tense."],
+        ];
+
+        tenseCases.forEach(([firstPart, answer, expectedQuestion]) => {
+          const entry = data.bank.find((candidate) =>
+            candidate?.templateParts?.[0] === firstPart && candidate?.answer?.[0] === answer
+          );
+          assert(Boolean(entry), `sentence-drag English: missing tense case ${firstPart}${answer}`);
+          if (entry) {
+            assert(
+              entry.question === expectedQuestion,
+              `sentence-drag English: ${firstPart}${answer} must request the intended tense`
+            );
+          }
+        });
+
+        const generatedAgreement = withFixedRandom(0.99, () =>
+          globalThis.createEnglishSentenceDragGeneratedEntry?.(1)
+        );
+        assert(Boolean(generatedAgreement), "sentence-drag English: generated agreement entry missing");
+        if (generatedAgreement) {
+          assert(
+            generatedAgreement.question === "Complete the sentence in the simple present tense.",
+            "sentence-drag English: generated agreement prompt must request simple present tense"
+          );
+        }
       }
 
       function validateVocabularyGrammarActivityCoverage() {
@@ -496,6 +541,7 @@
             sessionStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
             localStorage.removeItem(SMOKE_REPORT_QUEUE_STORAGE_KEY);
 
+            click(document.getElementById("restart-button"), "workflow reset to start screen");
             const questionCount = document.getElementById("question-count");
             const difficultyInput = document.getElementById("difficulty-level");
             const startForm = document.getElementById("start-form");
@@ -1046,6 +1092,7 @@
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
         validateRegistryModules();
+        validateEnglishSentenceDragTenseCoverage();
         validateVocabularyGrammarActivityCoverage();
         validateHouseholdProblemSolvingActivityCoverage();
         validateGeneralKnowledgeWorldModelCoverage();
@@ -1178,6 +1225,37 @@
           visualFractionEntries.forEach((entry, index) => {
             validateEntry(entry, `fraction visual interactive coverage #${index + 1}`);
           });
+        }
+
+        const fractionSenseCoverage = globalThis.FRACTION_SENSE_COVERAGE || {};
+        [
+          ["improperNumberLine", "improper-number-line", "option-select"],
+          ["improperMixedBridge", "improper-mixed-bridge", "option-select"],
+          ["unitFractionReason", "unit-fraction-reason", "paired-select"],
+          ["changingWholeReason", "changing-whole-reason", "paired-select"],
+          ["percentGridMatch", "percent-grid-match", "option-select"],
+          ["percentPainter", "percent-painter", "part-select"],
+          ["buildTheWhole", "build-the-whole", "option-select"],
+          ["fairShareRemainder", "fair-share-remainder", "option-select"],
+          ["representationChoice", "representation-choice", "option-select"],
+        ].forEach(([factoryName, expectedType, expectedLayout]) => {
+          const factory = fractionSenseCoverage[factoryName];
+          if (typeof factory !== "function") {
+            failures.push(`fraction sense ${factoryName}: factory missing`);
+            return;
+          }
+          const entry = factory();
+          validateEntry(entry, `fraction sense ${factoryName}`);
+          if (entry?.interactive?.type !== expectedType || entry?.interactive?.layout !== expectedLayout) {
+            failures.push(`fraction sense ${factoryName}: expected ${expectedType} ${expectedLayout}`);
+          }
+          if (typeof normalizeChoiceBankEntry === "function") {
+            const normalized = normalizeChoiceBankEntry(entry, "fractions-choice");
+            if (!normalized) failures.push(`fraction sense ${factoryName}: could not normalize`);
+          }
+        });
+        if (fractionSenseCoverage.percentPainter?.()?.interactive?.acceptAnySelection !== true) {
+          failures.push("fraction sense percent painter should accept any correctly sized tile selection");
         }
 
         [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].forEach((difficulty) => {

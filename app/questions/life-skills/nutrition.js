@@ -1251,6 +1251,46 @@ const NUTRITION_QUESTIONS = [
 
 ];
 
+// Practical food-label literacy: serving math, ingredients, allergens, and fair comparisons.
+NUTRITION_QUESTIONS.push(
+  nutritionQuestion(
+    "A label lists a serving size of 30 g. If you eat 60 g, how many servings did you eat?",
+    ["1 serving", "2 servings", "3 servings", "30 servings"],
+    "2 servings",
+    3
+  ),
+  nutritionQuestion(
+    "The ingredients begin: whole-wheat flour, sugar, oats, oil. Which ingredient is present in the greatest amount by weight?",
+    ["Whole-wheat flour", "Sugar", "Oats", "Oil"],
+    "Whole-wheat flour",
+    4
+  ),
+  nutritionQuestion(
+    "A label says 'Contains: milk and almonds.' Which person should not eat this food?",
+    ["A person with an almond allergy", "A person who dislikes bananas", "A person choosing a low-sodium food", "A person looking for more fiber"],
+    "A person with an almond allergy",
+    4
+  ),
+  nutritionQuestion(
+    "A container has 3 servings and 7 g of protein per serving. How much protein is in the whole container?",
+    ["7 g", "10 g", "21 g", "24 g"],
+    "21 g",
+    5
+  ),
+  nutritionQuestion(
+    "Soup A has 320 mg sodium per 100 g. Soup B has 280 mg sodium per 100 g. Which is lower in sodium when equal amounts are compared?",
+    ["Soup A", "Soup B", "They are equal", "The larger package"],
+    "Soup B",
+    6
+  ),
+  nutritionQuestion(
+    "One serving has 24 g carbohydrate, including 5 g fiber and 8 g added sugar. Which number is the fiber amount?",
+    ["5 g", "8 g", "16 g", "24 g"],
+    "5 g",
+    5
+  )
+);
+
 function createNutritionGeneratedEntry(difficulty) {
   const level = nutritionClampDifficulty(difficulty);
   const generatorsByLevel = {

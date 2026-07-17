@@ -346,6 +346,19 @@
     `;
   }
 
+  function buildImproperFractionPromptHtml(numerator, denominator) {
+    const wholeCount = Math.ceil(numerator / denominator);
+    const bars = Array.from({ length: wholeCount }, (_, wholeIndex) => {
+      const segments = Array.from({ length: denominator }, (_, partIndex) => {
+        const index = wholeIndex * denominator + partIndex;
+        return `<span class="drag-fraction-segment${index < numerator ? " is-filled" : ""}"></span>`;
+      }).join("");
+      return `<div class="drag-fraction-strip" aria-hidden="true">${segments}</div>`;
+    }).join("");
+
+    return `<div class="drag-fraction-prompt drag-improper-fraction-prompt">${bars}</div>`;
+  }
+
   function createOrderQuestion({ type, difficulty, questionText, extraText, values, startLabel, endLabel }) {
     return createTargetsDragQuestion({
       type,
@@ -835,6 +848,49 @@
       });
     }
 
+    if (difficulty >= 4 && difficulty <= 8 && Math.random() < 0.34) {
+      const pool = difficulty <= 5
+        ? [[3, 2], [5, 4], [7, 4], [4, 3], [5, 3]]
+        : [[7, 3], [9, 4], [11, 4], [8, 3], [13, 5], [11, 6]];
+      const selection = takeRandom(pool, difficulty >= 7 ? 4 : 3);
+      const answers = selection.map(([numerator, denominator]) => `${numerator}/${denominator}`);
+      return createTargetsDragQuestion({
+        type,
+        difficulty,
+        questionText: "Drag each improper fraction to its model.",
+        extraText: "Each complete bar is one whole. Count equal-size pieces across all the wholes.",
+        targetArrangement: "rows",
+        targets: selection.map(([numerator, denominator]) => ({
+          html: buildImproperFractionPromptHtml(numerator, denominator),
+          reviewLabel: `${numerator} pieces of size 1/${denominator}`,
+        })),
+        answer: answers,
+        choices: answers,
+        answerLabel: answers.join(", "),
+      });
+    }
+
+    if (difficulty >= 4 && difficulty <= 8 && Math.random() < 0.32) {
+      const pairs = takeUniqueAnswerPairs([
+        { text: "1/2 of 14", answer: "7" },
+        { text: "2/3 of 18", answer: "12" },
+        { text: "3/4 of 20", answer: "15" },
+        { text: "2/5 of 30", answer: "12" },
+        { text: "5/8 of 24", answer: "15" },
+        { text: "3/10 of 50", answer: "15" },
+        { text: "4/5 of 35", answer: "28" },
+      ], difficulty >= 7 ? 5 : 4);
+      return createMatchingDragQuestion({
+        type,
+        difficulty,
+        questionText: "Match each fraction-of-a-collection expression to its amount.",
+        extraText: "First find one equal share, then take the number of shares named by the numerator.",
+        leftItems: pairs,
+        rightItems: pairs.map((pair) => pair.answer),
+        reviewText: "The denominator tells how many equal groups to make; the numerator tells how many groups to take.",
+      });
+    }
+
     if (difficulty <= 7 && Math.random() < 0.55) {
       const pairs = takeUniqueAnswerPairs([
         { text: "1/2", answer: "2/4" },
@@ -855,12 +911,35 @@
       });
     }
 
+    if (difficulty >= 5 && Math.random() < 0.34) {
+      const pairs = takeUniqueAnswerPairs([
+        { text: "10%", answer: "one tenth of a whole" },
+        { text: "20%", answer: "one fifth of a whole" },
+        { text: "25%", answer: "one quarter of a whole" },
+        { text: "40%", answer: "two fifths of a whole" },
+        { text: "50%", answer: "one half of a whole" },
+        { text: "75%", answer: "three quarters of a whole" },
+        { text: "125%", answer: "one and one quarter wholes" },
+        { text: "150%", answer: "one and one half wholes" },
+      ], difficulty >= 8 ? 5 : 4);
+      return createMatchingDragQuestion({
+        type,
+        difficulty,
+        questionText: "Match each percent to the amount it describes.",
+        extraText: "100% is one whole, so a percent may also be greater than one whole.",
+        leftItems: pairs,
+        rightItems: pairs.map((pair) => pair.answer),
+      });
+    }
+
     if (difficulty >= 5 && Math.random() < 0.55) {
       const sets = [
         { minDifficulty: 5, maxDifficulty: 6, values: ["1/5", "2/5", "3/5", "4/5"] },
         { minDifficulty: 6, maxDifficulty: 7, values: ["1/8", "3/8", "5/8", "7/8"] },
         { minDifficulty: 7, maxDifficulty: 8, values: ["0.2", "1/3", "1/2", "0.75"] },
-        { minDifficulty: 8, maxDifficulty: 10, values: ["12.5%", "1/4", "0.4", "5/8", "0.9"] },
+        { minDifficulty: 8, maxDifficulty: 9, values: ["12.5%", "1/4", "0.4", "5/8", "0.9"] },
+        { minDifficulty: 8, maxDifficulty: 10, values: ["3/4", "1", "5/4", "1 1/2", "175%"] },
+        { minDifficulty: 9, maxDifficulty: 10, values: ["0.6", "7/8", "110%", "4/3", "1 3/4"] },
       ];
       return createOrderQuestion({
         type,
@@ -888,6 +967,34 @@
         extraText: "Use the total number of equal ratio parts.",
         leftItems: pairs,
         rightItems: pairs.map((pair) => pair.answer),
+      });
+    }
+
+    if (difficulty >= 7 && Math.random() < 0.5) {
+      return createBucketsDragQuestion({
+        type,
+        difficulty,
+        questionText: "Sort the equivalent representations.",
+        extraText: "Fractions, decimals, and percents can name exactly the same number.",
+        buckets: [
+          { label: "Equal to 1/4", answers: takeRandom(["0.25", "25%", "2/8"], difficulty >= 9 ? 3 : 2) },
+          { label: "Equal to 1/2", answers: takeRandom(["0.5", "50%", "4/8"], difficulty >= 9 ? 3 : 2) },
+          { label: "Equal to 3/4", answers: takeRandom(["0.75", "75%", "6/8"], difficulty >= 9 ? 3 : 2) },
+        ],
+      });
+    }
+
+    if (difficulty >= 6 && Math.random() < 0.5) {
+      return createBucketsDragQuestion({
+        type,
+        difficulty,
+        questionText: "Sort each value by how it compares with one whole.",
+        extraText: "One whole is 1, 100%, or any fraction with equal numerator and denominator.",
+        buckets: [
+          { label: "Less than 1", answers: takeRandom(["7/8", "0.6", "95%"], difficulty >= 9 ? 3 : 2) },
+          { label: "Equal to 1", answers: takeRandom(["6/6", "100%", "1.0"], difficulty >= 9 ? 3 : 2) },
+          { label: "Greater than 1", answers: takeRandom(["5/4", "120%", "1 1/2"], difficulty >= 9 ? 3 : 2) },
+        ],
       });
     }
 
@@ -2029,6 +2136,10 @@
         return createVisualMeasurementDragQuestion(category, level);
       case "maps-and-directions":
         return createMapsDirectionsDragQuestion(category, level);
+      case "history":
+        return typeof globalThis.createHistoryGeneratedDragQuestion === "function"
+          ? globalThis.createHistoryGeneratedDragQuestion(level)
+          : null;
       default:
         return null;
     }

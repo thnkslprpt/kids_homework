@@ -201,7 +201,7 @@ Within math, the app uses both:
 - `Visual Measurement`
   - clocks, rulers, scales, containers, unit visuals, elapsed time, and practical measurement scenes
 - `Logic`
-  - patterns, ordering, elimination, and deduction
+  - patterns, ordering, elimination, deduction, and practical prioritization under time pressure
 - `Rationality`
   - probability, evidence, fair testing, sampling, and careful conclusions
 - `General Knowledge`
@@ -213,8 +213,12 @@ Within math, the app uses both:
 - `Population`
   - top 20 most populous countries
   - population answers rounded to the nearest `10 million`
+- `Computing`
+  - precise instructions, algorithms, conditions, loops, variables / changing state, and Boolean logic
+  - six balanced strands at every difficulty level from `1` to `10`
 - `Financial Literacy`
-  - saving, spending, needs vs wants, better deals, discounts, and simple budgeting
+  - saving, spending, needs vs wants, unit prices, delivered totals, multi-buy offers, and discounts
+  - receipt and transaction checks, account fees, simple interest, and practical budgeting
 - `Measurement`
   - length, mass, volume, temperature, and unit conversions
 - `Charts and Graphs`
@@ -223,6 +227,7 @@ Within math, the app uses both:
     scatterplots, two-way tables, misleading graphs, sampling bias, and averages with outliers
 - `Calendar`
   - months, weekdays, leap years, dates, and elapsed days
+  - appointment notices, arrival and travel times, preparation instructions, and cancellation rules
 - `Estimation`
   - ballpark answers and reasonableness checks
 - `Probability`
@@ -232,9 +237,10 @@ Within math, the app uses both:
 - `Health and First Aid`
   - basic safety, hydration, hygiene, minor first-aid basics, and emergency numbers
 - `Nutrition`
-  - serving size, calories, added sugar, protein, fiber, and balanced food choices
+  - serving size, calories, added sugar, protein, fiber, ingredients, allergens, and balanced food choices
 - `Household Problem Solving`
-  - home safety, storage, laundry, cleaning labels, and simple practical tasks
+  - home safety, storage, laundry, cleaning labels, packing checklists, and simple practical tasks
+  - safe first actions for electricity, gas, smoke, and water hazards
 - `Fractions`
   - visual fraction models, equivalent fractions, comparing fractions, and fractions of a set
 - `Fractions and Ratios`

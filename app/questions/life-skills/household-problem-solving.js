@@ -654,6 +654,97 @@ HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS.push(
   }
 );
 
+// Practical packing decisions and safe first actions around household utilities.
+HOUSEHOLD_PROBLEM_SOLVING_QUESTIONS.push(
+  // Packing and checklists.
+  {
+    question: "A checklist says to pack one pair of socks per day plus one spare pair. How many pairs are needed for a 3-day trip?",
+    options: ["2 pairs", "3 pairs", "4 pairs", "6 pairs"],
+    answer: "4 pairs",
+    difficulty: 3,
+  },
+  {
+    question: "You will walk outdoors all day, and the forecast says steady rain. Which item is most important to add?",
+    options: ["A waterproof jacket", "An extra picture frame", "A heavy glass bowl", "Indoor slippers"],
+    answer: "A waterproof jacket",
+    difficulty: 2,
+  },
+  {
+    question: "You are packing for one cold night at a campsite. Which item directly helps you sleep safely and warmly?",
+    options: ["A sleeping bag rated for the expected temperature", "A beach towel only", "A desk lamp", "A second pair of sunglasses"],
+    answer: "A sleeping bag rated for the expected temperature",
+    difficulty: 5,
+  },
+  {
+    question: "For a hot, sunny day at the beach, which group best matches the destination and weather?",
+    options: ["Water, sunscreen, and a sun hat", "A wool blanket, gloves, and boots", "A hammer, nails, and paint", "A winter coat, scarf, and hand warmers"],
+    answer: "Water, sunscreen, and a sun hat",
+    difficulty: 4,
+  },
+  {
+    question: "During a journey, which item should stay easy to reach instead of at the bottom of a large suitcase?",
+    options: ["The travel document you must show", "Clothes for the final day", "A spare towel", "An extra pair of pajamas"],
+    answer: "The travel document you must show",
+    difficulty: 6,
+  },
+  {
+    question: "A night-camping checklist already has a tent, sleeping bag, water, food, and warm clothes. Which important item is still missing?",
+    options: ["A flashlight with working batteries", "A ceramic vase", "A television remote", "A stack of school notebooks"],
+    answer: "A flashlight with working batteries",
+    difficulty: 5,
+  },
+
+  // Electricity, gas, smoke, and water safety.
+  {
+    question: "You notice a power cord with exposed wire. What is the safest first action?",
+    options: ["Do not touch or use it; tell an adult", "Wrap it with paper and keep using it", "Test it with wet hands", "Push the wire back while it is plugged in"],
+    answer: "Do not touch or use it; tell an adult",
+    difficulty: 5,
+  },
+  {
+    question: "A plugged-in appliance falls into a sink full of water. What should you do first?",
+    options: ["Stay away from the water and tell an adult immediately", "Reach into the water and pull it out", "Drain the sink while touching the appliance", "Dry it with a towel while it is plugged in"],
+    answer: "Stay away from the water and tell an adult immediately",
+    difficulty: 7,
+  },
+  {
+    question: "You smell gas inside the home. Which is the safest immediate response?",
+    options: ["Leave without using switches or flames, then alert an adult from outside", "Turn on the lights to inspect every room", "Light a match to find the leak", "Use an electric fan before leaving"],
+    answer: "Leave without using switches or flames, then alert an adult from outside",
+    difficulty: 7,
+  },
+  {
+    question: "There is visible smoke and the smoke alarm is sounding. What should you do?",
+    options: ["Leave immediately, stay outside, and get emergency help", "Search every room before leaving", "Open windows and remain inside", "Go back for belongings after reaching the door"],
+    answer: "Leave immediately, stay outside, and get emergency help",
+    difficulty: 6,
+  },
+  {
+    question: "Water is spreading across the floor toward a plugged-in power strip. What is the safest first action for a child?",
+    options: ["Stay out of the wet area and warn an adult immediately", "Step through the water and unplug the strip", "Move the strip with a metal tool", "Cover the water with a rug"],
+    answer: "Stay out of the wet area and warn an adult immediately",
+    difficulty: 8,
+  },
+  {
+    question: "A sink is overflowing, and there are no electrical devices near the water. What should you do first if you can reach the faucet safely?",
+    options: ["Turn off the faucet, then alert an adult", "Leave the faucet running and fetch toys", "Block the doorway without telling anyone", "Touch nearby outlets to check whether they are dry"],
+    answer: "Turn off the faucet, then alert an adult",
+    difficulty: 5,
+  },
+  {
+    question: "After leaving a smoky building, why should you stay outside?",
+    options: ["Smoke and fire can spread or return without warning", "Fresh air makes alarms louder", "The building needs time to cool your shoes", "Going back makes emergency calls faster"],
+    answer: "Smoke and fire can spread or return without warning",
+    difficulty: 7,
+  },
+  {
+    question: "During a power outage, which light source is the safest first choice?",
+    options: ["A battery-powered flashlight", "An unattended candle", "A match held while walking", "The flashlight on a device with a damaged battery"],
+    answer: "A battery-powered flashlight",
+    difficulty: 4,
+  }
+);
+
 const HOUSEHOLD_GENERATED_POOLS = {
   1: [
     {

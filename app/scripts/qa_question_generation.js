@@ -24,6 +24,7 @@ const categories = [
   "general-knowledge",
   "geography",
   "population",
+  "computing",
   "financial-literacy",
   "measurement",
   "charts-and-graphs",

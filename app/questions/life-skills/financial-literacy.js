@@ -269,6 +269,123 @@ const FINANCIAL_LITERACY_QUESTIONS = [
   financialLiteracyQuestion("A 2,400-shekel item has a 20% discount. How much is the discount?", ["240 shekels", "360 shekels", "480 shekels", "600 shekels"], "480 shekels", 10),
 ];
 
+// Practical literacy expansion: real checkout totals, receipt checks, and account comparisons.
+FINANCIAL_LITERACY_QUESTIONS.push(
+  // Unit price and total cost.
+  financialLiteracyQuestion(
+    "You need 6 yogurt cups. Store A charges 30 shekels with free delivery. Store B charges 27 shekels plus 5 shekels delivery. Which has the lower total cost?",
+    ["Store A: 30 shekels", "Store B: 27 shekels", "Store B: 32 shekels", "They both cost 30 shekels"],
+    "Store A: 30 shekels",
+    3
+  ),
+  financialLiteracyQuestion(
+    "Two bags of the same rice cost 12 shekels for 500 g and 16.50 shekels for 750 g. Which has the lower price per 100 g?",
+    ["The 500 g bag at 2.40 shekels per 100 g", "The 750 g bag at 2.20 shekels per 100 g", "They have the same unit price", "The 750 g bag at 3 shekels per 100 g"],
+    "The 750 g bag at 2.20 shekels per 100 g",
+    5
+  ),
+  financialLiteracyQuestion(
+    "You need exactly 12 rolls of paper. Which option has the lowest total cost?",
+    ["Three 4-packs at 14 shekels each", "Two 6-packs at 19 shekels each", "One 12-pack at 40 shekels", "Twelve single rolls at 3.50 shekels each"],
+    "Two 6-packs at 19 shekels each",
+    6
+  ),
+  financialLiteracyQuestion(
+    "You need 3 notebooks. One notebook costs 9 shekels, or the multi-buy offer is 3 for 24 shekels. How much do you save with the offer?",
+    ["3 shekels", "6 shekels", "9 shekels", "24 shekels"],
+    "3 shekels",
+    4
+  ),
+  financialLiteracyQuestion(
+    "An online jacket costs 90 shekels, is 20% off, and has an 8-shekel delivery fee. What is the delivered cost?",
+    ["72 shekels", "80 shekels", "82 shekels", "98 shekels"],
+    "80 shekels",
+    6
+  ),
+  financialLiteracyQuestion(
+    "You need 2 bottles of shampoo. Shop A charges 28 shekels each plus 8 shekels delivery. Shop B offers 2 for 60 shekels with free delivery. Which is cheaper, and by how much?",
+    ["Shop A by 4 shekels", "Shop B by 4 shekels", "Shop B by 8 shekels", "They cost the same"],
+    "Shop B by 4 shekels",
+    7
+  ),
+
+  // Receipts and transaction checking.
+  financialLiteracyQuestion(
+    "You bought 3 juices, but the receipt lists a quantity of 4. Which part of the receipt is incorrect?",
+    ["The item quantity", "The payment method", "The store address", "The receipt date"],
+    "The item quantity",
+    3
+  ),
+  financialLiteracyQuestion(
+    "A notebook was marked 18 shekels on the shelf, but the receipt charges 21 shekels for one notebook. What should you check with the cashier?",
+    ["The notebook's charged price", "The number of receipt lines", "The time the store opened", "The color of the price tag"],
+    "The notebook's charged price",
+    4
+  ),
+  financialLiteracyQuestion(
+    "A receipt shows a 58-shekel subtotal, a 10-shekel coupon, and a 7-shekel delivery fee. What should the final total be?",
+    ["41 shekels", "48 shekels", "55 shekels", "75 shekels"],
+    "55 shekels",
+    5
+  ),
+  financialLiteracyQuestion(
+    "A receipt has an 80-shekel subtotal and says 10% tax is added. What total should appear?",
+    ["82 shekels", "88 shekels", "90 shekels", "96 shekels"],
+    "88 shekels",
+    6
+  ),
+  financialLiteracyQuestion(
+    "Your total is 67 shekels. You pay 100 shekels and receive 23 shekels change. What is wrong?",
+    ["The change is 10 shekels too little", "The change is 10 shekels too much", "The change is correct", "The total should be 77 shekels"],
+    "The change is 10 shekels too little",
+    5
+  ),
+  financialLiteracyQuestion(
+    "Your bank activity shows the same 32-shekel card purchase twice at the same shop and time, but you bought only once. What should you report?",
+    ["A possible duplicate transaction", "A missing cash withdrawal", "An incorrect account name", "A late delivery"],
+    "A possible duplicate transaction",
+    7
+  ),
+
+  // Bank fees and simple interest.
+  financialLiteracyQuestion(
+    "A savings account pays 3% simple interest per year. How much interest does 1,000 shekels earn in 2 years?",
+    ["30 shekels", "60 shekels", "90 shekels", "1,060 shekels"],
+    "60 shekels",
+    6
+  ),
+  financialLiteracyQuestion(
+    "Account A charges 4 shekels each month. Account B charges 40 shekels once per year. Which costs less over one year, and by how much?",
+    ["Account A by 8 shekels", "Account B by 8 shekels", "Account B by 40 shekels", "They cost the same"],
+    "Account B by 8 shekels",
+    7
+  ),
+  financialLiteracyQuestion(
+    "You keep 1,000 shekels for one year. Account A pays 2% interest with no fee. Account B pays 3% interest but charges a 15-shekel yearly fee. Which gives the higher net gain?",
+    ["Account A by 5 shekels", "Account B by 5 shekels", "Account B by 15 shekels", "They give the same net gain"],
+    "Account A by 5 shekels",
+    8
+  ),
+  financialLiteracyQuestion(
+    "An account charges a 7-shekel maintenance fee every month. How much do the fees total in one year?",
+    ["49 shekels", "70 shekels", "77 shekels", "84 shekels"],
+    "84 shekels",
+    6
+  ),
+  financialLiteracyQuestion(
+    "An account starts at 200 shekels. No money is added or spent, but it ends the month at 194 shekels. What most likely explains the difference?",
+    ["A 6-shekel account fee", "A 6-shekel interest payment", "A 194-shekel deposit", "A 200-shekel purchase"],
+    "A 6-shekel account fee",
+    5
+  ),
+  financialLiteracyQuestion(
+    "You expect to keep an average balance of 600 shekels for one year. Account A has no fee and pays no interest. Account B pays 1% yearly interest but charges 5 shekels per month. Which costs you less overall?",
+    ["Account A", "Account B", "They have the same net cost", "There is not enough information"],
+    "Account A",
+    9
+  )
+);
+
 const FINANCIAL_CURRENCY_FACTS = [
   { country: "Israel", currency: "shekel", code: "ILS" },
   { country: "United States", currency: "dollar", code: "USD" },
