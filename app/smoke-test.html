@@ -90,7 +90,7 @@
       const api = globalThis.HOMEWORK_TEST_API;
       const failures = [];
       const SMOKE_HISTORY_STORAGE_KEY = "homework-session-history-v2";
-      const SMOKE_SELECTED_USER_STORAGE_KEY = "homework-selected-user";
+      const SMOKE_SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
       const SMOKE_REPORT_QUEUE_STORAGE_KEY = "homework-google-sheets-report-queue-v1";
       const smokeRealFetch = typeof globalThis.fetch === "function" ? globalThis.fetch.bind(globalThis) : null;
       let smokeReportPostCount = 0;
@@ -538,7 +538,7 @@
           [SMOKE_HISTORY_STORAGE_KEY, SMOKE_SELECTED_USER_STORAGE_KEY, SMOKE_REPORT_QUEUE_STORAGE_KEY],
           () => {
             localStorage.removeItem(SMOKE_HISTORY_STORAGE_KEY);
-            sessionStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
+            localStorage.removeItem(SMOKE_SELECTED_USER_STORAGE_KEY);
             localStorage.removeItem(SMOKE_REPORT_QUEUE_STORAGE_KEY);
 
             click(document.getElementById("restart-button"), "workflow reset to start screen");

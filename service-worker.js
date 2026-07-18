@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-07-17-english-tense-history-fraction-sense-computing-1";
+const CACHE_VERSION = "homework-v2026-07-18-refactor-cleanup-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
@@ -45,18 +45,6 @@ const OPTIONAL_ASSETS = [
   "app/icons/icon-192.png",
   "app/icons/icon-512.png",
   "app/assets/fonts/GveretLevin-Regular.woff2",
-  "app/assets/europe-blank-map.svg",
-  "app/assets/europe-italy-blue.png",
-  "app/assets/europe-italy-blue.svg",
-  "app/assets/geography-australia-in-oceania.svg",
-  "app/assets/geography-base-africa-blankmap.svg",
-  "app/assets/geography-base-africa-grouped.svg",
-  "app/assets/geography-base-africa.svg",
-  "app/assets/geography-base-americas.svg",
-  "app/assets/geography-base-asia-world.svg",
-  "app/assets/geography-base-asia.svg",
-  "app/assets/geography-base-oceania.svg",
-  "app/assets/geography-papua-new-guinea-in-oceania.svg",
   "app/assets/hebrew-images/airplane.svg",
   "app/assets/hebrew-images/ant.svg",
   "app/assets/hebrew-images/apple.svg",

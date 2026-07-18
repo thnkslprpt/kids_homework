@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const { resolveQaAppScriptSources } = require("./qa_app_sources.js");
 
 const repoRoot = path.resolve(__dirname, "../..");
 const htmlPath = path.join(repoRoot, "homework.html");
@@ -218,8 +219,7 @@ function createContext() {
 }
 
 function scriptSourcesFromHtml() {
-  const html = fs.readFileSync(htmlPath, "utf8");
-  return Array.from(html.matchAll(/<script\s+src="([^"]+)"><\/script>/g), (match) => match[1]);
+  return resolveQaAppScriptSources(repoRoot, htmlPath);
 }
 
 function loadAppContext() {
@@ -247,7 +247,7 @@ function validateQuestion(question, meta) {
   }
 
   const mode = String(question.mode || "");
-  if (!["choice", "input", "drag", "practice"].includes(mode)) {
+  if (!["choice", "input", "drag", "practice", "interactive"].includes(mode)) {
     errors.push(`${meta}: unsupported mode ${JSON.stringify(question.mode)}`);
   }
 
@@ -360,6 +360,7 @@ function run() {
         }
         seenByCategory.get(category).add(textKey(`${question.questionText} ${question.displayText} ${question.visualSummary}`));
         failures.push(...validateQuestion(question, meta));
+        failures.push(...context.HOMEWORK_TEST_API.validateHomeworkQuestionShape(question, meta));
 
         if (category !== "geography" && actualCategory === "geography-map") {
           failures.push(`${meta}: unexpectedly generated geography-map for ${category}`);

@@ -3,6 +3,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const vm = require("node:vm");
+const { resolveQaAppScriptSources } = require("./qa_app_sources.js");
 
 const repoRoot = path.resolve(__dirname, "../..");
 const htmlPath = path.join(repoRoot, "homework.html");
@@ -120,8 +121,7 @@ function createContext() {
 
 function loadAppContext() {
   const context = createContext();
-  const html = fs.readFileSync(htmlPath, "utf8");
-  const sources = Array.from(html.matchAll(/<script\s+src="([^"]+)"><\/script>/g), (match) => match[1]);
+  const sources = resolveQaAppScriptSources(repoRoot, htmlPath);
   for (const source of sources) {
     const code = fs.readFileSync(path.join(repoRoot, source), "utf8");
     vm.runInContext(code, context, { filename: source });
@@ -386,13 +386,13 @@ function validateProbability(entry, meta) {
     const vanilla = Number(match[2]);
     const expected = fraction(chocolate, chocolate + vanilla);
     if (entry.answer !== expected) errors.push(`${meta}: expected chocolate-cookie probability ${expected}`);
-  } else if ((match = text.match(/bag has (\d+) green cubes, (\d+) yellow cubes, and (\d+) purple cubes\. What is the chance of picking green or yellow/))) {
+  } else if ((match = text.match(/bag has (\d+) green cubes?, (\d+) yellow cubes?, and (\d+) purple cubes?\. What is the chance of picking green or yellow/))) {
     const green = Number(match[1]);
     const yellow = Number(match[2]);
     const purple = Number(match[3]);
     const expected = fraction(green + yellow, green + yellow + purple);
     if (entry.answer !== expected) errors.push(`${meta}: expected green-or-yellow probability ${expected}`);
-  } else if ((match = text.match(/prize box has (\d+) pencils, (\d+) erasers, and (\d+) stickers\. What is the chance of not picking a sticker/))) {
+  } else if ((match = text.match(/prize box has (\d+) pencils?, (\d+) erasers?, and (\d+) stickers?\. What is the chance of not picking a sticker/))) {
     const pencils = Number(match[1]);
     const erasers = Number(match[2]);
     const stickers = Number(match[3]);
