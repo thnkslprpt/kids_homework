@@ -225,14 +225,14 @@
     { topic: "hebrew-final-letters", difficulty: 1, question: "Which is the final form of נ?", answer: "ן", options: ["ן", "נ", "ם", "ץ"] },
     { topic: "hebrew-final-letters", difficulty: 2, question: "Which word uses a final letter correctly?", answer: "שלום", options: ["שלום", "שלומ", "שלון", "שלופ"] },
     { topic: "hebrew-final-letters", difficulty: 3, question: "Which letter can change to ץ at the end of a word?", answer: "צ", options: ["צ", "ק", "ס", "ת"] },
-    { topic: "hebrew-prepositions", difficulty: 1, question: "Choose the Hebrew preposition that means to.", displayText: "___ בית", answer: "לְ", options: ["לְ", "בְּ", "עַל", "מִן"] },
-    { topic: "hebrew-prepositions", difficulty: 2, question: "Choose the Hebrew preposition that means in.", displayText: "___ בית", answer: "בְּ", options: ["בְּ", "עַל", "מִן", "לְ"] },
+    { topic: "hebrew-prepositions", difficulty: 1, question: "Choose the Hebrew prefix that means to.", displayText: "___בַיִת", answer: "לְ", options: ["לְ", "בְּ", "עַל", "מִן"] },
+    { topic: "hebrew-prepositions", difficulty: 2, question: "Choose the Hebrew prefix that means in.", displayText: "___בַיִת", answer: "בְּ", options: ["בְּ", "עַל", "מִן", "לְ"] },
     { topic: "hebrew-prepositions", difficulty: 3, question: "Choose the Hebrew preposition that means on.", displayText: "הספר ___ השולחן", answer: "עַל", options: ["עַל", "בְּ", "לְיַד", "מִן"] },
     { topic: "hebrew-prepositions", difficulty: 5, question: "Choose the Hebrew preposition that means from.", displayText: "דנה באה ___ הבית", answer: "מִן", options: ["מִן", "עַל", "בְּ", "אֶל"] },
     { topic: "hebrew-prepositions", difficulty: 7, question: "Choose the best Hebrew preposition.", displayText: "הכיסא נמצא ___ השולחן.", answer: "לְיַד", options: ["לְיַד", "מִן", "אֶל", "שֶל"] },
-    { topic: "hebrew-root-families", difficulty: 3, question: "Which word belongs to the כתב root family?", answer: "כותב", options: ["כותב", "אוכל", "רץ", "ישן"] },
+    { topic: "hebrew-root-families", difficulty: 3, question: "Which word belongs to the כתב root family?", answer: "כותב", options: ["כותב", "אוֹכֵל", "רץ", "ישן"] },
     { topic: "hebrew-root-families", difficulty: 4, question: "Which word belongs to the למד root family?", answer: "תלמיד", options: ["תלמיד", "חלון", "שתה", "הלך"] },
-    { topic: "hebrew-root-families", difficulty: 5, question: "Which word belongs to the אכל root family?", answer: "אוכל", options: ["אוכל", "שומר", "כותב", "יושב"] },
+    { topic: "hebrew-root-families", difficulty: 5, question: "Which word belongs to the אכל root family?", answer: "אוֹכֵל", options: ["אוֹכֵל", "שומר", "כותב", "יושב"] },
     { topic: "hebrew-root-families", difficulty: 8, question: "Which pair shares the same Hebrew root?", answer: "כתב / מכתב", options: ["כתב / מכתב", "בית / מים", "אור / ילד", "הלך / ספר"] },
     { topic: "hebrew-agreement", difficulty: 4, question: "Which sentence has correct gender agreement?", answer: "הילדה שמחה.", options: ["הילדה שמחה.", "הילדה שמח.", "הילד שמחה.", "הילדות שמח."] },
     { topic: "hebrew-agreement", difficulty: 5, question: "Which sentence has correct number agreement?", answer: "הילדים רצים.", options: ["הילדים רצים.", "הילדים רץ.", "הילד רצים.", "הילדות רץ."] },
@@ -246,7 +246,7 @@
   ];
 
   const ROOT_FAMILIES = [
-    { difficulty: 2, root: "כתב", meaning: "writing", words: ["כתב", "כותב", "כתבה", "מכתב", "כתיבה"], outsider: "אוכל" },
+    { difficulty: 2, root: "כתב", meaning: "writing", words: ["כתב", "כותב", "כתבה", "מכתב", "כתיבה"], outsider: "אוֹכֵל" },
     { difficulty: 2, root: "למד", meaning: "learning", words: ["למד", "לומד", "למדה", "תלמיד", "למידה"], outsider: "פתח" },
     { difficulty: 3, root: "אכל", meaning: "eating", words: ["אכל", "אוכלת", "מאכל", "אכילה", "נאכל"], outsider: "שמר" },
     { difficulty: 3, root: "שמר", meaning: "keeping", words: ["שמר", "שומר", "שמירה", "נשמר", "משמרת"], outsider: "הלך" },
@@ -260,8 +260,8 @@
     { difficulty: 7, root: "עזר", meaning: "helping", words: ["עזר", "עוזרת", "עזרה", "עוזרים", "נעזר"], outsider: "ראה" },
     { difficulty: 8, root: "נהל", meaning: "managing", words: ["ניהל", "מנהלת", "ניהול", "הנהלה", "מנהל"], outsider: "זכר" },
     { difficulty: 8, root: "בדק", meaning: "checking", words: ["בדק", "בודקת", "בדיקה", "נבדק", "מבדק"], outsider: "צחק" },
-    { difficulty: 9, root: "החליט", meaning: "deciding", words: ["החליט", "מחליטה", "החלטה", "הוחלט"], outsider: "הסביר" },
-    { difficulty: 9, root: "הסביר", meaning: "explaining", words: ["הסביר", "מסבירה", "הסבר", "מוסבר"], outsider: "הצליח" },
+    { difficulty: 9, root: "חלט", meaning: "deciding", words: ["החליט", "מחליטה", "החלטה", "הוחלט"], outsider: "הסביר" },
+    { difficulty: 9, root: "סבר", meaning: "explaining", words: ["הסביר", "מסבירה", "הסבר", "מוסבר"], outsider: "הצליח" },
   ];
 
   const ROOT_DISTRACTOR_PAIRS = [
@@ -366,7 +366,7 @@
     { difficulty: 6, prompt: "Choose the form that matches the time word.", displayText: "עכשיו אנחנו ___ את התרגיל.", answer: "פותרים", options: ["פותרים", "פתרנו", "נפתור", "פתרתי"], reviewText: "עכשיו אנחנו פותרים את התרגיל." },
     { difficulty: 6, prompt: "Choose the form that matches the time word.", displayText: "בשבוע שעבר הם ___ לטיול.", answer: "נסעו", options: ["נסעו", "נוסעים", "יסעו", "נסעתי"], reviewText: "בשבוע שעבר הם נסעו לטיול." },
     { difficulty: 7, prompt: "Choose the correct person and tense.", displayText: "מחר אני ___ למורה תשובה ברורה.", answer: "אסביר", options: ["אסביר", "הסברתי", "מסביר", "יסבירו"], reviewText: "מחר אני אסביר למורה תשובה ברורה." },
-    { difficulty: 7, prompt: "Choose the correct person and tense.", displayText: "אתמול את ___ לחברה שלך.", answer: "עזרת", options: ["עזרת", "עוזרת", "תעזרי", "עזרו"], reviewText: "אתמול את עזרת לחברה שלך." },
+    { difficulty: 7, prompt: "Choose the correct person and tense.", displayText: "אתמול אַתְ ___ לחברה שלך.", answer: "עזרת", options: ["עזרת", "עוזרת", "תעזרי", "עזרו"], reviewText: "אתמול אַתְ עזרת לחברה שלך." },
     { difficulty: 8, prompt: "Choose the sentence with correct tense and person.", answer: "מחר הם יבדקו את הרשימה.", options: ["מחר הם יבדקו את הרשימה.", "מחר הם בדקו את הרשימה.", "אתמול הם יבדקו את הרשימה.", "מחר הם בודק את הרשימה."], reviewText: "מחר הם יבדקו את הרשימה." },
     { difficulty: 8, prompt: "Choose the sentence with correct tense and gender.", answer: "עכשיו דנה מסבירה את הדרך.", options: ["עכשיו דנה מסבירה את הדרך.", "עכשיו דנה מסביר את הדרך.", "אתמול דנה מסבירה את הדרך.", "מחר דנה הסבירה את הדרך."], reviewText: "עכשיו דנה מסבירה את הדרך." },
     { difficulty: 9, prompt: "Choose the correct future form.", displayText: "אם נסיים מוקדם, אנחנו ___ את הדוח היום.", answer: "נגיש", options: ["נגיש", "הגשנו", "מגישים", "יגיש"], reviewText: "אנחנו נגיש את הדוח." },
@@ -422,18 +422,18 @@
     { difficulty: 1, question: "Choose the plural form.", displayText: "ילד -> ___", answer: "ילדים", options: ["ילדים", "ילדות", "ילד", "ילדה"], reviewText: "ילד -> ילדים" },
     { difficulty: 1, question: "Choose the singular form.", displayText: "ילדות -> ___", answer: "ילדה", options: ["ילדה", "ילד", "ילדים", "ילדות"], reviewText: "ילדות -> ילדה" },
     { difficulty: 2, question: "Choose the plural form.", displayText: "ספר -> ___", answer: "ספרים", options: ["ספרים", "ספרות", "ספר", "ספרה"], reviewText: "ספר -> ספרים" },
-    { difficulty: 2, question: "Choose the plural form.", displayText: "מחברת -> ___", answer: "מחברות", options: ["מחברות", "מחברים", "מחברתים", "מחבר"], reviewText: "מחברת -> מחברות" },
+    { difficulty: 2, question: "Choose the plural form.", displayText: "מחברת -> ___", answer: "מחברות", options: ["מחברות", "מחברים", "מחברת", "מחבר"], reviewText: "מחברת -> מחברות" },
     { difficulty: 3, question: "Choose the correct phrase.", displayText: "two new books", answer: "שני ספרים חדשים", options: ["שני ספרים חדשים", "שתי ספרים חדשות", "שני ספר חדש", "שתי ספרות חדשים"], reviewText: "שני ספרים חדשים" },
     { difficulty: 3, question: "Choose the correct phrase.", displayText: "two new notebooks", answer: "שתי מחברות חדשות", options: ["שתי מחברות חדשות", "שני מחברות חדשים", "שתי מחברת חדשה", "שני מחברים חדשים"], reviewText: "שתי מחברות חדשות" },
-    { difficulty: 4, question: "Choose the plural form.", displayText: "שולחן -> ___", answer: "שולחנות", options: ["שולחנות", "שולחנים", "שולחנת", "שולחן"], reviewText: "שולחן -> שולחנות" },
-    { difficulty: 4, question: "Choose the singular form.", displayText: "כיסאות -> ___", answer: "כיסא", options: ["כיסא", "כיסאות", "כיסאים", "כיסית"], reviewText: "כיסאות -> כיסא" },
+    { difficulty: 4, question: "Choose the plural form.", displayText: "שולחן -> ___", answer: "שולחנות", options: ["שולחנות", "שולחן", "כיסאות", "מדפים"], reviewText: "שולחן -> שולחנות" },
+    { difficulty: 4, question: "Choose the singular form.", displayText: "כיסאות -> ___", answer: "כיסא", options: ["כיסא", "כיסאות", "שולחן", "ספסל"], reviewText: "כיסאות -> כיסא" },
     { difficulty: 5, question: "Choose the adjective that agrees.", displayText: "דלתות ___", answer: "פתוחות", options: ["פתוחות", "פתוחים", "פתוח", "פתוחה"], reviewText: "דלתות פתוחות" },
     { difficulty: 5, question: "Choose the adjective that agrees.", displayText: "חלונות ___", answer: "נקיים", options: ["נקיים", "נקיות", "נקי", "נקייה"], reviewText: "חלונות נקיים" },
     { difficulty: 6, question: "Choose the correct singular phrase.", displayText: "הילדות הגבוהות -> ___", answer: "הילדה הגבוהה", options: ["הילדה הגבוהה", "הילד הגבוה", "הילדה הגבוה", "הילדים הגבוהים"], reviewText: "הילדות הגבוהות -> הילדה הגבוהה" },
-    { difficulty: 6, question: "Choose the correct plural phrase.", displayText: "הבית הישן -> ___", answer: "הבתים הישנים", options: ["הבתים הישנים", "הביתים הישנות", "הבתים ישן", "הבית הישן"], reviewText: "הבית הישן -> הבתים הישנים" },
+    { difficulty: 6, question: "Choose the correct plural phrase.", displayText: "הבית הישן -> ___", answer: "הבתים הישנים", options: ["הבתים הישנים", "הבתים הישנות", "הבתים ישן", "הבית הישן"], reviewText: "הבית הישן -> הבתים הישנים" },
     { difficulty: 7, question: "Choose the correct number agreement.", answer: "הנשים החכמות שאלו שאלות.", options: ["הנשים החכמות שאלו שאלות.", "הנשים החכמים שאלו שאלות.", "האישה החכמות שאלה שאלות.", "הנשים החכמה שאל שאלה."], reviewText: "הנשים החכמות שאלו שאלות." },
-    { difficulty: 8, question: "Choose the correct phrase.", displayText: "three short stories", answer: "שלושה סיפורים קצרים", options: ["שלושה סיפורים קצרים", "שלוש סיפורים קצרות", "שלושה סיפור קצר", "שלוש סיפורות קצרים"], reviewText: "שלושה סיפורים קצרים" },
-    { difficulty: 9, question: "Choose the correct phrase.", displayText: "three important decisions", answer: "שלוש החלטות חשובות", options: ["שלוש החלטות חשובות", "שלושה החלטות חשובים", "שלוש החלטה חשובה", "שלושה החלטים חשובים"], reviewText: "שלוש החלטות חשובות" },
+    { difficulty: 8, question: "Choose the correct phrase.", displayText: "three short stories", answer: "שלושה סיפורים קצרים", options: ["שלושה סיפורים קצרים", "שלוש סיפורים קצרות", "שלושה סיפור קצר", "שלושה סיפורים קצרות"], reviewText: "שלושה סיפורים קצרים" },
+    { difficulty: 9, question: "Choose the correct phrase.", displayText: "three important decisions", answer: "שלוש החלטות חשובות", options: ["שלוש החלטות חשובות", "שלושה החלטות חשובים", "שלוש החלטה חשובה", "שלוש החלטות חשובים"], reviewText: "שלוש החלטות חשובות" },
   ];
 
   function createNumberFormEntry(difficulty) {
@@ -513,7 +513,7 @@
     { difficulty: 6, displayText: "הכדור התגלגל ___.", answer: "מתחת לשולחן", options: ["מתחת לשולחן", "מעל השולחן", "בגלל השולחן", "לפני השולחן"], reviewText: "הכדור התגלגל מתחת לשולחן." },
     { difficulty: 7, displayText: "הגענו מאוחר ___ הגשם.", answer: "בגלל", options: ["בגלל", "למרות", "אצל", "בין"], reviewText: "הגענו מאוחר בגלל הגשם." },
     { difficulty: 8, displayText: "___ הרעש, התלמידים המשיכו לעבוד.", answer: "למרות", options: ["למרות", "בגלל", "אצל", "מתחת ל"], reviewText: "למרות הרעש, התלמידים המשיכו לעבוד." },
-    { difficulty: 9, displayText: "הפגישה נקבעה ___ המנהלת והמורה.", answer: "בין", options: ["בין", "בתוך", "מעל", "בלי"], reviewText: "הפגישה נקבעה בין המנהלת והמורה." },
+    { difficulty: 9, displayText: "הפגישה נקבעה ___ המנהלת למורה.", answer: "בין", options: ["בין", "בתוך", "מעל", "בלי"], reviewText: "הפגישה נקבעה בין המנהלת למורה." },
   ];
 
   function createPrepositionEntry(difficulty) {
@@ -577,11 +577,11 @@
     { difficulty: 2, lines: ["מיה קוראת ספר.", "הספר חדש."], question: "What is new?", answer: "הספר", options: ["הספר", "הכדור", "הדלת", "המים"] },
     { difficulty: 2, lines: ["נועם שותה מים.", "הכוס על השולחן."], question: "Where is the cup?", answer: "על השולחן", options: ["על השולחן", "בתיק", "בחצר", "ליד הדלת"] },
     { difficulty: 3, lines: ["אורי לקח כדור אדום.", "הוא שיחק עם דני בחצר."], question: "With whom did Ori play?", answer: "עם דני", options: ["עם דני", "עם מיה", "עם המורה", "עם הכלב"] },
-    { difficulty: 3, lines: ["יעל פתחה את התיק.", "בתיק היו מחברת ועפרון."], question: "What was in the bag?", answer: "מחברת ועפרון", options: ["מחברת ועפרון", "לחם וחלב", "כדור וספר", "מפתח וטלפון"] },
-    { difficulty: 4, lines: ["אמא ביקשה מרוני לסדר את השולחן.", "רוני הביאה צלחות וכוסות מהמטבח."], question: "What did Roni bring?", answer: "צלחות וכוסות", options: ["צלחות וכוסות", "ספרים ומחברות", "נעליים וכובע", "עפרון ומחק"] },
+    { difficulty: 3, lines: ["יעל פתחה את התיק.", "בתיק היו מחברת ועיפרון."], question: "What was in the bag?", answer: "מחברת ועיפרון", options: ["מחברת ועיפרון", "לחם וחלב", "כדור וספר", "מפתח וטלפון"] },
+    { difficulty: 4, lines: ["אימא ביקשה מרוני לסדר את השולחן.", "רוני הביאה צלחות וכוסות מהמטבח."], question: "What did Roni bring?", answer: "צלחות וכוסות", options: ["צלחות וכוסות", "ספרים ומחברות", "נעליים וכובע", "עיפרון ומחק"] },
     { difficulty: 5, lines: ["בבוקר ירד גשם חזק.", "הילדים חיכו ליד הדלת עד שאבא הביא מטריות."], question: "Why did the children wait?", answer: "כי ירד גשם חזק", options: ["כי ירד גשם חזק", "כי הכדור נאבד", "כי השיעור נגמר", "כי הם רצו לאכול"] },
     { difficulty: 6, lines: ["תמר מצאה הודעה מהמורה.", "בהודעה היה כתוב להביא מחברת כחולה לשיעור הבא."], question: "What should Tamar bring?", answer: "מחברת כחולה", options: ["מחברת כחולה", "כדור אדום", "תיק חדש", "כוס מים"] },
-    { difficulty: 7, lines: ["אחרי המשחק, הקבוצה בדקה את הרשימה.", "הם גילו שחסרים שני בקבוקי מים ומפה אחת."], question: "What was missing?", answer: "שני בקבוקי מים ומפה אחת", options: ["שני בקבוקי מים ומפה אחת", "שלוש מחברות ועפרון", "כרטיסים וטלפון", "לחם וחלב"] },
+    { difficulty: 7, lines: ["אחרי המשחק, חברי הקבוצה בדקו את הרשימה.", "הם גילו שחסרים שני בקבוקי מים ומפה אחת."], question: "What was missing?", answer: "שני בקבוקי מים ומפה אחת", options: ["שני בקבוקי מים ומפה אחת", "שלוש מחברות ועיפרון", "כרטיסים וטלפון", "לחם וחלב"] },
     { difficulty: 8, lines: ["המנהלת שלחה הודעה קצרה לצוות.", "היא ביקשה לדחות את הפגישה מפני שהאולם עדיין תפוס."], question: "Why was the meeting delayed?", answer: "כי האולם עדיין תפוס", options: ["כי האולם עדיין תפוס", "כי כולם סיימו מוקדם", "כי ירד שלג", "כי חסרו כיסאות"] },
     { difficulty: 9, lines: ["למרות העייפות, דנה המשיכה לבדוק את התשובות.", "היא רצתה לוודא שההסבר ברור לפני שהגישה את העבודה."], question: "Why did Dana keep checking?", answer: "כדי לוודא שההסבר ברור", options: ["כדי לוודא שההסבר ברור", "כדי למחוק את העבודה", "כדי לאחר לשיעור", "כדי למצוא את הכדור"] },
   ];
@@ -801,7 +801,7 @@
     { difficulty: 3, displayText: "לפני השינה הילדים ___ שיניים.", answer: "מצחצחים", options: ["מצחצחים", "מציירים", "מטפסים", "שוברים"], reviewText: "לפני השינה הילדים מצחצחים שיניים." },
     { difficulty: 3, displayText: "המורה כתבה את השאלה ___ הלוח.", answer: "על", options: ["על", "אצל", "מן", "עם"], reviewText: "המורה כתבה את השאלה על הלוח." },
     { difficulty: 4, displayText: "אתמול דני ___ מכתב קצר.", answer: "כתב", options: ["כתב", "כותב", "יכתוב", "כתבו"], reviewText: "אתמול דני כתב מכתב קצר." },
-    { difficulty: 4, displayText: "מחר דנה ___ את הספר לספריה.", answer: "תחזיר", options: ["תחזיר", "החזירה", "מחזירה", "החזירו"], reviewText: "מחר דנה תחזיר את הספר לספריה." },
+    { difficulty: 4, displayText: "מחר דנה ___ את הספר לספרייה.", answer: "תחזיר", options: ["תחזיר", "החזירה", "מחזירה", "החזירו"], reviewText: "מחר דנה תחזיר את הספר לספרייה." },
     { difficulty: 5, displayText: "הילדים שמרו את המשחק ___ הקופסה.", answer: "בתוך", options: ["בתוך", "מעל", "אצל", "בגלל"], reviewText: "הילדים שמרו את המשחק בתוך הקופסה." },
     { difficulty: 5, displayText: "המחברות החדשות ___ על המדף.", answer: "נמצאות", options: ["נמצאות", "נמצא", "נמצאים", "נמצאת"], reviewText: "המחברות החדשות נמצאות על המדף." },
     { difficulty: 6, displayText: "אם נסיים מוקדם, ___ לפארק אחרי הצהריים.", answer: "נלך", options: ["נלך", "הלכנו", "הולכים", "הלך"], reviewText: "אם נסיים מוקדם, נלך לפארק אחרי הצהריים." },

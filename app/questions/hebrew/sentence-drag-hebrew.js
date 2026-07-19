@@ -115,7 +115,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אמא ", " עוגה."],
+      templateParts: ["אימא ", " עוגה."],
       answer: ["אופה"],
       distractors: ["זורקת", "מנקה", "מציירת"],
       difficulty: 1,
@@ -206,7 +206,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["החברים ", " במפה טובה כדי למצוא את הדרך לפארק."],
+      templateParts: ["החברים ", " במפה כדי למצוא את הדרך לפארק."],
       answer: ["משתמשים"],
       distractors: ["בונים", "מציירים", "מכבסים"],
       difficulty: 4,
@@ -248,14 +248,14 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["לפני הטיול המשפחה ", " את התיקים, ", " מים ו", " כובע."],
-      answer: ["אורזת", "לוקחת", "מביאה"],
+      templateParts: ["לפני הטיול המשפחה ", " את התיקים, ", " בקבוקי מים ו", " כובעים."],
+      answer: ["מכינה", "ממלאת", "לוקחת"],
       distractors: ["מנקה", "מציירת", "שוברת"],
       difficulty: 5,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["החוקר ", " את המים, ", " את התוצאות ו", " את המסקנה."],
+      templateParts: ["החוקר ", " את טמפרטורת המים, ", " את התוצאות ו", " את המסקנה."],
       answer: ["מודד", "רושם", "כותב"],
       distractors: ["שוטף", "זורק", "שומע"],
       difficulty: 5,
@@ -305,7 +305,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     {
       question: "השלימו את המשפט.",
       templateParts: ["הסוס ", " עשב."],
-      answer: ["אוכל"],
+      answer: ["אוֹכֵל"],
       distractors: ["כותב", "פותח", "שר"],
       difficulty: 1,
     },
@@ -451,7 +451,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["כדי להכין כריך, דניאל ", " לחם, ", " גבינה ו", " ירקות."],
+      templateParts: ["כדי להכין כריך, דנה ", " לחם, ", " גבינה ו", " ירקות."],
       answer: ["פורסת", "מורחת", "מוסיפה"],
       distractors: ["שוטפת", "צובעת", "קופצת"],
       difficulty: 5,
@@ -472,7 +472,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["בדרך לבית הספר נעם ", " חבר, ", " אותו ו", " ללכת."],
+      templateParts: ["בדרך לבית הספר נועם ", " חבר, ", " אותו ו", " ללכת."],
       answer: ["פוגש", "מברך", "ממשיך"],
       distractors: ["צובע", "שובר", "אופה"],
       difficulty: 5,
@@ -929,13 +929,13 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
         const prompts = [
           {
             question: "השלימו את המשפט.",
-            templateParts: ["לפני הטיול המשפחה ", " את התיקים, ", " מים ו", " כובע."],
-            answer: ["אורזת", "לוקחת", "מביאה"],
+            templateParts: ["לפני הטיול המשפחה ", " את התיקים, ", " בקבוקי מים ו", " כובעים."],
+            answer: ["מכינה", "ממלאת", "לוקחת"],
             distractors: ["מנקה", "מציירת", "שוברת"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["החוקר ", " את המים, ", " את התוצאות ו", " את המסקנה."],
+            templateParts: ["החוקר ", " את טמפרטורת המים, ", " את התוצאות ו", " את המסקנה."],
             answer: ["מודד", "רושם", "כותב"],
             distractors: ["שוטף", "זורק", "שורק"],
           },

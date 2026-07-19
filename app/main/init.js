@@ -42,7 +42,13 @@ const hebrewQuestionBank = DEFAULT_HEBREW_BANKS.questionBank;
 const hebrewMeanings = DEFAULT_HEBREW_BANKS.meanings;
 const adultHebrewModule =
   typeof ADULT_HEBREW_MODULE !== "undefined" && ADULT_HEBREW_MODULE ? ADULT_HEBREW_MODULE : {};
-const adultHebrewWordEntries = Array.isArray(adultHebrewModule.words) ? adultHebrewModule.words : [];
+const adultHebrewWordEntries = Array.isArray(adultHebrewModule.words)
+  ? adultHebrewModule.words.map((entry) => {
+      const rawHebrew = String(entry?.hebrew || "").trim();
+      const pointedHebrew = String(adultHebrewModule.pointedWords?.[rawHebrew] || "").trim();
+      return pointedHebrew ? { ...entry, hebrew: pointedHebrew, transliteration: "" } : entry;
+    })
+  : [];
 const MIRANDA_HEBREW_BANKS = createHebrewBankBundle(
   mergeUserHebrewWordSets(adultHebrewWordEntries, rawHebrewWordEntries),
   rawHebrewImageWordEntries
@@ -92,8 +98,22 @@ const HEBREW_POINTED_WORD_LOOKUP = (() => {
     }
   });
 
+  Object.entries(adultHebrewModule.pointedWords || {}).forEach(([rawHebrew, pointedHebrew]) => {
+    const source = String(rawHebrew || "").trim();
+    const target = String(pointedHebrew || "").trim();
+    if (source && target && !lookup.has(source)) {
+      lookup.set(source, target);
+    }
+  });
+
   return lookup;
 })();
+const HEBREW_RUNTIME_MULTI_WORD_NIKKUD_OVERRIDES = Array.from(
+  new Map([
+    ...HEBREW_MULTI_WORD_NIKKUD_OVERRIDES,
+    ...Object.entries(adultHebrewModule.pointedWords || {}).filter(([source]) => /\s/.test(source)),
+  ]).entries()
+).sort((left, right) => right[0].length - left[0].length);
 const questionRegistry = globalThis.HomeworkQuestions || { get: () => null, list: () => [] };
 
 function getQuestionModule(category) {

@@ -1,11 +1,12 @@
-// Generated from Teach Me Hebrew modern frequency list and pointed with Dicta.
-// Snapshot date: 2026-04-12.
-const HEBREW_EXPANDED_WORDS = [
+// Generated from Teach Me Hebrew's modern frequency list.
+// Hebrew forms were vocalized directly with Dicta Nakdan (modern genre).
+const HEBREW_EXPANDED_WORDS =
+[
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Because",
     "transliteration": "ki",
-    "hebrew": "כִּי",
+    "hebrew": "כִּי",
     "difficulty": 6
   },
   {
@@ -33,21 +34,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That / which",
     "transliteration": "asher",
-    "hebrew": "אֲשֶׁר",
+    "hebrew": "אֲשֶׁר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the year [X] / in the year of",
     "transliteration": "bishnat",
-    "hebrew": "בִּשְׁנַת",
+    "hebrew": "בִּשְׁנַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Most, very much",
     "transliteration": "beyoter",
-    "hebrew": "בְּיוֹתֵר",
+    "hebrew": "בְּיוֹתֵר",
     "difficulty": 6
   },
   {
@@ -61,7 +62,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like / as",
     "transliteration": "kmo",
-    "hebrew": "כְּמוֹ",
+    "hebrew": "כְּמוֹ",
     "difficulty": 6
   },
   {
@@ -96,14 +97,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "These",
     "transliteration": "ele",
-    "hebrew": "אֵלֶּה",
+    "hebrew": "אֵלֶּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a way",
     "transliteration": "beofen",
-    "hebrew": "בְּאֹופֶן",
+    "hebrew": "בְּאֹפֶן",
     "difficulty": 6
   },
   {
@@ -124,14 +125,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "My mouth / multiplied by",
     "transliteration": "pi",
-    "hebrew": "פִּי",
+    "hebrew": "פִּי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "His / belongs to him",
     "transliteration": "shelo",
-    "hebrew": "שֶׁלּוֹ",
+    "hebrew": "שֶׁלּוֹ",
     "difficulty": 6
   },
   {
@@ -159,14 +160,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Her / it",
     "transliteration": "ota",
-    "hebrew": "אוֹתָהּ",
+    "hebrew": "אוֹתָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "My son",
     "transliteration": "bni",
-    "hebrew": "בְּנִי",
+    "hebrew": "בְּנִי",
     "difficulty": 6
   },
   {
@@ -180,7 +181,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The century / the hundred",
     "transliteration": "hame'a",
-    "hebrew": "הַמֵּאָה",
+    "hebrew": "הַמֵּאָה",
     "difficulty": 6
   },
   {
@@ -215,14 +216,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Because of",
     "transliteration": "beshel",
-    "hebrew": "בְּשֶׁל",
+    "hebrew": "בְּשֶׁל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In them (m.)",
     "transliteration": "bahem",
-    "hebrew": "בָּהֶם",
+    "hebrew": "בָּהֶם",
     "difficulty": 6
   },
   {
@@ -236,28 +237,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mainly / principally / especially",
     "transliteration": "be'ikar",
-    "hebrew": "בְּעִיקָּר",
+    "hebrew": "בְּעִקָּר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "But / only",
     "transliteration": "ela",
-    "hebrew": "אֶלָּא",
+    "hebrew": "אֶלָּא",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Instead of / in place",
     "transliteration": "bimkom",
-    "hebrew": "בַּמָּקוֹם",
+    "hebrew": "בִּמְקוֹם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That was (m.s.)",
     "transliteration": "shehaya",
-    "hebrew": "שֶׁהָיָה",
+    "hebrew": "שֶׁהָיָה",
     "difficulty": 6
   },
   {
@@ -278,7 +279,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That in him / that in it",
     "transliteration": "shebo",
-    "hebrew": "שֶׁבּוֹ",
+    "hebrew": "שֶׁבּוֹ",
     "difficulty": 6
   },
   {
@@ -299,7 +300,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To her",
     "transliteration": "la",
-    "hebrew": "לָהּ",
+    "hebrew": "לָה",
     "difficulty": 6
   },
   {
@@ -313,7 +314,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Jews",
     "transliteration": "hayehudim",
-    "hebrew": "הַיְּהוּדִים",
+    "hebrew": "הַיְּהוּדִים",
     "difficulty": 6
   },
   {
@@ -327,7 +328,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The sea",
     "transliteration": "hayam",
-    "hebrew": "הַיָּם",
+    "hebrew": "הַיָּם",
     "difficulty": 6
   },
   {
@@ -341,14 +342,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Life / (could also be a name)",
     "transliteration": "khaim",
-    "hebrew": "חַיִּים",
+    "hebrew": "חַיִּים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The state",
     "transliteration": "hamedina",
-    "hebrew": "הַמְּדִינָה",
+    "hebrew": "הַמְּדִינָה",
     "difficulty": 6
   },
   {
@@ -376,14 +377,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That he / that is (m)",
     "transliteration": "shehu",
-    "hebrew": "שֶׁהוּא",
+    "hebrew": "שֶׁהוּא",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "My husband",
     "transliteration": "ba'ali",
-    "hebrew": "בַּעֲלִי",
+    "hebrew": "בַּעֲלִי",
     "difficulty": 6
   },
   {
@@ -432,7 +433,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the way",
     "transliteration": "baderekh",
-    "hebrew": "בַּדֶּרֶךְ",
+    "hebrew": "בַּדֶּרֶךְ",
     "difficulty": 6
   },
   {
@@ -446,35 +447,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Use",
     "transliteration": "shimush",
-    "hebrew": "שִׁימּוּשׁ",
+    "hebrew": "שִׁמּוּשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Such as",
     "transliteration": "kegon",
-    "hebrew": "כְּגוֹן",
+    "hebrew": "כְּגוֹן",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Through / by way of / by",
     "transliteration": "be'emtsa'ut",
-    "hebrew": "בְּאֶמְצָעוּת",
+    "hebrew": "בְּאֶמְצָעוּת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Of that / from then / of you (f.pl.)",
     "transliteration": "miken",
-    "hebrew": "מִכֵּן",
+    "hebrew": "מִכֵּן",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "During / in the course of",
     "transliteration": "bemeshekh",
-    "hebrew": "בְּמֶשֶׁךְ",
+    "hebrew": "בְּמֶשֶׁךְ",
     "difficulty": 6
   },
   {
@@ -502,7 +503,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the name of / called",
     "transliteration": "beshem",
-    "hebrew": "בְּשֵׁם",
+    "hebrew": "בְּשֵׁם",
     "difficulty": 6
   },
   {
@@ -516,35 +517,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The government",
     "transliteration": "hamemshala",
-    "hebrew": "הַמֶּמְשָׁלָה",
+    "hebrew": "הַמֶּמְשָׁלָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To all",
     "transliteration": "lekhol",
-    "hebrew": "לַכֹּל",
+    "hebrew": "לְכֹל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Under / beneath / instead of",
     "transliteration": "takhat",
-    "hebrew": "תַּחַת",
+    "hebrew": "תַּחַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sometimes",
     "transliteration": "le'itim",
-    "hebrew": "לְעִתִּים",
+    "hebrew": "לְעִתִּים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "This (m.)",
     "transliteration": "haze",
-    "hebrew": "הַזֶּה",
+    "hebrew": "הַזֶּה",
     "difficulty": 6
   },
   {
@@ -579,14 +580,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The years of",
     "transliteration": "shnot",
-    "hebrew": "שְׁנוֹת",
+    "hebrew": "שְׁנוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Almost",
     "transliteration": "kim'at",
-    "hebrew": "כִּמְעַט",
+    "hebrew": "כִּמְעַט",
     "difficulty": 6
   },
   {
@@ -600,28 +601,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In addition",
     "transliteration": "benosaf",
-    "hebrew": "בְּנוֹסָף",
+    "hebrew": "בְּנוֹסָף",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the hands of",
     "transliteration": "bidei",
-    "hebrew": "בִּידֵי",
+    "hebrew": "בִּידֵי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the footsteps of / following / as a result of",
     "transliteration": "be'ikvot",
-    "hebrew": "בְּעִקְבוֹת",
+    "hebrew": "בְּעִקְבוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a city",
     "transliteration": "be'ir",
-    "hebrew": "בָּעִיר",
+    "hebrew": "בְּעִיר",
     "difficulty": 6
   },
   {
@@ -635,28 +636,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Among",
     "transliteration": "bekerev",
-    "hebrew": "בַּקְּרָב",
+    "hebrew": "בְּקֶרֶב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As",
     "transliteration": "kefi",
-    "hebrew": "כְּפִי",
+    "hebrew": "כְּפִי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The game",
     "transliteration": "hamis'khak",
-    "hebrew": "הַמִּשְׂחָק",
+    "hebrew": "הַמִּשְׂחָק",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Most",
     "transliteration": "rov",
-    "hebrew": "רֹוב",
+    "hebrew": "רֹב",
     "difficulty": 6
   },
   {
@@ -670,14 +671,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And the",
     "transliteration": "ve'et",
-    "hebrew": "וְאַתְּ",
+    "hebrew": "וְאֶת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a time (of)",
     "transliteration": "be'et",
-    "hebrew": "בְּעֵת",
+    "hebrew": "בְּעֵת",
     "difficulty": 6
   },
   {
@@ -691,14 +692,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For example",
     "transliteration": "lemashal",
-    "hebrew": "לְמָשָׁל",
+    "hebrew": "לְמָשָׁל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The army",
     "transliteration": "hatsava",
-    "hebrew": "הַצָּבָא",
+    "hebrew": "הַצָּבָא",
     "difficulty": 6
   },
   {
@@ -712,7 +713,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Article / dish / vessel / ware / tool",
     "transliteration": "kli",
-    "hebrew": "כְּלִי",
+    "hebrew": "כְּלִי",
     "difficulty": 6
   },
   {
@@ -726,14 +727,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In an area",
     "transliteration": "be'ezor",
-    "hebrew": "בָּאֵזוֹר",
+    "hebrew": "בְּאֵזוֹר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the world",
     "transliteration": "ba'olam",
-    "hebrew": "בָּעוֹלָם",
+    "hebrew": "בָּעוֹלָם",
     "difficulty": 6
   },
   {
@@ -747,7 +748,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Inside",
     "transliteration": "betokh",
-    "hebrew": "בְּתוֹךְ",
+    "hebrew": "בְּתוֹךְ",
     "difficulty": 6
   },
   {
@@ -761,14 +762,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The face of",
     "transliteration": "pnei",
-    "hebrew": "פְּנֵי",
+    "hebrew": "פְּנֵי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a country",
     "transliteration": "be'arets",
-    "hebrew": "בָּאָרֶץ",
+    "hebrew": "בְּאָרֶץ",
     "difficulty": 6
   },
   {
@@ -782,14 +783,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The thing / the object / the item / the matter",
     "transliteration": "hadavar",
-    "hebrew": "הַדָּבָר",
+    "hebrew": "הַדָּבָר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Only",
     "transliteration": "bilvad",
-    "hebrew": "בִּלְבַד",
+    "hebrew": "בִּלְבַד",
     "difficulty": 6
   },
   {
@@ -803,7 +804,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At home / in the house",
     "transliteration": "babayit",
-    "hebrew": "בַּבַּיִת",
+    "hebrew": "בַּבַּיִת",
     "difficulty": 6
   },
   {
@@ -817,7 +818,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The life",
     "transliteration": "hakhaim",
-    "hebrew": "הַחַיִּים",
+    "hebrew": "הַחַיִּים",
     "difficulty": 6
   },
   {
@@ -831,14 +832,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Through / along",
     "transliteration": "le'orekh",
-    "hebrew": "לְאֹורֶךְ",
+    "hebrew": "לְאֹרֶךְ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Not / no / im- / in- / un- / dis- / except",
     "transliteration": "bilti",
-    "hebrew": "בִּלְתִּי",
+    "hebrew": "בִּלְתִּי",
     "difficulty": 6
   },
   {
@@ -859,7 +860,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The big / the large (m.s.)",
     "transliteration": "hagadol",
-    "hebrew": "הַגָּדוֹל",
+    "hebrew": "הַגָּדוֹל",
     "difficulty": 6
   },
   {
@@ -873,21 +874,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The book",
     "transliteration": "hasefer",
-    "hebrew": "הַסֵּפֶר",
+    "hebrew": "הַסֵּפֶר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Saw (m.pl.)",
     "transliteration": "ra'u",
-    "hebrew": "רְאוּ",
+    "hebrew": "רָאוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "By this",
     "transliteration": "bekhakh",
-    "hebrew": "בְּכָךְ",
+    "hebrew": "בְּכָךְ",
     "difficulty": 6
   },
   {
@@ -908,14 +909,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And until",
     "transliteration": "ve'ad",
-    "hebrew": "וַעַד",
+    "hebrew": "וְעַד",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Against",
     "transliteration": "keneged",
-    "hebrew": "כְּנֶגֶד",
+    "hebrew": "כְּנֶגֶד",
     "difficulty": 6
   },
   {
@@ -929,35 +930,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Returned (f.s.)",
     "transliteration": "shava",
-    "hebrew": "שָׁבָה",
+    "hebrew": "שָׁבָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Too",
     "transliteration": "midai",
-    "hebrew": "מַדֵּי",
+    "hebrew": "מִדַּי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the end",
     "transliteration": "basof",
-    "hebrew": "בַּסּוֹף",
+    "hebrew": "בַּסּוֹף",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The party (political)",
     "transliteration": "hamiflaga",
-    "hebrew": "הַמִּפְלָגָה",
+    "hebrew": "הַמִּפְלָגָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Especially",
     "transliteration": "bimyukhad",
-    "hebrew": "בִּמְיֻוחָד",
+    "hebrew": "בִּמְיֻחָד",
     "difficulty": 6
   },
   {
@@ -971,7 +972,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The water",
     "transliteration": "hamayim",
-    "hebrew": "הַמַּיִם",
+    "hebrew": "הַמַּיִם",
     "difficulty": 6
   },
   {
@@ -985,35 +986,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The more / as far as",
     "transliteration": "kekhol",
-    "hebrew": "כְּכָל",
+    "hebrew": "כְּכֹל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That were",
     "transliteration": "shehayu",
-    "hebrew": "שֶׁהָיוּ",
+    "hebrew": "שֶׁהָיוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a period / in an era",
     "transliteration": "bitkufa",
-    "hebrew": "בַּתְּקוּפָה",
+    "hebrew": "בִּתְקוּפָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Still / yet",
     "transliteration": "adayin",
-    "hebrew": "עֲדַיִין",
+    "hebrew": "עֲדַיִן",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The years",
     "transliteration": "hashanim",
-    "hebrew": "הַשָּׁנִים",
+    "hebrew": "הַשָּׁנִים",
     "difficulty": 6
   },
   {
@@ -1041,7 +1042,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the time [of]",
     "transliteration": "bizman",
-    "hebrew": "בִּזְמַן",
+    "hebrew": "בִּזְמַן",
     "difficulty": 6
   },
   {
@@ -1055,28 +1056,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Soldier (m)",
     "transliteration": "khayal",
-    "hebrew": "חַיָּל",
+    "hebrew": "חַיָּל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "While",
     "transliteration": "be'od",
-    "hebrew": "בְּעוֹד",
+    "hebrew": "בְּעוֹד",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The houses of / the homes of",
     "transliteration": "batei",
-    "hebrew": "בָּתֵּי",
+    "hebrew": "בָּתֵּי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hers",
     "transliteration": "shela",
-    "hebrew": "שֶׁלָּהּ",
+    "hebrew": "שֶׁלָּה",
     "difficulty": 6
   },
   {
@@ -1090,21 +1091,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the same / at the same (f.s.)",
     "transliteration": "be'ota",
-    "hebrew": "בְּאוֹתָהּ",
+    "hebrew": "בְּאוֹתָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Big / large (f.s.)",
     "transliteration": "gdola",
-    "hebrew": "גְּדוֹלָה",
+    "hebrew": "גְּדוֹלָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Arrived (m.s.)",
     "transliteration": "hegi'a",
-    "hebrew": "הִגִּיעַ",
+    "hebrew": "הִגִּיעַ",
     "difficulty": 6
   },
   {
@@ -1118,7 +1119,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Actually / in fact",
     "transliteration": "lema'ase",
-    "hebrew": "לְמַעֲשֶׂה",
+    "hebrew": "לְמַעֲשֶׂה",
     "difficulty": 6
   },
   {
@@ -1146,21 +1147,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Theirs",
     "transliteration": "shelahem",
-    "hebrew": "שֶׁלָּהֶם",
+    "hebrew": "שֶׁלָּהֶם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On me / about me",
     "transliteration": "alai",
-    "hebrew": "עֲלֵי",
+    "hebrew": "עָלִי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Between them (m.)",
     "transliteration": "beinehem",
-    "hebrew": "בֵּינֵיהֶם",
+    "hebrew": "בֵּינֵיהֶם",
     "difficulty": 6
   },
   {
@@ -1181,7 +1182,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Everything",
     "transliteration": "hakol",
-    "hebrew": "הַכֹּל",
+    "hebrew": "הַכֹּל",
     "difficulty": 6
   },
   {
@@ -1202,7 +1203,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the beginning of",
     "transliteration": "bitkhilat",
-    "hebrew": "בִּתְחִילַּת",
+    "hebrew": "בִּתְחִלַּת",
     "difficulty": 6
   },
   {
@@ -1216,14 +1217,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The sentence / the trial",
     "transliteration": "hamishpat",
-    "hebrew": "הַמִּשְׁפָּט",
+    "hebrew": "הַמִּשְׁפָּט",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a way / in a shape / in a form",
     "transliteration": "betsura",
-    "hebrew": "בְּצוּרָה",
+    "hebrew": "בְּצוּרָה",
     "difficulty": 6
   },
   {
@@ -1244,7 +1245,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the time of / in the period of / in the era of",
     "transliteration": "bitkufat",
-    "hebrew": "בִּתְקוּפַת",
+    "hebrew": "בִּתְקוּפַת",
     "difficulty": 6
   },
   {
@@ -1258,21 +1259,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a frame / in a framework",
     "transliteration": "bemisgeret",
-    "hebrew": "בְּמִסְגֶּרֶת",
+    "hebrew": "בְּמִסְגֶּרֶת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The empire",
     "transliteration": "ha'imperia",
-    "hebrew": "הָאִימְפֶּרְיָה",
+    "hebrew": "הָאִימְפֶּרְיָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "People",
     "transliteration": "anashim",
-    "hebrew": "אֲנָשִׁים",
+    "hebrew": "אֲנָשִׁים",
     "difficulty": 6
   },
   {
@@ -1286,21 +1287,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The sun",
     "transliteration": "hashemesh",
-    "hebrew": "הַשֶּׁמֶשׁ",
+    "hebrew": "הַשֶּׁמֶשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Matters",
     "transliteration": "inyanim",
-    "hebrew": "עִנְיָינִים",
+    "hebrew": "עִנְיָנִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That she / that is (f.s.)",
     "transliteration": "shehi",
-    "hebrew": "שֶׁהִיא",
+    "hebrew": "שֶׁהִיא",
     "difficulty": 6
   },
   {
@@ -1314,14 +1315,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Year [X] / year of",
     "transliteration": "shnat",
-    "hebrew": "שְׁנַת",
+    "hebrew": "שְׁנַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mine",
     "transliteration": "sheli",
-    "hebrew": "שֶׁלִּי",
+    "hebrew": "שֶׁלִּי",
     "difficulty": 6
   },
   {
@@ -1342,49 +1343,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the years",
     "transliteration": "bashanim",
-    "hebrew": "בַּשָּׁנִים",
+    "hebrew": "בַּשָּׁנִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Writing",
     "transliteration": "ktav",
-    "hebrew": "כָּתַב",
+    "hebrew": "כָּתַב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The battle",
     "transliteration": "hakrav",
-    "hebrew": "הַקְּרָב",
+    "hebrew": "הַקְּרָב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On [day / date] / per day",
     "transliteration": "beyom",
-    "hebrew": "בַּיּוֹם",
+    "hebrew": "בְּיוֹם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Because",
     "transliteration": "mipnei",
-    "hebrew": "מִפְּנֵי",
+    "hebrew": "מִפְּנֵי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[to] there",
     "transliteration": "lesham",
-    "hebrew": "לֶשֶׁם",
+    "hebrew": "לְשָׁם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Content",
     "transliteration": "tokhen",
-    "hebrew": "תֹּוכֶן",
+    "hebrew": "תֹּכֶן",
     "difficulty": 6
   },
   {
@@ -1398,49 +1399,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Arrived (pl.)",
     "transliteration": "hegi'u",
-    "hebrew": "הִגִּיעוּ",
+    "hebrew": "הִגִּיעוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the years of",
     "transliteration": "bishnot",
-    "hebrew": "בִּשְׁנוֹת",
+    "hebrew": "בִּשְׁנוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In countries",
     "transliteration": "be'aratsot",
-    "hebrew": "בָּאֲרָצוֹת",
+    "hebrew": "בָּאֲרָצוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The way / the road",
     "transliteration": "haderekh",
-    "hebrew": "הַדֶּרֶךְ",
+    "hebrew": "הַדֶּרֶךְ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Soldiers",
     "transliteration": "khayalim",
-    "hebrew": "חַיָּילִים",
+    "hebrew": "חַיָּלִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Program / plan",
     "transliteration": "tokhnit",
-    "hebrew": "תָּוכְנִית",
+    "hebrew": "תָּכְנִית",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The movie / the ribbon/strip",
     "transliteration": "haseret",
-    "hebrew": "הַסֶּרֶט",
+    "hebrew": "הַסֶּרֶט",
     "difficulty": 6
   },
   {
@@ -1454,14 +1455,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That they (m.) / that are (m.pl.)",
     "transliteration": "shehem",
-    "hebrew": "שֶׁהֵם",
+    "hebrew": "שֶׁהֵם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Done",
     "transliteration": "na'asa",
-    "hebrew": "נַעֲשֶׂה",
+    "hebrew": "נַעֲשָׂה",
     "difficulty": 6
   },
   {
@@ -1475,14 +1476,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In them (f.)",
     "transliteration": "bahen",
-    "hebrew": "בָּהֶן",
+    "hebrew": "בָּהֶן",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The time",
     "transliteration": "hazman",
-    "hebrew": "הַזְּמַן",
+    "hebrew": "הַזְּמַן",
     "difficulty": 6
   },
   {
@@ -1496,14 +1497,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The king",
     "transliteration": "hamelekh",
-    "hebrew": "הַמֶּלֶךְ",
+    "hebrew": "הַמֶּלֶךְ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Neighbor (m.s.)",
     "transliteration": "shakhen",
-    "hebrew": "שֶׁכֵּן",
+    "hebrew": "שָׁכֵן",
     "difficulty": 6
   },
   {
@@ -1517,14 +1518,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Council of",
     "transliteration": "mo'etset",
-    "hebrew": "הַמּוֹעָצוֹת",
+    "hebrew": "מוֹעֶצֶת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From him",
     "transliteration": "mimenu",
-    "hebrew": "מִמֶּנּוּ",
+    "hebrew": "מִמֶּנּוּ",
     "difficulty": 6
   },
   {
@@ -1538,7 +1539,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The authority / the reign / the government",
     "transliteration": "hashilton",
-    "hebrew": "הַשִּׁלְטוֹן",
+    "hebrew": "הַשִּׁלְטוֹן",
     "difficulty": 6
   },
   {
@@ -1552,14 +1553,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bacterium",
     "transliteration": "khaydak",
-    "hebrew": "חִידֵּק",
+    "hebrew": "חַיְדַּק",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Jewish (f.s.)",
     "transliteration": "hayehudit",
-    "hebrew": "הַיְּהוּדִית",
+    "hebrew": "הַיְּהוּדִית",
     "difficulty": 6
   },
   {
@@ -1587,21 +1588,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The new (f.s.)",
     "transliteration": "hakhadasha",
-    "hebrew": "הַחֲדָשָׁה",
+    "hebrew": "הַחֲדָשָׁה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From all",
     "transliteration": "mikol",
-    "hebrew": "מִכָּל",
+    "hebrew": "מִכֹּל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In front of / in the presence of",
     "transliteration": "bifnei",
-    "hebrew": "בִּפְנֵי",
+    "hebrew": "בִּפְנֵי",
     "difficulty": 6
   },
   {
@@ -1622,7 +1623,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That in them (m.)",
     "transliteration": "shebahem",
-    "hebrew": "שֶׁבָּהֶם",
+    "hebrew": "שֶׁבָּהֶם",
     "difficulty": 6
   },
   {
@@ -1636,28 +1637,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "External (m.pl.)",
     "transliteration": "khitsonim",
-    "hebrew": "חִיצוֹנִיִּים",
+    "hebrew": "חִיצוֹנִיִּים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Marine (m.s.)",
     "transliteration": "yami",
-    "hebrew": "יְמֵי",
+    "hebrew": "יַמִּי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The mid / the middle / the intermediate",
     "transliteration": "habeinayim",
-    "hebrew": "הַבֵּינַיִים",
+    "hebrew": "הַבֵּינַיִם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "All over",
     "transliteration": "berakhvei",
-    "hebrew": "בְּרַחֲבֵי",
+    "hebrew": "בְּרַחֲבֵי",
     "difficulty": 6
   },
   {
@@ -1671,7 +1672,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Jew / the Jewish (m.s.)",
     "transliteration": "hayehudi",
-    "hebrew": "הַיְּהוּדִי",
+    "hebrew": "הַיְּהוּדִי",
     "difficulty": 6
   },
   {
@@ -1685,7 +1686,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The movement / the motion / the traffic",
     "transliteration": "hatnu'a",
-    "hebrew": "הַתְּנוּעָה",
+    "hebrew": "הַתְּנוּעָה",
     "difficulty": 6
   },
   {
@@ -1713,7 +1714,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The friend (f.s.)",
     "transliteration": "hakhavera",
-    "hebrew": "הַחֶבְרָה",
+    "hebrew": "הַחֲבֵרָה",
     "difficulty": 6
   },
   {
@@ -1727,21 +1728,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The structure",
     "transliteration": "hamivne",
-    "hebrew": "הַמִּבְנֶה",
+    "hebrew": "הַמִּבְנֶה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The house / the home",
     "transliteration": "habayit",
-    "hebrew": "הַבַּיִת",
+    "hebrew": "הַבַּיִת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The machine",
     "transliteration": "hamekhona",
-    "hebrew": "הַמְּכוֹנָה",
+    "hebrew": "הַמְּכוֹנָה",
     "difficulty": 6
   },
   {
@@ -1769,7 +1770,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The rebellion",
     "transliteration": "hamered",
-    "hebrew": "הַמֶּרֶד",
+    "hebrew": "הַמֶּרֶד",
     "difficulty": 6
   },
   {
@@ -1790,7 +1791,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Around",
     "transliteration": "saviv",
-    "hebrew": "סְבִיב",
+    "hebrew": "סָבִיב",
     "difficulty": 6
   },
   {
@@ -1804,21 +1805,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Now",
     "transliteration": "ata",
-    "hebrew": "עַתָּה",
+    "hebrew": "עַתָּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Transition / pass",
     "transliteration": "ma'avar",
-    "hebrew": "מֵעֵבֶר",
+    "hebrew": "מַעֲבָר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For example",
     "transliteration": "ledugma",
-    "hebrew": "לְדֻוגְמָה",
+    "hebrew": "לְדֻגְמָה",
     "difficulty": 6
   },
   {
@@ -1846,7 +1847,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To the country / to Israel",
     "transliteration": "la'arets",
-    "hebrew": "לְאֶרֶץ",
+    "hebrew": "לָאָרֶץ",
     "difficulty": 6
   },
   {
@@ -1860,7 +1861,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Pact / alliance / covenant / circumcision",
     "transliteration": "brit",
-    "hebrew": "בְּרִית",
+    "hebrew": "בְּרִית",
     "difficulty": 6
   },
   {
@@ -1874,28 +1875,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Links / the connections / the bindings",
     "transliteration": "kishurim",
-    "hebrew": "קִישּׁוּרִים",
+    "hebrew": "קִשּׁוּרִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "These",
     "transliteration": "ha'ele",
-    "hebrew": "הָאֵלֶּה",
+    "hebrew": "הָאֵלֶּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From this (m.)",
     "transliteration": "mize",
-    "hebrew": "מִזֶּה",
+    "hebrew": "מִזֶּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Main / principal",
     "transliteration": "rashi",
-    "hebrew": "רָאשֵׁי",
+    "hebrew": "רָאשִׁי",
     "difficulty": 6
   },
   {
@@ -1909,14 +1910,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hill",
     "transliteration": "tel",
-    "hebrew": "תֵּל",
+    "hebrew": "תֵּל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the north",
     "transliteration": "batsafon",
-    "hebrew": "בַּצָּפוֹן",
+    "hebrew": "בַּצָּפוֹן",
     "difficulty": 6
   },
   {
@@ -1930,56 +1931,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The engineering",
     "transliteration": "hahandasa",
-    "hebrew": "הַהַנְדָּסָה",
+    "hebrew": "הַהַנְדָּסָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Without",
     "transliteration": "mibli",
-    "hebrew": "מִבְּלִי",
+    "hebrew": "מִבְּלִי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mostly",
     "transliteration": "larov",
-    "hebrew": "לָרֹוב",
+    "hebrew": "לָרֹב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That is between / that is among",
     "transliteration": "shebein",
-    "hebrew": "שֶׁבֵּין",
+    "hebrew": "שֶׁבֵּין",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Action / operation / deed / transaction",
     "transliteration": "pe'ula",
-    "hebrew": "פְּעֻולָּה",
+    "hebrew": "פְּעֻלָּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "Unit / squad / only / single (f.s.)",
+    "english": "Unit / squad / only / single",
     "transliteration": "yekhida",
-    "hebrew": "יְחִידוֹת",
+    "hebrew": "יְחִידָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That I",
     "transliteration": "she'ani",
-    "hebrew": "שֶׁאֲנִי",
+    "hebrew": "שֶׁאֲנִי",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Coming / came (m.s.)",
     "transliteration": "ba",
-    "hebrew": "בָּא",
+    "hebrew": "בָּא",
     "difficulty": 6
   },
   {
@@ -1993,42 +1994,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And after",
     "transliteration": "vele'akhar",
-    "hebrew": "וּלְאַחַר",
+    "hebrew": "וְלָאַחַר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Period / era",
     "transliteration": "tkufa",
-    "hebrew": "תְּקוּפָה",
+    "hebrew": "תְּקוּפָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Period of / era of",
     "transliteration": "tkufat",
-    "hebrew": "תְּקוּפַת",
+    "hebrew": "תְּקוּפַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Even / although",
     "transliteration": "afilu",
-    "hebrew": "אֲפִילּוּ",
+    "hebrew": "אֲפִלּוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To find",
     "transliteration": "limtso",
-    "hebrew": "לִמְצֹוא",
+    "hebrew": "לִמְצֹא",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Earlier",
     "transliteration": "kodem",
-    "hebrew": "קֹודֶם",
+    "hebrew": "קֹדֶם",
     "difficulty": 6
   },
   {
@@ -2042,7 +2043,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The community",
     "transliteration": "hakehila",
-    "hebrew": "הַקְּהִילָּה",
+    "hebrew": "הַקְּהִלָּה",
     "difficulty": 6
   },
   {
@@ -2056,7 +2057,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a hundred",
     "transliteration": "beme'a",
-    "hebrew": "בְּמֵאָה",
+    "hebrew": "בְּמֵאָה",
     "difficulty": 6
   },
   {
@@ -2070,7 +2071,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From an aspect",
     "transliteration": "mibkhina",
-    "hebrew": "מִבְּחִינָה",
+    "hebrew": "מִבְּחִינָה",
     "difficulty": 6
   },
   {
@@ -2084,7 +2085,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who was / that she was",
     "transliteration": "shehaita",
-    "hebrew": "שֶׁהָיְיתָה",
+    "hebrew": "שֶׁהָיִיתָה",
     "difficulty": 6
   },
   {
@@ -2133,14 +2134,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The elections / the selections",
     "transliteration": "habkhirot",
-    "hebrew": "הַבְּחִירוֹת",
+    "hebrew": "הַבְּחִירוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Dynasty",
     "transliteration": "shoshelet",
-    "hebrew": "שׁוֹשֶׁלֶת",
+    "hebrew": "שׁוֹשֶׁלֶת",
     "difficulty": 6
   },
   {
@@ -2154,28 +2155,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like this / such",
     "transliteration": "kaze",
-    "hebrew": "כָּזֶה",
+    "hebrew": "כָּזֶה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Big / large (m.pl.)",
     "transliteration": "gdolim",
-    "hebrew": "גְּדוֹלִים",
+    "hebrew": "גְּדוֹלִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Received / accepted (m.s.)",
     "transliteration": "kibel",
-    "hebrew": "קִיבֵּל",
+    "hebrew": "קִבֵּל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The ship",
     "transliteration": "hasfina",
-    "hebrew": "הַסְּפִינָה",
+    "hebrew": "הַסְּפִינָה",
     "difficulty": 6
   },
   {
@@ -2210,28 +2211,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the year [X] / from the year of",
     "transliteration": "mishnat",
-    "hebrew": "מִשְׁנַת",
+    "hebrew": "מִשְׁנַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The use",
     "transliteration": "hashimush",
-    "hebrew": "הַשִּׁימּוּשׁ",
+    "hebrew": "הַשִּׁמּוּשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "This time",
     "transliteration": "hapa'am",
-    "hebrew": "הַפַּעַם",
+    "hebrew": "הַפַּעַם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Immediately",
     "transliteration": "miyad",
-    "hebrew": "מִיָּד",
+    "hebrew": "מִיָּד",
     "difficulty": 6
   },
   {
@@ -2259,7 +2260,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "This year",
     "transliteration": "hashana",
-    "hebrew": "הַשָּׁנָה",
+    "hebrew": "הַשָּׁנָה",
     "difficulty": 6
   },
   {
@@ -2273,21 +2274,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Continued (m.s.)",
     "transliteration": "himshikh",
-    "hebrew": "הִמְשִׁיךְ",
+    "hebrew": "הִמְשִׁיךְ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "With the help of",
     "transliteration": "be'ezrat",
-    "hebrew": "בְּעֶזְרַת",
+    "hebrew": "בְּעֶזְרַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As a result",
     "transliteration": "ketotsa'a",
-    "hebrew": "כְּתוֹצָאָה",
+    "hebrew": "כְּתוֹצָאָה",
     "difficulty": 6
   },
   {
@@ -2301,7 +2302,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The big / the large (f.s.)",
     "transliteration": "hagdola",
-    "hebrew": "הַגְּדוֹלָה",
+    "hebrew": "הַגְּדוֹלָה",
     "difficulty": 6
   },
   {
@@ -2315,63 +2316,63 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Meaning",
     "transliteration": "klomar",
-    "hebrew": "כְּלוֹמַר",
+    "hebrew": "כְּלוֹמַר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Less / minus",
     "transliteration": "pakhot",
-    "hebrew": "פָּחוֹת",
+    "hebrew": "פָּחוֹת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the top / leading / in a head",
     "transliteration": "berosh",
-    "hebrew": "בָּרֹאשׁ",
+    "hebrew": "בְּרֹאשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Blood",
     "transliteration": "dam",
-    "hebrew": "דָּם",
+    "hebrew": "דָּם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Friend of / member of (f.s.)",
     "transliteration": "khavrat",
-    "hebrew": "חֶבְרַת",
+    "hebrew": "חַבְרַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The name / God",
     "transliteration": "hashem",
-    "hebrew": "הַשֵּׁם",
+    "hebrew": "הַשֵּׁם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To arrive",
     "transliteration": "lehagi'a",
-    "hebrew": "לְהַגִּיעַ",
+    "hebrew": "לְהַגִּיעַ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Started (f.s.)",
     "transliteration": "hekhela",
-    "hebrew": "הֵחֵלָּה",
+    "hebrew": "הֵחֵלָּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Materials",
     "transliteration": "khomarim",
-    "hebrew": "חֳומָרִים",
+    "hebrew": "חֳמָרִים",
     "difficulty": 6
   },
   {
@@ -2406,21 +2407,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Caesar",
     "transliteration": "hakeysar",
-    "hebrew": "הַקֵּיסָר",
+    "hebrew": "הַקֵּיסָר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The air",
     "transliteration": "ha'avir",
-    "hebrew": "הָאֲוִויר",
+    "hebrew": "הָאֲוִיר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Center",
     "transliteration": "merkaz",
-    "hebrew": "מֶרְכָּז",
+    "hebrew": "מֶרְכָּז",
     "difficulty": 6
   },
   {
@@ -2441,21 +2442,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the direction of / from adjustment / from tuning",
     "transliteration": "mekivun",
-    "hebrew": "מִכֵּיוָון",
+    "hebrew": "מִכִּוּוּן",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That there is",
     "transliteration": "sheyesh",
-    "hebrew": "שֶׁיֵּשׁ",
+    "hebrew": "שֶׁיֵּשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "So / this way",
     "transliteration": "ko",
-    "hebrew": "כֹּה",
+    "hebrew": "כֹּה",
     "difficulty": 6
   },
   {
@@ -2476,7 +2477,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The forest",
     "transliteration": "haya'ar",
-    "hebrew": "הַיַּעַר",
+    "hebrew": "הַיַּעַר",
     "difficulty": 6
   },
   {
@@ -2490,42 +2491,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "On her / about her",
     "transliteration": "aleha",
-    "hebrew": "עֲלִיָּה",
+    "hebrew": "עָלֶיהָ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "State / situation",
     "transliteration": "matsav",
-    "hebrew": "מַצָּב",
+    "hebrew": "מַצָּב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Knesset (the Israeli parliament)",
     "transliteration": "hakneset",
-    "hebrew": "הַכְּנֶסֶת",
+    "hebrew": "הַכְּנֶסֶת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Compared with / against / opposite",
     "transliteration": "le'umat",
-    "hebrew": "לְעֻומַּת",
+    "hebrew": "לְעֻמַּת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Movement of / motion of / traffic of",
     "transliteration": "tnu'at",
-    "hebrew": "תְּנוּעַת",
+    "hebrew": "תְּנוּעַת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Actions / operations / deeds / transactions",
     "transliteration": "pe'ulot",
-    "hebrew": "פְּעֻולּוֹת",
+    "hebrew": "פְּעֻלּוֹת",
     "difficulty": 6
   },
   {
@@ -2539,7 +2540,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Always",
     "transliteration": "tamid",
-    "hebrew": "תָּמִיד",
+    "hebrew": "תָּמִיד",
     "difficulty": 6
   },
   {
@@ -2553,21 +2554,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Placed / put (pl.)",
     "transliteration": "samu",
-    "hebrew": "שְׁמוֹ",
+    "hebrew": "שָׂמוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From a side / from the [right/left]",
     "transliteration": "mitsad",
-    "hebrew": "מִצַּד",
+    "hebrew": "מִצַּד",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a stage / at a phase",
     "transliteration": "beshalav",
-    "hebrew": "בְּשָׁלָב",
+    "hebrew": "בְּשָׁלָב",
     "difficulty": 6
   },
   {
@@ -2581,14 +2582,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The only / the single / the individual",
     "transliteration": "hayakhid",
-    "hebrew": "הַיָּחִיד",
+    "hebrew": "הַיָּחִיד",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Later / later on",
     "transliteration": "bahemshekh",
-    "hebrew": "בַּהֶמְשֵׁךְ",
+    "hebrew": "בַּהֶמְשֵׁךְ",
     "difficulty": 6
   },
   {
@@ -2609,7 +2610,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "New (m.pl.)",
     "transliteration": "khadashim",
-    "hebrew": "חֳדָשִׁים",
+    "hebrew": "חֲדָשִׁים",
     "difficulty": 6
   },
   {
@@ -2623,63 +2624,63 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ownership",
     "transliteration": "ba'alut",
-    "hebrew": "בַּעֲלוּת",
+    "hebrew": "בַּעֲלוּת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In contrast / contrary to",
     "transliteration": "benigud",
-    "hebrew": "בְּנִיגּוּד",
+    "hebrew": "בְּנִגּוּד",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Activity",
     "transliteration": "pe'ilut",
-    "hebrew": "פְּעִילוּת",
+    "hebrew": "פְּעִילוּת",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Flag",
     "transliteration": "degel",
-    "hebrew": "דֶּגֶל",
+    "hebrew": "דֶּגֶל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Specific (m.pl.)",
     "transliteration": "mesuyamim",
-    "hebrew": "מְסֻויָּמִים",
+    "hebrew": "מְסֻיָּמִים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a game",
     "transliteration": "bemis'khak",
-    "hebrew": "בַּמִּשְׂחָק",
+    "hebrew": "בְּמִשְׂחָק",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In parallel / simultaneously",
     "transliteration": "bemakbil",
-    "hebrew": "בְּמַקְבִּיל",
+    "hebrew": "בְּמַקְבִּיל",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the past",
     "transliteration": "ba'avar",
-    "hebrew": "בֶּעָבָר",
+    "hebrew": "בַּעֲבַר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Basis / base",
     "transliteration": "basis",
-    "hebrew": "בָּסִיס",
+    "hebrew": "בָּסִיס",
     "difficulty": 6
   },
   {
@@ -2700,35 +2701,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To use",
     "transliteration": "lehishtamesh",
-    "hebrew": "לְהִשְׁתַּמֵּשׁ",
+    "hebrew": "לְהִשְׁתַּמֵּשׁ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a number",
     "transliteration": "bemispar",
-    "hebrew": "בְּמִסְפָּר",
+    "hebrew": "בְּמִסְפָּר",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The group",
     "transliteration": "hakvutsa",
-    "hebrew": "הַקְּבוּצָה",
+    "hebrew": "הַקְּבוּצָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Exists (m.s.)",
     "transliteration": "kayam",
-    "hebrew": "קַיָּים",
+    "hebrew": "קַיָּם",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The place",
     "transliteration": "hamakom",
-    "hebrew": "הַמָּקוֹם",
+    "hebrew": "הַמָּקוֹם",
     "difficulty": 6
   },
   {
@@ -2742,49 +2743,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Whereas",
     "transliteration": "ve'ilu",
-    "hebrew": "וְאִילּוּ",
+    "hebrew": "וְאִלּוּ",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Here is",
     "transliteration": "hine",
-    "hebrew": "הִנֵּה",
+    "hebrew": "הִנֵּה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Manic (f.s.)",
     "transliteration": "manit",
-    "hebrew": "מֵאֳנִיַּת",
+    "hebrew": "מָאנִית",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The settlement / the civilization",
     "transliteration": "hayeshuv",
-    "hebrew": "הַיִּישּׁוּב",
+    "hebrew": "הַיִּשּׁוּב",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The old (f.s.)",
     "transliteration": "hazkena",
-    "hebrew": "הַזְּקֵנָה",
+    "hebrew": "הַזְּקֵנָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The ant",
     "transliteration": "hanemala",
-    "hebrew": "הַנְּמָלָה",
+    "hebrew": "הַנְּמָלָה",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And I / and me",
     "transliteration": "ve'ani",
-    "hebrew": "וַאֲנִי",
+    "hebrew": "וְאָנִי",
     "difficulty": 6
   },
   {
@@ -2798,49 +2799,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Drugs",
     "transliteration": "samim",
-    "hebrew": "סַמִּים",
+    "hebrew": "סַמִּים",
     "difficulty": 6
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The bank",
     "transliteration": "habank",
-    "hebrew": "הַבַּנְק",
+    "hebrew": "הַבַּנְק",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the same / at the same (m.s.)",
     "transliteration": "be'oto",
-    "hebrew": "בְּאוֹתוֹ",
+    "hebrew": "בְּאוֹתוֹ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Regarding",
     "transliteration": "legabei",
-    "hebrew": "לְגַבֵּי",
+    "hebrew": "לְגַבֵּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Towards",
     "transliteration": "klapei",
-    "hebrew": "כְּלַפֵּי",
+    "hebrew": "כְּלַפֵּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On [days] / in the days of",
     "transliteration": "bimei",
-    "hebrew": "בִּימֵי",
+    "hebrew": "בִּימֵי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The series",
     "transliteration": "hasidra",
-    "hebrew": "הַסִּדְרָה",
+    "hebrew": "הַסִּדְרָה",
     "difficulty": 7
   },
   {
@@ -2882,77 +2883,77 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "There are (m.)",
     "transliteration": "yeshnam",
-    "hebrew": "יֶשְׁנָם",
+    "hebrew": "יֶשְׁנָם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Words",
     "transliteration": "milim",
-    "hebrew": "מִילִּים",
+    "hebrew": "מִלִּים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To form / to create / to make",
     "transliteration": "litsor",
-    "hebrew": "לִיצֹור",
+    "hebrew": "לִיצֹר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Area / field / territory",
     "transliteration": "shetakh",
-    "hebrew": "שֶׁטַח",
+    "hebrew": "שֶׁטַח",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Widened / broadened",
     "transliteration": "murkhav",
-    "hebrew": "מֻורְחָב",
+    "hebrew": "מֻרְחָב",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Cluster",
     "transliteration": "eshkol",
-    "hebrew": "אֶשְׁכּוֹל",
+    "hebrew": "אֶשְׁכּוֹל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That there is no",
     "transliteration": "she'ein",
-    "hebrew": "שֶׁאֵין",
+    "hebrew": "שֶׁאֵין",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Because",
     "transliteration": "biglal",
-    "hebrew": "בִּגְלַל",
+    "hebrew": "בִּגְלַל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Clear / obvious (m.s.)",
     "transliteration": "barur",
-    "hebrew": "בָּרוּר",
+    "hebrew": "בָּרוּר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The judgment / the sentence / the law",
     "transliteration": "hadin",
-    "hebrew": "הַדִּין",
+    "hebrew": "הַדִּין",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The village",
     "transliteration": "hakfar",
-    "hebrew": "הַכְּפָר",
+    "hebrew": "הַכְּפָר",
     "difficulty": 7
   },
   {
@@ -2987,14 +2988,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The mathematics",
     "transliteration": "hamatematika",
-    "hebrew": "הַמָּתֵמָטִיקָה",
+    "hebrew": "הַמָּתֵמָטִיקָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Really",
     "transliteration": "mamash",
-    "hebrew": "מַמָּשׁ",
+    "hebrew": "מַמָּשׁ",
     "difficulty": 7
   },
   {
@@ -3008,14 +3009,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "New (f.s.)",
     "transliteration": "khadasha",
-    "hebrew": "חֲדָשָׁה",
+    "hebrew": "חֲדָשָׁה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pomegranate / the grenade",
     "transliteration": "harimon",
-    "hebrew": "הָרִימּוֹן",
+    "hebrew": "הָרִמּוֹן",
     "difficulty": 7
   },
   {
@@ -3036,7 +3037,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tie / bond / link / connection",
     "transliteration": "kesher",
-    "hebrew": "קֶשֶׁר",
+    "hebrew": "קֶשֶׁר",
     "difficulty": 7
   },
   {
@@ -3064,14 +3065,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is considered / was considered (m.s.)",
     "transliteration": "nekhshav",
-    "hebrew": "נְחַשֵּׁב",
+    "hebrew": "נֶחֱשָׁב",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The period / the era",
     "transliteration": "hatkufa",
-    "hebrew": "הַתְּקוּפָה",
+    "hebrew": "הַתְּקוּפָה",
     "difficulty": 7
   },
   {
@@ -3092,14 +3093,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Of a measure / of size / of a quality / to the extent that / [if (slang)]",
     "transliteration": "bemida",
-    "hebrew": "בְּמִידָּה",
+    "hebrew": "בְּמִדָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Margins / edges / fringe",
     "transliteration": "shulayim",
-    "hebrew": "שׁוּלַיִים",
+    "hebrew": "שׁוּלַיִם",
     "difficulty": 7
   },
   {
@@ -3120,28 +3121,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The big / the large (m.pl.)",
     "transliteration": "hagdolim",
-    "hebrew": "הַגְּדוֹלִים",
+    "hebrew": "הַגְּדוֹלִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The warfare / the fighting",
     "transliteration": "halekhima",
-    "hebrew": "הַלְּחִימָה",
+    "hebrew": "הַלְּחִימָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Asked / borrowed (m.s.)",
     "transliteration": "sha'al",
-    "hebrew": "שָׁאַל",
+    "hebrew": "שָׁאַל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "This (f.)",
     "transliteration": "hazot",
-    "hebrew": "הַזֹּאת",
+    "hebrew": "הַזֹּאת",
     "difficulty": 7
   },
   {
@@ -3162,28 +3163,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Divisions",
     "transliteration": "divizyot",
-    "hebrew": "דִּיוִויזְיוֹת",
+    "hebrew": "דִּיוִיזְיוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Kinds of / species of",
     "transliteration": "minei",
-    "hebrew": "מִינֵי",
+    "hebrew": "מִינִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On a hill",
     "transliteration": "betel",
-    "hebrew": "בְּתֵל",
+    "hebrew": "בְּתֵל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Was used / served (m.s.)",
     "transliteration": "shimesh",
-    "hebrew": "שִׁימֵּשׁ",
+    "hebrew": "שִׁמֵּשׁ",
     "difficulty": 7
   },
   {
@@ -3204,7 +3205,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In/at places",
     "transliteration": "bimkomot",
-    "hebrew": "בַּמְּקוֹמוֹת",
+    "hebrew": "בִּמְקוֹמוֹת",
     "difficulty": 7
   },
   {
@@ -3218,28 +3219,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Commander",
     "transliteration": "mefaked",
-    "hebrew": "מְפַקֵּד",
+    "hebrew": "מְפַקֵּד",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That after",
     "transliteration": "shele'akhar",
-    "hebrew": "שֶׁלְּאַחַר",
+    "hebrew": "שֶׁלְּאַחַר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From between / from among",
     "transliteration": "mibein",
-    "hebrew": "מִבֵּין",
+    "hebrew": "מִבֵּין",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From her",
     "transliteration": "mimena",
-    "hebrew": "מִמֶּנָּה",
+    "hebrew": "מִמֶּנָּה",
     "difficulty": 7
   },
   {
@@ -3253,28 +3254,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Change",
     "transliteration": "shinui",
-    "hebrew": "שִׁינּוּי",
+    "hebrew": "שִׁנּוּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The flag",
     "transliteration": "hadegel",
-    "hebrew": "הַדֶּגֶל",
+    "hebrew": "הַדֶּגֶל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The democracy",
     "transliteration": "hademokratya",
-    "hebrew": "הַדֵּמוֹקְרַטְיָה",
+    "hebrew": "הַדֵּמוֹקְרַטְיָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At all",
     "transliteration": "bikhlal",
-    "hebrew": "בִּכְלָל",
+    "hebrew": "בִּכְלָל",
     "difficulty": 7
   },
   {
@@ -3288,14 +3289,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From this",
     "transliteration": "mikakh",
-    "hebrew": "מִכָּךְ",
+    "hebrew": "מִכָּךְ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Quantity / amount",
     "transliteration": "kamut",
-    "hebrew": "כַּמּוּת",
+    "hebrew": "כַּמּוּת",
     "difficulty": 7
   },
   {
@@ -3316,28 +3317,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Exist (m.pl.)",
     "transliteration": "kayamim",
-    "hebrew": "קַיָּימִים",
+    "hebrew": "קַיָּמִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The states",
     "transliteration": "hamedinot",
-    "hebrew": "הַמְּדִינוֹת",
+    "hebrew": "הַמְּדִינוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Central (m.s.)",
     "transliteration": "merkazi",
-    "hebrew": "מֶרְכְּזֵי",
+    "hebrew": "מֶרְכָּזִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the street",
     "transliteration": "barekhov",
-    "hebrew": "בָּרְחוֹב",
+    "hebrew": "בָּרְחוֹב",
     "difficulty": 7
   },
   {
@@ -3358,21 +3359,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Indeed",
     "transliteration": "omnam",
-    "hebrew": "אָומְנָם",
+    "hebrew": "אוֹמְנָם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Everybody (m.)",
     "transliteration": "kulam",
-    "hebrew": "כֻּולָּם",
+    "hebrew": "כֻּלָּם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Execution / putting to death",
-    "transliteration": "[hotsa'a] lahoreg",
-    "hebrew": "לַהוֹרֵג",
+    "transliteration": "hotsa'a lahoreg",
+    "hebrew": "הוֹצָאָה לַהֹרֶג",
     "difficulty": 7
   },
   {
@@ -3393,35 +3394,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The player / the actor",
     "transliteration": "hasakhkan",
-    "hebrew": "הַשַּׂחְקָן",
+    "hebrew": "הַשַּׂחְקָן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "His life",
     "transliteration": "khayav",
-    "hebrew": "חַיָּיו",
+    "hebrew": "חַיָּיו",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The rest",
     "transliteration": "hayeter",
-    "hebrew": "הַיֶּתֶר",
+    "hebrew": "הַיֶּתֶר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Energy",
     "transliteration": "energiya",
-    "hebrew": "אֵנֶרְגִּיָּה",
+    "hebrew": "אֵנֶרְגִּיָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The rise / the increase / the immigration",
     "transliteration": "ha'aliya",
-    "hebrew": "הָעֲלִיָּיה",
+    "hebrew": "הָעֲלִיָּה",
     "difficulty": 7
   },
   {
@@ -3435,7 +3436,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The beginning of",
     "transliteration": "tkhilat",
-    "hebrew": "תְּחִילַּת",
+    "hebrew": "תְּחִלַּת",
     "difficulty": 7
   },
   {
@@ -3449,28 +3450,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The population",
     "transliteration": "ha'ukhlusiya",
-    "hebrew": "הָאֻוכְלוּסִיָּיה",
+    "hebrew": "הָאֻכְלוּסִיָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a forest",
     "transliteration": "beya'ar",
-    "hebrew": "בַּיַּעַר",
+    "hebrew": "בְּיַעַר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "All of it (m.s.)",
     "transliteration": "kulo",
-    "hebrew": "כֻּולּוֹ",
+    "hebrew": "כֻּלּוֹ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Knew (m.s.)",
     "transliteration": "yada",
-    "hebrew": "יֶדַע",
+    "hebrew": "יָדַע",
     "difficulty": 7
   },
   {
@@ -3484,7 +3485,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Direction / adjustment / tuning",
     "transliteration": "kivun",
-    "hebrew": "כִּיוּוּן",
+    "hebrew": "כִּוּוּן",
     "difficulty": 7
   },
   {
@@ -3498,7 +3499,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To prevent",
     "transliteration": "limno'a",
-    "hebrew": "לִמְנֹועַ",
+    "hebrew": "לִמְנֹעַ",
     "difficulty": 7
   },
   {
@@ -3512,7 +3513,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For reading / for calling / for a call",
     "transliteration": "likri'a",
-    "hebrew": "לַקְּרִיאָה",
+    "hebrew": "לִקְרִיאָה",
     "difficulty": 7
   },
   {
@@ -3526,14 +3527,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Months",
     "transliteration": "khodashim",
-    "hebrew": "חֳודָשִׁים",
+    "hebrew": "חֳדָשִׁים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hereby",
     "transliteration": "baze",
-    "hebrew": "בָּזֶה",
+    "hebrew": "בָּזֶה",
     "difficulty": 7
   },
   {
@@ -3547,35 +3548,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The rest",
     "transliteration": "hash'ar",
-    "hebrew": "הַשְּׁאָר",
+    "hebrew": "הַשְּׁאָר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "High / tall (f.s.)",
     "transliteration": "gvoha",
-    "hebrew": "גְּבוֹהָה",
+    "hebrew": "גְּבוֹהָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a field / in an area / in a range",
     "transliteration": "bitkhum",
-    "hebrew": "בַּתְּחוּם",
+    "hebrew": "בִּתְחוּם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Specific (m.s.)",
     "transliteration": "mesuyam",
-    "hebrew": "מְסֻויָּם",
+    "hebrew": "מְסֻיָּם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The kind / the species / the gender / the sex",
     "transliteration": "hamin",
-    "hebrew": "הַמִּין",
+    "hebrew": "הַמִּין",
     "difficulty": 7
   },
   {
@@ -3589,21 +3590,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The soil / the ground / the land",
     "transliteration": "hakarka",
-    "hebrew": "הַקַּרְקַע",
+    "hebrew": "הַקַּרְקַע",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The municipality",
     "transliteration": "ha'iriya",
-    "hebrew": "הָעִירִיָּיה",
+    "hebrew": "הָעִירִיָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Treatment",
     "transliteration": "tipul",
-    "hebrew": "טִיפּוּל",
+    "hebrew": "טִפּוּל",
     "difficulty": 7
   },
   {
@@ -3624,7 +3625,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The unit / the squad / the only / the single",
     "transliteration": "hayekhida",
-    "hebrew": "הַיְּחִידָה",
+    "hebrew": "הַיְּחִידָה",
     "difficulty": 7
   },
   {
@@ -3638,84 +3639,84 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The area / the field / the territory",
     "transliteration": "hashetakh",
-    "hebrew": "הַשֶּׁטַח",
+    "hebrew": "הַשֶּׁטַח",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Legal (m.s.)",
     "transliteration": "khuki",
-    "hebrew": "חֻוקִּי",
+    "hebrew": "חֻקִּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The regiment",
     "transliteration": "hagdud",
-    "hebrew": "הַגְּדוּד",
+    "hebrew": "הַגְּדוּד",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And all",
     "transliteration": "vekol",
-    "hebrew": "וְכָל",
+    "hebrew": "וְכֹל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To receive / to accept",
     "transliteration": "lekabel",
-    "hebrew": "לְקַבֵּל",
+    "hebrew": "לְקַבֵּל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Exist (f.s.)",
     "transliteration": "kayemet",
-    "hebrew": "קַיֶּימֶת",
+    "hebrew": "קַיֶּמֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Published / advertised (m.s.)",
     "transliteration": "pirsem",
-    "hebrew": "פִּרְסֵם",
+    "hebrew": "פִּרְסֵם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The mouse (female)",
     "transliteration": "ha'akhbara",
-    "hebrew": "הָעַכְבָּרָה",
+    "hebrew": "הָעַכְבָּרָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "I am not",
     "transliteration": "eineni",
-    "hebrew": "אֵינֶנִּי",
+    "hebrew": "אֵינֶנִּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Exactly",
     "transliteration": "bediyuk",
-    "hebrew": "בְּדִיּוּק",
+    "hebrew": "בְּדִיּוּק",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Minister",
     "transliteration": "sar",
-    "hebrew": "שַׂר",
+    "hebrew": "שַׂר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rest / remainder",
     "transliteration": "sh'ar",
-    "hebrew": "שְׁאָר",
+    "hebrew": "שְׁאָר",
     "difficulty": 7
   },
   {
@@ -3750,7 +3751,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In sport",
     "transliteration": "besport",
-    "hebrew": "בִּסְפּוֹרְט",
+    "hebrew": "בִּסְפּוֹרְט",
     "difficulty": 7
   },
   {
@@ -3771,49 +3772,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The meaning / the interpretation",
     "transliteration": "haperush",
-    "hebrew": "הַפָּרוּשׂ",
+    "hebrew": "הַפֵּרוּשׁ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Small / little (m.pl.)",
     "transliteration": "ktanim",
-    "hebrew": "קְטַנִּים",
+    "hebrew": "קְטַנִּים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Points",
     "transliteration": "nekudot",
-    "hebrew": "נְקֻודּוֹת",
+    "hebrew": "נְקֻדּוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Herself",
     "transliteration": "atsma",
-    "hebrew": "עַצְמָהּ",
+    "hebrew": "עָצְמָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Lack / deficiency / shortage / deficit",
     "transliteration": "khoser",
-    "hebrew": "חֹוסֶר",
+    "hebrew": "חֹסֶר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Accordingly",
     "transliteration": "behet'em",
-    "hebrew": "בְּהֶתְאֵם",
+    "hebrew": "בְּהֶתְאֵם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Process",
     "transliteration": "tahalikh",
-    "hebrew": "תַּהֲלִיךְ",
+    "hebrew": "תַּהֲלִיךְ",
     "difficulty": 7
   },
   {
@@ -3827,28 +3828,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a state / in a situation",
     "transliteration": "bematsav",
-    "hebrew": "בַּמַּצָּב",
+    "hebrew": "בְּמַצָּב",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To build",
     "transliteration": "livnot",
-    "hebrew": "לְבָנוֹת",
+    "hebrew": "לִבְנוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Probably",
     "transliteration": "kanir'e",
-    "hebrew": "כַּנִּרְאֶה",
+    "hebrew": "כַּנִּרְאֶה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The nature",
     "transliteration": "hateva",
-    "hebrew": "הַטֶּבַע",
+    "hebrew": "הַטֶּבַע",
     "difficulty": 7
   },
   {
@@ -3869,14 +3870,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Thanks to / due to / by right of",
     "transliteration": "bizkhut",
-    "hebrew": "בִּזְכוּת",
+    "hebrew": "בִּזְכוּת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Judgment / sentence / law",
     "transliteration": "din",
-    "hebrew": "דִּין",
+    "hebrew": "דִּין",
     "difficulty": 7
   },
   {
@@ -3890,14 +3891,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The desert",
     "transliteration": "hamidbar",
-    "hebrew": "הַמִּדְבָּר",
+    "hebrew": "הַמִּדְבָּר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The boulevard",
     "transliteration": "hasdera",
-    "hebrew": "הַשְּׂדֵרָה",
+    "hebrew": "הַשְּׂדֵרָה",
     "difficulty": 7
   },
   {
@@ -3911,7 +3912,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "[to] time",
     "transliteration": "befa'am",
-    "hebrew": "בַּפַּעַם",
+    "hebrew": "בְּפַעַם",
     "difficulty": 7
   },
   {
@@ -3939,14 +3940,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His son",
     "transliteration": "bno",
-    "hebrew": "בְּנוֹ",
+    "hebrew": "בְּנוֹ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The state / the situation",
     "transliteration": "hamatsav",
-    "hebrew": "הַמַּצָּב",
+    "hebrew": "הַמַּצָּב",
     "difficulty": 7
   },
   {
@@ -3960,14 +3961,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Government of",
     "transliteration": "memshelet",
-    "hebrew": "מֶמְשֶׁלֶת",
+    "hebrew": "מֶמְשֶׁלֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The liberal",
     "transliteration": "haliberalit",
-    "hebrew": "הַלִּיבֵּרָלִית",
+    "hebrew": "הַלִּיבֵּרָלִית",
     "difficulty": 7
   },
   {
@@ -3981,28 +3982,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hours",
     "transliteration": "sha'ot",
-    "hebrew": "שָׁעוֹת",
+    "hebrew": "שָׁעוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Under / beneath",
     "transliteration": "mitakhat",
-    "hebrew": "מִתַּחַת",
+    "hebrew": "מִתַּחַת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The owner of / has",
     "transliteration": "ba'alat",
-    "hebrew": "בַּעֲלַת",
+    "hebrew": "בַּעֲלַת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Returned / repeated (f.s.)",
     "transliteration": "khazra",
-    "hebrew": "חֲזָרָה",
+    "hebrew": "חָזְרָה",
     "difficulty": 7
   },
   {
@@ -4030,35 +4031,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The general",
     "transliteration": "hageneral",
-    "hebrew": "הַגֵּנֵרָל",
+    "hebrew": "הַגֵּנֵרָל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Arrived (f.s.)",
     "transliteration": "hegi'a",
-    "hebrew": "הִגִּיעָה",
+    "hebrew": "הִגִּיעָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a month",
     "transliteration": "bekhodesh",
-    "hebrew": "בַּחֹודֶשׁ",
+    "hebrew": "בְּחֹדֶשׁ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Need / necessity",
     "transliteration": "tsorekh",
-    "hebrew": "צֹורֶךְ",
+    "hebrew": "צֹרֶךְ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Role",
     "transliteration": "tafkid",
-    "hebrew": "תַּפְקִיד",
+    "hebrew": "תַּפְקִיד",
     "difficulty": 7
   },
   {
@@ -4072,49 +4073,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like",
     "transliteration": "bedome",
-    "hebrew": "בְּדוֹמֶה",
+    "hebrew": "בְּדוֹמֶה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Cells of",
     "transliteration": "ta'ei",
-    "hebrew": "תָּאֵי",
+    "hebrew": "תָּאֵי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Enough",
     "transliteration": "day",
-    "hebrew": "דַּי",
+    "hebrew": "דַּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the eyes of / in the opinion of",
     "transliteration": "be'einei",
-    "hebrew": "בְּעֵינֵי",
+    "hebrew": "בְּעֵינִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Small / little (f.s.)",
     "transliteration": "ktana",
-    "hebrew": "קְטַנָּה",
+    "hebrew": "קְטַנָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the center",
     "transliteration": "bamerkaz",
-    "hebrew": "בַּמֶּרְכָּז",
+    "hebrew": "בַּמֶּרְכָּז",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is / constitutes (m.s.)",
     "transliteration": "mehave",
-    "hebrew": "מְהַוֶּוה",
+    "hebrew": "מְהַוֶּה",
     "difficulty": 7
   },
   {
@@ -4142,7 +4143,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Special",
     "transliteration": "meyukhad",
-    "hebrew": "מְיֻוחָד",
+    "hebrew": "מְיֻחָד",
     "difficulty": 7
   },
   {
@@ -4156,7 +4157,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The visible",
     "transliteration": "hanir'e",
-    "hebrew": "הַנִּרְאֶה",
+    "hebrew": "הַנִּרְאֶה",
     "difficulty": 7
   },
   {
@@ -4170,28 +4171,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The fact",
     "transliteration": "ha'uvda",
-    "hebrew": "הָעֻובְדָּה",
+    "hebrew": "הָעֻבְדָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ways / roads",
     "transliteration": "drakhim",
-    "hebrew": "דְּרָכִים",
+    "hebrew": "דְּרָכִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To a city",
     "transliteration": "le'ir",
-    "hebrew": "לָעִיר",
+    "hebrew": "לְעִיר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The action / the operation / the deed / the transaction",
     "transliteration": "hape'ula",
-    "hebrew": "הַפְּעֻולָּה",
+    "hebrew": "הַפְּעֻלָּה",
     "difficulty": 7
   },
   {
@@ -4205,14 +4206,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At war",
     "transliteration": "bemilkhama",
-    "hebrew": "בְּמִלְחָמָה",
+    "hebrew": "בְּמִלְחָמָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The ancient / the old (f.s.)",
     "transliteration": "ha'atika",
-    "hebrew": "הָעַתִּיקָה",
+    "hebrew": "הָעַתִּיקָה",
     "difficulty": 7
   },
   {
@@ -4226,7 +4227,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Regiment",
     "transliteration": "gdud",
-    "hebrew": "גְּדוּד",
+    "hebrew": "גְּדוּד",
     "difficulty": 7
   },
   {
@@ -4261,28 +4262,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At his end / at its end",
     "transliteration": "besofo",
-    "hebrew": "בְּסוֹפוֹ",
+    "hebrew": "בְּסוֹפוֹ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The law",
     "transliteration": "hakhok",
-    "hebrew": "הַחֹוק",
+    "hebrew": "הַחֹק",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The main",
     "transliteration": "harashi",
-    "hebrew": "הָרָאשִׁי",
+    "hebrew": "הָרָאשִׁי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Effect / influence",
     "transliteration": "hashpa'a",
-    "hebrew": "הַשְׁפָּעָה",
+    "hebrew": "הַשְׁפָּעָה",
     "difficulty": 7
   },
   {
@@ -4296,7 +4297,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the back / dorsal",
     "transliteration": "gabi",
-    "hebrew": "גַּבִּי",
+    "hebrew": "גַּבִּי",
     "difficulty": 7
   },
   {
@@ -4310,35 +4311,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "How",
     "transliteration": "keytsad",
-    "hebrew": "כֵּיצַד",
+    "hebrew": "כֵּיצַד",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The death of",
     "transliteration": "mot",
-    "hebrew": "מָוֶת",
+    "hebrew": "מוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The international (m.s.)",
     "transliteration": "habeynleumi",
-    "hebrew": "הַבֵּינְלְאֻומִּי",
+    "hebrew": "הַבֵּינְלְאֻמִּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The weapon",
     "transliteration": "haneshek",
-    "hebrew": "הַנֶּשֶׁק",
+    "hebrew": "הַנֶּשֶׁק",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In Hebrew",
     "transliteration": "be'ivrit",
-    "hebrew": "בְּעִבְרִית",
+    "hebrew": "בְּעִבְרִית",
     "difficulty": 7
   },
   {
@@ -4352,14 +4353,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Now",
     "transliteration": "ka'et",
-    "hebrew": "כָּעֵת",
+    "hebrew": "כָּעֵת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Of course / certainly",
     "transliteration": "kamuvan",
-    "hebrew": "כַּמּוּבָן",
+    "hebrew": "כַּמּוּבָן",
     "difficulty": 7
   },
   {
@@ -4373,42 +4374,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The sides",
     "transliteration": "hatsdadim",
-    "hebrew": "הַצְּדָדִים",
+    "hebrew": "הַצְּדָדִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the south",
     "transliteration": "badarom",
-    "hebrew": "בַּדָּרוֹם",
+    "hebrew": "בַּדָּרוֹם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Names",
     "transliteration": "shemot",
-    "hebrew": "שֵׁמוֹת",
+    "hebrew": "שֵׁמוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For",
     "transliteration": "bishvil",
-    "hebrew": "בִּשְׁבִיל",
+    "hebrew": "בִּשְׁבִיל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From there",
     "transliteration": "misham",
-    "hebrew": "מִשָּׁם",
+    "hebrew": "מִשָּׁם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Spoken / said / agreed",
     "transliteration": "medubar",
-    "hebrew": "מְדוּבָּר",
+    "hebrew": "מְדֻבָּר",
     "difficulty": 7
   },
   {
@@ -4436,7 +4437,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Except",
     "transliteration": "milvad",
-    "hebrew": "מִלְּבַד",
+    "hebrew": "מִלְּבַד",
     "difficulty": 7
   },
   {
@@ -4450,14 +4451,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Matter / interest",
     "transliteration": "inyan",
-    "hebrew": "עִנְיָין",
+    "hebrew": "עִנְיָן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Importance",
     "transliteration": "khashivut",
-    "hebrew": "חֲשִׁיבוּת",
+    "hebrew": "חֲשִׁיבוּת",
     "difficulty": 7
   },
   {
@@ -4471,7 +4472,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The north",
     "transliteration": "hatsafon",
-    "hebrew": "הַצָּפוֹן",
+    "hebrew": "הַצָּפוֹן",
     "difficulty": 7
   },
   {
@@ -4485,7 +4486,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The main / the principal / the primary (m.pl.)",
     "transliteration": "ha'ikariym",
-    "hebrew": "הָעִיקָּרִיִּים",
+    "hebrew": "הָעִקָּרִיִּים",
     "difficulty": 7
   },
   {
@@ -4506,7 +4507,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In most of",
     "transliteration": "berov",
-    "hebrew": "בְּרֹוב",
+    "hebrew": "בְּרֹב",
     "difficulty": 7
   },
   {
@@ -4520,7 +4521,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Those",
     "transliteration": "halalu",
-    "hebrew": "הַלָּלוּ",
+    "hebrew": "הַלָּלוּ",
     "difficulty": 7
   },
   {
@@ -4548,63 +4549,63 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To keep / to guard / to protect",
     "transliteration": "lishmor",
-    "hebrew": "לִשְׁמֹור",
+    "hebrew": "לִשְׁמֹר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Approves / confirms (m.s.)",
     "transliteration": "me'asher",
-    "hebrew": "מְאַשֵּׁר",
+    "hebrew": "מְאַשֵּׁר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Women",
     "transliteration": "nashim",
-    "hebrew": "נָשִׁים",
+    "hebrew": "נָשִׁים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In treatment",
     "transliteration": "betipul",
-    "hebrew": "בְּטִיפּוּל",
+    "hebrew": "בְּטִפּוּל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mocked / teased (m.s.)",
     "transliteration": "sanat",
-    "hebrew": "סֵנְט",
+    "hebrew": "סָנַט",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The government",
     "transliteration": "hamimshal",
-    "hebrew": "הַמִּמְשָׁל",
+    "hebrew": "הַמִּמְשָׁל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The journey",
     "transliteration": "hamasa",
-    "hebrew": "הַמַּסָּע",
+    "hebrew": "הַמַּסָּע",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Criticism / inspection",
     "transliteration": "bikoret",
-    "hebrew": "בִּיקֹּורֶת",
+    "hebrew": "בִּקֹּרֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Engineering",
     "transliteration": "handasa",
-    "hebrew": "הַנְדָּסָה",
+    "hebrew": "הַנְדָּסָה",
     "difficulty": 7
   },
   {
@@ -4618,98 +4619,98 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Quite / rather",
     "transliteration": "lemadai",
-    "hebrew": "לְמַדַּי",
+    "hebrew": "לְמַדַּי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The rain",
     "transliteration": "hageshem",
-    "hebrew": "הַגֶּשֶׁם",
+    "hebrew": "הַגֶּשֶׁם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In case / accidentally",
     "transliteration": "bemikre",
-    "hebrew": "בְּמִקְרֶה",
+    "hebrew": "בְּמִקְרֶה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The art",
     "transliteration": "ha'omanut",
-    "hebrew": "הָאָמָּנוּת",
+    "hebrew": "הָאָמָּנוּת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The spider (female)",
     "transliteration": "ha'akavisha",
-    "hebrew": "הַעַכְבִישָׁהּ",
+    "hebrew": "הָעַכְבִישָׁה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Weeks / Shavuot (Jewish holiday)",
     "transliteration": "shavu'ot",
-    "hebrew": "שָׁבוּעוֹת",
+    "hebrew": "שָׁבוּעוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To perform / to execute",
     "transliteration": "levatse'a",
-    "hebrew": "לְבַצֵּעַ",
+    "hebrew": "לְבַצֵּעַ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To a place",
     "transliteration": "lemakom",
-    "hebrew": "לַמָּקוֹם",
+    "hebrew": "לְמָקוֹם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Aimed at",
     "transliteration": "bematara",
-    "hebrew": "בְּמַטָּרָה",
+    "hebrew": "בְּמַטָּרָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The south",
     "transliteration": "hadarom",
-    "hebrew": "הַדָּרוֹם",
+    "hebrew": "הַדָּרוֹם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The middle (m.s.) / the median (m.s.) / the high school / the Mediterranean (sea)",
     "transliteration": "hatikhon",
-    "hebrew": "הַתִּיכוֹן",
+    "hebrew": "הַתִּיכוֹן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Journey",
     "transliteration": "masa",
-    "hebrew": "מַסָּע",
+    "hebrew": "מַסָּע",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Here",
     "transliteration": "kan",
-    "hebrew": "כָּאן",
+    "hebrew": "כָּאן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the island",
     "transliteration": "ba'i",
-    "hebrew": "בָּאִי",
+    "hebrew": "בָּאִי",
     "difficulty": 7
   },
   {
@@ -4723,21 +4724,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Law",
     "transliteration": "khok",
-    "hebrew": "חֹוק",
+    "hebrew": "חֹק",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Defense",
     "transliteration": "hagana",
-    "hebrew": "הֲגַנָּה",
+    "hebrew": "הֲגַנָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The blood",
     "transliteration": "hadam",
-    "hebrew": "הַדָּם",
+    "hebrew": "הַדָּם",
     "difficulty": 7
   },
   {
@@ -4751,14 +4752,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The subject",
     "transliteration": "hanose",
-    "hebrew": "הַנּוֹשֵׂא",
+    "hebrew": "הַנּוֹשֵׂא",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Methods",
     "transliteration": "shitot",
-    "hebrew": "שִׁיטוֹת",
+    "hebrew": "שִׁיטוֹת",
     "difficulty": 7
   },
   {
@@ -4772,28 +4773,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Psalms",
     "transliteration": "tehilim",
-    "hebrew": "תְּהִילִּים",
+    "hebrew": "תְּהִלִּים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That is on",
     "transliteration": "she'al",
-    "hebrew": "שֶׁעַל",
+    "hebrew": "שֶׁעַל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The glory / the fame",
     "transliteration": "hatehila",
-    "hebrew": "הַתְּהִילָּה",
+    "hebrew": "הַתְּהִלָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Continued (pl.)",
     "transliteration": "himshikhu",
-    "hebrew": "הִמְשִׁיכוּ",
+    "hebrew": "הִמְשִׁיכוּ",
     "difficulty": 7
   },
   {
@@ -4807,7 +4808,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The residents of",
     "transliteration": "toshvei",
-    "hebrew": "תּוֹשָׁבֵי",
+    "hebrew": "תּוֹשָׁבֵי",
     "difficulty": 7
   },
   {
@@ -4821,56 +4822,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The gold",
     "transliteration": "hazahav",
-    "hebrew": "הַזָּהָב",
+    "hebrew": "הַזָּהָב",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In areas",
     "transliteration": "be'ezorim",
-    "hebrew": "בַּאֲזוֹרִים",
+    "hebrew": "בַּאֲזוֹרִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Actually / spitefully",
     "transliteration": "davka",
-    "hebrew": "דַּוְוקָא",
+    "hebrew": "דַּוְקָא",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The sculpture",
     "transliteration": "hapisul",
-    "hebrew": "הַפִּיסּוּל",
+    "hebrew": "הַפִּסּוּל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The harbors",
     "transliteration": "hanmalim",
-    "hebrew": "הַנְּמָלִים",
+    "hebrew": "הַנְּמָלִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Do / make (m.s.)",
     "transliteration": "ose",
-    "hebrew": "עוֹשֶׂה",
+    "hebrew": "עוֹשֶׂה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the middle",
     "transliteration": "ba'emtsa",
-    "hebrew": "בָּאֶמְצַע",
+    "hebrew": "בָּאֶמְצַע",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Placed / put (f.s.)",
     "transliteration": "sama",
-    "hebrew": "שֶׁמָּה",
+    "hebrew": "שָׂמָה",
     "difficulty": 7
   },
   {
@@ -4898,42 +4899,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tower",
     "transliteration": "migdal",
-    "hebrew": "מִגְדָּל",
+    "hebrew": "מִגְדָּל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That are not / that are not here (m.pl.)",
     "transliteration": "she'einam",
-    "hebrew": "שֶׁאֵינָם",
+    "hebrew": "שֶׁאֵינָם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The military (m.s.)",
     "transliteration": "hatsva'i",
-    "hebrew": "הַצְּבָאִי",
+    "hebrew": "הַצְּבָאִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Most of",
     "transliteration": "marbit",
-    "hebrew": "מַרְבִּית",
+    "hebrew": "מַרְבִּית",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The song / the poem",
     "transliteration": "hashir",
-    "hebrew": "הַשִּׁיר",
+    "hebrew": "הַשִּׁיר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tonight / the night",
     "transliteration": "halaila",
-    "hebrew": "הַלַּיְלָה",
+    "hebrew": "הֲלִילַה",
     "difficulty": 7
   },
   {
@@ -4954,21 +4955,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Spring",
     "transliteration": "ma'ayan",
-    "hebrew": "מַעְיָן",
+    "hebrew": "מַעֲיָן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the war of",
     "transliteration": "bemilkhemet",
-    "hebrew": "בְּמִלְחֶמֶת",
+    "hebrew": "בְּמִלְחֶמֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the west",
     "transliteration": "bama'arav",
-    "hebrew": "בַּמַּעֲרָב",
+    "hebrew": "בַּמַּעֲרָב",
     "difficulty": 7
   },
   {
@@ -4982,14 +4983,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The program / the plan",
     "transliteration": "hatokhnit",
-    "hebrew": "הַתָּוכְנִית",
+    "hebrew": "הַתָּכְנִית",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The old (m.s.)",
     "transliteration": "hazaken",
-    "hebrew": "הַזָּקֵן",
+    "hebrew": "הַזָּקֵן",
     "difficulty": 7
   },
   {
@@ -5003,21 +5004,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At first / initially",
     "transliteration": "batkhila",
-    "hebrew": "בַּתְּחִילָּה",
+    "hebrew": "בַּתְּחִלָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Condition / provision",
     "transliteration": "tnai",
-    "hebrew": "תְּנַאי",
+    "hebrew": "תְּנָאִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The soldiers",
     "transliteration": "hakhayalim",
-    "hebrew": "הַחַיָּילִים",
+    "hebrew": "הַחַיָּלִים",
     "difficulty": 7
   },
   {
@@ -5031,7 +5032,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The tie / the bond / the link / the connection",
     "transliteration": "hakesher",
-    "hebrew": "הַקַּשָּׁר",
+    "hebrew": "הַקֶּשֶׁר",
     "difficulty": 7
   },
   {
@@ -5045,7 +5046,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Frequently",
     "transliteration": "tadir",
-    "hebrew": "תָּדִיר",
+    "hebrew": "תָּדִיר",
     "difficulty": 7
   },
   {
@@ -5066,21 +5067,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The days",
     "transliteration": "hayamim",
-    "hebrew": "הַיָּמִים",
+    "hebrew": "הַיָּמִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To act / to operate",
     "transliteration": "lif'ol",
-    "hebrew": "לִפְעֹול",
+    "hebrew": "לִפְעֹל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Building of (v.)",
     "transliteration": "bniyat",
-    "hebrew": "בְּנִיַת",
+    "hebrew": "בְּנִיַּת",
     "difficulty": 7
   },
   {
@@ -5094,14 +5095,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Dozens [literally: tens]",
     "transliteration": "asarot",
-    "hebrew": "עֶשְׂרוֹת",
+    "hebrew": "עֲשָׂרוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The western (m.s.)",
     "transliteration": "hama'aravi",
-    "hebrew": "הַמַּעֲרָבִי",
+    "hebrew": "הַמַּעֲרָבִי",
     "difficulty": 7
   },
   {
@@ -5115,28 +5116,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The attack",
     "transliteration": "hamitkafa",
-    "hebrew": "הַמִּתְקָפָה",
+    "hebrew": "הַמִּתְקָפָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The central (m.s.)",
     "transliteration": "hamerkazi",
-    "hebrew": "הַמֶּרְכָּזִי",
+    "hebrew": "הַמֶּרְכָּזִי",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Badges / labels / tags",
     "transliteration": "tagiyot",
-    "hebrew": "תָּגִיּוֹת",
+    "hebrew": "תָּגִיּוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Really",
     "transliteration": "be'emet",
-    "hebrew": "בֶּאֱמֶת",
+    "hebrew": "בֶּאֱמֶת",
     "difficulty": 7
   },
   {
@@ -5178,84 +5179,84 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tried (m.s.)",
     "transliteration": "nisa",
-    "hebrew": "נִיסָּה",
+    "hebrew": "נִסָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The religion",
     "transliteration": "hadat",
-    "hebrew": "הַדָּת",
+    "hebrew": "הַדָּת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Occupation",
     "transliteration": "kibush",
-    "hebrew": "כִּיבּוּשׁ",
+    "hebrew": "כִּבּוּשׁ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Into power / to/for the government",
     "transliteration": "lashilton",
-    "hebrew": "לַשִּׁלְטוֹן",
+    "hebrew": "לַשִּׁלְטוֹן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Her age / found out (m.s.) / joy",
     "transliteration": "gila",
-    "hebrew": "גִּילֹה",
+    "hebrew": "גִּלָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Note / mark / pointing out / grade",
     "transliteration": "tsiyun",
-    "hebrew": "צִיּוֹן",
+    "hebrew": "צִיּוּן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The creatures",
     "transliteration": "hayetsurim",
-    "hebrew": "הַיְּצוּרִים",
+    "hebrew": "הַיְּצוּרִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ours",
     "transliteration": "shelanu",
-    "hebrew": "שֶׁלָּנוּ",
+    "hebrew": "שֶׁלָּנוּ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And a name",
     "transliteration": "veshem",
-    "hebrew": "וְשֵׁם",
+    "hebrew": "וְשֵׁם",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The story",
     "transliteration": "hasipur",
-    "hebrew": "הַסִּיפּוּר",
+    "hebrew": "הַסִּפּוּר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fast / rapidly / quickly",
     "transliteration": "bimhirut",
-    "hebrew": "בִּמְהִירוּת",
+    "hebrew": "בִּמְהִירוּת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Wild / son / -able / bar",
     "transliteration": "bar",
-    "hebrew": "בָּר",
+    "hebrew": "בָּר",
     "difficulty": 7
   },
   {
@@ -5269,28 +5270,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For the purpose of",
     "transliteration": "letsorekh",
-    "hebrew": "לְצֹורֶךְ",
+    "hebrew": "לְצֹרֶךְ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For treatment",
     "transliteration": "letipul",
-    "hebrew": "לְטִיפּוּל",
+    "hebrew": "לְטִפּוּל",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Team / staff",
     "transliteration": "tsevet",
-    "hebrew": "צֶוֶות",
+    "hebrew": "צֶוֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Meaning",
     "transliteration": "mashma'ut",
-    "hebrew": "מַשְׁמָעוּת",
+    "hebrew": "מַשְׁמָעוּת",
     "difficulty": 7
   },
   {
@@ -5311,7 +5312,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sensory",
     "transliteration": "khushi",
-    "hebrew": "חוּשִׁי",
+    "hebrew": "חוּשִׁי",
     "difficulty": 7
   },
   {
@@ -5332,7 +5333,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/in the direction of / for adjustment / for tuning",
     "transliteration": "lekivun",
-    "hebrew": "לְכִיוּוּן",
+    "hebrew": "לְכִוּוּן",
     "difficulty": 7
   },
   {
@@ -5346,14 +5347,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Medications / drugs",
     "transliteration": "trufot",
-    "hebrew": "תְּרוּפוֹת",
+    "hebrew": "תְּרוּפוֹת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Specific (f.s.)",
     "transliteration": "mesuyemet",
-    "hebrew": "מְסֻויֶּמֶת",
+    "hebrew": "מְסֻיֶּמֶת",
     "difficulty": 7
   },
   {
@@ -5367,7 +5368,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the area / in the field / in the territory",
     "transliteration": "bashetakh",
-    "hebrew": "בַּשֶּׁטַח",
+    "hebrew": "בַּשֶּׁטַח",
     "difficulty": 7
   },
   {
@@ -5381,21 +5382,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The research",
     "transliteration": "hamekhkar",
-    "hebrew": "הַמֶּחְקָר",
+    "hebrew": "הַמֶּחְקָר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And sometimes",
     "transliteration": "ul'itim",
-    "hebrew": "וּלְעִתִּים",
+    "hebrew": "וּלְעִתִּים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The train",
     "transliteration": "harakevet",
-    "hebrew": "הָרַכֶּבֶת",
+    "hebrew": "הָרַכֶּבֶת",
     "difficulty": 7
   },
   {
@@ -5423,14 +5424,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the year",
     "transliteration": "bashana",
-    "hebrew": "בְּשָׁנָה",
+    "hebrew": "בַּשָּׁנָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "He is / is (m.)",
     "transliteration": "hino",
-    "hebrew": "הִינּוֹ",
+    "hebrew": "הִנּוֹ",
     "difficulty": 7
   },
   {
@@ -5444,49 +5445,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "All of it (f.s.)",
     "transliteration": "kula",
-    "hebrew": "כֻּולָּהּ",
+    "hebrew": "כֻּלָּה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Length / duration",
     "transliteration": "orekh",
-    "hebrew": "אֹורֶךְ",
+    "hebrew": "אֹרֶךְ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Spices",
     "transliteration": "tavlinim",
-    "hebrew": "תַּבְלִינִים",
+    "hebrew": "תַּבְלִינִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Yours (m.s.)",
     "transliteration": "shelkha",
-    "hebrew": "שֶׁלְּךָ",
+    "hebrew": "שֶׁלְּךָ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The hour / the time",
     "transliteration": "hasha'a",
-    "hebrew": "הַשָּׁעָה",
+    "hebrew": "הַשָּׁעָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To stand",
     "transliteration": "la'amod",
-    "hebrew": "לַעֲמֹוד",
+    "hebrew": "לַעֲמֹד",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The young (m.s.)",
     "transliteration": "hatsa'ir",
-    "hebrew": "הַצָּעִיר",
+    "hebrew": "הַצָּעִיר",
     "difficulty": 7
   },
   {
@@ -5507,49 +5508,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The public",
     "transliteration": "hatsibur",
-    "hebrew": "הַצִּיבּוּר",
+    "hebrew": "הַצִּבּוּר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The siege",
     "transliteration": "hamatsor",
-    "hebrew": "הַמָּצוֹר",
+    "hebrew": "הַמָּצוֹר",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The command",
     "transliteration": "hapikud",
-    "hebrew": "הַפִּיקּוּד",
+    "hebrew": "הַפִּקּוּד",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Variety",
     "transliteration": "migvan",
-    "hebrew": "מִגְוַון",
+    "hebrew": "מִגְוַן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The temple / the shrine",
     "transliteration": "hamikdash",
-    "hebrew": "הַמִּקְדָּשׁ",
+    "hebrew": "הַמִּקְדָּשׁ",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In relation / regarding / at a ratio",
     "transliteration": "beyakhas",
-    "hebrew": "בְּיַחַס",
+    "hebrew": "בְּיַחַס",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Used for / intended for (m.s.)",
     "transliteration": "meshamesh",
-    "hebrew": "מְשַׁמֵּשׁ",
+    "hebrew": "מְשַׁמֵּשׁ",
     "difficulty": 7
   },
   {
@@ -5563,14 +5564,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Stood / was about to / endured / succeeded / insisted on (f.s.)",
     "transliteration": "amda",
-    "hebrew": "עֶמְדָּה",
+    "hebrew": "עָמְדָה",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Subject",
     "transliteration": "nose",
-    "hebrew": "נוֹשֵׂא",
+    "hebrew": "נוֹשֵׂא",
     "difficulty": 7
   },
   {
@@ -5584,28 +5585,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The spices",
     "transliteration": "hatavlinim",
-    "hebrew": "הַתַּבְלִינִים",
+    "hebrew": "הַתַּבְלִינִים",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The death",
     "transliteration": "hamavet",
-    "hebrew": "הַמָּוֶות",
+    "hebrew": "הַמָּוֶת",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Possible",
     "transliteration": "yitakhen",
-    "hebrew": "יִיתָּכֵן",
+    "hebrew": "יִתָּכֵן",
     "difficulty": 7
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Detail / individual / except",
     "transliteration": "prat",
-    "hebrew": "פְּרָט",
+    "hebrew": "פְּרָט",
     "difficulty": 8
   },
   {
@@ -5626,42 +5627,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The northern",
     "transliteration": "hatsfoni",
-    "hebrew": "הַצְּפוֹנִי",
+    "hebrew": "הַצְּפוֹנִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The southern",
     "transliteration": "hadromi",
-    "hebrew": "הַדְּרוֹמִי",
+    "hebrew": "הַדְּרוֹמִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "You could",
     "transliteration": "yakholta",
-    "hebrew": "יְכֹולֶת",
+    "hebrew": "יָכֹלְתָּ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The devil",
     "transliteration": "hashed",
-    "hebrew": "הַשֵּׁד",
+    "hebrew": "הַשֵּׁד",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Before",
     "transliteration": "beterem",
-    "hebrew": "בְּטֶרֶם",
+    "hebrew": "בְּטֶרֶם",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The leg",
     "transliteration": "haregel",
-    "hebrew": "הֶרְגֵּל",
+    "hebrew": "הָרֶגֶל",
     "difficulty": 8
   },
   {
@@ -5710,21 +5711,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Defeat",
     "transliteration": "tvusa",
-    "hebrew": "תְּבוּסַת",
+    "hebrew": "תְּבוּסָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At [time] / per hour / in an hour",
     "transliteration": "besha'a",
-    "hebrew": "בְּשָׁעָה",
+    "hebrew": "בְּשָׁעָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The intelligence",
     "transliteration": "hatvuna",
-    "hebrew": "הַתְּבוּנָה",
+    "hebrew": "הַתְּבוּנָה",
     "difficulty": 8
   },
   {
@@ -5738,42 +5739,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Details / individuals",
     "transliteration": "pratim",
-    "hebrew": "פְּרָטִים",
+    "hebrew": "פְּרָטִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That is not / that is not here (m.s.)",
     "transliteration": "she'eino",
-    "hebrew": "שֶׁאֵינוֹ",
+    "hebrew": "שֶׁאֵינוֹ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "The main / the principal / the primary (m.s.)",
+    "english": "The main / principal / primary (m.s.)",
     "transliteration": "ha'ikari",
-    "hebrew": "הָעִיקָּרִי",
+    "hebrew": "הָעִקָּרִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In states",
     "transliteration": "bimdinot",
-    "hebrew": "בַּמְּדִינוֹת",
+    "hebrew": "בִּמְדִינוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Suddenly",
     "transliteration": "pit'om",
-    "hebrew": "פִּתְאוֹם",
+    "hebrew": "פִּתְאוֹם",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Method of",
     "transliteration": "shitat",
-    "hebrew": "שִׁיטַת",
+    "hebrew": "שִׁיטַת",
     "difficulty": 8
   },
   {
@@ -5794,21 +5795,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sample / example",
     "transliteration": "dugma",
-    "hebrew": "דֻּוגְמָה",
+    "hebrew": "דֻּגְמָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The words",
     "transliteration": "hamilim",
-    "hebrew": "הַמִּילִּים",
+    "hebrew": "הַמִּלִּים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Air",
     "transliteration": "avir",
-    "hebrew": "אֲוִויר",
+    "hebrew": "אֲוִיר",
     "difficulty": 8
   },
   {
@@ -5822,14 +5823,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The date",
     "transliteration": "hata'arikh",
-    "hebrew": "הַתַּאֲרִיךְ",
+    "hebrew": "הַתַּאֲרִיךְ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The need",
     "transliteration": "hatsorekh",
-    "hebrew": "הַצֹּורֶךְ",
+    "hebrew": "הַצֹּרֶךְ",
     "difficulty": 8
   },
   {
@@ -5843,7 +5844,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Square / loaf",
     "transliteration": "kikar",
-    "hebrew": "כִּיכַּר",
+    "hebrew": "כִּכַּר",
     "difficulty": 8
   },
   {
@@ -5857,7 +5858,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And of / and belongs to",
     "transliteration": "veshel",
-    "hebrew": "וְשֶׁל",
+    "hebrew": "וְשֶׁל",
     "difficulty": 8
   },
   {
@@ -5871,7 +5872,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That is possible",
     "transliteration": "shenitan",
-    "hebrew": "שֶׁנִּיתָּן",
+    "hebrew": "שֶׁנִּתָּן",
     "difficulty": 8
   },
   {
@@ -5892,14 +5893,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the shape of / in the form of",
     "transliteration": "betsurat",
-    "hebrew": "בְּצוּרַת",
+    "hebrew": "בְּצוּרַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Democracy",
     "transliteration": "demokratya",
-    "hebrew": "דֵּמוֹקְרַטְיָה",
+    "hebrew": "דֵּמוֹקְרַטְיָה",
     "difficulty": 8
   },
   {
@@ -5955,98 +5956,98 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Obvious / evident (m.s.)",
     "transliteration": "nikar",
-    "hebrew": "נִיכָּר",
+    "hebrew": "נִכָּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Using (pl.)",
     "transliteration": "mishtamshim",
-    "hebrew": "מִשְׁתַּמְּשִׁים",
+    "hebrew": "מִשְׁתַּמְּשִׁים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The language / the lip",
     "transliteration": "hasafa",
-    "hebrew": "הַשָּׂפָה",
+    "hebrew": "הַשָּׂפָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a desert",
     "transliteration": "bemidbar",
-    "hebrew": "בַּמִּדְבָּר",
+    "hebrew": "בְּמִדְבַּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Described (m.s.)",
     "transliteration": "te'er",
-    "hebrew": "תֵּיאֵר",
+    "hebrew": "תֵּאֵר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the side",
     "transliteration": "batsad",
-    "hebrew": "בַּצַּד",
+    "hebrew": "בַּצַּד",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That all",
     "transliteration": "shekol",
-    "hebrew": "שֶׁכָּל",
+    "hebrew": "שֶׁכֹּל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "National (m.s.)",
     "transliteration": "le'umi",
-    "hebrew": "לְאֻומִּי",
+    "hebrew": "לְאֻמִּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Capable (m.pl.)",
     "transliteration": "mesugalim",
-    "hebrew": "מְסֻוגָּלִים",
+    "hebrew": "מְסֻגָּלִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Experience / trial / attempt",
     "transliteration": "nisayon",
-    "hebrew": "נִיסָּיוֹן",
+    "hebrew": "נִסָּיוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Secondary",
     "transliteration": "mishni",
-    "hebrew": "מִשְּׁנֵי",
+    "hebrew": "מִשְׁנִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Authority / reign / government",
     "transliteration": "shilton",
-    "hebrew": "שִׁלְטוֹן",
+    "hebrew": "שִׁלְטוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Such as / as in the example of",
     "transliteration": "kedugmat",
-    "hebrew": "כְּדֻוגְמַת",
+    "hebrew": "כְּדֻגְמַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tried (pl.)",
     "transliteration": "nisu",
-    "hebrew": "נִיסּוּ",
+    "hebrew": "נִסּוּ",
     "difficulty": 8
   },
   {
@@ -6060,7 +6061,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Received / accepted (pl.)",
     "transliteration": "kiblu",
-    "hebrew": "קִיבְּלוּ",
+    "hebrew": "קִבְּלוּ",
     "difficulty": 8
   },
   {
@@ -6081,7 +6082,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Descriptions",
     "transliteration": "te'urim",
-    "hebrew": "תֵּיאוּרִים",
+    "hebrew": "תֵּאוּרִים",
     "difficulty": 8
   },
   {
@@ -6095,28 +6096,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The hill",
     "transliteration": "hatel",
-    "hebrew": "הַתֵּל",
+    "hebrew": "הַתֵּל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Again",
     "transliteration": "shenit",
-    "hebrew": "שֵׁנִית",
+    "hebrew": "שֵׁנִית",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The small / the little (m.s.)",
     "transliteration": "hakatan",
-    "hebrew": "הַקָּטָן",
+    "hebrew": "הַקָּטָן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like these / like those / such",
     "transliteration": "ka'ele",
-    "hebrew": "כָּאֵלֶּה",
+    "hebrew": "כָּאֵלֶּה",
     "difficulty": 8
   },
   {
@@ -6137,14 +6138,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "My life",
     "transliteration": "khayai",
-    "hebrew": "חַיַּי",
+    "hebrew": "חַיַּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Opened (m.s.) / Fatah",
     "transliteration": "patakh",
-    "hebrew": "פָּתַח",
+    "hebrew": "פָּתַח",
     "difficulty": 8
   },
   {
@@ -6158,21 +6159,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The building",
     "transliteration": "habinyan",
-    "hebrew": "הַבִּנְיָין",
+    "hebrew": "הַבִּנְיָן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the aspect of",
     "transliteration": "mibkhinat",
-    "hebrew": "מִבְּחִינַת",
+    "hebrew": "מִבְּחִינַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To cause",
     "transliteration": "ligrom",
-    "hebrew": "לִגְרֹום",
+    "hebrew": "לִגְרֹם",
     "difficulty": 8
   },
   {
@@ -6200,42 +6201,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The illness / the disease",
     "transliteration": "hamakhala",
-    "hebrew": "הַמַּחֲלָה",
+    "hebrew": "הַמַּחֲלָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Description",
     "transliteration": "te'ur",
-    "hebrew": "תֵּיאוּר",
+    "hebrew": "תֵּאוּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The stomach",
     "transliteration": "hakeyva",
-    "hebrew": "הַקֵּיבָה",
+    "hebrew": "הַקֵּבָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The system / / the editorial board",
     "transliteration": "hama'arekhet",
-    "hebrew": "הַמַּעֲרֶכֶת",
+    "hebrew": "הַמַּעֲרֶכֶת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Big / large (f.pl.)",
     "transliteration": "gdolot",
-    "hebrew": "גְּדוֹלוֹת",
+    "hebrew": "גְּדוֹלוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The security / the confidence",
     "transliteration": "habitakhon",
-    "hebrew": "הַבִּיטָּחוֹן",
+    "hebrew": "הַבִּטָּחוֹן",
     "difficulty": 8
   },
   {
@@ -6277,14 +6278,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Development",
     "transliteration": "pituakh",
-    "hebrew": "פִּיתּוּחַ",
+    "hebrew": "פִּתּוּחַ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "I said",
     "transliteration": "amarti",
-    "hebrew": "אָמַרְתִּי",
+    "hebrew": "אָמַרְתִּי",
     "difficulty": 8
   },
   {
@@ -6298,7 +6299,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The boy / the youngster",
     "transliteration": "hana'ar",
-    "hebrew": "הַנַּעַר",
+    "hebrew": "הַנַּעַר",
     "difficulty": 8
   },
   {
@@ -6312,7 +6313,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The leaves",
     "transliteration": "ha'alim",
-    "hebrew": "הֶעָלִים",
+    "hebrew": "הַעֲלִים",
     "difficulty": 8
   },
   {
@@ -6333,14 +6334,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The people",
     "transliteration": "ha'anashim",
-    "hebrew": "הָאֲנָשִׁים",
+    "hebrew": "הָאֲנָשִׁים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Capable (m.s.)",
     "transliteration": "mesugal",
-    "hebrew": "מְסֻוגָּל",
+    "hebrew": "מְסֻגָּל",
     "difficulty": 8
   },
   {
@@ -6354,7 +6355,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His sons",
     "transliteration": "banav",
-    "hebrew": "בָּנָיו",
+    "hebrew": "בָּנָיו",
     "difficulty": 8
   },
   {
@@ -6368,14 +6369,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for a number",
     "transliteration": "lemispar",
-    "hebrew": "לַמִּסְפָּר",
+    "hebrew": "לְמִסְפָּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who arrived (pl.)",
     "transliteration": "shehigi'u",
-    "hebrew": "שֶׁהִגִּיעוּ",
+    "hebrew": "שֶׁהִגִּיעוּ",
     "difficulty": 8
   },
   {
@@ -6389,28 +6390,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for a game",
     "transliteration": "lemis'khak",
-    "hebrew": "לַמִּשְׂחָק",
+    "hebrew": "לְמִשְׂחָק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That in them (f.)",
     "transliteration": "shebahen",
-    "hebrew": "שֶׁבָּהֶן",
+    "hebrew": "שֶׁבָּהֶן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Gave judgment / decided / rules / stopped (m.s.)",
     "transliteration": "pasak",
-    "hebrew": "פְּסַק",
+    "hebrew": "פָּסַק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Main point / essence",
     "transliteration": "ikar",
-    "hebrew": "עִיקַּר",
+    "hebrew": "עִקַּר",
     "difficulty": 8
   },
   {
@@ -6438,70 +6439,70 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Active",
     "transliteration": "pa'il",
-    "hebrew": "פָּעִיל",
+    "hebrew": "פָּעִיל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In his book",
     "transliteration": "bsifro",
-    "hebrew": "בְּסִפְרוֹ",
+    "hebrew": "בְּסִפְרוֹ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The authorities",
     "transliteration": "hashiltonot",
-    "hebrew": "הַשִּׁלְטוֹנוֹת",
+    "hebrew": "הַשִּׁלְטוֹנוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Zionist (f.s.)",
     "transliteration": "hatsiyonit",
-    "hebrew": "הַצִּיּוֹנִית",
+    "hebrew": "הַצִּיּוֹנִית",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is described (f.s.)",
     "transliteration": "meto'eret",
-    "hebrew": "מְתֹואֶרֶת",
+    "hebrew": "מְתֹאֶרֶת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "So / like this / thus",
     "transliteration": "kakha",
-    "hebrew": "כָּכָה",
+    "hebrew": "כָּכָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "You will be (m.s.) / she will be",
     "transliteration": "tihiye",
-    "hebrew": "תִּהְיֶה",
+    "hebrew": "תִּהְיֶה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Proposed / suggested / offered (m.s.)",
     "transliteration": "hetsi'a",
-    "hebrew": "הִצִּיעַ",
+    "hebrew": "הִצִּיעַ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "About / in regards",
     "transliteration": "benoge'a",
-    "hebrew": "בְּנוֹגֵעַ",
+    "hebrew": "בְּנוֹגֵעַ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To assist / to help",
     "transliteration": "lesaye'a",
-    "hebrew": "לְסַיֵּיעַ",
+    "hebrew": "לְסַיֵּעַ",
     "difficulty": 8
   },
   {
@@ -6522,28 +6523,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The center",
     "transliteration": "hamerkaz",
-    "hebrew": "הַמֶּרְכָּז",
+    "hebrew": "הַמֶּרְכָּז",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The station / the stop / the base",
     "transliteration": "hatakhana",
-    "hebrew": "הַתַּחֲנָה",
+    "hebrew": "הַתַּחֲנָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In elections",
     "transliteration": "bebkhirot",
-    "hebrew": "בַּבְּחִירוֹת",
+    "hebrew": "בַּבְּחִירוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Included (f.s.)",
     "transliteration": "kalela",
-    "hebrew": "כָּלְלָה",
+    "hebrew": "כָּלְלָה",
     "difficulty": 8
   },
   {
@@ -6557,28 +6558,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For the use",
     "transliteration": "lashimush",
-    "hebrew": "לְשִׁימּוּשׁ",
+    "hebrew": "לַשִּׁמּוּשׁ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "General (m.s.)",
     "transliteration": "klali",
-    "hebrew": "כְּלָלִי",
+    "hebrew": "כְּלָלִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The ghetto",
     "transliteration": "hageto",
-    "hebrew": "הַגֵּטוֹ",
+    "hebrew": "הַגֵּטוֹ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Judge",
     "transliteration": "dayan",
-    "hebrew": "דַּיָּין",
+    "hebrew": "דַּיָּן",
     "difficulty": 8
   },
   {
@@ -6592,14 +6593,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Spoke (m.s.) / commandment",
     "transliteration": "diber",
-    "hebrew": "דִּיבֵּר",
+    "hebrew": "דִּבֵּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Actually / in fact / in a bone",
     "transliteration": "be'etsem",
-    "hebrew": "בְּעֶצֶם",
+    "hebrew": "בְּעֶצֶם",
     "difficulty": 8
   },
   {
@@ -6620,7 +6621,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is described (m.s.)",
     "transliteration": "meto'ar",
-    "hebrew": "מְתֹואָר",
+    "hebrew": "מְתֹאָר",
     "difficulty": 8
   },
   {
@@ -6634,7 +6635,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Grew (m.s.)",
     "transliteration": "gadal",
-    "hebrew": "גָּדַל",
+    "hebrew": "גָּדַל",
     "difficulty": 8
   },
   {
@@ -6662,14 +6663,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The team / the staff",
     "transliteration": "hatsevet",
-    "hebrew": "הַצֶּוֶות",
+    "hebrew": "הַצֶּוֶת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Structural",
     "transliteration": "mivni",
-    "hebrew": "מִבְנֵי",
+    "hebrew": "מִבְנִי",
     "difficulty": 8
   },
   {
@@ -6683,49 +6684,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In part",
     "transliteration": "bekhelek",
-    "hebrew": "בְּחֵלֶק",
+    "hebrew": "בְּחֵלֶק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the level of",
     "transliteration": "beramat",
-    "hebrew": "בְּרָמַת",
+    "hebrew": "בְּרָמַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Near by / close",
     "transliteration": "besamukh",
-    "hebrew": "בְּסָמוּךְ",
+    "hebrew": "בְּסָמוּךְ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The navy / the armada",
     "transliteration": "hatsi",
-    "hebrew": "הַצִּי",
+    "hebrew": "הַצִּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The president",
     "transliteration": "hanasi",
-    "hebrew": "הַנָּשִׂיא",
+    "hebrew": "הַנָּשִׂיא",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "The main / the principal / the primary (m.s.)",
+    "english": "The main / principal / primary (f.s.)",
     "transliteration": "haikarit",
-    "hebrew": "הָעִיקָּרִית",
+    "hebrew": "הָעִקָּרִית",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the east / to the east",
     "transliteration": "bamizrakh",
-    "hebrew": "בַּמִּזְרָח",
+    "hebrew": "בַּמִּזְרָח",
     "difficulty": 8
   },
   {
@@ -6753,21 +6754,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For a discovery",
     "transliteration": "legilui",
-    "hebrew": "לְגִילּוּי",
+    "hebrew": "לְגִלּוּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The regiments",
     "transliteration": "hagdudim",
-    "hebrew": "הַגְּדוּדִים",
+    "hebrew": "הַגְּדוּדִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "My heart",
     "transliteration": "libi",
-    "hebrew": "לִבִּי",
+    "hebrew": "לִבִּי",
     "difficulty": 8
   },
   {
@@ -6788,7 +6789,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The young (m.pl.)",
     "transliteration": "hatse'irim",
-    "hebrew": "הַצְּעִירִים",
+    "hebrew": "הַצְּעִירִים",
     "difficulty": 8
   },
   {
@@ -6802,7 +6803,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To them (m.)",
     "transliteration": "eleihem",
-    "hebrew": "אֲלֵיהֶם",
+    "hebrew": "אֵלֵיהֶם",
     "difficulty": 8
   },
   {
@@ -6823,28 +6824,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To be used",
     "transliteration": "leshamesh",
-    "hebrew": "לְשַׁמֵּשׁ",
+    "hebrew": "לְשַׁמֵּשׁ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The food",
     "transliteration": "hamazon",
-    "hebrew": "הַמָּזוֹן",
+    "hebrew": "הַמָּזוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The central (f.s.)",
     "transliteration": "hamerkazit",
-    "hebrew": "הַמֶּרְכָּזִית",
+    "hebrew": "הַמֶּרְכָּזִית",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At an age / with joy",
     "transliteration": "begil",
-    "hebrew": "בְּגִיל",
+    "hebrew": "בְּגִיל",
     "difficulty": 8
   },
   {
@@ -6865,35 +6866,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And especially",
     "transliteration": "uvimyukhad",
-    "hebrew": "וּבִמְיֻוחָד",
+    "hebrew": "וּבִמְיֻחָד",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The eastern (m.s.)",
     "transliteration": "hamizrakhi",
-    "hebrew": "הַמִּזְרָחִי",
+    "hebrew": "הַמִּזְרָחִי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a book",
     "transliteration": "besefer",
-    "hebrew": "בַּסֵּפֶר",
+    "hebrew": "בְּסֵפֶר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the language / on the lip",
     "transliteration": "basafa",
-    "hebrew": "בַּשָּׂפָה",
+    "hebrew": "בַּשָּׂפָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a parade / in a march",
     "transliteration": "bemits'ad",
-    "hebrew": "בַּמִּצְעָד",
+    "hebrew": "בְּמִצְעָד",
     "difficulty": 8
   },
   {
@@ -6907,7 +6908,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Competitions",
     "transliteration": "takharuyot",
-    "hebrew": "תַּחֲרוּיוֹת",
+    "hebrew": "תַּחֲרוּיוֹת",
     "difficulty": 8
   },
   {
@@ -6921,35 +6922,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Think (m.s.)",
     "transliteration": "khoshev",
-    "hebrew": "חוֹשֵׁב",
+    "hebrew": "חוֹשֵׁב",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In an instance / at the moment [that]",
     "transliteration": "berega",
-    "hebrew": "בָּרֶגַע",
+    "hebrew": "בְּרֶגַע",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Coming / came (f.s.)",
     "transliteration": "ba'a",
-    "hebrew": "בָּאָה",
+    "hebrew": "בָּאָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To eat",
     "transliteration": "le'ekhol",
-    "hebrew": "לֶאֱכֹול",
+    "hebrew": "לֶאֱכֹל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The winter",
     "transliteration": "hakhoref",
-    "hebrew": "הַחֹורֶף",
+    "hebrew": "הַחֹרֶף",
     "difficulty": 8
   },
   {
@@ -6963,7 +6964,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Enough",
     "transliteration": "maspik",
-    "hebrew": "מַסְפִּיק",
+    "hebrew": "מַסְפִּיק",
     "difficulty": 8
   },
   {
@@ -6977,14 +6978,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the north",
     "transliteration": "mitsafon",
-    "hebrew": "מַצְפּוּן",
+    "hebrew": "מִצָּפוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Changes",
     "transliteration": "shinuim",
-    "hebrew": "שִׁינּוּיִים",
+    "hebrew": "שִׁנּוּיִים",
     "difficulty": 8
   },
   {
@@ -6998,28 +6999,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The white (f.s.) / the moon",
     "transliteration": "halevana",
-    "hebrew": "הַלְּבָנָה",
+    "hebrew": "הַלְּבָנָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The national (m.s.)",
     "transliteration": "hale'umi",
-    "hebrew": "הַלְּאֻומִּי",
+    "hebrew": "הַלְּאֻמִּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Shapes / figures / characters",
     "transliteration": "dmuyot",
-    "hebrew": "דְּמוּיוֹת",
+    "hebrew": "דְּמוּיוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Expression",
     "transliteration": "bitui",
-    "hebrew": "בִּיטּוּי",
+    "hebrew": "בִּטּוּי",
     "difficulty": 8
   },
   {
@@ -7033,7 +7034,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hook",
     "transliteration": "vav",
-    "hebrew": "ווּ",
+    "hebrew": "וָו",
     "difficulty": 8
   },
   {
@@ -7047,7 +7048,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The capital",
     "transliteration": "habira",
-    "hebrew": "הַבִּירָה",
+    "hebrew": "הַבִּירָה",
     "difficulty": 8
   },
   {
@@ -7061,7 +7062,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Gates",
     "transliteration": "she'arim",
-    "hebrew": "שְׁעָרִים",
+    "hebrew": "שְׁעָרִים",
     "difficulty": 8
   },
   {
@@ -7075,14 +7076,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The activity",
     "transliteration": "hape'ilut",
-    "hebrew": "הַפְּעִילוּת",
+    "hebrew": "הַפְּעִילוּת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Which (pl.)",
     "transliteration": "elu",
-    "hebrew": "אֵילּוּ",
+    "hebrew": "אֵלּוּ",
     "difficulty": 8
   },
   {
@@ -7096,56 +7097,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His wife",
     "transliteration": "ishto",
-    "hebrew": "אִשְׁתּוֹ",
+    "hebrew": "אִשְׁתּוֹ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Words / what was/is said / things / items / matters",
     "transliteration": "dvarim",
-    "hebrew": "דְּבָרִים",
+    "hebrew": "דְּבָרִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a distance",
     "transliteration": "bemerkhak",
-    "hebrew": "בְּמֶרְחָק",
+    "hebrew": "בְּמֶרְחָק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Caused (m.s.)",
     "transliteration": "garam",
-    "hebrew": "גְּרָם",
+    "hebrew": "גָּרַם",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The face",
     "transliteration": "hapanim",
-    "hebrew": "הַפָּנִים",
+    "hebrew": "הַפָּנִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Next / the person who is coming (m.pl.)",
     "transliteration": "haba'im",
-    "hebrew": "הַבָּאִים",
+    "hebrew": "הַבָּאִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For a description",
     "transliteration": "lete'ur",
-    "hebrew": "לְתֵיאוּר",
+    "hebrew": "לְתֵאוּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To change",
     "transliteration": "leshanot",
-    "hebrew": "לְשַׁנּוֹת",
+    "hebrew": "לְשַׁנּוֹת",
     "difficulty": 8
   },
   {
@@ -7159,14 +7160,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Any / of any kind (m.s.)",
     "transliteration": "kolshehu",
-    "hebrew": "כָּלְשֶׁהוּ",
+    "hebrew": "כָּלְשֶׁהוּ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Heavy (m.s.) / liver",
     "transliteration": "kaved",
-    "hebrew": "כָּבֵד",
+    "hebrew": "כָּבֵד",
     "difficulty": 8
   },
   {
@@ -7180,28 +7181,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Resistance / objection",
     "transliteration": "hitnagdut",
-    "hebrew": "הִתְנַגְּדוּת",
+    "hebrew": "הִתְנַגְּדוּת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In use",
     "transliteration": "beshimush",
-    "hebrew": "בְּשִׁימּוּשׁ",
+    "hebrew": "בְּשִׁמּוּשׁ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The chest / the breast",
     "transliteration": "hakhaze",
-    "hebrew": "הֶחָזֶה",
+    "hebrew": "הַחֲזֵה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Cells",
     "transliteration": "ta'im",
-    "hebrew": "תָּאִים",
+    "hebrew": "תָּאִים",
     "difficulty": 8
   },
   {
@@ -7236,21 +7237,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Song / poem",
     "transliteration": "shir",
-    "hebrew": "שִׁיר",
+    "hebrew": "שִׁיר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The kinds / the species / the genders",
     "transliteration": "haminim",
-    "hebrew": "הַמִּינִים",
+    "hebrew": "הַמִּינִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the beginning / Genesis",
     "transliteration": "bereshit",
-    "hebrew": "בְּרֵאשִׁית",
+    "hebrew": "בְּרֵאשִׁית",
     "difficulty": 8
   },
   {
@@ -7264,21 +7265,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "As the pronunciation of",
     "transliteration": "kehagiyat",
-    "hebrew": "כַּהֲגִיַּית",
+    "hebrew": "כַּהֲגִיַּת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As if / like",
     "transliteration": "ke'ilu",
-    "hebrew": "כְּאִילּוּ",
+    "hebrew": "כְּאִלּוּ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As described",
     "transliteration": "kamto'ar",
-    "hebrew": "כַּמְּתֹואָר",
+    "hebrew": "כַּמְּתֹאָר",
     "difficulty": 8
   },
   {
@@ -7292,7 +7293,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To fight",
     "transliteration": "lehilakhem",
-    "hebrew": "לְהִילָּחֵם",
+    "hebrew": "לְהִלָּחֵם",
     "difficulty": 8
   },
   {
@@ -7313,21 +7314,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Singing / poetry",
     "transliteration": "shira",
-    "hebrew": "שִׁירָה",
+    "hebrew": "שִׁירָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Lines of",
     "transliteration": "kavei",
-    "hebrew": "קַוֵּי",
+    "hebrew": "קַוֵּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the front",
     "transliteration": "bakhazit",
-    "hebrew": "בַּחֲזִית",
+    "hebrew": "בַּחֲזִית",
     "difficulty": 8
   },
   {
@@ -7341,14 +7342,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To the area",
     "transliteration": "la'ezor",
-    "hebrew": "לְאֵזוֹר",
+    "hebrew": "לָאֵזוֹר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fact",
     "transliteration": "uvda",
-    "hebrew": "עֻובְדָּה",
+    "hebrew": "עֻבְדָּה",
     "difficulty": 8
   },
   {
@@ -7362,7 +7363,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Art",
     "transliteration": "omanut",
-    "hebrew": "אָמָּנוּת",
+    "hebrew": "אָמָּנוּת",
     "difficulty": 8
   },
   {
@@ -7390,14 +7391,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bush / talk",
     "transliteration": "si'akh",
-    "hebrew": "שִׂיחַ",
+    "hebrew": "שִׂיחַ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To pass / to cross / to go through",
     "transliteration": "la'avor",
-    "hebrew": "לַעֲבֹור",
+    "hebrew": "לַעֲבֹר",
     "difficulty": 8
   },
   {
@@ -7411,63 +7412,63 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The victory",
     "transliteration": "hanitsakhon",
-    "hebrew": "הַנִּיצָּחוֹן",
+    "hebrew": "הַנִּצָּחוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Material",
     "transliteration": "khomer",
-    "hebrew": "חֹומֶר",
+    "hebrew": "חֹמֶר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The struggle",
     "transliteration": "hama'avak",
-    "hebrew": "הַמַּאֲבָק",
+    "hebrew": "הַמַּאֲבָק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The [name] family",
     "transliteration": "mishpakhat",
-    "hebrew": "מִשְׁפַּחַת",
+    "hebrew": "מִשְׁפַּחַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Barn",
     "transliteration": "goren",
-    "hebrew": "גֹּורֶן",
+    "hebrew": "גֹּרֶן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The description",
     "transliteration": "hate'ur",
-    "hebrew": "הַתֵּיאוּר",
+    "hebrew": "הַתֵּאוּר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The eggs",
     "transliteration": "habeytsim",
-    "hebrew": "הַבֵּיצִים",
+    "hebrew": "הַבֵּיצִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mode / manner / way",
     "transliteration": "ofen",
-    "hebrew": "אֹופֶן",
+    "hebrew": "אֹפֶן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Did (m.s.)",
     "transliteration": "asa",
-    "hebrew": "עֲשֵׂה",
+    "hebrew": "עָשָׂה",
     "difficulty": 8
   },
   {
@@ -7481,21 +7482,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The title / the degree / the adjective / the appearance / the shape",
     "transliteration": "hato'ar",
-    "hebrew": "הַתֹּואַר",
+    "hebrew": "הַתֹּאַר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The police",
     "transliteration": "hamishtara",
-    "hebrew": "הַמִּשְׁטָרָה",
+    "hebrew": "הַמִּשְׁטָרָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The blue (m.s.)",
     "transliteration": "hakakhol",
-    "hebrew": "הַכָּחֹול",
+    "hebrew": "הַכָּחֹל",
     "difficulty": 8
   },
   {
@@ -7509,7 +7510,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Arrive / deserved (m.s.)",
     "transliteration": "megi'a",
-    "hebrew": "מַגִּיעַ",
+    "hebrew": "מַגִּיעַ",
     "difficulty": 8
   },
   {
@@ -7523,7 +7524,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The in-, the un-, the dis-",
     "transliteration": "habilti",
-    "hebrew": "הַבִּלְתִּי",
+    "hebrew": "הַבִּלְתִּי",
     "difficulty": 8
   },
   {
@@ -7537,7 +7538,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Net",
     "transliteration": "reshet",
-    "hebrew": "רֶשֶׁת",
+    "hebrew": "רֶשֶׁת",
     "difficulty": 8
   },
   {
@@ -7551,7 +7552,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Character / nature",
     "transliteration": "ofi",
-    "hebrew": "אֹופִי",
+    "hebrew": "אֹפִי",
     "difficulty": 8
   },
   {
@@ -7565,7 +7566,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "My share / partial",
     "transliteration": "khelki",
-    "hebrew": "חֶלְקֵי",
+    "hebrew": "חֶלְקִי",
     "difficulty": 8
   },
   {
@@ -7586,14 +7587,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Discovery",
     "transliteration": "gilui",
-    "hebrew": "גִּילּוּי",
+    "hebrew": "גִּלּוּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The church",
     "transliteration": "haknesiya",
-    "hebrew": "הַכְּנֵסִיָּיה",
+    "hebrew": "הַכְּנֵסִיָּה",
     "difficulty": 8
   },
   {
@@ -7607,14 +7608,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Songs / poems",
     "transliteration": "shirim",
-    "hebrew": "שִׁירִים",
+    "hebrew": "שִׁירִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The formation / the creation / the making / the work of art / the composition",
     "transliteration": "hayetsira",
-    "hebrew": "הַיְּצִירָה",
+    "hebrew": "הַיְּצִירָה",
     "difficulty": 8
   },
   {
@@ -7628,35 +7629,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From me",
     "transliteration": "mimeni",
-    "hebrew": "מִמֶּנִּי",
+    "hebrew": "מִמֶּנִּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That the",
     "transliteration": "she'et",
-    "hebrew": "שֶׁאַתְּ",
+    "hebrew": "שְׂאֵת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In line",
     "transliteration": "bator",
-    "hebrew": "בְּתוֹר",
+    "hebrew": "בַּתּוֹר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In cases",
     "transliteration": "bemikrim",
-    "hebrew": "בְּמִקְרִים",
+    "hebrew": "בְּמִקְרִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To enable / to facilitate",
     "transliteration": "le'afsher",
-    "hebrew": "לְאַפְשֵׁר",
+    "hebrew": "לְאַפְשֵׁר",
     "difficulty": 8
   },
   {
@@ -7691,28 +7692,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Title / degree / adjective / appearance / shape",
     "transliteration": "to'ar",
-    "hebrew": "תֹּואַר",
+    "hebrew": "תֹּאַר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sculpture",
     "transliteration": "pisul",
-    "hebrew": "פִּיסּוּל",
+    "hebrew": "פִּסּוּל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who describes (f.s.)",
     "transliteration": "hameta'eret",
-    "hebrew": "הַמְּתָאֶרֶת",
+    "hebrew": "הַמְּתָאֶרֶת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In me",
     "transliteration": "bi",
-    "hebrew": "בִּי",
+    "hebrew": "בִּי",
     "difficulty": 8
   },
   {
@@ -7761,7 +7762,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Long (f.s.)",
     "transliteration": "aruka",
-    "hebrew": "אֲרֻוכָּה",
+    "hebrew": "אֲרֻכָּה",
     "difficulty": 8
   },
   {
@@ -7789,28 +7790,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who describe (m.pl.)",
     "transliteration": "hameta'arim",
-    "hebrew": "הַמְּתָאֲרִים",
+    "hebrew": "הַמְּתָאֲרִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The big / the large (f.pl.)",
     "transliteration": "hagdolot",
-    "hebrew": "הַגְּדוֹלוֹת",
+    "hebrew": "הַגְּדוֹלוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Possibility",
     "transliteration": "efsharut",
-    "hebrew": "אֶפְשָׁרוּת",
+    "hebrew": "אֶפְשָׁרוּת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Garden / kindergarten",
     "transliteration": "gan",
-    "hebrew": "גַּן",
+    "hebrew": "גַּן",
     "difficulty": 8
   },
   {
@@ -7831,49 +7832,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Himself / personally (m.s.)",
     "transliteration": "be'atsmo",
-    "hebrew": "בְּעַצְמוֹ",
+    "hebrew": "בְּעַצְמוֹ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Regarding / in the thing",
     "transliteration": "badavar",
-    "hebrew": "בִּדְבַר",
+    "hebrew": "בַּדָּבָר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who describes (m.s.)",
     "transliteration": "hameta'er",
-    "hebrew": "הַמְּתָאֵר",
+    "hebrew": "הַמְּתָאֵר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Six",
     "transliteration": "shesh",
-    "hebrew": "שֵׁשׁ",
+    "hebrew": "שֵׁשׁ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "President",
     "transliteration": "nasi",
-    "hebrew": "נָשִׂיא",
+    "hebrew": "נָשִׂיא",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Civilization / culture",
     "transliteration": "tarbut",
-    "hebrew": "תַּרְבּוּת",
+    "hebrew": "תַּרְבּוּת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rabbi / my rabbi / my teacher",
     "transliteration": "rabi",
-    "hebrew": "רַבִּי",
+    "hebrew": "רַבִּי",
     "difficulty": 8
   },
   {
@@ -7887,14 +7888,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The battle / the campaign / the act",
     "transliteration": "hama'arakha",
-    "hebrew": "הַמַּעֲרָכָה",
+    "hebrew": "הַמַּעֲרָכָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The border / the limit",
     "transliteration": "hagvul",
-    "hebrew": "הַגְּבוּל",
+    "hebrew": "הַגְּבוּל",
     "difficulty": 8
   },
   {
@@ -7908,56 +7909,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Count (m.s.) / gauge / numerator",
     "transliteration": "mone",
-    "hebrew": "מֻונָּה",
+    "hebrew": "מוֹנֶה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The known (m.s.)",
     "transliteration": "hayadu'a",
-    "hebrew": "הַיָּדוּעַ",
+    "hebrew": "הַיָּדוּעַ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As follows / below",
     "transliteration": "lehalan",
-    "hebrew": "לְהַלָּן",
+    "hebrew": "לְהַלָּן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for the Jews",
     "transliteration": "layehudim",
-    "hebrew": "לַיְּהוּדִים",
+    "hebrew": "לַיְּהוּדִים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Examinations / tests",
     "transliteration": "bdikot",
-    "hebrew": "בְּדִיקוֹת",
+    "hebrew": "בְּדִיקוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The park",
     "transliteration": "hapark",
-    "hebrew": "הַפַּארְק",
+    "hebrew": "הַפַּארְק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sat (m.s.)",
     "transliteration": "yashav",
-    "hebrew": "יָשַׁב",
+    "hebrew": "יָשַׁב",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a description",
     "transliteration": "bete'ur",
-    "hebrew": "בַּתֵּיאוּר",
+    "hebrew": "בְּתֵאוּר",
     "difficulty": 8
   },
   {
@@ -7978,7 +7979,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Honor / glory / respect / dignity",
     "transliteration": "kavod",
-    "hebrew": "כָּבוֹד",
+    "hebrew": "כָּבוֹד",
     "difficulty": 8
   },
   {
@@ -8006,7 +8007,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Asked / looked for / wished (m.s.)",
     "transliteration": "bikesh",
-    "hebrew": "בִּיקֵּשׁ",
+    "hebrew": "בִּקֵּשׁ",
     "difficulty": 8
   },
   {
@@ -8020,28 +8021,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Changes (m.s.) / matters",
     "transliteration": "meshane",
-    "hebrew": "מִשְׁנָה",
+    "hebrew": "מְשַׁנֶּה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Beginning",
     "transliteration": "reshit",
-    "hebrew": "רֵאשִׁית",
+    "hebrew": "רֵאשִׁית",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To invert / to convert / to turn / to become / to transform",
     "transliteration": "lahafokh",
-    "hebrew": "לַהֲפֹוךְ",
+    "hebrew": "לַהֲפֹךְ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Beginning / first",
     "transliteration": "tkhila",
-    "hebrew": "תְּחִילָּה",
+    "hebrew": "תְּחִלָּה",
     "difficulty": 8
   },
   {
@@ -8055,14 +8056,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In [the] houses of / at the homes of",
     "transliteration": "bevatei",
-    "hebrew": "בְּבָתֵּי",
+    "hebrew": "בְּבָתֵּי",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On behalf of",
     "transliteration": "mita'am",
-    "hebrew": "מִטַּעַם",
+    "hebrew": "מִטַּעַם",
     "difficulty": 8
   },
   {
@@ -8083,14 +8084,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The armor",
     "transliteration": "hashiryon",
-    "hebrew": "הַשִּׁרְיוֹן",
+    "hebrew": "הַשִּׁרְיוֹן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The republic",
     "transliteration": "harepublika",
-    "hebrew": "הָרֶפּוּבְּלִיקָה",
+    "hebrew": "הָרֶפּוּבְּלִיקָה",
     "difficulty": 8
   },
   {
@@ -8104,14 +8105,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And giving",
     "transliteration": "umatan",
-    "hebrew": "וּמַתָּן",
+    "hebrew": "וּמַתָּן",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In water",
     "transliteration": "bemayim",
-    "hebrew": "בַּמַּיִם",
+    "hebrew": "בְּמַיִם",
     "difficulty": 8
   },
   {
@@ -8125,14 +8126,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pyramid",
     "transliteration": "hapiramida",
-    "hebrew": "הַפִּירָמִידָה",
+    "hebrew": "הַפִּירָמִידָה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Boulevard",
     "transliteration": "sderot",
-    "hebrew": "שְׂדֵרוֹת",
+    "hebrew": "שְׂדֵרוֹת",
     "difficulty": 8
   },
   {
@@ -8160,7 +8161,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The summer",
     "transliteration": "hakayits",
-    "hebrew": "הַקַּיִץ",
+    "hebrew": "הַקַּיִץ",
     "difficulty": 8
   },
   {
@@ -8195,14 +8196,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Former / ex",
     "transliteration": "leshe'avar",
-    "hebrew": "לְשֶׁעָבַר",
+    "hebrew": "לְשֶׁעָבַר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "There is (f.s.)",
     "transliteration": "yeshna",
-    "hebrew": "יֶשְׁנָהּ",
+    "hebrew": "יְשֵׁנָה",
     "difficulty": 8
   },
   {
@@ -8216,7 +8217,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "When he",
     "transliteration": "keshehu",
-    "hebrew": "כְּשֶׁהוּא",
+    "hebrew": "כְּשֶׁהוּא",
     "difficulty": 8
   },
   {
@@ -8230,7 +8231,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Turned (m.s.)",
     "transliteration": "pana",
-    "hebrew": "פָּנָה",
+    "hebrew": "פָּנָה",
     "difficulty": 8
   },
   {
@@ -8244,7 +8245,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Official (m.s.)",
     "transliteration": "rishmi",
-    "hebrew": "רִשְׁמִי",
+    "hebrew": "רִשְׁמִי",
     "difficulty": 8
   },
   {
@@ -8258,28 +8259,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Acted / operated (m.s.)",
     "transliteration": "pa'al",
-    "hebrew": "פָּעַל",
+    "hebrew": "פָּעַל",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In process",
     "transliteration": "betahalikh",
-    "hebrew": "בַּתַּהֲלִיךְ",
+    "hebrew": "בְּתַהֲלִיךְ",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Most of them (m.)",
     "transliteration": "rubam",
-    "hebrew": "רֻובָּם",
+    "hebrew": "רֻבָּם",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Were / constituted (pl.)",
     "transliteration": "hivu",
-    "hebrew": "הִיוּוּ",
+    "hebrew": "הִוּוּ",
     "difficulty": 8
   },
   {
@@ -8293,21 +8294,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Exist (f.pl.)",
     "transliteration": "kayamot",
-    "hebrew": "קַיָּימוֹת",
+    "hebrew": "קַיָּמוֹת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The chapter / the period / the joint",
     "transliteration": "haperek",
-    "hebrew": "הַפֶּרֶק",
+    "hebrew": "הַפֶּרֶק",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[in] a title / [in] a degree / [in] an adjective / [in] an appearance / [in] a shape",
     "transliteration": "beto'ar",
-    "hebrew": "בַּתֹּואַר",
+    "hebrew": "בְּתֹאַר",
     "difficulty": 8
   },
   {
@@ -8342,56 +8343,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Mind / knowledge / wisdom",
     "transliteration": "da'at",
-    "hebrew": "דַּעַת",
+    "hebrew": "דַּעַת",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Stayed / remained / was left (m.s.)",
     "transliteration": "nish'ar",
-    "hebrew": "נִשְׁאַר",
+    "hebrew": "נִשְׁאַר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The houses / the homes",
     "transliteration": "habatim",
-    "hebrew": "הַבָּתִּים",
+    "hebrew": "הַבָּתִּים",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Deed / story / tale",
     "transliteration": "ma'ase",
-    "hebrew": "מַעֲשֶׂה",
+    "hebrew": "מַעֲשֶׂה",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To return / to repeat",
     "transliteration": "lakhzor",
-    "hebrew": "לַחֲזֹור",
+    "hebrew": "לַחֲזֹר",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Returned (m.s.)",
     "transliteration": "shav",
-    "hebrew": "שָׁב",
+    "hebrew": "שָׁב",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To achieve / to criticize",
     "transliteration": "lehasig",
-    "hebrew": "לְהַשִּׂיג",
+    "hebrew": "לְהַשִּׂיג",
     "difficulty": 8
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Long (m.s.)",
     "transliteration": "arokh",
-    "hebrew": "אָרֹוךְ",
+    "hebrew": "אָרֹךְ",
     "difficulty": 8
   },
   {
@@ -8405,21 +8406,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The growth / the increase / the tumor",
     "transliteration": "hagidul",
-    "hebrew": "הַגִּידּוּל",
+    "hebrew": "הַגִּדּוּל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the sea",
     "transliteration": "bayam",
-    "hebrew": "בַּיָּם",
+    "hebrew": "בַּיָּם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Iron",
     "transliteration": "barzel",
-    "hebrew": "בַּרְזֶל",
+    "hebrew": "בַּרְזֶל",
     "difficulty": 9
   },
   {
@@ -8440,7 +8441,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The occupation",
     "transliteration": "hakibush",
-    "hebrew": "הַכִּיבּוּשׁ",
+    "hebrew": "הַכִּבּוּשׁ",
     "difficulty": 9
   },
   {
@@ -8461,35 +8462,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Method",
     "transliteration": "shita",
-    "hebrew": "שִׁיטָה",
+    "hebrew": "שִׁיטָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "His image / his figure / his shape / his character",
     "transliteration": "dmuto",
-    "hebrew": "דְּמוּתוֹ",
+    "hebrew": "דְּמוּתוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[with] a voice / [with] a sound / loudly",
     "transliteration": "bekol",
-    "hebrew": "בְּקוֹל",
+    "hebrew": "בְּקוֹל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Replied / returned [something] (m.s.)",
     "transliteration": "heshiv",
-    "hebrew": "הֵשִׁיב",
+    "hebrew": "הֵשִׁיב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The matter / the interest",
     "transliteration": "ha'inyan",
-    "hebrew": "הָעִנְיָין",
+    "hebrew": "הָעִנְיָן",
     "difficulty": 9
   },
   {
@@ -8503,35 +8504,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Deep (m.s.)",
     "transliteration": "amok",
-    "hebrew": "עָמֹוק",
+    "hebrew": "עָמֹק",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The words / what was said / the things / the items / the matters",
     "transliteration": "hadvarim",
-    "hebrew": "הַדְּבָרִים",
+    "hebrew": "הַדְּבָרִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On [days] / in days",
     "transliteration": "beyamim",
-    "hebrew": "בַּיָּמִים",
+    "hebrew": "בְּיָמִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The new (m.pl.)",
     "transliteration": "hakhadashim",
-    "hebrew": "הַחֲדָשִׁים",
+    "hebrew": "הַחֲדָשִׁים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Word / circumcision",
     "transliteration": "mila",
-    "hebrew": "מִילָּה",
+    "hebrew": "מִלָּה",
     "difficulty": 9
   },
   {
@@ -8545,49 +8546,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rubella",
     "transliteration": "ademet",
-    "hebrew": "אַדְמַת",
+    "hebrew": "אַדֶּמֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The number",
     "transliteration": "hamispar",
-    "hebrew": "הַמִּסְפָּר",
+    "hebrew": "הַמִּסְפָּר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That also",
     "transliteration": "shegam",
-    "hebrew": "שֶׁגַּם",
+    "hebrew": "שֶׁגַּם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The talk / the conversation / the bush",
     "transliteration": "hasi'akh",
-    "hebrew": "הַשִּׂיחַ",
+    "hebrew": "הַשִּׂיחַ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The treatment",
     "transliteration": "hatipul",
-    "hebrew": "הַטִּיפּוּל",
+    "hebrew": "הַטִּפּוּל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Because of",
     "transliteration": "begin",
-    "hebrew": "בֵּגִין",
+    "hebrew": "בֵּגִין",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To divide",
     "transliteration": "lekhalek",
-    "hebrew": "לְחַלֵּק",
+    "hebrew": "לְחַלֵּק",
     "difficulty": 9
   },
   {
@@ -8615,14 +8616,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The kitchen",
     "transliteration": "hamitbakh",
-    "hebrew": "הַמִּטְבָּח",
+    "hebrew": "הַמִּטְבָּח",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Has been decided",
     "transliteration": "hukhlat",
-    "hebrew": "הֻוחְלַט",
+    "hebrew": "הֻחְלַט",
     "difficulty": 9
   },
   {
@@ -8636,7 +8637,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The general (m.s.)",
     "transliteration": "haklali",
-    "hebrew": "הַכְּלָלִי",
+    "hebrew": "הַכְּלָלִי",
     "difficulty": 9
   },
   {
@@ -8650,7 +8651,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To occupy",
     "transliteration": "likhbosh",
-    "hebrew": "לִכְבֹּושׁ",
+    "hebrew": "לִכְבֹּשׁ",
     "difficulty": 9
   },
   {
@@ -8664,42 +8665,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cross",
     "transliteration": "hatslav",
-    "hebrew": "הַצְּלָב",
+    "hebrew": "הַצְּלָב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Significant (m.s.)",
     "transliteration": "mashma'uti",
-    "hebrew": "מַשְׁמָעוּתִי",
+    "hebrew": "מַשְׁמָעוּתִי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Development",
     "transliteration": "hitpatkhut",
-    "hebrew": "הִתְפַּתְּחוּת",
+    "hebrew": "הִתְפַּתְּחוּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The aristocracy",
     "transliteration": "ha'atsula",
-    "hebrew": "הָאֲצֻולָּה",
+    "hebrew": "הָאֲצֻלָּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a civilization / in a culture",
     "transliteration": "betarbut",
-    "hebrew": "בַּתַּרְבּוּת",
+    "hebrew": "בְּתַרְבּוּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Accepted / conventional (m.s.)",
     "transliteration": "mekubal",
-    "hebrew": "מְקֻובָּל",
+    "hebrew": "מְקֻבָּל",
     "difficulty": 9
   },
   {
@@ -8727,28 +8728,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The land",
     "transliteration": "hayabasha",
-    "hebrew": "הַיַּבָּשָׁה",
+    "hebrew": "הַיַּבָּשָׁה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the night / at night",
     "transliteration": "balaila",
-    "hebrew": "בַּלַּיְלָה",
+    "hebrew": "בַּלַּיְלָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Told",
     "transliteration": "siper",
-    "hebrew": "סִיפֵּר",
+    "hebrew": "סִפֵּר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for the past",
     "transliteration": "la'avar",
-    "hebrew": "לְעֵבֶר",
+    "hebrew": "לַעֲבָר",
     "difficulty": 9
   },
   {
@@ -8769,35 +8770,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To continue",
     "transliteration": "lehamshikh",
-    "hebrew": "לְהַמְשִׁיךְ",
+    "hebrew": "לְהַמְשִׁיךְ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Field",
     "transliteration": "sade",
-    "hebrew": "שָׂדֶה",
+    "hebrew": "שָׂדֶה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Habits",
     "transliteration": "hergelim",
-    "hebrew": "הָרַגְלַיִם",
+    "hebrew": "הֶרְגֵּלִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Agreement / contract",
     "transliteration": "heskem",
-    "hebrew": "הֶסְכֵּם",
+    "hebrew": "הֶסְכֵּם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the matter of / with interest",
     "transliteration": "be'inyan",
-    "hebrew": "בָּעִנְיָין",
+    "hebrew": "בְּעִנְיָן",
     "difficulty": 9
   },
   {
@@ -8832,21 +8833,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Pressure",
     "transliteration": "lakhats",
-    "hebrew": "לְחַץ",
+    "hebrew": "לַחַץ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Official (f.s.) / officially",
     "transliteration": "rishmit",
-    "hebrew": "רִשְׁמִית",
+    "hebrew": "רִשְׁמִית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The military (f.s.)",
     "transliteration": "hatsva'it",
-    "hebrew": "הַצְּבָאִית",
+    "hebrew": "הַצְּבָאִית",
     "difficulty": 9
   },
   {
@@ -8867,35 +8868,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Completion / perfection / wholeness / innocence / purity",
     "transliteration": "tom",
-    "hebrew": "תֹּום",
+    "hebrew": "תֹּם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To the Knesset",
     "transliteration": "lakneset",
-    "hebrew": "לַכְּנֶסֶת",
+    "hebrew": "לַכְּנֶסֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The virus",
     "transliteration": "hanagif",
-    "hebrew": "הַנְּגִיף",
+    "hebrew": "הֲנָגִיף",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That will be (m.s.)",
     "transliteration": "sheyihye",
-    "hebrew": "שֶׁיִּהְיֶה",
+    "hebrew": "שֶׁיִּהְיֶה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Came (pl.)",
     "transliteration": "ba'u",
-    "hebrew": "בָּאוּ",
+    "hebrew": "בָּאוּ",
     "difficulty": 9
   },
   {
@@ -8909,7 +8910,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the streets",
     "transliteration": "barekhovot",
-    "hebrew": "בִּרְחוֹבוֹת",
+    "hebrew": "בָּרְחוֹבוֹת",
     "difficulty": 9
   },
   {
@@ -8923,28 +8924,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Carried / married (m.s.)",
     "transliteration": "nasa",
-    "hebrew": "נָשָׂא",
+    "hebrew": "נָשָׂא",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Minutes / thin (f.pl.)",
     "transliteration": "dakot",
-    "hebrew": "דַּקּוֹת",
+    "hebrew": "דַּקּוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Award / prize",
     "transliteration": "pras",
-    "hebrew": "פְּרָס",
+    "hebrew": "פְּרָס",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a league",
     "transliteration": "beliga",
-    "hebrew": "בַּלִּיגָה",
+    "hebrew": "בְּלִיגָה",
     "difficulty": 9
   },
   {
@@ -8958,105 +8959,105 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His way / through him/it",
     "transliteration": "darko",
-    "hebrew": "דַּרְכּוֹ",
+    "hebrew": "דַּרְכּוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "My book",
     "transliteration": "sifri",
-    "hebrew": "סִפְרֵי",
+    "hebrew": "סִפְרִי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The source / the beak",
     "transliteration": "hamakor",
-    "hebrew": "הַמָּקוֹר",
+    "hebrew": "הַמָּקוֹר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Used (pl.)",
     "transliteration": "hishtamshu",
-    "hebrew": "הִשְׁתַּמְּשׁוּ",
+    "hebrew": "הִשְׁתַּמְּשׁוּ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The high / the tall (f.s.)",
     "transliteration": "hagavoha",
-    "hebrew": "הַגְּבוֹהָה",
+    "hebrew": "הַגְּבוֹהָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The word / the circumcision",
     "transliteration": "hamila",
-    "hebrew": "הַמִּילָּה",
+    "hebrew": "הַמִּלָּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The next / the person who is coming (f.pl.)",
     "transliteration": "haba'ot",
-    "hebrew": "הַבָּאוֹת",
+    "hebrew": "הַבָּאוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The basis / the base",
     "transliteration": "habasis",
-    "hebrew": "הַבָּסִיס",
+    "hebrew": "הַבָּסִיס",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The invasion",
     "transliteration": "haplisha",
-    "hebrew": "הַפְּלִישָׁה",
+    "hebrew": "הַפְּלִישָׁה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The civilization / the culture",
     "transliteration": "hatarbut",
-    "hebrew": "הַתַּרְבּוּת",
+    "hebrew": "הַתַּרְבּוּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Stage / phase / rung",
     "transliteration": "shalav",
-    "hebrew": "שָׁלָב",
+    "hebrew": "שָׁלָב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The relation / the ratio / the attitude",
     "transliteration": "hayakhas",
-    "hebrew": "הַיַּחַס",
+    "hebrew": "הַיַּחַס",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The plant / the factory",
     "transliteration": "hamif'al",
-    "hebrew": "הַמִּפְעָל",
+    "hebrew": "הַמִּפְעָל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Shot",
     "transliteration": "yeriya",
-    "hebrew": "יְרִיָּיה",
+    "hebrew": "יְרִיָּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Eggs",
     "transliteration": "beytsim",
-    "hebrew": "בֵּיצִים",
+    "hebrew": "בֵּיצִים",
     "difficulty": 9
   },
   {
@@ -9077,7 +9078,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Alive / in life",
     "transliteration": "bakhayim",
-    "hebrew": "בַּחַיִּים",
+    "hebrew": "בַּחַיִּים",
     "difficulty": 9
   },
   {
@@ -9126,7 +9127,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Competition",
     "transliteration": "takharut",
-    "hebrew": "תַּחֲרוּת",
+    "hebrew": "תַּחֲרוּת",
     "difficulty": 9
   },
   {
@@ -9140,7 +9141,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Cooperation / collaboration",
     "transliteration": "shituf",
-    "hebrew": "שִׁיתּוּף",
+    "hebrew": "שִׁתּוּף",
     "difficulty": 9
   },
   {
@@ -9154,14 +9155,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For the year [X] / for the year of / for the sleep of",
     "transliteration": "lishnat",
-    "hebrew": "לִשְׁנַת",
+    "hebrew": "לִשְׁנַת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Event",
     "transliteration": "eru'a",
-    "hebrew": "אֵירוּעַ",
+    "hebrew": "אֵרוּעַ",
     "difficulty": 9
   },
   {
@@ -9182,14 +9183,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The committee / the board",
     "transliteration": "hava'ad",
-    "hebrew": "הַוַּועַד",
+    "hebrew": "הַוַּעַד",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The dead (m.pl.)",
     "transliteration": "hametim",
-    "hebrew": "הַמֵּתִים",
+    "hebrew": "הַמֵּתִים",
     "difficulty": 9
   },
   {
@@ -9203,42 +9204,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His family",
     "transliteration": "mishpakhto",
-    "hebrew": "מִשְׁפַּחְתּוֹ",
+    "hebrew": "מִשְׁפַּחְתּוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To hit / to damage / to offend",
     "transliteration": "lifgo'a",
-    "hebrew": "לִפְגֹּועַ",
+    "hebrew": "לִפְגֹּעַ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The difficult / the hard (m.s.)",
     "transliteration": "hakashe",
-    "hebrew": "הַקָּשֶׁה",
+    "hebrew": "הַקָּשֶׁה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a season",
     "transliteration": "be'ona",
-    "hebrew": "בָּעוֹנָה",
+    "hebrew": "בְּעוֹנָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The area",
     "transliteration": "hasviva",
-    "hebrew": "הַסְּבִיבָה",
+    "hebrew": "הַסְּבִיבָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Knesset (the Israeli parliament)",
     "transliteration": "kneset",
-    "hebrew": "כְּנֶסֶת",
+    "hebrew": "כְּנֶסֶת",
     "difficulty": 9
   },
   {
@@ -9252,7 +9253,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Significant (f.s.) / in significance",
     "transliteration": "mashma'utit",
-    "hebrew": "מַשְׁמָעוּתִית",
+    "hebrew": "מַשְׁמָעוּתִית",
     "difficulty": 9
   },
   {
@@ -9287,70 +9288,70 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a park",
     "transliteration": "bepark",
-    "hebrew": "בַּפַּארְק",
+    "hebrew": "בְּפַּארְק",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Trials / attempts",
     "transliteration": "nisyonot",
-    "hebrew": "נִיסְיוֹנוֹת",
+    "hebrew": "נִסְיוֹנוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Point of",
     "transliteration": "nekudat",
-    "hebrew": "נְקֻודַּת",
+    "hebrew": "נְקֻדַּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Concentration",
     "transliteration": "rikuz",
-    "hebrew": "רִיכּוּז",
+    "hebrew": "רִכּוּז",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the history of",
     "transliteration": "betoldot",
-    "hebrew": "בְּתוֹלְדוֹת",
+    "hebrew": "בְּתוֹלְדוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As part",
     "transliteration": "kekhelek",
-    "hebrew": "כְּחֵלֶק",
+    "hebrew": "כְּחֵלֶק",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the height / at the level",
     "transliteration": "barama",
-    "hebrew": "בָּרָמָה",
+    "hebrew": "בָּרָמָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Two years",
     "transliteration": "shnatayim",
-    "hebrew": "שְׁנָתַיִים",
+    "hebrew": "שְׁנָתַיִם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The biology",
     "transliteration": "habiologia",
-    "hebrew": "הַבִּיּוֹלוֹגְיָה",
+    "hebrew": "הַבִּיּוֹלוֹגְיָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Carbon",
     "transliteration": "pakhman",
-    "hebrew": "פַּחְמָן",
+    "hebrew": "פַּחְמָן",
     "difficulty": 9
   },
   {
@@ -9364,28 +9365,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The children",
     "transliteration": "hayladim",
-    "hebrew": "הַיְּלָדִים",
+    "hebrew": "הַיְּלָדִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the morning",
     "transliteration": "baboker",
-    "hebrew": "בַּבֹּוקֶר",
+    "hebrew": "בַּבֹּקֶר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The family",
     "transliteration": "hamishpakha",
-    "hebrew": "הַמִּשְׁפָּחָה",
+    "hebrew": "הַמִּשְׁפָּחָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pull / the attraction / the withdrawal / gravity",
     "transliteration": "hameshikha",
-    "hebrew": "הִמְשִׁיכָה",
+    "hebrew": "הַמְּשִׁיכָה",
     "difficulty": 9
   },
   {
@@ -9406,7 +9407,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Image / figure / shape / character",
     "transliteration": "dmut",
-    "hebrew": "דְּמוּת",
+    "hebrew": "דְּמוּת",
     "difficulty": 9
   },
   {
@@ -9434,14 +9435,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "As aforesaid",
     "transliteration": "ka'amur",
-    "hebrew": "כָּאָמוּר",
+    "hebrew": "כָּאָמוּר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hit / impact / damage / offense",
     "transliteration": "pgi'a",
-    "hebrew": "פְּגִיעָה",
+    "hebrew": "פְּגִיעָה",
     "difficulty": 9
   },
   {
@@ -9462,28 +9463,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The regime",
     "transliteration": "hamishtar",
-    "hebrew": "הַמִּשְׁטָר",
+    "hebrew": "הַמִּשְׁטָר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Construction",
     "transliteration": "bniya",
-    "hebrew": "בְּנִיָּיה",
+    "hebrew": "בְּנִיָּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The revolution",
     "transliteration": "hamahapekha",
-    "hebrew": "הַמַּהְפֵּכָה",
+    "hebrew": "הַמַּהְפֵּכָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Motions / movements",
     "transliteration": "tnu'ot",
-    "hebrew": "תְּנוּעוֹת",
+    "hebrew": "תְּנוּעוֹת",
     "difficulty": 9
   },
   {
@@ -9497,28 +9498,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Bible / the legend",
     "transliteration": "hamikra",
-    "hebrew": "הַמִּקְרָא",
+    "hebrew": "הַמִּקְרָא",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The parsley",
     "transliteration": "hapetrosilnon",
-    "hebrew": "הַפֶּטְרוֹסְלִינוּן",
+    "hebrew": "הַפֶּטְרוֹסְלִינוּן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The door",
     "transliteration": "hadelet",
-    "hebrew": "הַדֶּלֶת",
+    "hebrew": "הַדֶּלֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The queen",
     "transliteration": "hamalka",
-    "hebrew": "הַמַּלְכָּה",
+    "hebrew": "הַמַּלְכָּה",
     "difficulty": 9
   },
   {
@@ -9539,21 +9540,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is not / is not here (f.s.)",
     "transliteration": "einena",
-    "hebrew": "אֵינֶנָּה",
+    "hebrew": "אֵינֶנָּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The iron",
     "transliteration": "habarzel",
-    "hebrew": "הַבַּרְזֶל",
+    "hebrew": "הַבַּרְזֶל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In much / in many",
     "transliteration": "beharbe",
-    "hebrew": "בְּהַרְבֵּה",
+    "hebrew": "בְּהַרְבֵּה",
     "difficulty": 9
   },
   {
@@ -9567,14 +9568,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The players / the actors",
     "transliteration": "hasakhkanim",
-    "hebrew": "הַשַּׂחְקָנִים",
+    "hebrew": "הַשַּׂחְקָנִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Introduced / displayed / presented / exhibited (m.s.)",
     "transliteration": "hetsig",
-    "hebrew": "הִצִּיג",
+    "hebrew": "הִצִּיג",
     "difficulty": 9
   },
   {
@@ -9595,49 +9596,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Under his command",
     "transliteration": "befikudo",
-    "hebrew": "בְּפִיקּוּדוֹ",
+    "hebrew": "בְּפִקּוּדוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In an operation / on sale",
     "transliteration": "bemivtsa",
-    "hebrew": "בְּמִבְצָע",
+    "hebrew": "בְּמִבְצָע",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Religion",
     "transliteration": "dat",
-    "hebrew": "דָּת",
+    "hebrew": "דָּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Actually",
     "transliteration": "bafo'al",
-    "hebrew": "בְּפֹועַל",
+    "hebrew": "בְּפֹעַל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cell",
     "transliteration": "hata",
-    "hebrew": "הַתָּא",
+    "hebrew": "הַתָּא",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Growth / increase / tumor",
     "transliteration": "gidul",
-    "hebrew": "גִּידּוּל",
+    "hebrew": "גִּדּוּל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At the university of",
     "transliteration": "be'universitat",
-    "hebrew": "בְּאוּנִיבֶרְסִיטַת",
+    "hebrew": "בְּאוּנִיבֶרְסִיטַת",
     "difficulty": 9
   },
   {
@@ -9651,49 +9652,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like this (f.)",
     "transliteration": "kazot",
-    "hebrew": "כָּזֹאת",
+    "hebrew": "כָּזֹאת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The black (f.s.)",
     "transliteration": "hashkhora",
-    "hebrew": "הַשְּׁחֹורָה",
+    "hebrew": "הַשְּׁחֹרָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Must / owes / debtor(m.s.)",
     "transliteration": "khayav",
-    "hebrew": "חַיָּיב",
+    "hebrew": "חַיָּב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Continues / continued / lasted / was pulled / was attracted / was withdrawn (m.s.)",
     "transliteration": "nimshakh",
-    "hebrew": "נִמְשָׁךְ",
+    "hebrew": "נִמְשָׁךְ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Dealt / engaged / worked (m.s.)",
     "transliteration": "asak",
-    "hebrew": "עֵסֶק",
+    "hebrew": "עָסַק",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sabotage / bruising",
     "transliteration": "khabala",
-    "hebrew": "חַבָּלָה",
+    "hebrew": "חַבָּלָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The high / the tall (m.s.)",
     "transliteration": "hagvoha",
-    "hebrew": "הַגָּבוֹהַּ",
+    "hebrew": "הַגָּבוֹהַּ",
     "difficulty": 9
   },
   {
@@ -9707,7 +9708,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Events",
     "transliteration": "eru'im",
-    "hebrew": "אֵירוּעִים",
+    "hebrew": "אֵרוּעִים",
     "difficulty": 9
   },
   {
@@ -9721,21 +9722,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Freedom",
     "transliteration": "khofesh",
-    "hebrew": "חֹופֶשׁ",
+    "hebrew": "חֹפֶשׁ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The knowledge",
     "transliteration": "hayeda",
-    "hebrew": "הַיֶּדַע",
+    "hebrew": "הַיֶּדַע",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Gradually",
     "transliteration": "behadraga",
-    "hebrew": "בְּהַדְרָגָה",
+    "hebrew": "בְּהַדְרָגָה",
     "difficulty": 9
   },
   {
@@ -9749,77 +9750,77 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Included (pl.)",
     "transliteration": "kalelu",
-    "hebrew": "כָּלְלוּ",
+    "hebrew": "כָּלְלוּ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Forcefully",
     "transliteration": "beko'akh",
-    "hebrew": "בְּכוֹחַ",
+    "hebrew": "בְּכוֹחַ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the period of / from the era of",
     "transliteration": "mitkufat",
-    "hebrew": "מִתְּקוּפַת",
+    "hebrew": "מִתְּקוּפַת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Were used for (pl.)",
     "transliteration": "shimshu",
-    "hebrew": "שִׁימְּשׁוּ",
+    "hebrew": "שִׁמְּשׁוּ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Attitude / access / approach",
     "transliteration": "gisha",
-    "hebrew": "גִּישָׁה",
+    "hebrew": "גִּישָׁה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Close to",
     "transliteration": "bekirvat",
-    "hebrew": "בְּקִרְבַת",
+    "hebrew": "בְּקִרְבַת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Specific (f.pl.)",
     "transliteration": "mesuyamot",
-    "hebrew": "מְסֻויָּמוֹת",
+    "hebrew": "מְסֻיָּמוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Obvious / evident (f.s.)",
     "transliteration": "nikeret",
-    "hebrew": "נִיכֶּרֶת",
+    "hebrew": "נִכֶּרֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The original (m.s.)",
     "transliteration": "hamekori",
-    "hebrew": "הַמְּקוֹרִי",
+    "hebrew": "הַמְּקוֹרִי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Characteristics",
     "transliteration": "me'afyenim",
-    "hebrew": "מְאַפְיְינִים",
+    "hebrew": "מְאַפְיְנִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To learn / to study",
     "transliteration": "lilmod",
-    "hebrew": "לִלְמֹוד",
+    "hebrew": "לִלְמֹד",
     "difficulty": 9
   },
   {
@@ -9833,7 +9834,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Certainly",
     "transliteration": "bevadai",
-    "hebrew": "בְּוַדַּאי",
+    "hebrew": "בְּוַדָּאִי",
     "difficulty": 9
   },
   {
@@ -9854,7 +9855,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hill of",
     "transliteration": "giv'at",
-    "hebrew": "גִּבְעַת",
+    "hebrew": "גִּבְעַת",
     "difficulty": 9
   },
   {
@@ -9868,7 +9869,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The women",
     "transliteration": "hanashim",
-    "hebrew": "הַנָּשִׁים",
+    "hebrew": "הַנָּשִׁים",
     "difficulty": 9
   },
   {
@@ -9882,21 +9883,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "After [time period]",
     "transliteration": "ka'avor",
-    "hebrew": "כַּעֲבֹור",
+    "hebrew": "כַּעֲבֹר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Lacking (m.s.)",
     "transliteration": "khasar",
-    "hebrew": "חָסֵר",
+    "hebrew": "חֲסַר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Believed (pl.)",
     "transliteration": "he'eminu",
-    "hebrew": "הַאֲמִינוּ",
+    "hebrew": "הֶאֱמִינוּ",
     "difficulty": 9
   },
   {
@@ -9910,56 +9911,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Aforementioned",
     "transliteration": "le'el",
-    "hebrew": "לְעֵיל",
+    "hebrew": "לְעֵל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "As one",
     "transliteration": "ke'ekhad",
-    "hebrew": "כְּאֶחָד",
+    "hebrew": "כְּאֶחָד",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The units / the squads / the only / the single (f.pl.)",
     "transliteration": "hayekhidot",
-    "hebrew": "הַיְּחִידוֹת",
+    "hebrew": "הַיְּחִידוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Effects / influences",
     "transliteration": "hashpa'ot",
-    "hebrew": "הַשְׁפָּעוֹת",
+    "hebrew": "הַשְׁפָּעוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The main (f.s.)",
     "transliteration": "harashit",
-    "hebrew": "הָרֵאשִׁית",
+    "hebrew": "הָרָאשִׁית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Girls / daughters",
     "transliteration": "banot",
-    "hebrew": "בָּנוֹת",
+    "hebrew": "בָּנוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Pact / alliance / covenant / circumcision",
     "transliteration": "bivrit",
-    "hebrew": "בַּבְּרִית",
+    "hebrew": "בִּבְרִית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Soldiers of",
     "transliteration": "khayalei",
-    "hebrew": "חַיָּילֵי",
+    "hebrew": "חַיָּלֵי",
     "difficulty": 9
   },
   {
@@ -9980,7 +9981,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "My soul / my spirit / my life",
     "transliteration": "nafeshi",
-    "hebrew": "נַפְשִׁי",
+    "hebrew": "נַפְשִׁי",
     "difficulty": 9
   },
   {
@@ -9994,21 +9995,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the evening",
     "transliteration": "ba'erev",
-    "hebrew": "בָּעֶרֶב",
+    "hebrew": "בָּעֶרֶב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That this (m.)",
     "transliteration": "sheze",
-    "hebrew": "שֶׁזֶּה",
+    "hebrew": "שֶׁזֶּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The council",
     "transliteration": "hamo'etsa",
-    "hebrew": "הַמּוֹעָצָה",
+    "hebrew": "הַמּוֹעֵצָה",
     "difficulty": 9
   },
   {
@@ -10022,35 +10023,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Regime / reign",
     "transliteration": "mishtar",
-    "hebrew": "מִשְׁטָר",
+    "hebrew": "מִשְׁטָר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The league",
     "transliteration": "haliga",
-    "hebrew": "הַלִּיגָה",
+    "hebrew": "הַלִּיגָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The red",
     "transliteration": "ha'adom",
-    "hebrew": "הָאָדֹום",
+    "hebrew": "הָאָדֹם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a state",
     "transliteration": "bemedina",
-    "hebrew": "בַּמְּדִינָה",
+    "hebrew": "בַּמְּדִינָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Regarding / wherever (biblical)",
     "transliteration": "ba'asher",
-    "hebrew": "בַּאֲשֶׁר",
+    "hebrew": "בַּאֲשֶׁר",
     "difficulty": 9
   },
   {
@@ -10064,14 +10065,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Performed / executed (m.s.)",
     "transliteration": "bitsa",
-    "hebrew": "בִּיצֵּעַ",
+    "hebrew": "בִּצֵּעַ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a ghetto",
     "transliteration": "begeto",
-    "hebrew": "בַּגֵּטוֹ",
+    "hebrew": "בְּגֵטוֹ",
     "difficulty": 9
   },
   {
@@ -10085,7 +10086,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bacteria",
     "transliteration": "khaydakim",
-    "hebrew": "חַיְידַּקִּים",
+    "hebrew": "חַיְדַּקִּים",
     "difficulty": 9
   },
   {
@@ -10106,14 +10107,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The hand",
     "transliteration": "hayad",
-    "hebrew": "הַיָּד",
+    "hebrew": "הַיָּד",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Was published / was advertised (m.s.)",
     "transliteration": "pursam",
-    "hebrew": "פֻּורְסַם",
+    "hebrew": "פֻּרְסַם",
     "difficulty": 9
   },
   {
@@ -10134,14 +10135,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Death",
     "transliteration": "mavet",
-    "hebrew": "מָוֶות",
+    "hebrew": "מָוֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Took (m.s.)",
     "transliteration": "lakakh",
-    "hebrew": "לֶקַח",
+    "hebrew": "לָקַח",
     "difficulty": 9
   },
   {
@@ -10155,7 +10156,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Wave",
     "transliteration": "gal",
-    "hebrew": "גַּל",
+    "hebrew": "גַּל",
     "difficulty": 9
   },
   {
@@ -10169,7 +10170,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Refused (m.s.)",
     "transliteration": "serav",
-    "hebrew": "סֵירֵב",
+    "hebrew": "סֵרַב",
     "difficulty": 9
   },
   {
@@ -10190,42 +10191,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To break into / to breach",
     "transliteration": "lifrots",
-    "hebrew": "לִפְרֹוץ",
+    "hebrew": "לִפְרֹץ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To an owner of / to a husband",
     "transliteration": "leva'al",
-    "hebrew": "לַבַּעַל",
+    "hebrew": "לְבַעַל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Was written (m.s.)",
     "transliteration": "nikhtav",
-    "hebrew": "נִכְתַּב",
+    "hebrew": "נִכְתַּב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The telegram",
     "transliteration": "hamivrak",
-    "hebrew": "הַמִּבְרָק",
+    "hebrew": "הַמִּבְרָק",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "His rule / his reign",
     "transliteration": "shiltono",
-    "hebrew": "שִׁלְטוֹנוֹ",
+    "hebrew": "שִׁלְטוֹנוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In captivity",
     "transliteration": "beshevi",
-    "hebrew": "בַּשֶּׁבִי",
+    "hebrew": "בְּשֶׁבִי",
     "difficulty": 9
   },
   {
@@ -10239,21 +10240,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "His right",
     "transliteration": "yemino",
-    "hebrew": "יָמֵינוּ",
+    "hebrew": "יְמִינוֹ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rise of / increase of / immigration of",
     "transliteration": "aliyat",
-    "hebrew": "עֲלִיַּית",
+    "hebrew": "עֲלִיַּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a movie / with a ribbon/strip",
     "transliteration": "beseret",
-    "hebrew": "בַּסֶּרֶט",
+    "hebrew": "בְּסֶרֶט",
     "difficulty": 9
   },
   {
@@ -10267,7 +10268,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Problems",
     "transliteration": "be'ayot",
-    "hebrew": "בְּעָיוֹת",
+    "hebrew": "בְּעָיוֹת",
     "difficulty": 9
   },
   {
@@ -10295,7 +10296,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Aerobic (m.pl.)",
     "transliteration": "aviraniyim",
-    "hebrew": "אֲוִוירָנִיִּים",
+    "hebrew": "אֲוִירָנִיִּים",
     "difficulty": 9
   },
   {
@@ -10309,14 +10310,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In favor of",
     "transliteration": "be'ad",
-    "hebrew": "בְּעַד",
+    "hebrew": "בְּעַד",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To stay / to remain",
     "transliteration": "lehisha'er",
-    "hebrew": "לְהִישָּׁאֵר",
+    "hebrew": "לְהִשָּׁאֵר",
     "difficulty": 9
   },
   {
@@ -10328,9 +10329,9 @@ const HEBREW_EXPANDED_WORDS = [
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "That is [at] / common / available (f.s.)",
+    "english": "Common / available (f.s.)",
     "transliteration": "metsuya",
-    "hebrew": "הַמָּצוּי",
+    "hebrew": "מְצוּיָה",
     "difficulty": 9
   },
   {
@@ -10344,14 +10345,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To a god",
     "transliteration": "le'el",
-    "hebrew": "לָאֵל",
+    "hebrew": "לְאֵל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sentence / trial",
     "transliteration": "mishpat",
-    "hebrew": "מִשְׁפָּט",
+    "hebrew": "מִשְׁפָּט",
     "difficulty": 9
   },
   {
@@ -10372,35 +10373,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The white (m.s.)",
     "transliteration": "halavan",
-    "hebrew": "הַלָּבָן",
+    "hebrew": "הַלָּבָן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The medications / the drugs",
     "transliteration": "hatrufot",
-    "hebrew": "הַתְּרוּפוֹת",
+    "hebrew": "הַתְּרוּפוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Complex / composed of (m.s.)",
     "transliteration": "murkav",
-    "hebrew": "מֻורְכָּב",
+    "hebrew": "מֻרְכָּב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The attitude / the access / the approach",
     "transliteration": "hagisha",
-    "hebrew": "הַגִּישָׁה",
+    "hebrew": "הַגִּישָׁה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a system / in an editorial board",
     "transliteration": "bema'arekhet",
-    "hebrew": "בַּמַּעֲרֶכֶת",
+    "hebrew": "בְּמַעֲרֶכֶת",
     "difficulty": 9
   },
   {
@@ -10414,7 +10415,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The relations",
     "transliteration": "hayakhasim",
-    "hebrew": "הַיְּחָסִים",
+    "hebrew": "הַיַּחֲסִים",
     "difficulty": 9
   },
   {
@@ -10428,14 +10429,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Materials of",
     "transliteration": "khomrei",
-    "hebrew": "חָומְרֵי",
+    "hebrew": "חוֹמְרֵי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Village",
     "transliteration": "kfar",
-    "hebrew": "כְּפָר",
+    "hebrew": "כְּפָר",
     "difficulty": 9
   },
   {
@@ -10449,14 +10450,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the season of",
     "transliteration": "be'onat",
-    "hebrew": "בְּעוֹנַת",
+    "hebrew": "בְּעוֹנַת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the years of",
     "transliteration": "mishnot",
-    "hebrew": "מִשְּׁנוֹת",
+    "hebrew": "מִשְּׁנוֹת",
     "difficulty": 9
   },
   {
@@ -10477,14 +10478,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "My position",
     "transliteration": "emdati",
-    "hebrew": "עָמַדְתִּי",
+    "hebrew": "עֶמְדָּתִי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To ask / to request",
     "transliteration": "levakesh",
-    "hebrew": "לְבַקֵּשׁ",
+    "hebrew": "לְבַקֵּשׁ",
     "difficulty": 9
   },
   {
@@ -10498,84 +10499,84 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That [it is] possible (adv.)",
     "transliteration": "she'efshar",
-    "hebrew": "שֶׁאֶפְשָׁר",
+    "hebrew": "שֶׁאֶפְשָׁר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To carry / to marry",
     "transliteration": "laset",
-    "hebrew": "לָשֵׂאת",
+    "hebrew": "לָשֵׂאת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To introduce / to display / to present / to exhibit",
     "transliteration": "lehatsig",
-    "hebrew": "לְהַצִּיג",
+    "hebrew": "לְהַצִּיג",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Who prepared / who made arrangements / that was held / that was edited (m.s.)",
     "transliteration": "shene'erakh",
-    "hebrew": "שֶׁנֶּעֱרַךְ",
+    "hebrew": "שֶׁנֶּעֱרַךְ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Difficult / hard (m.pl.)",
     "transliteration": "kashim",
-    "hebrew": "קָשִׁים",
+    "hebrew": "קָשִׁים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fight (m.s. imperative)",
     "transliteration": "hilakhem",
-    "hebrew": "הַלֶּחֶם",
+    "hebrew": "הִלָּחֵם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The material",
     "transliteration": "hakhomer",
-    "hebrew": "הַחֹומֶר",
+    "hebrew": "הַחֹמֶר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "The general (m.pl.)",
+    "english": "The general (f.s.)",
     "transliteration": "haklalit",
-    "hebrew": "הַכְּלָלִית",
+    "hebrew": "הַכְּלָלִית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a village",
     "transliteration": "bekfar",
-    "hebrew": "בַּכְּפָר",
+    "hebrew": "בְּכַפָר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[in] a style of / [in] a manner of",
     "transliteration": "besignon",
-    "hebrew": "בְּסִגְנוֹן",
+    "hebrew": "בְּסִגְנוֹן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Victory",
     "transliteration": "nitsakhon",
-    "hebrew": "נִיצָּחוֹן",
+    "hebrew": "נִצָּחוֹן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In return for / in exchange for // change of / transformation of",
     "transliteration": "tmurat",
-    "hebrew": "תְּמוּרַת",
+    "hebrew": "תְּמוּרַת",
     "difficulty": 9
   },
   {
@@ -10589,7 +10590,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Acted / operated (pl.)",
     "transliteration": "pa'alu",
-    "hebrew": "פָּעֲלוּ",
+    "hebrew": "פָּעֲלוּ",
     "difficulty": 9
   },
   {
@@ -10617,35 +10618,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Artists",
     "transliteration": "omanim",
-    "hebrew": "אָמָּנִים",
+    "hebrew": "אָמָּנִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The southern (f.s.)",
     "transliteration": "hadromit",
-    "hebrew": "הַדְּרוֹמִית",
+    "hebrew": "הַדְּרוֹמִית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On a site",
     "transliteration": "be'atar",
-    "hebrew": "בָּאֲתָר",
+    "hebrew": "בָּאֲתָר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[on] a mountain",
     "transliteration": "behar",
-    "hebrew": "בָּהָר",
+    "hebrew": "בְּהַר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The river",
     "transliteration": "hanahar",
-    "hebrew": "הַנָּהָר",
+    "hebrew": "הַנָּהָר",
     "difficulty": 9
   },
   {
@@ -10666,14 +10667,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cities",
     "transliteration": "ha'arim",
-    "hebrew": "הֶעָרִים",
+    "hebrew": "הַעֲרִים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In history",
     "transliteration": "bahistoria",
-    "hebrew": "בַּהִיסְטוֹרְיָה",
+    "hebrew": "בַּהִיסְטוֹרְיָה",
     "difficulty": 9
   },
   {
@@ -10694,14 +10695,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In activity",
     "transliteration": "bif'ilut",
-    "hebrew": "בַּפְּעִילוּת",
+    "hebrew": "בִּפְעִילוּת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Was determined / was fixed / was set (m.s.)",
     "transliteration": "nikba",
-    "hebrew": "נִקְבַּע",
+    "hebrew": "נִקְבַּע",
     "difficulty": 9
   },
   {
@@ -10722,21 +10723,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The humane (m.s.)",
     "transliteration": "ha'enoshi",
-    "hebrew": "הָאֱנוֹשִׁי",
+    "hebrew": "הָאֱנוֹשִׁי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Varies / changes (m.s.) / variant (stat.)",
     "transliteration": "mishtane",
-    "hebrew": "מִשְׁתַּנֶּה",
+    "hebrew": "מִשְׁתַּנֶּה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From most / of most / so many",
     "transliteration": "merov",
-    "hebrew": "מֵרֹוב",
+    "hebrew": "מֵרֹב",
     "difficulty": 9
   },
   {
@@ -10757,7 +10758,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And that / and regarding",
     "transliteration": "va'asher",
-    "hebrew": "וַאֲשֶׁר",
+    "hebrew": "וַאֲשֶׁר",
     "difficulty": 9
   },
   {
@@ -10778,7 +10779,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Families",
     "transliteration": "mishpakhot",
-    "hebrew": "מִשְׁפָּחוֹת",
+    "hebrew": "מִשְׁפָּחוֹת",
     "difficulty": 9
   },
   {
@@ -10792,28 +10793,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To assume / to place",
     "transliteration": "lehani'akh",
-    "hebrew": "לְהַנִּיחַ",
+    "hebrew": "לְהַנִּיחַ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Received / accepted (f.s.)",
     "transliteration": "kibla",
-    "hebrew": "קִיבְּלָה",
+    "hebrew": "קִבְּלָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a series",
     "transliteration": "besidra",
-    "hebrew": "בַּסִּדְרָה",
+    "hebrew": "בְּסִדְרָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The economic (m.s.)",
     "transliteration": "hakalkali",
-    "hebrew": "הַכַּלְכָּלִי",
+    "hebrew": "הַכַּלְכָּלִי",
     "difficulty": 9
   },
   {
@@ -10841,28 +10842,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And many",
     "transliteration": "verabim",
-    "hebrew": "וְרַבִּים",
+    "hebrew": "וְרַבִּים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Required / demanded / preached / interpreted (m.s.)",
     "transliteration": "darash",
-    "hebrew": "דָּרַשׁ",
+    "hebrew": "דָּרַשׁ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In words",
     "transliteration": "bemilim",
-    "hebrew": "בְּמִילִּים",
+    "hebrew": "בְּמִלִּים",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a body",
     "transliteration": "beguf",
-    "hebrew": "בַּגּוּף",
+    "hebrew": "בְּגוּף",
     "difficulty": 9
   },
   {
@@ -10876,28 +10877,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Areas of / fields of / territories of",
     "transliteration": "shitkhei",
-    "hebrew": "שִׁטְחֵי",
+    "hebrew": "שִׁטְחִי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the south",
     "transliteration": "midarom",
-    "hebrew": "מִדָּרוֹם",
+    "hebrew": "מִדָּרוֹם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To hold / to fulfill / to carry out / to maintain",
     "transliteration": "lekayem",
-    "hebrew": "לְקַיֵּים",
+    "hebrew": "לְקַיֵּם",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The known (m.pl.)",
     "transliteration": "hayedu'im",
-    "hebrew": "הַיְּדוּעִים",
+    "hebrew": "הַיְּדוּעִים",
     "difficulty": 9
   },
   {
@@ -10925,49 +10926,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the century",
     "transliteration": "mehame'a",
-    "hebrew": "מֵהַמֵּאָה",
+    "hebrew": "מֵהַמֵּאָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Conservation",
     "transliteration": "shimur",
-    "hebrew": "שִׁימּוּר",
+    "hebrew": "שִׁמּוּר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Principle",
     "transliteration": "ikaron",
-    "hebrew": "עִקָּרוֹן",
+    "hebrew": "עִקָּרוֹן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The tradition",
     "transliteration": "hamasoret",
-    "hebrew": "הַמָּסֹורֶת",
+    "hebrew": "הַמָּסֹרֶת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The humane (f.s.)",
     "transliteration": "ha'enoshit",
-    "hebrew": "הָאֱנוֹשִׁית",
+    "hebrew": "הָאֱנוֹשִׁית",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Disturbances / interferences / interruptions",
     "transliteration": "hafra'ot",
-    "hebrew": "הַפְּרָעוֹת",
+    "hebrew": "הַפְרָעוֹת",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Applied (m.s.)",
     "transliteration": "hekhil",
-    "hebrew": "הַחַיִל",
+    "hebrew": "הֵחִיל",
     "difficulty": 9
   },
   {
@@ -10981,7 +10982,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The whale",
     "transliteration": "halivyatan",
-    "hebrew": "הַלִּוְויָיתָן",
+    "hebrew": "הַלִּוְיָתָן",
     "difficulty": 9
   },
   {
@@ -10995,14 +10996,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sounds / sounded (m.s.) / we will hear",
     "transliteration": "nishma",
-    "hebrew": "נִשְׁמָע",
+    "hebrew": "נִשְׁמָע",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sit (m.s.)",
     "transliteration": "yoshev",
-    "hebrew": "יוֹשֵׁב",
+    "hebrew": "יוֹשֵׁב",
     "difficulty": 9
   },
   {
@@ -11016,14 +11017,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Who/that can",
     "transliteration": "sheyakhol",
-    "hebrew": "שֶׁיָּכוֹל",
+    "hebrew": "שֶׁיָּכוֹל",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The bottom / the lower / the inferior (m.s.)",
     "transliteration": "hatakhton",
-    "hebrew": "הַתַּחְתּוֹן",
+    "hebrew": "הַתַּחְתּוֹן",
     "difficulty": 9
   },
   {
@@ -11044,7 +11045,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Games",
     "transliteration": "miskhakim",
-    "hebrew": "מִשְׂחָקִים",
+    "hebrew": "מִשְׂחָקִים",
     "difficulty": 9
   },
   {
@@ -11065,14 +11066,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In procession",
     "transliteration": "basakh",
-    "hebrew": "בַּסַּךְ",
+    "hebrew": "בַּסַּךְ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That was done",
     "transliteration": "shena'asa",
-    "hebrew": "שֶׁנַּעֲשָׂה",
+    "hebrew": "שֶׁנַּעֲשָׂה",
     "difficulty": 9
   },
   {
@@ -11086,14 +11087,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Between them (f.)",
     "transliteration": "beynehen",
-    "hebrew": "בֵּינֵיהֶן",
+    "hebrew": "בֵּינֵיהֶן",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For a period of",
     "transliteration": "lemeshekh",
-    "hebrew": "לְמֶשֶׁךְ",
+    "hebrew": "לְמֶשֶׁךְ",
     "difficulty": 9
   },
   {
@@ -11107,14 +11108,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And mainly / and principally / and especially",
     "transliteration": "uve'ikar",
-    "hebrew": "וּבְעִיקָּר",
+    "hebrew": "וּבְעִקָּר",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The natural (m.s.)",
     "transliteration": "hativ'i",
-    "hebrew": "הַטִּבְעִי",
+    "hebrew": "הַטִּבְעִי",
     "difficulty": 9
   },
   {
@@ -11128,35 +11129,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "With me",
     "transliteration": "iti",
-    "hebrew": "אִיתַי",
+    "hebrew": "אִתִּי",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cook",
     "transliteration": "hatabakh",
-    "hebrew": "הַטַּבָּח",
+    "hebrew": "הַטַּבָּח",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The west",
     "transliteration": "hama'arav",
-    "hebrew": "הַמַּעֲרָב",
+    "hebrew": "הַמַּעֲרָב",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Were sent (pl.)",
     "transliteration": "nishlekhu",
-    "hebrew": "נִשְׁלְחוּ",
+    "hebrew": "נִשְׁלְחוּ",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Headed by / led by",
     "transliteration": "berashut",
-    "hebrew": "בְּרָאשׁוּת",
+    "hebrew": "בְּרָאשׁוּת",
     "difficulty": 9
   },
   {
@@ -11184,7 +11185,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The learning / the Talmud",
     "transliteration": "hatalmud",
-    "hebrew": "הַתַּלְמוּד",
+    "hebrew": "הַתַּלְמוּד",
     "difficulty": 9
   },
   {
@@ -11198,35 +11199,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The young (f.s.)",
     "transliteration": "hatse'ira",
-    "hebrew": "הַצְּעִירָה",
+    "hebrew": "הַצְּעִירָה",
     "difficulty": 9
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To think",
     "transliteration": "lakhshov",
-    "hebrew": "לַחֲשֹׁוב",
+    "hebrew": "לַחֲשֹׁב",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To write",
     "transliteration": "likhtov",
-    "hebrew": "לִכְתֹּוב",
+    "hebrew": "לִכְתֹּב",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That already",
     "transliteration": "shekvar",
-    "hebrew": "שֶׁכְּבָר",
+    "hebrew": "שֶׁכְּבָר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a price",
     "transliteration": "bimkhir",
-    "hebrew": "בִּמְחִיר",
+    "hebrew": "בִּמְחִיר",
     "difficulty": 10
   },
   {
@@ -11247,28 +11248,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Supposed (m.s.)",
     "transliteration": "amur",
-    "hebrew": "אֱמֹור",
+    "hebrew": "אָמוּר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For a role / for the role of",
     "transliteration": "letafkid",
-    "hebrew": "לַתַּפְקִיד",
+    "hebrew": "לְתַפְקִיד",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who is called (m.s.)",
     "transliteration": "shenikra",
-    "hebrew": "שֶׁנִּקְרָא",
+    "hebrew": "שֶׁנִּקְרָא",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a story",
     "transliteration": "besipur",
-    "hebrew": "בַּסִּיפּוּר",
+    "hebrew": "בְּסִפּוּר",
     "difficulty": 10
   },
   {
@@ -11282,28 +11283,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Special (f.s.)",
     "transliteration": "meyukhedet",
-    "hebrew": "מְיֻוחֶדֶת",
+    "hebrew": "מְיֻחֶדֶת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Measure / size / quality",
     "transliteration": "mida",
-    "hebrew": "מִידָּה",
+    "hebrew": "מִדָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hope",
     "transliteration": "tikva",
-    "hebrew": "תִּקְוָוה",
+    "hebrew": "תִּקְוָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And other (m.pl.) / and others (m.)",
     "transliteration": "ve'akherim",
-    "hebrew": "וַאֲחֵרִים",
+    "hebrew": "וְאַחְרִים",
     "difficulty": 10
   },
   {
@@ -11324,14 +11325,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "She is / is (f.)",
     "transliteration": "hina",
-    "hebrew": "הִינֵּה",
+    "hebrew": "הִנָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Visited / criticized",
     "transliteration": "biker",
-    "hebrew": "בִּיקֵּר",
+    "hebrew": "בִּקֵּר",
     "difficulty": 10
   },
   {
@@ -11345,49 +11346,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Will dissolve",
     "transliteration": "yimas",
-    "hebrew": "יִימַּס",
+    "hebrew": "יִמַּס",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for a state",
     "transliteration": "lemdina",
-    "hebrew": "לַמְּדִינָה",
+    "hebrew": "לְמָדִינָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To play",
     "transliteration": "lesakhek",
-    "hebrew": "לְשַׂחֵק",
+    "hebrew": "לְשַׂחֵק",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Served (m.s.)",
     "transliteration": "sherat",
-    "hebrew": "שִׁירַת",
+    "hebrew": "שֵׁרַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ruled (m.s.)",
     "transliteration": "shalat",
-    "hebrew": "שֶׁלֶט",
+    "hebrew": "שַׁלָּט",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who brought (m.s.)",
     "transliteration": "shehevi",
-    "hebrew": "שֶׁהֵבִיא",
+    "hebrew": "שֶׁהֵבִיא",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The games",
     "transliteration": "hamiskhakim",
-    "hebrew": "הַמִּשְׂחָקִים",
+    "hebrew": "הַמִּשְׂחָקִים",
     "difficulty": 10
   },
   {
@@ -11408,7 +11409,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a company / in a society",
     "transliteration": "bekhevra",
-    "hebrew": "בַּחֶבְרָה",
+    "hebrew": "בְּחֶבְרָה",
     "difficulty": 10
   },
   {
@@ -11422,14 +11423,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The local (m.pl.)",
     "transliteration": "hamekomiyim",
-    "hebrew": "הַמְּקוֹמִיִּים",
+    "hebrew": "הַמְּקוֹמִיִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Giving",
     "transliteration": "matan",
-    "hebrew": "מַתָּן",
+    "hebrew": "מַתָּן",
     "difficulty": 10
   },
   {
@@ -11464,14 +11465,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The movies / the ribbons/strips",
     "transliteration": "hasratim",
-    "hebrew": "הַסְּרָטִים",
+    "hebrew": "הַסְּרָטִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The mandate",
     "transliteration": "hamandat",
-    "hebrew": "הַמַּנְדָּט",
+    "hebrew": "הַמַּנְדָּט",
     "difficulty": 10
   },
   {
@@ -11527,7 +11528,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The team / the elected / the selected (f.s.)",
     "transliteration": "hanivkheret",
-    "hebrew": "הַנִּבְחֶרֶת",
+    "hebrew": "הַנִּבְחֶרֶת",
     "difficulty": 10
   },
   {
@@ -11541,14 +11542,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The commerce / the trade",
     "transliteration": "hamiskhar",
-    "hebrew": "הַמִּסְחָר",
+    "hebrew": "הַמִּסְחָר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The line",
     "transliteration": "hakav",
-    "hebrew": "הַקַּו",
+    "hebrew": "הַקַּו",
     "difficulty": 10
   },
   {
@@ -11562,56 +11563,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "For my son",
     "transliteration": "livni",
-    "hebrew": "לִבְנֵי",
+    "hebrew": "לִבְנִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rhythm",
     "transliteration": "ketsev",
-    "hebrew": "קַצָּב",
+    "hebrew": "קֶצֶב",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Continuation",
     "transliteration": "hemshekh",
-    "hebrew": "הֶמְשֵׁךְ",
+    "hebrew": "הֶמְשֵׁךְ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Enables / facilitates (m.s.)",
     "transliteration": "me'afsher",
-    "hebrew": "מְאַפְשֵׁר",
+    "hebrew": "מְאַפְשֵׁר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Are / constitute (m.pl.)",
     "transliteration": "mehavim",
-    "hebrew": "מְהַוִּוים",
+    "hebrew": "מְהַוִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And a number",
     "transliteration": "umispar",
-    "hebrew": "וּמְסַפֵּר",
+    "hebrew": "וּמִסְפָּר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The east",
     "transliteration": "hamizrakh",
-    "hebrew": "הַמִּזְרָח",
+    "hebrew": "הַמִּזְרָח",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Existed / took place / was held (m.s.)",
     "transliteration": "hitkayem",
-    "hebrew": "הִתְקַיֵּים",
+    "hebrew": "הִתְקַיֵּם",
     "difficulty": 10
   },
   {
@@ -11632,21 +11633,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The ways / the roads",
     "transliteration": "hadrakhim",
-    "hebrew": "הַדְּרָכִים",
+    "hebrew": "הַדְּרָכִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "Democratic (f.pl.)",
+    "english": "Democratic (f.s.)",
     "transliteration": "demokratit",
-    "hebrew": "דֵּמוֹקְרָטִית",
+    "hebrew": "דֵּמוֹקְרָטִית",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bridge",
     "transliteration": "gesher",
-    "hebrew": "גֶּשֶׁר",
+    "hebrew": "גֶּשֶׁר",
     "difficulty": 10
   },
   {
@@ -11660,21 +11661,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Lasted / was pulled / was attracted / was withdrawn (f.s.)",
     "transliteration": "nimshekha",
-    "hebrew": "נִמְשְׁכָה",
+    "hebrew": "נִמְשְׁכָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Is considered",
     "transliteration": "nekhshevet",
-    "hebrew": "נֶחְשֶׁבֶת",
+    "hebrew": "נֶחְשֶׁבֶת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The shipment / the delivery",
     "transliteration": "hamishlo'akh",
-    "hebrew": "הַמִּשְׁלוֹחַ",
+    "hebrew": "הַמִּשְׁלוֹחַ",
     "difficulty": 10
   },
   {
@@ -11688,7 +11689,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Broken open",
     "transliteration": "paruts",
-    "hebrew": "פָּרוּץ",
+    "hebrew": "פָּרוּץ",
     "difficulty": 10
   },
   {
@@ -11702,14 +11703,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To the sea",
     "transliteration": "layam",
-    "hebrew": "לַיָּם",
+    "hebrew": "לַיָּם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ties / bonds / links / connections",
     "transliteration": "ksharim",
-    "hebrew": "קְשָׁרִים",
+    "hebrew": "קְשָׁרִים",
     "difficulty": 10
   },
   {
@@ -11723,28 +11724,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Population of",
     "transliteration": "ukhlusiyat",
-    "hebrew": "אֻוכְלוּסִיַּית",
+    "hebrew": "אֻכְלוּסִיַּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The television",
     "transliteration": "hatelevizya",
-    "hebrew": "הַטֵּלֵוִויזְיָה",
+    "hebrew": "הַטֵּלֵוִיזְיָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Played (m.s.)",
     "transliteration": "sikhek",
-    "hebrew": "שִׂיחֵק",
+    "hebrew": "שִׂחֵק",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The division",
     "transliteration": "hakhaluka",
-    "hebrew": "הַחֲלֻוקָּה",
+    "hebrew": "הַחֲלֻקָּה",
     "difficulty": 10
   },
   {
@@ -11765,7 +11766,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Histadrut (the General Federation of Laborers in Israel)",
     "transliteration": "hahistadrut",
-    "hebrew": "הַהִסְתַּדְּרוּת",
+    "hebrew": "הַהִסְתַּדְּרוּת",
     "difficulty": 10
   },
   {
@@ -11779,63 +11780,63 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Happens (f.s.)",
     "transliteration": "mitrakheshet",
-    "hebrew": "מִתְרַחֶשֶׁת",
+    "hebrew": "מִתְרַחֶשֶׁת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sward / fencing",
     "transliteration": "sayif",
-    "hebrew": "סַיָּף",
+    "hebrew": "סַיִף",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fruits",
     "transliteration": "peirot",
-    "hebrew": "פֵּירוֹת",
+    "hebrew": "פֵּרוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That if",
     "transliteration": "she'im",
-    "hebrew": "שֶׁאִם",
+    "hebrew": "שֶׁאִם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That they (f.) / that are (f.pl.)",
     "transliteration": "shehen",
-    "hebrew": "שֶׁהֵן",
+    "hebrew": "שֶׁהֵן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cemetery",
-    "transliteration": "[beit] hakvarot",
-    "hebrew": "הַקְּבָרוֹת",
+    "transliteration": "beit hakvarot",
+    "hebrew": "בֵּית הַקְּבָרוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Reception of / acceptance of",
     "transliteration": "kabalat",
-    "hebrew": "קַבָּלַת",
+    "hebrew": "קַבָּלַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The peace",
     "transliteration": "hashalom",
-    "hebrew": "הַשָּׁלוֹם",
+    "hebrew": "הַשָּׁלוֹם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a half / at a middle",
     "transliteration": "bemakhatsit",
-    "hebrew": "בַּמַּחֲצִית",
+    "hebrew": "בְּמַחֲצִית",
     "difficulty": 10
   },
   {
@@ -11849,56 +11850,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sent (m.s.)",
     "transliteration": "shalakh",
-    "hebrew": "שְׁלַח",
+    "hebrew": "שָׁלַח",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The black (m.s.)",
     "transliteration": "hashakhor",
-    "hebrew": "הַשָּׁחֹור",
+    "hebrew": "הַשָּׁחֹר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who arrived (m.s.)",
     "transliteration": "shehigi'a",
-    "hebrew": "שֶׁהִגִּיעַ",
+    "hebrew": "שֶׁהִגִּיעַ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The affair of / the chapter of / the portion of",
     "transliteration": "parashat",
-    "hebrew": "פָּרָשַׁת",
+    "hebrew": "פָּרָשַׁת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Surgery",
     "transliteration": "nituakh",
-    "hebrew": "נִיתּוּחַ",
+    "hebrew": "נִתּוּחַ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Top / peak",
     "transliteration": "si",
-    "hebrew": "שִׂיא",
+    "hebrew": "שִׂיא",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In how many / in how much / in some",
     "transliteration": "bekhama",
-    "hebrew": "בְּכַמָּה",
+    "hebrew": "בְּכַמָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a height",
     "transliteration": "begova",
-    "hebrew": "בְּגֹובַהּ",
+    "hebrew": "בְּגוֹבָה",
     "difficulty": 10
   },
   {
@@ -11912,35 +11913,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the days of",
     "transliteration": "mimei",
-    "hebrew": "מִימֵי",
+    "hebrew": "מִימִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Local (m.pl.)",
     "transliteration": "mekomiyim",
-    "hebrew": "מְקוֹמִיִּים",
+    "hebrew": "מְקוֹמִיִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Well established / well based (m.s.)",
     "transliteration": "mevusas",
-    "hebrew": "מְבֻוסָּס",
+    "hebrew": "מְבֻסָּס",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Direct (f.s.)",
     "transliteration": "yeshira",
-    "hebrew": "יְשִׁירָה",
+    "hebrew": "יְשִׁירָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The movements / the motions",
     "transliteration": "hatnu'ot",
-    "hebrew": "הַתְּנוּעוֹת",
+    "hebrew": "הַתְּנוּעוֹת",
     "difficulty": 10
   },
   {
@@ -11954,21 +11955,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The union",
     "transliteration": "ha'ikhud",
-    "hebrew": "הָאִיחוּד",
+    "hebrew": "הָאִחוּד",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for an army",
     "transliteration": "letsava",
-    "hebrew": "לַצָּבָא",
+    "hebrew": "לְצָבָא",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Free",
     "transliteration": "khofshi",
-    "hebrew": "חָופְשִׁי",
+    "hebrew": "חוֹפְשִׁי",
     "difficulty": 10
   },
   {
@@ -11982,35 +11983,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The residents",
     "transliteration": "hatoshavim",
-    "hebrew": "הַתּוֹשָׁבִים",
+    "hebrew": "הַתּוֹשָׁבִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fortifications",
     "transliteration": "bitsurim",
-    "hebrew": "בִּיצּוּרִים",
+    "hebrew": "בִּצּוּרִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Was used for (f.s.)",
     "transliteration": "shimsha",
-    "hebrew": "שִׁימְּשָׁה",
+    "hebrew": "שִׁמְּשָׁה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "For a count",
     "transliteration": "lesfira",
-    "hebrew": "לַסְּפִירָה",
+    "hebrew": "לַסְּפִירָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The national (f.s.)",
     "transliteration": "hale'umit",
-    "hebrew": "הַלְּאֻומִּית",
+    "hebrew": "הַלְּאֻמִּית",
     "difficulty": 10
   },
   {
@@ -12024,7 +12025,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The effect / the influence",
     "transliteration": "hahashpa'a",
-    "hebrew": "הַהַשְׁפָּעָה",
+    "hebrew": "הַהַשְׁפָּעָה",
     "difficulty": 10
   },
   {
@@ -12038,42 +12039,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And in the year [X]",
     "transliteration": "uvishnat",
-    "hebrew": "וּבִשְׁנַת",
+    "hebrew": "וּבִשְׁנַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Games of",
     "transliteration": "miskhakei",
-    "hebrew": "מִשְׂחֲקֵי",
+    "hebrew": "מִשְׂחֲקֵי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "There are (f.)",
     "transliteration": "yeshnan",
-    "hebrew": "יֶשְׁנָן",
+    "hebrew": "יֶשְׁנָן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bombs",
     "transliteration": "ptsatsot",
-    "hebrew": "פְּצָצוֹת",
+    "hebrew": "פְּצָצוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Municipality of",
     "transliteration": "iriyat",
-    "hebrew": "עִירִיַּית",
+    "hebrew": "עִירִיַּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Investigated / researched / inquired (m.s.)",
     "transliteration": "khakar",
-    "hebrew": "חֵקֶר",
+    "hebrew": "חָקַר",
     "difficulty": 10
   },
   {
@@ -12101,21 +12102,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pole",
     "transliteration": "hakotev",
-    "hebrew": "הַקֹּוטֶב",
+    "hebrew": "הַקֹּטֶב",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That you (m.s.)",
     "transliteration": "she'ata",
-    "hebrew": "שֶׁאַתָּה",
+    "hebrew": "שֶׁאַתָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cabbage / the angel",
     "transliteration": "hakruv",
-    "hebrew": "הַכְּרוּב",
+    "hebrew": "הַכְּרוּב",
     "difficulty": 10
   },
   {
@@ -12136,28 +12137,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the house of / from the home of",
     "transliteration": "mibeit",
-    "hebrew": "מִבֵּית",
+    "hebrew": "מִבֵּית",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And even / and although",
     "transliteration": "ve'afilu",
-    "hebrew": "וַאֲפִילּוּ",
+    "hebrew": "וַאֲפִלּוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "[to] death",
     "transliteration": "lemavet",
-    "hebrew": "לַמָּוֶות",
+    "hebrew": "לְמָוֶת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Seven",
     "transliteration": "sheva",
-    "hebrew": "שֶׁבַע",
+    "hebrew": "שֶׁבַע",
     "difficulty": 10
   },
   {
@@ -12178,7 +12179,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To send",
     "transliteration": "lishloakh",
-    "hebrew": "לִשְׁלֹוחַ",
+    "hebrew": "לִשְׁלֹחַ",
     "difficulty": 10
   },
   {
@@ -12192,14 +12193,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the summer",
     "transliteration": "bakayits",
-    "hebrew": "בַּקַּיִץ",
+    "hebrew": "בַּקַּיִץ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The heart",
     "transliteration": "halev",
-    "hebrew": "הַלֵּב",
+    "hebrew": "הַלֵּב",
     "difficulty": 10
   },
   {
@@ -12220,21 +12221,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The gates",
     "transliteration": "hashe'arim",
-    "hebrew": "הַשְּׁעָרִים",
+    "hebrew": "הַשְּׁעָרִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the championship",
     "transliteration": "ba'alifut",
-    "hebrew": "בָּאַלִּיפוּת",
+    "hebrew": "בָּאַלִּיפוּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In an army",
     "transliteration": "betsava",
-    "hebrew": "בַּצָּבָא",
+    "hebrew": "בְּצָבָא",
     "difficulty": 10
   },
   {
@@ -12248,21 +12249,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Broke into / broke out / burst (m.s.)",
     "transliteration": "parats",
-    "hebrew": "פֶּרֶץ",
+    "hebrew": "פָּרַץ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Personal (f.s.) / private (f.s.) / in person",
     "transliteration": "ishit",
-    "hebrew": "אִישִׁית",
+    "hebrew": "אִישִׁית",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Participated (pl.)",
     "transliteration": "hishtatfu",
-    "hebrew": "הִשְׁתַּתְּפוּ",
+    "hebrew": "הִשְׁתַּתְּפוּ",
     "difficulty": 10
   },
   {
@@ -12283,7 +12284,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for the player / to/for the actor",
     "transliteration": "lasakhkan",
-    "hebrew": "לַשַּׂחְקָן",
+    "hebrew": "לַשַּׂחְקָן",
     "difficulty": 10
   },
   {
@@ -12297,14 +12298,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The youth",
     "transliteration": "hano'ar",
-    "hebrew": "הַנֹּועַר",
+    "hebrew": "הַנֹּעַר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Examination",
     "transliteration": "bdika",
-    "hebrew": "בְּדִיקָה",
+    "hebrew": "בְּדִיקָה",
     "difficulty": 10
   },
   {
@@ -12318,7 +12319,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The groups",
     "transliteration": "hakvutsot",
-    "hebrew": "הַקְּבוּצוֹת",
+    "hebrew": "הַקְּבוּצוֹת",
     "difficulty": 10
   },
   {
@@ -12332,7 +12333,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Direct / will sing (m.s.)",
     "transliteration": "yashir",
-    "hebrew": "יָשִׁיר",
+    "hebrew": "יָשִׁיר",
     "difficulty": 10
   },
   {
@@ -12346,14 +12347,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Special (f.pl.)",
     "transliteration": "meyukhadot",
-    "hebrew": "מְיֻוחָדוֹת",
+    "hebrew": "מְיֻחָדוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Tradition",
     "transliteration": "masoret",
-    "hebrew": "מָסֹורֶת",
+    "hebrew": "מָסֹרֶת",
     "difficulty": 10
   },
   {
@@ -12367,14 +12368,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Companies (mil.)",
     "transliteration": "plugot",
-    "hebrew": "פְּלֻוגּוֹת",
+    "hebrew": "פְּלֻגּוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Prohibition / ban",
     "transliteration": "isur",
-    "hebrew": "אִיסּוּר",
+    "hebrew": "אִסּוּר",
     "difficulty": 10
   },
   {
@@ -12395,14 +12396,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the boulevard",
     "transliteration": "basdera",
-    "hebrew": "בַּשְּׂדֵרָה",
+    "hebrew": "בַּשְּׂדֵרָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a stream",
     "transliteration": "benakhal",
-    "hebrew": "בַּנַּחַל",
+    "hebrew": "בְּנַחַל",
     "difficulty": 10
   },
   {
@@ -12416,21 +12417,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The energy",
     "transliteration": "ha'energiya",
-    "hebrew": "הָאֵנֶרְגִּיָּה",
+    "hebrew": "הָאֵנֶרְגִּיָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Anabolic (pl.)",
     "transliteration": "an'aboliyim",
-    "hebrew": "אַנְאבּוֹלִיִּים",
+    "hebrew": "אַנְבּוֹלִיִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Losses / something which is lost (pl)",
     "transliteration": "avedot",
-    "hebrew": "אֲבֵידוֹת",
+    "hebrew": "אֲבֵדוֹת",
     "difficulty": 10
   },
   {
@@ -12458,21 +12459,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The stick / the wand / the headquarters",
     "transliteration": "hamate",
-    "hebrew": "הַמַּטֶּה",
+    "hebrew": "הַמַּטֶּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Up / to a height",
     "transliteration": "lagova",
-    "hebrew": "לְגֹובַהּ",
+    "hebrew": "לַגּוֹבָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To evacuate",
     "transliteration": "lefanot",
-    "hebrew": "לִפְנוֹת",
+    "hebrew": "לְפַנּוֹת",
     "difficulty": 10
   },
   {
@@ -12486,7 +12487,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To leave",
     "transliteration": "la'azov",
-    "hebrew": "לַעֲזֹוב",
+    "hebrew": "לַעֲזֹב",
     "difficulty": 10
   },
   {
@@ -12500,35 +12501,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To explain",
     "transliteration": "lehasbir",
-    "hebrew": "לְהַסְבִּיר",
+    "hebrew": "לְהַסְבִּיר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Depending on / depends (m.s.) / hung",
     "transliteration": "talui",
-    "hebrew": "תָּלוּי",
+    "hebrew": "תָּלוּי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Their lives",
     "transliteration": "khayeihem",
-    "hebrew": "חַיֵּיהֶם",
+    "hebrew": "חַיֵּיהֶם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Ended (m.s.)",
     "transliteration": "histayem",
-    "hebrew": "הִסְתַּיֵּים",
+    "hebrew": "הִסְתַּיֵּם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the wind / with the spirit",
     "transliteration": "baru'akh",
-    "hebrew": "בָּרוּחַ",
+    "hebrew": "בָּרוּחַ",
     "difficulty": 10
   },
   {
@@ -12556,7 +12557,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Houses",
     "transliteration": "batim",
-    "hebrew": "בָּתִּים",
+    "hebrew": "בָּתִּים",
     "difficulty": 10
   },
   {
@@ -12577,7 +12578,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Private (m.s.)",
     "transliteration": "prati",
-    "hebrew": "פְּרָטֵי",
+    "hebrew": "פְּרָטִי",
     "difficulty": 10
   },
   {
@@ -12612,14 +12613,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The influence of / the affect of",
     "transliteration": "hashpa'at",
-    "hebrew": "הַשְׁפָּעַת",
+    "hebrew": "הַשְׁפָּעַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The image / the figure / the shape / the character",
     "transliteration": "hadmut",
-    "hebrew": "הַדְּמוּת",
+    "hebrew": "הַדְּמוּת",
     "difficulty": 10
   },
   {
@@ -12633,21 +12634,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Pomegranates / grenades",
     "transliteration": "rimonim",
-    "hebrew": "רִימּוֹנִים",
+    "hebrew": "רִמּוֹנִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The capital of",
     "transliteration": "birat",
-    "hebrew": "בִּירַת",
+    "hebrew": "בִּירַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "From the people of / of the people of",
     "transliteration": "me'anshei",
-    "hebrew": "מֵאַנְשֵׁי",
+    "hebrew": "מְאַנְּשִׁי",
     "difficulty": 10
   },
   {
@@ -12661,28 +12662,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Version",
     "transliteration": "girsa",
-    "hebrew": "גִּרְסָה",
+    "hebrew": "גִּרְסָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a series of / in the series of",
     "transliteration": "besidrat",
-    "hebrew": "בְּסִדְרַת",
+    "hebrew": "בְּסִדְרַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Sample of / pattern of",
     "transliteration": "dugmat",
-    "hebrew": "דֻּוגְמַת",
+    "hebrew": "דֻּגְמַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Well established / well based (f.s.)",
     "transliteration": "mevuseset",
-    "hebrew": "מְבֻוסֶּסֶת",
+    "hebrew": "מְבֻסֶּסֶת",
     "difficulty": 10
   },
   {
@@ -12696,7 +12697,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Approval / confirmation",
     "transliteration": "ishur",
-    "hebrew": "אִישּׁוּר",
+    "hebrew": "אִשּׁוּר",
     "difficulty": 10
   },
   {
@@ -12710,7 +12711,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The Muslims",
     "transliteration": "hamuslemim",
-    "hebrew": "הַמֻּוסְלְמִים",
+    "hebrew": "הַמֻּסְלְמִים",
     "difficulty": 10
   },
   {
@@ -12724,35 +12725,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Production",
     "transliteration": "yitsur",
-    "hebrew": "יִיצּוּר",
+    "hebrew": "יִצּוּר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Evenings",
     "transliteration": "aravim",
-    "hebrew": "עַרְבִים",
+    "hebrew": "עֲרָבִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The dog",
     "transliteration": "hakelev",
-    "hebrew": "הַכֶּלֶב",
+    "hebrew": "הַכֶּלֶב",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The cricket",
     "transliteration": "hatsratsar",
-    "hebrew": "הַצְּרָצַר",
+    "hebrew": "הַצְּרָצַר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Home",
     "transliteration": "habaita",
-    "hebrew": "הַבַּיְתָה",
+    "hebrew": "הַבַּיְתָה",
     "difficulty": 10
   },
   {
@@ -12766,21 +12767,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Read / called (pl.)",
     "transliteration": "kar'u",
-    "hebrew": "קִרְאוּ",
+    "hebrew": "קָרְאוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The small / the little (m.pl.)",
     "transliteration": "haktanim",
-    "hebrew": "הַקְּטַנִּים",
+    "hebrew": "הַקְּטַנִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That passed / the last (m.s.)",
     "transliteration": "she'avar",
-    "hebrew": "שֶׁעָבַר",
+    "hebrew": "שֶׁעָבַר",
     "difficulty": 10
   },
   {
@@ -12794,56 +12795,56 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "When they",
     "transliteration": "keshehem",
-    "hebrew": "כְּשֶׁהֵם",
+    "hebrew": "כְּשֶׁהֵם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In a room",
     "transliteration": "bekheder",
-    "hebrew": "בַּחֶדֶר",
+    "hebrew": "בְּחֶדֶר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Supplier",
     "transliteration": "sapak",
-    "hebrew": "סָפֵק",
+    "hebrew": "סַפָּק",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And half",
     "transliteration": "vekhetsi",
-    "hebrew": "וָחֵצִי",
+    "hebrew": "וְחֵצִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And these",
     "transliteration": "ve'ele",
-    "hebrew": "וְאֵלֶּה",
+    "hebrew": "וְאֵלֶּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Opening of",
     "transliteration": "ptikhat",
-    "hebrew": "פְּתִיחַת",
+    "hebrew": "פְּתִיחַת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Did (pl.)",
     "transliteration": "asu",
-    "hebrew": "עֵשָׂו",
+    "hebrew": "עָשׂוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Worry / fear",
     "transliteration": "khashash",
-    "hebrew": "חֲשָׁשׁ",
+    "hebrew": "חֲשָׁשׁ",
     "difficulty": 10
   },
   {
@@ -12864,7 +12865,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The question",
     "transliteration": "hashe'ela",
-    "hebrew": "הַשְּׁאֵלָה",
+    "hebrew": "הַשְּׁאֵלָה",
     "difficulty": 10
   },
   {
@@ -12878,7 +12879,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Comparison",
     "transliteration": "hashva'a",
-    "hebrew": "הַשּׁוֹאָה",
+    "hebrew": "הַשְׁוָאָה",
     "difficulty": 10
   },
   {
@@ -12892,14 +12893,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Guard",
     "transliteration": "mishmar",
-    "hebrew": "מְשַׁמֵּר",
+    "hebrew": "מִשְׁמָר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Directly",
     "transliteration": "yeshirot",
-    "hebrew": "יְשִׁירוֹת",
+    "hebrew": "יְשִׁירוֹת",
     "difficulty": 10
   },
   {
@@ -12913,7 +12914,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Men",
     "transliteration": "gvarim",
-    "hebrew": "גְּבָרִים",
+    "hebrew": "גְּבָרִים",
     "difficulty": 10
   },
   {
@@ -12941,21 +12942,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To/for the man / to/for the person / to/for mankind",
     "transliteration": "la'adam",
-    "hebrew": "לְאָדָם",
+    "hebrew": "לָאָדָם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To participate",
     "transliteration": "lehishtatef",
-    "hebrew": "לְהִשְׁתַּתֵּף",
+    "hebrew": "לְהִשְׁתַּתֵּף",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Gates of",
     "transliteration": "sha'arei",
-    "hebrew": "שַׁעֲרֵי",
+    "hebrew": "שַׁעֲרֵי",
     "difficulty": 10
   },
   {
@@ -12969,14 +12970,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The public (m.s.)",
     "transliteration": "hatsiburi",
-    "hebrew": "הַצִּיבּוּרִי",
+    "hebrew": "הַצִּבּוּרִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The reason",
     "transliteration": "hasiba",
-    "hebrew": "הַסִּיבָּה",
+    "hebrew": "הַסִּבָּה",
     "difficulty": 10
   },
   {
@@ -12997,77 +12998,77 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And the people of",
     "transliteration": "ve'anshei",
-    "hebrew": "וְאַנְשֵׁי",
+    "hebrew": "וְאַנְּשִׁי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The northern (f.s.)",
     "transliteration": "hatsfonit",
-    "hebrew": "הַצְּפוֹנִית",
+    "hebrew": "הַצְּפוֹנִית",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The resistance / the objection",
     "transliteration": "hahitnagdut",
-    "hebrew": "הַהִתְנַגְּדוּת",
+    "hebrew": "הַהִתְנַגְּדוּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That included (m.s.)",
     "transliteration": "shekalal",
-    "hebrew": "שֶׁכָּלַל",
+    "hebrew": "שֶׁכָּלַל",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In literature",
     "transliteration": "basifrut",
-    "hebrew": "בַּסִּפְרוּת",
+    "hebrew": "בַּסִּפְרוּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The western (f.s.)",
     "transliteration": "hama'aravit",
-    "hebrew": "הַמַּעֲרָבִית",
+    "hebrew": "הַמַּעֲרָבִית",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Performance",
     "transliteration": "bitsu'a",
-    "hebrew": "בִּיצּוּעַ",
+    "hebrew": "בִּצּוּעַ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The holiness",
     "transliteration": "hakodesh",
-    "hebrew": "הַקֹּודֶשׁ",
+    "hebrew": "הַקֹּדֶשׁ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Rise / increase / immigration",
     "transliteration": "aliya",
-    "hebrew": "עֲלִיָּיה",
+    "hebrew": "עֲלִיָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Developed (f.s.)",
     "transliteration": "hitpatkha",
-    "hebrew": "הִתְפַּתְּחָה",
+    "hebrew": "הִתְפַּתְּחָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The career",
     "transliteration": "hakaryera",
-    "hebrew": "הַקַּרְיֵירָה",
+    "hebrew": "הַקַּרְיֵרָה",
     "difficulty": 10
   },
   {
@@ -13081,7 +13082,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The expression",
     "transliteration": "habitui",
-    "hebrew": "הַבִּיטּוּי",
+    "hebrew": "הַבִּטּוּי",
     "difficulty": 10
   },
   {
@@ -13095,42 +13096,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fish (pl.)",
     "transliteration": "dagim",
-    "hebrew": "דָּגִים",
+    "hebrew": "דָּגִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In no",
     "transliteration": "beshum",
-    "hebrew": "בְּשׁוּם",
+    "hebrew": "בְּשׁוּם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To tell / to cut (hair)",
     "transliteration": "lesaper",
-    "hebrew": "לְסַפֵּר",
+    "hebrew": "לְסַפֵּר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Arrive / deserve (m.pl.)",
     "transliteration": "megi'im",
-    "hebrew": "מַגִּיעִים",
+    "hebrew": "מַגִּיעִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Man",
     "transliteration": "gever",
-    "hebrew": "גֶּבֶר",
+    "hebrew": "גֶּבֶר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To help / to assist",
     "transliteration": "la'azor",
-    "hebrew": "לַעֲזֹור",
+    "hebrew": "לַעֲזֹר",
     "difficulty": 10
   },
   {
@@ -13144,21 +13145,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To search",
     "transliteration": "lekhapes",
-    "hebrew": "לְחַפֵּשׂ",
+    "hebrew": "לְחַפֵּשׂ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The next / the person who is coming (f.s.)",
     "transliteration": "haba'a",
-    "hebrew": "הַבָּאָה",
+    "hebrew": "הַבָּאָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Back / at the rehearsal",
     "transliteration": "bakhazara",
-    "hebrew": "בַּחֲזָרָה",
+    "hebrew": "בַּחֲזָרָה",
     "difficulty": 10
   },
   {
@@ -13172,7 +13173,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The works of",
     "transliteration": "kitvei",
-    "hebrew": "כִּתְבֵי",
+    "hebrew": "כִּתְבֵי",
     "difficulty": 10
   },
   {
@@ -13214,35 +13215,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The communication / the media",
     "transliteration": "hatikshoret",
-    "hebrew": "הַתִּקְשֹׁורֶת",
+    "hebrew": "הַתִּקְשֹׁרֶת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In response",
     "transliteration": "bitguva",
-    "hebrew": "בִּתְגוּבָה",
+    "hebrew": "בִּתְגוּבָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Continue (m.s.)",
     "transliteration": "mamshikh",
-    "hebrew": "מַמְשִׁיךְ",
+    "hebrew": "מַמְשִׁיךְ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The possibility / the option",
     "transliteration": "ha'efsharut",
-    "hebrew": "הָאֶפְשָׁרוּת",
+    "hebrew": "הָאֶפְשָׁרוּת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Finished (m.s.)",
     "transliteration": "siyem",
-    "hebrew": "סִיֵּים",
+    "hebrew": "סִיֵּם",
     "difficulty": 10
   },
   {
@@ -13256,21 +13257,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Practical (m.s.)",
     "transliteration": "ma'asi",
-    "hebrew": "מַעֲשֵׂי",
+    "hebrew": "מַעֲשִׂי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "And my husband",
     "transliteration": "uva'ali",
-    "hebrew": "וּבַעְלִי",
+    "hebrew": "וּבַעֲלִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Fitness / capability",
     "transliteration": "kosher",
-    "hebrew": "כֹּושֶׁר",
+    "hebrew": "כֹּשֶׁר",
     "difficulty": 10
   },
   {
@@ -13298,21 +13299,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a square / in a loaf",
     "transliteration": "bekikar",
-    "hebrew": "בַּכִּיכָּר",
+    "hebrew": "בַּכִּכָּר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In dispute",
     "transliteration": "bemakhloket",
-    "hebrew": "בְּמַחֲלֹוקֶת",
+    "hebrew": "בְּמַחֲלֹקֶת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Residents",
     "transliteration": "toshavim",
-    "hebrew": "תּוֹשָׁבִים",
+    "hebrew": "תּוֹשָׁבִים",
     "difficulty": 10
   },
   {
@@ -13326,28 +13327,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Events of",
     "transliteration": "eru'ei",
-    "hebrew": "אֵירוּעֵי",
+    "hebrew": "אֵרוּעֵי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The conditions / the provisions",
     "transliteration": "hatna'im",
-    "hebrew": "הַתְּנָאִים",
+    "hebrew": "הַתְּנָאִים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Existed / took place / were held (pl.)",
     "transliteration": "hitkaimu",
-    "hebrew": "הִתְקַיְּימוּ",
+    "hebrew": "הִתְקַיְּמוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Company of (mil.)",
     "transliteration": "plugat",
-    "hebrew": "פְּלֻוגַּת",
+    "hebrew": "פְּלֻגַּת",
     "difficulty": 10
   },
   {
@@ -13368,14 +13369,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The singing / the poetry",
     "transliteration": "hashira",
-    "hebrew": "הַשִּׁירָה",
+    "hebrew": "הַשִּׁירָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The building (v.)",
     "transliteration": "habniya",
-    "hebrew": "הַבְּנִיָּיה",
+    "hebrew": "הַבְּנִיָּה",
     "difficulty": 10
   },
   {
@@ -13396,21 +13397,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "The marathon",
     "transliteration": "hamaraton",
-    "hebrew": "הֲמַרְתּוּן",
+    "hebrew": "הֲמָרָתוֹן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The whistle",
     "transliteration": "hashrika",
-    "hebrew": "הַשְּׁרִיקָה",
+    "hebrew": "הַשְּׁרִיקָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Replied / returned (f.s.)",
     "transliteration": "heshiva",
-    "hebrew": "הַשִּׁיבָה",
+    "hebrew": "הֵשִׁיבָה",
     "difficulty": 10
   },
   {
@@ -13431,7 +13432,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To place / to put",
     "transliteration": "lasim",
-    "hebrew": "לָשִׂים",
+    "hebrew": "לָשִׂים",
     "difficulty": 10
   },
   {
@@ -13445,7 +13446,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Flowers",
     "transliteration": "prakhim",
-    "hebrew": "פְּרָחִים",
+    "hebrew": "פְּרָחִים",
     "difficulty": 10
   },
   {
@@ -13459,7 +13460,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Aspired / inhaled (m.s.)",
     "transliteration": "sha'af",
-    "hebrew": "שֶׁאַף",
+    "hebrew": "שָׁאַף",
     "difficulty": 10
   },
   {
@@ -13480,7 +13481,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Became clear",
     "transliteration": "hitbarer",
-    "hebrew": "הִתְבָּרֵר",
+    "hebrew": "הִתְבָּרֵר",
     "difficulty": 10
   },
   {
@@ -13501,28 +13502,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Possible (m.s. adj.)",
     "transliteration": "efshari",
-    "hebrew": "אֶפְשָׁרִי",
+    "hebrew": "אֶפְשָׁרִי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "At a camp / in a group",
     "transliteration": "bemakhane",
-    "hebrew": "בַּמַּחֲנֶה",
+    "hebrew": "בְּמַחֲנֶה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the cell / in the chamber",
     "transliteration": "bata",
-    "hebrew": "בַּתָּא",
+    "hebrew": "בַּתָּא",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Built (m.s.)",
     "transliteration": "bana",
-    "hebrew": "בְּנָהּ",
+    "hebrew": "בָּנָה",
     "difficulty": 10
   },
   {
@@ -13536,7 +13537,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To a state / to a situation",
     "transliteration": "lematsav",
-    "hebrew": "לְמַצָּב",
+    "hebrew": "לְמַצָּב",
     "difficulty": 10
   },
   {
@@ -13550,28 +13551,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Long (m.pl.)",
     "transliteration": "arukim",
-    "hebrew": "אֲרֻוכִּים",
+    "hebrew": "אֲרֻכִּים",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "-like / -form (m.s.)",
     "transliteration": "dmui",
-    "hebrew": "דְּמוּי",
+    "hebrew": "דְּמוּי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Player / actor",
     "transliteration": "sakhkan",
-    "hebrew": "שַׂחְקָן",
+    "hebrew": "שַׂחְקָן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Publication / advertisement / fame",
     "transliteration": "pirsum",
-    "hebrew": "פִּרְסוּם",
+    "hebrew": "פִּרְסוּם",
     "difficulty": 10
   },
   {
@@ -13599,28 +13600,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Met (m.s.)",
     "transliteration": "nifgash",
-    "hebrew": "נִפָּגֵשׁ",
+    "hebrew": "נִפְגַּשׁ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That are/were intended for / that are/were destined for / that conferred (pl.)",
     "transliteration": "sheno'adu",
-    "hebrew": "שֶׁנּוֹעֲדוּ",
+    "hebrew": "שֶׁנּוֹעֲדוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The method",
     "transliteration": "hashita",
-    "hebrew": "הַשִּׁיטָה",
+    "hebrew": "הַשִּׁיטָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The reproductiveness",
     "transliteration": "hareviya",
-    "hebrew": "הָרְבִיָּיה",
+    "hebrew": "הָרְבִיָּה",
     "difficulty": 10
   },
   {
@@ -13634,7 +13635,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Especially",
     "transliteration": "beyikhud",
-    "hebrew": "בְּיִיחוּד",
+    "hebrew": "בְּיִחוּד",
     "difficulty": 10
   },
   {
@@ -13648,7 +13649,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "And was (f.s.)",
     "transliteration": "vehaita",
-    "hebrew": "וְהָיְיתָה",
+    "hebrew": "וְהָיִיתָה",
     "difficulty": 10
   },
   {
@@ -13662,7 +13663,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "As a god / as to",
     "transliteration": "ke'el",
-    "hebrew": "כְּאֵל",
+    "hebrew": "כְּאֵל",
     "difficulty": 10
   },
   {
@@ -13676,14 +13677,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Were passed / were transferred",
     "transliteration": "hu'avru",
-    "hebrew": "הָועָבְרוּ",
+    "hebrew": "הֻעַבְרוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "On the condition / provided that",
     "transliteration": "bitnai",
-    "hebrew": "בִּתְנַאי",
+    "hebrew": "בִּתְנָאִי",
     "difficulty": 10
   },
   {
@@ -13697,14 +13698,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Took (m.s.)",
     "transliteration": "natal",
-    "hebrew": "נֵטֶל",
+    "hebrew": "נָטַל",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The underground",
     "transliteration": "hamakhteret",
-    "hebrew": "הַמַּחְתֶּרֶת",
+    "hebrew": "הַמַּחְתֶּרֶת",
     "difficulty": 10
   },
   {
@@ -13718,42 +13719,42 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who created / that/who made (m.s.)",
     "transliteration": "sheyatsar",
-    "hebrew": "שֶׁיָּצַר",
+    "hebrew": "שֶׁיָּצַר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The godfather",
     "transliteration": "hasandak",
-    "hebrew": "הַסַּנְדָּק",
+    "hebrew": "הַסַּנְדָּק",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pyramids",
     "transliteration": "hapiramidot",
-    "hebrew": "הַפִּירָמִידוֹת",
+    "hebrew": "הַפִּירָמִידוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The spear",
     "transliteration": "haromakh",
-    "hebrew": "הָרֹומַח",
+    "hebrew": "הָרֹמַח",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Reproductiveness",
     "transliteration": "reviya",
-    "hebrew": "רְבִיָּיה",
+    "hebrew": "רְבִיָּה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "My opinion",
     "transliteration": "da'ati",
-    "hebrew": "דַּעְתִּי",
+    "hebrew": "דַּעֲתִי",
     "difficulty": 10
   },
   {
@@ -13774,21 +13775,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "To sing",
     "transliteration": "lashir",
-    "hebrew": "לָשִׁיר",
+    "hebrew": "לָשִׁיר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The words of / the things of",
     "transliteration": "divrei",
-    "hebrew": "דִּבְרֵי",
+    "hebrew": "דִּבְרֵי",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Around",
     "transliteration": "misaviv",
-    "hebrew": "מִסָּבִיב",
+    "hebrew": "מִסָּבִיב",
     "difficulty": 10
   },
   {
@@ -13802,28 +13803,28 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "White (f.s.)",
     "transliteration": "levana",
-    "hebrew": "לִבְנֶה",
+    "hebrew": "לְבָנָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the hours",
     "transliteration": "basha'ot",
-    "hebrew": "בִּשְׁעוֹת",
+    "hebrew": "בַּשָּׁעוֹת",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Bought",
     "transliteration": "kana",
-    "hebrew": "קָנֶה",
+    "hebrew": "קָנָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Like this (f.)",
     "transliteration": "kazo",
-    "hebrew": "כָּזוֹ",
+    "hebrew": "כָּזוֹ",
     "difficulty": 10
   },
   {
@@ -13837,7 +13838,7 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Hung / depending on (f.s.)",
     "transliteration": "tluya",
-    "hebrew": "תְּלוּיָה",
+    "hebrew": "תְּלוּיָה",
     "difficulty": 10
   },
   {
@@ -13851,49 +13852,49 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Theirs (f)",
     "transliteration": "shelahen",
-    "hebrew": "שֶׁלָּהֶן",
+    "hebrew": "שֶׁלָּהֶן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Give (m.s. imperative)",
     "transliteration": "ha'anek",
-    "hebrew": "הָעֲנָק",
+    "hebrew": "הַעֲנֵק",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The vote / the voting",
     "transliteration": "hahatsba'a",
-    "hebrew": "הַהַצְבָּעָה",
+    "hebrew": "הַהַצְבָּעָה",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Trunk / race / stem",
     "transliteration": "geza",
-    "hebrew": "גֶּזַע",
+    "hebrew": "גֶּזַע",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In fire",
     "transliteration": "be'esh",
-    "hebrew": "בְּאֵשׁ",
+    "hebrew": "בְּאֵשׁ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To attack",
     "transliteration": "litkof",
-    "hebrew": "לִתְקֹוף",
+    "hebrew": "לִתְקֹף",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "To deal with / to engage in / to work in",
     "transliteration": "la'asok",
-    "hebrew": "לַעֲסֹוק",
+    "hebrew": "לַעֲסֹק",
     "difficulty": 10
   },
   {
@@ -13914,35 +13915,35 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who acted / that/who operated (pl.)",
     "transliteration": "shepa'alu",
-    "hebrew": "שֶׁפָּעֲלוּ",
+    "hebrew": "שֶׁפָּעֲלוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "That/who were left (pl.)",
     "transliteration": "shenotru",
-    "hebrew": "שֶׁנּוֹתְרוּ",
+    "hebrew": "שֶׁנּוֹתְרוּ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Twice",
     "transliteration": "pa'amayim",
-    "hebrew": "פַּעֲמַיִים",
+    "hebrew": "פַּעֲמַיִם",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The pass / the transfer / the transition",
     "transliteration": "hama'avar",
-    "hebrew": "הַמַּעֲבָר",
+    "hebrew": "הַמַּעֲבָר",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "The grave",
     "transliteration": "hakever",
-    "hebrew": "הַקֶּבֶר",
+    "hebrew": "הַקֶּבֶר",
     "difficulty": 10
   },
   {
@@ -13963,21 +13964,21 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Grain",
     "transliteration": "dagan",
-    "hebrew": "דָּגָן",
+    "hebrew": "דָּגָן",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Especially / particularly",
     "transliteration": "bifrat",
-    "hebrew": "בִּפְרָט",
+    "hebrew": "בִּפְרָט",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "In the building of",
     "transliteration": "bivniyat",
-    "hebrew": "בִּבְנִיַּית",
+    "hebrew": "בִּבְנִיַּת",
     "difficulty": 10
   },
   {
@@ -13991,14 +13992,14 @@ const HEBREW_EXPANDED_WORDS = [
     "category": "Everyday Hebrew (Expanded)",
     "english": "Temple / shrine",
     "transliteration": "mikdash",
-    "hebrew": "מִקְדָּשׁ",
+    "hebrew": "מִקְדָּשׁ",
     "difficulty": 10
   },
   {
     "category": "Everyday Hebrew (Expanded)",
     "english": "Language of / lip of / edge of",
     "transliteration": "sfat",
-    "hebrew": "שְׂפַת",
+    "hebrew": "שְׂפַת",
     "difficulty": 10
   }
 ];

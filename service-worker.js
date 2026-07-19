@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-07-18-refactor-cleanup-1";
+const CACHE_VERSION = "homework-v2026-07-19-hebrew-review-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS

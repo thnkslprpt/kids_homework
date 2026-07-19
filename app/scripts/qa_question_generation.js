@@ -390,4 +390,13 @@ function run() {
   console.log("\nNo structural QA failures found.");
 }
 
-run();
+module.exports = {
+  categories,
+  loadAppContext,
+  textKey,
+  validateQuestion,
+};
+
+if (require.main === module) {
+  run();
+}

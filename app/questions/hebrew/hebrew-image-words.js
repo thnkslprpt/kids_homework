@@ -27,7 +27,7 @@ const HEBREW_IMAGE_WORD_BANK = [
   { hebrew: "עין", english: "Eye", asset: "eye.svg", alt: "eye" },
   { hebrew: "דג", english: "Fish", asset: "fish.svg", alt: "fish" },
   { hebrew: "עט", english: "Pen", asset: "pen.svg", alt: "pen" },
-  { hebrew: "עפרון", english: "Pencil", asset: "pencil.svg", alt: "pencil" },
+  { hebrew: "עיפרון", english: "Pencil", asset: "pencil.svg", alt: "pencil" },
   { hebrew: "כף", english: "Spoon", asset: "spoon.svg", alt: "spoon" },
 
   // Level 3
@@ -80,7 +80,7 @@ const HEBREW_IMAGE_WORD_BANK = [
   { hebrew: "מונית", english: "Taxi", asset: "taxi.svg", alt: "taxi" },
   { hebrew: "תה", english: "Tea", asset: "tea.svg", alt: "tea" },
   { hebrew: "טלפון", english: "Telephone", asset: "telephone.svg", alt: "telephone" },
-  { hebrew: "עגבניה", english: "Tomato", asset: "tomato.svg", alt: "tomato" },
+  { hebrew: "עגבנייה", english: "Tomato", asset: "tomato.svg", alt: "tomato" },
   { hebrew: "רכבת", english: "Train", asset: "train.svg", alt: "train" },
   { hebrew: "עץ", english: "Tree, wood", asset: "tree.svg", alt: "tree" },
   { hebrew: "טלוויזיה", english: "Tv", asset: "tv.svg", alt: "television" },

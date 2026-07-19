@@ -609,7 +609,7 @@ function applyHebrewSentenceNikkud(value) {
   }
 
   let pointedText = rawText;
-  HEBREW_MULTI_WORD_NIKKUD_OVERRIDES.forEach(([source, target]) => {
+  HEBREW_RUNTIME_MULTI_WORD_NIKKUD_OVERRIDES.forEach(([source, target]) => {
     const pattern = new RegExp(`(^|[^\\u05D0-\\u05EA])${escapeRegExp(source)}(?=$|[^\\u05D0-\\u05EA])`, "g");
     pointedText = pointedText.replace(pattern, (match, prefix) => `${prefix}${target}`);
   });
@@ -622,6 +622,10 @@ function applyHebrewSentenceNikkudList(values) {
 }
 
 function pointHebrewToken(token) {
+  if (hasHebrewNikkud(token)) {
+    return token;
+  }
+
   const strippedWord = stripHebrewDiacritics(token);
   if (!strippedWord) {
     return token;
@@ -687,11 +691,10 @@ function pointPrefixedHebrewToken(strippedWord) {
 }
 
 function addFallbackHebrewNikkud(strippedWord) {
-  if (strippedWord.length < 2) {
-    return strippedWord;
-  }
-
-  return strippedWord.replace(/[\u05D0-\u05EA]/, (letter) => `${letter}ְ`);
+  // Nikud cannot be inferred safely from spelling alone (for example, ספר,
+  // אוכל, שם, and את all have context-dependent readings). Keep an unknown
+  // token unpointed instead of manufacturing a plausible-looking wrong form.
+  return strippedWord;
 }
 
 function shouldHideHebrewDragPrompt(questionText) {

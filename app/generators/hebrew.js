@@ -107,6 +107,7 @@ function createHebrewChoiceModeQuestion({
   reviewText = "",
   forceCompactMain = false,
   isHebrewMain = false,
+  preserveDisplayText = false,
 }) {
   const point = (value) => applyHebrewSentenceNikkud(String(value || "").trim());
   const normalizedOptions = Array.from(new Set((options || []).map(point))).filter(Boolean);
@@ -120,7 +121,7 @@ function createHebrewChoiceModeQuestion({
     difficulty,
     mode: "choice",
     questionText: applyHebrewSentenceNikkud(questionText),
-    displayText: point(displayText),
+    displayText: preserveDisplayText ? String(displayText || "").trim() : point(displayText),
     extraText: applyHebrewSentenceNikkud(extraText),
     extraHtml: "",
     visualHtml,
@@ -628,8 +629,9 @@ function createHebrewNikkudContrastQuestion(resources, difficulty) {
     options,
     answer: entry.hebrewDisplay,
     answerLabel: entry.hebrewDisplay,
-    reviewText: `${entry.strippedHebrew}: ${entry.hebrewDisplay} = ${entry.english}`,
+    reviewText: `${entry.hebrewDisplay} = ${entry.english}`,
     isHebrewMain: true,
+    preserveDisplayText: true,
   });
 }
 
@@ -783,14 +785,15 @@ function createHebrewFinalLetterQuestion(difficulty) {
 }
 
 function buildMaskedHebrewWord(word, expectedLetter, useFinalPosition) {
-  const letters = Array.from(String(word || "").trim());
+  const pointedWord = applyHebrewSentenceNikkud(String(word || "").trim());
+  const letters = pointedWord.match(/[\u05D0-\u05EA][\u0591-\u05C7]*|[^\u05D0-\u05EA]/g) || [];
   if (!letters.length) {
     return "";
   }
 
   if (useFinalPosition) {
     const lastIndex = letters.length - 1;
-    if (letters[lastIndex] !== expectedLetter) {
+    if (stripHebrewDiacritics(letters[lastIndex]) !== expectedLetter) {
       return "";
     }
 
@@ -812,7 +815,7 @@ function findHebrewLetterMaskIndex(letters, expectedLetter) {
   const fallbackIndexes = [];
 
   letters.forEach((letter, index) => {
-    if (letter !== expectedLetter) {
+    if (stripHebrewDiacritics(letter) !== expectedLetter) {
       return;
     }
 

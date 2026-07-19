@@ -661,14 +661,24 @@
 
       function validateHebrewQuestionNikkud(question, label) {
         if (!question || question.mode === "practice") return;
+        const isHomographContrast = String(question.questionText || "").startsWith("Which pointed Hebrew word means");
+        const isRootFamilyQuestion = collectQuestionTextValues(question).some((value) =>
+          /root family|family is connected to/.test(value)
+        );
+        const intentionalBareRoots = isRootFamilyQuestion
+          ? new Set(["כתב", "למד", "אכל", "שמר", "הלך", "פתח", "סגר", "דבר", "עזר", "נהל", "בדק", "חלט", "סבר"])
+          : new Set();
+        const questionForNikkud = isHomographContrast
+          ? { ...question, displayText: "" }
+          : question;
         const isHebrewQuestion =
           question.isHebrew ||
           String(question.type || "").includes("hebrew") ||
-          collectQuestionTextValues(question).some((value) => /[\u05D0-\u05EA]/.test(value));
+          collectQuestionTextValues(questionForNikkud).some((value) => /[\u05D0-\u05EA]/.test(value));
         if (!isHebrewQuestion) return;
 
-        collectQuestionTextValues(question).forEach((value) => {
-          const unpointedWords = findUnpointedHebrewWords(value);
+        collectQuestionTextValues(questionForNikkud).forEach((value) => {
+          const unpointedWords = findUnpointedHebrewWords(value).filter((word) => !intentionalBareRoots.has(word));
           if (unpointedWords.length) {
             failures.push(`${label}: Hebrew text missing nikud: ${Array.from(new Set(unpointedWords)).join(", ")} in "${String(value).slice(0, 120)}"`);
           }
