@@ -1,0 +1,277 @@
+/*
+ * Prototype 3: Flat Sticker + Dot Trail matching connections.
+ * Loaded after prototype-3.css and limited to matching/connection questions.
+ */
+
+.theme-pastel-play .drag-board.matching {
+  overflow: hidden;
+  border: 1px solid rgba(185, 126, 193, 0.18);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(255, 219, 239, 0.25), transparent 25%),
+    radial-gradient(circle at 92% 88%, rgba(211, 238, 235, 0.27), transparent 25%),
+    linear-gradient(145deg, rgba(255, 253, 255, 0.99), rgba(250, 247, 255, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 14px 34px rgba(100, 72, 127, 0.07);
+}
+
+.theme-pastel-play .matching-stage {
+  gap: clamp(34px, 8vw, 92px);
+  padding: 14px 8px;
+}
+
+.theme-pastel-play .matching-column {
+  gap: 16px;
+}
+
+.theme-pastel-play .matching-row {
+  --match-color: #ca77bd;
+  --match-color-dark: #99518f;
+  --match-soft: rgba(202, 119, 189, 0.16);
+  transition: transform 150ms ease;
+}
+
+.theme-pastel-play .matching-row.left {
+  width: min(100%, 340px);
+}
+
+.theme-pastel-play .matching-row.right {
+  width: min(100%, 292px);
+}
+
+.theme-pastel-play .matching-card {
+  min-height: 68px;
+  border: 1px solid rgba(157, 100, 168, 0.16);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.91);
+  box-shadow:
+    0 8px 20px rgba(100, 72, 127, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.96);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 150ms ease;
+}
+
+.theme-pastel-play .matching-card[role="button"]:hover {
+  border-color: rgba(224, 103, 179, 0.34);
+  transform: translateY(-1px);
+}
+
+.theme-pastel-play .matching-row.connected .matching-card {
+  border-color: color-mix(in srgb, var(--match-color) 58%, white);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), var(--match-soft));
+  box-shadow:
+    0 9px 22px rgba(100, 72, 127, 0.07),
+    inset 4px 0 0 color-mix(in srgb, var(--match-color) 82%, white);
+}
+
+.theme-pastel-play .matching-row.right.connected .matching-card {
+  box-shadow:
+    0 9px 22px rgba(100, 72, 127, 0.07),
+    inset -4px 0 0 color-mix(in srgb, var(--match-color) 82%, white);
+}
+
+.theme-pastel-play .matching-row.active {
+  transform: translateY(-2px);
+}
+
+.theme-pastel-play .matching-row.active .matching-card {
+  border-color: #8f73d8;
+  box-shadow:
+    0 0 0 4px rgba(143, 115, 216, 0.11),
+    0 11px 24px rgba(100, 72, 127, 0.09);
+}
+
+.theme-pastel-play .matching-anchor {
+  position: relative;
+  isolation: isolate;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0;
+  overflow: visible;
+  border: 3px solid #cfb9da;
+  border-radius: 50%;
+  background: #fffaff;
+  box-shadow:
+    0 5px 12px rgba(96, 61, 111, 0.12),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.9);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 140ms ease;
+}
+
+.theme-pastel-play .matching-anchor::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px solid rgba(255, 255, 255, 0.78);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.theme-pastel-play .matching-anchor::after {
+  content: none;
+}
+
+.theme-pastel-play .matching-anchor:hover:not(:disabled) {
+  border-color: #cb70bb;
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 7px rgba(203, 112, 187, 0.10),
+    0 7px 16px rgba(96, 61, 111, 0.14);
+}
+
+.theme-pastel-play .matching-anchor.connected {
+  border-color: var(--match-color-dark);
+  background: var(--match-color);
+  box-shadow:
+    0 0 0 4px var(--match-soft),
+    0 7px 16px rgba(100, 72, 127, 0.14),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.5);
+}
+
+.theme-pastel-play .matching-anchor.connected::before {
+  inset: 5px;
+  border-color: rgba(255, 255, 255, 0.72);
+}
+
+.theme-pastel-play .matching-anchor.active,
+.theme-pastel-play .matching-anchor.dragging {
+  cursor: grabbing;
+  border-color: #7657c4;
+  transform: scale(1.12);
+  box-shadow:
+    0 0 0 7px rgba(143, 115, 216, 0.20),
+    0 0 0 13px rgba(143, 115, 216, 0.08),
+    0 10px 22px rgba(86, 66, 145, 0.18);
+}
+
+.theme-pastel-play .matching-row.available-target .matching-anchor {
+  animation: sticker-target-pulse 1.05s ease-in-out infinite alternate;
+}
+
+.theme-pastel-play .matching-anchor.snap-target {
+  border-color: #389c84;
+  background: #eafff9;
+  transform: scale(1.16);
+  box-shadow:
+    0 0 0 8px rgba(90, 189, 165, 0.20),
+    0 0 0 15px rgba(90, 189, 165, 0.08),
+    0 10px 24px rgba(63, 159, 136, 0.19);
+}
+
+.theme-pastel-play .matching-row.snap-target .matching-card {
+  border-color: #5abda5;
+  background: linear-gradient(135deg, #ffffff, rgba(205, 245, 235, 0.62));
+  box-shadow:
+    0 0 0 4px rgba(90, 189, 165, 0.12),
+    0 12px 26px rgba(63, 159, 136, 0.11);
+}
+
+.theme-pastel-play .matching-lines {
+  filter: drop-shadow(0 3px 3px rgba(100, 72, 127, 0.10));
+}
+
+.theme-pastel-play .matching-line {
+  fill: none;
+  stroke: var(--match-color, #cb70bb);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* Two dotted paths create crisp colored stickers with a soft halo. */
+.theme-pastel-play .matching-line.trail-halo {
+  stroke-width: 9;
+  stroke-dasharray: 1 12;
+  opacity: 0.18;
+}
+
+.theme-pastel-play .matching-line.trail-dots {
+  stroke-width: 5.5;
+  stroke-dasharray: 1 12;
+  opacity: 0.96;
+}
+
+.theme-pastel-play .matching-line.preview.trail-halo {
+  stroke-width: 10;
+  opacity: 0.13;
+}
+
+.theme-pastel-play .matching-line.preview.trail-dots {
+  stroke-width: 5.5;
+  stroke-dasharray: 1 13;
+  opacity: 0.7;
+  animation: sticker-dot-move 0.72s linear infinite;
+}
+
+.theme-pastel-play .matching-line.preview.snapped.trail-halo,
+.theme-pastel-play .matching-line.preview.snapped.trail-dots {
+  stroke: #5abda5;
+}
+
+.theme-pastel-play .matching-line.preview.snapped.trail-dots {
+  opacity: 0.92;
+}
+
+.theme-pastel-play .matching-actions {
+  margin-top: 18px;
+}
+
+@keyframes sticker-dot-move {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+
+@keyframes sticker-target-pulse {
+  from {
+    box-shadow:
+      0 0 0 3px rgba(203, 112, 187, 0.05),
+      0 6px 14px rgba(100, 72, 127, 0.09);
+  }
+  to {
+    box-shadow:
+      0 0 0 7px rgba(203, 112, 187, 0.13),
+      0 8px 18px rgba(100, 72, 127, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-pastel-play .matching-row.available-target .matching-anchor,
+  .theme-pastel-play .matching-line.preview.trail-dots {
+    animation: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .theme-pastel-play .matching-stage {
+    gap: 24px;
+    padding-inline: 0;
+  }
+
+  .theme-pastel-play .matching-row {
+    gap: 8px;
+  }
+
+  .theme-pastel-play .matching-card {
+    min-height: 60px;
+    padding: 10px 11px;
+    border-radius: 17px;
+  }
+
+  .theme-pastel-play .matching-anchor {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+}

@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-07-31-flat-sticker-1";
+const CACHE_VERSION = "homework-v2026-07-31-prototype-3-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
@@ -11,7 +11,6 @@ const CRITICAL_ASSETS = [
   "manifest.json",
   "app/style.css",
   "app/prototype-3.css",
-  "app/flat-sticker-matching.css",
   "app/question-utils.js",
   "app/questions/registry.js",
   "app/questions/manifest.js",
@@ -27,7 +26,6 @@ const CRITICAL_ASSETS = [
   "app/core/results-reporter.js",
   "app/pwa/updates.js",
   "app/app.js",
-  "app/flat-sticker-matching.js",
   "app/main/constants.js",
   "app/main/session.js",
   "app/main/math-utils.js",

@@ -1,0 +1,326 @@
+/*
+ * Prototype 3: paint-swirl matching connections
+ * Loaded after prototype-3.css so it only changes matching/connection questions.
+ */
+
+.theme-pastel-play .drag-board.matching {
+  overflow: hidden;
+  border: 1px solid rgba(224, 140, 91, 0.2);
+  background:
+    radial-gradient(circle at 9% 14%, rgba(255, 219, 165, 0.28), transparent 24%),
+    radial-gradient(circle at 91% 86%, rgba(182, 231, 220, 0.3), transparent 25%),
+    linear-gradient(145deg, rgba(255, 253, 249, 0.98), rgba(252, 247, 255, 0.98));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.96),
+    0 14px 34px rgba(100, 72, 127, 0.08);
+}
+
+.theme-pastel-play .matching-stage {
+  gap: clamp(34px, 8vw, 92px);
+  padding: 14px 8px;
+}
+
+.theme-pastel-play .matching-column {
+  gap: 16px;
+}
+
+.theme-pastel-play .matching-row {
+  --match-color: #c9b9ad;
+  --match-color-dark: #8f7d70;
+  --match-soft: rgba(236, 229, 223, 0.24);
+  transition: transform 150ms ease;
+}
+
+.theme-pastel-play .matching-row.left {
+  width: min(100%, 340px);
+}
+
+.theme-pastel-play .matching-row.right {
+  width: min(100%, 292px);
+}
+
+.theme-pastel-play .matching-card {
+  min-height: 68px;
+  border: 1px solid rgba(125, 93, 151, 0.13);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow:
+    0 8px 20px rgba(100, 72, 127, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.94);
+  transition:
+    background 180ms ease,
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 150ms ease;
+}
+
+.theme-pastel-play .matching-card[role="button"]:hover {
+  border-color: rgba(240, 91, 157, 0.3);
+  transform: translateY(-1px);
+}
+
+.theme-pastel-play .matching-row.connected .matching-card {
+  border-color: var(--match-color);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.96), var(--match-soft));
+  box-shadow:
+    0 9px 22px rgba(100, 72, 127, 0.08),
+    inset 5px 0 0 var(--match-color);
+}
+
+.theme-pastel-play .matching-row.right.connected .matching-card {
+  box-shadow:
+    0 9px 22px rgba(100, 72, 127, 0.08),
+    inset -5px 0 0 var(--match-color);
+}
+
+.theme-pastel-play .matching-row.active {
+  transform: translateY(-2px);
+}
+
+.theme-pastel-play .matching-row.active .matching-card {
+  border-color: #5d8ee8;
+  box-shadow:
+    0 0 0 4px rgba(93, 142, 232, 0.14),
+    0 12px 26px rgba(93, 142, 232, 0.12);
+}
+
+.theme-pastel-play .matching-anchor {
+  position: relative;
+  isolation: isolate;
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  min-height: 38px;
+  padding: 0;
+  overflow: visible;
+  border: 3px solid #c8b8aa;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 34% 27%, rgba(255, 255, 255, 0.98) 0 12%, transparent 13%),
+    rgba(255, 253, 249, 0.96);
+  box-shadow:
+    0 6px 14px rgba(107, 80, 62, 0.12),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.76);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    box-shadow 160ms ease,
+    transform 150ms ease;
+}
+
+.theme-pastel-play .matching-anchor::before,
+.theme-pastel-play .matching-anchor::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+/* A faint unpainted spiral is visible before a connection is made. */
+.theme-pastel-play .matching-anchor::before {
+  inset: 6px;
+  border: 2px solid rgba(143, 125, 112, 0.28);
+  border-left-color: transparent;
+  border-bottom-color: rgba(143, 125, 112, 0.14);
+  border-radius: 50%;
+  transform: rotate(-24deg);
+}
+
+.theme-pastel-play .matching-anchor::after {
+  width: 8px;
+  height: 8px;
+  top: 12px;
+  left: 13px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(143, 125, 112, 0.18);
+  box-shadow: none;
+}
+
+.theme-pastel-play .matching-anchor:hover:not(:disabled) {
+  border-color: #e88152;
+  transform: scale(1.06);
+  box-shadow:
+    0 0 0 7px rgba(232, 129, 82, 0.1),
+    0 8px 18px rgba(107, 80, 62, 0.15);
+}
+
+.theme-pastel-play .matching-anchor.connected {
+  border-color: var(--match-color-dark);
+  background:
+    radial-gradient(circle at 32% 24%, rgba(255, 255, 255, 0.82) 0 11%, transparent 12%),
+    radial-gradient(circle at 58% 62%, var(--match-color) 0 20%, transparent 21%),
+    conic-gradient(
+      from 18deg,
+      var(--match-color) 0 15%,
+      var(--match-color-dark) 15% 25%,
+      var(--match-color) 25% 48%,
+      rgba(255, 255, 255, 0.68) 48% 55%,
+      var(--match-color) 55% 78%,
+      var(--match-color-dark) 78% 88%,
+      var(--match-color) 88% 100%
+    );
+  box-shadow:
+    0 0 0 4px var(--match-soft),
+    0 8px 18px rgba(100, 72, 127, 0.14),
+    inset 0 0 0 3px rgba(255, 255, 255, 0.48);
+}
+
+.theme-pastel-play .matching-anchor.connected::before {
+  inset: 7px;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  border-right-color: transparent;
+  border-bottom-color: rgba(255, 255, 255, 0.18);
+  transform: rotate(36deg);
+}
+
+.theme-pastel-play .matching-anchor.connected::after {
+  width: 9px;
+  height: 9px;
+  top: 11px;
+  left: 12px;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.theme-pastel-play .matching-anchor.active,
+.theme-pastel-play .matching-anchor.dragging {
+  cursor: grabbing;
+  border-color: #3577d4;
+  transform: scale(1.1);
+  box-shadow:
+    0 0 0 7px rgba(93, 142, 232, 0.2),
+    0 0 0 13px rgba(93, 142, 232, 0.08),
+    0 10px 22px rgba(71, 112, 174, 0.18);
+}
+
+.theme-pastel-play .matching-row.available-target .matching-anchor {
+  animation: paint-swirl-target-pulse 1.05s ease-in-out infinite alternate;
+}
+
+.theme-pastel-play .matching-anchor.snap-target {
+  border-color: #3f9f88;
+  transform: scale(1.16);
+  box-shadow:
+    0 0 0 8px rgba(90, 189, 165, 0.2),
+    0 0 0 15px rgba(90, 189, 165, 0.08),
+    0 10px 24px rgba(63, 159, 136, 0.2);
+}
+
+.theme-pastel-play .matching-row.snap-target .matching-card {
+  border-color: #5abda5;
+  background: linear-gradient(135deg, #ffffff, rgba(205, 245, 235, 0.62));
+  box-shadow:
+    0 0 0 4px rgba(90, 189, 165, 0.12),
+    0 12px 26px rgba(63, 159, 136, 0.12);
+}
+
+.theme-pastel-play .matching-lines {
+  filter: drop-shadow(0 4px 4px rgba(100, 72, 127, 0.11));
+}
+
+.theme-pastel-play .matching-line {
+  fill: none;
+  stroke: var(--match-color, #e88152);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.theme-pastel-play .matching-line.paint-under {
+  stroke-width: 13;
+  opacity: 0.16;
+}
+
+.theme-pastel-play .matching-line.paint-main {
+  stroke-width: 7;
+  opacity: 0.94;
+}
+
+.theme-pastel-play .matching-line.paint-texture {
+  stroke: rgba(255, 255, 255, 0.64);
+  stroke-width: 2.2;
+  stroke-dasharray: 1 9;
+  opacity: 0.72;
+}
+
+.theme-pastel-play .matching-line.preview.paint-under {
+  stroke: #5d8ee8;
+  stroke-width: 12;
+  opacity: 0.12;
+}
+
+.theme-pastel-play .matching-line.preview.paint-main {
+  stroke: #5d8ee8;
+  stroke-width: 5.5;
+  stroke-dasharray: 9 9;
+  opacity: 0.62;
+  animation: paint-swirl-dash 0.8s linear infinite;
+}
+
+.theme-pastel-play .matching-line.preview.snapped.paint-main {
+  stroke: #5abda5;
+  stroke-dasharray: none;
+  opacity: 0.82;
+}
+
+.theme-pastel-play .matching-actions {
+  margin-top: 18px;
+}
+
+@keyframes paint-swirl-dash {
+  to {
+    stroke-dashoffset: -18;
+  }
+}
+
+@keyframes paint-swirl-target-pulse {
+  from {
+    box-shadow:
+      0 0 0 3px rgba(240, 91, 157, 0.06),
+      0 7px 16px rgba(100, 72, 127, 0.09);
+  }
+  to {
+    box-shadow:
+      0 0 0 7px rgba(240, 91, 157, 0.13),
+      0 9px 20px rgba(100, 72, 127, 0.12);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-pastel-play .matching-row.available-target .matching-anchor,
+  .theme-pastel-play .matching-line.preview.paint-main {
+    animation: none;
+  }
+}
+
+@media (max-width: 620px) {
+  .theme-pastel-play .matching-stage {
+    gap: 24px;
+    padding-inline: 0;
+  }
+
+  .theme-pastel-play .matching-row {
+    gap: 8px;
+  }
+
+  .theme-pastel-play .matching-card {
+    min-height: 60px;
+    padding: 10px 11px;
+    border-radius: 17px;
+  }
+
+  .theme-pastel-play .matching-anchor {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    min-height: 34px;
+  }
+
+  .theme-pastel-play .matching-anchor::after {
+    top: 10px;
+    left: 11px;
+  }
+}

@@ -5,8 +5,8 @@
   "start_url": "homework.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#fff4f8",
-  "theme_color": "#f05b9d",
+  "background_color": "#f4f7ff",
+  "theme_color": "#146c94",
   "orientation": "any",
   "icons": [
     {
