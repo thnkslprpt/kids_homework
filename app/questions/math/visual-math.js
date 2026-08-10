@@ -606,7 +606,22 @@ const VISUAL_MATH_QUESTIONS = (() => {
 
   function createVisualMathGeneratedEntryInternal(difficulty) {
     const level = clampDifficulty(difficulty);
-    return randomChoice(ALL_FAMILIES)(level);
+    if (level >= 8 && Math.random() < 0.58) {
+      const studioIds = level >= 9
+        ? ["geometry", "coordinates-functions", "patterns-sequences"]
+        : ["geometry", "coordinates-functions"];
+      const studioModule = globalThis.HomeworkQuestions?.get(randomChoice(studioIds));
+      const studioEntry = studioModule?.generatedEntryFactory?.(level);
+      if (studioEntry) return studioEntry;
+    }
+    const gradeAlignedFamilies = level <= 2
+      ? [createNumberLineQuestion, createPlotQuestion, createExtraNumberLineQuestion, createExtraPlotQuestion]
+      : level === 3
+        ? [createNumberLineQuestion, createAngleQuestion, createPlotQuestion, createAreaQuestion, createTablePatternQuestion, createExtraNumberLineQuestion, createExtraAngleQuestion, createExtraPlotQuestion]
+        : level === 4
+          ? [createNumberLineQuestion, createAngleQuestion, createPlotQuestion, createAreaQuestion, createTablePatternQuestion, createExtraNumberLineQuestion, createExtraAngleQuestion, createExtraPlotQuestion, createExtraAreaQuestion]
+          : ALL_FAMILIES;
+    return randomChoice(gradeAlignedFamilies)(level);
   }
 
   const fallbackQuestions = [];
@@ -634,5 +649,5 @@ globalThis.HomeworkQuestions?.register({
   label: "Visual Math",
   getStaticQuestions: () => VISUAL_MATH_QUESTIONS,
   generatedEntryFactory: globalThis.createVisualMathGeneratedEntry,
-  generatedShare: 0.85,
+  generatedShare: 1,
 });

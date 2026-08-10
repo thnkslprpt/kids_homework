@@ -9,7 +9,7 @@ const GOOGLE_SHEETS_REPORT_SOURCE = "kids_homework_app";
 const GOOGLE_SHEETS_REPORT_SCHEMA_VERSION = 1;
 const GOOGLE_SHEETS_REPORT_SECRET = "";
 const MAX_SAVED_SESSIONS = 10;
-const QUESTION_COUNT_OPTIONS = [20, 30, 40];
+const QUESTION_COUNT_OPTIONS = [10, 20, 30];
 const SPEED_ROUND_QUESTION_COUNT = 5;
 const SPEED_ROUND_SECONDS = 10;
 const SPEED_ROUND_MS = SPEED_ROUND_SECONDS * 1000;
@@ -83,10 +83,18 @@ const REVIEW_RECENCY_DECAY = 0.82;
 const SNAPSHOT_DATE_PATTERN = /^Snapshot date:\s*(\d{4}-\d{2}-\d{2})\.$/;
 const CORE_SESSION_CATEGORIES = ["math", "hebrew"];
 const NON_CORE_SESSION_CATEGORIES = [
+  "addition-subtraction",
+  "multiplication-division",
+  "place-value-decimals",
+  "geometry",
+  "patterns-sequences",
+  "coordinates-functions",
   "science",
   "science-evidence",
   "time",
   "statistics",
+  "negative-numbers",
+  "percentages",
   "algebra",
   "applied-word-problems",
   "visual-math",
@@ -117,9 +125,17 @@ const NON_CORE_SESSION_CATEGORIES = [
 ];
 const REVIEW_FOCUS_ALLOWED_CATEGORIES = new Set([
   "math",
+  "addition-subtraction",
+  "multiplication-division",
+  "place-value-decimals",
+  "geometry",
+  "patterns-sequences",
+  "coordinates-functions",
   "hebrew",
   "time",
   "statistics",
+  "negative-numbers",
+  "percentages",
   "algebra",
   "applied-word-problems",
   "visual-math",
@@ -170,11 +186,19 @@ const USER_PROFILES = [
     name: "Gabriel",
     categoryDifficulties: {
       math: 3,
+      "addition-subtraction": 3,
+      "multiplication-division": 3,
+      "place-value-decimals": 3,
+      geometry: 3,
+      "patterns-sequences": 3,
+      "coordinates-functions": 3,
       hebrew: 2,
       science: 3,
       "science-evidence": 3,
       time: 3,
       statistics: 3,
+      "negative-numbers": 3,
+      percentages: 3,
       algebra: 3,
       "applied-word-problems": 3,
       "visual-math": 3,
@@ -218,11 +242,19 @@ const USER_PROFILES = [
     name: "Gideon",
     categoryDifficulties: {
       math: 7,
+      "addition-subtraction": 7,
+      "multiplication-division": 7,
+      "place-value-decimals": 7,
+      geometry: 7,
+      "patterns-sequences": 7,
+      "coordinates-functions": 7,
       hebrew: 7,
       science: 7,
       "science-evidence": 7,
       time: 7,
       statistics: 7,
+      "negative-numbers": 7,
+      percentages: 7,
       algebra: 7,
       "applied-word-problems": 7,
       "visual-math": 7,
@@ -266,11 +298,19 @@ const USER_PROFILES = [
     name: "Noga",
     categoryDifficulties: {
       math: 4,
+      "addition-subtraction": 4,
+      "multiplication-division": 4,
+      "place-value-decimals": 4,
+      geometry: 4,
+      "patterns-sequences": 4,
+      "coordinates-functions": 4,
       hebrew: 4,
       science: 4,
       "science-evidence": 4,
       time: 4,
       statistics: 4,
+      "negative-numbers": 4,
+      percentages: 4,
       algebra: 4,
       "applied-word-problems": 4,
       "visual-math": 4,
@@ -328,12 +368,20 @@ const USER_PROFILES = [
 ];
 const CATEGORY_LABELS = {
   math: "Math",
+  "addition-subtraction": "Addition & Subtraction",
+  "multiplication-division": "Multiplication & Division",
+  "place-value-decimals": "Place Value & Decimals",
+  geometry: "Geometry & Shapes",
+  "patterns-sequences": "Patterns & Sequences",
+  "coordinates-functions": "Coordinates & Functions",
   hebrew: "Hebrew",
   "hebrew-writing": "Hebrew Writing",
   science: "Science",
   "science-evidence": "Science Evidence",
   time: "Time",
   statistics: "Statistics",
+  "negative-numbers": "Negative Numbers",
+  percentages: "Percentages",
   algebra: "Algebra",
   "applied-word-problems": "Applied Word Problems",
   "visual-math": "Visual Math",
@@ -404,7 +452,15 @@ const HEBREW_DIFFICULTY_WEIGHTS = {
 };
 const EXTENDED_MATH_CATEGORIES = new Set([
   "math",
+  "addition-subtraction",
+  "multiplication-division",
+  "place-value-decimals",
+  "geometry",
+  "patterns-sequences",
+  "coordinates-functions",
   "statistics",
+  "negative-numbers",
+  "percentages",
   "time",
   "algebra",
   "applied-word-problems",
@@ -424,7 +480,97 @@ const SESSION_PRESETS = {
   adaptive: "adaptive",
   "math-heavy": "math-heavy",
   hebrew: "hebrew",
+  practice: "practice",
 };
+
+// Level numbers are grade numbers. This scope is intentionally short enough to
+// show beside the slider while also serving as the app's curriculum contract.
+const GRADE_LEVEL_SCOPE = {
+  1: "Numbers to 120 · add/subtract within 20 · shapes, length and time",
+  2: "Place value to 1,000 · add/subtract within 100 · equal groups",
+  3: "Multiplication/division · fractions · area and data",
+  4: "Multi-digit operations · fraction equivalence · angles",
+  5: "Decimals · fraction operations · volume · coordinate plane",
+  6: "Ratios and percent · rational numbers · expressions · statistics",
+  7: "Proportions · signed operations · equations · probability",
+  8: "Linear functions · exponents · transformations · bivariate data",
+  9: "Algebra I · quadratics · coordinate geometry · modeling",
+  10: "Geometry/Algebra II · sequences · nonlinear functions · statistics",
+};
+
+const PRACTICE_TOPIC_GROUPS = [
+  {
+    label: "Number & Math Skills",
+    icon: "✦",
+    categories: [
+      "math",
+      "addition-subtraction",
+      "multiplication-division",
+      "place-value-decimals",
+      "negative-numbers",
+      "percentages",
+      "fractions",
+      "fractions-and-ratios",
+      "algebra",
+      "patterns-sequences",
+      "coordinates-functions",
+      "applied-word-problems",
+      "visual-math",
+      "estimation",
+    ],
+  },
+  {
+    label: "Measure, Data & Space",
+    icon: "▦",
+    categories: [
+      "geometry",
+      "measurement",
+      "visual-measurement",
+      "time",
+      "calendar",
+      "statistics",
+      "charts-and-graphs",
+      "probability",
+      "spatial-reasoning",
+      "logic",
+    ],
+  },
+  {
+    label: "Language & Ideas",
+    icon: "Aa",
+    categories: [
+      "hebrew",
+      "reading-comprehension",
+      "vocabulary-grammar",
+      "rationality",
+    ],
+  },
+  {
+    label: "Science & Our World",
+    icon: "◉",
+    categories: [
+      "science",
+      "science-evidence",
+      "geography",
+      "geography-map",
+      "maps-and-directions",
+      "population",
+      "history",
+      "general-knowledge",
+    ],
+  },
+  {
+    label: "Life & Technology",
+    icon: "⌂",
+    categories: [
+      "computing",
+      "financial-literacy",
+      "health-and-first-aid",
+      "nutrition",
+      "household-problem-solving",
+    ],
+  },
+];
 
 
   window.HomeworkApp.config = {
@@ -474,5 +620,7 @@ const SESSION_PRESETS = {
     HEBREW_DIFFICULTY_WEIGHTS,
     EXTENDED_MATH_CATEGORIES,
     SESSION_PRESETS,
+    GRADE_LEVEL_SCOPE,
+    PRACTICE_TOPIC_GROUPS,
   };
 })();

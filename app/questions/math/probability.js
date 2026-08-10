@@ -1988,16 +1988,16 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
   }
 
   const generatedTemplates = [
-    { minLevel: 1, weight: 3, build: createLikelihoodQuestion },
-    { minLevel: 2, weight: 3, build: createWeatherQuestion },
+    { minLevel: 1, maxLevel: 4, weight: 3, build: createLikelihoodQuestion },
+    { minLevel: 2, maxLevel: 7, weight: 3, build: createWeatherQuestion },
     { minLevel: 5, weight: 3, build: createExperimentalQuestion },
-    { minLevel: 3, weight: 3, build: createFairGameQuestion },
+    { minLevel: 3, maxLevel: 8, weight: 3, build: createFairGameQuestion },
     { minLevel: 4, weight: 3, build: createBestStrategyQuestion },
     { minLevel: 5, weight: 3, build: createIndependentQuestion },
-    { minLevel: 3, weight: 2, build: createNotEnoughInformationQuestion },
+    { minLevel: 3, maxLevel: 7, weight: 2, build: createNotEnoughInformationQuestion },
     { minLevel: 2, weight: 3, build: createCardQuestion },
-    { minLevel: 1, weight: 3, build: createObjectBagQuestion },
-    { minLevel: 2, weight: 3, build: createDiceQuestion },
+    { minLevel: 1, maxLevel: 7, weight: 3, build: createObjectBagQuestion },
+    { minLevel: 2, maxLevel: 8, weight: 3, build: createDiceQuestion },
     { minLevel: 4, weight: 3, build: createComplementQuestion },
     { minLevel: 5, weight: 3, build: createTwoStepQuestion },
     { minLevel: 6, weight: 3, build: createExpectedValueQuestion },
@@ -2246,8 +2246,9 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
     ],
     10: [
       () => {
-        const soccerPlayers = probabilityRandomChoice([20, 30, 40]);
-        const girls = soccerPlayers * probabilityRandomChoice([0.25, 0.4, 0.6]);
+        const [soccerPlayers, girls] = probabilityRandomChoice([
+          [20, 5], [20, 8], [20, 12], [30, 12], [30, 18], [40, 10], [40, 16], [40, 24],
+        ]);
         return buildEntry({
           question: `A school club has ${soccerPlayers} soccer players. Of those soccer players, ${girls} are girls. If one soccer player is chosen, what is the chance the player is a girl?`,
           answer: probabilityFormatFraction(girls, soccerPlayers),

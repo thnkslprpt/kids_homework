@@ -19,11 +19,14 @@ function createGeneratedCategoryQuestion(category, difficulty) {
 
 function createTimeChoiceQuestion(difficulty) {
   const level = normalizeSessionDifficulty(difficulty);
+  if (level === 1) {
+    return createClockWordingQuestion(level);
+  }
   const templates = [
-    { minLevel: 1, weight: 5, build: createForwardElapsedTimeQuestion },
-    { minLevel: 2, weight: 3, build: createTimeUntilQuestion },
-    { minLevel: 3, weight: 3, build: createBackwardElapsedTimeQuestion },
-    { minLevel: 5, weight: 2, build: createRolloverTimeQuestion },
+    { minLevel: 1, maxLevel: 5, weight: 5, build: createForwardElapsedTimeQuestion },
+    { minLevel: 2, maxLevel: 6, weight: 3, build: createTimeUntilQuestion },
+    { minLevel: 3, maxLevel: 8, weight: 3, build: createBackwardElapsedTimeQuestion },
+    { minLevel: 5, maxLevel: 8, weight: 2, build: createRolloverTimeQuestion },
     { minLevel: 3, weight: 3, build: createScheduleTimeQuestion },
     { minLevel: 5, weight: 3, build: createRoutineTimeQuestion },
     { minLevel: 1, maxLevel: 5, weight: 3, build: createClockWordingQuestion },

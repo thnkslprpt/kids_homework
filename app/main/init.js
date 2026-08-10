@@ -247,39 +247,31 @@ const generatedChoiceCategoryConfigs = Object.fromEntries(
     .filter(([, config]) => typeof config.factory === "function")
 );
 
-const mathInputGenerators = [
-  createAdditionInputQuestion,
-  createSubtractionInputQuestion,
-  createMultiplicationInputQuestion,
-  createDivisionInputQuestion,
-  createMissingNumberInputQuestion,
-  createDecimalOperationInputQuestion,
-  createPlaceValueInputQuestion,
-  createRectangleMeasureInputQuestion,
-  createMoneyInputQuestion,
-  createPercentageInputQuestion,
-];
+const mathInputGeneratorsByDifficulty = {
+  1: [createAdditionInputQuestion, createSubtractionInputQuestion, createMissingNumberInputQuestion],
+  2: [createAdditionInputQuestion, createSubtractionInputQuestion, createMissingNumberInputQuestion, createPlaceValueInputQuestion, createMoneyInputQuestion],
+  3: [createAdditionInputQuestion, createSubtractionInputQuestion, createMultiplicationInputQuestion, createDivisionInputQuestion, createMissingNumberInputQuestion, createRectangleMeasureInputQuestion],
+  4: [createAdditionInputQuestion, createSubtractionInputQuestion, createMultiplicationInputQuestion, createDivisionInputQuestion, createMissingNumberInputQuestion, createPlaceValueInputQuestion, createRectangleMeasureInputQuestion],
+  5: [createMultiplicationInputQuestion, createDivisionInputQuestion, createMissingNumberInputQuestion, createDecimalOperationInputQuestion, createPlaceValueInputQuestion, createRectangleMeasureInputQuestion],
+  6: [createAdditionInputQuestion, createSubtractionInputQuestion, createDivisionInputQuestion, createDecimalOperationInputQuestion, createPercentageInputQuestion],
+  7: [createAdditionInputQuestion, createSubtractionInputQuestion, createDivisionInputQuestion, createDecimalOperationInputQuestion, createPercentageInputQuestion],
+  8: [createAdvancedMathInputQuestion],
+  9: [createAdvancedMathInputQuestion],
+  10: [createAdvancedMathInputQuestion],
+};
 
-const mathChoiceGenerators = [
-  createAdditionChoiceQuestion,
-  createSubtractionChoiceQuestion,
-  createMultiplicationChoiceQuestion,
-  createDivisionChoiceQuestion,
-  createMissingNumberChoiceQuestion,
-  createSkipCountingChoiceQuestion,
-  createNumberPatternChoiceQuestion,
-  createComparisonChoiceQuestion,
-  createDecimalComparisonChoiceQuestion,
-  createDecimalOperationChoiceQuestion,
-  createPlaceValueChoiceQuestion,
-  createRoundingChoiceQuestion,
-  createRectangleMeasureChoiceQuestion,
-  createPrimeCompositeChoiceQuestion,
-  createNumberLineChoiceQuestion,
-  createFractionBarChoiceQuestion,
-  createMoneyChoiceQuestion,
-  createPercentageChoiceQuestion,
-];
+const mathChoiceGeneratorsByDifficulty = {
+  1: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createMissingNumberChoiceQuestion, createComparisonChoiceQuestion, createNumberLineChoiceQuestion, createFractionBarChoiceQuestion],
+  2: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createMissingNumberChoiceQuestion, createSkipCountingChoiceQuestion, createComparisonChoiceQuestion, createPlaceValueChoiceQuestion, createMoneyChoiceQuestion, createFractionBarChoiceQuestion],
+  3: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createMultiplicationChoiceQuestion, createDivisionChoiceQuestion, createMissingNumberChoiceQuestion, createNumberPatternChoiceQuestion, createRoundingChoiceQuestion, createRectangleMeasureChoiceQuestion, createFractionBarChoiceQuestion],
+  4: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createMultiplicationChoiceQuestion, createDivisionChoiceQuestion, createMissingNumberChoiceQuestion, createDecimalComparisonChoiceQuestion, createPlaceValueChoiceQuestion, createRoundingChoiceQuestion, createRectangleMeasureChoiceQuestion, createPrimeCompositeChoiceQuestion, createFractionBarChoiceQuestion],
+  5: [createMultiplicationChoiceQuestion, createDivisionChoiceQuestion, createMissingNumberChoiceQuestion, createDecimalComparisonChoiceQuestion, createDecimalOperationChoiceQuestion, createPlaceValueChoiceQuestion, createRoundingChoiceQuestion, createRectangleMeasureChoiceQuestion, createPrimeCompositeChoiceQuestion, createFractionBarChoiceQuestion],
+  6: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createDivisionChoiceQuestion, createDecimalOperationChoiceQuestion, createPrimeCompositeChoiceQuestion, createFractionBarChoiceQuestion, createPercentageChoiceQuestion],
+  7: [createAdditionChoiceQuestion, createSubtractionChoiceQuestion, createDivisionChoiceQuestion, createDecimalOperationChoiceQuestion, createNumberPatternChoiceQuestion, createPercentageChoiceQuestion],
+  8: [createAdvancedMathChoiceQuestion],
+  9: [createAdvancedMathChoiceQuestion],
+  10: [createAdvancedMathChoiceQuestion],
+};
 
 const statisticsGeneratorsByDifficulty = {
   1: [
@@ -296,19 +288,15 @@ const statisticsGeneratorsByDifficulty = {
     createStatisticsMiddleNumberQuestion,
     createStatisticsHighestNumberQuestion,
     createStatisticsLowestNumberQuestion,
-    createStatisticsMeanQuestion,
     createStatisticsRangeQuestion,
     createStatisticsDataQuestion,
   ],
   4: [
-    createStatisticsMeanQuestion,
-    createStatisticsMedianQuestion,
     createStatisticsModeQuestion,
     createStatisticsRangeQuestion,
     createStatisticsDataQuestion,
   ],
   5: [
-    createStatisticsMeanQuestion,
     createStatisticsMedianQuestion,
     createStatisticsModeQuestion,
     createStatisticsRangeQuestion,
@@ -327,6 +315,23 @@ const statisticsGeneratorsByDifficulty = {
     createStatisticsModeQuestion,
     createStatisticsRangeQuestion,
     createStatisticsDataQuestion,
+  ],
+  8: [
+    createStatisticsAssociationQuestion,
+    createStatisticsRelativeFrequencyQuestion,
+    createStatisticsOutlierReasoningQuestion,
+  ],
+  9: [
+    createStatisticsWeightedMeanQuestion,
+    createStatisticsSamplingQuestion,
+    createStatisticsAssociationQuestion,
+    createStatisticsOutlierReasoningQuestion,
+  ],
+  10: [
+    createStatisticsConditionalProbabilityQuestion,
+    createStatisticsWeightedMeanQuestion,
+    createStatisticsSamplingQuestion,
+    createStatisticsAssociationQuestion,
   ],
 };
 

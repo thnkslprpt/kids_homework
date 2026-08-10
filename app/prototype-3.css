@@ -340,6 +340,12 @@ body.theme-pastel-play::after {
   background: #f3edff;
 }
 
+.theme-pastel-play .builder-preset-button:nth-child(4) {
+  border-color: rgba(236, 79, 150, 0.3);
+  color: #b33570;
+  background: #fff0f7;
+}
+
 .theme-pastel-play .builder-preset-button.active:nth-child(1) {
   color: #ffffff;
   border-color: var(--pastel-teal);
@@ -359,6 +365,13 @@ body.theme-pastel-play::after {
   border-color: var(--pastel-purple);
   background: linear-gradient(135deg, #a47be5, #7c55c6);
   box-shadow: 0 10px 24px rgba(141, 98, 215, 0.24);
+}
+
+.theme-pastel-play .builder-preset-button.active:nth-child(4) {
+  color: #ffffff;
+  border-color: #ec4f96;
+  background: linear-gradient(135deg, #ff79b2, #e64a91);
+  box-shadow: 0 10px 24px rgba(236, 79, 150, 0.24);
 }
 
 .theme-pastel-play button {

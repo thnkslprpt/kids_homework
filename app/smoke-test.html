@@ -11,15 +11,21 @@
         <form id="start-form">
           <input id="hebrew-only" value="false">
           <input id="question-count" value="30">
+          <button type="button" class="question-count-button" data-question-count="10"></button>
           <button type="button" class="question-count-button" data-question-count="20"></button>
           <button type="button" class="question-count-button active" data-question-count="30"></button>
-          <button type="button" class="question-count-button" data-question-count="40"></button>
           <input id="difficulty-level" value="3">
           <div id="difficulty-selector"></div>
           <output id="difficulty-value"></output>
+          <small id="difficulty-scope"></small>
           <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew"></button>
           <button type="button" class="builder-preset-button active" data-session-preset="adaptive"></button>
           <button type="button" class="builder-preset-button" data-session-preset="math-heavy"></button>
+          <button id="practice-preset-button" type="button" class="builder-preset-button" data-session-preset="practice"></button>
+          <section id="practice-topic-panel" hidden>
+            <div id="practice-topic-groups"></div>
+            <p id="practice-topic-selection"></p>
+          </section>
         </form>
         <button id="history-button"></button>
         <button id="dashboard-button"></button>
@@ -554,7 +560,7 @@
             click(document.querySelector('[data-user-id="guest"]'), "guest user button");
             difficultyInput.value = "10";
             difficultyInput.dispatchEvent(new Event("input", { bubbles: true }));
-            assert(document.getElementById("difficulty-value").textContent === "10", "guest difficulty value should update");
+            assert(document.getElementById("difficulty-value").textContent === "Grade 10", "guest grade value should update");
             click(document.querySelector('[data-question-count="20"]'), "20 question button");
             click(document.querySelector('[data-session-preset="math-heavy"]'), "math-heavy preset button");
             assert(document.getElementById("hebrew-only").value === "false", "math-heavy preset should not enable Hebrew only");
@@ -608,6 +614,46 @@
             assertVisibleScreen("start-screen", "dashboard back");
           }
         );
+      }
+
+      function runFocusedPracticeSmokeTest() {
+        const countValues = Array.from(document.querySelectorAll(".question-count-button"))
+          .map((button) => Number(button.dataset.questionCount));
+        assert(JSON.stringify(countValues) === JSON.stringify([10, 20, 30]), "practice: question counts should be 10, 20, 30");
+
+        click(document.querySelector('[data-user-id="guest"]'), "practice guest user button");
+        click(document.querySelector('[data-session-preset="practice"]'), "practice preset button");
+        assert(document.getElementById("question-count").value === "10", "practice: focused sessions should default to 10 questions");
+        assert(!document.getElementById("practice-topic-panel").hidden, "practice: topic panel should be visible");
+        assert(
+          document.querySelectorAll(".practice-topic-button").length === api.SESSION_CATEGORY_ORDER.length,
+          "practice: every session category should have a topic button"
+        );
+
+        click(document.querySelector('[data-practice-category="percentages"]'), "percentages practice topic");
+        assert(api.state.practiceCategory === "percentages", "practice: selected category was not stored");
+        submit(document.getElementById("start-form"), "practice start submit");
+        assertVisibleScreen("quiz-screen", "practice started session");
+        assert(api.state.questions.length === 10, `practice: expected 10 questions, got ${api.state.questions.length}`);
+        assert(
+          api.state.questions.every((question) => String(question.type || "").replace(/-(choice|input|drag)$/, "") === "percentages"),
+          "practice: generated a question outside the selected percentages topic"
+        );
+        assert(
+          api.state.questions.some((question) => question.mode === "interactive"),
+          "practice: percentages session should include interactive questions"
+        );
+
+        completeActiveRound();
+        assertVisibleScreen("results-screen", "practice completed without speed round");
+        assert(api.state.speedRound.records.length === 0, "practice: focused sessions should not add unrelated speed questions");
+        assert(!getText(document.getElementById("results-summary")).includes("Speed round"), "practice: results should not mention a speed round");
+
+        click(document.getElementById("restart-button"), "practice reset to start screen");
+        click(document.querySelector('[data-session-preset="hebrew"]'), "practice switch to Hebrew");
+        assert(document.getElementById("question-count").value === "30", "practice: leaving practice should restore the prior question count");
+        assert(document.getElementById("hebrew-only").value === "true", "practice: Hebrew preset should enable Hebrew only");
+        click(document.querySelector('[data-session-preset="adaptive"]'), "practice return to adaptive");
       }
 
       function validateScoringHelpers() {
@@ -1333,6 +1379,7 @@
         if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
         speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
 
+        runFocusedPracticeSmokeTest();
         runUiWorkflowSmokeTest();
       } catch (error) {
         failures.push(error && error.stack ? error.stack : String(error));

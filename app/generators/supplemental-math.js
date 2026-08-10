@@ -332,23 +332,93 @@
     });
   }
 
+  function createLinearEquationQuestion(difficulty) {
+    const solution = randomInt(-10, 12);
+    const coefficient = randomInt(2, 7);
+    const constant = randomInt(-12, 12);
+    const result = coefficient * solution + constant;
+    return entry({
+      topic: "math-linear-equations",
+      difficulty,
+      question: "Solve the linear equation.",
+      displayText: `${coefficient}x ${constant >= 0 ? "+" : "−"} ${Math.abs(constant)} = ${result}`,
+      answer: solution,
+      options: numberOptions(solution, [-coefficient, -2, -1, 1, 2, coefficient]),
+      reviewText: `Undo the constant, then divide by ${coefficient}.`,
+    });
+  }
+
+  function createRadicalQuestion(difficulty) {
+    const root = randomInt(3, 15);
+    const answer = root;
+    return entry({
+      topic: "math-radicals",
+      difficulty,
+      question: "What is the principal square root?",
+      displayText: `√${root * root}`,
+      answer,
+      options: numberOptions(answer, [-3, -2, -1, 1, 2, 3], 0),
+      reviewText: `${root} × ${root} = ${root * root}.`,
+    });
+  }
+
+  function createQuadraticQuestion(difficulty) {
+    const leftRoot = randomInt(2, 8);
+    const rightRoot = randomInt(2, 8);
+    const answer = `(x − ${leftRoot})(x − ${rightRoot})`;
+    return entry({
+      topic: "math-quadratics",
+      difficulty,
+      question: "Which expression is the factored form?",
+      displayText: `x² − ${leftRoot + rightRoot}x + ${leftRoot * rightRoot}`,
+      answer,
+      options: [
+        answer,
+        `(x + ${leftRoot})(x + ${rightRoot})`,
+        `(x − ${leftRoot + rightRoot})(x − ${leftRoot * rightRoot})`,
+        `(x + ${leftRoot})(x − ${rightRoot})`,
+      ],
+      reviewText: `The roots are ${leftRoot} and ${rightRoot}.`,
+    });
+  }
+
+  function createSequenceQuestion(difficulty) {
+    const first = randomInt(2, 12);
+    const difference = randomInt(2, 8);
+    const term = randomInt(8, 16);
+    const answer = first + (term - 1) * difference;
+    return entry({
+      topic: "math-sequences",
+      difficulty,
+      question: `Find term ${term} of the arithmetic sequence.`,
+      displayText: `a₁ = ${first}, d = ${difference}`,
+      answer,
+      options: numberOptions(answer, [-difference, -1, 1, difference, term]),
+      reviewText: `aₙ = a₁ + (n − 1)d.`,
+    });
+  }
+
   const mathGenerators = [
-    createRemainderQuestion,
-    createGcfLcmQuestion,
-    createOrderOfOperationsQuestion,
-    createFractionOperationQuestion,
-    createMixedNumberQuestion,
-    createUnitRateQuestion,
-    createProportionQuestion,
-    createInequalityQuestion,
-    createAngleQuestion,
-    createTriangleQuestion,
-    createSymmetryQuestion,
-    { minLevel: 4, create: createPrimeFactorQuestion },
-    { minLevel: 4, create: createExponentQuestion },
-    { minLevel: 4, create: createCoordinateTransformQuestion },
-    { minLevel: 5, create: createPercentChangeQuestion },
-    { minLevel: 5, create: createVolumeSurfaceAreaQuestion },
+    { minLevel: 3, maxLevel: 5, create: createRemainderQuestion },
+    { minLevel: 4, maxLevel: 6, create: createGcfLcmQuestion },
+    { minLevel: 3, maxLevel: 7, create: createOrderOfOperationsQuestion },
+    { minLevel: 4, maxLevel: 7, create: createFractionOperationQuestion },
+    { minLevel: 4, maxLevel: 7, create: createMixedNumberQuestion },
+    { minLevel: 6, maxLevel: 7, create: createUnitRateQuestion },
+    { minLevel: 6, maxLevel: 7, create: createProportionQuestion },
+    { minLevel: 6, maxLevel: 8, create: createInequalityQuestion },
+    { minLevel: 4, maxLevel: 7, create: createAngleQuestion },
+    { minLevel: 4, maxLevel: 7, create: createTriangleQuestion },
+    { minLevel: 2, maxLevel: 5, create: createSymmetryQuestion },
+    { minLevel: 4, maxLevel: 7, create: createPrimeFactorQuestion },
+    { minLevel: 6, maxLevel: 9, create: createExponentQuestion },
+    { minLevel: 5, maxLevel: 8, create: createCoordinateTransformQuestion },
+    { minLevel: 6, maxLevel: 7, create: createPercentChangeQuestion },
+    { minLevel: 5, maxLevel: 7, create: createVolumeSurfaceAreaQuestion },
+    { minLevel: 8, maxLevel: 9, create: createLinearEquationQuestion },
+    { minLevel: 8, maxLevel: 9, create: createRadicalQuestion },
+    { minLevel: 9, maxLevel: 10, create: createQuadraticQuestion },
+    { minLevel: 10, maxLevel: 10, create: createSequenceQuestion },
   ];
 
   globalThis.createSupplementalMathGeneratedEntry = (difficulty) =>

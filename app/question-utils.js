@@ -280,7 +280,11 @@
 
   function pickGeneratedEntry(generators, difficulty, attempts = 40) {
     const level = clampDifficulty(difficulty);
-    const eligible = generators.filter((generator) => !generator.minLevel || generator.minLevel <= level);
+    const eligible = generators.filter((generator) => {
+      const minLevel = Number(generator?.minLevel || 1);
+      const maxLevel = Number(generator?.maxLevel || MAX_LEVEL);
+      return minLevel <= level && level <= maxLevel;
+    });
     if (!eligible.length) {
       return null;
     }

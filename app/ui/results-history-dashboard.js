@@ -4,6 +4,11 @@ function completeActiveRound() {
     return;
   }
 
+  if (state.sessionPreset === SESSION_PRESETS.practice) {
+    void finishSession();
+    return;
+  }
+
   startSpeedRound();
 }
 
@@ -42,15 +47,20 @@ function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } 
   const roundedSpeedPercentage = Math.round(speedPercentage);
 
   elements.resultsTitle.textContent = getResultsPraise(percentage);
-  elements.resultsSummary.replaceChildren(
+  const summaryNodes = [
     document.createTextNode(
       `${currentUser.name} got ${state.correctCount} out of ${state.totalQuestions} correct. That's ${roundedPercentage}%.`
     ),
-    document.createElement("br"),
-    document.createTextNode(
-      `Speed round: ${state.speedRound.correctCount}/${speedTotal}. That's ${roundedSpeedPercentage}%.`
-    )
-  );
+  ];
+  if (state.sessionPreset !== SESSION_PRESETS.practice) {
+    summaryNodes.push(
+      document.createElement("br"),
+      document.createTextNode(
+        `Speed round: ${state.speedRound.correctCount}/${speedTotal}. That's ${roundedSpeedPercentage}%.`
+      )
+    );
+  }
+  elements.resultsSummary.replaceChildren(...summaryNodes);
   renderResultsDetails();
   updateResultsNavigation();
 
@@ -460,6 +470,7 @@ function getSessionPresetLabel(preset) {
       [SESSION_PRESETS.adaptive]: "Adaptive",
       [SESSION_PRESETS["math-heavy"]]: "Math",
       [SESSION_PRESETS.hebrew]: "Hebrew",
+      [SESSION_PRESETS.practice]: "Practice",
     }[preset] || "Adaptive"
   );
 }
@@ -528,9 +539,18 @@ function buildSessionHistoryEntry() {
     sessionPreset: state.sessionPreset,
     totalQuestions: state.totalQuestions,
     correctCount: state.correctCount,
-    speedRoundTotalQuestions: state.speedRound.totalQuestions || SPEED_ROUND_QUESTION_COUNT,
-    speedRoundCorrectCount: state.speedRound.correctCount || 0,
-    speedRoundRecords: state.speedRound.records.filter(Boolean).map((record) => ({ ...record })),
+    speedRoundTotalQuestions:
+      state.sessionPreset === SESSION_PRESETS.practice
+        ? undefined
+        : state.speedRound.totalQuestions || SPEED_ROUND_QUESTION_COUNT,
+    speedRoundCorrectCount:
+      state.sessionPreset === SESSION_PRESETS.practice
+        ? undefined
+        : state.speedRound.correctCount || 0,
+    speedRoundRecords:
+      state.sessionPreset === SESSION_PRESETS.practice
+        ? []
+        : state.speedRound.records.filter(Boolean).map((record) => ({ ...record })),
     records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
   };
 }
@@ -619,7 +639,15 @@ function formatSessionHistoryMeta(session) {
   }
 
   if (session?.sessionPreset && session.sessionPreset !== SESSION_PRESETS.adaptive) {
-    parts.push(getSessionPresetLabel(session.sessionPreset));
+    const presetLabel = getSessionPresetLabel(session.sessionPreset);
+    const focusedCategory = Array.isArray(session?.selectedCategories)
+      ? session.selectedCategories[0]
+      : "";
+    parts.push(
+      session.sessionPreset === SESSION_PRESETS.practice && focusedCategory
+        ? `${presetLabel}: ${getCategoryLabel(focusedCategory)}`
+        : presetLabel
+    );
   }
 
   if (session?.hebrewOnly && session.sessionPreset !== SESSION_PRESETS.hebrew) {

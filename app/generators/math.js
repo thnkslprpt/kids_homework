@@ -1,19 +1,135 @@
 function createMathInputQuestion(difficulty) {
-  const question = randomChoice(mathInputGenerators)(getCoreNumericGeneratorDifficulty(difficulty));
+  const level = normalizeSessionDifficulty(difficulty);
+  const generators = mathInputGeneratorsByDifficulty[level] || mathInputGeneratorsByDifficulty[3];
+  const generator = randomChoice(generators);
+  const question = generator(generator === createAdvancedMathInputQuestion ? level : getCoreNumericGeneratorDifficulty(level));
   return { ...question, difficulty };
 }
 
 function createMathChoiceQuestion(difficulty) {
+  const level = normalizeSessionDifficulty(difficulty);
   if (difficulty <= 2 && Math.random() < 0.28) {
     return createComparisonDragQuestion(difficulty);
   }
 
-  if (getOptionalGlobalFunction("createSupplementalMathGeneratedEntry") && Math.random() < 0.32) {
+  if (level >= 3 && getOptionalGlobalFunction("createSupplementalMathGeneratedEntry") && Math.random() < (level >= 8 ? 0.58 : 0.32)) {
     return createSupplementalMathChoiceQuestion(difficulty);
   }
 
-  const question = randomChoice(mathChoiceGenerators)(getCoreNumericGeneratorDifficulty(difficulty));
+  const generators = mathChoiceGeneratorsByDifficulty[level] || mathChoiceGeneratorsByDifficulty[3];
+  const generator = randomChoice(generators);
+  const question = generator(generator === createAdvancedMathChoiceQuestion ? level : getCoreNumericGeneratorDifficulty(level));
   return { ...question, difficulty };
+}
+
+function createAdvancedMathInputQuestion(difficulty) {
+  const level = normalizeSessionDifficulty(difficulty);
+  if (level === 8) {
+    const answer = randomInt(-12, 12);
+    const coefficient = randomInt(2, 8);
+    const constant = randomInt(-15, 15);
+    const result = coefficient * answer + constant;
+    return createNumericInputQuestion({
+      type: "math-input",
+      difficulty: level,
+      questionText: "Solve the linear equation.",
+      displayText: `${coefficient}x ${constant >= 0 ? "+" : "−"} ${Math.abs(constant)} = ${result}`,
+      answer,
+    });
+  }
+
+  if (level === 9) {
+    if (Math.random() < 0.5) {
+      const input = randomInt(-6, 6);
+      const a = randomInt(1, 5);
+      const b = randomInt(-8, 8);
+      const c = randomInt(-10, 10);
+      const answer = a * input * input + b * input + c;
+      return createNumericInputQuestion({
+        type: "math-input",
+        difficulty: level,
+        questionText: `Evaluate f(${input}).`,
+        displayText: `f(x) = ${a}x² ${b >= 0 ? "+" : "−"} ${Math.abs(b)}x ${c >= 0 ? "+" : "−"} ${Math.abs(c)}`,
+        answer,
+      });
+    }
+    const firstRoot = randomInt(-8, -2);
+    const secondRoot = randomInt(2, 9);
+    const linear = -(firstRoot + secondRoot);
+    const constant = firstRoot * secondRoot;
+    return createNumericInputQuestion({
+      type: "math-input",
+      difficulty: level,
+      questionText: "Solve the quadratic equation. Enter the larger solution.",
+      displayText: `x² ${linear >= 0 ? "+" : "−"} ${Math.abs(linear)}x ${constant >= 0 ? "+" : "−"} ${Math.abs(constant)} = 0`,
+      answer: secondRoot,
+    });
+  }
+
+  const firstRoot = randomInt(-9, -2);
+  const secondRoot = randomInt(2, 10);
+  const coefficient = randomInt(1, 4);
+  const linear = -coefficient * (firstRoot + secondRoot);
+  const constant = coefficient * firstRoot * secondRoot;
+  const answer = linear ** 2 - 4 * coefficient * constant;
+  return createNumericInputQuestion({
+    type: "math-input",
+    difficulty: level,
+    questionText: "Find the discriminant of the quadratic equation.",
+    displayText: `${coefficient}x² ${linear >= 0 ? "+" : "−"} ${Math.abs(linear)}x ${constant >= 0 ? "+" : "−"} ${Math.abs(constant)} = 0`,
+    answer,
+  });
+}
+
+function createAdvancedMathChoiceQuestion(difficulty) {
+  const level = normalizeSessionDifficulty(difficulty);
+  if (level === 8) {
+    const base = randomInt(2, 12);
+    const answer = base;
+    return createNumericChoiceQuestion({
+      type: "math-choice",
+      difficulty: level,
+      questionText: "Find the positive square root.",
+      displayText: `√${base * base}`,
+      answer,
+    });
+  }
+  if (level === 9) {
+    const firstRoot = randomInt(2, 6);
+    const secondRoot = firstRoot + randomInt(2, 5);
+    const answer = `x = ${firstRoot} or x = ${secondRoot}`;
+    return {
+      type: "math-choice",
+      difficulty: level,
+      mode: "choice",
+      questionText: "Choose the complete solution set.",
+      displayText: `x² − ${firstRoot + secondRoot}x + ${firstRoot * secondRoot} = 0`,
+      extraText: "",
+      reviewText: `The quadratic factors as (x − ${firstRoot})(x − ${secondRoot}).`,
+      options: shuffleArray([
+        answer,
+        `x = −${firstRoot} or x = −${secondRoot}`,
+        `x = ${firstRoot + secondRoot} or x = ${firstRoot * secondRoot}`,
+        `x = ${firstRoot} only`,
+      ]),
+      answerValue: answer,
+      answerLabel: answer,
+      isHebrew: false,
+    };
+  }
+  const coefficient = randomInt(2, 5);
+  const constant = randomInt(-5, 6);
+  const shift = randomInt(1, 7);
+  const input = randomInt(-4, 5);
+  const inner = coefficient * input + constant;
+  const answer = inner ** 2 + shift;
+  return createNumericChoiceQuestion({
+    type: "math-choice",
+    difficulty: level,
+    questionText: `Given f(x) = ${coefficient}x ${constant >= 0 ? "+" : "−"} ${Math.abs(constant)} and g(x) = x² + ${shift}, find g(f(${input})).`,
+    displayText: `First find f(${input}), then substitute that result into g.`,
+    answer,
+  });
 }
 
 function createSupplementalMathChoiceQuestion(difficulty) {
@@ -851,11 +967,140 @@ function createPercentageChoiceQuestion(difficulty) {
 }
 
 function createStatisticsChoiceQuestion(difficulty) {
-  const generatorDifficulty = getCoreNumericGeneratorDifficulty(difficulty);
+  const generatorDifficulty = normalizeSessionDifficulty(difficulty);
   const generators =
     statisticsGeneratorsByDifficulty[generatorDifficulty] || statisticsGeneratorsByDifficulty[3];
   const question = randomChoice(generators)(generatorDifficulty);
   return { ...question, difficulty };
+}
+
+function createStatisticsAssociationQuestion(difficulty) {
+  const positive = Math.random() < 0.55;
+  const none = Math.random() < 0.25;
+  const answer = none ? "No clear association" : positive ? "Positive association" : "Negative association";
+  const rows = Array.from({ length: 5 }, (_, index) => {
+    const x = index + 1;
+    const y = none ? randomInt(3, 15) : positive ? 2 * x + randomInt(0, 2) : 14 - 2 * x + randomInt(0, 2);
+    return [x, y];
+  });
+  return {
+    type: "statistics-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "What kind of association does the data show?",
+    displayText: rows.map(([x, y]) => `(${x}, ${y})`).join(", "),
+    extraText: "",
+    reviewText: "Association describes the overall direction of the paired data; it does not prove causation.",
+    options: shuffleArray(["Positive association", "Negative association", "No clear association", "Perfect causation"]),
+    answerValue: answer,
+    answerLabel: answer,
+    isHebrew: false,
+  };
+}
+
+function createStatisticsRelativeFrequencyQuestion(difficulty) {
+  const groupTotal = randomChoice([20, 25, 40, 50]);
+  const favorable = groupTotal * randomChoice([0.2, 0.25, 0.4, 0.5, 0.6]);
+  const answer = `${Math.round((favorable / groupTotal) * 100)}%`;
+  const answerPercent = Number(answer.replace("%", ""));
+  const options = Array.from(new Set([
+    answer,
+    `${favorable}%`,
+    `${100 - answerPercent}%`,
+    `${Math.max(0, answerPercent - 10)}%`,
+    `${Math.min(100, answerPercent + 10)}%`,
+  ])).slice(0, 4);
+  return {
+    type: "statistics-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "What is the relative frequency within this group?",
+    displayText: `${favorable} of ${groupTotal} students chose the option.`,
+    extraText: "",
+    reviewText: `Relative frequency = ${favorable} ÷ ${groupTotal} = ${answer}.`,
+    options: shuffleArray(options),
+    answerValue: answer,
+    answerLabel: answer,
+    isHebrew: false,
+  };
+}
+
+function createStatisticsOutlierReasoningQuestion(difficulty) {
+  const center = randomInt(8, 20);
+  const values = [center - 2, center - 1, center, center + 1, center + 2, center + 30];
+  const answer = "The mean increases more than the median";
+  return {
+    type: "statistics-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "How does the high outlier affect the data set?",
+    displayText: values.join(", "),
+    extraText: "",
+    reviewText: "A high outlier pulls the mean upward; the median is more resistant.",
+    options: shuffleArray([answer, "The median increases more than the mean", "Neither measure changes", "The mean becomes the smallest value"]),
+    answerValue: answer,
+    answerLabel: answer,
+    isHebrew: false,
+  };
+}
+
+function createStatisticsWeightedMeanQuestion(difficulty) {
+  const firstCount = randomChoice([10, 20, 30]);
+  const secondCount = randomChoice([10, 20, 30]);
+  const firstMean = randomChoice([60, 70, 80, 90]);
+  const secondMean = randomChoice([60, 70, 80, 90]);
+  const answer = (firstCount * firstMean + secondCount * secondMean) / (firstCount + secondCount);
+  return createNumericChoiceQuestion({
+    type: "statistics-choice",
+    difficulty,
+    questionText: `One group of ${firstCount} has mean ${firstMean}; another group of ${secondCount} has mean ${secondMean}. What is the combined mean?`,
+    displayText: "Weight each mean by its group size.",
+    answer,
+  });
+}
+
+function createStatisticsSamplingQuestion(difficulty) {
+  const answer = "Randomly sample students from every grade";
+  return {
+    type: "statistics-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "Which plan is most likely to represent the whole school?",
+    displayText: "The school wants to estimate average nightly homework time.",
+    extraText: "",
+    reviewText: "A representative random sample reduces selection bias.",
+    options: shuffleArray([answer, "Ask only students in homework club", "Ask the first five students at one table", "Ask only students who finished early"]),
+    answerValue: answer,
+    answerLabel: answer,
+    isHebrew: false,
+  };
+}
+
+function createStatisticsConditionalProbabilityQuestion(difficulty) {
+  const totalInGroup = randomChoice([20, 25, 40]);
+  const favorable = totalInGroup * randomChoice([0.2, 0.25, 0.4, 0.5]);
+  const answer = `${Math.round((favorable / totalInGroup) * 100)}%`;
+  const answerPercent = Number(answer.replace("%", ""));
+  const options = Array.from(new Set([
+    answer,
+    `${favorable}%`,
+    `${100 - answerPercent}%`,
+    `${Math.max(0, answerPercent - 10)}%`,
+    `${Math.min(100, answerPercent + 10)}%`,
+  ])).slice(0, 4);
+  return {
+    type: "statistics-choice",
+    difficulty,
+    mode: "choice",
+    questionText: "Given that a student is in Group A, what percent chose music?",
+    displayText: `Group A: ${favorable} chose music and ${totalInGroup - favorable} did not.`,
+    extraText: "",
+    reviewText: `The condition changes the denominator to the ${totalInGroup} students in Group A.`,
+    options: shuffleArray(options),
+    answerValue: answer,
+    answerLabel: answer,
+    isHebrew: false,
+  };
 }
 
 function createStatisticsMiddleNumberQuestion(difficulty) {

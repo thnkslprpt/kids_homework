@@ -32,6 +32,8 @@ function createEmptySpeedRoundState() {
   currentUserId: USER_PROFILES[0].id,
   dashboardUserId: USER_PROFILES[0].id,
   sessionPreset: SESSION_PRESETS.adaptive,
+  practiceCategory: "",
+  practicePreviousQuestionCount: "30",
   categoryDifficulties: createUniformCategoryDifficulties(3),
   selectedCategories: [],
   totalQuestions: 0,

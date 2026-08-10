@@ -384,6 +384,43 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     return shuffle([answer, ...shuffle(labels.filter((label) => label !== answer)).slice(0, 3)]);
   }
 
+  function createPictureGraphQuestion(difficulty) {
+    const contexts = [
+      { title: "Favorite fruit", labels: ["Apples", "Bananas", "Grapes", "Pears"] },
+      { title: "Books read", labels: ["Noga", "Gideon", "Gabriel", "Eden"] },
+      { title: "Toy shelf", labels: ["Blocks", "Cars", "Balls", "Puzzles"] },
+    ];
+    const context = randomChoice(contexts);
+    const counts = shuffle(difficulty <= 1 ? [2, 4, 6, 8] : [3, 5, 7, 9]);
+    const values = context.labels.map((label, index) => ({ label, value: counts[index] }));
+    const askValue = Math.random() < 0.5;
+    const target = randomChoice(values);
+    if (askValue) {
+      return entry({
+        topic: "data-picture-graphs",
+        difficulty,
+        question: `How many does the chart show for ${target.label}?`,
+        visualHtml: renderTable(context.title, [["Category", "Count"], ...values.map((point) => [point.label, "● ".repeat(point.value).trim()])]),
+        visualSummary: valuesSummary(values),
+        answer: target.value,
+        options: numberOptions(target.value, [-3, -2, -1, 1, 2, 3], 0),
+      });
+    }
+    const askMost = Math.random() < 0.65;
+    const ordered = [...values].sort((left, right) => right.value - left.value);
+    const answer = askMost ? ordered[0].label : ordered[ordered.length - 1].label;
+    return entry({
+      topic: "data-picture-graphs",
+      difficulty,
+      question: askMost ? "Which category has the most?" : "Which category has the fewest?",
+      visualHtml: renderTable(context.title, [["Category", "Count"], ...values.map((point) => [point.label, "● ".repeat(point.value).trim()])]),
+      visualSummary: valuesSummary(values),
+      answer,
+      options: labelOptions(context.labels, answer),
+    });
+  }
+  createPictureGraphQuestion.maxLevel = 2;
+
   function createLineGraphQuestion(difficulty) {
     const context = randomChoice(DAILY_DATA_CONTEXTS);
     const values = makeSeries(context, difficulty, difficulty <= 3 ? "up" : "mixed");
@@ -413,6 +450,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: labelOptions(values.map((point) => point.label), answer),
     });
   }
+  createLineGraphQuestion.minLevel = 2;
+  createLineGraphQuestion.maxLevel = 7;
 
   function createPieChartQuestion(difficulty) {
     const contexts = [
@@ -435,6 +474,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: parts.map((part) => part.label),
     });
   }
+  createPieChartQuestion.minLevel = 3;
+  createPieChartQuestion.maxLevel = 7;
 
   function createScatterplotQuestion(difficulty) {
     const contexts = [
@@ -476,12 +517,26 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       ],
     });
   }
+  createScatterplotQuestion.minLevel = 8;
 
   function createTwoWayTableQuestion(difficulty) {
     const topLeft = randomInt(4, 12);
     const topRight = randomInt(3, 10);
     const bottomLeft = randomInt(2, 9);
     const bottomRight = randomInt(2, 9);
+    if (difficulty >= 9) {
+      const busTotal = topLeft + topRight;
+      const percent = Math.round((topLeft / busTotal) * 100);
+      return entry({
+        topic: "data-two-way-tables",
+        difficulty,
+        question: "Among students who took the bus, about what percent chose soccer?",
+        visualHtml: renderTable("Class survey", [["", "Soccer", "Art"], ["Bus", topLeft, topRight], ["Walk", bottomLeft, bottomRight]]),
+        answer: `${percent}%`,
+        options: unique([`${percent}%`, `${topLeft}%`, `${busTotal}%`, `${Math.max(0, percent - 10)}%`, `${Math.min(100, percent + 10)}%`]).slice(0, 4),
+        reviewText: `Within the bus row, use ${topLeft} ÷ ${busTotal}.`,
+      });
+    }
     const ask = randomChoice(["cell", "row", "column"]);
     if (ask === "row") {
       const answer = topLeft + topRight;
@@ -514,6 +569,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: numberOptions(topLeft, [-3, -2, -1, 1, 2, 3], 0),
     });
   }
+  createTwoWayTableQuestion.minLevel = 7;
 
   function createMisleadingGraphQuestion(difficulty) {
     const examples = [
@@ -545,6 +601,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       ],
     });
   }
+  createMisleadingGraphQuestion.minLevel = 6;
 
   function createSamplingBiasQuestion(difficulty) {
     const examples = [
@@ -573,6 +630,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: [picked.answer, ...picked.wrong],
     });
   }
+  createSamplingBiasQuestion.minLevel = 6;
 
   function createOutlierAverageQuestion(difficulty) {
     const middle = randomInt(7, 12);
@@ -592,6 +650,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
         : [`The median ${median} better describes the typical score`, `The median is ${outlier}`, "There is no outlier", "All scores are close together"],
     });
   }
+  createOutlierAverageQuestion.minLevel = 6;
 
   function createTrendQuestion(difficulty) {
     const context = randomChoice(DAILY_DATA_CONTEXTS);
@@ -619,6 +678,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     });
   }
   createTrendQuestion.minLevel = 3;
+  createTrendQuestion.maxLevel = 7;
 
   function createOutlierQuestion(difficulty) {
     const context = randomChoice(DAILY_DATA_CONTEXTS);
@@ -637,7 +697,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: labelOptions(values.map((point) => point.label), outlier.label),
     });
   }
-  createOutlierQuestion.minLevel = 5;
+  createOutlierQuestion.minLevel = 6;
+  createOutlierQuestion.maxLevel = 9;
 
   function createMeanMedianQuestion(difficulty) {
     const context = randomChoice(DAILY_DATA_CONTEXTS.filter((item) => item.labels.length >= 5));
@@ -656,7 +717,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       options: numberOptions(answerValue, [-4, -2, -1, 1, 2, 4], 0).map(formatNumber),
     });
   }
-  createMeanMedianQuestion.minLevel = 4;
+  createMeanMedianQuestion.minLevel = 6;
+  createMeanMedianQuestion.maxLevel = 9;
 
   function createCompareTwoChartsQuestion(difficulty) {
     const context = randomChoice(TWO_CHART_CONTEXTS);
@@ -728,6 +790,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
   createMisleadingAxisQuestion.minLevel = 6;
 
   const dataGenerators = [
+    createPictureGraphQuestion,
     createLineGraphQuestion,
     createPieChartQuestion,
     createScatterplotQuestion,
@@ -745,6 +808,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
   globalThis.createChartsAndGraphsGeneratedEntry = (difficulty) =>
     pickGeneratedEntry(dataGenerators, difficulty);
   globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE = {
+    picture: createPictureGraphQuestion,
     line: createLineGraphQuestion,
     trend: createTrendQuestion,
     outlier: createOutlierQuestion,
@@ -759,5 +823,5 @@ globalThis.HomeworkQuestions?.register({
   label: "Charts and Graphs",
   getStaticQuestions: () => CHARTS_AND_GRAPHS_QUESTIONS,
   generatedEntryFactory: globalThis.createChartsAndGraphsGeneratedEntry,
-  generatedShare: 0.45,
+  generatedShare: 1,
 });

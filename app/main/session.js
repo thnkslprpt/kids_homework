@@ -1058,6 +1058,12 @@ function applyUserDefaultDifficulty(userId) {
 
 function applyUserDefaultSessionMode() {
   setHebrewOnlySelection(false);
+  state.practiceCategory = "";
+  state.practicePreviousQuestionCount = "30";
+  if (elements.questionCount) {
+    elements.questionCount.value = "30";
+    updateQuestionCountButtons();
+  }
   setSessionPreset(SESSION_PRESETS.adaptive);
 }
 
@@ -1221,7 +1227,7 @@ function updateStartControlsForCurrentUser() {
   }
 
   if (elements.difficultyLabel) {
-    elements.difficultyLabel.textContent = "Difficulty";
+    elements.difficultyLabel.textContent = "Grade level";
   }
 
   if (elements.hebrewOnlyButton) {
@@ -1244,6 +1250,11 @@ function updateStartControlsForCurrentUser() {
     button.title = builderLocked ? `${currentUser.name}'s session settings are preset.` : "";
   });
 
+  elements.practiceTopicGroups?.querySelectorAll(".practice-topic-button").forEach((button) => {
+    button.disabled = builderLocked;
+  });
+
+  updatePracticeTopicPanel();
   updateDifficultyControl();
 }
 
@@ -1274,6 +1285,8 @@ function updateQuestionCountButtons() {
 }
 
 function initializeSessionBuilder() {
+  renderPracticeTopicSelector();
+
   elements.sessionPresetButtons.forEach((button) => {
     button.addEventListener("click", () => {
       applySessionPreset(button.dataset.sessionPreset || SESSION_PRESETS.adaptive);
@@ -1294,6 +1307,20 @@ function applySessionPreset(preset) {
   const normalizedPreset = Object.prototype.hasOwnProperty.call(SESSION_PRESETS, preset)
     ? SESSION_PRESETS[preset]
     : SESSION_PRESETS.adaptive;
+  const wasPractice = state.sessionPreset === SESSION_PRESETS.practice;
+  const enteringPractice = normalizedPreset === SESSION_PRESETS.practice && !wasPractice;
+  const leavingPractice = normalizedPreset !== SESSION_PRESETS.practice && wasPractice;
+
+  if (enteringPractice && elements.questionCount) {
+    state.practicePreviousQuestionCount = String(elements.questionCount.value || "30");
+    elements.questionCount.value = "10";
+  } else if (leavingPractice && elements.questionCount) {
+    elements.questionCount.value = QUESTION_COUNT_OPTIONS.includes(
+      Number.parseInt(state.practicePreviousQuestionCount, 10)
+    )
+      ? state.practicePreviousQuestionCount
+      : "30";
+  }
 
   if (normalizedPreset === SESSION_PRESETS.adaptive) {
     setHebrewOnlySelection(false);
@@ -1301,9 +1328,12 @@ function applySessionPreset(preset) {
     setHebrewOnlySelection(false);
   } else if (normalizedPreset === SESSION_PRESETS.hebrew) {
     setHebrewOnlySelection(true);
+  } else if (normalizedPreset === SESSION_PRESETS.practice) {
+    setHebrewOnlySelection(false);
   }
 
   setSessionPreset(normalizedPreset);
+  updateQuestionCountButtons();
   updateStartControlsForCurrentUser();
 }
 
@@ -1318,6 +1348,8 @@ function updateSessionPresetButtons() {
     button.classList.toggle("active", isActive);
     button.setAttribute("aria-pressed", isActive ? "true" : "false");
   });
+
+  updatePracticeTopicPanel();
 }
 
 function getPresetCategories(preset = state.sessionPreset) {
@@ -1329,6 +1361,12 @@ function getPresetCategories(preset = state.sessionPreset) {
     return ["hebrew"];
   }
 
+  if (preset === SESSION_PRESETS.practice) {
+    return SESSION_CATEGORY_ORDER.includes(state.practiceCategory)
+      ? [state.practiceCategory]
+      : [];
+  }
+
   return SESSION_CATEGORY_ORDER;
 }
 
@@ -1336,9 +1374,102 @@ function getSessionBuilderOptions() {
   return {
     minDifficulty: 1,
     selectedCategories: getPresetCategories(),
-    adaptiveReview: true,
+    adaptiveReview: state.sessionPreset !== SESSION_PRESETS.practice,
     sessionPreset: state.sessionPreset,
   };
+}
+
+function renderPracticeTopicSelector() {
+  if (!elements.practiceTopicGroups) {
+    return;
+  }
+
+  elements.practiceTopicGroups.innerHTML = "";
+  const topicIcons = {
+    math: "123",
+    "negative-numbers": "−5",
+    percentages: "%",
+    fractions: "½",
+    "fractions-and-ratios": "2:3",
+    algebra: "x",
+    hebrew: "א",
+    science: "⚗",
+    geography: "◎",
+    "geography-map": "⌖",
+    computing: "</>",
+    probability: "🎲",
+    time: "◷",
+    calendar: "▦",
+  };
+
+  PRACTICE_TOPIC_GROUPS.forEach((group) => {
+    const section = document.createElement("section");
+    section.className = "practice-topic-group";
+
+    const heading = document.createElement("h4");
+    heading.className = "practice-topic-group-title";
+    heading.innerHTML = `<span aria-hidden="true">${escapeHtml(group.icon)}</span> ${escapeHtml(group.label)}`;
+    section.appendChild(heading);
+
+    const grid = document.createElement("div");
+    grid.className = "practice-topic-grid";
+    group.categories.forEach((category) => {
+      if (!SESSION_CATEGORY_ORDER.includes(category)) {
+        return;
+      }
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "practice-topic-button";
+      button.dataset.practiceCategory = category;
+      button.setAttribute("aria-pressed", "false");
+      button.innerHTML = `
+        <span class="practice-topic-icon" aria-hidden="true">${escapeHtml(topicIcons[category] || "•")}</span>
+        <span>${escapeHtml(CATEGORY_LABELS[category] || category)}</span>
+      `;
+      button.addEventListener("click", () => selectPracticeCategory(category));
+      grid.appendChild(button);
+    });
+    section.appendChild(grid);
+    elements.practiceTopicGroups.appendChild(section);
+  });
+
+  updatePracticeTopicPanel();
+}
+
+function selectPracticeCategory(category) {
+  if (!SESSION_CATEGORY_ORDER.includes(category)) {
+    return;
+  }
+
+  state.practiceCategory = category;
+  state.selectedCategories = [category];
+  if (state.sessionPreset !== SESSION_PRESETS.practice) {
+    applySessionPreset(SESSION_PRESETS.practice);
+    return;
+  }
+
+  updatePracticeTopicPanel();
+  clearStartMessage();
+}
+
+function updatePracticeTopicPanel() {
+  if (!elements.practiceTopicPanel) {
+    return;
+  }
+
+  const isPractice = state.sessionPreset === SESSION_PRESETS.practice;
+  elements.practiceTopicPanel.hidden = !isPractice;
+  elements.practiceTopicGroups?.querySelectorAll(".practice-topic-button").forEach((button) => {
+    const isActive = button.dataset.practiceCategory === state.practiceCategory;
+    button.classList.toggle("active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+
+  if (elements.practiceTopicSelection) {
+    elements.practiceTopicSelection.textContent = SESSION_CATEGORY_ORDER.includes(state.practiceCategory)
+      ? `Focused practice: ${CATEGORY_LABELS[state.practiceCategory] || state.practiceCategory}`
+      : "Choose a topic to begin.";
+  }
 }
 
 function initializeDifficultyControl() {
@@ -1353,13 +1484,6 @@ function initializeDifficultyControl() {
 }
 
 function initializeHebrewOnlyButton() {
-  elements.hebrewOnlyButton?.addEventListener("click", () => {
-    elements.hebrewOnly.value = String(!isHebrewOnlySelected());
-    syncSessionPresetForHebrewOnly();
-    updateHebrewOnlyButton();
-    updateStartControlsForCurrentUser();
-  });
-
   syncSessionPresetForHebrewOnly();
   updateHebrewOnlyButton();
 }
@@ -1379,8 +1503,11 @@ function updateDifficultyControl() {
   elements.difficultySelector?.setAttribute("data-disabled", elements.difficultyLevel.disabled ? "true" : "false");
 
   if (elements.difficultyValue) {
-    elements.difficultyValue.textContent = String(normalizedDifficulty);
-    elements.difficultyValue.setAttribute("aria-label", `Difficulty level ${normalizedDifficulty}`);
+    elements.difficultyValue.textContent = `Grade ${normalizedDifficulty}`;
+    elements.difficultyValue.setAttribute("aria-label", `Grade ${normalizedDifficulty}`);
+  }
+  if (elements.difficultyScope) {
+    elements.difficultyScope.textContent = GRADE_LEVEL_SCOPE[normalizedDifficulty] || "";
   }
 }
 
@@ -1575,9 +1702,16 @@ function startSession(event) {
   const sessionBuilderOptions = getSessionBuilderOptions();
   const hebrewOnly = selectedHebrewOnly;
   const selectedCategories = hebrewOnly ? ["hebrew"] : sessionBuilderOptions.selectedCategories;
+  const isFocusedPractice = state.sessionPreset === SESSION_PRESETS.practice;
 
   if (!Number.isFinite(totalQuestions) || !QUESTION_COUNT_OPTIONS.includes(totalQuestions)) {
     showStartMessage("Please choose one of the question counts shown.", "error");
+    return;
+  }
+
+  if (isFocusedPractice && selectedCategories.length !== 1) {
+    showStartMessage("Choose one practice topic before starting.", "error");
+    elements.practiceTopicPanel?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
     return;
   }
 
@@ -1635,16 +1769,21 @@ function startSession(event) {
             userId: state.currentUserId,
             categoryDifficulties,
           })
-        : injectHebrewWritingPracticeTail(
-            buildSessionQuestions(totalQuestions, difficulty, {
+        : (() => {
+            const generatedQuestions = buildSessionQuestions(totalQuestions, difficulty, {
               hebrewOnly,
               userId: state.currentUserId,
               categoryDifficulties,
               ...sessionBuilderOptions,
-            }),
-            hebrewCategoryDifficulty,
-            { hebrewOnly }
-          );
+            });
+            return isFocusedPractice
+              ? generatedQuestions
+              : injectHebrewWritingPracticeTail(
+                  generatedQuestions,
+                  hebrewCategoryDifficulty,
+                  { hebrewOnly }
+                );
+          })();
 
     const validationErrors = validateHomeworkQuestionList(sessionQuestions, "session");
     if (validationErrors.length) {
@@ -2239,7 +2378,7 @@ function createSessionQuestionForCategory(
   }
 
   if (category === "charts-and-graphs") {
-    if (generatedChoiceCategoryConfigs["charts-and-graphs"]?.factory && Math.random() < 0.45) {
+    if (generatedChoiceCategoryConfigs["charts-and-graphs"]?.factory) {
       const generatedChartQuestion = createChartsAndGraphsGeneratedChoiceQuestion(effectiveDifficulty);
       if (generatedChartQuestion) {
         return generatedChartQuestion;

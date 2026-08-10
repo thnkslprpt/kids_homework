@@ -433,39 +433,34 @@ function createFractionsAndRatiosGeneratedEntry(difficulty) {
   const level = fractionsAndRatiosClampDifficulty(difficulty);
   const generatorByLevel = {
     1: [
-      fractionsAndRatiosCreateFractionOfNumberEntry,
       fractionsAndRatiosCreateFractionOfSetEntry,
-      fractionsAndRatiosCreateSimpleRatioMeaningEntry,
     ],
     2: [
-      fractionsAndRatiosCreateFractionOfNumberEntry,
       fractionsAndRatiosCreateFractionOfSetEntry,
-      fractionsAndRatiosCreateEquivalentFractionEntry,
       fractionsAndRatiosCreateCompareFractionEntry,
     ],
     3: [
       fractionsAndRatiosCreateFractionOfNumberEntry,
-      fractionsAndRatiosCreateDecimalPercentEntry,
-      fractionsAndRatiosCreateRatioPartEntry,
+      fractionsAndRatiosCreateFractionOfSetEntry,
       fractionsAndRatiosCreateCompareFractionEntry,
     ],
     4: [
-      fractionsAndRatiosCreateSimplifyRatioEntry,
       fractionsAndRatiosCreateEquivalentFractionEntry,
-      fractionsAndRatiosCreateRecipeScalingEntry,
-      fractionsAndRatiosCreateDecimalPercentEntry,
+      fractionsAndRatiosCreateCompareFractionEntry,
+      fractionsAndRatiosCreateSameDenominatorOperationEntry,
     ],
     5: [
       fractionsAndRatiosCreateSameDenominatorOperationEntry,
-      fractionsAndRatiosCreateRatioPartEntry,
       fractionsAndRatiosCreateRecipeScalingEntry,
-      fractionsAndRatiosCreateScaleRatioEntry,
+      fractionsAndRatiosCreateFractionOfNumberEntry,
+      fractionsAndRatiosCreateEquivalentFractionEntry,
     ],
     6: [
       fractionsAndRatiosCreateUnlikeDenominatorOperationEntry,
       fractionsAndRatiosCreateMissingEquivalentFractionEntry,
       fractionsAndRatiosCreateUnitRateEntry,
-      fractionsAndRatiosCreateScaleRatioEntry,
+      fractionsAndRatiosCreateSimplifyRatioEntry,
+      fractionsAndRatiosCreateRatioPartEntry,
     ],
     7: [
       fractionsAndRatiosCreateFractionMultiplicationEntry,
@@ -867,6 +862,6 @@ globalThis.HomeworkQuestions?.register({
   label: "Fractions and Ratios",
   getStaticQuestions: () => FRACTIONS_AND_RATIOS_QUESTIONS,
   generatedEntryFactory: createFractionsAndRatiosGeneratedEntry,
-  generatedShare: 0.85,
+  generatedShare: 1,
   supportsDrag: true,
 });

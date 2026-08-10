@@ -414,11 +414,15 @@ const FRACTIONS_QUESTIONS = (() => {
           visualSummary: "2 of 4 counters are blue.",
         }),
       () =>
-        createPlainQuestion({
-          question: "What is 1/2 of 8?",
-          options: ["2", "3", "4", "6"],
-          answer: "4",
+        createSetQuestion({
+          question: "What fraction of the counters are yellow?",
+          coloredCount: 2,
+          totalCount: 4,
+          options: ["1/4", "2/4", "3/4", "4/4"],
+          answer: "2/4",
           difficulty: 1,
+          color: FILLED_COLOR,
+          visualSummary: "2 of 4 counters are yellow.",
         }),
 
     ],
@@ -455,11 +459,15 @@ const FRACTIONS_QUESTIONS = (() => {
           fallbackOption: "Neither",
         }),
       () =>
-        createPlainQuestion({
-          question: "What is 1/4 of 12?",
-          options: ["2", "3", "4", "6"],
-          answer: "3",
+        createSetQuestion({
+          question: "What fraction of the counters are blue?",
+          coloredCount: 3,
+          totalCount: 6,
+          options: ["1/6", "2/6", "3/6", "4/6"],
+          answer: "3/6",
           difficulty: 2,
+          color: FILLED_ALT_COLOR,
+          visualSummary: "3 of 6 counters are blue.",
         }),      () =>
         createPieQuestion({
           question: "What fraction is shaded?",
@@ -491,11 +499,14 @@ const FRACTIONS_QUESTIONS = (() => {
           fallbackOption: "Neither",
         }),
       () =>
-        createPlainQuestion({
-          question: "What is 1/5 of 20?",
-          options: ["2", "3", "4", "5"],
-          answer: "4",
+        createPieQuestion({
+          question: "Which fraction of the circle is shaded?",
+          numerator: 1,
+          denominator: 3,
+          options: ["1/2", "1/3", "2/3", "3/3"],
+          answer: "1/3",
           difficulty: 2,
+          title: "Equal thirds",
         }),
 
     ],
@@ -1003,7 +1014,10 @@ const FRACTIONS_QUESTIONS = (() => {
       typeof globalThis.createFractionVisualInteractiveEntry === "function" &&
       Math.random() < 0.35
     ) {
-      return globalThis.createFractionVisualInteractiveEntry(level);
+      return {
+        ...globalThis.createFractionVisualInteractiveEntry(level),
+        difficulty: level,
+      };
     }
     const factories = FRACTIONS_GENERATED_FACTORIES[level] || FRACTIONS_GENERATED_FACTORIES[3];
     return {
@@ -2164,6 +2178,6 @@ globalThis.HomeworkQuestions?.register({
   label: "Fractions",
   getStaticQuestions: () => FRACTIONS_QUESTIONS,
   generatedEntryFactory: globalThis.createFractionsGeneratedEntry,
-  generatedShare: 0.8,
+  generatedShare: 1,
   supportsDrag: true,
 });

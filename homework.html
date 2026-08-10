@@ -33,13 +33,13 @@
               <span>How many questions?</span>
               <input id="question-count" name="questionCount" type="hidden" value="30">
               <div class="question-count-selector" role="group" aria-label="Question count">
+                <button type="button" class="question-count-button" data-question-count="10" aria-pressed="false">10</button>
                 <button type="button" class="question-count-button" data-question-count="20" aria-pressed="false">20</button>
                 <button type="button" class="question-count-button active" data-question-count="30" aria-pressed="true">30</button>
-                <button type="button" class="question-count-button" data-question-count="40" aria-pressed="false">40</button>
               </div>
             </label>
             <label class="field difficulty-field">
-              <span id="difficulty-label">Difficulty</span>
+              <span id="difficulty-label">Grade level</span>
               <div id="difficulty-selector" class="difficulty-selector" role="group" aria-labelledby="difficulty-label">
                 <span class="difficulty-scale-label" aria-hidden="true">1</span>
                 <input
@@ -54,16 +54,29 @@
                   aria-labelledby="difficulty-label"
                 >
                 <span class="difficulty-scale-label" aria-hidden="true">10</span>
-                <output id="difficulty-value" class="difficulty-value" for="difficulty-level">3</output>
+                <output id="difficulty-value" class="difficulty-value" for="difficulty-level">Grade 3</output>
               </div>
+              <small id="difficulty-scope" class="difficulty-scope">Multiplication/division · fractions · area and data</small>
             </label>
           </div>
           <div id="session-builder" class="session-builder">
-            <div class="builder-row builder-presets" aria-label="Session preset">
+            <div class="builder-row builder-presets" role="group" aria-label="Session type">
               <button type="button" class="builder-preset-button active" data-session-preset="adaptive" aria-pressed="true">🚀 Adaptive</button>
               <button type="button" class="builder-preset-button" data-session-preset="math-heavy" aria-pressed="false">123 Math</button>
               <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew" aria-pressed="false">א Hebrew</button>
+              <button id="practice-preset-button" type="button" class="builder-preset-button" data-session-preset="practice" aria-pressed="false">🎯 Practice</button>
             </div>
+            <section id="practice-topic-panel" class="practice-topic-panel" aria-labelledby="practice-topic-heading" hidden>
+              <div class="practice-topic-header">
+                <div>
+                  <p class="practice-topic-kicker">Choose one focus</p>
+                  <h3 id="practice-topic-heading">What would you like to practice?</h3>
+                </div>
+                <span class="practice-topic-count">10-question quick practice</span>
+              </div>
+              <div id="practice-topic-groups" class="practice-topic-groups"></div>
+              <p id="practice-topic-selection" class="practice-topic-selection" aria-live="polite">Choose a topic to begin.</p>
+            </section>
           </div>
           <button type="submit" class="primary-button">Let’s Start! ♥</button>
         </form>

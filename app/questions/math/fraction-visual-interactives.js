@@ -954,14 +954,18 @@ const FRACTION_VISUAL_INTERACTIVE_QUESTIONS = (() => {
 
   function createGeneratedEntry(difficulty) {
     const level = clampDifficulty(difficulty);
-    const eligible = VARIANT_BUILDERS.filter((variant) => variant.level <= level);
+    const eligible = VARIANT_BUILDERS.filter(
+      (variant) => variant.level <= level && variant.level >= Math.max(1, level - 1)
+    );
     return randomChoice(eligible.length ? eligible : VARIANT_BUILDERS).create();
   }
 
   function createCoverageEntries() {
     const entries = [];
     for (let level = 1; level <= 10; level += 1) {
-      const eligible = VARIANT_BUILDERS.filter((variant) => variant.level <= level);
+      const eligible = VARIANT_BUILDERS.filter(
+        (variant) => variant.level <= level && variant.level >= Math.max(1, level - 1)
+      );
       for (let index = 0; index < 6; index += 1) {
         entries.push(eligible[index % eligible.length].create());
       }

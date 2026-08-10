@@ -173,11 +173,11 @@ const ESTIMATION_QUESTIONS = [
 function createEstimationGeneratedEntry(difficulty) {
   const level = clampEstimationDifficulty(difficulty);
   const generators = {
-    1: [genAdd, genSubtract, genDivide, genSimpleMultiply, genCounting],
-    2: [genAdd, genSubtract, genDivide, genSimpleMultiply, genMeasure],
-    3: [genMultiAdd, genPercent, genCounting, genMoney, genDivide],
-    4: [genElapsedTime, genPercent, genMultiAdd, genSimpleMultiply, genSubtract],
-    5: [genLargeMultiply, genPercent, genDiscount, genLargeDivide, genSeatCount],
+    1: [genEverydayEstimate, genNearBenchmark],
+    2: [genAdd, genSubtract, genMeasure, genNearBenchmark],
+    3: [genMultiAdd, genCounting, genMoney, genDivide, genSimpleMultiply],
+    4: [genElapsedTime, genMultiAdd, genSimpleMultiply, genSubtract, genMoney],
+    5: [genLargeMultiply, genLargeDivide, genSeatCount, genElapsedTime, genArea],
     6: [genDecimalProduct, genRate, genAverage, genArea, genTip],
     7: [genChange, genTravel, genStorage, genScaleRecipe, genArea],
     8: [genOrderOfMagnitude, genMapScale, genWeeklyRate, genDrainRate, genTax],
@@ -191,6 +191,24 @@ function e(difficulty, question, options, answer) {
   return { question, options: unique(options), answer, difficulty: clampEstimationDifficulty(difficulty) };
 }
 
+function genEverydayEstimate(d) {
+  return pick([
+    q(d, "Which is the most sensible estimate for the height of a classroom door?", "About 2 meters", ["About 2 centimeters", "About 20 centimeters", "About 2 meters", "About 20 meters"]),
+    q(d, "Which is the most sensible estimate for the length of a pencil?", "About 15 centimeters", ["About 2 centimeters", "About 15 centimeters", "About 1 meter", "About 10 meters"]),
+    q(d, "Which is the most sensible estimate for the number of children in one class?", "About 25 children", ["About 2 children", "About 25 children", "About 200 children", "About 2,000 children"]),
+    q(d, "Which is the most sensible estimate for the mass of one apple?", "About 200 grams", ["About 2 grams", "About 20 grams", "About 200 grams", "About 2,000 grams"]),
+    q(d, "Which is the most sensible estimate for the number of days in one month?", "About 30 days", ["About 3 days", "About 10 days", "About 30 days", "About 100 days"]),
+  ]);
+}
+
+function genNearBenchmark(d) {
+  const target = pick(d <= 1 ? [10, 20, 30, 40, 50, 60, 70, 80, 90] : [50, 100, 150, 200, 250, 300]);
+  const step = d <= 1 ? 10 : 50;
+  const offset = pick(d <= 1 ? [-3, -2, -1, 1, 2, 3] : [-18, -12, -7, 7, 12, 18]);
+  const value = Math.max(1, target + offset);
+  return q(d, `There are ${value} counters in a box. About how many counters is that?`, about(target), aboutOptions(target, step));
+}
+
 function genAdd(d) {
   const max = d <= 1 ? 70 : d <= 2 ? 180 : 450;
   const a = rand(12, max), b = rand(12, max);
@@ -200,7 +218,7 @@ function genAdd(d) {
 }
 
 function genSubtract(d) {
-  const a = rand(d <= 1 ? 45 : 90, d <= 1 ? 180 : 900);
+  const a = rand(d <= 1 ? 45 : 90, d <= 1 ? 180 : d <= 2 ? 200 : 900);
   const b = rand(10, Math.max(10, Math.floor(a * 0.6)));
   const step = d <= 2 ? 10 : 50;
   const ans = roundNice(a - b, step);
@@ -558,6 +576,6 @@ globalThis.HomeworkQuestions?.register({
   label: "Estimation",
   getStaticQuestions: () => ESTIMATION_QUESTIONS,
   generatedEntryFactory: createEstimationGeneratedEntry,
-  generatedShare: 0.85,
+  generatedShare: 1,
   supportsDrag: true,
 });

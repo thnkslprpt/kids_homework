@@ -1,12 +1,12 @@
 function generateAdditionValues(difficulty) {
   const config = {
     1: { min: 0, max: 10, answerMin: 0, answerMax: 20, negativeBias: 0 },
-    2: { min: -5, max: 20, answerMin: -10, answerMax: 30, negativeBias: 0.3 },
-    3: { min: -10, max: 30, answerMin: -20, answerMax: 40, negativeBias: 0.4 },
-    4: { min: -20, max: 50, answerMin: -20, answerMax: 70, negativeBias: 0.5 },
-    5: { min: -20, max: 80, answerMin: -20, answerMax: 100, negativeBias: 0.55 },
-    6: { min: -60, max: 160, answerMin: -100, answerMax: 220, negativeBias: 0.55 },
-    7: { min: -150, max: 350, answerMin: -220, answerMax: 500, negativeBias: 0.6 },
+    2: { min: 0, max: 80, answerMin: 0, answerMax: 100, negativeBias: 0 },
+    3: { min: 0, max: 800, answerMin: 0, answerMax: 1000, negativeBias: 0 },
+    4: { min: 0, max: 50000, answerMin: 0, answerMax: 100000, negativeBias: 0 },
+    5: { min: 0, max: 500000, answerMin: 0, answerMax: 1000000, negativeBias: 0 },
+    6: { min: -60, max: 160, answerMin: -100, answerMax: 220, negativeBias: 0.4 },
+    7: { min: -150, max: 350, answerMin: -220, answerMax: 500, negativeBias: 0.5 },
   }[difficulty];
 
   return buildSignedOperationValues((left, right) => left + right, config);
@@ -15,12 +15,12 @@ function generateAdditionValues(difficulty) {
 function generateSubtractionValues(difficulty) {
   const config = {
     1: { min: 0, max: 12, answerMin: 0, answerMax: 12, negativeBias: 0 },
-    2: { min: -5, max: 20, answerMin: -10, answerMax: 25, negativeBias: 0.35 },
-    3: { min: -10, max: 30, answerMin: -20, answerMax: 40, negativeBias: 0.45 },
-    4: { min: -20, max: 50, answerMin: -20, answerMax: 70, negativeBias: 0.55 },
-    5: { min: -20, max: 80, answerMin: -20, answerMax: 100, negativeBias: 0.6 },
-    6: { min: -60, max: 160, answerMin: -120, answerMax: 220, negativeBias: 0.62 },
-    7: { min: -150, max: 350, answerMin: -300, answerMax: 500, negativeBias: 0.66 },
+    2: { min: 0, max: 100, answerMin: 0, answerMax: 100, negativeBias: 0 },
+    3: { min: 0, max: 1000, answerMin: 0, answerMax: 1000, negativeBias: 0 },
+    4: { min: 0, max: 100000, answerMin: 0, answerMax: 100000, negativeBias: 0 },
+    5: { min: 0, max: 1000000, answerMin: 0, answerMax: 1000000, negativeBias: 0 },
+    6: { min: -60, max: 160, answerMin: -120, answerMax: 220, negativeBias: 0.45 },
+    7: { min: -150, max: 350, answerMin: -300, answerMax: 500, negativeBias: 0.55 },
   }[difficulty];
 
   return buildSignedOperationValues((left, right) => left - right, config);
@@ -232,7 +232,7 @@ function generateComparisonDragProblem(difficulty) {
 }
 
 function generatePlaceValueProblem(difficulty) {
-  const digitCount = difficulty <= 2 ? 4 : difficulty === 3 ? 5 : difficulty <= 5 ? 6 : difficulty === 6 ? 7 : 8;
+  const digitCount = difficulty === 1 ? 2 : difficulty === 2 ? 3 : difficulty === 3 ? 4 : difficulty <= 5 ? 6 : difficulty === 6 ? 7 : 8;
   const digits = buildUniqueDigitSequence(digitCount);
   const validIndexes = digits
     .map((digit, index) => (digit === 0 ? null : index))
@@ -244,6 +244,12 @@ function generatePlaceValueProblem(difficulty) {
   const optionPowers = shuffleArray(
     Array.from({ length: digitCount }, (_, power) => power).filter((power) => power !== placePower)
   ).slice(0, 3);
+  while (optionPowers.length < 3) {
+    const fallbackPower = digitCount + optionPowers.length - 1;
+    if (fallbackPower !== placePower && !optionPowers.includes(fallbackPower)) {
+      optionPowers.push(fallbackPower);
+    }
+  }
 
   return {
     numberText: formatGroupedNumber(Number(digits.join(""))),
@@ -663,9 +669,9 @@ function getTimeLevelConfig(difficulty) {
   const level = normalizeSessionDifficulty(difficulty);
   if (level <= 1) {
     return {
-      forwardDurations: [5, 10, 15, 20, 30],
-      untilDurations: [5, 10, 15, 20, 30],
-      backwardDurations: [5, 10, 15, 20, 30],
+      forwardDurations: [30, 60],
+      untilDurations: [30, 60],
+      backwardDurations: [30, 60],
       hours: [7, 18],
     };
   }
