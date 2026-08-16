@@ -42,15 +42,13 @@
 }
 
 .field,
-.challenge-options,
-.confidence-selector {
+.challenge-options {
   min-width: 0;
   border: 0;
 }
 
 .field legend,
-.challenge-options legend,
-.confidence-selector legend {
+.challenge-options legend {
   margin-bottom: 10px;
   padding: 0;
   color: var(--muted);
@@ -175,35 +173,6 @@ summary {
   line-height: 1.5;
 }
 
-.confidence-selector {
-  display: grid;
-  gap: 8px;
-  margin: 0;
-  padding: 12px;
-  border: 1px solid rgba(39, 73, 114, 0.12);
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.82);
-}
-
-.confidence-options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.confidence-options button {
-  min-height: 44px;
-  padding: 9px 14px;
-  border: 2px solid rgba(39, 73, 114, 0.16);
-  background: #f7f8fa;
-  color: var(--ink);
-}
-
-.confidence-options button[aria-pressed="true"] {
-  border-color: var(--accent-dark);
-  background: var(--accent-soft);
-}
-
 .question-support {
   display: flex;
   align-items: center;
@@ -259,10 +228,6 @@ summary {
 
   .feedback-continue-button {
     width: 100%;
-  }
-
-  .confidence-options button {
-    flex: 1 1 120px;
   }
 
   .drag-slot.target.map {

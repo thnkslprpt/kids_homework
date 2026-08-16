@@ -445,9 +445,6 @@ function renderQuizFeedback() {
       ${reviewRecord.reviewHtml}
     `;
     elements.feedback.className = "feedback-banner review";
-    if (elements.confidenceSelector) {
-      elements.confidenceSelector.hidden = true;
-    }
     return;
   }
 
@@ -462,7 +459,6 @@ function renderFeedback() {
   if (elements.feedbackContinueButton) {
     elements.feedbackContinueButton.hidden = !getActiveRoundState().awaitingContinue;
   }
-  renderConfidenceSelector();
 }
 
 function showPreviousQuizQuestion() {
@@ -524,9 +520,6 @@ function initializeUiEnhancements() {
   elements.feedbackContinueButton?.addEventListener("click", continueAfterFeedback);
   elements.readAloudButton?.addEventListener("click", readCurrentQuestionAloud);
   elements.hintButton?.addEventListener("click", showNextHint);
-  elements.confidenceButtons?.forEach((button) => {
-    button.addEventListener("click", () => setAnswerConfidence(button.dataset.confidence));
-  });
   elements.pauseSessionButton?.addEventListener("click", () => {
     window.dispatchEvent(new CustomEvent("homework:pause-session"));
   });

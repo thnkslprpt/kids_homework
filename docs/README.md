@@ -138,7 +138,7 @@ saying the homework results receiver is running.
 - Tracks live progress with colored progress boxes and a score counter.
 - Can run an optional `5` question challenge after the main session.
 - Keeps feedback and explanations beside the answered question until the learner chooses Continue.
-- Offers progressive hints and an optional confidence check.
+- Offers progressive hints without adding an extra post-answer confidence step.
 - Can read visible English or Hebrew question text aloud when the browser provides speech synthesis.
 - Drag questions support sentence completion, category sorting, matching, and image vocabulary.
 - Typed math questions check when you press `Enter`.

@@ -51,8 +51,6 @@
   speedTimerFill: document.getElementById("speed-timer-fill"),
   feedback: document.getElementById("feedback"),
   feedbackContinueButton: document.getElementById("feedback-continue-button"),
-  confidenceSelector: document.getElementById("confidence-selector"),
-  confidenceButtons: Array.from(document.querySelectorAll("[data-confidence]")),
   questionSupport: document.getElementById("question-support"),
   readAloudButton: document.getElementById("read-aloud-button"),
   hintButton: document.getElementById("hint-button"),

@@ -124,43 +124,6 @@ function showNextHint() {
   document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
 }
 
-function setAnswerConfidence(confidence) {
-  const allowed = new Set(["not-sure", "somewhat", "sure"]);
-  if (!allowed.has(confidence)) {
-    return;
-  }
-
-  const round = getActiveRoundState();
-  const selection = round.answerSelections[round.currentIndex];
-  const record = isSpeedRoundActive()
-    ? round.records[round.currentIndex]
-    : state.sessionRecords[round.currentIndex];
-  if (!round.awaitingContinue || !selection || !record) {
-    return;
-  }
-
-  selection.confidence = confidence;
-  record.confidence = confidence;
-  renderConfidenceSelector();
-  document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
-}
-
-function renderConfidenceSelector() {
-  if (!elements.confidenceSelector) {
-    return;
-  }
-
-  const round = getActiveRoundState();
-  const selection = round.answerSelections[round.currentIndex];
-  elements.confidenceSelector.hidden = !round.awaitingContinue;
-  elements.confidenceButtons?.forEach((button) => {
-    button.setAttribute(
-      "aria-pressed",
-      selection?.confidence === button.dataset.confidence ? "true" : "false"
-    );
-  });
-}
-
 function renderCurrentQuestion() {
   cleanupInteractiveDragState();
 

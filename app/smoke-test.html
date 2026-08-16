@@ -52,11 +52,6 @@
         <p id="score-text"></p>
         <div id="speed-timer" hidden><strong id="speed-timer-text"></strong><span id="speed-timer-fill"></span></div>
         <p id="feedback"></p>
-        <fieldset id="confidence-selector" hidden>
-          <button type="button" data-confidence="not-sure" aria-pressed="false">Not sure</button>
-          <button type="button" data-confidence="somewhat" aria-pressed="false">Somewhat sure</button>
-          <button type="button" data-confidence="sure" aria-pressed="false">Very sure</button>
-        </fieldset>
         <button id="feedback-continue-button" type="button" hidden>Continue</button>
         <div id="question-support" hidden>
           <button id="hint-button" type="button">Show a hint</button>
@@ -567,11 +562,6 @@
             answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
             if (canAnswerWrong) usedIntentionalWrong = true;
             assert(round.awaitingContinue, `workflow: ${beforeRound} question ${beforeIndex + 1} should wait for Continue`);
-            if (beforeRound === "main" && beforeIndex === 0) {
-              click(document.querySelector('[data-confidence="sure"]'), "workflow confidence selection");
-              assert(round.answerSelections[beforeIndex]?.confidence === "sure", "workflow: confidence should be saved with the selection");
-              assert(api.state.sessionRecords[beforeIndex]?.confidence === "sure", "workflow: confidence should be saved with the session record");
-            }
             if (beforeRound === "main" && beforeIndex === 9 && round.totalQuestions > 10) {
               assert(
                 getText(document.getElementById("feedback-continue-button")) === "Take a Break, Then Continue",
@@ -777,10 +767,8 @@
 
           answerCurrentVisibleQuestion();
           assert(api.state.awaitingContinue, "checkpoint: answered question should wait for Continue");
-          click(document.querySelector('[data-confidence="sure"]'), "checkpoint confidence");
           const savedBeforePause = JSON.parse(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) || "null");
           assert(savedBeforePause?.state?.answerResults?.[0] === true, "checkpoint: answer result should be stored");
-          assert(savedBeforePause?.state?.answerSelections?.[0]?.confidence === "sure", "checkpoint: confidence should be stored");
           assert(savedBeforePause?.state?.awaitingContinue === true, "checkpoint: feedback phase should be stored");
           assert(isValidActiveSessionCheckpoint(savedBeforePause), "checkpoint: an app-created checkpoint should validate");
 
@@ -846,7 +834,6 @@
           assertVisibleScreen("quiz-screen", "checkpoint resumed");
           assert(api.state.currentIndex === 0, "checkpoint: resume should return to the answered question feedback");
           assert(api.state.awaitingContinue === true, "checkpoint: resume should restore the feedback phase");
-          assert(api.state.sessionRecords[0]?.confidence === "sure", "checkpoint: resume should restore confidence metadata");
           assert(!document.getElementById("feedback-continue-button").hidden, "checkpoint: Continue should be available after resume");
           click(document.getElementById("feedback-continue-button"), "checkpoint continue after resume");
           assert(api.state.currentIndex === 1, "checkpoint: Continue after resume should advance exactly once");

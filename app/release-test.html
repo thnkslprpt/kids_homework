@@ -289,8 +289,7 @@
         assertNoHorizontalOverflow(frame, "mobile question");
         answerCurrentQuestion(frame);
         assert(isVisible(doc.getElementById("feedback-continue-button")), "mobile feedback did not retain Continue");
-        click(doc, '[data-confidence="sure"]', "mobile confidence");
-        assert(api.state.sessionRecords[0]?.confidence === "sure", "mobile confidence was not saved");
+        assert(!doc.getElementById("confidence-selector"), "mobile feedback still shows the confidence prompt");
         assertNoHorizontalOverflow(frame, "mobile feedback");
 
         click(doc, "#pause-session-button", "mobile Save & Exit");
