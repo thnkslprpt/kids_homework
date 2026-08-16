@@ -197,7 +197,6 @@ was weakened.
 - [x] Treat Hebrew writing as completed, parent/self-reviewed practice rather than automatically
   correct. It is excluded from graded accuracy and weak-topic calculations.
 - [x] Add 5-question “quick win” sessions in addition to 10/20/30.
-- [x] Add a natural break label after each set of 10 questions.
 - [x] Add progressive hints, confidence values (`not-sure`, `somewhat`, `sure`), and response-time
   metadata.
 - [x] Add one-tap focused practice for the most-missed category on the results screen.
@@ -352,7 +351,7 @@ are zero under the unchanged 15-character rule.
 - [x] Headless Chrome integration workflow reaches all non-content assertions after the checkpoint
   integration edits, including conditional feedback pauses, exact-once Continue, confidence persistence,
   discard plus `pagehide`, malformed/oversized and adversarial main/speed state, map compaction and
-  hydration, natural breaks, focused practice, and speech controls.
+  hydration, focused practice, and speech controls.
 - [x] Seeded structural generation: PASS — 8,200 questions in the infrastructure workstream.
 - [x] Time/Probability randomized QA: PASS — 1,000 Time and 1,000 Probability questions after the
   document-mock checkpoint-listener compatibility fix.

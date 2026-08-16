@@ -361,6 +361,16 @@ function validateQuestion(question, meta) {
       if (choices.length < 2 || answerIndexes.some((index) => !Number.isInteger(index) || index < 0 || index >= choices.length)) {
         errors.push(`${meta}: interactive answers do not point to available choices`);
       }
+      const choiceKeys = choices.map((choice) => textKey(choice?.summary || choice?.label || ""));
+      if (choiceKeys.some((key) => !key) || new Set(choiceKeys).size !== choiceKeys.length) {
+        errors.push(`${meta}: interactive choices have blank or duplicate summaries`);
+      }
+      const visualKeys = choices
+        .map((choice) => String(choice?.html || "").replace(/\saria-(?:label|hidden)="[^"]*"/g, "").replace(/\s+/g, " ").trim())
+        .filter(Boolean);
+      if (visualKeys.length === choices.length && new Set(visualKeys).size !== visualKeys.length) {
+        errors.push(`${meta}: interactive choices render duplicate option markup`);
+      }
       if (layout === "multi-select" && answerIndexes.length < 2) {
         errors.push(`${meta}: multi-select needs more than one correct choice`);
       }
@@ -368,6 +378,14 @@ function validateQuestion(question, meta) {
       const parts = Array.isArray(interactive.parts) ? interactive.parts : [];
       if (parts.length < 2 || answerIndexes.some((index) => !Number.isInteger(index) || index < 0 || index >= parts.length)) {
         errors.push(`${meta}: interactive answers do not point to available parts`);
+      }
+    } else if (layout === "paired-select") {
+      for (const [field, label] of [["items", "answers"], ["reasons", "reasons"]]) {
+        const entries = Array.isArray(interactive[field]) ? interactive[field] : [];
+        const entryKeys = entries.map((entry) => textKey(entry?.summary || entry?.label || ""));
+        if (entries.length < 2 || entryKeys.some((key) => !key) || new Set(entryKeys).size !== entryKeys.length) {
+          errors.push(`${meta}: paired-select has blank, missing, or duplicate ${label}`);
+        }
       }
     }
   }
@@ -380,6 +398,22 @@ function run() {
   const failures = [];
   const counts = new Map();
   const seenByCategory = new Map();
+
+  const percentCoverage = context.PERCENTAGES_QUESTION_COVERAGE;
+  if (typeof percentCoverage?.renderPercentBar !== "function") {
+    failures.push("percentage bar coverage renderer is missing");
+  } else {
+    const visualKeys = new Map();
+    for (let percent = 0; percent <= 100; percent += 5) {
+      const html = percentCoverage.renderPercentBar(percent, { showLabel: false });
+      const visualKey = String(html).replace(/\saria-label="[^"]*"/, "");
+      if (visualKeys.has(visualKey)) {
+        failures.push(`percentage bars for ${visualKeys.get(visualKey)}% and ${percent}% render identically`);
+      } else {
+        visualKeys.set(visualKey, percent);
+      }
+    }
+  }
 
   for (const category of categories) {
     for (let difficulty = 1; difficulty <= 10; difficulty += 1) {

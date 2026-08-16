@@ -1755,11 +1755,27 @@ function validateHomeworkQuestionShape(question, context = "question") {
       if (reasons.length < 2) {
         addError("interactive paired questions need reasons");
       }
+      const itemKeys = items.map((item) => String(item?.summary || item?.label || "").trim().toLowerCase());
+      const reasonKeys = reasons.map((reason) => String(reason?.summary || reason?.label || "").trim().toLowerCase());
+      if (itemKeys.some((key) => !key) || new Set(itemKeys).size !== itemKeys.length) {
+        addError("interactive paired answers must be distinct and nonblank");
+      }
+      if (reasonKeys.some((key) => !key) || new Set(reasonKeys).size !== reasonKeys.length) {
+        addError("interactive paired reasons must be distinct and nonblank");
+      }
       if (!Number.isFinite(answerItemIndex) || answerItemIndex < 0 || answerItemIndex >= items.length) {
         addError("interactive paired questions need a valid answer item");
       }
       if (!Number.isFinite(answerReasonIndex) || answerReasonIndex < 0 || answerReasonIndex >= reasons.length) {
         addError("interactive paired questions need a valid answer reason");
+      }
+    }
+    if (["option-select", "multi-select"].includes(interactive?.layout) && Array.isArray(interactive.choices)) {
+      const choiceKeys = interactive.choices.map((choice) =>
+        String(choice?.summary || choice?.label || "").trim().toLowerCase()
+      );
+      if (choiceKeys.some((key) => !key) || new Set(choiceKeys).size !== choiceKeys.length) {
+        addError("interactive choices must be distinct and nonblank");
       }
     }
     if (String(question.answerValue ?? "").trim() === "") {

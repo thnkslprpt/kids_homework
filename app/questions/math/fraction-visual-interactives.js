@@ -542,12 +542,17 @@ const FRACTION_VISUAL_INTERACTIVE_QUESTIONS = (() => {
   function makeMissingPiece({ numerator, denominator, level }) {
     const missing = denominator - numerator;
     const answerFraction = fractionText(missing, denominator);
-    const choices = shuffle([
+    const candidateValues = Array.from(new Set([
       answerFraction,
       fractionText(numerator, denominator),
-      fractionText(Math.max(1, missing - 1), denominator),
+      fractionText(Math.min(denominator - 1, missing + 1), denominator),
       fractionText(missing, denominator + 1),
-    ]).map((value, index) => makeOptionChoice(LETTERS[index], `<div class="fraction-target-text">${escapeHtml(value)}</div>`, value));
+      fractionText(Math.max(1, missing - 1), denominator),
+    ])).slice(0, 4);
+    if (candidateValues.length !== 4) {
+      throw new Error("Missing-piece question needs four distinct fraction choices.");
+    }
+    const choices = shuffle(candidateValues).map((value, index) => makeOptionChoice(LETTERS[index], `<div class="fraction-target-text">${escapeHtml(value)}</div>`, value));
     const answerIndex = choices.findIndex((choice) => choice.summary === answerFraction);
     return makeInteractiveEntry({
       type: "missing-piece",

@@ -387,17 +387,11 @@ function updateQuizNavigation() {
   if (elements.feedbackContinueButton) {
     elements.feedbackContinueButton.hidden = !round.awaitingContinue;
     const isRoundComplete = round.currentIndex >= round.totalQuestions - 1;
-    const isNaturalBreak =
-      !isSpeedRoundActive() &&
-      !isRoundComplete &&
-      (round.currentIndex + 1) % 10 === 0;
     elements.feedbackContinueButton.textContent = isRoundComplete
       ? isSpeedRoundActive() || !state.speedChallengeEnabled || state.sessionPreset === SESSION_PRESETS.practice
         ? "See Results"
         : "Start Challenge"
-      : isNaturalBreak
-        ? "Take a Break, Then Continue"
-        : "Continue";
+      : "Continue";
   }
 }
 

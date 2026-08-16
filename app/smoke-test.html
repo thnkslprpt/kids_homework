@@ -572,12 +572,6 @@
           );
           if (shouldWaitForContinue) {
             assert(round.awaitingContinue, `workflow: ${beforeRound} question ${beforeIndex + 1} should wait for Continue`);
-            if (beforeRound === "main" && beforeIndex === 9 && round.totalQuestions > 10) {
-              assert(
-                getText(document.getElementById("feedback-continue-button")) === "Take a Break, Then Continue",
-                "workflow: question 10 should offer a natural break"
-              );
-            }
             click(document.getElementById("feedback-continue-button"), "workflow feedback continue");
           }
 

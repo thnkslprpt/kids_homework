@@ -94,12 +94,19 @@ const PERCENTAGES_QUESTIONS = (() => {
   function renderPercentBar(percent, { showLabel = true } = {}) {
     const maxPercent = percent > 100 ? 200 : 100;
     const blocks = maxPercent / 10;
-    const filled = Math.round(percent / 10);
+    const boundedPercent = Math.max(0, Math.min(maxPercent, Number(percent) || 0));
     const width = 300;
     const blockWidth = width / blocks;
-    const rects = Array.from({ length: blocks }, (_, index) =>
-      `<rect x="${index * blockWidth}" y="20" width="${blockWidth}" height="48" rx="2" fill="${index < filled ? (index < 10 ? COLORS.fill : COLORS.fill2) : COLORS.empty}" stroke="${COLORS.ink}" stroke-width="1.3"></rect>`
-    ).join("");
+    const rects = Array.from({ length: blocks }, (_, index) => {
+      const blockStart = index * 10;
+      const blockFillPercent = Math.max(0, Math.min(10, boundedPercent - blockStart));
+      const fillWidth = blockWidth * (blockFillPercent / 10);
+      const x = index * blockWidth;
+      const fill = fillWidth > 0
+        ? `<rect x="${x}" y="20" width="${fillWidth}" height="48" fill="${index < 10 ? COLORS.fill : COLORS.fill2}"></rect>`
+        : "";
+      return `<rect x="${x}" y="20" width="${blockWidth}" height="48" rx="2" fill="${COLORS.empty}"></rect>${fill}<rect x="${x}" y="20" width="${blockWidth}" height="48" rx="2" fill="none" stroke="${COLORS.ink}" stroke-width="1.3"></rect>`;
+    }).join("");
     const labels = maxPercent === 200
       ? `<text x="0" y="88">0%</text><text x="150" y="88" text-anchor="middle">100%</text><text x="300" y="88" text-anchor="end">200%</text>`
       : `<text x="0" y="88">0%</text><text x="150" y="88" text-anchor="middle">50%</text><text x="300" y="88" text-anchor="end">100%</text>`;
@@ -235,7 +242,12 @@ const PERCENTAGES_QUESTIONS = (() => {
     }
 
     const target = randomChoice(level >= 9 ? [115, 125, 140, 150, 175] : [110, 120, 125, 150]);
-    const values = shuffle([target, target - 10, 100, Math.min(200, target + 25)]);
+    const candidateValues = Array.from(new Set([target, target - 10, 100, Math.min(200, target + 25)]));
+    for (const value of [target + 10, target - 20, 125, 150, 175, 200]) {
+      if (candidateValues.length >= 4) break;
+      if (value >= 100 && value <= 200 && !candidateValues.includes(value)) candidateValues.push(value);
+    }
+    const values = shuffle(candidateValues.slice(0, 4));
     return optionInteractive({
       difficulty: level,
       question: `Which bar represents ${target}% of one whole?`,
@@ -538,8 +550,13 @@ const PERCENTAGES_QUESTIONS = (() => {
     [10, "What multiplier represents three consecutive 10% increases?", "1.1³", ["1.3", "0.9³", "3.1"]],
   ].map(([difficulty, question, answer, distractors]) => choiceEntry({ difficulty, question, answer, options: distractors }));
 
-  return { createGeneratedEntry, staticQuestions };
+  return { createGeneratedEntry, createModelQuestion, renderPercentBar, staticQuestions };
 })();
+
+globalThis.PERCENTAGES_QUESTION_COVERAGE = {
+  createModelQuestion: PERCENTAGES_QUESTIONS.createModelQuestion,
+  renderPercentBar: PERCENTAGES_QUESTIONS.renderPercentBar,
+};
 
 globalThis.HomeworkQuestions?.register({
   id: "percentages",

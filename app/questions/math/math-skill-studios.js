@@ -97,7 +97,29 @@
   }
 
   function optionInteractive({ category, difficulty, question, choices, answer, visualHtml = "", visualSummary = "", reviewText = "", prompt = "Choose the best answer." }) {
-    const shown = shuffle(choices.map((item) => typeof item === "object" ? item : { summary: String(item) }));
+    const distinctChoices = [];
+    const seenSummaries = new Set();
+    choices
+      .map((item) => typeof item === "object" ? item : { summary: String(item) })
+      .forEach((item) => {
+        const summary = String(item.summary);
+        if (!summary.trim() || seenSummaries.has(summary)) return;
+        seenSummaries.add(summary);
+        distinctChoices.push({ ...item, summary });
+      });
+    const numericAnswer = Number(String(answer).replaceAll(",", ""));
+    if (distinctChoices.length < 4 && Number.isFinite(numericAnswer)) {
+      makeOptions(answer, distinctChoices.map((item) => item.summary)).forEach((summary) => {
+        if (!seenSummaries.has(summary)) {
+          seenSummaries.add(summary);
+          distinctChoices.push({ summary });
+        }
+      });
+    }
+    if (distinctChoices.length < 4) {
+      throw new Error(`Interactive question needs four distinct choices: ${question}`);
+    }
+    const shown = shuffle(distinctChoices.slice(0, 4));
     const answerIndex = shown.findIndex((item) => String(item.summary) === String(answer));
     if (answerIndex < 0) throw new Error(`Interactive answer is missing: ${answer}`);
     return {
@@ -156,8 +178,25 @@
   }
 
   function pairedInteractive({ category, difficulty, question, answers, reasons, answer, reason, visualHtml = "", reviewText = "" }) {
-    const answerItemIndex = answers.findIndex((item) => item.summary === answer);
-    const answerReasonIndex = reasons.findIndex((item) => item.summary === reason);
+    const distinctBySummary = (items) => {
+      const seen = new Set();
+      return items.filter((item) => {
+        const summary = String(item?.summary || "");
+        if (!summary.trim() || seen.has(summary)) return false;
+        seen.add(summary);
+        return true;
+      });
+    };
+    const shownAnswers = distinctBySummary(answers).slice(0, 3);
+    const shownReasons = distinctBySummary(reasons).slice(0, 3);
+    if (shownAnswers.length < 3 || shownReasons.length < 3) {
+      throw new Error(`Paired question needs three distinct answers and reasons: ${question}`);
+    }
+    const answerItemIndex = shownAnswers.findIndex((item) => item.summary === answer);
+    const answerReasonIndex = shownReasons.findIndex((item) => item.summary === reason);
+    if (answerItemIndex < 0 || answerReasonIndex < 0) {
+      throw new Error(`Paired question is missing its answer or reason: ${question}`);
+    }
     return {
       mode: "interactive",
       difficulty: clamp(difficulty),
@@ -172,8 +211,8 @@
         type: `${category}-answer-reason`,
         layout: "paired-select",
         prompt: "Choose the answer and the reason that proves it.",
-        items: answers,
-        reasons,
+        items: shownAnswers,
+        reasons: shownReasons,
         answerIndexes: [answerItemIndex],
         answerItemIndex,
         answerReasonIndex,
@@ -534,7 +573,7 @@
       const width = randomInt(3, 9);
       const height = randomInt(2, 8);
       const area = width * height;
-      return pairedInteractive({ category, difficulty: level, question: `What is the area of a ${width}-by-${height} rectangle?`, answer: `${area} square units`, reason: `Area counts ${height} rows of ${width} unit squares`, answers: [`${area} square units`, `${2 * (width + height)} square units`, `${width + height} square units`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: `Area counts ${height} rows of ${width} unit squares` }, { label: "B", summary: "Area means add all four side lengths" }, { label: "C", summary: "Area is always length plus width" }], visualHtml: visualCard("Cover the inside", renderArray(height, width)), reviewText: `${width} × ${height} = ${area} square units.` });
+      return pairedInteractive({ category, difficulty: level, question: `What is the area of a ${width}-by-${height} rectangle?`, answer: `${area} square units`, reason: `Area counts ${height} rows of ${width} unit squares`, answers: [`${area} square units`, `${2 * (width + height)} square units`, `${width + height} square units`, `${area + width} square units`, `${area + height} square units`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: `Area counts ${height} rows of ${width} unit squares` }, { label: "B", summary: "Area means add all four side lengths" }, { label: "C", summary: "Area is always length plus width" }], visualHtml: visualCard("Cover the inside", renderArray(height, width)), reviewText: `${width} × ${height} = ${area} square units.` });
     }
     if (level === 4) {
       const known = randomChoice([25, 35, 45, 55, 65, 70]);
@@ -546,7 +585,7 @@
       const w = randomInt(2, 6);
       const h = randomInt(2, 5);
       const volume = l * w * h;
-      return optionInteractive({ category, difficulty: level, question: "What is the volume of the rectangular prism?", answer: `${volume} cubic units`, choices: [`${volume} cubic units`, `${2 * (l + w + h)} cubic units`, `${l * w} cubic units`, `${l + w + h} cubic units`], visualHtml: visualCard("Layers of unit cubes", renderShape("prism", `${l} × ${w} × ${h}`)), reviewText: `${l} × ${w} × ${h} = ${volume} cubic units.` });
+      return optionInteractive({ category, difficulty: level, question: "What is the volume of the rectangular prism?", answer: `${volume} cubic units`, choices: [`${volume} cubic units`, `${2 * (l + w + h)} cubic units`, `${l * w} cubic units`, `${l + w + h} cubic units`, `${l * h} cubic units`, `${w * h} cubic units`], visualHtml: visualCard("Layers of unit cubes", renderShape("prism", `${l} × ${w} × ${h}`)), reviewText: `${l} × ${w} × ${h} = ${volume} cubic units.` });
     }
     if (level === 6) {
       const base = randomInt(6, 16);
@@ -649,7 +688,7 @@
     const difference = randomInt(2, 8);
     const n = randomInt(8, 15);
     const answer = first + (n - 1) * difference;
-    return pairedInteractive({ category, difficulty: level, question: `An arithmetic sequence starts at ${first} with common difference ${difference}. Find term ${n}.`, answer: String(answer), reason: `Use aₙ = a₁ + (n − 1)d`, answers: [answer, first + n * difference, n * difference].map((value) => ({ label: String(value), summary: String(value) })), reasons: [{ label: "A", summary: "Use aₙ = a₁ + (n − 1)d" }, { label: "B", summary: "Multiply the first term by n" }, { label: "C", summary: "Add the term number only once" }], visualHtml: visualCard("Arithmetic sequence", `<div class="math-skill-expression">a₁=${first}, d=${difference}, n=${n}</div>`), reviewText: `${first} + (${n} − 1) × ${difference} = ${answer}.` });
+    return pairedInteractive({ category, difficulty: level, question: `An arithmetic sequence starts at ${first} with common difference ${difference}. Find term ${n}.`, answer: String(answer), reason: `Use aₙ = a₁ + (n − 1)d`, answers: [answer, first + n * difference, n * difference, answer - difference, answer + difference].map((value) => ({ label: String(value), summary: String(value) })), reasons: [{ label: "A", summary: "Use aₙ = a₁ + (n − 1)d" }, { label: "B", summary: "Multiply the first term by n" }, { label: "C", summary: "Add the term number only once" }], visualHtml: visualCard("Arithmetic sequence", `<div class="math-skill-expression">a₁=${first}, d=${difference}, n=${n}</div>`), reviewText: `${first} + (${n} − 1) × ${difference} = ${answer}.` });
   }
 
   function createPatternRule(level) {
@@ -684,7 +723,7 @@
       const max = 5;
       const point = { x: randomInt(1, max), y: randomInt(1, max), label: "A" };
       const answer = `(${point.x}, ${point.y})`;
-      return optionInteractive({ category, difficulty: level, question: "What are the coordinates of point A?", answer, choices: [answer, `(${point.y}, ${point.x})`, `(${point.x - 1}, ${point.y})`, `(${point.x}, ${point.y - 1})`], visualHtml: visualCard("Across, then up", renderCoordinateGrid([point], { min: 0, max })), reviewText: `Move ${point.x} across and ${point.y} up: ${answer}.` });
+      return optionInteractive({ category, difficulty: level, question: "What are the coordinates of point A?", answer, choices: [answer, `(${point.y}, ${point.x})`, `(${point.x - 1}, ${point.y})`, `(${point.x}, ${point.y - 1})`, `(${point.x + 1}, ${point.y})`, `(${point.x}, ${point.y + 1})`], visualHtml: visualCard("Across, then up", renderCoordinateGrid([point], { min: 0, max })), reviewText: `Move ${point.x} across and ${point.y} up: ${answer}.` });
     }
     if (level === 5) {
       const start = { x: randomInt(0, 4), y: randomInt(0, 4) };
@@ -697,7 +736,7 @@
       const point = { x: randomInt(-4, 4) || -2, y: randomInt(-4, 4) || 3, label: "P" };
       const axis = Math.random() < 0.5 ? "x-axis" : "y-axis";
       const answer = axis === "x-axis" ? `(${point.x}, ${-point.y})` : `(${-point.x}, ${point.y})`;
-      return pairedInteractive({ category, difficulty: level, question: `Reflect P over the ${axis}.`, answer, reason: axis === "x-axis" ? "An x-axis reflection changes the sign of y" : "A y-axis reflection changes the sign of x", answers: [answer, `(${-point.x}, ${-point.y})`, `(${point.y}, ${point.x})`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: axis === "x-axis" ? "An x-axis reflection changes the sign of y" : "A y-axis reflection changes the sign of x" }, { label: "B", summary: "Every reflection swaps x and y" }, { label: "C", summary: "A reflection never changes coordinates" }], visualHtml: visualCard("Mirror across an axis", renderCoordinateGrid([point])), reviewText: `The reflected point is ${answer}.` });
+      return pairedInteractive({ category, difficulty: level, question: `Reflect P over the ${axis}.`, answer, reason: axis === "x-axis" ? "An x-axis reflection changes the sign of y" : "A y-axis reflection changes the sign of x", answers: [answer, `(${-point.x}, ${-point.y})`, `(${point.y}, ${point.x})`, `(${point.x + 1}, ${point.y})`, `(${point.x}, ${point.y + 1})`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: axis === "x-axis" ? "An x-axis reflection changes the sign of y" : "A y-axis reflection changes the sign of x" }, { label: "B", summary: "Every reflection swaps x and y" }, { label: "C", summary: "A reflection never changes coordinates" }], visualHtml: visualCard("Mirror across an axis", renderCoordinateGrid([point])), reviewText: `The reflected point is ${answer}.` });
     }
     if (level === 7) {
       const rate = randomInt(2, 6);
@@ -709,13 +748,13 @@
       const intercept = randomInt(-4, 4);
       const points = [{ x: 0, y: intercept, label: "A" }, { x: 1, y: intercept + slope, label: "B" }];
       const answer = `y = ${slope}x ${intercept >= 0 ? "+" : "−"} ${Math.abs(intercept)}`;
-      return pairedInteractive({ category, difficulty: level, question: "Which linear equation matches points A and B?", answer, reason: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}`, answers: [answer, `y = ${intercept}x + ${slope}`, `y = ${slope}x`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}` }, { label: "B", summary: "Slope and intercept can be swapped" }, { label: "C", summary: "Every line passes through the origin" }], visualHtml: visualCard("Slope and intercept", renderCoordinateGrid(points)), reviewText: `The matching equation is ${answer}.` });
+      return pairedInteractive({ category, difficulty: level, question: "Which linear equation matches points A and B?", answer, reason: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}`, answers: [answer, `y = ${intercept}x + ${slope}`, `y = ${slope}x`, `y = ${slope + 1}x ${intercept >= 0 ? "+" : "−"} ${Math.abs(intercept)}`, `y = ${slope}x ${intercept + 1 >= 0 ? "+" : "−"} ${Math.abs(intercept + 1)}`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}` }, { label: "B", summary: "Slope and intercept can be swapped" }, { label: "C", summary: "Every line passes through the origin" }], visualHtml: visualCard("Slope and intercept", renderCoordinateGrid(points)), reviewText: `The matching equation is ${answer}.` });
     }
     if (level === 9) {
       const h = randomInt(-3, 4);
       const k = randomInt(-3, 4);
       const answer = `(${h}, ${k})`;
-      return optionInteractive({ category, difficulty: level, question: "Find the vertex from vertex form.", displayText: `y = (x ${h >= 0 ? "−" : "+"} ${Math.abs(h)})² ${k >= 0 ? "+" : "−"} ${Math.abs(k)}`, answer, choices: [answer, `(${-h}, ${k})`, `(${h}, ${-k})`, `(${-h}, ${-k})`], visualHtml: visualCard("Vertex form y = (x − h)² + k", renderCoordinateGrid([{ x: h, y: k, label: "V" }])), reviewText: `The vertex is (h, k) = ${answer}.` });
+      return optionInteractive({ category, difficulty: level, question: "Find the vertex from vertex form.", displayText: `y = (x ${h >= 0 ? "−" : "+"} ${Math.abs(h)})² ${k >= 0 ? "+" : "−"} ${Math.abs(k)}`, answer, choices: [answer, `(${-h}, ${k})`, `(${h}, ${-k})`, `(${-h}, ${-k})`, `(${h + 1}, ${k})`, `(${h}, ${k + 1})`], visualHtml: visualCard("Vertex form y = (x − h)² + k", renderCoordinateGrid([{ x: h, y: k, label: "V" }])), reviewText: `The vertex is (h, k) = ${answer}.` });
     }
     const a = randomInt(2, 5);
     const b = randomInt(1, 4);
