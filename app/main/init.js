@@ -22,7 +22,6 @@ const sessionHistoryStore = window.HomeworkApp.sessionHistory.createSessionHisto
 const resultsReporter = window.HomeworkApp.resultsReporter.createResultsReporter({
   endpointUrl: GOOGLE_SHEETS_REPORT_WEB_APP_URL,
   queueStorageKey: GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY,
-  reportSecret: GOOGLE_SHEETS_REPORT_SECRET,
   schemaVersion: GOOGLE_SHEETS_REPORT_SCHEMA_VERSION,
   source: GOOGLE_SHEETS_REPORT_SOURCE,
 });
@@ -348,6 +347,9 @@ elements.quizBackButton.addEventListener("click", showPreviousQuizQuestion);
 elements.quizForwardButton.addEventListener("click", showNextQuizQuestion);
 elements.resultsBackButton.addEventListener("click", showPreviousQuizQuestion);
 elements.resultsForwardButton.addEventListener("click", showNextQuizQuestion);
+
+initializeUiEnhancements();
+initializeSessionCheckpointing();
 
 initializeUserSelector();
 initializeQuestionCountButtons();

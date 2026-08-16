@@ -9,11 +9,22 @@ function financialLiteracyQuestion(question, options, answer, difficulty, extras
     throw new Error(`Financial literacy question must have exactly 4 unique options including the answer: ${question}`);
   }
 
+  const level = clampFinancialDifficulty(difficulty);
   return {
     question: String(question),
     options: normalizedOptions,
     answer: normalizedAnswer,
-    difficulty: clampFinancialDifficulty(difficulty),
+    difficulty: level,
+    contentId: extras.contentId || globalThis.HomeworkQuestionUtils?.stableContentId(
+      "financial-literacy",
+      `${level}|${question}|${normalizedAnswer}`
+    ),
+    skill: extras.skill || "financial-literacy.applied-decision-making",
+    gradeMin: extras.gradeMin ?? level,
+    gradeMax: extras.gradeMax ?? level,
+    explanation: extras.explanation || extras.reviewText || normalizedAnswer,
+    reviewText: extras.reviewText || extras.explanation || normalizedAnswer,
+    reviewStatus: extras.reviewStatus || "author-curated",
     ...extras,
   };
 }

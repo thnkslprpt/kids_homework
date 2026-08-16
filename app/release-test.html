@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Homework release browser matrix</title>
+    <style>
+      body { margin: 0; font-family: sans-serif; }
+      iframe { display: block; border: 0; }
+      #result { white-space: pre-wrap; }
+    </style>
+  </head>
+  <body>
+    <pre id="result">RUNNING</pre>
+    <div id="frames"></div>
+    <script>
+      const result = document.getElementById("result");
+      const frameHost = document.getElementById("frames");
+      const ACTIVE_SESSION_KEY = "homework-active-session-v1";
+      const HISTORY_KEY = "homework-session-history-v2";
+      let reportAttempts = 0;
+
+      function assert(condition, message) {
+        if (!condition) throw new Error(message);
+      }
+
+      function waitFor(predicate, message, timeoutMs = 45000) {
+        const startedAt = performance.now();
+        return new Promise((resolve, reject) => {
+          const check = () => {
+            try {
+              const value = predicate();
+              if (value) {
+                resolve(value);
+                return;
+              }
+            } catch (error) {
+              reject(error);
+              return;
+            }
+            if (performance.now() - startedAt >= timeoutMs) {
+              reject(new Error(message));
+              return;
+            }
+            setTimeout(check, 25);
+          };
+          check();
+        });
+      }
+
+      async function waitForAsync(predicate, message, timeoutMs = 45000) {
+        const startedAt = performance.now();
+        while (performance.now() - startedAt < timeoutMs) {
+          const value = await predicate();
+          if (value) return value;
+          await new Promise((resolve) => setTimeout(resolve, 25));
+        }
+        throw new Error(message);
+      }
+
+      async function qaPost(path, body = "") {
+        const response = await fetch(path, { method: "POST", body, cache: "no-store" });
+        assert(response.ok, `QA endpoint ${path} returned ${response.status}`);
+        return response;
+      }
+
+      async function qaStats() {
+        return (await qaPost("/__qa/stats")).json();
+      }
+
+      function isVisible(element) {
+        return Boolean(element) && !element.hidden && element.getClientRects().length > 0;
+      }
+
+      async function loadApp(width, label, path = "/homework.html") {
+        const frame = document.createElement("iframe");
+        frame.width = String(width);
+        frame.height = "900";
+        frame.name = label;
+        frame.src = `${path}${path.includes("?") ? "&" : "?"}qa=${encodeURIComponent(label)}-${Date.now()}`;
+        frameHost.appendChild(frame);
+        await new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => reject(new Error(`${label}: page load timed out`)), 45000);
+          frame.addEventListener("load", () => {
+            clearTimeout(timeout);
+            resolve();
+          }, { once: true });
+        });
+        await waitFor(
+          () => frame.contentWindow?.HOMEWORK_TEST_API && frame.contentDocument?.querySelector("[data-user-id]"),
+          `${label}: production app did not initialize`
+        );
+
+        const appWindow = frame.contentWindow;
+        const originalFetch = appWindow.fetch.bind(appWindow);
+        appWindow.fetch = (...args) => {
+          const url = String(args[0]?.url || args[0] || "");
+          if (/script\.google\.com\/macros\//i.test(url)) {
+            reportAttempts += 1;
+            return Promise.reject(new Error("Production reporting is intercepted in release QA."));
+          }
+          return originalFetch(...args);
+        };
+        return frame;
+      }
+
+      function frameParts(frame) {
+        return {
+          api: frame.contentWindow.HOMEWORK_TEST_API,
+          doc: frame.contentDocument,
+          win: frame.contentWindow,
+        };
+      }
+
+      function click(doc, selector, label) {
+        const element = typeof selector === "string" ? doc.querySelector(selector) : selector;
+        assert(element, `${label}: element is missing`);
+        assert(!element.disabled, `${label}: element is disabled`);
+        element.click();
+        return element;
+      }
+
+      function change(element, checked) {
+        element.checked = checked;
+        element.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+
+      function submit(doc) {
+        doc.getElementById("start-form").dispatchEvent(
+          new Event("submit", { bubbles: true, cancelable: true })
+        );
+      }
+
+      function text(element) {
+        return String(element?.textContent || "").replace(/\s+/g, " ").trim();
+      }
+
+      function assertNoHorizontalOverflow(frame, label) {
+        const { doc, win } = frameParts(frame);
+        const root = doc.documentElement;
+        assert(
+          root.scrollWidth <= Math.ceil(win.innerWidth) + 1,
+          `${label}: horizontal overflow ${root.scrollWidth}px > ${win.innerWidth}px`
+        );
+      }
+
+      function answerCurrentQuestion(frame) {
+        const { api, doc } = frameParts(frame);
+        const round = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
+        const question = round.questions[round.currentIndex];
+        assert(question, `missing ${api.state.currentRound} question ${round.currentIndex + 1}`);
+
+        if (question.mode === "choice") {
+          const button = Array.from(doc.querySelectorAll("#choices-area .choice-button"))
+            .find((option) => option.dataset.value === String(question.answerValue));
+          click(doc, button, `choice answer ${question.answerValue}`);
+        } else if (question.mode === "input") {
+          doc.getElementById("answer-input").value = String(question.answerValue);
+          doc.getElementById("answer-form").dispatchEvent(
+            new Event("submit", { bubbles: true, cancelable: true })
+          );
+        } else if (question.mode === "practice") {
+          click(doc, "#choices-area .practice-button", "practice completion");
+        } else if (question.mode === "interactive") {
+          if (question.interactive?.layout === "command-sequence") {
+            (question.interactive.answerSequence || []).forEach((command) => {
+              click(
+                doc,
+                `#choices-area .command-button[data-command="${String(command).toUpperCase()}"]`,
+                `command ${command}`
+              );
+            });
+          } else if (question.interactive?.layout === "paired-select") {
+            click(
+              doc,
+              `#choices-area .paired-select-option[data-group="items"][data-index="${question.interactive.answerItemIndex}"]`,
+              "paired item"
+            );
+            click(
+              doc,
+              `#choices-area .paired-select-option[data-group="reasons"][data-index="${question.interactive.answerReasonIndex}"]`,
+              "paired reason"
+            );
+          } else {
+            (question.interactive?.answerIndexes || []).forEach((answerIndex) => {
+              click(doc, `#choices-area .interactive-option[data-index="${answerIndex}"]`, `option ${answerIndex}`);
+            });
+          }
+          click(doc, "#choices-area .interactive-check-button", "interactive check");
+        } else if (question.mode === "drag") {
+          if (question.dragLayout === "matching") {
+            const leftAnchors = Array.from(doc.querySelectorAll("#drag-area .matching-anchor.left"));
+            const rightRows = Array.from(doc.querySelectorAll("#drag-area .matching-row.right"));
+            question.dragAnswerTokens.forEach((answerToken, index) => {
+              const rightAnchor = rightRows
+                .find((row) => text(row.querySelector(".matching-card")) === String(answerToken))
+                ?.querySelector(".matching-anchor.right");
+              click(doc, leftAnchors[index], `matching left ${index + 1}`);
+              click(doc, rightAnchor, `matching right ${answerToken}`);
+            });
+          } else {
+            question.dragAnswerTokens.forEach((answerToken) => {
+              const tokenButton = Array.from(doc.querySelectorAll("#drag-area .drag-token"))
+                .find((button) => text(button) === String(answerToken));
+              click(doc, tokenButton, `drag token ${answerToken}`);
+            });
+          }
+          click(doc, "#drag-area .drag-check-button", "drag check");
+        } else {
+          throw new Error(`unsupported question mode ${question.mode}`);
+        }
+
+        assert(round.awaitingContinue, `${api.state.currentRound} answer did not pause for feedback`);
+      }
+
+      function continueFeedback(frame) {
+        const { doc } = frameParts(frame);
+        click(doc, "#feedback-continue-button", "Continue after feedback");
+      }
+
+      function completeMainRound(frame) {
+        const { api, doc } = frameParts(frame);
+        let count = 0;
+        while (api.state.currentRound === "main" && doc.getElementById("results-screen").hidden) {
+          answerCurrentQuestion(frame);
+          continueFeedback(frame);
+          count += 1;
+          assert(count <= 30, "main round did not finish");
+        }
+      }
+
+      function completeCurrentSession(frame) {
+        const { api, doc } = frameParts(frame);
+        let count = 0;
+        while (doc.getElementById("results-screen").hidden) {
+          answerCurrentQuestion(frame);
+          continueFeedback(frame);
+          count += 1;
+          assert(count <= 40, `session did not finish; round=${api.state.currentRound}`);
+        }
+      }
+
+      async function startMathChallenge(frame, relaxed) {
+        const { api, doc } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "guest profile");
+        click(doc, '[data-session-preset="math-heavy"]', "math preset");
+        click(doc, '[data-question-count="5"]', "five questions");
+        const challenge = doc.getElementById("speed-challenge-enabled");
+        const noCountdown = doc.getElementById("speed-relaxed-timer");
+        change(challenge, true);
+        change(noCountdown, relaxed);
+        submit(doc);
+        await waitFor(
+          () => !doc.getElementById("quiz-screen").hidden && api.state.questions.length === 5,
+          `${relaxed ? "untimed" : "timed"} challenge did not start`
+        );
+        completeMainRound(frame);
+        assert(api.state.currentRound === "speed", `${relaxed ? "untimed" : "timed"} challenge did not begin`);
+        assert(
+          doc.getElementById("speed-timer").hidden === relaxed,
+          `${relaxed ? "untimed" : "timed"} challenge timer visibility is wrong`
+        );
+        completeCurrentSession(frame);
+        assert(api.state.speedRound.records.filter(Boolean).length === 5, "challenge did not save five records");
+      }
+
+      async function runDesktopChallengeMatrix() {
+        const frame = await loadApp(1366, "desktop-challenges");
+        assertNoHorizontalOverflow(frame, "desktop start");
+        await startMathChallenge(frame, false);
+        assertNoHorizontalOverflow(frame, "desktop timed results");
+        click(frame.contentDocument, "#restart-button", "restart after timed challenge");
+        await startMathChallenge(frame, true);
+        assertNoHorizontalOverflow(frame, "desktop untimed results");
+        return frame;
+      }
+
+      async function runMobileCheckpointAndHistoryMatrix() {
+        const frame = await loadApp(375, "mobile-checkpoint-history");
+        const { api, doc, win } = frameParts(frame);
+        assert(win.innerWidth === 375, `mobile viewport is ${win.innerWidth}px, expected 375px`);
+        assertNoHorizontalOverflow(frame, "mobile start");
+
+        click(doc, '[data-user-id="guest"]', "mobile guest profile");
+        click(doc, '[data-session-preset="math-heavy"]', "mobile math preset");
+        click(doc, '[data-question-count="5"]', "mobile five questions");
+        change(doc.getElementById("speed-challenge-enabled"), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "mobile session did not start");
+        assertNoHorizontalOverflow(frame, "mobile question");
+        answerCurrentQuestion(frame);
+        assert(isVisible(doc.getElementById("feedback-continue-button")), "mobile feedback did not retain Continue");
+        click(doc, '[data-confidence="sure"]', "mobile confidence");
+        assert(api.state.sessionRecords[0]?.confidence === "sure", "mobile confidence was not saved");
+        assertNoHorizontalOverflow(frame, "mobile feedback");
+
+        click(doc, "#pause-session-button", "mobile Save & Exit");
+        const saved = localStorage.getItem(ACTIVE_SESSION_KEY);
+        assert(saved && JSON.parse(saved).state.awaitingContinue, "Save & Exit did not persist feedback state");
+        assert(!doc.getElementById("resume-session-panel").hidden, "resume panel is hidden after Save & Exit");
+        click(doc, "#resume-session-button", "mobile resume");
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "mobile resume did not return to quiz");
+        assert(api.state.awaitingContinue, "mobile resume did not restore feedback phase");
+        continueFeedback(frame);
+        assert(api.state.currentIndex === 1, "mobile resumed Continue did not advance exactly once");
+        click(doc, "#pause-session-button", "mobile second Save & Exit");
+        click(doc, "#discard-session-button", "mobile discard");
+        assert(localStorage.getItem(ACTIVE_SESSION_KEY) === null, "discard did not clear checkpoint");
+
+        localStorage.setItem(ACTIVE_SESSION_KEY, "{malformed");
+        frame.remove();
+        const freshFrame = await loadApp(375, "mobile-malformed-history");
+        const fresh = frameParts(freshFrame);
+        assert(localStorage.getItem(ACTIVE_SESSION_KEY) === null, "malformed checkpoint was not quarantined");
+        assert(fresh.doc.getElementById("resume-session-panel").hidden, "malformed checkpoint exposed resume UI");
+        assertNoHorizontalOverflow(freshFrame, "mobile malformed-storage recovery");
+
+        let exportedBlob = null;
+        let exportedFilename = "";
+        fresh.win.URL.createObjectURL = (blob) => {
+          exportedBlob = blob;
+          return "blob:qa-history";
+        };
+        fresh.win.URL.revokeObjectURL = () => {};
+        fresh.win.HTMLAnchorElement.prototype.click = function () {
+          exportedFilename = this.download;
+        };
+        fresh.win.confirm = () => true;
+        click(fresh.doc, "#history-button", "open mobile history");
+        assert(
+          fresh.doc.querySelectorAll("#history-list .history-session").length >= 2,
+          "completed challenge sessions are missing from history"
+        );
+        click(fresh.doc, "#export-history-button", "export history");
+        assert(exportedBlob, "history export did not create a Blob");
+        const exported = JSON.parse(await exportedBlob.text());
+        assert(Array.isArray(exported) && exported.length >= 2, "history export JSON is incomplete");
+        assert(exportedFilename === "homework-history-guest.json", `unexpected export name ${exportedFilename}`);
+        click(fresh.doc, "#delete-history-button", "delete guest history");
+        assert(fresh.doc.querySelectorAll("#history-list .history-session").length === 0, "history delete left sessions visible");
+        const storedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || "{}");
+        assert(storedHistory?.users?.guest?.length === 0, "history delete did not clear the selected learner");
+        return freshFrame;
+      }
+
+      async function runMapOfflineResumeMatrix() {
+        const before = await qaStats();
+        assert(before.mapRequestCount === 0, `map bundle loaded eagerly ${before.mapRequestCount} time(s)`);
+        const frame = await loadApp(1366, "desktop-map-online");
+        const { api, doc, win } = frameParts(frame);
+        assert(!win.GEOGRAPHY_MAP_COUNTRIES, "map data exists before a map/history selection");
+        click(doc, '[data-user-id="guest"]', "map guest profile");
+        click(doc, '[data-session-preset="practice"]', "map practice preset");
+        click(doc, '[data-practice-category="geography-map"]', "map practice topic");
+        click(doc, '[data-question-count="5"]', "map five questions");
+        submit(doc);
+        await waitFor(
+          () => !doc.getElementById("quiz-screen").hidden && Array.isArray(win.GEOGRAPHY_MAP_COUNTRIES),
+          "lazy map session did not load"
+        );
+        const after = await qaStats();
+        assert(after.mapRequestCount >= 1, "lazy map bundle was not requested on demand");
+        assert(api.state.questions.length === 5, "map practice did not build five questions");
+        click(doc, "#pause-session-button", "save map session");
+        const serialized = localStorage.getItem(ACTIVE_SESSION_KEY) || "";
+        assert(serialized.length > 0 && serialized.length < 1_000_000, "map checkpoint is missing or oversized");
+        assert(!serialized.includes("<svg"), "map checkpoint retained inline SVG markup");
+        assert(/geographyMapCountry|geographyMapVisualKind/.test(serialized), "map checkpoint lacks a hydration marker");
+        frame.remove();
+
+        await qaPost("/__qa/mode", "offline");
+        const offlineFrame = await loadApp(1366, "desktop-map-offline-resume");
+        const offline = frameParts(offlineFrame);
+        assert(!offline.win.GEOGRAPHY_MAP_COUNTRIES, "offline page eagerly loaded map data");
+        assert(!offline.doc.getElementById("resume-session-panel").hidden, "offline map checkpoint is not resumable");
+        click(offline.doc, "#resume-session-button", "offline map resume");
+        await waitFor(
+          () => !offline.doc.getElementById("quiz-screen").hidden && Array.isArray(offline.win.GEOGRAPHY_MAP_COUNTRIES),
+          "offline map checkpoint did not hydrate from cache"
+        );
+        assert(
+          offline.doc.querySelector("#question-visual svg, #drag-area svg"),
+          "offline resumed map did not render an SVG visual"
+        );
+        assertNoHorizontalOverflow(offlineFrame, "offline resumed map");
+
+        const fallbackFrame = await loadApp(1366, "offline-navigation-fallback", `/missing-${Date.now()}`);
+        assert(
+          text(fallbackFrame.contentDocument.querySelector("h1")).includes("Great Things"),
+          "offline unknown navigation did not fall back to the cached app"
+        );
+        fallbackFrame.remove();
+        return offlineFrame;
+      }
+
+      async function installServiceWorker() {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map((registration) => registration.unregister()));
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map((name) => caches.delete(name)));
+        const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
+        await navigator.serviceWorker.ready;
+        await waitFor(() => registration.active, "service worker did not activate", 90000);
+        await waitFor(() => navigator.serviceWorker.controller, "service worker did not claim the release runner", 30000);
+        const names = await caches.keys();
+        const mainCache = names.find((name) => /^homework-v.*(?<!-runtime)$/.test(name));
+        assert(mainCache, `installed cache is missing: ${JSON.stringify(names)}`);
+        const cache = await caches.open(mainCache);
+        assert(await cache.match("/homework.html"), "installed cache is missing homework.html");
+        assert(await cache.match("/app/main/session.js"), "installed cache is missing session.js");
+        return { registration, initialMainCache: mainCache };
+      }
+
+      async function runServiceWorkerUpdateMatrix(registration, initialMainCache, appFrame) {
+        await qaPost("/__qa/mode", "online");
+        await qaPost("/__qa/update");
+        const controllerChanged = new Promise((resolve) => {
+          navigator.serviceWorker.addEventListener("controllerchange", resolve, { once: true });
+        });
+        await registration.update();
+        await waitFor(() => registration.waiting, "updated service worker did not enter waiting state", 90000);
+        const appDoc = appFrame.contentDocument;
+        await waitFor(
+          () => !appDoc.getElementById("app-update-banner").hidden,
+          "production update banner did not appear",
+          30000
+        );
+        click(appDoc, "#app-update-button", "apply service-worker update");
+        assert(appDoc.getElementById("app-update-button").disabled, "update button was not locked after activation request");
+        await controllerChanged;
+        await waitFor(() => registration.active && !registration.waiting, "updated service worker did not activate", 60000);
+        await waitForAsync(
+          async () => !(await caches.keys()).includes(initialMainCache),
+          "activation did not delete the previous app cache",
+          30000
+        );
+        const names = await caches.keys();
+        assert(names.some((name) => name.includes("-qa-update") && !name.endsWith("-runtime")), "updated app cache is missing");
+        assert(
+          names.filter((name) => name.startsWith("homework-v") && !name.includes("-qa-update")).length === 0,
+          `stale homework caches remain: ${JSON.stringify(names)}`
+        );
+      }
+
+      async function run() {
+        assert("serviceWorker" in navigator, "service workers are unavailable in Chrome");
+        const { registration, initialMainCache } = await installServiceWorker();
+        const desktopFrame = await runDesktopChallengeMatrix();
+        await runMobileCheckpointAndHistoryMatrix();
+        const offlineMapFrame = await runMapOfflineResumeMatrix();
+        assert(reportAttempts === 0, `local QA attempted ${reportAttempts} production report(s)`);
+        await runServiceWorkerUpdateMatrix(registration, initialMainCache, offlineMapFrame || desktopFrame);
+        result.textContent = "PASS";
+        await qaPost("/__qa/done", result.textContent);
+      }
+
+      run().catch((error) => {
+        result.textContent = `FAIL\n${error?.stack || error}`;
+        fetch("/__qa/done", { method: "POST", body: result.textContent }).catch(() => {});
+      });
+    </script>
+  </body>
+</html>

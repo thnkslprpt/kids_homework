@@ -6220,7 +6220,7 @@ const HEBREW_EXPANDED_WORDS =
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "The system / / the editorial board",
+    "english": "The system / the editorial board",
     "transliteration": "hama'arekhet",
     "hebrew": "הַמַּעֲרֶכֶת",
     "difficulty": 8
@@ -6731,7 +6731,7 @@ const HEBREW_EXPANDED_WORDS =
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "Systems / / editorial boards",
+    "english": "Systems / editorial boards",
     "transliteration": "ma'arakhot",
     "hebrew": "מַעֲרָכוֹת",
     "difficulty": 8
@@ -7081,7 +7081,7 @@ const HEBREW_EXPANDED_WORDS =
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "Which (pl.)",
+    "english": "These (pl.)",
     "transliteration": "elu",
     "hebrew": "אֵלּוּ",
     "difficulty": 8
@@ -11785,7 +11785,7 @@ const HEBREW_EXPANDED_WORDS =
   },
   {
     "category": "Everyday Hebrew (Expanded)",
-    "english": "Sward / fencing",
+    "english": "Sword / fencing",
     "transliteration": "sayif",
     "hebrew": "סַיִף",
     "difficulty": 10

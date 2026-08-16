@@ -510,7 +510,7 @@
   const registry = globalThis.HomeworkQuestions;
   const logicModule = registry?.get?.("logic");
   if (logicModule) {
-    registry.register({
+    registry.replace({
       ...logicModule,
       generatedEntryFactory: blendFactory(logicModule.generatedEntryFactory, createLogicSpatialLogicPuzzleEntry, 0.35),
     });
@@ -518,7 +518,7 @@
 
   const spatialModule = registry?.get?.("spatial-reasoning");
   if (spatialModule) {
-    registry.register({
+    registry.replace({
       ...spatialModule,
       generatedEntryFactory: blendFactory(
         spatialModule.generatedEntryFactory,

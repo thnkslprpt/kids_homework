@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#f05b9d">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Homework">
     <title>Homework</title>
     <link rel="stylesheet" href="app/style.css">
@@ -22,24 +23,35 @@
       </header>
       <section id="start-screen" class="card screen">
         <h2>Who is learning today?</h2>
+        <section id="resume-session-panel" class="resume-session-panel" aria-labelledby="resume-session-heading" hidden>
+          <h3 id="resume-session-heading">Continue where you left off?</h3>
+          <p id="resume-session-summary">An unfinished session is saved on this device.</p>
+          <div class="resume-session-actions">
+            <button id="resume-session-button" type="button" class="primary-button">Resume Session</button>
+            <button id="discard-session-button" type="button" class="secondary-button">Start Fresh</button>
+          </div>
+        </section>
         <div class="student-section">
           <p class="student-heading">Choose Student</p>
           <div id="user-selector" class="user-selector" role="group" aria-label="Student"></div>
         </div>
         <form id="start-form" class="start-form">
           <input id="hebrew-only" name="hebrewOnly" type="hidden" value="false">
-          <div class="start-fields">
-            <label class="field question-count-field">
-              <span>How many questions?</span>
+          <details id="session-customization" class="start-customization">
+            <summary>Customize session</summary>
+            <div class="start-fields">
+            <fieldset class="field question-count-field">
+              <legend>How many questions?</legend>
               <input id="question-count" name="questionCount" type="hidden" value="30">
               <div class="question-count-selector" role="group" aria-label="Question count">
+                <button type="button" class="question-count-button" data-question-count="5" aria-label="5 questions, quick win" title="Quick win">5</button>
                 <button type="button" class="question-count-button" data-question-count="10" aria-pressed="false">10</button>
                 <button type="button" class="question-count-button" data-question-count="20" aria-pressed="false">20</button>
                 <button type="button" class="question-count-button active" data-question-count="30" aria-pressed="true">30</button>
               </div>
-            </label>
-            <label class="field difficulty-field">
-              <span id="difficulty-label">Grade level</span>
+            </fieldset>
+            <fieldset class="field difficulty-field">
+              <legend id="difficulty-label">Grade level</legend>
               <div id="difficulty-selector" class="difficulty-selector" role="group" aria-labelledby="difficulty-label">
                 <span class="difficulty-scale-label" aria-hidden="true">1</span>
                 <input
@@ -57,8 +69,24 @@
                 <output id="difficulty-value" class="difficulty-value" for="difficulty-level">Grade 3</output>
               </div>
               <small id="difficulty-scope" class="difficulty-scope">Multiplication/division · fractions · area and data</small>
-            </label>
-          </div>
+            </fieldset>
+            </div>
+            <fieldset class="challenge-options">
+              <legend>Optional challenge</legend>
+              <label class="toggle-option">
+                <input id="speed-challenge-enabled" name="speedChallengeEnabled" type="checkbox">
+                <span><strong>Add a 5-question challenge</strong><small>Timed questions after the main session.</small></span>
+              </label>
+              <label class="toggle-option challenge-dependent">
+                <input id="speed-relaxed-timer" name="speedRelaxedTimer" type="checkbox">
+                <span><strong>No countdown</strong><small>Keep bonus questions without time pressure.</small></span>
+              </label>
+              <label class="toggle-option challenge-dependent">
+                <input id="speed-sound-enabled" name="speedSoundEnabled" type="checkbox">
+                <span><strong>Timer sounds</strong><small>Play a quiet tick during timed questions.</small></span>
+              </label>
+            </fieldset>
+          </details>
           <div id="session-builder" class="session-builder">
             <div class="builder-row builder-presets" role="group" aria-label="Session type">
               <button type="button" class="builder-preset-button active" data-session-preset="adaptive" aria-pressed="true">🚀 Adaptive</button>
@@ -87,9 +115,13 @@
         <p id="start-feedback" class="feedback" aria-live="polite"></p>
       </section>
       <section id="quiz-screen" class="card screen" hidden>
+        <div class="quiz-session-actions">
+          <button id="pause-session-button" type="button" class="secondary-button">Save &amp; Exit</button>
+        </div>
         <div class="status-bar">
           <div class="status-card progress-card">
-            <div id="progress-tracker" class="progress-tracker" aria-hidden="true"></div>
+            <p id="progress-summary" class="progress-summary">Question 1 of 1</p>
+            <div id="progress-tracker" class="progress-tracker" role="progressbar" aria-label="Session progress" aria-valuemin="0" aria-valuemax="1" aria-valuenow="0"></div>
           </div>
           <div class="status-card score-card">
             <p id="score-text" class="status-value">0/0</p>
@@ -104,10 +136,29 @@
             <span id="speed-timer-fill" class="speed-timer-fill"></span>
           </div>
         </div>
-        <p id="feedback" class="feedback-banner" aria-live="polite"></p>
+        <div id="feedback-region" class="feedback-region">
+          <div id="feedback" class="feedback-banner" role="status" aria-live="polite" aria-atomic="true"></div>
+          <fieldset id="confidence-selector" class="confidence-selector" hidden>
+            <legend>How sure were you?</legend>
+            <div class="confidence-options">
+              <button type="button" data-confidence="not-sure" aria-pressed="false">Not sure</button>
+              <button type="button" data-confidence="somewhat" aria-pressed="false">Somewhat sure</button>
+              <button type="button" data-confidence="sure" aria-pressed="false">Very sure</button>
+            </div>
+          </fieldset>
+          <button id="feedback-continue-button" type="button" class="primary-button feedback-continue-button" hidden>Continue</button>
+        </div>
 
-        <div class="question-panel">
-          <p id="question-number" class="question-number">Question 1:</p>
+        <div id="question-support" class="question-support" hidden>
+          <div class="question-support-actions">
+            <button id="read-aloud-button" type="button" class="secondary-button" hidden>Hear Question</button>
+            <button id="hint-button" type="button" class="secondary-button">Show a hint</button>
+          </div>
+          <p id="hint-text" class="hint-text" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="question-panel" aria-labelledby="question-number">
+          <h2 id="question-number" class="question-number" tabindex="-1">Question 1 of 1</h2>
           <p id="question-prompt" class="question-prompt"></p>
           <div id="question-main" class="question-main"></div>
           <div id="question-visual" class="question-visual" hidden></div>
@@ -153,6 +204,9 @@
         <p id="results-summary" class="results-summary"></p>
         <div id="results-category-summary" class="results-category-summary" hidden></div>
         <div id="results-review-list" class="results-review-list" hidden></div>
+        <button id="results-practice-button" type="button" class="primary-button results-practice-button" hidden>
+          Practice This Topic
+        </button>
         <div class="quiz-nav results-nav" aria-label="Session review navigation">
           <button id="results-back-button" type="button" class="secondary-button">‹ Previous</button>
           <button id="results-forward-button" type="button" class="secondary-button">Next ›</button>
@@ -162,7 +216,11 @@
       <section id="history-screen" class="card screen" hidden>
         <div class="history-header">
           <h2>Previous Sessions</h2>
-          <button id="history-back-button" type="button" class="secondary-button">Back</button>
+          <div class="history-management-actions">
+            <button id="export-history-button" type="button" class="secondary-button">Export</button>
+            <button id="delete-history-button" type="button" class="secondary-button danger-button">Delete History</button>
+            <button id="history-back-button" type="button" class="secondary-button">Back</button>
+          </div>
         </div>
         <p id="history-empty" class="history-empty" hidden>No previous sessions yet.</p>
         <div id="history-list" class="history-list"></div>
@@ -181,13 +239,15 @@
     <div id="app-update-banner" class="app-update-banner" hidden>
       <span>A new homework version is ready.</span>
       <button id="app-update-button" type="button">Reload</button>
+      <button id="app-update-later-button" type="button">Later</button>
     </div>
+    <div id="screen-status-announcer" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="app/core/bootstrap-errors.js"></script>
     <script src="app/question-utils.js"></script>
     <script src="app/questions/registry.js"></script>
     <script src="app/questions/manifest.js"></script>
     <script src="app/questions/load.js" data-base="app/"></script>
     <script src="app/core/namespace.js"></script>
-    <script src="app/core/bootstrap-errors.js"></script>
     <script src="app/core/config.js"></script>
     <script src="app/core/state.js"></script>
     <script src="app/core/dom.js"></script>

@@ -23,15 +23,25 @@
   }
 
   function choiceEntry({ difficulty, question, answer, options, extraText = "", reviewText = "" }) {
+    const level = clampDifficulty(difficulty);
     return {
       type: "history-choice",
-      difficulty: clampDifficulty(difficulty),
+      difficulty: level,
       mode: "choice",
       question,
       answer,
       options: shuffle(Array.from(new Set([answer, ...options]))).slice(0, 4),
       extraText,
       reviewText,
+      contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+        "history",
+        `${level}|${question}|${answer}`
+      ),
+      skill: level <= 4 ? "history.chronology" : "history.evidence-and-interpretation",
+      gradeMin: level,
+      gradeMax: level,
+      explanation: reviewText || extraText || answer,
+      reviewStatus: "author-curated",
     };
   }
 
@@ -255,7 +265,13 @@
     ];
     if (level >= 6) factories.push(() => buildHistoricalThinkingQuestion(level));
     if (level >= 8) factories.push(() => buildBceCeDurationQuestion(level));
-    return randomChoice(factories)();
+    const generated = randomChoice(factories)();
+    return {
+      ...generated,
+      difficulty: level,
+      gradeMin: level,
+      gradeMax: level,
+    };
   }
 
   const CIVILIZATION_LOCATIONS = [
@@ -418,15 +434,18 @@
     const eligibleRounds = MAP_ROUNDS.filter((round) => round.minDifficulty <= level);
     const round = randomChoice(eligibleRounds);
     const locations = round.names.map((name) => LOCATION_BY_NAME.get(name));
-    return createTargetsDrag({
-      difficulty: level,
-      questionText: "Civilizations Map: place each name near its historical homeland or heartland.",
-      extraText: "Locations are broad and approximate, not modern borders. Drag a label, or tap a label and then tap its map spot.",
-      arrangement: "map",
-      mapHtml: buildWorldMapHtml(),
-      targets: locations.map((location) => ({ x: location.x, y: location.y, reviewLabel: location.name })),
-      answer: locations.map((location) => location.name),
-    });
+    return {
+      ...createTargetsDrag({
+        difficulty: level,
+        questionText: "Civilizations Map: place each name near its historical homeland or heartland.",
+        extraText: "Locations are broad and approximate, not modern borders. Drag a label, or tap a label and then tap its map spot.",
+        arrangement: "map",
+        mapHtml: buildWorldMapHtml(),
+        targets: locations.map((location) => ({ x: location.x, y: location.y, reviewLabel: location.name })),
+        answer: locations.map((location) => location.name),
+      }),
+      geographyMapVisualKind: "history-world",
+    };
   }
 
   function createChronologyDragQuestion(level) {
@@ -548,6 +567,7 @@
   globalThis.HISTORY_CIVILIZATION_LOCATIONS = CIVILIZATION_LOCATIONS;
   globalThis.createHistoryGeneratedEntry = createHistoryGeneratedEntry;
   globalThis.createHistoryGeneratedDragQuestion = createHistoryGeneratedDragQuestion;
+  globalThis.renderHistoryWorldMapHtml = buildWorldMapHtml;
 
   globalThis.HomeworkQuestions?.register({
     id: "history",

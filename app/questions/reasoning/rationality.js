@@ -633,8 +633,13 @@ const RATIONALITY_QUESTIONS = [
     5
   ),
   rationalityQuestion(
-    "Which claim is easiest to test fairly?",
-    ["Some songs are cool", "Plants grow faster with more sunlight when water and soil stay the same", "Pizza is the best food", "Blue is a lucky color"],
+    "Which claim already names a measurable outcome and the conditions to keep the same?",
+    [
+      "Students learn better whenever music is playing",
+      "Plants grow faster with more sunlight when water and soil stay the same",
+      "This pizza improves every student's mood",
+      "Blue classrooms make a school more successful",
+    ],
     "Plants grow faster with more sunlight when water and soil stay the same",
     5
   ),
@@ -1501,11 +1506,14 @@ const RATIONALITY_QUESTIONS = [
   ),
 
 ];
+const RATIONALITY_ACTIVE_QUESTIONS =
+  globalThis.HomeworkQuestionUtils?.filterAnswerLengthCues(RATIONALITY_QUESTIONS, 15) ||
+  RATIONALITY_QUESTIONS;
 
 function createRationalityGeneratedEntry(difficulty) {
   const level = rationalityClampDifficulty(difficulty);
-  const exactLevelQuestions = RATIONALITY_QUESTIONS.filter((entry) => entry.difficulty === level);
-  const fallbackQuestions = RATIONALITY_QUESTIONS.filter((entry) => entry.difficulty <= level);
+  const exactLevelQuestions = RATIONALITY_ACTIVE_QUESTIONS.filter((entry) => entry.difficulty === level);
+  const fallbackQuestions = RATIONALITY_ACTIVE_QUESTIONS.filter((entry) => entry.difficulty <= level);
   const pool = exactLevelQuestions.length ? exactLevelQuestions : fallbackQuestions;
   const selected = rationalityRandomChoice(pool);
 
@@ -1546,7 +1554,7 @@ function rationalityShuffleArray(values) {
 globalThis.HomeworkQuestions?.register({
   id: "rationality",
   label: "Rationality",
-  getStaticQuestions: () => RATIONALITY_QUESTIONS,
+  getStaticQuestions: () => RATIONALITY_ACTIVE_QUESTIONS,
   generatedEntryFactory: createRationalityGeneratedEntry,
   generatedShare: 0.7,
 });

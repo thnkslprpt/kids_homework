@@ -7,17 +7,30 @@
   <body>
     <main class="app-shell">
       <section id="start-screen">
+        <section id="resume-session-panel" hidden>
+          <h3>Continue where you left off?</h3>
+          <p id="resume-session-summary"></p>
+          <button id="resume-session-button" type="button">Resume Session</button>
+          <button id="discard-session-button" type="button">Start Fresh</button>
+        </section>
         <div id="user-selector"></div>
         <form id="start-form">
           <input id="hebrew-only" value="false">
+          <details id="session-customization" open>
           <input id="question-count" value="30">
+          <button type="button" class="question-count-button" data-question-count="5"></button>
           <button type="button" class="question-count-button" data-question-count="10"></button>
           <button type="button" class="question-count-button" data-question-count="20"></button>
           <button type="button" class="question-count-button active" data-question-count="30"></button>
           <input id="difficulty-level" value="3">
           <div id="difficulty-selector"></div>
+          <label id="difficulty-label" for="difficulty-level">Grade level</label>
           <output id="difficulty-value"></output>
           <small id="difficulty-scope"></small>
+          <input id="speed-challenge-enabled" type="checkbox">
+          <label class="challenge-dependent"><input id="speed-relaxed-timer" type="checkbox"></label>
+          <label class="challenge-dependent"><input id="speed-sound-enabled" type="checkbox"></label>
+          </details>
           <button id="hebrew-only-button" type="button" class="builder-preset-button" data-session-preset="hebrew"></button>
           <button type="button" class="builder-preset-button active" data-session-preset="adaptive"></button>
           <button type="button" class="builder-preset-button" data-session-preset="math-heavy"></button>
@@ -32,10 +45,24 @@
         <p id="start-feedback"></p>
       </section>
       <section id="quiz-screen" hidden>
+        <h2 tabindex="-1">Homework session</h2>
+        <button id="pause-session-button" type="button">Save &amp; Exit</button>
         <div id="progress-tracker"></div>
+        <p id="progress-summary"></p>
         <p id="score-text"></p>
         <div id="speed-timer" hidden><strong id="speed-timer-text"></strong><span id="speed-timer-fill"></span></div>
         <p id="feedback"></p>
+        <fieldset id="confidence-selector" hidden>
+          <button type="button" data-confidence="not-sure" aria-pressed="false">Not sure</button>
+          <button type="button" data-confidence="somewhat" aria-pressed="false">Somewhat sure</button>
+          <button type="button" data-confidence="sure" aria-pressed="false">Very sure</button>
+        </fieldset>
+        <button id="feedback-continue-button" type="button" hidden>Continue</button>
+        <div id="question-support" hidden>
+          <button id="hint-button" type="button">Show a hint</button>
+          <button id="read-aloud-button" type="button" hidden>Hear Question</button>
+          <p id="hint-text"></p>
+        </div>
         <p id="question-number"></p>
         <p id="question-prompt"></p>
         <div id="question-main"></div>
@@ -58,16 +85,21 @@
         <p id="results-summary"></p>
         <div id="results-category-summary"></div>
         <div id="results-review-list"></div>
+        <button id="results-practice-button" type="button" hidden>Practice This Topic</button>
         <button id="results-back-button"></button>
         <button id="results-forward-button"></button>
         <button id="restart-button"></button>
       </section>
       <section id="history-screen" hidden>
+        <h2 tabindex="-1">Previous Sessions</h2>
         <button id="history-back-button"></button>
+        <button id="export-history-button" type="button">Export</button>
+        <button id="delete-history-button" type="button">Delete History</button>
         <p id="history-empty"></p>
         <div id="history-list"></div>
       </section>
       <section id="dashboard-screen" hidden>
+        <h2 tabindex="-1">Parent Dashboard</h2>
         <button id="dashboard-back-button"></button>
         <div id="dashboard-user-selector"></div>
         <div id="dashboard-content"></div>
@@ -75,12 +107,15 @@
     </main>
     <div id="app-update-banner" hidden>
       <button id="app-update-button" type="button"></button>
+      <button id="app-update-later-button" type="button"></button>
     </div>
+    <div id="screen-status-announcer" role="status" aria-live="polite"></div>
     <pre id="result">running</pre>
 
     <script src="question-utils.js"></script>
     <script src="questions/registry.js"></script>
     <script src="questions/manifest.js"></script>
+    <script src="questions/geography/geography-map-data.js"></script>
     <script src="questions/load.js"></script>
     <script src="core/namespace.js"></script>
     <script src="core/bootstrap-errors.js"></script>
@@ -93,11 +128,13 @@
     <script src="app.js"></script>
     <script>
       const result = document.getElementById("result");
+      globalThis.HOMEWORK_ALLOW_LOCAL_REPORTS = true;
       const api = globalThis.HOMEWORK_TEST_API;
       const failures = [];
       const SMOKE_HISTORY_STORAGE_KEY = "homework-session-history-v2";
       const SMOKE_SELECTED_USER_STORAGE_KEY = "homework-selected-user-v1";
       const SMOKE_REPORT_QUEUE_STORAGE_KEY = "homework-google-sheets-report-queue-v1";
+      const SMOKE_ACTIVE_SESSION_STORAGE_KEY = "homework-active-session-v1";
       const smokeRealFetch = typeof globalThis.fetch === "function" ? globalThis.fetch.bind(globalThis) : null;
       let smokeReportPostCount = 0;
       let smokeLastReportPayload = null;
@@ -109,7 +146,14 @@
           } catch {
             smokeLastReportPayload = null;
           }
-          return Promise.resolve({ type: "opaque" });
+          return Promise.resolve({
+            type: "basic",
+            ok: true,
+            json: () => Promise.resolve({
+              ok: true,
+              sessionId: smokeLastReportPayload?.session?.id || "",
+            }),
+          });
         }
 
         if (smokeRealFetch) {
@@ -520,8 +564,21 @@
           const canAnswerWrong = !usedIntentionalWrong && question && ["choice", "input"].includes(question.mode);
           const beforeRound = api.state.currentRound;
           const beforeIndex = round.currentIndex;
-          answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
-          if (canAnswerWrong) usedIntentionalWrong = true;
+            answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
+            if (canAnswerWrong) usedIntentionalWrong = true;
+            assert(round.awaitingContinue, `workflow: ${beforeRound} question ${beforeIndex + 1} should wait for Continue`);
+            if (beforeRound === "main" && beforeIndex === 0) {
+              click(document.querySelector('[data-confidence="sure"]'), "workflow confidence selection");
+              assert(round.answerSelections[beforeIndex]?.confidence === "sure", "workflow: confidence should be saved with the selection");
+              assert(api.state.sessionRecords[beforeIndex]?.confidence === "sure", "workflow: confidence should be saved with the session record");
+            }
+            if (beforeRound === "main" && beforeIndex === 9 && round.totalQuestions > 10) {
+              assert(
+                getText(document.getElementById("feedback-continue-button")) === "Take a Break, Then Continue",
+                "workflow: question 10 should offer a natural break"
+              );
+            }
+            click(document.getElementById("feedback-continue-button"), "workflow feedback continue");
 
           const afterRound = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
           const madeProgress =
@@ -563,6 +620,9 @@
             assert(document.getElementById("difficulty-value").textContent === "Grade 10", "guest grade value should update");
             click(document.querySelector('[data-question-count="20"]'), "20 question button");
             click(document.querySelector('[data-session-preset="math-heavy"]'), "math-heavy preset button");
+            const challengeCheckbox = document.getElementById("speed-challenge-enabled");
+            challengeCheckbox.checked = true;
+            challengeCheckbox.dispatchEvent(new Event("change", { bubbles: true }));
             assert(document.getElementById("hebrew-only").value === "false", "math-heavy preset should not enable Hebrew only");
             submit(startForm, "workflow start submit");
             assertVisibleScreen("quiz-screen", "started session");
@@ -598,7 +658,16 @@
               assert(api.state.viewIndex <= api.state.currentIndex, "workflow: review forward should stay within answered range");
             }
 
-            click(document.getElementById("restart-button"), "restart button");
+            assertVisibleScreen("results-screen", "review forward returns to results");
+            const resultsPracticeButton = document.getElementById("results-practice-button");
+            assert(!resultsPracticeButton.hidden, "workflow: a missed category should offer focused practice");
+            const expectedPracticeCategory = resultsPracticeButton.dataset.practiceCategory;
+            click(resultsPracticeButton, "results focused-practice button");
+            assertVisibleScreen("start-screen", "results focused practice");
+            assert(api.state.sessionPreset === api.SESSION_PRESETS.practice, "workflow: result practice should select Practice preset");
+            assert(api.state.practiceCategory === expectedPracticeCategory, "workflow: result practice should retain the missed category");
+            assert(document.getElementById("question-count").value === "10", "workflow: result practice should use 10 questions");
+
             assertVisibleScreen("start-screen", "restart");
             click(document.getElementById("history-button"), "history button");
             assertVisibleScreen("history-screen", "history");
@@ -619,7 +688,10 @@
       function runFocusedPracticeSmokeTest() {
         const countValues = Array.from(document.querySelectorAll(".question-count-button"))
           .map((button) => Number(button.dataset.questionCount));
-        assert(JSON.stringify(countValues) === JSON.stringify([10, 20, 30]), "practice: question counts should be 10, 20, 30");
+        assert(
+          JSON.stringify(countValues) === JSON.stringify([5, 10, 20, 30]),
+          `practice: question counts should be 5, 10, 20, 30; got ${JSON.stringify(countValues)}`
+        );
 
         click(document.querySelector('[data-user-id="guest"]'), "practice guest user button");
         click(document.querySelector('[data-session-preset="practice"]'), "practice preset button");
@@ -656,6 +728,143 @@
         click(document.querySelector('[data-session-preset="adaptive"]'), "practice return to adaptive");
       }
 
+      function runSessionCheckpointSmokeTest() {
+        withStoragePreserved([SMOKE_ACTIVE_SESSION_STORAGE_KEY], () => {
+          localStorage.removeItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY);
+          const mapEntry = Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
+            ? globalThis.GEOGRAPHY_MAP_COUNTRIES[0]
+            : null;
+          if (mapEntry && typeof globalThis.renderGeographyMapVisualHtml === "function") {
+            const liveMapQuestion = {
+              geographyMapCountry: mapEntry.country,
+              visualHtml: globalThis.renderGeographyMapVisualHtml(mapEntry),
+            };
+            const compactMapQuestion = cloneQuestionForCheckpoint(liveMapQuestion);
+            assert(!compactMapQuestion.visualHtml, "checkpoint: marked country-map HTML should be stripped");
+            assert(Boolean(liveMapQuestion.visualHtml), "checkpoint: compaction must not mutate the live map question");
+            const hydratedMapQuestion = hydrateCheckpointQuestion(compactMapQuestion);
+            assert(Boolean(hydratedMapQuestion.visualHtml), "checkpoint: country-map HTML should be rebuilt before restore");
+          }
+          if (typeof globalThis.renderGeographyContinentMapHtml === "function") {
+            const liveContinentQuestion = {
+              geographyMapVisualKind: "continents",
+              dragMapHtml: globalThis.renderGeographyContinentMapHtml(),
+            };
+            const compactContinentQuestion = cloneQuestionForCheckpoint(liveContinentQuestion);
+            assert(!compactContinentQuestion.dragMapHtml, "checkpoint: marked continent-map HTML should be stripped");
+            assert(Boolean(liveContinentQuestion.dragMapHtml), "checkpoint: continent compaction must not mutate live state");
+            assert(
+              Boolean(hydrateCheckpointQuestion(compactContinentQuestion).dragMapHtml),
+              "checkpoint: continent-map HTML should be rebuilt before restore"
+            );
+          }
+
+          localStorage.setItem(
+            SMOKE_ACTIVE_SESSION_STORAGE_KEY,
+            "x".repeat(ACTIVE_SESSION_CHECKPOINT_MAX_CHARS + 1)
+          );
+          assert(loadActiveSessionCheckpoint() === null, "checkpoint: oversized saved data should be rejected");
+          assert(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) === null, "checkpoint: oversized saved data should be removed");
+
+          showStartScreen();
+          click(document.querySelector('[data-user-id="guest"]'), "checkpoint guest user");
+          click(document.querySelector('[data-session-preset="math-heavy"]'), "checkpoint math preset");
+          click(document.querySelector('[data-question-count="5"]'), "checkpoint five questions");
+          document.getElementById("speed-challenge-enabled").checked = false;
+          document.getElementById("speed-challenge-enabled").dispatchEvent(new Event("change", { bubbles: true }));
+          submit(document.getElementById("start-form"), "checkpoint start");
+          assertVisibleScreen("quiz-screen", "checkpoint session started");
+
+          answerCurrentVisibleQuestion();
+          assert(api.state.awaitingContinue, "checkpoint: answered question should wait for Continue");
+          click(document.querySelector('[data-confidence="sure"]'), "checkpoint confidence");
+          const savedBeforePause = JSON.parse(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) || "null");
+          assert(savedBeforePause?.state?.answerResults?.[0] === true, "checkpoint: answer result should be stored");
+          assert(savedBeforePause?.state?.answerSelections?.[0]?.confidence === "sure", "checkpoint: confidence should be stored");
+          assert(savedBeforePause?.state?.awaitingContinue === true, "checkpoint: feedback phase should be stored");
+          assert(isValidActiveSessionCheckpoint(savedBeforePause), "checkpoint: an app-created checkpoint should validate");
+
+          const assertRejectedCheckpoint = (label, mutate) => {
+            const candidate = structuredClone(savedBeforePause);
+            mutate(candidate);
+            assert(!isValidActiveSessionCheckpoint(candidate), `checkpoint: ${label} should be rejected`);
+          };
+          assertRejectedCheckpoint("invalid save date", (value) => { value.savedAt = "not-a-date"; });
+          assertRejectedCheckpoint("invalid session date", (value) => { value.state.sessionStartedAt = "not-a-date"; });
+          assertRejectedCheckpoint("mismatched question total", (value) => { value.state.totalQuestions += 1; });
+          assertRejectedCheckpoint("out-of-range current index", (value) => { value.state.currentIndex = 999; });
+          assertRejectedCheckpoint("view beyond current index", (value) => { value.state.viewIndex = 1; });
+          assertRejectedCheckpoint("mismatched answered count", (value) => { value.state.answeredCount = 0; });
+          assertRejectedCheckpoint("invalid result value", (value) => { value.state.answerResults[0] = "true"; });
+          assertRejectedCheckpoint("missing answer selection", (value) => { value.state.answerSelections = []; });
+          assertRejectedCheckpoint("non-object record", (value) => { value.state.sessionRecords[0] = null; });
+          assertRejectedCheckpoint("oversized hint array", (value) => {
+            value.state.hintsUsed = Array(value.state.totalQuestions + 1).fill(0);
+          });
+
+          const validSpeedCheckpoint = structuredClone(savedBeforePause);
+          const mainTotal = validSpeedCheckpoint.state.totalQuestions;
+          validSpeedCheckpoint.state.currentRound = "speed";
+          validSpeedCheckpoint.state.currentIndex = mainTotal;
+          validSpeedCheckpoint.state.viewIndex = mainTotal;
+          validSpeedCheckpoint.state.answeredCount = mainTotal;
+          validSpeedCheckpoint.state.correctCount = mainTotal;
+          validSpeedCheckpoint.state.answerResults = Array(mainTotal).fill(true);
+          validSpeedCheckpoint.state.answerSelections = Array.from({ length: mainTotal }, () => ({ value: "answer" }));
+          validSpeedCheckpoint.state.sessionRecords = Array.from({ length: mainTotal }, (_, index) => ({ questionNumber: index + 1 }));
+          validSpeedCheckpoint.state.hintsUsed = [];
+          validSpeedCheckpoint.state.awaitingContinue = false;
+          validSpeedCheckpoint.state.speedRound = {
+            totalQuestions: 1,
+            currentIndex: 0,
+            viewIndex: 0,
+            answeredCount: 0,
+            correctCount: 0,
+            answerResults: [],
+            answerSelections: [],
+            hintsUsed: [],
+            questions: [structuredClone(validSpeedCheckpoint.state.questions[0])],
+            records: [],
+            awaitingContinue: false,
+          };
+          assert(isValidActiveSessionCheckpoint(validSpeedCheckpoint), "checkpoint: a bounded active challenge should validate");
+          const malformedSpeedCheckpoint = structuredClone(validSpeedCheckpoint);
+          malformedSpeedCheckpoint.state.speedRound.questions = [{}];
+          assert(!isValidActiveSessionCheckpoint(malformedSpeedCheckpoint), "checkpoint: malformed challenge questions should be rejected");
+          const oversizedSpeedCheckpoint = structuredClone(validSpeedCheckpoint);
+          oversizedSpeedCheckpoint.state.speedRound.totalQuestions = api.SPEED_ROUND_QUESTION_COUNT + 1;
+          oversizedSpeedCheckpoint.state.speedRound.questions = Array.from(
+            { length: api.SPEED_ROUND_QUESTION_COUNT + 1 },
+            () => structuredClone(validSpeedCheckpoint.state.questions[0])
+          );
+          assert(!isValidActiveSessionCheckpoint(oversizedSpeedCheckpoint), "checkpoint: oversized challenge should be rejected");
+
+          click(document.getElementById("pause-session-button"), "checkpoint save and exit");
+          assertVisibleScreen("start-screen", "checkpoint paused");
+          assert(!document.getElementById("resume-session-panel").hidden, "checkpoint: resume panel should be visible");
+          click(document.getElementById("resume-session-button"), "checkpoint resume");
+          assertVisibleScreen("quiz-screen", "checkpoint resumed");
+          assert(api.state.currentIndex === 0, "checkpoint: resume should return to the answered question feedback");
+          assert(api.state.awaitingContinue === true, "checkpoint: resume should restore the feedback phase");
+          assert(api.state.sessionRecords[0]?.confidence === "sure", "checkpoint: resume should restore confidence metadata");
+          assert(!document.getElementById("feedback-continue-button").hidden, "checkpoint: Continue should be available after resume");
+          click(document.getElementById("feedback-continue-button"), "checkpoint continue after resume");
+          assert(api.state.currentIndex === 1, "checkpoint: Continue after resume should advance exactly once");
+
+          click(document.getElementById("pause-session-button"), "checkpoint pause again");
+          click(document.getElementById("discard-session-button"), "checkpoint discard");
+          assertVisibleScreen("start-screen", "checkpoint discarded");
+          assert(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) === null, "checkpoint: discard should remove saved data");
+          assert(api.state.questions.length === 0 && api.state.totalQuestions === 0, "checkpoint: discard should clear in-memory questions");
+          window.dispatchEvent(new Event("pagehide"));
+          assert(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) === null, "checkpoint: pagehide must not resurrect a discarded session");
+
+          localStorage.setItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY, "{malformed");
+          window.dispatchEvent(new CustomEvent("homework:resume-session"));
+          assert(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) === null, "checkpoint: malformed JSON should be removed safely");
+        });
+      }
+
       function validateScoringHelpers() {
         const cases = [
           ["4,000", 4000, {}],
@@ -668,6 +877,45 @@
           const candidates = globalThis.buildNumericAnswerCandidates(rawValue, question);
           assert(candidates.includes(expected), `numeric parser should accept ${JSON.stringify(rawValue)} as ${expected}`);
         });
+      }
+
+      function validateReadAloudSupport() {
+        const question = {
+          type: "hebrew-listening-choice",
+          difficulty: 2,
+          mode: "choice",
+          questionText: "Listen to the word.",
+          displayText: "",
+          listenText: "שָׁלוֹם",
+          options: ["one", "two", "three", "four"],
+          answerValue: "one",
+          answerLabel: "one",
+          isHebrew: true,
+        };
+        renderSmokeQuestion(question, "read-aloud support");
+        const button = document.getElementById("read-aloud-button");
+        const supported =
+          typeof window.speechSynthesis !== "undefined" &&
+          typeof window.SpeechSynthesisUtterance === "function";
+        assert(button.hidden === !supported, "read-aloud button visibility should match browser support");
+        if (!supported) return;
+
+        const synthesis = window.speechSynthesis;
+        const originalCancel = synthesis.cancel;
+        const originalSpeak = synthesis.speak;
+        let didCancel = false;
+        let spokenUtterance = null;
+        try {
+          synthesis.cancel = () => { didCancel = true; };
+          synthesis.speak = (utterance) => { spokenUtterance = utterance; };
+          click(button, "read-aloud button");
+          assert(didCancel, "read-aloud should stop any prior utterance");
+          assert(spokenUtterance?.text === "שָׁלוֹם", "read-aloud should prefer listenText");
+          assert(spokenUtterance?.lang === "he-IL", "Hebrew read-aloud should use a Hebrew voice locale");
+        } finally {
+          synthesis.cancel = originalCancel;
+          synthesis.speak = originalSpeak;
+        }
       }
 
       function validateQuestion(question, label) {
@@ -1157,6 +1405,7 @@
         validateNutritionLabelReaderCoverage();
         validateLogicSpatialPuzzleCoverage();
         validateScoringHelpers();
+        validateReadAloudSupport();
         validateGeneratedHebrewNikkudCoverage();
         validateHebrewActivityCoverage();
         const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);
@@ -1379,6 +1628,7 @@
         if (speedQuestions.length !== api.SPEED_ROUND_QUESTION_COUNT) failures.push("speed round wrong length");
         speedQuestions.forEach((question, index) => validateQuestion(question, `speed #${index + 1}`));
 
+        runSessionCheckpointSmokeTest();
         runFocusedPracticeSmokeTest();
         runUiWorkflowSmokeTest();
       } catch (error) {

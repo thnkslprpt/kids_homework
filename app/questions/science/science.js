@@ -1,12 +1,24 @@
 // Bundled offline science multiple-choice questions.
 // Curated for kids, with static and generated support through difficulty level 10.
 function scienceQuestion(question, correctAnswer, incorrectAnswers, difficulty, category = "Curated Science") {
+  const normalizedDifficulty = scienceClampDifficulty(difficulty);
+  const contentId = globalThis.HomeworkQuestionUtils?.stableContentId(
+    "science",
+    `${category}|${question}|${correctAnswer}`
+  );
   return {
     question,
     correctAnswer,
     incorrectAnswers,
     category,
-    difficulty,
+    difficulty: normalizedDifficulty,
+    contentId,
+    skill: `science.${String(category).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`,
+    gradeMin: normalizedDifficulty,
+    gradeMax: normalizedDifficulty,
+    explanation: String(correctAnswer),
+    reviewText: String(correctAnswer),
+    reviewStatus: "author-curated",
   };
 }
 
@@ -53,7 +65,7 @@ const SCIENCE_QUESTIONS = [
   scienceQuestion("Which part of a cell controls many cell activities?", "Nucleus", ["Cell wall only", "Chlorophyll", "Stomach"], 4, "Cells"),
   scienceQuestion("What is the main product plants make during photosynthesis?", "Sugar", ["Salt", "Metal", "Smoke"], 5, "Life Science"),
   scienceQuestion("Which gas do plants release during photosynthesis?", "Oxygen", ["Helium", "Neon", "Methane only"], 5, "Life Science"),
-  scienceQuestion("What is density?", "Mass compared with volume", ["Color compared with shape", "Speed compared with sound", "Age compared with size"], 5, "Matter"),
+  scienceQuestion("What is density?", "Mass per unit volume", ["Volume per unit of time", "Weight per unit of distance", "Temperature per unit of mass"], 5, "Matter"),
   scienceQuestion("Which organ system moves oxygen and nutrients through the body?", "Circulatory system", ["Skeletal system", "Digestive system only", "Nervous system only"], 5, "Human Body"),
   scienceQuestion("What is a food web?", "Many connected food chains", ["A list of recipes", "A net used to catch stars", "A kind of plant root"], 5, "Ecosystems"),
   scienceQuestion("What is a black hole?", "A region with gravity so strong light cannot escape", ["A cave under the ocean", "A planet made of ice", "A cloud with no water"], 5, "Earth and Space"),
@@ -109,7 +121,7 @@ const SCIENCE_QUESTIONS = [
   scienceQuestion("What is gene expression?", "Using information in a gene to make a product such as a protein", ["Turning a chromosome into a planet", "Measuring the pH of rain", "Breaking rock into sediment"], 10, "Genetics"),
   scienceQuestion("What is the difference between mitosis and meiosis?", "Mitosis makes body cells; meiosis makes sex cells", ["Mitosis makes rocks; meiosis makes clouds", "Mitosis happens only in stars", "Meiosis makes cells with twice as many chromosomes every time"], 10, "Cells"),
   scienceQuestion("Why can greenhouse gases warm Earth?", "They absorb and re-emit infrared radiation", ["They turn sunlight into sound", "They remove all oxygen", "They make gravity stronger"], 10, "Climate Science"),
-  scienceQuestion("What does specific heat describe?", "How much energy changes a substance's temperature", ["How acidic a liquid is", "How many protons an atom has", "How fast an animal runs"], 10, "Matter"),
+  scienceQuestion("What does specific heat capacity describe?", "Energy needed per unit mass for a one-degree temperature change", ["Temperature change caused by one unit of force", "Energy released by one unit volume during freezing", "Mass gained during a one-degree temperature change"], 10, "Matter"),
   scienceQuestion("What does peer review help scientists do?", "Find problems and improve work before publication", ["Keep all data secret forever", "Avoid testing ideas", "Replace evidence with opinions"], 10, "Science Practices"),
 
   scienceQuestion("Which body part helps you smell?", "Nose", ["Eyes", "Knees", "Fingers"], 1, "Human Body"),
@@ -229,6 +241,13 @@ function createScienceGeneratedEntry(difficulty) {
     options: scienceShuffle([entry.correctAnswer, ...entry.incorrectAnswers]),
     answer: entry.correctAnswer,
     difficulty: level,
+    contentId: entry.contentId,
+    skill: entry.skill,
+    gradeMin: entry.gradeMin,
+    gradeMax: entry.gradeMax,
+    explanation: entry.explanation,
+    reviewText: entry.reviewText,
+    reviewStatus: entry.reviewStatus,
   };
 }
 
@@ -269,7 +288,7 @@ function scienceShuffle(values) {
   if (!questionUtils) {
     return;
   }
-  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+  const { entry, pickGeneratedEntry, randomChoice, shuffle, stableContentId } = questionUtils;
 
   const blueprints = [
     { topic: "science-life-cycles", difficulty: 1, question: "What is the first stage in many plant life cycles?", answer: "Seed", options: ["Seed", "Adult plant", "Fruit", "Dead leaf"] },
@@ -309,11 +328,119 @@ function scienceShuffle(values) {
 
   function createBlueprintEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    return entry(randomChoice(blueprints.filter((item) => item.difficulty <= level)));
+    const exact = blueprints.filter((item) => item.difficulty === level);
+    const blueprint = randomChoice(exact);
+    return entry({
+      ...blueprint,
+      contentId: stableContentId("science", `${blueprint.topic}|${blueprint.question}`),
+      skill: blueprint.topic,
+      gradeMin: level,
+      gradeMax: level,
+      explanation: blueprint.explanation || blueprint.answer,
+      reviewStatus: "author-curated",
+    });
   }
 
+  const chooseAllBlueprints = [
+    {
+      minDifficulty: 1,
+      maxDifficulty: 3,
+      topic: "science-observation-evidence",
+      question: "Choose every statement that is a direct observation.",
+      items: [
+        { summary: "The leaf has three brown spots.", correct: true },
+        { summary: "The water is 18°C.", correct: true },
+        { summary: "The plant is unhappy.", correct: false },
+        { summary: "This is the best leaf.", correct: false },
+      ],
+      explanation: "Direct observations describe something seen or measured; feelings and value judgments are interpretations.",
+    },
+    {
+      minDifficulty: 4,
+      maxDifficulty: 6,
+      topic: "science-energy-transfer",
+      question: "Choose every example in which energy is transferred.",
+      items: [
+        { summary: "Sunlight warms a dark pavement.", correct: true },
+        { summary: "A moving ball makes a resting ball move after a collision.", correct: true },
+        { summary: "A ruler has marks showing centimeters.", correct: false },
+        { summary: "A rock is classified as igneous.", correct: false },
+      ],
+      explanation: "Radiation can transfer energy to pavement, and a collision can transfer kinetic energy between balls.",
+    },
+    {
+      minDifficulty: 7,
+      maxDifficulty: 8,
+      topic: "science-ecosystem-evidence",
+      question: "A pond lost many insect larvae. Choose every result that could support the claim that fish had less food.",
+      items: [
+        { summary: "Fish stomach samples contained fewer insect larvae than before.", correct: true },
+        { summary: "Average fish mass decreased while other measured conditions stayed similar.", correct: true },
+        { summary: "The pond sign was repainted blue.", correct: false },
+        { summary: "One visitor said the pond looked nicer.", correct: false },
+      ],
+      explanation: "Diet samples and a measured change in fish mass bear on food availability; paint color and preference do not.",
+    },
+    {
+      minDifficulty: 9,
+      maxDifficulty: 10,
+      topic: "science-causal-evidence",
+      question: "Choose every feature that would strengthen a causal claim in a plant-growth experiment.",
+      items: [
+        { summary: "Randomly assign similar plants to treatment and control groups.", correct: true },
+        { summary: "Keep light, water, soil, and measurement timing consistent.", correct: true },
+        { summary: "Report only the tallest plant from the treatment group.", correct: false },
+        { summary: "Change fertilizer and pot size at the same time.", correct: false },
+      ],
+      explanation: "Random assignment, a comparison group, and controlled conditions reduce alternative explanations; cherry-picking and confounding weaken the claim.",
+    },
+  ];
+
+  function createScienceChooseAllEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const blueprint = randomChoice(
+      chooseAllBlueprints.filter(
+        (item) => level >= item.minDifficulty && level <= item.maxDifficulty
+      )
+    );
+    const choices = shuffle(blueprint.items.map((item) => ({ ...item })));
+    const answerIndexes = choices
+      .map((item, index) => (item.correct ? index : -1))
+      .filter((index) => index >= 0);
+    const correctChoices = choices.filter((item) => item.correct).map((item) => item.summary);
+    return {
+      mode: "interactive",
+      difficulty: level,
+      question: blueprint.question,
+      answer: correctChoices.join(" | "),
+      answerLabel: correctChoices.join("; "),
+      reviewText: blueprint.explanation,
+      contentId: stableContentId("science", `choose-all|${blueprint.question}`),
+      skill: blueprint.topic,
+      gradeMin: blueprint.minDifficulty,
+      gradeMax: blueprint.maxDifficulty,
+      explanation: blueprint.explanation,
+      reviewStatus: "author-curated",
+      interactive: {
+        type: "science-choose-all",
+        layout: "multi-select",
+        prompt: "Select all correct choices. More than one answer may be correct.",
+        choices: choices.map((item, index) => ({
+          label: String.fromCharCode(65 + index),
+          summary: item.summary,
+        })),
+        answerIndexes,
+        minSelected: answerIndexes.length,
+        maxSelected: answerIndexes.length,
+        selectedLabel: "Selected evidence",
+        checkLabel: "Check Evidence",
+      },
+    };
+  }
+
+  globalThis.createScienceChooseAllGeneratedEntry = createScienceChooseAllEntry;
   globalThis.createScienceTopicGeneratedEntry = (difficulty) =>
-    pickGeneratedEntry([createBlueprintEntry], difficulty);
+    pickGeneratedEntry([createBlueprintEntry, createBlueprintEntry, createScienceChooseAllEntry], difficulty);
 })();
 
 globalThis.HomeworkQuestions?.register({

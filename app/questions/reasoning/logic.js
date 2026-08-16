@@ -420,12 +420,13 @@ function logicShuffle(values) {
     { topic: "thinking-risk-reward", difficulty: 6, question: "Which option has a clear reward but also a risk?", answer: "Taking a shortcut may save time but might be unsafe", options: ["Taking a shortcut may save time but might be unsafe", "Wearing a helmet makes biking safer", "Reading directions helps avoid mistakes", "Checking work can catch errors"] },
     { topic: "thinking-evidence-checks", difficulty: 5, question: "What would change your mind about a claim that a study app helps?", answer: "A fair comparison showing no improvement", options: ["A fair comparison showing no improvement", "The app has a bright logo", "One friend likes the color", "The name sounds smart"] },
     { topic: "thinking-evidence-checks", difficulty: 7, question: "Which evidence would most strongly test a cause-and-effect claim?", answer: "A controlled comparison changing only the suspected cause", options: ["A controlled comparison changing only the suspected cause", "A funny story from one person", "A guess made before data", "A picture without measurements"] },
+    { topic: "thinking-debugging", difficulty: 9, question: "A rule works for every test except an empty list. What should you do next?", answer: "Trace the empty-list case and add a defined stopping rule", options: ["Trace the empty-list case and add a defined stopping rule", "Delete the successful tests", "Assume empty lists can never occur", "Add unrelated steps until the output changes"] },
     { topic: "thinking-evidence-checks", difficulty: 10, question: "Which question best checks whether you should change your mind?", answer: "What evidence would show my current idea is wrong?", options: ["What evidence would show my current idea is wrong?", "Who agrees with me already?", "Can I ignore the strongest evidence?", "Which answer sounds nicest?"] },
   ];
 
   function createBlueprintEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    const blueprint = randomChoice(blueprints.filter((item) => item.difficulty <= level));
+    const blueprint = randomChoice(blueprints.filter((item) => item.difficulty === level));
     return typeof blueprint.create === "function" ? blueprint.create() : entry(blueprint);
   }
 

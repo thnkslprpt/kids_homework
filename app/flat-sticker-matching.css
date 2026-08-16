@@ -4,7 +4,7 @@
  */
 
 .theme-pastel-play .drag-board.matching {
-  overflow: hidden;
+  overflow: visible;
   border: 1px solid rgba(185, 126, 193, 0.18);
   background:
     radial-gradient(circle at 8% 12%, rgba(255, 219, 239, 0.25), transparent 25%),
@@ -269,9 +269,9 @@
   }
 
   .theme-pastel-play .matching-anchor {
-    width: 34px;
-    height: 34px;
-    min-width: 34px;
-    min-height: 34px;
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }

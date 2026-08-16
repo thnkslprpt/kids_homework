@@ -1,30 +1,10 @@
 #!/usr/bin/env node
 
 const vm = require("node:vm");
-const { loadAppContext, textKey, validateQuestion } = require("./qa_question_generation.js");
+const { categories, loadAppContext, textKey, validateQuestion } = require("./qa_question_generation.js");
 
 const samplesPerGrade = Number.parseInt(process.argv[2] || "60", 10);
-const targetedCategories = [
-  "math",
-  "addition-subtraction",
-  "multiplication-division",
-  "place-value-decimals",
-  "geometry",
-  "patterns-sequences",
-  "coordinates-functions",
-  "time",
-  "statistics",
-  "negative-numbers",
-  "percentages",
-  "visual-math",
-  "charts-and-graphs",
-  "probability",
-  "fractions",
-  "fractions-and-ratios",
-  "algebra",
-  "measurement",
-  "estimation",
-];
+const targetedCategories = [...categories];
 
 const forbiddenRules = {
   math: {

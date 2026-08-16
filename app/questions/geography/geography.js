@@ -9,7 +9,7 @@ const GEOGRAPHY_QUESTIONS = (() => {
     { country: "Indonesia", capital: "Jakarta", region: "Southeast Asia", rank: 4 },
     { country: "Pakistan", capital: "Islamabad", region: "South Asia", rank: 5 },
     { country: "Nigeria", capital: "Abuja", region: "Africa", rank: 6 },
-    { country: "Brazil", capital: "Brasilia", region: "South America", rank: 7 },
+    { country: "Brazil", capital: "Brasília", region: "South America", rank: 7 },
     { country: "Bangladesh", capital: "Dhaka", region: "South Asia", rank: 8 },
     { country: "Russia", capital: "Moscow", region: "Europe", rank: 9 },
     { country: "Ethiopia", capital: "Addis Ababa", region: "Africa", rank: 10 },
@@ -26,11 +26,11 @@ const GEOGRAPHY_QUESTIONS = (() => {
     { country: "United Kingdom", capital: "London", region: "Europe", rank: 21 },
     { country: "Tanzania", capital: "Dodoma", region: "Africa", rank: 22 },
     { country: "France", capital: "Paris", region: "Europe", rank: 23 },
-    { country: "South Africa", capital: "Pretoria", region: "Africa", rank: 24 },
+    { country: "South Africa", capital: "Pretoria", capitalKind: "executive", region: "Africa", rank: 24 },
     { country: "Italy", capital: "Rome", region: "Europe", rank: 25 },
     { country: "Kenya", capital: "Nairobi", region: "Africa", rank: 26 },
     { country: "Myanmar", capital: "Naypyidaw", region: "Southeast Asia", rank: 27 },
-    { country: "Colombia", capital: "Bogota", region: "South America", rank: 28 },
+    { country: "Colombia", capital: "Bogotá", region: "South America", rank: 28 },
     { country: "South Korea", capital: "Seoul", region: "East Asia", rank: 29 },
     { country: "Sudan", capital: "Khartoum", region: "Africa", rank: 30 },
     { country: "Uganda", capital: "Kampala", region: "Africa", rank: 31 },
@@ -52,7 +52,7 @@ const GEOGRAPHY_QUESTIONS = (() => {
     { country: "Peru", capital: "Lima", region: "South America", rank: 47 },
     { country: "Saudi Arabia", capital: "Riyadh", region: "Middle East", rank: 48 },
     { country: "Madagascar", capital: "Antananarivo", region: "Africa", rank: 49 },
-    { country: "Cote d'Ivoire", capital: "Yamoussoukro", region: "Africa", rank: 50 },
+    { country: "Côte d’Ivoire", capital: "Yamoussoukro", region: "Africa", rank: 50 },
   ];
 
   function clampDifficulty(value) {
@@ -131,9 +131,12 @@ const GEOGRAPHY_QUESTIONS = (() => {
     const direction = forcedDirection || pickCapitalDirection(level);
     const entry = forcedEntry || pickCapitalEntry(level, direction);
     const answer = direction === "forward" ? entry.capital : entry.country;
-    const question =
-      direction === "forward"
-        ? `What is the capital city of ${entry.country}?`
+    const question = direction === "forward"
+      ? entry.capitalKind === "executive"
+        ? `Which city is the executive capital of ${entry.country}?`
+        : `What is the capital city of ${entry.country}?`
+      : entry.capitalKind === "executive"
+        ? `${entry.capital} is the executive capital of which country?`
         : `${entry.capital} is the capital city of which country?`;
     const preferredPool =
       direction === "forward"
@@ -205,8 +208,8 @@ const GEOGRAPHY_QUESTIONS = (() => {
     ),
     makeStaticCapital(
       "What is the capital city of Brazil?",
-      "Brasilia",
-      ["Brasilia", "Bogota", "Buenos Aires", "Lima"],
+      "Brasília",
+      ["Brasília", "Bogotá", "Buenos Aires", "Lima"],
       3
     ),
     makeStaticCapital(
@@ -330,7 +333,8 @@ if (typeof module !== "undefined" && module.exports) {
 
   function createBlueprintEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    const blueprint = randomChoice(blueprints.filter((item) => item.difficulty <= level));
+    const exact = blueprints.filter((item) => item.difficulty === level);
+    const blueprint = randomChoice(exact);
     return typeof blueprint.create === "function" ? blueprint.create() : entry(blueprint);
   }
 

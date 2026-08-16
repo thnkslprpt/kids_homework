@@ -15,6 +15,16 @@ function nutritionQuestion(question, options, answer, difficulty, extra = {}) {
     options: normalizedOptions,
     answer: normalizedAnswer,
     difficulty: normalizedDifficulty,
+    contentId: extra.contentId || globalThis.HomeworkQuestionUtils?.stableContentId(
+      "nutrition",
+      `${normalizedDifficulty}|${question}|${normalizedAnswer}`
+    ),
+    skill: extra.skill || "nutrition.food-label-and-balanced-choice",
+    gradeMin: extra.gradeMin ?? normalizedDifficulty,
+    gradeMax: extra.gradeMax ?? normalizedDifficulty,
+    explanation: extra.explanation || extra.reviewText || normalizedAnswer,
+    reviewText: extra.reviewText || extra.explanation || normalizedAnswer,
+    reviewStatus: extra.reviewStatus || "author-curated",
     ...extra,
   };
 }
@@ -414,22 +424,22 @@ const NUTRITION_QUESTIONS = [
     "Which lunch includes a vegetable, a protein, and a grain?",
     [
       "Turkey sandwich with lettuce and whole wheat bread",
-      "Only cookies",
-      "Only soda",
-      "Only plain candy",
+      "Lettuce and tomato salad with no protein or grain",
+      "Chicken and carrot sticks with no grain food",
+      "Cheese on whole wheat bread with no vegetable",
     ],
     "Turkey sandwich with lettuce and whole wheat bread",
     4
   ),
   nutritionQuestion(
-    "Which label clue often means a food is less processed?",
+    "Which label clue can help you understand how a food was made, without proving by itself that the food is healthier?",
     [
-      "A shorter ingredient list with familiar foods",
-      "The brightest package",
-      "The biggest cartoon picture",
-      "The longest brand name",
+      "The ingredients and their order by weight",
+      "The brightness of the package",
+      "The size of the cartoon picture",
+      "The length of the brand name",
     ],
-    "A shorter ingredient list with familiar foods",
+    "The ingredients and their order by weight",
     4
   ),
 
@@ -461,7 +471,12 @@ const NUTRITION_QUESTIONS = [
   ),
   nutritionQuestion(
     "Which lunch includes fruit, a vegetable, a grain, and protein?",
-    ["Chicken wrap with lettuce and apple slices", "Only cookies", "Only soda", "Only plain chips"],
+    [
+      "Chicken wrap with lettuce and apple slices",
+      "Turkey on whole wheat bread with no fruit or vegetable",
+      "Apple slices and cucumber sticks with no grain or protein",
+      "Rice with broccoli and orange slices but no protein food",
+    ],
     "Chicken wrap with lettuce and apple slices",
     4
   ),
@@ -478,8 +493,8 @@ const NUTRITION_QUESTIONS = [
     4
   ),
   nutritionQuestion(
-    "Which ingredient list sounds least processed?",
-    ["Oats, raisins, cinnamon", "Sugar, syrup, dye, candy", "Soda flavor, dye, bubbles", "Frosting, sprinkles, syrup"],
+    "Which ingredient list contains only recognizable whole-food ingredients?",
+    ["Oats, raisins, cinnamon", "Sugar, syrup, dye, candy pieces", "Carbonated water, flavoring, dye", "Frosting, sprinkles, syrup"],
     "Oats, raisins, cinnamon",
     4
   ),
@@ -978,7 +993,7 @@ const NUTRITION_QUESTIONS = [
     "A package says \"low fat\" but has 22 grams of added sugar per serving. What should you think?",
     [
       "Check the whole label, because one claim does not tell everything",
-      "It must be the healthiest food",
+      "The low-fat claim guarantees that every other value on the label is ideal",
       "Added sugar no longer matters",
       "The serving size is always one bite",
     ],
@@ -990,7 +1005,7 @@ const NUTRITION_QUESTIONS = [
     [
       "This cereal has more fiber and less added sugar per serving",
       "This box looks exciting",
-      "This package is taller",
+      "The cereal with the taller box must contain more fiber in each serving",
       "This brand name is easier to say",
     ],
     "This cereal has more fiber and less added sugar per serving",
@@ -1136,7 +1151,7 @@ const NUTRITION_QUESTIONS = [
     "A smoothie has fruit, yogurt, and no added sugar. A soda has 39 grams of added sugar and no protein. Which evidence supports choosing the smoothie more often?",
     [
       "It provides fruit and protein with no added sugar",
-      "It has a shorter straw",
+      "The smoothie is colder and comes with a shorter drinking straw",
       "It is colder",
       "It has fewer bubbles",
     ],
@@ -1147,7 +1162,7 @@ const NUTRITION_QUESTIONS = [
     "Which statement shows the best nutrition reasoning?",
     [
       "No single food decides health; patterns and portions matter over time",
-      "One cookie ruins all healthy eating forever",
+      "One sweet snack permanently cancels every nutritious choice made later",
       "Vegetables are only healthy if eaten alone",
       "A food is healthy only if the package is green",
     ],
@@ -1158,7 +1173,7 @@ const NUTRITION_QUESTIONS = [
     "A child ate a salty lunch. Which dinner choice best balances the day?",
     [
       "Vegetable soup with beans, fruit, and water",
-      "Extra salty chips and soda",
+      "Extra salty chips with soda and no fruit or vegetables",
       "Only candy",
       "Nothing but crackers",
     ],
@@ -1171,7 +1186,7 @@ const NUTRITION_QUESTIONS = [
       "A sugary cereal says \"part of a complete breakfast\"",
       "A carrot is orange",
       "A plain egg comes in a shell",
-      "A cucumber contains water",
+      "A cucumber package says it contains water and has green skin",
     ],
     "A sugary cereal says \"part of a complete breakfast\"",
     10
@@ -1290,6 +1305,9 @@ NUTRITION_QUESTIONS.push(
     5
   )
 );
+const NUTRITION_ACTIVE_QUESTIONS =
+  globalThis.HomeworkQuestionUtils?.filterAnswerLengthCues(NUTRITION_QUESTIONS, 15) ||
+  NUTRITION_QUESTIONS;
 
 function createNutritionGeneratedEntry(difficulty) {
   const level = nutritionClampDifficulty(difficulty);
@@ -1356,10 +1374,20 @@ function createNutritionGeneratedEntry(difficulty) {
     ],
   };
 
-  return {
-    ...nutritionPick(generatorsByLevel[level])(),
-    difficulty: level,
-  };
+  let fallback = null;
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const candidate = {
+      ...nutritionPick(generatorsByLevel[level])(),
+      difficulty: level,
+      gradeMin: level,
+      gradeMax: level,
+    };
+    fallback ||= candidate;
+    if (!globalThis.HomeworkQuestionUtils?.hasAnswerLengthCue(candidate.options, candidate.answer, 15)) {
+      return candidate;
+    }
+  }
+  return fallback;
 }
 
 function nutritionCreateProteinQuestion() {
@@ -2115,7 +2143,7 @@ function nutritionShuffle(values) {
 globalThis.HomeworkQuestions?.register({
   id: "nutrition",
   label: "Nutrition",
-  getStaticQuestions: () => NUTRITION_QUESTIONS,
+  getStaticQuestions: () => NUTRITION_ACTIVE_QUESTIONS,
   generatedEntryFactory: createNutritionGeneratedEntry,
   supplementalGeneratedEntryFactory: globalThis.createNutritionPracticalGeneratedEntry,
   generatedShare: 0.55,

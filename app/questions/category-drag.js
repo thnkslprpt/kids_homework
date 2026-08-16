@@ -109,6 +109,24 @@
     return picked;
   }
 
+  function normalizeContentMetadata(metadata, difficulty) {
+    const source = metadata?.source;
+    return {
+      contentId: String(metadata?.contentId || ""),
+      skill: String(metadata?.skill || ""),
+      gradeMin: clampDifficulty(metadata?.gradeMin ?? difficulty),
+      gradeMax: clampDifficulty(metadata?.gradeMax ?? difficulty),
+      explanation: String(metadata?.explanation || ""),
+      hints: Array.isArray(metadata?.hints) ? metadata.hints.map(String).filter(Boolean) : [],
+      comparisonMode: metadata?.comparisonMode === "exact-text" ? "exact-text" : "semantic",
+      source: source && typeof source === "object" ? { ...source } : source ? String(source) : null,
+      sourceDate: String(metadata?.sourceDate || ""),
+      reviewedAt: String(metadata?.reviewedAt || ""),
+      reviewStatus: String(metadata?.reviewStatus || ""),
+      locale: String(metadata?.locale || ""),
+    };
+  }
+
   function createMatchingDragQuestion({
     type,
     difficulty,
@@ -118,6 +136,7 @@
     leftItems,
     rightItems,
     reviewText = "",
+    ...contentMetadata
   }) {
     const normalizedLeftItems = Array.isArray(leftItems)
       ? leftItems
@@ -164,6 +183,7 @@
       answerValue: answerTokens.join(" | "),
       answerLabel,
       isHebrew: false,
+      ...normalizeContentMetadata(contentMetadata, difficulty),
     };
   }
 
@@ -177,6 +197,7 @@
     choices,
     reviewText = "",
     visualSummary = "",
+    ...contentMetadata
   }) {
     const normalizedParts = Array.isArray(templateParts) ? templateParts.map((part) => String(part)) : [];
     const normalizedAnswer = Array.isArray(answer) ? answer.map((token) => String(token)) : [];
@@ -210,6 +231,7 @@
       answerValue: normalizedAnswer.join(" | "),
       answerLabel: buildFilledText(normalizedParts, normalizedAnswer),
       isHebrew: false,
+      ...normalizeContentMetadata(contentMetadata, difficulty),
     };
   }
 
@@ -230,6 +252,7 @@
     dragLineEndLabel = "",
     dragShowTargetLabels = true,
     dragCompassCenterLabel = "Compass",
+    ...contentMetadata
   }) {
     const normalizedTargets = Array.isArray(targets)
       ? targets.map((target) => ({
@@ -274,10 +297,11 @@
       dragLineEndLabel,
       dragShowTargetLabels,
       dragCompassCenterLabel,
-      reviewText,
+      reviewText: reviewText || answerLabel || buildTargetsAnswerLabel(normalizedTargets, normalizedAnswer),
       answerValue: normalizedAnswer.join(" | "),
       answerLabel: answerLabel || buildTargetsAnswerLabel(normalizedTargets, normalizedAnswer),
       isHebrew: false,
+      ...normalizeContentMetadata(contentMetadata, difficulty),
     };
   }
 
@@ -290,6 +314,7 @@
     buckets,
     reviewText = "",
     dragPlaceholderText = "",
+    ...contentMetadata
   }) {
     const normalizedBuckets = Array.isArray(buckets)
       ? buckets
@@ -326,10 +351,11 @@
       dragChoices: buildChoiceTokens(type, difficulty, flatAnswers),
       dragAnswerTokens: flatAnswers,
       dragPlaceholderText,
-      reviewText,
+      reviewText: reviewText || buildBucketAnswerLabel(normalizedBuckets),
       answerValue: flatAnswers.join(" | "),
       answerLabel: buildBucketAnswerLabel(normalizedBuckets),
       isHebrew: false,
+      ...normalizeContentMetadata(contentMetadata, difficulty),
     };
   }
 
@@ -1101,6 +1127,78 @@
         { label: "Decomposer", answers: takeRandom(["mushroom", "bacteria", "earthworm", "mold"], difficulty >= 9 ? 3 : 2) },
       ],
     });
+  }
+
+  function createHealthDecisionSequenceQuestion(type, difficulty) {
+    const scenarios = [
+      {
+        minDifficulty: 1,
+        maxDifficulty: 4,
+        id: "small-scrape-sequence",
+        prompt: "Small scrape: put the safe response in order.",
+        steps: [
+          "Stop playing and move to a safe place",
+          "Tell a trusted adult",
+          "Rinse the scrape gently with clean water",
+          "Use a clean bandage if the adult says it is appropriate",
+        ],
+      },
+      {
+        minDifficulty: 5,
+        maxDifficulty: 7,
+        id: "possible-poison-sequence",
+        prompt: "Possible poisoning: put the help-seeking response in order.",
+        steps: [
+          "Move away from the substance without touching more of it",
+          "Tell a trusted adult immediately",
+          "Keep the container or label nearby without handling spilled material",
+          "The adult calls the poison center, or emergency services for serious symptoms",
+        ],
+      },
+      {
+        minDifficulty: 8,
+        maxDifficulty: 10,
+        id: "fire-evacuation-sequence",
+        prompt: "Smoke alarm and visible smoke: put the safest priorities in order.",
+        steps: [
+          "Use the nearest safe exit without collecting belongings",
+          "Go to the outside meeting place",
+          "Call emergency help from safety",
+          "Stay outside and follow the dispatcher's instructions",
+        ],
+      },
+    ];
+    const scenario = chooseByLevel(scenarios, difficulty);
+    const result = createTargetsDragQuestion({
+      type,
+      difficulty,
+      questionText: scenario.prompt,
+      extraText: "This activity practices recognition and help-seeking; follow current professional instructions in a real emergency.",
+      targetArrangement: "rows",
+      targets: scenario.steps.map((_, index) => ({
+        text: `Step ${index + 1}`,
+        reviewLabel: `Step ${index + 1}`,
+      })),
+      answer: scenario.steps,
+      choices: scenario.steps,
+      dragPlaceholderText: "Safe step",
+    });
+    return result
+      ? {
+          ...result,
+          contentId: `health.sequence.${scenario.id}`,
+          skill: "health.emergency.safe-sequencing",
+          gradeMin: difficulty,
+          gradeMax: difficulty,
+          explanation: "Protect yourself first, get a trusted adult or trained help, and do not delay evacuation.",
+          source: {
+            title: "NHS first aid guidance",
+            url: "https://www.nhs.uk/conditions/first-aid/",
+            locale: "General",
+          },
+          reviewedAt: "2026-08-12",
+        }
+      : null;
   }
 
   function createNutritionDragQuestion(category, difficulty) {
@@ -2126,6 +2224,8 @@
         return createFinancialLiteracyDragQuestion(category, level);
       case "nutrition":
         return createNutritionDragQuestion(category, level);
+      case "health-and-first-aid":
+        return createHealthDecisionSequenceQuestion(category, level);
       case "household-problem-solving":
         return createHouseholdProblemSolvingDragQuestion(category, level);
       case "estimation":

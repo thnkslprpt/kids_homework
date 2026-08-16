@@ -32,6 +32,70 @@
     return Array.from(new Set(values.map((value) => String(value).trim()).filter(Boolean)));
   }
 
+  function stableContentId(scope, templateKey) {
+    const normalizedScope = String(scope || "content")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "content";
+    const normalizedKey = String(templateKey || "item").trim().toLowerCase().replace(/\s+/g, " ");
+    let hash = 2166136261;
+    for (let index = 0; index < normalizedKey.length; index += 1) {
+      hash ^= normalizedKey.charCodeAt(index);
+      hash = Math.imul(hash, 16777619);
+    }
+    const slug = normalizedKey
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 42) || "item";
+    return `${normalizedScope}.${slug}.${(hash >>> 0).toString(36)}`;
+  }
+
+  function selectGradeBand(items, difficulty, maxDistance = 1) {
+    const level = clampDifficulty(difficulty);
+    const entries = Array.isArray(items) ? items.filter(Boolean) : [];
+    const withinRange = entries.filter((item) => {
+      const min = clampDifficulty(item?.gradeMin ?? item?.difficulty);
+      const max = clampDifficulty(item?.gradeMax ?? item?.difficulty);
+      return Math.min(min, max) <= level && level <= Math.max(min, max);
+    });
+    if (withinRange.length) return withinRange;
+
+    const distanceLimit = Math.max(0, Number.parseInt(maxDistance, 10) || 0);
+    let closestDistance = Number.POSITIVE_INFINITY;
+    const closest = [];
+    for (const item of entries) {
+      const itemLevel = clampDifficulty(item?.difficulty ?? item?.gradeMin);
+      const distance = Math.abs(itemLevel - level);
+      if (distance > distanceLimit || distance > closestDistance) continue;
+      if (distance < closestDistance) {
+        closest.length = 0;
+        closestDistance = distance;
+      }
+      closest.push(item);
+    }
+    return closest;
+  }
+
+  function hasAnswerLengthCue(options, answer, minimumGap = 15) {
+    const normalizedAnswer = String(answer ?? "").trim();
+    const distractorLengths = (Array.isArray(options) ? options : [])
+      .map((option) => String(option ?? "").trim())
+      .filter((option) => option && option !== normalizedAnswer)
+      .map((option) => option.length);
+    const gap = Math.max(1, Number.parseInt(minimumGap, 10) || 15);
+    return Boolean(
+      normalizedAnswer &&
+      distractorLengths.length &&
+      distractorLengths.every((length) => normalizedAnswer.length >= length + gap)
+    );
+  }
+
+  function filterAnswerLengthCues(entries, minimumGap = 15) {
+    return (Array.isArray(entries) ? entries : []).filter(
+      (item) => !hasAnswerLengthCue(item?.options, item?.answer, minimumGap)
+    );
+  }
+
   function gcd(left, right) {
     let a = Math.abs(left);
     let b = Math.abs(right);
@@ -220,6 +284,19 @@
       reviewText = "",
       extraText = "",
       topic = "",
+      contentId = "",
+      skill = "",
+      gradeMin = difficulty,
+      gradeMax = difficulty,
+      explanation = reviewText,
+      hints = [],
+      distractorRationales = {},
+      comparisonMode = "semantic",
+      source = null,
+      sourceDate = "",
+      reviewedAt = "",
+      reviewStatus = "",
+      locale = "",
     } = config;
     const normalizedOptions = unique(options);
     const normalizedAnswer = String(answer).trim();
@@ -242,6 +319,22 @@
       reviewText,
       extraText,
       topic,
+      contentId: String(contentId || ""),
+      skill: String(skill || topic || ""),
+      gradeMin: clampDifficulty(gradeMin),
+      gradeMax: clampDifficulty(gradeMax),
+      explanation: String(explanation || reviewText || ""),
+      hints: Array.isArray(hints) ? hints.map(String).filter(Boolean) : [],
+      distractorRationales:
+        distractorRationales && typeof distractorRationales === "object"
+          ? { ...distractorRationales }
+          : {},
+      comparisonMode: comparisonMode === "exact-text" ? "exact-text" : "semantic",
+      source: source && typeof source === "object" ? { ...source } : source ? String(source) : null,
+      sourceDate: String(sourceDate || ""),
+      reviewedAt: String(reviewedAt || ""),
+      reviewStatus: String(reviewStatus || ""),
+      locale: String(locale || ""),
     };
   }
 
@@ -310,8 +403,10 @@
     clampDifficulty,
     entry,
     fractionText,
+    filterAnswerLengthCues,
     gcd,
     lcm,
+    hasAnswerLengthCue,
     numberOptions,
     pickGeneratedEntry,
     randomChoice,
@@ -319,7 +414,9 @@
     renderLineGraph,
     renderPieTable,
     renderTable,
+    selectGradeBand,
     shuffle,
+    stableContentId,
     unique,
   };
 

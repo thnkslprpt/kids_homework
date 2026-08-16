@@ -5,7 +5,15 @@
       return;
     }
 
-    feedback.textContent = message;
+    feedback.replaceChildren();
+    const text = document.createElement("span");
+    text.textContent = `${message} `;
+    const reload = document.createElement("button");
+    reload.type = "button";
+    reload.className = "secondary-button startup-reload-button";
+    reload.textContent = "Reload app";
+    reload.addEventListener("click", () => window.location.reload());
+    feedback.append(text, reload);
     feedback.classList.add("error");
   }
 

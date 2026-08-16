@@ -292,8 +292,8 @@ body.theme-pastel-play::after {
 
 .theme-pastel-play .question-count-button.active {
   color: #ffffff;
-  border-color: #f05b9d;
-  background: linear-gradient(135deg, #ff82b5 0%, #ef589d 100%);
+  border-color: #9d275f;
+  background: linear-gradient(135deg, #b83276 0%, #922052 100%);
   box-shadow: 0 8px 20px rgba(240, 91, 157, 0.25);
 }
 
@@ -348,8 +348,8 @@ body.theme-pastel-play::after {
 
 .theme-pastel-play .builder-preset-button.active:nth-child(1) {
   color: #ffffff;
-  border-color: var(--pastel-teal);
-  background: linear-gradient(135deg, #57c8c0, #319d98);
+  border-color: #17605d;
+  background: linear-gradient(135deg, #237f7a, #175e5b);
   box-shadow: 0 10px 24px rgba(57, 170, 164, 0.25);
 }
 
@@ -362,15 +362,15 @@ body.theme-pastel-play::after {
 
 .theme-pastel-play .builder-preset-button.active:nth-child(3) {
   color: #ffffff;
-  border-color: var(--pastel-purple);
-  background: linear-gradient(135deg, #a47be5, #7c55c6);
+  border-color: #57349a;
+  background: linear-gradient(135deg, #7045b5, #553090);
   box-shadow: 0 10px 24px rgba(141, 98, 215, 0.24);
 }
 
 .theme-pastel-play .builder-preset-button.active:nth-child(4) {
   color: #ffffff;
-  border-color: #ec4f96;
-  background: linear-gradient(135deg, #ff79b2, #e64a91);
+  border-color: #9d275f;
+  background: linear-gradient(135deg, #b83276, #922052);
   box-shadow: 0 10px 24px rgba(236, 79, 150, 0.24);
 }
 
@@ -380,7 +380,7 @@ body.theme-pastel-play::after {
 
 .theme-pastel-play .primary-button {
   min-height: 52px;
-  background: linear-gradient(135deg, #ff76ad 0%, #ec4f96 100%);
+  background: linear-gradient(135deg, #b83276 0%, #922052 100%);
   box-shadow: 0 12px 25px rgba(240, 91, 157, 0.24);
 }
 
@@ -392,7 +392,7 @@ body.theme-pastel-play::after {
 }
 
 .theme-pastel-play .primary-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #f06aa3 0%, #d84085 100%);
+  background: linear-gradient(135deg, #a72b69 0%, #7f1945 100%);
   box-shadow: 0 15px 30px rgba(222, 64, 135, 0.28);
 }
 
@@ -693,7 +693,7 @@ body.theme-pastel-play::after {
 .theme-pastel-play button:focus-visible,
 .theme-pastel-play input:focus-visible,
 .theme-pastel-play [tabindex]:focus-visible {
-  outline: 4px solid rgba(93, 142, 232, 0.28);
+  outline: 3px solid #174f84;
   outline-offset: 3px;
 }
 

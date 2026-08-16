@@ -4047,9 +4047,88 @@ const RAW_HEBREW_EXPANDED_WORDS = Array.isArray(
   ? HEBREW_EXPANDED_WORDS
   : [];
 
+// The expanded list comes from a news-heavy frequency corpus and machine
+// pointing, so frequency rank is not a child curriculum. Only the exact pairs
+// below were reviewed for meaning, pointing, usefulness, and age suitability.
+// Their grades are assigned by instructional role: connectors and concrete
+// academic words first, then evidence/research vocabulary and abstract terms.
+const HEBREW_EXPANDED_REVIEWED_SPECS = [
+  // Grade 6: connect ideas and discuss ordinary schoolwork.
+  { hebrew: "לְמָשָׁל", english: "For example", childGloss: "Introduces an example", difficulty: 6 },
+  { hebrew: "לַמְרוֹת", english: "Despite", difficulty: 6 },
+  { hebrew: "בְּנוֹסָף", english: "In addition", childGloss: "Adds another point", difficulty: 6 },
+  { hebrew: "כְּתוֹצָאָה", english: "As a result", childGloss: "Shows a result", difficulty: 6 },
+  { hebrew: "תֹּכֶן", english: "Content", difficulty: 6 },
+  { hebrew: "חֳמָרִים", english: "Materials", difficulty: 6 },
+  { hebrew: "שִׁמּוּשׁ", english: "Use", difficulty: 6 },
+  { hebrew: "עֵרֶךְ", english: "Value", difficulty: 6 },
+
+  // Grade 7: explain a process and identify information sources.
+  { hebrew: "מֵידָע", english: "Information", difficulty: 7 },
+  { hebrew: "מְקוֹרוֹת", english: "Sources", difficulty: 7 },
+  { hebrew: "מַשְׁמָעוּת", english: "Meaning", difficulty: 7 },
+  { hebrew: "תַּהֲלִיךְ", english: "Process", difficulty: 7 },
+  { hebrew: "הַנְדָּסָה", english: "Engineering", difficulty: 7 },
+  { hebrew: "חֲשִׁיבוּת", english: "Importance", difficulty: 7 },
+  { hebrew: "שִׁיטוֹת", english: "Methods", difficulty: 7 },
+  { hebrew: "נוֹשֵׂא", english: "Subject", difficulty: 7 },
+
+  // Grade 8: distinguish fact, description, expression, and possibility.
+  { hebrew: "עֻבְדָּה", english: "Fact", difficulty: 8 },
+  { hebrew: "אֶפְשָׁרוּת", english: "Possibility", difficulty: 8 },
+  { hebrew: "בִּטּוּי", english: "Expression", difficulty: 8 },
+  { hebrew: "תֵּאוּר", english: "Description", difficulty: 8 },
+  { hebrew: "פִּתּוּחַ", english: "Development", difficulty: 8 },
+  { hebrew: "לְגַלּוֹת", english: "To discover", childGloss: "Discover or find out", difficulty: 8 },
+  { hebrew: "אֱמֶת", english: "Truth", difficulty: 8 },
+  { hebrew: "סֵמֶל", english: "Symbol", difficulty: 8 },
+
+  // Grade 9: reason about scientific and general principles.
+  { hebrew: "שִׁיטָה", english: "Method", difficulty: 9 },
+  { hebrew: "עֶקְרוֹנוֹת", english: "Principles", difficulty: 9 },
+  { hebrew: "עִקָּרוֹן", english: "Principle", difficulty: 9 },
+  { hebrew: "לְהוֹכִיחַ", english: "To prove", childGloss: "Prove with evidence", difficulty: 9 },
+  { hebrew: "תּוֹפָעָה", english: "Phenomenon", difficulty: 9 },
+  { hebrew: "שִׁמּוּר", english: "Conservation", difficulty: 9 },
+  { hebrew: "אֵלֶקְטְרוֹנִים", english: "Electrons", difficulty: 9 },
+  { hebrew: "מוֹלֵקוּלוֹת", english: "Molecules", difficulty: 9 },
+
+  // Grade 10: compare, qualify, and explain claims precisely.
+  { hebrew: "הַשְׁוָאָה", english: "Comparison", difficulty: 10 },
+  { hebrew: "בְּדִיקָה", english: "Examination", difficulty: 10 },
+  { hebrew: "גִּרְסָה", english: "Version", difficulty: 10 },
+  { hebrew: "לְהַסְבִּיר", english: "To explain", childGloss: "Explain clearly", difficulty: 10 },
+  { hebrew: "הִתְבָּרֵר", english: "Became clear", difficulty: 10 },
+  { hebrew: "דַּעֲתִי", english: "My opinion", difficulty: 10 },
+  { hebrew: "זֵהֶה", english: "Identical", difficulty: 10 },
+  { hebrew: "לְהִשְׁתַּתֵּף", english: "To participate", childGloss: "Participate or take part", difficulty: 10 },
+];
+const HEBREW_EXPANDED_REVIEWED_SPEC_BY_KEY = new Map(
+  HEBREW_EXPANDED_REVIEWED_SPECS.map((entry) => [
+    buildHebrewWordKey(entry.hebrew, entry.english),
+    entry,
+  ])
+);
+const HEBREW_EXPANDED_REVIEWED_GRADE_BY_KEY = new Map(
+  HEBREW_EXPANDED_REVIEWED_SPECS.map((entry) => [
+    buildHebrewWordKey(entry.hebrew, entry.english),
+    entry.difficulty,
+  ])
+);
+const HEBREW_EXPANDED_REVIEWED_SAFE_KEYS = new Set(
+  HEBREW_EXPANDED_REVIEWED_GRADE_BY_KEY.keys()
+);
+const HEBREW_EXPANDED_CHILD_SENSITIVE_PATTERN = new RegExp(
+  "\\b(?:assault|attack|battle|bloodshed|bomb|corpse|dead|death|execution|gun|kill(?:ed|ing|s)?|murder(?:ed|er|ing|s)?|rape|rifle|sexual|suicide|terror(?:ism|ist|ists)?|weapon|warfare)\\b",
+  "i"
+);
+const HEBREW_EXPANDED_FRAGMENT_PATTERN = /^(?:and |as |at |by |for |from |in |of |on |that |the |their |to |with )|\bof$/i;
+
+const HEBREW_EXPANDED_CURATED_WORDS = normalizeExpandedHebrewWords(RAW_HEBREW_EXPANDED_WORDS);
+
 const HEBREW_WORDS = mergeHebrewWordSets(
   buildCuratedHebrewWords(RAW_HEBREW_WORDS),
-  normalizeExpandedHebrewWords(RAW_HEBREW_EXPANDED_WORDS)
+  HEBREW_EXPANDED_CURATED_WORDS
 );
 
 function buildHebrewWordKey(hebrew, english) {
@@ -4123,22 +4202,62 @@ function buildCuratedHebrewWords(words) {
 
 function normalizeExpandedHebrewWords(words) {
   const normalizedWords = [];
+  const seenHebrewMeanings = new Set();
 
   (words || []).forEach((entry) => {
-    const difficulty = Math.max(6, Math.min(10, Number(entry?.difficulty) || 6));
+    const identity = buildHebrewWordKey(entry?.hebrew, entry?.english);
+    const reviewedSpec = HEBREW_EXPANDED_REVIEWED_SPEC_BY_KEY.get(identity);
+    if (!reviewedSpec) {
+      return;
+    }
+    const difficulty = reviewedSpec.difficulty;
     const normalizedEntry = {
       category: String(entry?.category || "Everyday Hebrew (Expanded)").trim(),
-      english: String(entry?.english || "").trim(),
+      english: String(reviewedSpec.childGloss || entry?.english || "").trim(),
       transliteration: String(entry?.transliteration || "").trim(),
       hebrew: String(entry?.hebrew || "").trim(),
       difficulty,
     };
 
-    if (!normalizedEntry.hebrew || !normalizedEntry.english) {
+    const normalizedIdentity = buildHebrewWordKey(normalizedEntry.hebrew, normalizedEntry.english);
+    const slashCount = (normalizedEntry.english.match(/\//g) || []).length;
+    const isReviewedSafe = HEBREW_EXPANDED_REVIEWED_SAFE_KEYS.has(identity);
+    const isSensitive = HEBREW_EXPANDED_CHILD_SENSITIVE_PATTERN.test(normalizedEntry.english);
+    const isMalformed = /\/\s*\//.test(normalizedEntry.english) || slashCount > 3;
+    const isContextFragment = HEBREW_EXPANDED_FRAGMENT_PATTERN.test(normalizedEntry.english);
+
+    if (
+      !normalizedEntry.hebrew ||
+      !normalizedEntry.english ||
+      !normalizedEntry.transliteration ||
+      seenHebrewMeanings.has(normalizedIdentity) ||
+      isMalformed ||
+      !isReviewedSafe ||
+      isSensitive ||
+      isContextFragment
+    ) {
       return;
     }
 
-    normalizedWords.push(normalizedEntry);
+    seenHebrewMeanings.add(normalizedIdentity);
+    const stableId = globalThis.HomeworkQuestionUtils?.stableContentId(
+      "hebrew-expanded",
+      `${normalizedEntry.hebrew}|${normalizedEntry.english}`
+    );
+    normalizedWords.push({
+      ...normalizedEntry,
+      contentId: stableId || `hebrew-expanded.${normalizedWords.length + 1}`,
+      skill: "hebrew.vocabulary.contextual-meaning",
+      gradeMin: difficulty,
+      gradeMax: difficulty,
+      explanation: `${normalizedEntry.hebrew} means ${normalizedEntry.english} in this vocabulary entry.`,
+      reviewStatus: "human-reviewed",
+      source: {
+        title: "Teach Me Hebrew modern frequency list; vocalized with Dicta Nakdan",
+        url: "https://www.teachmehebrew.com/hebrew-frequency-list.html",
+      },
+      reviewedAt: "2026-08-12",
+    });
   });
 
   return normalizedWords;

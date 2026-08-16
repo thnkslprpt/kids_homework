@@ -14,6 +14,153 @@ function isSpeedRoundActive() {
   return state.currentRound === "speed";
 }
 
+function setLanguageMetadata(element, isHebrew) {
+  if (!element) {
+    return;
+  }
+
+  if (isHebrew) {
+    element.lang = "he";
+    element.dir = "rtl";
+  } else {
+    element.removeAttribute("lang");
+    element.removeAttribute("dir");
+  }
+}
+
+function isCurrentAnswerLocked(round) {
+  return round.answerResults[round.viewIndex] !== undefined;
+}
+
+function shouldOfferNegativeSign(question) {
+  const answer = Number(question?.answerValue);
+  return answer < 0 || /negative/i.test(String(question?.type || ""));
+}
+
+function announceQuestion(question, round) {
+  if (!elements.screenStatusAnnouncer) {
+    return;
+  }
+
+  const position = Math.min(round.viewIndex + 1, round.totalQuestions);
+  const prefix = isSpeedRoundActive() ? "Challenge" : "Question";
+  const prompt = [question?.questionText, question?.displayText].filter(Boolean).join(" ");
+  elements.screenStatusAnnouncer.textContent = `${prefix} ${position} of ${round.totalQuestions}. ${prompt}`;
+}
+
+function renderHintSupport(question, round, answerLocked) {
+  if (!elements.questionSupport || !elements.hintButton || !elements.hintText) {
+    return;
+  }
+
+  const hints = Array.isArray(question?.hints)
+    ? question.hints.map((hint) => String(hint || "").trim()).filter(Boolean)
+    : [];
+  const used = Number(round.hintsUsed?.[round.viewIndex]) || 0;
+  const hasAvailableHints = !answerLocked && hints.length > 0;
+  const canReadAloud = canSpeakQuestion(question);
+  elements.questionSupport.hidden = !hasAvailableHints && !canReadAloud;
+  elements.hintButton.hidden = !hasAvailableHints;
+  if (elements.readAloudButton) {
+    elements.readAloudButton.hidden = !canReadAloud;
+  }
+  elements.hintText.textContent = used > 0 ? hints[Math.min(used, hints.length) - 1] : "";
+  elements.hintButton.disabled = used >= hints.length;
+  elements.hintButton.textContent = used === 0
+    ? "Show a hint"
+    : used < hints.length
+      ? "Show another hint"
+      : "All hints shown";
+}
+
+function getQuestionSpeechText(question) {
+  const explicitText = String(question?.listenText || "").trim();
+  if (explicitText) {
+    return explicitText;
+  }
+
+  return [question?.questionText, question?.displayText]
+    .map((value) => String(value || "").trim())
+    .filter(Boolean)
+    .join(". ");
+}
+
+function canSpeakQuestion(question) {
+  return Boolean(
+    elements.readAloudButton &&
+    typeof window.speechSynthesis !== "undefined" &&
+    typeof window.SpeechSynthesisUtterance === "function" &&
+    getQuestionSpeechText(question)
+  );
+}
+
+function readCurrentQuestionAloud() {
+  const question = getActiveRoundState().questions[getActiveRoundState().viewIndex];
+  const text = getQuestionSpeechText(question);
+  if (!text || !canSpeakQuestion(question)) {
+    return;
+  }
+
+  window.speechSynthesis.cancel();
+  const utterance = new window.SpeechSynthesisUtterance(text);
+  utterance.lang = Boolean(question?.isHebrew) || containsHebrewText(text) ? "he-IL" : "en-US";
+  utterance.rate = 0.9;
+  window.speechSynthesis.speak(utterance);
+}
+
+function showNextHint() {
+  const round = getActiveRoundState();
+  const question = round.questions[round.viewIndex];
+  const hints = Array.isArray(question?.hints)
+    ? question.hints.map((hint) => String(hint || "").trim()).filter(Boolean)
+    : [];
+  if (!hints.length || isCurrentAnswerLocked(round)) {
+    return;
+  }
+
+  const used = Number(round.hintsUsed?.[round.viewIndex]) || 0;
+  round.hintsUsed[round.viewIndex] = Math.min(hints.length, used + 1);
+  renderHintSupport(question, round, false);
+  document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
+}
+
+function setAnswerConfidence(confidence) {
+  const allowed = new Set(["not-sure", "somewhat", "sure"]);
+  if (!allowed.has(confidence)) {
+    return;
+  }
+
+  const round = getActiveRoundState();
+  const selection = round.answerSelections[round.currentIndex];
+  const record = isSpeedRoundActive()
+    ? round.records[round.currentIndex]
+    : state.sessionRecords[round.currentIndex];
+  if (!round.awaitingContinue || !selection || !record) {
+    return;
+  }
+
+  selection.confidence = confidence;
+  record.confidence = confidence;
+  renderConfidenceSelector();
+  document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
+}
+
+function renderConfidenceSelector() {
+  if (!elements.confidenceSelector) {
+    return;
+  }
+
+  const round = getActiveRoundState();
+  const selection = round.answerSelections[round.currentIndex];
+  elements.confidenceSelector.hidden = !round.awaitingContinue;
+  elements.confidenceButtons?.forEach((button) => {
+    button.setAttribute(
+      "aria-pressed",
+      selection?.confidence === button.dataset.confidence ? "true" : "false"
+    );
+  });
+}
+
 function renderCurrentQuestion() {
   cleanupInteractiveDragState();
 
@@ -41,35 +188,50 @@ function renderCurrentQuestion() {
   }
 
   const reviewingPreviousQuestion = isViewingPreviousQuestion();
+  const answerLocked = reviewingPreviousQuestion || isCurrentAnswerLocked(round);
   const answerSelection = round.answerSelections[round.viewIndex] || null;
+  if (!answerLocked && round.timingQuestionIndex !== round.viewIndex) {
+    round.timingQuestionIndex = round.viewIndex;
+    round.questionStartedAt = Date.now();
+  }
 
   updateStatusBar();
   updateQuizNavigation();
   renderQuizFeedback();
 
   elements.questionNumber.textContent = reviewingPreviousQuestion
-    ? `Question ${round.viewIndex + 1} (review):`
+    ? `Question ${round.viewIndex + 1} of ${round.totalQuestions} (review)`
     : isSpeedRoundActive()
-      ? `Speed Round ${round.viewIndex + 1} of ${SPEED_ROUND_QUESTION_COUNT}:`
-      : `Question ${round.viewIndex + 1}:`;
+      ? `Challenge ${round.viewIndex + 1} of ${round.totalQuestions}`
+      : `Question ${round.viewIndex + 1} of ${round.totalQuestions}`;
   const questionPromptIsHebrew = containsHebrewText(question.questionText);
   const questionMainIsHebrew = Boolean(question.isHebrew) || containsHebrewText(question.displayText);
   elements.questionPrompt.textContent = question.questionText;
   elements.questionPrompt.hidden = !question.questionText;
   elements.questionPrompt.classList.toggle("hebrew", questionPromptIsHebrew);
+  setLanguageMetadata(elements.questionPrompt, questionPromptIsHebrew);
 
   elements.questionMain.textContent = question.displayText;
   elements.questionMain.hidden = !question.displayText;
   elements.questionMain.classList.toggle("hebrew", questionMainIsHebrew);
+  setLanguageMetadata(elements.questionMain, questionMainIsHebrew);
   elements.questionMain.classList.toggle("compact", shouldUseCompactQuestionMain(question));
 
   elements.questionVisual.innerHTML = question.visualHtml || "";
   elements.questionVisual.hidden = !question.visualHtml;
+  if (question.visualHtml && question.visualSummary) {
+    elements.questionVisual.setAttribute("role", "img");
+    elements.questionVisual.setAttribute("aria-label", String(question.visualSummary));
+  } else {
+    elements.questionVisual.removeAttribute("role");
+    elements.questionVisual.removeAttribute("aria-label");
+  }
 
   if (question.extraHtml) {
     elements.questionExtra.innerHTML = question.extraHtml;
     elements.questionExtra.hidden = false;
     elements.questionExtra.classList.toggle("hebrew", Boolean(question.isHebrew));
+    setLanguageMetadata(elements.questionExtra, Boolean(question.isHebrew));
   } else {
     const extraText =
       reviewingPreviousQuestion && question.mode === "drag" ? "" : getVisibleQuestionExtraText(question);
@@ -79,6 +241,17 @@ function renderCurrentQuestion() {
       "hebrew",
       Boolean(question.isHebrew) || containsHebrewText(extraText)
     );
+    setLanguageMetadata(
+      elements.questionExtra,
+      Boolean(question.isHebrew) || containsHebrewText(extraText)
+    );
+  }
+
+  elements.answerSignButton.hidden = question.mode !== "input" || !shouldOfferNegativeSign(question);
+  renderHintSupport(question, round, answerLocked);
+  announceQuestion(question, round);
+  if (question.mode !== "input" || answerLocked) {
+    focusQuestionHeading();
   }
 
   if (question.mode === "input") {
@@ -86,11 +259,11 @@ function renderCurrentQuestion() {
     elements.inputArea.hidden = false;
     elements.choicesArea.hidden = true;
     elements.dragArea.hidden = true;
-    elements.answerInput.disabled = reviewingPreviousQuestion;
-    elements.answerSignButton.disabled = reviewingPreviousQuestion;
-    elements.answerSubmitButton.disabled = reviewingPreviousQuestion;
-    elements.answerInput.value = reviewingPreviousQuestion ? answerSelection?.value || "" : "";
-    if (!reviewingPreviousQuestion && shouldAutoFocusAnswerInput()) {
+    elements.answerInput.disabled = answerLocked;
+    elements.answerSignButton.disabled = answerLocked;
+    elements.answerSubmitButton.disabled = answerLocked;
+    elements.answerInput.value = answerLocked ? answerSelection?.value || "" : "";
+    if (!answerLocked && shouldAutoFocusAnswerInput()) {
       focusAnswerInput();
     }
     return;
@@ -106,7 +279,7 @@ function renderCurrentQuestion() {
     elements.choicesArea.hidden = true;
     elements.dragArea.hidden = false;
     renderDragQuestion(question, {
-      readOnly: reviewingPreviousQuestion,
+      readOnly: answerLocked,
       selectedTokens: Array.isArray(answerSelection?.tokens) ? answerSelection.tokens : [],
     });
     return;
@@ -122,7 +295,7 @@ function renderCurrentQuestion() {
     elements.choicesArea.hidden = false;
     elements.dragArea.hidden = true;
     renderPracticeButtons(question, {
-      readOnly: reviewingPreviousQuestion,
+      readOnly: answerLocked,
       selectedValue: answerSelection?.value || "",
     });
     return;
@@ -138,7 +311,7 @@ function renderCurrentQuestion() {
     elements.choicesArea.hidden = false;
     elements.dragArea.hidden = true;
     renderInteractiveQuestion(question, {
-      readOnly: reviewingPreviousQuestion,
+      readOnly: answerLocked,
       selectedTokens: Array.isArray(answerSelection?.tokens) ? answerSelection.tokens : [],
     });
     return;
@@ -153,11 +326,11 @@ function renderCurrentQuestion() {
   elements.choicesArea.hidden = false;
   elements.dragArea.hidden = true;
   renderChoiceButtons(question, {
-    readOnly: reviewingPreviousQuestion,
+    readOnly: answerLocked,
     selectedValue: answerSelection?.value || "",
   });
 
-  if (isSpeedRoundActive() && !reviewingPreviousQuestion) {
+  if (isSpeedRoundActive() && !answerLocked) {
     startSpeedRoundTimer();
   } else {
     renderSpeedRoundTimer();
@@ -224,7 +397,7 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
     const labels = Array.from(selectedIndexes)
       .sort((left, right) => left - right)
       .map((index) => {
-        if (layout === "option-select") {
+        if (layout === "option-select" || layout === "multi-select") {
           return config.choices?.[index]?.summary || config.choices?.[index]?.label || String(index + 1);
         }
         return config.parts?.[index]?.summary || config.parts?.[index]?.label || `Part ${index + 1}`;
@@ -288,7 +461,9 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
 
     const label = document.createElement("span");
     label.className = "interactive-option-label";
-    label.textContent = layout === "option-select" ? `${item?.label || OPTION_LABELS[index]})` : item?.label || String(index + 1);
+    label.textContent = ["option-select", "multi-select"].includes(layout)
+      ? `${item?.label || OPTION_LABELS[index]})`
+      : item?.label || String(index + 1);
     button.appendChild(label);
 
     const body = document.createElement("span");
@@ -723,6 +898,10 @@ function renderChoiceButtons(question, { readOnly = false, selectedValue = "" } 
     button.className = `choice-button${optionIsHebrew ? " hebrew" : ""}`;
     button.dataset.value = optionText;
     button.disabled = readOnly;
+    if (optionIsHebrew) {
+      button.lang = "he";
+      button.dir = "rtl";
+    }
 
     if (readOnly) {
       if (optionText === question.answerValue) {
@@ -741,6 +920,7 @@ function renderChoiceButtons(question, { readOnly = false, selectedValue = "" } 
     textSpan.textContent = optionText;
     if (optionIsHebrew) {
       textSpan.setAttribute("dir", "rtl");
+      textSpan.setAttribute("lang", "he");
     }
 
     button.appendChild(labelSpan);
@@ -770,7 +950,7 @@ function renderPracticeButtons(question, { readOnly = false, selectedValue = "" 
 
   if (!readOnly) {
     button.addEventListener("click", () =>
-      handleAnswer(question, true, question.completionValue || "Done")
+      handleAnswer(question, null, question.completionValue || "Done", { isGraded: false })
     );
   }
 
@@ -792,6 +972,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
   const isBucketLayout = dragLayout === "buckets";
   const isMapTargetsLayout = isTargetsLayout && question.dragTargetArrangement === "map";
   let activeTokenId = "";
+  let focusAfterSync = null;
   const dragQuestionIsHebrew =
     Boolean(question.isHebrew) ||
     containsHebrewText(question.questionText) ||
@@ -845,6 +1026,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
     }
 
     slotValues[slotIndex] = token;
+    focusAfterSync = { kind: "slot", value: String(slotIndex) };
     sync();
   };
 
@@ -864,11 +1046,16 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       return;
     }
 
+    const tokenId = slotValues[slotIndex]?.id || "";
     slotValues[slotIndex] = null;
+    focusAfterSync = tokenId ? { kind: "token", value: tokenId } : null;
     sync();
   };
 
-  function createSlotButton(slotIndex, { placeholderText = "Drop here", comparison = false, extraClass = "" } = {}) {
+  function createSlotButton(
+    slotIndex,
+    { placeholderText = "Drop here", comparison = false, extraClass = "", ariaLabel = "" } = {}
+  ) {
     const slotButton = document.createElement("button");
     slotButton.type = "button";
     slotButton.className = [
@@ -881,7 +1068,15 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       .filter(Boolean)
       .join(" ");
     slotButton.textContent = slotValues[slotIndex]?.text || placeholderText || "\u00a0";
+    slotButton.dataset.slotIndex = String(slotIndex);
     slotButton.disabled = readOnly;
+    const currentText = slotValues[slotIndex]?.text;
+    slotButton.setAttribute(
+      "aria-label",
+      currentText
+        ? `${ariaLabel || `Answer spot ${slotIndex + 1}`}: ${currentText}. Activate to remove.`
+        : ariaLabel || `Answer spot ${slotIndex + 1}. Choose an answer, then activate this spot.`
+    );
     if (!readOnly) {
       slotButton.addEventListener("click", () => {
         if (slotValues[slotIndex]) {
@@ -928,7 +1123,9 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       }
 
       if (index < slotValues.length) {
-        sentence.appendChild(createSlotButton(index));
+        sentence.appendChild(
+          createSlotButton(index, { ariaLabel: `Sentence blank ${index + 1}` })
+        );
       }
     });
 
@@ -952,6 +1149,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       createSlotButton(0, {
         placeholderText: question.dragPlaceholderText || "?",
         comparison: true,
+        ariaLabel: "Comparison symbol",
       })
     );
     comparison.appendChild(rightNumber);
@@ -981,6 +1179,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
         createSlotButton(index, {
           placeholderText: question.dragPlaceholderText || "Drop here",
           extraClass: "target",
+          ariaLabel: `Answer for ${target?.reviewLabel || target?.text || `target ${index + 1}`}`,
         })
       );
       targets.appendChild(row);
@@ -1003,6 +1202,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
         createSlotButton(index, {
           placeholderText: question.dragPlaceholderText || "\u00a0",
           extraClass: "target line",
+          ariaLabel: `Position ${index + 1}${target?.reviewLabel || target?.text ? `: ${target.reviewLabel || target.text}` : ""}`,
         })
       );
 
@@ -1080,6 +1280,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
           createSlotButton(match.index, {
             placeholderText: question.dragPlaceholderText || "\u00a0",
             extraClass: "target compass",
+            ariaLabel: `${position} direction`,
           })
         );
       } else {
@@ -1112,14 +1313,22 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
       const slot = createSlotButton(index, {
         placeholderText: question.dragPlaceholderText || "Drop here",
         extraClass: "target map",
+        ariaLabel: `Map target ${index + 1}, ${describeMapPosition(target)}`,
       });
-      slot.setAttribute("aria-label", `Map label spot ${index + 1}`);
       targetPosition.appendChild(slot);
       canvas.appendChild(targetPosition);
     });
 
     map.appendChild(canvas);
     return map;
+  }
+
+  function describeMapPosition(target) {
+    const x = Number(target?.x) || 50;
+    const y = Number(target?.y) || 50;
+    const horizontal = x < 34 ? "left" : x > 66 ? "right" : "center";
+    const vertical = y < 34 ? "upper" : y > 66 ? "lower" : "middle";
+    return `${vertical} ${horizontal} area`;
   }
 
   function createTargetsLayout() {
@@ -1159,6 +1368,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
           createSlotButton(slotIndex, {
             placeholderText: question.dragPlaceholderText || "\u00a0",
             extraClass: "bucket",
+            ariaLabel: `${bucket.label}, item ${index + 1}`,
           })
         );
         slotIndex += 1;
@@ -1202,6 +1412,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
         .join(" ");
       tokenButton.draggable = true;
       tokenButton.textContent = token.text;
+      tokenButton.dataset.tokenId = token.id;
       if (isMapTargetsLayout) {
         if (activeTokenId === token.id) {
           tokenButton.classList.add("selected");
@@ -1289,6 +1500,14 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
     }
 
     elements.dragArea.appendChild(board);
+    if (focusAfterSync) {
+      const attribute = focusAfterSync.kind === "slot" ? "data-slot-index" : "data-token-id";
+      const target = Array.from(elements.dragArea.querySelectorAll(`[${attribute}]`)).find(
+        (element) => element.getAttribute(attribute) === focusAfterSync.value
+      );
+      focusAfterSync = null;
+      window.requestAnimationFrame?.(() => target?.focus({ preventScroll: true }));
+    }
   }
 
   sync();
@@ -1332,6 +1551,10 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
   const rightAnchors = [];
   let selectedEndpoint = null;
   let resizeObserver = null;
+  const matchingStatus = document.createElement("p");
+  matchingStatus.className = "matching-status sr-only";
+  matchingStatus.setAttribute("role", "status");
+  matchingStatus.setAttribute("aria-live", "polite");
 
   function getAnchorCenter(anchor) {
     const stageRect = stage.getBoundingClientRect();
@@ -1421,6 +1644,7 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
 
     if (selectedEndpoint?.side === side && selectedEndpoint.index === index) {
       selectedEndpoint = null;
+      matchingStatus.textContent = "Selection cleared.";
       sync();
       return;
     }
@@ -1430,11 +1654,14 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
       const rightIndex = side === "right" ? index : selectedEndpoint.index;
       connect(leftIndex, rightIndex);
       selectedEndpoint = null;
+      matchingStatus.textContent = `${leftItems[leftIndex].text} matched with ${rightItems[rightIndex].text}.`;
       sync();
       return;
     }
 
     selectedEndpoint = { side, index };
+    const item = side === "left" ? leftItems[index] : rightItems[index];
+    matchingStatus.textContent = `${item.text} selected. Now choose an item on the ${side === "left" ? "right" : "left"}.`;
     sync();
   }
 
@@ -1445,22 +1672,12 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
     const card = document.createElement("div");
     card.className = `matching-card${containsHebrewText(item?.text) ? " hebrew" : " english"}`;
     card.textContent = item.text;
-    if (!readOnly) {
-      card.addEventListener("click", () => selectEndpoint("left", index));
-      card.setAttribute("role", "button");
-      card.tabIndex = 0;
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          selectEndpoint("left", index);
-        }
-      });
-    }
+    setLanguageMetadata(card, containsHebrewText(item?.text));
 
     const anchor = document.createElement("button");
     anchor.type = "button";
     anchor.className = "matching-anchor left";
-    anchor.setAttribute("aria-label", `Connect ${item.text}`);
+    anchor.setAttribute("aria-label", `Select ${item.text} from the left column`);
     anchor.setAttribute("aria-disabled", readOnly ? "true" : "false");
     anchor.tabIndex = readOnly ? -1 : 0;
     if (!readOnly) {
@@ -1481,7 +1698,7 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
     const anchor = document.createElement("button");
     anchor.type = "button";
     anchor.className = "matching-anchor right";
-    anchor.setAttribute("aria-label", `Target ${item.text}`);
+    anchor.setAttribute("aria-label", `Select ${item.text} from the right column`);
     anchor.setAttribute("aria-disabled", readOnly ? "true" : "false");
     anchor.tabIndex = readOnly ? -1 : 0;
     if (!readOnly) {
@@ -1491,17 +1708,7 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
     const card = document.createElement("div");
     card.className = `matching-card${containsHebrewText(item?.text) ? " hebrew" : " english"}`;
     card.textContent = item.text;
-    if (!readOnly) {
-      card.addEventListener("click", () => selectEndpoint("right", index));
-      card.setAttribute("role", "button");
-      card.tabIndex = 0;
-      card.addEventListener("keydown", (event) => {
-        if (event.key === "Enter" || event.key === " ") {
-          event.preventDefault();
-          selectEndpoint("right", index);
-        }
-      });
-    }
+    setLanguageMetadata(card, containsHebrewText(item?.text));
 
     row.appendChild(anchor);
     row.appendChild(card);
@@ -1521,6 +1728,7 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
     clearButton.addEventListener("click", () => {
       connections.fill(null);
       selectedEndpoint = null;
+      matchingStatus.textContent = "All matches cleared.";
       sync();
     });
 
@@ -1546,6 +1754,8 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
     actions.appendChild(checkButton);
     board.appendChild(actions);
   }
+
+  board.appendChild(matchingStatus);
 
   elements.dragArea.appendChild(board);
 
@@ -1677,53 +1887,133 @@ function submitTypedAnswer(event) {
 
 function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = null) {
   const round = getActiveRoundState();
+  if (round.answerResults[round.currentIndex] !== undefined || round.awaitingContinue) {
+    return;
+  }
+
   if (isSpeedRoundActive()) {
     clearSpeedRoundTimer();
   }
 
   round.answeredCount += 1;
-  if (isCorrect) {
+  const isGraded = selectedMeta?.isGraded !== false && question?.mode !== "practice";
+  const normalizedResult = isGraded ? Boolean(isCorrect) : null;
+  const responseTimeMs = round.questionStartedAt
+    ? Math.max(0, Date.now() - round.questionStartedAt)
+    : undefined;
+  if (normalizedResult === true) {
     round.correctCount += 1;
+  }
+  if (!isGraded && !isSpeedRoundActive()) {
+    state.completedPracticeCount += 1;
   }
 
   round.answerSelections[round.currentIndex] = {
     value: selectedValue === "" ? "" : String(selectedValue),
     ...(Array.isArray(selectedMeta?.tokens) ? { tokens: [...selectedMeta.tokens] } : {}),
+    hintsUsed: Number(round.hintsUsed?.[round.currentIndex]) || 0,
   };
-  round.answerResults[round.currentIndex] = isCorrect;
+  round.answerResults[round.currentIndex] = normalizedResult;
   const record = buildSessionRecord(
     round.currentIndex + 1,
     question,
     selectedValue,
-    isCorrect,
-    selectedMeta
+    normalizedResult,
+    {
+      ...selectedMeta,
+      isGraded,
+      hintsUsed: Number(round.hintsUsed?.[round.currentIndex]) || 0,
+      responseTimeMs,
+    }
   );
   if (isSpeedRoundActive()) {
     round.records[round.currentIndex] = record;
   } else {
     state.sessionRecords[round.currentIndex] = record;
   }
-  state.feedbackMessage = buildOutcomeMessage(question, isCorrect, selectedValue);
-  state.feedbackTone = isCorrect ? "success" : "error";
+  state.feedbackMessage = isGraded
+    ? buildOutcomeMessage(question, normalizedResult, selectedValue)
+    : buildPracticeCompletionMessage(question);
+  state.feedbackTone = normalizedResult === false ? "error" : "success";
+  round.awaitingContinue = true;
+  if (!isSpeedRoundActive()) {
+    state.awaitingContinue = true;
+  }
+  renderCurrentQuestion();
+  document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
+  focusContinueButton();
+}
 
-  if (round.currentIndex === round.totalQuestions - 1) {
+function continueAfterFeedback() {
+  const round = getActiveRoundState();
+  if (!round.awaitingContinue) {
+    return;
+  }
+
+  round.awaitingContinue = false;
+  if (!isSpeedRoundActive()) {
+    state.awaitingContinue = false;
+  }
+  state.feedbackMessage = "";
+  state.feedbackTone = "";
+
+  if (round.currentIndex >= round.totalQuestions - 1) {
     round.currentIndex = round.totalQuestions;
     round.viewIndex = round.totalQuestions;
+    document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
     completeActiveRound();
     return;
   }
 
   round.currentIndex += 1;
   round.viewIndex = round.currentIndex;
+  document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
   renderCurrentQuestion();
+  focusQuestionHeading();
+}
+
+function focusContinueButton() {
+  const focus = () => elements.feedbackContinueButton?.focus({ preventScroll: true });
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(focus);
+  } else {
+    focus();
+  }
+}
+
+function focusQuestionHeading() {
+  const focus = () => elements.questionNumber?.focus({ preventScroll: true });
+  if (typeof requestAnimationFrame === "function") {
+    requestAnimationFrame(focus);
+  } else {
+    focus();
+  }
+}
+
+function buildPracticeCompletionMessage(question) {
+  const explanation = getQuestionExplanationHtml(question);
+  const message = question?.successMessage
+    ? escapeHtml(String(question.successMessage))
+    : "Activity completed. This item is not included in the accuracy score.";
+  return `<div class="feedback-outcome"><strong>${message}</strong>${explanation}</div>`;
 }
 
 function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
   if (isCorrect) {
-    return question?.successMessage ? escapeHtml(String(question.successMessage)) : "Correct!";
+    const success = question?.successMessage
+      ? escapeHtml(String(question.successMessage))
+      : "Correct!";
+    return `<div class="feedback-outcome"><strong>${success}</strong>${getQuestionExplanationHtml(question)}</div>`;
   }
 
-  return formatQuestionReview(question, selectedValue, { isCorrect });
+  return `${formatQuestionReview(question, selectedValue, { isCorrect })}${getQuestionExplanationHtml(question)}`;
+}
+
+function getQuestionExplanationHtml(question) {
+  const explanation = String(question?.explanation || question?.rationale || "").trim();
+  return explanation
+    ? `<div class="feedback-explanation"><strong>Why:</strong> ${escapeHtml(explanation)}</div>`
+    : "";
 }
 
 function formatQuestionReview(question, selectedValue, { isCorrect = false } = {}) {

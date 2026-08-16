@@ -362,7 +362,7 @@ const ADDITIONAL_READING_COMPREHENSION_BLUEPRINTS = [
   // Additional Level 10 questions
   readingBlueprint(10, "Which is the best evaluation of the argument?", ["A proposal says the school should buy the most expensive microscopes because higher prices always mean better learning.", "It gives no test results, teacher feedback, or comparison with less expensive models."], ["The argument relies on price instead of evidence about learning value.", "The argument proves expensive microscopes are always best.", "The argument gives enough teacher feedback.", "The argument is mainly about school lunches."], "The argument relies on price instead of evidence about learning value.", "Microscope Proposal"),
   readingBlueprint(10, "What is the most likely reason the author repeats 'one more adjustment'?", ["The robot rolled left. One more adjustment.", "The claw missed the block. One more adjustment.", "On the final run, the robot lifted the block cleanly."], ["To show persistence through repeated testing", "To show that the robot worked perfectly at first", "To make the reader ignore the tests", "To compare robots with blocks"], "To show persistence through repeated testing", "Robot Adjustments"),
-  readingBlueprint(10, "What is the most precise theme?", ["Lina wanted the quickest answer, so she copied the first source she found.", "When the fact turned out to be outdated, she checked newer sources and revised her report."], ["Reliable work requires checking whether information is current and trustworthy.", "The first source is always best.", "Reports should never be revised.", "Outdated facts are more useful than current ones."], "Reliable work requires checking whether information is current and trustworthy.", "Source Check"),
+  readingBlueprint(10, "What is the most precise theme?", ["Lina wanted the quickest answer, so she copied the first source she found.", "When the fact turned out to be outdated, she checked newer sources and revised her report."], ["Reliable work requires checking whether information is current and trustworthy.", "Efficient research means accepting the first source without checking its date.", "A report becomes reliable when its writer avoids making any later revisions.", "Older information is generally more trustworthy than newer evidence."], "Reliable work requires checking whether information is current and trustworthy.", "Source Check"),
   readingBlueprint(10, "Which statement best explains the irony?", ["The poster for the school's 'Paper-Saving Week' was printed on thick paper and handed out in stacks to every classroom."], ["A campaign about saving paper used a large amount of paper.", "The poster was used at school.", "Classrooms can receive paper.", "The week had a name."], "A campaign about saving paper used a large amount of paper.", "Paper-Saving Week"),
   readingBlueprint(10, "What assumption does the speaker make?", ["Dev says, 'Our video got more views after we changed the title, so the title must be the only reason views increased.'"], ["He assumes no other factor affected the number of views.", "He assumes titles never matter.", "He assumes the video lost views.", "He assumes nobody watched the video."], "He assumes no other factor affected the number of views.", "Video Views"),
   readingBlueprint(10, "What is the best synthesis of the two sources?", ["Source 1: Bus riders say the stop near the park has no shelter from rain.", "Source 2: Weather records show the area has frequent afternoon storms in spring."], ["Both sources support adding shelter at the park bus stop.", "The sources prove buses should stop running in spring.", "The survey disagrees with the weather records.", "The park has no bus stop."], "Both sources support adding shelter at the park bus stop.", "Bus Stop Shelter"),
@@ -387,6 +387,9 @@ const ADDITIONAL_READING_COMPREHENSION_BLUEPRINTS = [
 
 READING_COMPREHENSION_BLUEPRINTS.push(...ADDITIONAL_READING_COMPREHENSION_BLUEPRINTS);
 const READING_COMPREHENSION_QUESTIONS = READING_COMPREHENSION_BLUEPRINTS.map(createReadingStaticPassageQuestion);
+const READING_COMPREHENSION_ACTIVE_QUESTIONS =
+  globalThis.HomeworkQuestionUtils?.filterAnswerLengthCues(READING_COMPREHENSION_QUESTIONS, 15) ||
+  READING_COMPREHENSION_QUESTIONS;
 
 function readingBlueprint(difficulty, question, lines, options, answer, title = "Passage") {
   return { difficulty, question, title, lines, options, answer };
@@ -396,6 +399,12 @@ function createReadingStaticPassageQuestion(blueprint) {
   const entry = readingBuildQuestionFromBlueprint(blueprint, false);
   const passage = blueprint.lines.join(" ");
   return {
+    contentId: entry.contentId,
+    skill: entry.skill,
+    gradeMin: entry.gradeMin,
+    gradeMax: entry.gradeMax,
+    explanation: entry.explanation || entry.answer,
+    reviewStatus: entry.reviewStatus,
     question: entry.question,
     passage,
     visualHtml: entry.visualHtml,
@@ -409,8 +418,18 @@ function createReadingStaticPassageQuestion(blueprint) {
 
 function createReadingComprehensionGeneratedEntry(difficulty) {
   const level = clampReadingDifficulty(difficulty);
-  const exactPool = READING_COMPREHENSION_BLUEPRINTS.filter((entry) => entry.difficulty === level);
-  const fallbackPool = READING_COMPREHENSION_BLUEPRINTS.filter((entry) => entry.difficulty <= level);
+  const isBalanced = (blueprint) =>
+    !globalThis.HomeworkQuestionUtils?.hasAnswerLengthCue(
+      blueprint.options,
+      blueprint.answer,
+      15
+    );
+  const exactPool = READING_COMPREHENSION_BLUEPRINTS.filter(
+    (entry) => entry.difficulty === level && isBalanced(entry)
+  );
+  const fallbackPool = READING_COMPREHENSION_BLUEPRINTS.filter(
+    (entry) => entry.difficulty <= level && isBalanced(entry)
+  );
   const blueprint = readingRandomChoice(exactPool.length ? exactPool : fallbackPool);
   return readingBuildQuestionFromBlueprint(blueprint, true, level);
 }
@@ -427,15 +446,25 @@ function readingBuildQuestionFromBlueprint(blueprint, shuffleOptions = false, di
   }
 
   const passage = blueprint.lines.join(" ");
+  const level = clampReadingDifficulty(difficultyOverride ?? blueprint.difficulty);
   return {
     question: blueprint.question,
     visualHtml: buildReadingPassageCard(blueprint.title || "Passage", blueprint.lines),
     options: shuffleOptions ? readingShuffleArray(blueprint.options) : blueprint.options,
     answer: blueprint.answer,
-    difficulty: clampReadingDifficulty(difficultyOverride ?? blueprint.difficulty),
+    difficulty: level,
     visualSummary: passage,
     reviewText: passage,
     type: "reading-comprehension-choice",
+    contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+      "reading-comprehension",
+      `${blueprint.title || "passage"}|${blueprint.question}|${passage}`
+    ),
+    skill: `english.reading.${String(blueprint.skill || blueprint.question).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 48)}`,
+    gradeMin: level,
+    gradeMax: level,
+    explanation: String(blueprint.explanation || blueprint.answer),
+    reviewStatus: "author-curated",
   };
 }
 
@@ -494,7 +523,7 @@ function readingShuffleArray(values) {
   if (!questionUtils) {
     return;
   }
-  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+  const { entry, pickGeneratedEntry, randomChoice, stableContentId } = questionUtils;
 
   const inferenceDetectiveInteractiveBlueprints = [
     {
@@ -577,10 +606,20 @@ function readingShuffleArray(values) {
       reviewText: blueprint.passage.join(" "),
       answer: answerLabel,
       answerLabel,
+      contentId: stableContentId(
+        "reading-comprehension",
+        `inference-detective|${blueprint.inference}|${blueprint.passage.join(" ")}`
+      ),
+      skill: "english.reading.inference-evidence",
+      gradeMin: blueprint.minDifficulty,
+      gradeMax: blueprint.maxDifficulty,
+      explanation: `The supporting clues directly justify this inference: ${answerLabel}`,
+      reviewStatus: "author-curated",
       interactive: {
-        layout: "part-select",
+        type: "reading-evidence-choose-all",
+        layout: "multi-select",
         prompt: "Choose only the clue cards that prove the inference.",
-        parts: clueCards.map((card, index) => ({
+        choices: clueCards.map((card, index) => ({
           label: `Clue ${String.fromCharCode(65 + index)}`,
           summary: card.summary,
         })),
@@ -599,12 +638,13 @@ function readingShuffleArray(values) {
     { topic: "reading-main-idea", difficulty: 2, question: "What is the main idea?", displayText: "Nora waters the seedlings every morning. She checks the soil and moves the tray closer to the window when the leaves look pale.", answer: "Nora takes care of seedlings carefully.", options: ["Nora takes care of seedlings carefully.", "Nora dislikes plants.", "The window is broken.", "Seedlings never need water."] },
     { topic: "reading-evidence", difficulty: 3, question: "Which detail is evidence that the library was busy?", displayText: "The librarian put out extra chairs. Every table was full, and a line formed at the desk.", answer: "Every table was full.", options: ["Every table was full.", "The librarian works there.", "The chairs had legs.", "The desk was near the door."] },
     { topic: "reading-paragraph-ordering", difficulty: 4, question: "Which paragraph order makes the most sense?", displayText: "A: Finally, she served the soup. B: First, she chopped vegetables. C: Then, she let the soup simmer.", answer: "B, C, A", options: ["B, C, A", "A, B, C", "C, A, B", "B, A, C"] },
-    { topic: "reading-evidence", difficulty: 5, question: "Which detail is evidence for the claim?", displayText: "Claim: The library is busier after school. Visits: morning 18, lunch 24, after school 51.", answer: "After school had 51 visits, the most of the three times.", options: ["After school had 51 visits, the most of the three times.", "Libraries have books.", "Lunch sounds busy.", "Morning comes before lunch."] },
+    { topic: "reading-evidence", difficulty: 5, question: "Which detail is evidence for the claim?", displayText: "Claim: The library is busier after school. Visits: morning 18, lunch 24, after school 51.", answer: "After school had 51 visits, the most of the three times.", options: ["After school had 51 visits, the most of the three times.", "Morning had 18 visits, so morning was the busiest time.", "Lunch had 24 visits, more than the other two times.", "All three times had exactly the same number of visits."] },
     { topic: "reading-inference", difficulty: 5, question: "What can you infer?", displayText: "Mia looked at the dark clouds, zipped her backpack, and took an umbrella.", answer: "Mia thinks it may rain.", options: ["Mia thinks it may rain.", "Mia is going swimming.", "Mia hates backpacks.", "The umbrella is broken."] },
+    { topic: "reading-source-comparison", difficulty: 6, question: "Which source is better for checking the current bus schedule?", displayText: "Source A is an undated travel blog. Source B is the transit agency's page updated yesterday.", answer: "Source B, because it is official and recently updated.", options: ["Source B, because it is official and recently updated.", "Source A, because blog posts are always more accurate.", "Both sources must be equally current.", "Neither source can contain a schedule."] },
     { topic: "reading-inference", difficulty: 7, question: "What can you infer?", displayText: "Omar crossed out two answers, reread the question, and checked the chart before choosing.", answer: "Omar is trying to answer carefully.", options: ["Omar is trying to answer carefully.", "Omar cannot read charts.", "Omar already knows the answer is wrong.", "Omar is ignoring the question."] },
-    { topic: "reading-summarization", difficulty: 8, question: "Which summary is strongest?", displayText: "A class tested three bridge designs. The triangle design held the most weight, so they chose it for the final model.", answer: "The class used test results to choose the strongest bridge design.", options: ["The class used test results to choose the strongest bridge design.", "The class built a bridge and everyone was amazed.", "Triangles are always better for every object.", "The class did not test anything."] },
-    { topic: "reading-summarization", difficulty: 9, question: "Which summary keeps only the important information?", displayText: "A team tried three materials for a model roof. Paper leaked quickly, foil bent, and plastic stayed dry. The team used plastic in the final model.", answer: "The team tested roof materials and chose plastic because it worked best.", options: ["The team tested roof materials and chose plastic because it worked best.", "The paper was white and the foil was shiny.", "The model roof was the greatest roof ever made.", "The team used every material equally in the final model."] },
-    { topic: "reading-summarization", difficulty: 10, question: "Which summary is most objective?", displayText: "The article explains that city trees lower street temperatures, provide shade, and can reduce storm-water runoff.", answer: "City trees can cool streets, give shade, and help manage runoff.", options: ["City trees can cool streets, give shade, and help manage runoff.", "Trees are obviously the best thing in every city.", "The article is mostly about birds in trees.", "Storm water is never affected by trees."] },
+    { topic: "reading-summarization", difficulty: 8, question: "Which summary is strongest?", displayText: "A class tested three bridge designs. The triangle design held the most weight, so they chose it for the final model.", answer: "The class used test results to choose the strongest bridge design.", options: ["The class used test results to choose the strongest bridge design.", "The class chose the prettiest bridge without comparing test results.", "The class proved triangle designs are best for every kind of bridge.", "The class tested three bridges but did not use what it learned."] },
+    { topic: "reading-summarization", difficulty: 9, question: "Which summary keeps only the important information?", displayText: "A team tried three materials for a model roof. Paper leaked quickly, foil bent, and plastic stayed dry. The team used plastic in the final model.", answer: "The team tested roof materials and chose plastic because it worked best.", options: ["The team tested roof materials and chose plastic because it worked best.", "The team chose paper even though it leaked during the roof test.", "The team judged the materials only by their colors and textures.", "The team used every tested material equally in the final roof."] },
+    { topic: "reading-summarization", difficulty: 10, question: "Which summary is most objective?", displayText: "The article explains that city trees lower street temperatures, provide shade, and can reduce storm-water runoff.", answer: "City trees can cool streets, give shade, and help manage runoff.", options: ["City trees can cool streets, give shade, and help manage runoff.", "City trees are always the perfect answer to every city problem.", "City trees mainly attract birds and make every street beautiful.", "City trees increase street heat and prevent water from draining."] },
   ];
 
   function createSupplementalReadingComprehensionEntry(difficulty) {
@@ -613,10 +653,23 @@ function readingShuffleArray(values) {
       return createInferenceDetectiveInteractiveEntry(level);
     }
 
-    const choices = readingComprehensionSupplementalBlueprints.filter((item) => item.difficulty <= level);
-    return entry(randomChoice(choices));
+    const choices = readingComprehensionSupplementalBlueprints.filter((item) => item.difficulty === level);
+    const blueprint = randomChoice(choices);
+    return entry({
+      ...blueprint,
+      contentId: stableContentId(
+        "reading-comprehension",
+        `${blueprint.topic}|${blueprint.question}|${blueprint.displayText || ""}`
+      ),
+      skill: `english.reading.${String(blueprint.topic || "comprehension").replace(/^reading-/, "")}`,
+      gradeMin: level,
+      gradeMax: level,
+      explanation: blueprint.explanation || blueprint.answer,
+      reviewStatus: "author-curated",
+    });
   }
 
+  globalThis.createReadingInferenceDetectiveEntry = createInferenceDetectiveInteractiveEntry;
   globalThis.createReadingComprehensionSupplementalGeneratedEntry = (difficulty) =>
     pickGeneratedEntry([createSupplementalReadingComprehensionEntry], difficulty);
 })();
@@ -624,7 +677,7 @@ function readingShuffleArray(values) {
 globalThis.HomeworkQuestions?.register({
   id: "reading-comprehension",
   label: "Reading Comprehension",
-  getStaticQuestions: () => READING_COMPREHENSION_QUESTIONS,
+  getStaticQuestions: () => READING_COMPREHENSION_ACTIVE_QUESTIONS,
   generatedEntryFactory: createReadingComprehensionGeneratedEntry,
   supplementalGeneratedEntryFactory: globalThis.createReadingComprehensionSupplementalGeneratedEntry,
   generatedShare: 0.85,

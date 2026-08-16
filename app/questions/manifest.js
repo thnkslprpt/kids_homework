@@ -14,7 +14,6 @@ globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS = [
   "questions/math/visual-measurement.js",
   "questions/reasoning/logic.js",
   "questions/reasoning/rationality.js",
-  "questions/geography/geography-map-data.js",
   "questions/geography/geography-map.js",
   "questions/geography/geography.js",
   "questions/geography/population.js",
@@ -43,3 +42,7 @@ globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS = [
   "questions/english/vocabulary-grammar.js",
   "questions/hebrew/adult-hebrew-module.js",
 ];
+
+globalThis.HOMEWORK_LAZY_QUESTION_SCRIPT_PATHS = {
+  "geography-map": "questions/geography/geography-map-data.js",
+};

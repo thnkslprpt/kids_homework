@@ -1,7 +1,8 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-08-10-topic-practice-1";
+const CACHE_VERSION = "homework-v2026-08-16-quality-3";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
+const NAVIGATION_TIMEOUT_MS = 4000;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
   ? globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS
   : [];
@@ -126,6 +127,13 @@ const OPTIONAL_ASSETS = [
   "app/assets/hebrew-images/watermelon.svg",
 ];
 
+const QUESTION_ASSET_PATHS = new Set(
+  QUESTION_SCRIPT_PATHS.map((scriptPath) => `app/${scriptPath}`)
+);
+const REQUIRED_APP_SHELL_ASSETS = CRITICAL_ASSETS.filter(
+  (assetPath) => !QUESTION_ASSET_PATHS.has(assetPath)
+);
+
 function scopedUrl(path) {
   return new URL(path, self.registration.scope).toString();
 }
@@ -133,18 +141,26 @@ function scopedUrl(path) {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(async (cache) => {
-      const criticalRequests = CRITICAL_ASSETS.map(
-        (path) => new Request(scopedUrl(path), { cache: "reload" })
-      );
-      await cache.addAll(criticalRequests);
+      const shellResults = await cacheAssetsIndividually(cache, REQUIRED_APP_SHELL_ASSETS);
+      const shellFailures = shellResults.filter((result) => !result.ok);
+      if (shellFailures.length) {
+        throw new Error(
+          `Could not prepare the offline app shell: ${shellFailures
+            .map((result) => result.path)
+            .join(", ")}`
+        );
+      }
 
-      const optionalRequests = OPTIONAL_ASSETS.map(
-        (path) => new Request(scopedUrl(path), { cache: "reload" })
-      );
-      const results = await Promise.allSettled(optionalRequests.map((request) => cache.add(request)));
-      const failures = results.filter((result) => result.status === "rejected");
-      if (failures.length > 0) {
-        console.warn(`Homework offline cache skipped ${failures.length} optional asset(s).`, failures);
+      const supplementalResults = await cacheAssetsIndividually(cache, [
+        ...QUESTION_ASSET_PATHS,
+        ...OPTIONAL_ASSETS,
+      ]);
+      const supplementalFailures = supplementalResults.filter((result) => !result.ok);
+      if (supplementalFailures.length > 0) {
+        console.warn(
+          `Homework offline cache skipped ${supplementalFailures.length} supplemental asset(s).`,
+          supplementalFailures.map((result) => result.path)
+        );
       }
     })
   );
@@ -184,46 +200,108 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request, scopedUrl("homework.html")));
+    event.respondWith(networkFirst(request, scopedUrl("homework.html"), NAVIGATION_TIMEOUT_MS));
     return;
   }
 
-  if (isFreshnessCritical(url)) {
-    event.respondWith(networkFirst(request, request.url));
+  if (isAppCodeAsset(url)) {
+    event.respondWith(cacheFirst(request));
     return;
   }
 
   event.respondWith(cacheFirst(request));
 });
 
-function isFreshnessCritical(url) {
+function isAppCodeAsset(url) {
   return [".html", ".js", ".css", ".json"].some((extension) => url.pathname.endsWith(extension));
 }
 
-async function networkFirst(request, fallbackUrl) {
+async function networkFirst(request, fallbackUrl, timeoutMs = 0) {
+  let networkResponse = null;
   try {
-    const response = await fetch(request);
-    if (response && response.ok) {
-      const cache = await caches.open(RUNTIME_CACHE);
-      cache.put(request, response.clone());
+    networkResponse = await fetchWithTimeout(request, timeoutMs);
+    if (networkResponse && networkResponse.ok) {
+      await putInRuntimeCache(request, networkResponse.clone());
+      return networkResponse;
     }
-    return response;
   } catch (error) {
-    const cached = await caches.match(request);
-    return cached || caches.match(fallbackUrl);
+    // A cached response below is the expected path when offline or timed out.
   }
+
+  const cached = await matchCurrentCaches(request);
+  if (cached) {
+    return cached;
+  }
+
+  const fallback = fallbackUrl ? await matchCurrentCaches(fallbackUrl) : null;
+  if (fallback) {
+    return fallback;
+  }
+
+  return networkResponse || Response.error();
 }
 
 async function cacheFirst(request) {
-  const cached = await caches.match(request);
+  const cached = await matchCurrentCaches(request);
   if (cached) {
     return cached;
   }
 
   const response = await fetch(request);
   if (response && response.ok) {
-    const cache = await caches.open(RUNTIME_CACHE);
-    cache.put(request, response.clone());
+    await putInRuntimeCache(request, response.clone());
   }
   return response;
+}
+
+async function cacheAssetsIndividually(cache, paths) {
+  return Promise.all(
+    paths.map(async (path) => {
+      try {
+        const request = new Request(scopedUrl(path), { cache: "reload" });
+        const response = await fetch(request);
+        if (!response || !response.ok) {
+          throw new Error(`HTTP ${response ? response.status : "error"}`);
+        }
+        await cache.put(request, response);
+        return { path, ok: true };
+      } catch (error) {
+        return {
+          path,
+          ok: false,
+          error: String(error && error.message ? error.message : error),
+        };
+      }
+    })
+  );
+}
+
+async function matchCurrentCaches(request) {
+  const precache = await caches.open(CACHE_VERSION);
+  const precached = await precache.match(request, { ignoreSearch: true });
+  if (precached) {
+    return precached;
+  }
+
+  const runtime = await caches.open(RUNTIME_CACHE);
+  return runtime.match(request, { ignoreSearch: true });
+}
+
+async function putInRuntimeCache(request, response) {
+  try {
+    const cache = await caches.open(RUNTIME_CACHE);
+    await cache.put(request, response);
+  } catch (error) {
+    console.warn("Could not update the homework runtime cache.", error);
+  }
+}
+
+function fetchWithTimeout(request, timeoutMs) {
+  if (!timeoutMs || typeof AbortController === "undefined") {
+    return fetch(request);
+  }
+
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+  return fetch(request, { signal: controller.signal }).finally(() => clearTimeout(timeoutId));
 }

@@ -1,0 +1,22 @@
+{
+  "name": "kids-homework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Offline-first family homework practice app",
+  "scripts": {
+    "test": "npm run qa:core && npm run qa:integrity && npm run qa:generation && npm run qa:grade && npm run qa:content && npm run qa:time-probability && npm run qa:hebrew",
+    "qa:core": "node app/scripts/qa_core_data.js",
+    "qa:integrity": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_project_integrity.js",
+    "qa:generation": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_question_generation.js 20",
+    "qa:grade": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_grade_alignment.js 20",
+    "qa:content": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_content_quality.js 15",
+    "qa:time-probability": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_time_probability_generation.js 100",
+    "qa:hebrew": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_hebrew_content.js",
+    "qa:browser": "node app/scripts/qa_browser_smoke.js",
+    "qa:release-browser": "node app/scripts/qa_release_browser.js",
+    "qa:all": "npm test && npm run qa:browser"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

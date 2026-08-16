@@ -3,23 +3,31 @@
   const GREY = "#c0c0c0";
   const WHITE = "#ffffff";
   const OCEAN = "#eef7ff";
-  const MAP_COUNTRIES = Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
-    ? globalThis.GEOGRAPHY_MAP_COUNTRIES.slice()
-    : [];
-  const MAP_SVG_SOURCES =
-    globalThis.GEOGRAPHY_MAP_SVG_SOURCES && typeof globalThis.GEOGRAPHY_MAP_SVG_SOURCES === "object"
+  function getMapCountries() {
+    return Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
+      ? globalThis.GEOGRAPHY_MAP_COUNTRIES
+      : [];
+  }
+
+  function getMapSvgSources() {
+    return globalThis.GEOGRAPHY_MAP_SVG_SOURCES &&
+      typeof globalThis.GEOGRAPHY_MAP_SVG_SOURCES === "object"
       ? globalThis.GEOGRAPHY_MAP_SVG_SOURCES
       : {};
-  const MAP_SVG_VIEWBOXES =
-    globalThis.GEOGRAPHY_MAP_SVG_VIEWBOXES &&
-    typeof globalThis.GEOGRAPHY_MAP_SVG_VIEWBOXES === "object"
+  }
+
+  function getMapSvgViewboxes() {
+    return globalThis.GEOGRAPHY_MAP_SVG_VIEWBOXES &&
+      typeof globalThis.GEOGRAPHY_MAP_SVG_VIEWBOXES === "object"
       ? globalThis.GEOGRAPHY_MAP_SVG_VIEWBOXES
       : {};
-  const IS_SHARED_BASE_PROTOTYPE = globalThis.GEOGRAPHY_MAP_RENDER_MODE === "shared-base-prototype";
-  const SNAPSHOT_DATE =
-    typeof globalThis.GEOGRAPHY_MAP_SNAPSHOT_DATE === "string"
+  }
+
+  function getMapSnapshotDate() {
+    return typeof globalThis.GEOGRAPHY_MAP_SNAPSHOT_DATE === "string"
       ? globalThis.GEOGRAPHY_MAP_SNAPSHOT_DATE
       : "2026-04-13";
+  }
   let inlineSvgScopeId = 0;
 
   function clampDifficulty(value) {
@@ -57,11 +65,12 @@
   }
 
   function getEligibleEntries(level) {
-    const eligible = MAP_COUNTRIES.filter((entry) => (entry.minDifficulty || 1) <= level);
+    const mapCountries = getMapCountries();
+    const eligible = mapCountries.filter((entry) => (entry.minDifficulty || 1) <= level);
     if (eligible.length >= 16) {
       return eligible;
     }
-    return MAP_COUNTRIES;
+    return mapCountries;
   }
 
   function pickDistractors(answerEntry, level, pool) {
@@ -228,7 +237,7 @@
   }
 
   function buildSharedBaseSvg(entry) {
-    const sourceSvg = MAP_SVG_SOURCES[entry.source];
+    const sourceSvg = getMapSvgSources()[entry.source];
     if (typeof sourceSvg !== "string" || !Array.isArray(entry.ids) || !entry.ids.length) {
       return "";
     }
@@ -243,7 +252,7 @@
     return decorateInlineSvg(
       applySvgViewBox(
         injectSvgStyle(sourceSvg, styleText),
-        entry.viewBoxOverride || MAP_SVG_VIEWBOXES[entry.source] || ""
+        entry.viewBoxOverride || getMapSvgViewboxes()[entry.source] || ""
       ),
       entry.country,
       scopeClass
@@ -286,8 +295,13 @@
       return null;
     }
 
-    const prototypeLabel = IS_SHARED_BASE_PROTOTYPE ? "Prototype: shared base map rendering." : "";
-    const extraText = [prototypeLabel, `Snapshot date: ${SNAPSHOT_DATE}.`].filter(Boolean).join(" ");
+    const prototypeLabel =
+      globalThis.GEOGRAPHY_MAP_RENDER_MODE === "shared-base-prototype"
+        ? "Prototype: shared base map rendering."
+        : "";
+    const extraText = [prototypeLabel, `Snapshot date: ${getMapSnapshotDate()}.`]
+      .filter(Boolean)
+      .join(" ");
 
     return {
       question: "What country is this?",
@@ -298,6 +312,9 @@
       visualSummary: `${entry.country} is shaded blue on a regional map.`,
       extraText,
       reviewText: `Country map: ${entry.country} is shaded blue.`,
+      // Checkpoints store this compact key and rebuild the multi-megabyte SVG
+      // on resume instead of duplicating it inside localStorage.
+      geographyMapCountry: entry.country,
     };
   }
 
@@ -313,7 +330,7 @@
   const CONTINENT_LABELS = CONTINENT_TARGETS.map((target) => target.continent);
 
   function buildContinentWorldMapHtml() {
-    const sourceSvg = MAP_SVG_SOURCES.asia;
+    const sourceSvg = getMapSvgSources().asia;
     if (typeof sourceSvg !== "string" || !sourceSvg) {
       return "";
     }
@@ -367,6 +384,7 @@
       answerValue: CONTINENT_LABELS.join(" | "),
       answerLabel: CONTINENT_LABELS.map((continent) => `${continent}: ${continent}`).join(" | "),
       isHebrew: false,
+      geographyMapVisualKind: "continents",
     };
   }
 
@@ -385,6 +403,7 @@
   }
 
   globalThis.renderGeographyMapVisualHtml = buildVisualHtml;
+  globalThis.renderGeographyContinentMapHtml = buildContinentWorldMapHtml;
   globalThis.createGeographyMapGeneratedEntry = buildGeneratedEntry;
 })();
 

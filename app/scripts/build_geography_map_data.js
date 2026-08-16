@@ -26,7 +26,12 @@ function cleanSvgForInlineUse(svg) {
     .replace(/<\?xml[\s\S]*?\?>\s*/g, "")
     .replace(/<!--[\s\S]*?-->\s*/g, "")
     .replace(/<metadata[\s\S]*?<\/metadata>\s*/g, "")
+    .replace(/<foreignObject[\s\S]*?<\/foreignObject>\s*/g, "")
+    .replace(/<i:pgf[\s\S]*?<\/i:pgf>\s*/g, "")
+    .replace(/<sodipodi:namedview[\s\S]*?<\/sodipodi:namedview>\s*/g, "")
     .replace(/<sodipodi:namedview[\s\S]*?\/>\s*/g, "")
+    .replace(/\s(?:inkscape|sodipodi|i):[\w-]+="[^"]*"/g, "")
+    .replace(/\sxmlns:(?:inkscape|sodipodi|rdf|cc|dc|i|x|graph)="[^"]*"/g, "")
     .replace(/>\s+</g, "><")
     .trim();
 }

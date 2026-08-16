@@ -24,6 +24,13 @@ const bankReport = evaluate(`({
   adultUnpointed: adultHebrewQuestionBank.filter((entry) => !hasHebrewNikkud(entry.hebrewDisplay)).length,
   expandedTotal: HEBREW_EXPANDED_WORDS.length,
   expandedUnpointed: HEBREW_EXPANDED_WORDS.filter((entry) => !hasHebrewNikkud(entry.hebrew)).length,
+  expandedCuratedTotal: HEBREW_EXPANDED_CURATED_WORDS.length,
+  expandedCuratedByGrade: Object.fromEntries(
+    Array.from({ length: 5 }, (_, index) => index + 6).map((grade) => [
+      grade,
+      HEBREW_EXPANDED_CURATED_WORDS.filter((entry) => entry.difficulty === grade).length,
+    ])
+  ),
   generalTotal: hebrewQuestionBank.length,
   generalUnpointed: hebrewQuestionBank.filter((entry) => !hasHebrewNikkud(entry.hebrewDisplay)).length,
 })`);
@@ -33,6 +40,7 @@ expectEqual("adult vocabulary entries without nikud", bankReport.adultUnpointed,
 expectEqual("expanded vocabulary entries without nikud", bankReport.expandedUnpointed, 0);
 
 const expandedEntries = evaluate("HEBREW_EXPANDED_WORDS");
+const curatedExpandedEntries = evaluate("HEBREW_EXPANDED_CURATED_WORDS");
 const malformedExpandedEntries = expandedEntries.filter((entry) => /[\u05D0-\u05EA][\u05B9\u05BB]ו/.test(entry.hebrew));
 expectEqual("expanded entries with contradictory vowel-letter pointing", malformedExpandedEntries.length, 0);
 
@@ -50,6 +58,8 @@ const reviewedExpandedMeanings = new Map([
   ["The spider (female)", "הָעַכְבִישָׁה"],
   ["Transition / pass", "מַעֲבָר"],
   ["Unit / squad / only / single", "יְחִידָה"],
+  ["These (pl.)", "אֵלּוּ"],
+  ["Sword / fencing", "סַיִף"],
 ]);
 for (const [english, expectedHebrew] of reviewedExpandedMeanings) {
   const matchingEntries = expandedEntries.filter((entry) => entry.english === english);
@@ -57,6 +67,35 @@ for (const [english, expectedHebrew] of reviewedExpandedMeanings) {
     failures.push(`${english}: expected only ${expectedHebrew}`);
   }
 }
+
+const malformedCuratedGlosses = curatedExpandedEntries.filter(
+  (entry) => /\/\s*\//.test(entry.english) || (entry.english.match(/\//g) || []).length > 3
+);
+expectEqual("malformed expanded glosses reaching child bank", malformedCuratedGlosses.length, 0);
+
+const sensitiveCuratedGlossCount = evaluate(
+  "HEBREW_EXPANDED_CURATED_WORDS.filter((entry) => HEBREW_EXPANDED_CHILD_SENSITIVE_PATTERN.test(entry.english)).length"
+);
+expectEqual("unreviewed sensitive expanded glosses reaching child bank", sensitiveCuratedGlossCount, 0);
+
+const fragmentCuratedGlossCount = evaluate(
+  "HEBREW_EXPANDED_CURATED_WORDS.filter((entry) => HEBREW_EXPANDED_FRAGMENT_PATTERN.test(entry.english)).length"
+);
+expectEqual("context fragments reaching child bank", fragmentCuratedGlossCount, 0);
+
+const curatedContentIds = curatedExpandedEntries.map((entry) => String(entry.contentId || ""));
+expectEqual("expanded child entries without content IDs", curatedContentIds.filter((id) => !id).length, 0);
+expectEqual("duplicate expanded child content IDs", new Set(curatedContentIds).size, curatedContentIds.length);
+for (const [grade, count] of Object.entries(bankReport.expandedCuratedByGrade)) {
+  if (count < 6) {
+    failures.push(`reviewed expanded grade ${grade}: expected at least 6 entries, got ${count}`);
+  }
+}
+expectEqual(
+  "non-human-reviewed expanded entries reaching child bank",
+  curatedExpandedEntries.filter((entry) => entry.reviewStatus !== "human-reviewed").length,
+  0
+);
 
 const pointingCases = new Map([
   ["הספר נמצא בתיק.", "הַסֵּפֶר נִמְצָא בַּתִּיק."],
@@ -171,7 +210,7 @@ for (const relativePath of reviewedSourceFiles) {
 }
 
 console.log(
-  `Checked ${bankReport.generalTotal} general terms (${bankReport.expandedTotal} expanded), ${bankReport.adultTotal} adult terms, and generated Hebrew at every difficulty.`
+  `Checked ${bankReport.generalTotal} general terms (${bankReport.expandedTotal} raw expanded; ${bankReport.expandedCuratedTotal} child-safe expanded), ${bankReport.adultTotal} adult terms, and generated Hebrew at every difficulty.`
 );
 
 if (failures.length) {

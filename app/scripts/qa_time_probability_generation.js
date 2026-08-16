@@ -49,6 +49,8 @@ function createContext() {
   const document = {
     body: createElement("body"),
     documentElement: createElement("html"),
+    addEventListener() {},
+    removeEventListener() {},
     createElement,
     createElementNS: (_namespace, tagName) => createElement(tagName),
     getElementById(id) {

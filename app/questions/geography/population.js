@@ -613,7 +613,8 @@ function formatPopulationTarget(value) {
     const billions = value / 1_000_000_000;
     return `${billions % 1 === 0 ? billions.toFixed(0) : billions.toFixed(1)} billion`;
   }
-  return `${Math.round(value / 1_000_000)} million`;
+  const millions = value / 1_000_000;
+  return `${millions % 1 === 0 ? millions.toFixed(0) : millions.toFixed(1)} million`;
 }
 
 function formatPopulationValue(value) {

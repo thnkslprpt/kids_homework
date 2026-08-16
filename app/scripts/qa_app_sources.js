@@ -30,6 +30,22 @@ function resolveQaAppScriptSources(repoRoot, htmlPath) {
         "question"
       );
       resolvedSources.push(...questionSources.map((questionSource) => `app/${questionSource}`));
+
+      // Browser sessions load these large data-only bundles on demand. Node QA
+      // deliberately loads them up front so generation tests can synchronously
+      // exercise every registered category without changing browser behavior.
+      const lazyManifestMatch = manifestSource.match(
+        /globalThis\.HOMEWORK_LAZY_QUESTION_SCRIPT_PATHS\s*=\s*\{([\s\S]*?)\};/
+      );
+      if (lazyManifestMatch) {
+        const lazyQuestionSources = Array.from(
+          lazyManifestMatch[1].matchAll(/:\s*"([^"]+\.js)"/g),
+          (entry) => entry[1]
+        );
+        resolvedSources.push(
+          ...lazyQuestionSources.map((questionSource) => `app/${questionSource}`)
+        );
+      }
       return;
     }
 

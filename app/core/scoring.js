@@ -63,20 +63,21 @@ function parseFlexibleNumberCandidates(rawValue) {
   if (parenthesizedMatch) {
     const innerValue = parenthesizedMatch[1].trim();
     if (innerValue) {
-      variants.add(innerValue);
+      variants.delete(normalized);
       if (!/^[+-]/.test(innerValue)) {
         variants.add(`-${innerValue}`);
+      } else if (innerValue.startsWith("-")) {
+        variants.add(innerValue);
       }
     }
   }
 
   variants.forEach((variant) => {
     const compactValue = variant.replace(/([+-])\s+/g, "$1").trim();
-    const directValue = Number(compactValue);
-    if (Number.isFinite(directValue)) {
-      candidates.add(directValue);
+    const fractionValue = parseExplicitFraction(compactValue);
+    if (Number.isFinite(fractionValue)) {
+      candidates.add(fractionValue);
     }
-
     buildNormalizedFlexibleNumberStrings(compactValue).forEach((candidateText) => {
       const parsedValue = Number(candidateText);
       if (Number.isFinite(parsedValue)) {
@@ -86,6 +87,30 @@ function parseFlexibleNumberCandidates(rawValue) {
   });
 
   return candidates;
+}
+
+function parseExplicitFraction(value) {
+  const normalized = String(value || "").trim();
+  const simpleFraction = normalized.match(/^([+-]?\d+)\s*\/\s*(\d+)$/);
+  if (simpleFraction) {
+    const denominator = Number(simpleFraction[2]);
+    return denominator ? Number(simpleFraction[1]) / denominator : Number.NaN;
+  }
+
+  // Mixed numbers use a space between the whole and fractional parts. The
+  // leading sign applies to the complete value: -1 1/2 means -1.5.
+  const mixedFraction = normalized.match(/^([+-]?\d+)\s+(\d+)\s*\/\s*(\d+)$/);
+  if (!mixedFraction) {
+    return Number.NaN;
+  }
+  const whole = Number(mixedFraction[1]);
+  const numerator = Number(mixedFraction[2]);
+  const denominator = Number(mixedFraction[3]);
+  if (!denominator || numerator >= denominator) {
+    return Number.NaN;
+  }
+  const sign = whole < 0 || mixedFraction[1].startsWith("-") ? -1 : 1;
+  return sign * (Math.abs(whole) + numerator / denominator);
 }
 
 function buildNormalizedFlexibleNumberStrings(value) {
@@ -103,7 +128,13 @@ function buildNormalizedFlexibleNumberStrings(value) {
     addCandidate(compactValue.replace(/,/g, ""));
   }
 
-  if (/^[+-]?\d{1,3}(?:\.\d{3})+(?:,\d+)?$/.test(compactValue)) {
+  // A single dot followed by three digits is a valid decimal (for example,
+  // 1.000), so do not also reinterpret it as a thousands separator. European
+  // grouping is unambiguous when it contains a decimal comma or 2+ groups.
+  if (
+    /^[+-]?\d{1,3}(?:\.\d{3})+,\d+$/.test(compactValue) ||
+    /^[+-]?\d{1,3}(?:\.\d{3}){2,}$/.test(compactValue)
+  ) {
     addCandidate(compactValue.replace(/\./g, "").replace(",", "."));
   }
 
@@ -136,6 +167,7 @@ function numericAnswersMatch(left, right) {
     buildNumericAnswerCandidates,
     normalizeFlexibleNumericInput,
     numericAnswersMatch,
+    parseExplicitFraction,
   };
 
   globalThis.buildNormalizedFlexibleNumberStrings = buildNormalizedFlexibleNumberStrings;

@@ -727,6 +727,7 @@ function buildScienceQuestionBank(entries) {
       }
 
       return {
+        ...copyQuestionMetadata(entry),
         question: entry.question,
         options,
         answer: entry.correctAnswer,
@@ -747,6 +748,41 @@ function buildStaticDragQuestionBank(entries, type) {
   return entries
     .map((entry) => normalizeDragQuestionEntry(entry, type))
     .filter(Boolean);
+}
+
+const QUESTION_METADATA_FIELDS = [
+  "contentId",
+  "category",
+  "subject",
+  "strand",
+  "skill",
+  "topic",
+  "standard",
+  "gradeMin",
+  "gradeMax",
+  "withinGradeDifficulty",
+  "cognitiveDemand",
+  "locale",
+  "sensitivity",
+  "explanation",
+  "source",
+  "reviewedAt",
+  "sourceDate",
+  "reviewStatus",
+  "hints",
+  "listenText",
+  "geographyMapCountry",
+  "geographyMapVisualKind",
+  "distractorRationales",
+  "comparisonMode",
+];
+
+function copyQuestionMetadata(entry) {
+  return Object.fromEntries(
+    QUESTION_METADATA_FIELDS
+      .filter((field) => entry?.[field] !== undefined && entry?.[field] !== null)
+      .map((field) => [field, entry[field]])
+  );
 }
 
 function normalizeChoiceBankEntry(entry, type) {
@@ -773,6 +809,7 @@ function normalizeChoiceBankEntry(entry, type) {
     }
 
     return {
+      ...copyQuestionMetadata(entry),
       question: String(entry.question),
       answer,
       answerLabel: String(entry?.answerLabel || answer),
@@ -795,20 +832,23 @@ function normalizeChoiceBankEntry(entry, type) {
 
   const options = Array.from(new Set((entry?.options || []).map(String)));
   const answer = String(entry?.answer || "");
+  const comparisonMode = getChoiceComparisonMode(entry, type);
   if (
     difficulty === null ||
     !answer ||
     options.length !== 4 ||
     !options.includes(answer) ||
-    !hasDistinctChoiceMeanings(options)
+    (comparisonMode !== "exact-text" && !hasDistinctChoiceMeanings(options))
   ) {
     return null;
   }
 
   return {
+    ...copyQuestionMetadata(entry),
     question: String(entry?.question || ""),
     options,
     answer,
+    comparisonMode,
     difficulty,
     type,
     visualHtml: typeof entry?.visualHtml === "string" ? entry.visualHtml : "",
@@ -828,6 +868,26 @@ function normalizeChoiceBankEntry(entry, type) {
           ? entry.passage
           : "",
   };
+}
+
+function getChoiceComparisonMode(entry, type) {
+  if (entry?.comparisonMode === "exact-text") {
+    return "exact-text";
+  }
+
+  const prompt = String(entry?.question || "").toLowerCase();
+  const isOrthographyPrompt = [
+    "written correctly",
+    "capitalization",
+    "punctuation",
+    "comma",
+    "apostrophe",
+    "quotation mark",
+  ].some((needle) => prompt.includes(needle));
+
+  return String(type).startsWith("vocabulary-grammar") && isOrthographyPrompt
+    ? "exact-text"
+    : "meaning";
 }
 
 function normalizeDragQuestionEntry(entry, type) {
@@ -858,6 +918,7 @@ function normalizeDragQuestionEntry(entry, type) {
   }
 
   return {
+    ...copyQuestionMetadata(entry),
     question: String(entry.question),
     difficulty,
     type,
@@ -1374,7 +1435,12 @@ function getSessionBuilderOptions() {
   return {
     minDifficulty: 1,
     selectedCategories: getPresetCategories(),
-    adaptiveReview: state.sessionPreset !== SESSION_PRESETS.practice,
+    // Weak-skill review belongs to the explicitly adaptive preset.  Math,
+    // Hebrew, and focused-practice sessions should stay true to the mode the
+    // learner selected.
+    adaptiveReview:
+      state.sessionPreset === SESSION_PRESETS.adaptive &&
+      isReviewFocusEnabledForUser(state.currentUserId),
     sessionPreset: state.sessionPreset,
   };
 }
@@ -1621,7 +1687,15 @@ function validateHomeworkQuestionShape(question, context = "question") {
       : [];
     if (!interactive) {
       addError("interactive questions need interactive config");
-    } else if (!["option-select", "part-select", "command-sequence", "paired-select"].includes(interactive.layout)) {
+    } else if (
+      ![
+        "option-select",
+        "multi-select",
+        "part-select",
+        "command-sequence",
+        "paired-select",
+      ].includes(interactive.layout)
+    ) {
       addError("interactive questions need a supported layout");
     } else if (interactive.layout === "command-sequence") {
       const grid = interactive.grid && typeof interactive.grid === "object" ? interactive.grid : null;
@@ -1636,15 +1710,41 @@ function validateHomeworkQuestionShape(question, context = "question") {
     } else if (new Set(answerIndexes).size !== answerIndexes.length) {
       addError("interactive answer indexes must be unique");
     } else if (
-      interactive.layout === "option-select" &&
+      ["option-select", "multi-select"].includes(interactive.layout) &&
       (!Array.isArray(interactive.choices) || interactive.choices.length < 2)
     ) {
       addError("interactive option questions need choices");
+    } else if (
+      ["option-select", "multi-select"].includes(interactive.layout) &&
+      answerIndexes.some((index) => index < 0 || index >= interactive.choices.length)
+    ) {
+      addError("interactive answer indexes must point to available choices");
+    } else if (interactive.layout === "multi-select" && answerIndexes.length < 2) {
+      addError("interactive multi-select questions need at least two answers");
+    } else if (
+      interactive.layout === "multi-select" &&
+      (
+        (interactive.minSelected !== undefined &&
+          (!Number.isInteger(Number(interactive.minSelected)) ||
+            Number(interactive.minSelected) < 1 ||
+            Number(interactive.minSelected) > answerIndexes.length)) ||
+        (interactive.maxSelected !== undefined &&
+          (!Number.isInteger(Number(interactive.maxSelected)) ||
+            Number(interactive.maxSelected) < answerIndexes.length ||
+            Number(interactive.maxSelected) > interactive.choices.length))
+      )
+    ) {
+      addError("interactive multi-select limits must fit the available choices and answers");
     } else if (
       interactive.layout === "part-select" &&
       (!Array.isArray(interactive.parts) || interactive.parts.length < 2)
     ) {
       addError("interactive part questions need parts");
+    } else if (
+      interactive.layout === "part-select" &&
+      answerIndexes.some((index) => index < 0 || index >= interactive.parts.length)
+    ) {
+      addError("interactive answer indexes must point to available parts");
     } else if (interactive.layout === "paired-select") {
       const items = Array.isArray(interactive.items) ? interactive.items : [];
       const reasons = Array.isArray(interactive.reasons) ? interactive.reasons : [];
@@ -1684,7 +1784,48 @@ function validateHomeworkQuestionList(questions, context = "session") {
   return errors;
 }
 
-function startSession(event) {
+let lazyQuestionDataLoadPromise = null;
+
+async function ensureSelectedQuestionData(categories) {
+  // History's civilization-location activity intentionally reuses the optimized
+  // offline map source, so focused History practice needs the same lazy bundle.
+  const needsGeographyMap = Array.isArray(categories) && (
+    categories.includes(RESERVED_MAP_CATEGORY) || categories.includes("history")
+  );
+  if (!needsGeographyMap || Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)) {
+    return;
+  }
+
+  if (lazyQuestionDataLoadPromise) {
+    return lazyQuestionDataLoadPromise;
+  }
+
+  const relativePath = globalThis.HOMEWORK_LAZY_QUESTION_SCRIPT_PATHS?.[RESERVED_MAP_CATEGORY];
+  if (!relativePath) {
+    throw new Error("The geography map data path is not configured.");
+  }
+
+  lazyQuestionDataLoadPromise = new Promise((resolve, reject) => {
+    const sessionScript = Array.from(document.scripts).find((script) =>
+      /\/main\/session\.js(?:\?|$)/.test(script.src)
+    );
+    const script = document.createElement("script");
+    script.src = sessionScript?.src
+      ? new URL(`../${relativePath}`, sessionScript.src).toString()
+      : `app/${relativePath}`;
+    script.async = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error("Could not load the offline geography map bundle."));
+    document.head.appendChild(script);
+  }).catch((error) => {
+    lazyQuestionDataLoadPromise = null;
+    throw error;
+  });
+
+  return lazyQuestionDataLoadPromise;
+}
+
+async function startSession(event) {
   event.preventDefault();
 
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
@@ -1709,6 +1850,24 @@ function startSession(event) {
     return;
   }
 
+  const startButton = elements.startForm?.querySelector('button[type="submit"]');
+  try {
+    if (
+      (selectedCategories.includes(RESERVED_MAP_CATEGORY) || selectedCategories.includes("history")) &&
+      !globalThis.GEOGRAPHY_MAP_COUNTRIES
+    ) {
+      showStartMessage("Preparing map activities…", "success");
+      if (startButton) startButton.disabled = true;
+      await ensureSelectedQuestionData(selectedCategories);
+    }
+  } catch (error) {
+    console.error(error);
+    showStartMessage("Map activities could not be loaded. Check the connection and try again.", "error");
+    return;
+  } finally {
+    if (startButton) startButton.disabled = false;
+  }
+
   if (isFocusedPractice && selectedCategories.length !== 1) {
     showStartMessage("Choose one practice topic before starting.", "error");
     elements.practiceTopicPanel?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
@@ -1726,9 +1885,9 @@ function startSession(event) {
       return;
     }
   } else {
-    const requiredChoiceBanks = hebrewOnly
-      ? [choiceCategoryConfigs.hebrew]
-      : Object.values(choiceCategoryConfigs);
+    const requiredChoiceBanks = (hebrewOnly ? ["hebrew"] : selectedCategories)
+      .map((category) => choiceCategoryConfigs[category])
+      .filter(Boolean);
     if (requiredChoiceBanks.some(({ bank }) => !bank.length)) {
       showStartMessage(
         hebrewOnly ? "The Hebrew question bank is missing." : "One of the offline question files is missing.",
@@ -1747,12 +1906,20 @@ function startSession(event) {
   state.hebrewOnly = hebrewOnly;
   state.currentRound = "main";
   state.speedRound = createEmptySpeedRoundState();
+  state.awaitingContinue = false;
+  state.completedPracticeCount = 0;
+  state.speedChallengeEnabled = Boolean(elements.speedChallengeEnabled?.checked);
+  state.speedSoundEnabled = Boolean(elements.speedSoundEnabled?.checked);
+  state.speedRelaxedTimer = Boolean(elements.speedRelaxedTimer?.checked);
   state.currentIndex = 0;
   state.viewIndex = 0;
   state.answeredCount = 0;
   state.correctCount = 0;
   state.answerResults = [];
   state.answerSelections = [];
+  state.hintsUsed = [];
+  state.questionStartedAt = 0;
+  state.timingQuestionIndex = -1;
   state.sessionRecords = [];
   state.sessionStartedAt = new Date();
   state.feedbackMessage = "";
@@ -1776,7 +1943,13 @@ function startSession(event) {
               categoryDifficulties,
               ...sessionBuilderOptions,
             });
-            return isFocusedPractice
+            const shouldIncludeHebrewWriting =
+              !isFocusedPractice &&
+              isHebrewWritingTailEnabledForUser(state.currentUserId) &&
+              (state.sessionPreset === SESSION_PRESETS.adaptive ||
+                state.sessionPreset === SESSION_PRESETS.hebrew);
+
+            return !shouldIncludeHebrewWriting
               ? generatedQuestions
               : injectHebrewWritingPracticeTail(
                   generatedQuestions,
@@ -1799,6 +1972,7 @@ function startSession(event) {
 
   switchScreen(elements.quizScreen);
   renderCurrentQuestion();
+  saveActiveSessionCheckpoint();
 }
 
 function buildAdultSessionQuestions(totalQuestions) {
@@ -1837,7 +2011,12 @@ function buildAdultSessionQuestions(totalQuestions) {
     hebrewStandardQuestionIndex: 0,
     mapCountries: new Set(),
   };
-  return categorySequence.map((category) => createAdultSessionQuestion(category, resources, runtime));
+  return categorySequence.map((category) =>
+    withQuestionCategory(
+      createAdultSessionQuestion(category, resources, runtime),
+      category === "adult-hebrew" ? "hebrew" : category
+    )
+  );
 }
 
 function buildHebrewOnlySessionQuestions(totalQuestions, userId) {
@@ -2134,15 +2313,63 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
   };
 
   return categorySequence.map((category) =>
-    createSessionQuestionForCategory(
-      category,
-      normalizedDifficulty,
-      resources,
-      nonHebrewDifficultyQueues,
-      hebrewDifficultyQueue,
-      runtime
+    withQuestionCategory(
+      createSessionQuestionForCategory(
+        category,
+        normalizedDifficulty,
+        resources,
+        nonHebrewDifficultyQueues,
+        hebrewDifficultyQueue,
+        runtime
+      ),
+      category
     )
   );
+}
+
+function withQuestionCategory(question, category) {
+  if (!question || typeof question !== "object") {
+    return question;
+  }
+
+  const normalizedCategory = String(question.category || category || "general");
+  const skill = String(question.skill || question.topic || normalizedCategory);
+  return {
+    ...question,
+    category: normalizedCategory,
+    skill,
+    gradeMin: Number.isFinite(Number(question.gradeMin))
+      ? Number(question.gradeMin)
+      : Number(question.difficulty),
+    gradeMax: Number.isFinite(Number(question.gradeMax))
+      ? Number(question.gradeMax)
+      : Number(question.difficulty),
+    explanation: String(question.explanation || question.reviewText || ""),
+    contentId:
+      String(question.contentId || "").trim() ||
+      buildGeneratedContentId(normalizedCategory, skill, question),
+  };
+}
+
+function buildGeneratedContentId(category, skill, question) {
+  const template = [question.type, question.questionText, question.displayText]
+    .map((value) =>
+      String(value || "")
+        .toLowerCase()
+        .replace(/-?\d+(?:[.,]\d+)?/g, "#")
+        .replace(/\s+/g, " ")
+        .trim()
+    )
+    .filter(Boolean)
+    .join("|");
+  let hash = 2166136261;
+  for (let index = 0; index < template.length; index += 1) {
+    hash ^= template.charCodeAt(index);
+    hash = Math.imul(hash, 16777619);
+  }
+  return `${category}.${String(skill).replace(/[^a-z0-9-]+/gi, "-").toLowerCase()}.${(
+    hash >>> 0
+  ).toString(36)}`;
 }
 
 function injectHebrewWritingPracticeTail(questions, difficulty, options = {}) {
@@ -2157,7 +2384,9 @@ function injectHebrewWritingPracticeTail(questions, difficulty, options = {}) {
     return questions;
   }
 
-  const practiceQuestions = buildHebrewWritingPracticeQuestions(practiceCount, difficulty);
+  const practiceQuestions = buildHebrewWritingPracticeQuestions(practiceCount, difficulty).map((question) =>
+    withQuestionCategory(question, "hebrew")
+  );
   const prefixCount = Math.max(
     0,
     questions.length - practiceQuestions.length - (readingQuestion ? 1 : 0)
@@ -2165,7 +2394,7 @@ function injectHebrewWritingPracticeTail(questions, difficulty, options = {}) {
 
   return [
     ...questions.slice(0, prefixCount),
-    ...(readingQuestion ? [readingQuestion] : []),
+    ...(readingQuestion ? [withQuestionCategory(readingQuestion, "hebrew")] : []),
     ...practiceQuestions,
   ];
 }
@@ -2593,6 +2822,12 @@ function getUserWeakCategoryEntries(sessionHistory) {
     const sessionWeight = Math.pow(REVIEW_RECENCY_DECAY, sessionIndex);
 
     (session.records || []).forEach((record) => {
+      // Parent/self-reviewed writing and other practice activities have no
+      // correctness signal; treating their null result as a mistake would
+      // incorrectly steer the adaptive review engine.
+      if (record?.isGraded === false) {
+        return;
+      }
       const category = String(record?.category || "").trim();
       if (!SESSION_CATEGORY_ORDER.includes(category) || !REVIEW_FOCUS_ALLOWED_CATEGORIES.has(category)) {
         return;
@@ -2837,7 +3072,22 @@ function drawHebrewEntry(pool, difficulty) {
 
 function getEntriesForDifficulty(pool, difficulty) {
   const exact = pool.entriesByDifficulty.get(difficulty) || [];
-  return exact.length ? exact : pool.entries;
+  if (exact.length) {
+    return exact;
+  }
+
+  // A sparse bank must not silently turn a grade-10 request into a grade-1
+  // question. Prefer the nearest available level, breaking ties upward, and
+  // let content QA expose genuinely missing grade coverage.
+  const availableLevels = Array.from(pool.entriesByDifficulty.keys())
+    .filter(Number.isFinite)
+    .sort(
+      (left, right) =>
+        Math.abs(left - difficulty) - Math.abs(right - difficulty) || right - left
+    );
+  return availableLevels.length
+    ? pool.entriesByDifficulty.get(availableLevels[0]) || []
+    : pool.entries;
 }
 
 function buildDifficultyQueue(totalCount, weightMap) {
@@ -2929,4 +3179,464 @@ function allocateWeightedCounts(totalCount, weightMap) {
   }
 
   return counts;
+}
+
+const ACTIVE_SESSION_CHECKPOINT_KEY = "homework-active-session-v1";
+const ACTIVE_SESSION_CHECKPOINT_VERSION = 1;
+const ACTIVE_SESSION_CHECKPOINT_MAX_CHARS = 1000000;
+
+function getCheckpointStorage() {
+  try {
+    return sessionHistoryStore?.getStorage?.() || window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+function buildActiveSessionCheckpoint() {
+  const hasActiveQuiz = Boolean(elements.quizScreen && !elements.quizScreen.hidden);
+  if (
+    !hasActiveQuiz ||
+    !["main", "speed"].includes(state.currentRound) ||
+    !Array.isArray(state.questions) ||
+    !state.questions.length
+  ) {
+    return null;
+  }
+
+  const speedRound = state.speedRound || createEmptySpeedRoundState();
+  return {
+    version: ACTIVE_SESSION_CHECKPOINT_VERSION,
+    savedAt: new Date().toISOString(),
+    state: {
+      currentUserId: state.currentUserId,
+      dashboardUserId: state.dashboardUserId,
+      sessionPreset: state.sessionPreset,
+      practiceCategory: state.practiceCategory,
+      practicePreviousQuestionCount: state.practicePreviousQuestionCount,
+      categoryDifficulties: state.categoryDifficulties,
+      selectedCategories: state.selectedCategories,
+      totalQuestions: state.totalQuestions,
+      difficulty: state.difficulty,
+      hebrewOnly: state.hebrewOnly,
+      currentIndex: state.currentIndex,
+      viewIndex: state.viewIndex,
+      answeredCount: state.answeredCount,
+      correctCount: state.correctCount,
+      answerResults: state.answerResults,
+      answerSelections: state.answerSelections,
+      hintsUsed: Array.isArray(state.hintsUsed) ? state.hintsUsed : [],
+      questions: state.questions.map(cloneQuestionForCheckpoint),
+      sessionRecords: state.sessionRecords,
+      currentRound: state.currentRound,
+      sessionStartedAt:
+        state.sessionStartedAt instanceof Date
+          ? state.sessionStartedAt.toISOString()
+          : state.sessionStartedAt,
+      feedbackMessage: state.feedbackMessage,
+      feedbackTone: state.feedbackTone,
+      awaitingContinue: Boolean(state.awaitingContinue),
+      completedPracticeCount: Number(state.completedPracticeCount) || 0,
+      speedChallengeEnabled: Boolean(state.speedChallengeEnabled),
+      speedSoundEnabled: Boolean(state.speedSoundEnabled),
+      speedRelaxedTimer: Boolean(state.speedRelaxedTimer),
+      speedRound: {
+        totalQuestions: speedRound.totalQuestions,
+        currentIndex: speedRound.currentIndex,
+        viewIndex: speedRound.viewIndex,
+        answeredCount: speedRound.answeredCount,
+        correctCount: speedRound.correctCount,
+        answerResults: speedRound.answerResults,
+        answerSelections: speedRound.answerSelections,
+        hintsUsed: Array.isArray(speedRound.hintsUsed) ? speedRound.hintsUsed : [],
+        questions: Array.isArray(speedRound.questions)
+          ? speedRound.questions.map(cloneQuestionForCheckpoint)
+          : [],
+        records: speedRound.records,
+        awaitingContinue: Boolean(speedRound.awaitingContinue),
+      },
+    },
+  };
+}
+
+function cloneQuestionForCheckpoint(question) {
+  const clone = { ...question };
+  if (clone.geographyMapCountry) {
+    delete clone.visualHtml;
+  }
+  if (["continents", "history-world"].includes(clone.geographyMapVisualKind)) {
+    delete clone.dragMapHtml;
+  }
+  return clone;
+}
+
+function hydrateActiveSessionCheckpoint(checkpoint) {
+  if (!isCheckpointPlainObject(checkpoint) || !isCheckpointPlainObject(checkpoint.state)) {
+    return checkpoint;
+  }
+
+  return {
+    ...checkpoint,
+    state: {
+      ...checkpoint.state,
+      questions: hydrateCheckpointQuestions(checkpoint.state.questions),
+      speedRound: isCheckpointPlainObject(checkpoint.state.speedRound)
+        ? {
+            ...checkpoint.state.speedRound,
+            questions: hydrateCheckpointQuestions(checkpoint.state.speedRound.questions),
+          }
+        : checkpoint.state.speedRound,
+    },
+  };
+}
+
+function hydrateCheckpointQuestions(questions) {
+  return Array.isArray(questions) ? questions.map(hydrateCheckpointQuestion) : questions;
+}
+
+function hydrateCheckpointQuestion(question) {
+  if (!isCheckpointPlainObject(question)) {
+    return question;
+  }
+
+  const clone = { ...question };
+  if (clone.geographyMapCountry && !clone.visualHtml) {
+    const countryEntry = Array.isArray(globalThis.GEOGRAPHY_MAP_COUNTRIES)
+      ? globalThis.GEOGRAPHY_MAP_COUNTRIES.find(
+          (entry) => String(entry?.country || "") === String(clone.geographyMapCountry)
+        )
+      : null;
+    if (countryEntry && typeof globalThis.renderGeographyMapVisualHtml === "function") {
+      clone.visualHtml = globalThis.renderGeographyMapVisualHtml(countryEntry);
+    }
+  }
+
+  if (
+    clone.geographyMapVisualKind === "continents" &&
+    !clone.dragMapHtml &&
+    typeof globalThis.renderGeographyContinentMapHtml === "function"
+  ) {
+    clone.dragMapHtml = globalThis.renderGeographyContinentMapHtml();
+  } else if (
+    clone.geographyMapVisualKind === "history-world" &&
+    !clone.dragMapHtml &&
+    typeof globalThis.renderHistoryWorldMapHtml === "function"
+  ) {
+    clone.dragMapHtml = globalThis.renderHistoryWorldMapHtml();
+  }
+
+  return clone;
+}
+
+function hasUnhydratedCheckpointMapVisuals(checkpoint) {
+  const questions = [
+    ...(Array.isArray(checkpoint?.state?.questions) ? checkpoint.state.questions : []),
+    ...(Array.isArray(checkpoint?.state?.speedRound?.questions)
+      ? checkpoint.state.speedRound.questions
+      : []),
+  ];
+  return questions.some(
+    (question) =>
+      (question?.geographyMapCountry && !question.visualHtml) ||
+      (["continents", "history-world"].includes(question?.geographyMapVisualKind) &&
+        !question.dragMapHtml)
+  );
+}
+
+function saveActiveSessionCheckpoint() {
+  const storage = getCheckpointStorage();
+  const checkpoint = buildActiveSessionCheckpoint();
+  if (!storage || !checkpoint) {
+    return false;
+  }
+
+  try {
+    const serialized = JSON.stringify(checkpoint);
+    if (serialized.length > ACTIVE_SESSION_CHECKPOINT_MAX_CHARS) {
+      throw new Error("The session checkpoint is too large for safe local storage.");
+    }
+    storage.setItem(ACTIVE_SESSION_CHECKPOINT_KEY, serialized);
+    refreshResumeSessionPanel();
+    return true;
+  } catch (error) {
+    console.warn("Could not save the active homework session.", error);
+    return false;
+  }
+}
+
+function loadActiveSessionCheckpoint() {
+  const storage = getCheckpointStorage();
+  if (!storage) {
+    return null;
+  }
+
+  try {
+    const serialized = storage.getItem(ACTIVE_SESSION_CHECKPOINT_KEY) || "";
+    if (!serialized || serialized.length > ACTIVE_SESSION_CHECKPOINT_MAX_CHARS) {
+      storage.removeItem(ACTIVE_SESSION_CHECKPOINT_KEY);
+      return null;
+    }
+    const checkpoint = hydrateActiveSessionCheckpoint(JSON.parse(serialized));
+    if (!isValidActiveSessionCheckpoint(checkpoint)) {
+      storage.removeItem(ACTIVE_SESSION_CHECKPOINT_KEY);
+      return null;
+    }
+    return checkpoint;
+  } catch {
+    try {
+      storage.removeItem(ACTIVE_SESSION_CHECKPOINT_KEY);
+    } catch {}
+    return null;
+  }
+}
+
+function isValidActiveSessionCheckpoint(checkpoint) {
+  const savedState = checkpoint?.state;
+  if (
+    checkpoint?.version !== ACTIVE_SESSION_CHECKPOINT_VERSION ||
+    !isCheckpointPlainObject(savedState) ||
+    !isValidCheckpointDate(checkpoint.savedAt) ||
+    !isValidCheckpointDate(savedState.sessionStartedAt) ||
+    !USER_PROFILES.some((profile) => profile.id === savedState.currentUserId) ||
+    !Object.values(SESSION_PRESETS).includes(savedState.sessionPreset) ||
+    !["main", "speed"].includes(savedState.currentRound) ||
+    !Array.isArray(savedState.selectedCategories) ||
+    savedState.selectedCategories.length > SESSION_CATEGORY_ORDER.length ||
+    !savedState.selectedCategories.every(
+      (category) => typeof category === "string" && SESSION_CATEGORY_ORDER.includes(category)
+    ) ||
+    !isCheckpointPlainObject(savedState.categoryDifficulties) ||
+    !QUESTION_COUNT_OPTIONS.includes(savedState.totalQuestions) ||
+    !Array.isArray(savedState.questions) ||
+    savedState.questions.length !== savedState.totalQuestions ||
+    validateHomeworkQuestionList(savedState.questions, "saved session").length > 0 ||
+    !isValidSavedRoundState(savedState, savedState.totalQuestions, "sessionRecords")
+  ) {
+    return false;
+  }
+
+  const speedRound = savedState.speedRound;
+  if (!isCheckpointPlainObject(speedRound)) {
+    return false;
+  }
+
+  if (savedState.currentRound === "main") {
+    return (
+      savedState.awaitingContinue === Boolean(savedState.awaitingContinue) &&
+      Array.isArray(speedRound.questions) &&
+      speedRound.questions.length === 0 &&
+      isDormantSavedSpeedRound(speedRound)
+    );
+  }
+
+  return (
+    savedState.currentIndex === savedState.totalQuestions &&
+    savedState.answeredCount === savedState.totalQuestions &&
+    savedState.awaitingContinue === false &&
+    Number.isInteger(speedRound.totalQuestions) &&
+    speedRound.totalQuestions > 0 &&
+    speedRound.totalQuestions <= SPEED_ROUND_QUESTION_COUNT &&
+    Array.isArray(speedRound.questions) &&
+    speedRound.questions.length === speedRound.totalQuestions &&
+    validateHomeworkQuestionList(speedRound.questions, "saved challenge").length === 0 &&
+    isValidSavedRoundState(speedRound, speedRound.totalQuestions, "records")
+  );
+}
+
+function isValidSavedRoundState(round, totalQuestions, recordsField) {
+  const results = round?.answerResults;
+  const selections = round?.answerSelections;
+  const hints = round?.hintsUsed;
+  const records = round?.[recordsField];
+  const awaitingContinue = Boolean(round?.awaitingContinue);
+  if (
+    typeof round?.awaitingContinue !== "boolean" ||
+    !Number.isInteger(round?.currentIndex) ||
+    !Number.isInteger(round?.viewIndex) ||
+    !Number.isInteger(round?.answeredCount) ||
+    !Number.isInteger(round?.correctCount) ||
+    round.currentIndex < 0 ||
+    round.currentIndex > totalQuestions ||
+    round.viewIndex < 0 ||
+    round.viewIndex > round.currentIndex ||
+    round.answeredCount < 0 ||
+    round.answeredCount > totalQuestions ||
+    round.correctCount < 0 ||
+    round.correctCount > round.answeredCount ||
+    !Array.isArray(results) ||
+    results.length !== round.answeredCount ||
+    !results.every((result) => result === true || result === false || result === null) ||
+    results.filter((result) => result === true).length !== round.correctCount ||
+    !Array.isArray(selections) ||
+    selections.length !== round.answeredCount ||
+    !selections.every(isCheckpointPlainObject) ||
+    !Array.isArray(records) ||
+    records.length !== round.answeredCount ||
+    !records.every(isCheckpointPlainObject) ||
+    !Array.isArray(hints) ||
+    hints.length > totalQuestions ||
+    !hints.every(
+      (count) => count === null || (Number.isInteger(count) && count >= 0 && count <= 20)
+    )
+  ) {
+    return false;
+  }
+
+  return awaitingContinue
+    ? round.currentIndex < totalQuestions && round.answeredCount === round.currentIndex + 1
+    : round.answeredCount === round.currentIndex;
+}
+
+function isDormantSavedSpeedRound(round) {
+  return (
+    round.totalQuestions === SPEED_ROUND_QUESTION_COUNT &&
+    round.currentIndex === 0 &&
+    round.viewIndex === 0 &&
+    round.answeredCount === 0 &&
+    round.correctCount === 0 &&
+    round.awaitingContinue === false &&
+    [round.answerResults, round.answerSelections, round.hintsUsed, round.records].every(
+      (value) => Array.isArray(value) && value.length === 0
+    )
+  );
+}
+
+function isValidCheckpointDate(value) {
+  return (
+    typeof value === "string" &&
+    value.length > 0 &&
+    value.length <= 64 &&
+    Number.isFinite(Date.parse(value))
+  );
+}
+
+function isCheckpointPlainObject(value) {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function clearActiveSessionCheckpoint() {
+  const storage = getCheckpointStorage();
+  try {
+    storage?.removeItem(ACTIVE_SESSION_CHECKPOINT_KEY);
+  } catch {}
+  refreshResumeSessionPanel();
+}
+
+function discardActiveSessionCheckpoint() {
+  clearActiveSessionCheckpoint();
+  if (typeof showStartScreen === "function") {
+    showStartScreen();
+    showStartMessage("Saved session discarded. Choose a session when you are ready.", "success");
+  }
+}
+
+function refreshResumeSessionPanel() {
+  if (!elements.resumeSessionPanel) {
+    return;
+  }
+
+  const checkpoint = loadActiveSessionCheckpoint();
+  elements.resumeSessionPanel.hidden = !checkpoint;
+  if (!checkpoint || !elements.resumeSessionSummary) {
+    return;
+  }
+
+  const savedState = checkpoint.state;
+  const profile = USER_PROFILE_MAP[savedState.currentUserId] || USER_PROFILES[0];
+  const answered = Number(savedState.answeredCount) || 0;
+  const total = Number(savedState.totalQuestions) || savedState.questions.length;
+  elements.resumeSessionSummary.textContent = `${profile.name} has a saved ${getCheckpointPresetLabel(
+    savedState.sessionPreset
+  )} session: ${answered} of ${total} activities completed.`;
+}
+
+function getCheckpointPresetLabel(preset) {
+  return (
+    {
+      [SESSION_PRESETS.adaptive]: "adaptive",
+      [SESSION_PRESETS["math-heavy"]]: "math",
+      [SESSION_PRESETS.hebrew]: "Hebrew",
+      [SESSION_PRESETS.practice]: "practice",
+    }[preset] || "homework"
+  );
+}
+
+async function restoreActiveSessionCheckpoint() {
+  let checkpoint = loadActiveSessionCheckpoint();
+  if (!checkpoint) {
+    showStartMessage("That saved session is no longer available.", "error");
+    refreshResumeSessionPanel();
+    return false;
+  }
+
+  try {
+    if (hasUnhydratedCheckpointMapVisuals(checkpoint)) {
+      await ensureSelectedQuestionData(
+        Array.isArray(checkpoint.state.selectedCategories) && checkpoint.state.selectedCategories.length
+          ? checkpoint.state.selectedCategories
+          : [RESERVED_MAP_CATEGORY]
+      );
+      checkpoint = hydrateActiveSessionCheckpoint(checkpoint);
+    }
+    if (hasUnhydratedCheckpointMapVisuals(checkpoint) || !isValidActiveSessionCheckpoint(checkpoint)) {
+      throw new Error("The saved map activity could not be rebuilt safely.");
+    }
+  } catch (error) {
+    console.error(error);
+    showStartMessage("The saved map activity could not be prepared. Check the connection and try again.", "error");
+    return false;
+  }
+
+  cleanupInteractiveDragState();
+  clearSpeedRoundTimer();
+  const savedState = checkpoint.state;
+  Object.assign(state, savedState, {
+    sessionStartedAt: savedState.sessionStartedAt
+      ? new Date(savedState.sessionStartedAt)
+      : new Date(checkpoint.savedAt),
+    dragState: null,
+    // A paused session must not count time spent away from the app as answer
+    // latency. Rendering the restored item starts a fresh timing interval.
+    questionStartedAt: 0,
+    timingQuestionIndex: -1,
+    speedRound: {
+      ...createEmptySpeedRoundState(),
+      ...(savedState.speedRound || {}),
+      questionStartedAt: 0,
+      timingQuestionIndex: -1,
+    },
+  });
+  renderUserSelector();
+  updateStartControlsForCurrentUser();
+  switchScreen(elements.quizScreen);
+  renderCurrentQuestion();
+  return true;
+}
+
+function pauseActiveSession() {
+  if (!saveActiveSessionCheckpoint()) {
+    state.feedbackMessage = "This browser could not save the session. Keep this page open and try again.";
+    state.feedbackTone = "error";
+    renderCurrentQuestion();
+    return false;
+  }
+
+  cleanupInteractiveDragState();
+  clearSpeedRoundTimer();
+  switchScreen(elements.startScreen);
+  showStartMessage("Session saved. You can resume whenever you are ready.", "success");
+  refreshResumeSessionPanel();
+  return true;
+}
+
+function initializeSessionCheckpointing() {
+  document.addEventListener("homework:answer-recorded", saveActiveSessionCheckpoint);
+  window.addEventListener("homework:save-checkpoint", saveActiveSessionCheckpoint);
+  window.addEventListener("homework:pause-session", pauseActiveSession);
+  window.addEventListener("homework:resume-session", () => {
+    void restoreActiveSessionCheckpoint();
+  });
+  window.addEventListener("homework:discard-session", discardActiveSessionCheckpoint);
+  window.addEventListener("pagehide", saveActiveSessionCheckpoint);
+  refreshResumeSessionPanel();
 }

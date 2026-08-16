@@ -1,6 +1,10 @@
 function playConfetti(durationMs) {
   stopConfetti();
 
+  if (window.matchMedia?.("(prefers-reduced-motion: reduce)").matches) {
+    return;
+  }
+
   const layer = document.createElement("div");
   layer.className = "confetti-layer";
   const colors = ["#ff6b6b", "#ffd166", "#06d6a0", "#118ab2", "#ef476f", "#7cc576"];

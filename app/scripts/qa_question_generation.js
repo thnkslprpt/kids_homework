@@ -32,6 +32,8 @@ const categories = [
   "rationality",
   "general-knowledge",
   "geography",
+  "geography-map",
+  "history",
   "population",
   "computing",
   "financial-literacy",
@@ -145,6 +147,8 @@ function createContext() {
     documentElement: createElement("html"),
     createElement,
     createElementNS: (_namespace, tagName) => createElement(tagName),
+    addEventListener() {},
+    removeEventListener() {},
     getElementById(id) {
       if (!elementsById.has(id)) {
         const element = createElement("div");
@@ -248,6 +252,12 @@ function textKey(value) {
     .replace(/\s+/g, " ");
 }
 
+function choiceComparisonKey(value, comparisonMode = "semantic") {
+  return comparisonMode === "exact-text"
+    ? String(value ?? "").trim().replace(/\s+/g, " ")
+    : textKey(value);
+}
+
 function validateQuestion(question, meta) {
   const errors = [];
   if (!question || typeof question !== "object") {
@@ -272,7 +282,7 @@ function validateQuestion(question, meta) {
   if (mode === "choice") {
     const options = Array.isArray(question.options) ? question.options.map(String) : [];
     const answer = String(question.answerValue ?? "");
-    const optionKeys = options.map(textKey);
+    const optionKeys = options.map((option) => choiceComparisonKey(option, question.comparisonMode));
     if (options.length !== 4) {
       errors.push(`${meta}: choice question has ${options.length} options`);
     }
@@ -330,6 +340,38 @@ function validateQuestion(question, meta) {
     }
   }
 
+  if (mode === "interactive") {
+    const interactive = question.interactive && typeof question.interactive === "object"
+      ? question.interactive
+      : null;
+    const layout = String(interactive?.layout || "");
+    const answerIndexes = Array.isArray(interactive?.answerIndexes)
+      ? interactive.answerIndexes.map(Number)
+      : [];
+    if (!interactive) {
+      errors.push(`${meta}: interactive question is missing its configuration`);
+    } else if (layout === "command-sequence") {
+      if (!Array.isArray(interactive.answerSequence) || !interactive.answerSequence.length) {
+        errors.push(`${meta}: command sequence is missing its answer steps`);
+      }
+    } else if (!answerIndexes.length || new Set(answerIndexes).size !== answerIndexes.length) {
+      errors.push(`${meta}: interactive answer indexes are missing or duplicated`);
+    } else if (["option-select", "multi-select"].includes(layout)) {
+      const choices = Array.isArray(interactive.choices) ? interactive.choices : [];
+      if (choices.length < 2 || answerIndexes.some((index) => !Number.isInteger(index) || index < 0 || index >= choices.length)) {
+        errors.push(`${meta}: interactive answers do not point to available choices`);
+      }
+      if (layout === "multi-select" && answerIndexes.length < 2) {
+        errors.push(`${meta}: multi-select needs more than one correct choice`);
+      }
+    } else if (layout === "part-select") {
+      const parts = Array.isArray(interactive.parts) ? interactive.parts : [];
+      if (parts.length < 2 || answerIndexes.some((index) => !Number.isInteger(index) || index < 0 || index >= parts.length)) {
+        errors.push(`${meta}: interactive answers do not point to available parts`);
+      }
+    }
+  }
+
   return errors;
 }
 
@@ -370,7 +412,7 @@ function run() {
         failures.push(...validateQuestion(question, meta));
         failures.push(...context.HOMEWORK_TEST_API.validateHomeworkQuestionShape(question, meta));
 
-        if (category !== "geography" && actualCategory === "geography-map") {
+        if (!["geography", "geography-map"].includes(category) && actualCategory === "geography-map") {
           failures.push(`${meta}: unexpectedly generated geography-map for ${category}`);
         }
       }
@@ -400,6 +442,7 @@ function run() {
 
 module.exports = {
   categories,
+  choiceComparisonKey,
   loadAppContext,
   textKey,
   validateQuestion,

@@ -16,13 +16,23 @@ function generalKnowledgeQuestion(difficulty, question, options, answer) {
     options: normalizedOptions,
     answer: normalizedAnswer,
     difficulty: normalizedDifficulty,
+    contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+      "general-knowledge",
+      `${normalizedDifficulty}|${question}|${normalizedAnswer}`
+    ),
+    skill: "general-knowledge.cultural-and-world-literacy",
+    gradeMin: normalizedDifficulty,
+    gradeMax: normalizedDifficulty,
+    explanation: normalizedAnswer,
+    reviewText: normalizedAnswer,
+    reviewStatus: "author-curated",
   };
 }
 
 const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(1, "As of around 2026, about how many people live in the world?", ["About 8 million", "About 80 million", "About 800 million", "About 8 billion"], "About 8 billion"),
   generalKnowledgeQuestion(1, "About what percent of Earth's surface is covered by water?", ["About 21%", "About 51%", "About 71%", "About 91%"], "About 71%"),
-  generalKnowledgeQuestion(1, "How many continents are there?", ["Five", "Six", "Seven", "Eight"], "Seven"),
+  generalKnowledgeQuestion(1, "In the seven-continent model used in this app, how many continents are there?", ["Five", "Six", "Seven", "Eight"], "Seven"),
   generalKnowledgeQuestion(1, "Which ocean is the largest?", ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], "Pacific Ocean"),
   generalKnowledgeQuestion(1, "Which gas makes up most of Earth's air?", ["Nitrogen", "Oxygen", "Carbon dioxide", "Hydrogen"], "Nitrogen"),
   generalKnowledgeQuestion(2, "Which continent has the most people?", ["Africa", "Asia", "Europe", "South America"], "Asia"),
@@ -84,7 +94,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(2, "What do we call water that falls from clouds?", ["Rain", "Dust", "Smoke", "Sand"], "Rain"),
   generalKnowledgeQuestion(2, "Which kind of map shows countries and borders?", ["Political map", "Weather map", "Road map", "Star map"], "Political map"),
   generalKnowledgeQuestion(3, "Which continent is the largest?", ["Africa", "Asia", "Europe", "Australia"], "Asia"),
-  generalKnowledgeQuestion(3, "What is the highest mountain on Earth?", ["Mount Everest", "Mount Rainier", "K2", "Denali"], "Mount Everest"),
+  generalKnowledgeQuestion(3, "Which mountain has the highest summit above sea level?", ["Mount Everest", "Mount Rainier", "K2", "Denali"], "Mount Everest"),
   generalKnowledgeQuestion(3, "What causes day and night on Earth?", ["Earth's rotation", "The moon's color", "Rain clouds", "Ocean tides"], "Earth's rotation"),
   generalKnowledgeQuestion(3, "What is a peninsula?", ["Land with water on three sides", "A mountain with snow", "A deep hole in the ground", "A kind of cloud"], "Land with water on three sides"),
   generalKnowledgeQuestion(3, "Which ocean is west of South America?", ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"], "Pacific Ocean"),
@@ -103,7 +113,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(4, "Which continent is the smallest by land area?", ["Australia", "Europe", "Antarctica", "South America"], "Australia"),
   generalKnowledgeQuestion(5, "Which ocean is the smallest?", ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean", "Arctic Ocean"], "Arctic Ocean"),
   generalKnowledgeQuestion(5, "About how long does it take Earth to spin once?", ["About 12 hours", "About 24 hours", "About 7 days", "About 30 days"], "About 24 hours"),
-  generalKnowledgeQuestion(5, "What is the largest island in the world?", ["Greenland", "Iceland", "Madagascar", "New Guinea"], "Greenland"),
+  generalKnowledgeQuestion(5, "Excluding continents, what is the largest island in the world?", ["Greenland", "Iceland", "Madagascar", "New Guinea"], "Greenland"),
   generalKnowledgeQuestion(5, "What is the largest hot desert on Earth?", ["Gobi Desert", "Sahara Desert", "Kalahari Desert", "Mojave Desert"], "Sahara Desert"),
   generalKnowledgeQuestion(5, "Which line tells how far east or west a place is?", ["Latitude", "Longitude", "Equator", "Hemisphere"], "Longitude"),
   generalKnowledgeQuestion(5, "About what percent of Earth's water is in the oceans?", ["About 25%", "About 50%", "About 75%", "About 96.5%"], "About 96.5%"),
@@ -129,9 +139,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(1, "What place do you go to buy groceries?", ["Supermarket", "Theater", "Stadium", "Garage"], "Supermarket"),
   generalKnowledgeQuestion(1, "Which planet do humans live on?", ["Mars", "Venus", "Earth", "Jupiter"], "Earth"),
   generalKnowledgeQuestion(2, "What does a thermometer measure?", ["Temperature", "Distance", "Weight", "Speed"], "Temperature"),
-  generalKnowledgeQuestion(2, "Which continent is Australia in?", ["Asia", "Europe", "South America", "Australia"], "Australia"),
+  generalKnowledgeQuestion(2, "In the seven-continent model used in this app, which continent includes the country of Australia?", ["Asia", "Europe", "South America", "Australia"], "Australia"),
   generalKnowledgeQuestion(2, "Which ocean is west of Africa?", ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"], "Atlantic Ocean"),
-  generalKnowledgeQuestion(2, "What does recycling mean?", ["Using things again", "Throwing everything away", "Making things disappear", "Buying more things"], "Using things again"),
+  generalKnowledgeQuestion(2, "What does recycling mean?", ["Processing used material so it can become new material", "Using the same object again without processing it", "Sending every used object to a landfill", "Buying a replacement for every used object"], "Processing used material so it can become new material"),
   generalKnowledgeQuestion(2, "Which country has the largest population?", ["India", "Canada", "Australia", "Spain"], "India"),
   generalKnowledgeQuestion(2, "What is the capital of Japan?", ["Seoul", "Tokyo", "Beijing", "Bangkok"], "Tokyo"),
   generalKnowledgeQuestion(2, "What does a compass show?", ["Directions", "Temperature", "Time", "Weight"], "Directions"),
@@ -157,7 +167,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(3, "What does population mean?", ["Number of people in a place", "Number of books in a library", "Number of cars on a road", "Number of animals in a zoo"], "Number of people in a place"),
   generalKnowledgeQuestion(3, "Which continent has the Sahara Desert?", ["Africa", "Asia", "Europe", "Australia"], "Africa"),
   generalKnowledgeQuestion(3, "What does weather describe?", ["The short-term conditions outside", "The long-term pattern in a place", "The shape of clouds only", "The direction of a river"], "The short-term conditions outside"),
-  generalKnowledgeQuestion(3, "What is renewable energy?", ["Energy that can be replaced", "Energy that never works", "Energy made of metal", "Energy that is always noisy"], "Energy that can be replaced"),
+  generalKnowledgeQuestion(3, "What is renewable energy?", ["Energy from sources that naturally replenish on a human timescale", "Energy that can never run out, no matter how it is used", "Energy stored only inside metals", "Energy that is replaced by buying new batteries"], "Energy from sources that naturally replenish on a human timescale"),
   generalKnowledgeQuestion(3, "What place do airplanes use to take off and land?", ["Airport", "Harbor", "Garage", "Farm"], "Airport"),
   generalKnowledgeQuestion(3, "What is the first meal of the day?", ["Lunch", "Dinner", "Breakfast", "Snack"], "Breakfast"),
   generalKnowledgeQuestion(3, "What does a source mean in research?", ["Where information comes from", "A water pipe", "A school subject", "A kind of pencil"], "Where information comes from"),
@@ -170,7 +180,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(4, "What is a consumer?", ["A person who buys or uses goods", "A person who cooks for a school", "A person who builds roads", "A person who writes maps"], "A person who buys or uses goods"),
   generalKnowledgeQuestion(4, "What does a constitution do?", ["Gives basic rules for government", "Cures sickness", "Measures land", "Teaches math"], "Gives basic rules for government"),
   generalKnowledgeQuestion(4, "What is the best estimate of Nigeria's population?", ["About 23 million", "About 230 million", "About 2.3 billion", "About 23 billion"], "About 230 million"),
-  generalKnowledgeQuestion(4, "What is the capital of Argentina?", ["Buenos Aires", "Santiago", "Lima", "Bogota"], "Buenos Aires"),
+  generalKnowledgeQuestion(4, "What is the capital of Argentina?", ["Buenos Aires", "Santiago", "Lima", "Bogotá"], "Buenos Aires"),
   generalKnowledgeQuestion(4, "Which country is the largest by area?", ["Canada", "China", "Russia", "Brazil"], "Russia"),
   generalKnowledgeQuestion(4, "Which map feature helps compare distances?", ["Scale", "Title", "Border", "Key"], "Scale"),
   generalKnowledgeQuestion(4, "What is a public service?", ["A service that helps the public", "A game played in a park", "A private hobby", "A kind of snack"], "A service that helps the public"),
@@ -185,7 +195,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(5, "Which continent is India in?", ["Africa", "Asia", "Europe", "South America"], "Asia"),
   generalKnowledgeQuestion(5, "Which ocean touches the west coast of South America?", ["Atlantic Ocean", "Indian Ocean", "Pacific Ocean", "Arctic Ocean"], "Pacific Ocean"),
   generalKnowledgeQuestion(5, "Which ocean is closest to the North Pole?", ["Atlantic Ocean", "Pacific Ocean", "Indian Ocean", "Arctic Ocean"], "Arctic Ocean"),
-  generalKnowledgeQuestion(5, "What is the capital of Brazil?", ["Rio de Janeiro", "Brasilia", "Sao Paulo", "Salvador"], "Brasilia"),
+  generalKnowledgeQuestion(5, "What is the capital of Brazil?", ["Rio de Janeiro", "Brasília", "São Paulo", "Salvador"], "Brasília"),
   generalKnowledgeQuestion(5, "What is the capital of Kenya?", ["Lagos", "Nairobi", "Accra", "Kampala"], "Nairobi"),
   generalKnowledgeQuestion(5, "What is the capital of Turkey?", ["Ankara", "Istanbul", "Athens", "Sofia"], "Ankara"),
   generalKnowledgeQuestion(5, "What is the capital of Mexico?", ["Monterrey", "Guadalajara", "Mexico City", "Cancun"], "Mexico City"),
@@ -464,7 +474,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(4, "What is the capital of Poland?", ["Warsaw", "Krakow", "Prague", "Budapest"], "Warsaw"),
   generalKnowledgeQuestion(4, "What is the capital of Switzerland?", ["Bern", "Zurich", "Geneva", "Vienna"], "Bern"),
   generalKnowledgeQuestion(4, "What is the capital of Austria?", ["Vienna", "Prague", "Budapest", "Munich"], "Vienna"),
-  generalKnowledgeQuestion(4, "What is the capital of Chile?", ["Santiago", "Lima", "Buenos Aires", "Bogota"], "Santiago"),
+  generalKnowledgeQuestion(4, "What is the capital of Chile?", ["Santiago", "Lima", "Buenos Aires", "Bogotá"], "Santiago"),
   generalKnowledgeQuestion(4, "What is the capital of Peru?", ["Lima", "Quito", "Santiago", "La Paz"], "Lima"),
   generalKnowledgeQuestion(4, "Which country has the city of Barcelona?", ["Spain", "Italy", "Portugal", "France"], "Spain"),
   generalKnowledgeQuestion(4, "Which country has the city of Munich?", ["Germany", "Austria", "Switzerland", "Belgium"], "Germany"),
@@ -506,9 +516,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(5, "What is the capital of Hungary?", ["Budapest", "Prague", "Vienna", "Bucharest"], "Budapest"),
   generalKnowledgeQuestion(5, "What is the capital of Romania?", ["Bucharest", "Budapest", "Sofia", "Belgrade"], "Bucharest"),
   generalKnowledgeQuestion(5, "What is the capital of Greece?", ["Athens", "Rome", "Sofia", "Ankara"], "Athens"),
-  generalKnowledgeQuestion(5, "What is the capital of Colombia?", ["Bogota", "Lima", "Quito", "Caracas"], "Bogota"),
-  generalKnowledgeQuestion(5, "What is the capital of Ecuador?", ["Quito", "Bogota", "Lima", "Santiago"], "Quito"),
-  generalKnowledgeQuestion(5, "What is the capital of Venezuela?", ["Caracas", "Bogota", "Lima", "Montevideo"], "Caracas"),
+  generalKnowledgeQuestion(5, "What is the capital of Colombia?", ["Bogotá", "Lima", "Quito", "Caracas"], "Bogotá"),
+  generalKnowledgeQuestion(5, "What is the capital of Ecuador?", ["Quito", "Bogotá", "Lima", "Santiago"], "Quito"),
+  generalKnowledgeQuestion(5, "What is the capital of Venezuela?", ["Caracas", "Bogotá", "Lima", "Montevideo"], "Caracas"),
   generalKnowledgeQuestion(5, "What is the capital of Uruguay?", ["Montevideo", "Buenos Aires", "Santiago", "Asuncion"], "Montevideo"),
   generalKnowledgeQuestion(5, "What is the capital of Paraguay?", ["Asuncion", "Montevideo", "La Paz", "Quito"], "Asuncion"),
   generalKnowledgeQuestion(5, "Which country has the capital Havana?", ["Cuba", "Jamaica", "Haiti", "Panama"], "Cuba"),
@@ -609,7 +619,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(8, "What is externality in economics?", ["A cost or benefit affecting others not directly in a transaction", "A country border line", "A kind of tax form only", "A mountain pass"], "A cost or benefit affecting others not directly in a transaction"),
   generalKnowledgeQuestion(8, "What is a public good in economics?", ["A good that many people can use without using it up and without easy exclusion", "A product sold only in one store", "A food served at school", "A map open to the public"], "A good that many people can use without using it up and without easy exclusion"),
   generalKnowledgeQuestion(8, "What is a climate zone?", ["An area with similar long-term weather patterns", "A type of election district", "A page in an atlas", "A school lunch group"], "An area with similar long-term weather patterns"),
-  generalKnowledgeQuestion(8, "What is El Nino?", ["A warming pattern in the tropical Pacific that can affect weather", "A mountain in Europe", "A type of glacier", "A government branch"], "A warming pattern in the tropical Pacific that can affect weather"),
+  generalKnowledgeQuestion(8, "What is El Niño?", ["A warming pattern in the tropical Pacific that can affect weather", "A mountain in Europe", "A type of glacier", "A government branch"], "A warming pattern in the tropical Pacific that can affect weather"),
   // Additional Level 9: expanded variety with clear single-answer questions.
   generalKnowledgeQuestion(9, "What is confirmation bias?", ["Favoring information that supports what you already believe", "Checking all views equally", "A rule for map scales", "A type of rainfall"], "Favoring information that supports what you already believe"),
   generalKnowledgeQuestion(9, "What is survivorship bias?", ["Focusing only on examples that made it through a selection process", "Counting every case equally", "A type of river erosion", "A calendar rule"], "Focusing only on examples that made it through a selection process"),
@@ -628,7 +638,7 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(9, "What is imperialism?", ["A policy where a country extends power over other places", "A system with no countries", "A type of fossil fuel", "A mountain weather pattern"], "A policy where a country extends power over other places"),
   generalKnowledgeQuestion(9, "What is nationalism?", ["Strong identification with one's nation", "The study of clouds", "A trade route across a city", "A type of river mouth"], "Strong identification with one's nation"),
   generalKnowledgeQuestion(9, "What is a tariff?", ["A tax on imported or exported goods", "A kind of island", "A measure of earthquake size", "A branch of government"], "A tax on imported or exported goods"),
-  generalKnowledgeQuestion(9, "What is exchange rate?", ["The value of one currency compared with another", "The speed of ocean currents", "The amount of rainfall", "The length of a border"], "The value of one currency compared with another"),
+  generalKnowledgeQuestion(9, "What is an exchange rate?", ["The value of one currency compared with another", "The speed of ocean currents", "The amount of rainfall", "The length of a border"], "The value of one currency compared with another"),
   generalKnowledgeQuestion(9, "What is purchasing power?", ["How much goods or services money can buy", "The voltage in a battery", "The height of a building", "The number of people voting"], "How much goods or services money can buy"),
   generalKnowledgeQuestion(9, "What is deflation in economics?", ["A general fall in prices over time", "A rise in ocean levels", "An increase in rainfall", "A new government branch"], "A general fall in prices over time"),
   generalKnowledgeQuestion(9, "What is recession in economics?", ["A period of significant decline in economic activity", "A season with no rain", "A map showing mountains", "A type of moon phase"], "A period of significant decline in economic activity"),
@@ -657,6 +667,9 @@ const GENERAL_KNOWLEDGE_QUESTIONS = [
   generalKnowledgeQuestion(10, "What is adverse selection?", ["When hidden information leads higher-risk participants to be more likely to join", "A fair random sample", "A type of plate boundary", "A voting method with no candidates"], "When hidden information leads higher-risk participants to be more likely to join"),
   generalKnowledgeQuestion(10, "What is the tragedy of the commons?", ["Overuse of a shared resource when individuals act in self-interest", "A play performed in a park", "A law requiring shared gardens", "A map showing public roads"], "Overuse of a shared resource when individuals act in self-interest"),
 ];
+const GENERAL_KNOWLEDGE_ACTIVE_QUESTIONS =
+  globalThis.HomeworkQuestionUtils?.filterAnswerLengthCues(GENERAL_KNOWLEDGE_QUESTIONS, 15) ||
+  GENERAL_KNOWLEDGE_QUESTIONS;
 
 function generalKnowledgeShuffle(values) {
   const copy = [...values];
@@ -885,9 +898,13 @@ function createGeneralKnowledgeGeneratedEntry(difficulty) {
     return createGeneralKnowledgeWorldModelEntry(level);
   }
 
-  const exactEntries = GENERAL_KNOWLEDGE_QUESTIONS.filter((entry) => entry.difficulty === level);
-  const eligibleEntries = GENERAL_KNOWLEDGE_QUESTIONS.filter((entry) => entry.difficulty <= level);
-  const source = exactEntries.length ? exactEntries : eligibleEntries.length ? eligibleEntries : GENERAL_KNOWLEDGE_QUESTIONS;
+  const exactEntries = GENERAL_KNOWLEDGE_ACTIVE_QUESTIONS.filter((entry) => entry.difficulty === level);
+  const eligibleEntries = GENERAL_KNOWLEDGE_ACTIVE_QUESTIONS.filter((entry) => entry.difficulty <= level);
+  const source = exactEntries.length
+    ? exactEntries
+    : eligibleEntries.length
+      ? eligibleEntries
+      : GENERAL_KNOWLEDGE_ACTIVE_QUESTIONS;
   const entry = generalKnowledgeRandomChoice(source);
 
   return generalKnowledgeQuestion(entry.difficulty, entry.question, entry.options, entry.answer);
@@ -913,7 +930,7 @@ function generalKnowledgeRandomChoice(values) {
 globalThis.HomeworkQuestions?.register({
   id: "general-knowledge",
   label: "General Knowledge",
-  getStaticQuestions: () => GENERAL_KNOWLEDGE_QUESTIONS,
+  getStaticQuestions: () => GENERAL_KNOWLEDGE_ACTIVE_QUESTIONS,
   generatedEntryFactory: createGeneralKnowledgeGeneratedEntry,
   generatedShare: 0.6,
 });

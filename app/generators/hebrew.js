@@ -1059,9 +1059,12 @@ function buildHebrewImageTargetHtml(entry) {
 
 function createBankChoiceQuestion(entry, type, isHebrew = false) {
   const point = (value) => (isHebrew ? applyHebrewSentenceNikkud(value) : value);
+  const metadata =
+    typeof copyQuestionMetadata === "function" ? copyQuestionMetadata(entry) : {};
   if (entry?.mode === "interactive") {
     const answer = point(entry.answer || entry.answerLabel || "");
     return {
+      ...metadata,
       type,
       difficulty: entry.difficulty,
       mode: "interactive",
@@ -1082,6 +1085,7 @@ function createBankChoiceQuestion(entry, type, isHebrew = false) {
   const options = isHebrew ? entry.options.map((option) => applyHebrewSentenceNikkud(option)) : [...entry.options];
   const answer = point(entry.answer);
   return {
+    ...metadata,
     type,
     difficulty: entry.difficulty,
     mode: "choice",
@@ -1091,8 +1095,9 @@ function createBankChoiceQuestion(entry, type, isHebrew = false) {
     extraHtml: entry.extraHtml || "",
     visualHtml: entry.visualHtml || "",
     visualSummary: point(entry.visualSummary || ""),
-    reviewText: point(entry.reviewText || ""),
-    options: shuffleArray(options),
+      reviewText: point(entry.reviewText || ""),
+      comparisonMode: entry.comparisonMode || "semantic",
+      options: shuffleArray(options),
     answerValue: answer,
     answerLabel: answer,
     isHebrew,
@@ -1120,6 +1125,7 @@ function createBankDragQuestion(entry, type) {
     : [...entry.answer];
 
   return {
+    ...(typeof copyQuestionMetadata === "function" ? copyQuestionMetadata(entry) : {}),
     type,
     difficulty: entry.difficulty,
     mode: "drag",

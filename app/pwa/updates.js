@@ -52,8 +52,14 @@ function showAppUpdatePrompt(worker) {
   appElements.appUpdateBanner.hidden = false;
   appElements.appUpdateButton.onclick = () => {
     appElements.appUpdateButton.disabled = true;
+    document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
     worker.postMessage({ type: "SKIP_WAITING" });
   };
+  if (appElements.appUpdateLaterButton) {
+    appElements.appUpdateLaterButton.onclick = () => {
+      appElements.appUpdateBanner.hidden = true;
+    };
+  }
 }
 
 

@@ -49,7 +49,7 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
     return shuffleArray(options);
   }
 
-  function buildQuestion({ question, displayText = "", options, answer, difficulty, extraText = "" }) {
+  function buildQuestion({ question, displayText = "", options, answer, difficulty, extraText = "", topic = "language-usage", explanation = "", comparisonMode = "semantic" }) {
     const normalizedQuestion = String(question || "").trim();
     const normalizedAnswer = String(answer || "");
     const normalizedOptions = uniqueStrings(options || []);
@@ -66,13 +66,25 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       throw new Error("Vocabulary and grammar answer must be included in the options.");
     }
 
+    const level = clampDifficulty(difficulty);
     return {
       question: normalizedQuestion,
       displayText: String(displayText || ""),
       options: shuffleArray(normalizedOptions),
       answer: normalizedAnswer,
-      difficulty: clampDifficulty(difficulty),
+      difficulty: level,
       extraText: String(extraText || ""),
+      contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+        "vocabulary-grammar",
+        `${topic}|${question}|${displayText}|${normalizedAnswer}`
+      ),
+      skill: `english.${topic}`,
+      gradeMin: level,
+      gradeMax: level,
+      explanation: String(explanation || normalizedAnswer),
+      reviewText: String(explanation || normalizedAnswer),
+      comparisonMode: comparisonMode === "exact-text" ? "exact-text" : "semantic",
+      reviewStatus: "author-curated",
     };
   }
 
@@ -1308,6 +1320,14 @@ const VOCABULARY_GRAMMAR_DATA = (() => {
       answer: entry.answer,
       difficulty: entry.difficulty,
       extraText: entry.extraText || "",
+      contentId: entry.contentId,
+      skill: entry.skill,
+      gradeMin: entry.gradeMin,
+      gradeMax: entry.gradeMax,
+      explanation: entry.explanation || entry.answer,
+      reviewText: entry.reviewText || entry.explanation || entry.answer,
+      comparisonMode: entry.comparisonMode,
+      reviewStatus: entry.reviewStatus,
     }));
   }
 
@@ -1328,7 +1348,7 @@ function createVocabularyGrammarGeneratedEntry(difficulty) {
   if (!questionUtils) {
     return;
   }
-  const { entry, pickGeneratedEntry, randomChoice } = questionUtils;
+  const { entry, pickGeneratedEntry, randomChoice, stableContentId } = questionUtils;
 
   const vocabularyGrammarSupplementalBlueprints = [
     { topic: "language-spelling", difficulty: 1, question: "Which word is spelled correctly?", answer: "because", options: ["because", "becuz", "beacuse", "becaus"] },
@@ -1381,12 +1401,25 @@ function createVocabularyGrammarGeneratedEntry(difficulty) {
     { topic: "language-sentence-combining", difficulty: 8, question: "Which sentence combines the ideas best?", displayText: "The evidence was strong. The judge accepted the claim.", answer: "Because the evidence was strong, the judge accepted the claim.", options: ["Because the evidence was strong, the judge accepted the claim.", "The evidence accepted because the judge was strong.", "Because the judge was strong, the evidence accepted the claim.", "The evidence was strong the judge accepted the claim."] },
     { topic: "language-word-choice", difficulty: 6, question: "Which word is most precise?", displayText: "The horse moved quickly across the field.", answer: "galloped", options: ["galloped", "went", "did", "was"] },
     { topic: "language-word-choice", difficulty: 9, question: "Which phrase is the most concise?", answer: "although", options: ["although", "despite the fact that", "regardless of the fact that", "even with the circumstance that"] },
+    { topic: "language-revision", difficulty: 10, question: "Which revision states the claim with appropriate caution?", displayText: "The survey of 40 students proves that every student learns best with music.", answer: "In this survey, many participants reported learning well with music.", options: ["In this survey, many participants reported learning well with music.", "The survey proves music works for every learner everywhere.", "Music definitely causes all students to learn more.", "Forty answers settle the question for every population."] },
   ];
 
   function createSupplementalVocabularyGrammarEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    const choices = vocabularyGrammarSupplementalBlueprints.filter((item) => item.difficulty <= level);
-    return entry(randomChoice(choices));
+    const choices = vocabularyGrammarSupplementalBlueprints.filter((item) => item.difficulty === level);
+    const blueprint = randomChoice(choices);
+    return entry({
+      ...blueprint,
+      contentId: stableContentId(
+        "vocabulary-grammar",
+        `${blueprint.topic}|${blueprint.question}|${blueprint.displayText || ""}`
+      ),
+      skill: `english.${blueprint.topic}`,
+      gradeMin: level,
+      gradeMax: level,
+      explanation: blueprint.explanation || blueprint.answer,
+      reviewStatus: "author-curated",
+    });
   }
 
   globalThis.createVocabularyGrammarSupplementalGeneratedEntry = (difficulty) =>

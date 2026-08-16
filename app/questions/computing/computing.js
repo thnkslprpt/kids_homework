@@ -6,6 +6,7 @@
     loops: "Loops and repetition",
     variables: "Variables and changing state",
     boolean: "Boolean logic",
+    digitalSafety: "Digital safety and privacy",
   };
 
   function computingQuestion(topic, difficulty, question, options, answer, reviewText) {
@@ -29,6 +30,15 @@
       options: normalizedOptions,
       answer: normalizedAnswer,
       reviewText: String(reviewText || ""),
+      contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+        "computing",
+        `${topic}|${difficulty}|${question}`
+      ),
+      skill: `computing.${String(topic).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "")}`,
+      gradeMin: difficulty,
+      gradeMax: difficulty,
+      explanation: String(reviewText || answer),
+      reviewStatus: "author-curated",
     };
   }
 
@@ -113,7 +123,122 @@
     q(TOPICS.loops, 10, "A loop starts n = 20 and repeats while n > 1: replace n with floor(n / 2). What values does n take after each repeat?", ["10, 5, 2, 1", "10, 5, 3, 2", "19, 18, 17, 16", "20, 10, 5, 2"], "10, 5, 2, 1", "Integer division rounds down after each update: 20 → 10 → 5 → 2 → 1."),
     q(TOPICS.variables, 10, "Let x = 2. Run x = x + 3, then x = x × x. What is the final value of x?", ["25", "10", "13", "7"], "25", "The second instruction uses the updated value 5, so x becomes 5 × 5 = 25."),
     q(TOPICS.boolean, 10, "Which expression is equivalent to NOT(A AND B)?", ["(NOT A) OR (NOT B)", "(NOT A) AND (NOT B)", "A OR B", "A AND B"], "(NOT A) OR (NOT B)", "An AND statement is false when at least one part is false, which is De Morgan’s law."),
+
+    // Digital safety: decisions become more nuanced as the grade level rises.
+    q(TOPICS.digitalSafety, 1, "Which information is safest to share in a public game chat?", ["Your favorite animal", "Your home address", "Your school and class", "A parent's phone number"], "Your favorite animal", "A preference such as a favorite animal does not identify where you live or how to contact your family."),
+    q(TOPICS.digitalSafety, 2, "A stranger in a game asks for your full name. What is the safest response?", ["Do not share it and tell a trusted adult", "Send it so the stranger trusts you", "Post it in the public chat", "Trade it for the stranger's address"], "Do not share it and tell a trusted adult", "Personal details should not be shared with unknown people; a trusted adult can help."),
+    q(TOPICS.digitalSafety, 3, "Which password is harder for another person to guess?", ["River-Lemon-27-Cloud", "password", "12345678", "Avi2017"], "River-Lemon-27-Cloud", "A longer, uncommon passphrase is usually harder to guess than a common word, number pattern, or personal name and year."),
+    q(TOPICS.digitalSafety, 4, "A message says, ‘Click now or lose your game account!’ What should you do first?", ["Pause and verify the message through the official app or a trusted adult", "Click quickly before time runs out", "Reply with your password", "Forward it to every friend"], "Pause and verify the message through the official app or a trusted adult", "Urgency is a common manipulation tactic. Verify through a separate, trusted route before acting."),
+    q(TOPICS.digitalSafety, 5, "Why should you use a different password for each important account?", ["One leaked password will not unlock all the other accounts", "It makes every password public", "It lets websites read one another's data", "It removes the need for updates"], "One leaked password will not unlock all the other accounts", "Unique passwords limit the damage if one service is breached."),
+    q(TOPICS.digitalSafety, 6, "A flashlight app asks to access your contacts. What is the best question to ask?", ["Does the app need contacts to provide its flashlight function?", "Is the permission button my favorite color?", "Can I approve every permission at once?", "Will contacts make the light brighter?"], "Does the app need contacts to provide its flashlight function?", "Permissions should be connected to a feature the app genuinely needs; a basic flashlight does not need contacts."),
+    q(TOPICS.digitalSafety, 7, "A friend sends an unexpected file from their real account. What is the safest next step?", ["Confirm through another message or call that they meant to send it", "Open it because the account name is familiar", "Disable security warnings", "Upload it publicly to ask what it is"], "Confirm through another message or call that they meant to send it", "Accounts can be compromised. A separate confirmation helps verify that the message is genuine."),
+    q(TOPICS.digitalSafety, 8, "What does multi-factor authentication add beyond a password?", ["Another kind of proof that you are the account owner", "A public copy of the password", "Permission for anyone nearby to sign in", "A guarantee that no attack is possible"], "Another kind of proof that you are the account owner", "A second factor, such as a device prompt or security key, can protect an account when a password is stolen."),
+    q(TOPICS.digitalSafety, 9, "A social-media post is technically public but includes a classmate's private medical detail. What is the most responsible action?", ["Do not reshare it; alert the classmate or a trusted adult through an appropriate private route", "Reshare it because public information cannot cause harm", "Add the classmate's address for context", "Save it and threaten to repost it"], "Do not reshare it; alert the classmate or a trusted adult through an appropriate private route", "Being able to access information does not make redistribution ethical; privacy, consent, and possible harm still matter."),
+    q(TOPICS.digitalSafety, 10, "A site uses HTTPS. What can you reasonably conclude?", ["The connection is encrypted to the site, but the site's claims can still be false", "Every claim on the site has been independently verified", "The site cannot collect data", "The site is guaranteed never to be hacked"], "The connection is encrypted to the site, but the site's claims can still be false", "HTTPS protects data in transit and helps authenticate the connection; it does not prove that content is accurate or the operator is trustworthy."),
   ];
+
+  const DIGITAL_SAFETY_CHOOSE_ALL_BLUEPRINTS = [
+    {
+      minDifficulty: 1,
+      maxDifficulty: 3,
+      question: "Choose every action that helps keep an account password private.",
+      items: [
+        { summary: "Keep the password out of public chats.", correct: true },
+        { summary: "Ask a trusted adult for help if you might forget it.", correct: true },
+        { summary: "Tell it to anyone who promises free game coins.", correct: false },
+        { summary: "Use it as your public profile name.", correct: false },
+      ],
+      explanation: "Passwords should stay out of public or stranger conversations; a trusted adult can help a child manage an account safely.",
+    },
+    {
+      minDifficulty: 4,
+      maxDifficulty: 6,
+      question: "An unexpected prize message asks you to sign in through its link. Choose every warning sign.",
+      items: [
+        { summary: "It creates urgency by saying the prize expires in five minutes.", correct: true },
+        { summary: "It asks for a password on a page reached through the message.", correct: true },
+        { summary: "It came from an address unrelated to the official service.", correct: true },
+        { summary: "The message uses a readable font.", correct: false },
+        { summary: "The prize picture uses the same color as the real logo.", correct: false },
+      ],
+      explanation: "Urgency, credential requests, and a mismatched sender are meaningful phishing signals; appearance alone does not establish authenticity.",
+    },
+    {
+      minDifficulty: 7,
+      maxDifficulty: 8,
+      question: "A simple flashlight app requests contacts and precise location. Choose every sensible response.",
+      items: [
+        { summary: "Deny permissions that are unnecessary for the flashlight feature.", correct: true },
+        { summary: "Check the developer, reviews, and privacy information before using it.", correct: true },
+        { summary: "Approve every permission because the app was installable.", correct: false },
+        { summary: "Post your contact list publicly to make access unnecessary.", correct: false },
+      ],
+      explanation: "Permission requests should be proportional to the feature. Reputation and privacy information provide additional evidence before installation.",
+    },
+    {
+      minDifficulty: 9,
+      maxDifficulty: 10,
+      question: "A service reports that password hashes may have been stolen. Choose every useful next step for an affected user.",
+      items: [
+        { summary: "Change the password on that service using a new, unique password.", correct: true },
+        { summary: "Change reused copies of that password on other services.", correct: true },
+        { summary: "Enable multi-factor authentication where available.", correct: true },
+        { summary: "Reuse the old password after adding one character everywhere.", correct: false },
+        { summary: "Ignore official account alerts because hashes are never attacked.", correct: false },
+      ],
+      explanation: "A unique replacement limits credential reuse, and multi-factor authentication adds protection. Stolen hashes can still be cracked, especially for weak passwords.",
+    },
+  ];
+
+  function createComputingSafetyChooseAllEntry(difficulty) {
+    const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
+    const candidates = DIGITAL_SAFETY_CHOOSE_ALL_BLUEPRINTS.filter(
+      (blueprint) => level >= blueprint.minDifficulty && level <= blueprint.maxDifficulty
+    );
+    const blueprint = candidates[Math.floor(Math.random() * candidates.length)];
+    const choices = blueprint.items.map((item) => ({ ...item }));
+    for (let index = choices.length - 1; index > 0; index -= 1) {
+      const swapIndex = Math.floor(Math.random() * (index + 1));
+      [choices[index], choices[swapIndex]] = [choices[swapIndex], choices[index]];
+    }
+    const answerIndexes = choices
+      .map((item, index) => (item.correct ? index : -1))
+      .filter((index) => index >= 0);
+    const correctChoices = choices.filter((item) => item.correct).map((item) => item.summary);
+    return {
+      mode: "interactive",
+      difficulty: level,
+      question: blueprint.question,
+      answer: correctChoices.join(" | "),
+      answerLabel: correctChoices.join("; "),
+      reviewText: blueprint.explanation,
+      contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+        "computing",
+        `digital-safety-choose-all|${blueprint.question}`
+      ),
+      skill: "computing.digital-safety-and-privacy",
+      gradeMin: blueprint.minDifficulty,
+      gradeMax: blueprint.maxDifficulty,
+      explanation: blueprint.explanation,
+      reviewStatus: "author-curated",
+      interactive: {
+        type: "digital-safety-choose-all",
+        layout: "multi-select",
+        prompt: "Select all correct choices. More than one answer may be correct.",
+        choices: choices.map((item, index) => ({
+          label: String.fromCharCode(65 + index),
+          summary: item.summary,
+        })),
+        answerIndexes,
+        minSelected: answerIndexes.length,
+        maxSelected: answerIndexes.length,
+        selectedLabel: "Selected actions",
+        checkLabel: "Check Actions",
+      },
+    };
+  }
+
+  globalThis.createComputingSafetyChooseAllEntry = createComputingSafetyChooseAllEntry;
 
   globalThis.COMPUTING_QUESTION_COVERAGE = Object.fromEntries(
     Object.values(TOPICS).map((topic) => [
@@ -126,5 +251,8 @@
     id: "computing",
     label: "Computing",
     getStaticQuestions: () => COMPUTING_QUESTIONS,
+    supplementalGeneratedEntryFactory: createComputingSafetyChooseAllEntry,
+    generatedShare: 0.42,
+    supplementalShare: 1,
   });
 })();

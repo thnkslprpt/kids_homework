@@ -33,6 +33,10 @@
   }
 
   function choiceBlueprint(blueprint) {
+    const contentId = blueprint.contentId || questionUtils.stableContentId?.(
+      "hebrew",
+      `${blueprint.topic || "language"}|${blueprint.question}|${blueprint.displayText || ""}`
+    );
     return entry({
       ...blueprint,
       question: point(blueprint.question || ""),
@@ -41,6 +45,12 @@
       reviewText: point(blueprint.reviewText || ""),
       answer: point(blueprint.answer),
       options: pointList(blueprint.options),
+      contentId,
+      skill: blueprint.skill || blueprint.topic || "hebrew.language",
+      gradeMin: blueprint.gradeMin ?? blueprint.difficulty,
+      gradeMax: blueprint.gradeMax ?? blueprint.difficulty,
+      explanation: point(blueprint.explanation || blueprint.reviewText || blueprint.answer),
+      reviewStatus: blueprint.reviewStatus || "author-curated",
     });
   }
 
@@ -50,8 +60,9 @@
     if (exact.length) {
       return exact;
     }
-    const eligible = items.filter((item) => item.difficulty <= level);
-    return eligible.length ? eligible : items;
+    const distances = items.map((item) => Math.abs(Number(item.difficulty) - level));
+    const closestDistance = Math.min(...distances);
+    return items.filter((item) => Math.abs(Number(item.difficulty) - level) === closestDistance);
   }
 
   function getCumulativeEligible(items, difficulty) {
@@ -120,6 +131,12 @@
         .map((target, index) => `${target.reviewLabel || index + 1}: ${answerTokens[index]}`)
         .join(" | "),
       isHebrew: true,
+      contentId: questionUtils.stableContentId?.("hebrew", `${topic}|${questionText}`) || `hebrew.${topic}.${difficulty}`,
+      skill: topic,
+      gradeMin: difficulty,
+      gradeMax: difficulty,
+      explanation: point(extraText || questionText),
+      reviewStatus: "author-curated",
     };
   }
 
@@ -163,6 +180,12 @@
       answerValue: flatAnswers.join(" | "),
       answerLabel: normalizedBuckets.map((bucket) => `${bucket.label}: ${bucket.answers.join(", ")}`).join(" | "),
       isHebrew: true,
+      contentId: questionUtils.stableContentId?.("hebrew", `${topic}|${questionText}`) || `hebrew.${topic}.${difficulty}`,
+      skill: topic,
+      gradeMin: difficulty,
+      gradeMax: difficulty,
+      explanation: point(extraText || questionText),
+      reviewStatus: "author-curated",
     };
   }
 
@@ -212,6 +235,12 @@
       answerValue: answerTokens.join(" | "),
       answerLabel: normalizedPairs.map((pair) => `${pair.text}: ${pair.answer}`).join(" | "),
       isHebrew: true,
+      contentId: questionUtils.stableContentId?.("hebrew", `${topic}|${questionText}`) || `hebrew.${topic}.${difficulty}`,
+      skill: topic,
+      gradeMin: difficulty,
+      gradeMax: difficulty,
+      explanation: point(extraText || questionText),
+      reviewStatus: "author-curated",
     };
   }
 
@@ -223,7 +252,15 @@
   const STATIC_BLUEPRINTS = [
     { topic: "hebrew-final-letters", difficulty: 1, question: "Which is the final form of מ?", answer: "ם", options: ["ם", "מ", "ן", "ף"] },
     { topic: "hebrew-final-letters", difficulty: 1, question: "Which is the final form of נ?", answer: "ן", options: ["ן", "נ", "ם", "ץ"] },
-    { topic: "hebrew-final-letters", difficulty: 2, question: "Which word uses a final letter correctly?", answer: "שלום", options: ["שלום", "שלומ", "שלון", "שלופ"] },
+    {
+      topic: "hebrew-final-letters",
+      difficulty: 2,
+      question: "Which spelling correctly uses final mem (ם)?",
+      answer: "שָׁלוֹם",
+      options: ["שָׁלוֹם", "שָׁלוֹמ", "שָׁלוֹן", "שָׁלוֹפ"],
+      comparisonMode: "exact-text",
+      explanation: "The word שָׁלוֹם ends with ם, the final form of מ.",
+    },
     { topic: "hebrew-final-letters", difficulty: 3, question: "Which letter can change to ץ at the end of a word?", answer: "צ", options: ["צ", "ק", "ס", "ת"] },
     { topic: "hebrew-prepositions", difficulty: 1, question: "Choose the Hebrew prefix that means to.", displayText: "___בַיִת", answer: "לְ", options: ["לְ", "בְּ", "עַל", "מִן"] },
     { topic: "hebrew-prepositions", difficulty: 2, question: "Choose the Hebrew prefix that means in.", displayText: "___בַיִת", answer: "בְּ", options: ["בְּ", "עַל", "מִן", "לְ"] },
@@ -262,6 +299,7 @@
     { difficulty: 8, root: "בדק", meaning: "checking", words: ["בדק", "בודקת", "בדיקה", "נבדק", "מבדק"], outsider: "צחק" },
     { difficulty: 9, root: "חלט", meaning: "deciding", words: ["החליט", "מחליטה", "החלטה", "הוחלט"], outsider: "הסביר" },
     { difficulty: 9, root: "סבר", meaning: "explaining", words: ["הסביר", "מסבירה", "הסבר", "מוסבר"], outsider: "הצליח" },
+    { difficulty: 10, root: "חקר", meaning: "investigating", words: ["חקר", "חוקרת", "מחקר", "חקירה", "נחקר"], outsider: "החליט" },
   ];
 
   const ROOT_DISTRACTOR_PAIRS = [
@@ -584,6 +622,7 @@
     { difficulty: 7, lines: ["אחרי המשחק, חברי הקבוצה בדקו את הרשימה.", "הם גילו שחסרים שני בקבוקי מים ומפה אחת."], question: "What was missing?", answer: "שני בקבוקי מים ומפה אחת", options: ["שני בקבוקי מים ומפה אחת", "שלוש מחברות ועיפרון", "כרטיסים וטלפון", "לחם וחלב"] },
     { difficulty: 8, lines: ["המנהלת שלחה הודעה קצרה לצוות.", "היא ביקשה לדחות את הפגישה מפני שהאולם עדיין תפוס."], question: "Why was the meeting delayed?", answer: "כי האולם עדיין תפוס", options: ["כי האולם עדיין תפוס", "כי כולם סיימו מוקדם", "כי ירד שלג", "כי חסרו כיסאות"] },
     { difficulty: 9, lines: ["למרות העייפות, דנה המשיכה לבדוק את התשובות.", "היא רצתה לוודא שההסבר ברור לפני שהגישה את העבודה."], question: "Why did Dana keep checking?", answer: "כדי לוודא שההסבר ברור", options: ["כדי לוודא שההסבר ברור", "כדי למחוק את העבודה", "כדי לאחר לשיעור", "כדי למצוא את הכדור"] },
+    { difficulty: 10, lines: ["הכתבה טענה שהשיטה עוזרת לכל התלמידים.", "דנה שמה לב שהמחקר כלל רק עשרה תלמידים ולא הייתה בו קבוצת השוואה."], question: "Why did Dana question the article's claim?", answer: "כי המחקר היה קטן וללא קבוצת השוואה", options: ["כי המחקר היה קטן וללא קבוצת השוואה", "כי הכתבה נכתבה בעברית", "כי כל התלמידים השתתפו במחקר", "כי היו במחקר קבוצות השוואה רבות"] },
   ];
 
   function createReadingEntry(difficulty) {
@@ -610,6 +649,7 @@
     { difficulty: 7, question: "Choose the most precise corrected sentence.", answer: "בגלל הגשם נשארנו בבית.", options: ["בגלל הגשם נשארנו בבית.", "על הגשם נשארנו בבית.", "עם הגשם נשארנו בבית.", "מן הגשם נשארנו בבית."] },
     { difficulty: 8, question: "Choose the corrected sentence.", answer: "כשהמורה נכנסה, התלמידים פתחו את המחברות.", options: ["כשהמורה נכנסה, התלמידים פתחו את המחברות.", "כשהמורה נכנס, התלמידים פתחה את המחברות.", "כשהמורה נכנסה, התלמידים פותח את המחברות.", "כשהמורה יכנס, התלמידים פתחו את המחברות אתמול."] },
     { difficulty: 9, question: "Choose the sentence with correct pronoun reference.", answer: "דנה ורות הגיעו, והן התחילו לעבוד.", options: ["דנה ורות הגיעו, והן התחילו לעבוד.", "דנה ורות הגיעו, והם התחילו לעבוד.", "דנה ורות הגיעה, והיא התחילו לעבוד.", "דנה ורות יגיעו, והן התחילו אתמול."] },
+    { difficulty: 10, question: "Choose the sentence that states the evidence cautiously.", answer: "במדגם הזה, רוב התלמידים דיווחו שהשיטה עזרה להם.", options: ["במדגם הזה, רוב התלמידים דיווחו שהשיטה עזרה להם.", "המדגם הוכיח שהשיטה עוזרת לכולם תמיד.", "כל תלמיד בעולם חייב להשתמש בשיטה.", "אין צורך לבדוק את השיטה במחקר נוסף."] },
   ];
 
   function createCorrectionEntry(difficulty) {
@@ -640,6 +680,7 @@
     { difficulty: 7, relation: "opposite", prompt: "Choose the opposite Hebrew word.", displayText: "מסכים", answer: "מתנגד", options: ["מתנגד", "מסביר", "מציע", "ממשיך"] },
     { difficulty: 8, relation: "synonym", prompt: "Choose a Hebrew word with a similar meaning.", displayText: "מדויק", answer: "נכון", options: ["נכון", "מבולבל", "מאוחר", "ריק"] },
     { difficulty: 9, relation: "opposite", prompt: "Choose the opposite Hebrew word.", displayText: "יתרון", answer: "חיסרון", options: ["חיסרון", "פתרון", "דיון", "תכנון"] },
+    { difficulty: 10, relation: "synonym", prompt: "Choose the Hebrew phrase with the closest meaning.", displayText: "על פי הראיות", answer: "בהתאם לראיות", options: ["בהתאם לראיות", "ללא כל ראיה", "בניגוד לכל הנתונים", "לפני איסוף המידע"] },
   ];
 
   function createRelationEntry(difficulty) {
@@ -809,6 +850,7 @@
     { difficulty: 7, displayText: "___ שהדרך הייתה ארוכה, הגענו בזמן.", answer: "למרות", options: ["למרות", "בגלל", "מתחת ל", "אצל"], reviewText: "למרות שהדרך הייתה ארוכה, הגענו בזמן." },
     { difficulty: 8, displayText: "הצוות בדק את הרשימה ___ שלא יחסר דבר.", answer: "כדי", options: ["כדי", "בגלל", "ליד", "אחרי"], reviewText: "הצוות בדק את הרשימה כדי שלא יחסר דבר." },
     { difficulty: 9, displayText: "המנהלת ביקשה שההודעה ___ לכל ההורים עד הערב.", answer: "תישלח", options: ["תישלח", "נשלחה", "שולחת", "שלחו"], reviewText: "המנהלת ביקשה שההודעה תישלח לכל ההורים עד הערב." },
+    { difficulty: 10, displayText: "אילו היו הנתונים שלמים יותר, החוקרים ___ מסקנה מדויקת יותר.", answer: "היו מסיקים", options: ["היו מסיקים", "מסיקים", "הסיקו", "יסיקו"], reviewText: "אילו היו הנתונים שלמים יותר, החוקרים היו מסיקים מסקנה מדויקת יותר." },
   ];
 
   function createClozeEntry(difficulty) {
@@ -825,6 +867,7 @@
   }
 
   globalThis.createHebrewGeneratedSessionQuestion = (difficulty) => {
+    const requestedLevel = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
     const picked = pickGeneratedEntry(
       [
         createFinalLetterGateQuestion,
@@ -850,9 +893,22 @@
       return null;
     }
     if (picked.mode === "drag") {
-      return picked;
+      return {
+        ...picked,
+        difficulty: requestedLevel,
+        gradeMin: requestedLevel,
+        gradeMax: requestedLevel,
+      };
     }
-    return createHebrewChoiceSessionQuestion(picked);
+    const question = createHebrewChoiceSessionQuestion(picked);
+    return question
+      ? {
+          ...question,
+          difficulty: requestedLevel,
+          gradeMin: requestedLevel,
+          gradeMax: requestedLevel,
+        }
+      : null;
   };
 
   globalThis.HEBREW_GENERATOR_COVERAGE = {

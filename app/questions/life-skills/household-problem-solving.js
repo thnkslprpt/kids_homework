@@ -1010,15 +1010,21 @@ function createHouseholdProblemSolvingGeneratedEntry(difficulty) {
   }
 
   const toolSafetyBlueprints = [
-    { topic: "household-tool-safety", difficulty: 1, question: "What should you do before using scissors?", answer: "Point them away from your body and walk carefully", options: ["Point them away from your body and walk carefully", "Run with them", "Point them at a friend", "Throw them into a drawer"] },
+    { topic: "household-tool-safety", difficulty: 1, question: "How should you carry scissors to another table?", answer: "Close the blades, hold them safely with the points down, and walk", options: ["Close the blades, hold them safely with the points down, and walk", "Keep the blades open while walking", "Hold the scissors by one blade", "Pass them with the points toward another person"] },
+    { topic: "household-tool-safety", difficulty: 2, question: "Where should scissors be placed after use?", answer: "Closed and stored in their proper place", options: ["Closed and stored in their proper place", "Open at the edge of a table", "Hidden under loose papers", "Balanced on the back of a chair"] },
     { topic: "household-tool-safety", difficulty: 3, question: "Which label warning means you should not touch the tool?", answer: "Hot surface", options: ["Hot surface", "Blue handle", "Made on Monday", "Lightweight"] },
+    { topic: "household-tool-safety", difficulty: 4, question: "A tool's safety guard is missing. What is the best next step?", answer: "Do not use it; tell the responsible adult", options: ["Do not use it; tell the responsible adult", "Use it more slowly without the guard", "Hold the moving part with one hand", "Ask another child to test it first"] },
     { topic: "household-tool-safety", difficulty: 5, question: "A cutting tool is dull and slipping. What is the safest next step?", answer: "Stop and ask an adult to fix or replace it", options: ["Stop and ask an adult to fix or replace it", "Push harder", "Cut faster", "Point it toward your hand"] },
+    { topic: "household-tool-safety", difficulty: 6, question: "Why should a workpiece be secured before an adult drills or cuts it?", answer: "It helps prevent the material from shifting unexpectedly", options: ["It helps prevent the material from shifting unexpectedly", "It makes every tool safe without training", "It removes the need for eye protection", "It guarantees the material cannot split"] },
+    { topic: "household-tool-safety", difficulty: 7, question: "A power-tool cord has exposed wire. Which response is safest?", answer: "Do not plug it in; keep others away and tell an adult", options: ["Do not plug it in; keep others away and tell an adult", "Cover it with paper and keep working", "Test it briefly with wet hands", "Pull the cord to see whether it sparks"] },
     { topic: "household-tool-safety", difficulty: 8, question: "Why should goggles be worn for some building tasks?", answer: "They help protect eyes from flying bits", options: ["They help protect eyes from flying bits", "They make tools sharper", "They replace adult supervision", "They make dust safe to breathe"] },
+    { topic: "household-tool-safety", difficulty: 9, question: "A product creates fine dust when sanded. What should be checked before work begins?", answer: "The instructions, ventilation, protective equipment, and adult supervision", options: ["The instructions, ventilation, protective equipment, and adult supervision", "Only whether the material has a bright color", "Whether the job can be finished without stopping", "Only whether another child has tried it"] },
+    { topic: "household-tool-safety", difficulty: 10, question: "Two safety controls reduce different risks during a task. What is the best approach?", answer: "Use both controls as directed because one does not replace the other", options: ["Use both controls as directed because one does not replace the other", "Choose whichever control is easier and ignore the other", "Remove both controls if the task is brief", "Assume experience makes controls unnecessary"] },
   ];
 
   function createToolSafetyEntry(difficulty) {
     const level = Math.max(1, Math.min(10, Number.parseInt(difficulty, 10) || 3));
-    return entry(randomChoice(toolSafetyBlueprints.filter((item) => item.difficulty <= level)));
+    return entry(randomChoice(toolSafetyBlueprints.filter((item) => item.difficulty === level)));
   }
 
   globalThis.createHouseholdPracticalGeneratedEntry = (difficulty) =>

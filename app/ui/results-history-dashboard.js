@@ -4,7 +4,7 @@ function completeActiveRound() {
     return;
   }
 
-  if (state.sessionPreset === SESSION_PRESETS.practice) {
+  if (state.sessionPreset === SESSION_PRESETS.practice || !state.speedChallengeEnabled) {
     void finishSession();
     return;
   }
@@ -35,8 +35,9 @@ function finishSession() {
 function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } = {}) {
   cleanupInteractiveDragState();
   switchScreen(elements.resultsScreen);
-  const percentage = state.totalQuestions
-    ? (state.correctCount / state.totalQuestions) * 100
+  const gradedTotal = state.sessionRecords.filter((record) => record?.isGraded !== false).length;
+  const percentage = gradedTotal
+    ? (state.correctCount / gradedTotal) * 100
     : 0;
   const roundedPercentage = Math.round(percentage);
   const currentUser = getCurrentUserProfile();
@@ -49,10 +50,18 @@ function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } 
   elements.resultsTitle.textContent = getResultsPraise(percentage);
   const summaryNodes = [
     document.createTextNode(
-      `${currentUser.name} got ${state.correctCount} out of ${state.totalQuestions} correct. That's ${roundedPercentage}%.`
+      `${currentUser.name} got ${state.correctCount} out of ${gradedTotal} graded questions correct. That's ${roundedPercentage}%.`
     ),
   ];
-  if (state.sessionPreset !== SESSION_PRESETS.practice) {
+  if (state.completedPracticeCount > 0) {
+    summaryNodes.push(
+      document.createElement("br"),
+      document.createTextNode(
+        `${state.completedPracticeCount} writing ${state.completedPracticeCount === 1 ? "activity was" : "activities were"} completed separately from the score.`
+      )
+    );
+  }
+  if (state.speedChallengeEnabled && state.sessionPreset !== SESSION_PRESETS.practice) {
     summaryNodes.push(
       document.createElement("br"),
       document.createTextNode(
@@ -66,6 +75,9 @@ function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } 
 
   if (shouldPersist) {
     saveSessionHistory();
+    if (typeof clearActiveSessionCheckpoint === "function") {
+      clearActiveSessionCheckpoint();
+    }
   }
 
   if (shouldCelebrate) {
@@ -74,10 +86,25 @@ function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } 
 }
 
 function renderResultsDetails() {
-  const wrongRecords = state.sessionRecords.filter(Boolean).filter((record) => !record.isCorrect);
+  const wrongRecords = [
+    ...state.sessionRecords
+      .filter(Boolean)
+      .filter((record) => record.isGraded !== false && record.isCorrect === false)
+      .map((record) => ({ ...record, roundLabel: "Main" })),
+    ...(state.speedChallengeEnabled
+      ? state.speedRound.records
+          .filter(Boolean)
+          .filter((record) => record.isGraded !== false && record.isCorrect === false)
+          .map((record) => ({ ...record, roundLabel: "Challenge" }))
+      : []),
+  ];
   const wrongCounts = buildWrongCategoryCounts(wrongRecords);
 
   if (!wrongRecords.length) {
+    if (elements.resultsPracticeButton) {
+      elements.resultsPracticeButton.hidden = true;
+      delete elements.resultsPracticeButton.dataset.practiceCategory;
+    }
     elements.resultsCategorySummary.hidden = true;
     elements.resultsReviewList.hidden = false;
     elements.resultsReviewList.innerHTML = `
@@ -119,13 +146,25 @@ function renderResultsDetails() {
       (record) => `
         <article class="results-review-card">
           <p class="results-review-title">
-            Question ${record.questionNumber} · ${escapeHtml(record.categoryLabel)}
+            ${record.roundLabel} question ${record.questionNumber} · ${escapeHtml(record.categoryLabel)}
           </p>
           ${record.reviewHtml}
         </article>
       `
     )
     .join("");
+
+  if (elements.resultsPracticeButton) {
+    const practiceTarget = wrongCounts.find((entry) =>
+      SESSION_CATEGORY_ORDER.includes(entry.category)
+    );
+    const canPractice = Boolean(practiceTarget) && !isAdultUserSelected();
+    elements.resultsPracticeButton.hidden = !canPractice;
+    if (canPractice) {
+      elements.resultsPracticeButton.dataset.practiceCategory = practiceTarget.category;
+      elements.resultsPracticeButton.textContent = `Practice ${practiceTarget.categoryLabel}`;
+    }
+  }
 }
 
 function showStartScreen() {
@@ -135,12 +174,23 @@ function showStartScreen() {
   clearStartMessage();
   stopConfetti();
   state.currentRound = "main";
+  state.totalQuestions = 0;
   state.currentIndex = 0;
   state.viewIndex = 0;
+  state.answeredCount = 0;
+  state.correctCount = 0;
   state.answerResults = [];
   state.answerSelections = [];
+  state.hintsUsed = [];
+  state.questions = [];
   state.sessionRecords = [];
+  state.selectedCategories = [];
   state.speedRound = createEmptySpeedRoundState();
+  state.sessionStartedAt = null;
+  state.awaitingContinue = false;
+  state.completedPracticeCount = 0;
+  state.questionStartedAt = 0;
+  state.timingQuestionIndex = -1;
   state.feedbackMessage = "";
   state.feedbackTone = "";
   elements.resultsCategorySummary.innerHTML = "";
@@ -155,7 +205,17 @@ function showStartScreen() {
 
 function updateStatusBar() {
   const round = getActiveRoundState();
-  elements.scoreText.textContent = `${round.correctCount}/${round.answeredCount}`;
+  const records = isSpeedRoundActive() ? round.records : state.sessionRecords;
+  const gradedAnswered = records.filter((record) => record?.isGraded !== false).length;
+  elements.scoreText.textContent = `${round.correctCount}/${gradedAnswered}`;
+  elements.scoreText.setAttribute(
+    "aria-label",
+    `${round.correctCount} correct out of ${gradedAnswered} graded answers`
+  );
+  if (elements.progressSummary) {
+    const position = Math.min(round.viewIndex + 1, Math.max(1, round.totalQuestions));
+    elements.progressSummary.textContent = `${isSpeedRoundActive() ? "Challenge" : "Question"} ${position} of ${round.totalQuestions}`;
+  }
   renderProgressTracker();
   renderSpeedRoundTimer();
 }
@@ -163,15 +223,25 @@ function updateStatusBar() {
 function renderProgressTracker() {
   const round = getActiveRoundState();
   elements.progressTracker.innerHTML = "";
+  elements.progressTracker.setAttribute("aria-valuemin", "0");
+  elements.progressTracker.setAttribute("aria-valuemax", String(round.totalQuestions));
+  elements.progressTracker.setAttribute("aria-valuenow", String(round.answeredCount));
+  elements.progressTracker.setAttribute(
+    "aria-valuetext",
+    `${round.answeredCount} of ${round.totalQuestions} completed`
+  );
 
   for (let index = 0; index < round.totalQuestions; index += 1) {
     const box = document.createElement("span");
     box.className = "progress-box";
+    box.setAttribute("aria-hidden", "true");
 
     if (round.answerResults[index] === true) {
       box.classList.add("correct");
     } else if (round.answerResults[index] === false) {
       box.classList.add("wrong");
+    } else if (round.answerResults[index] === null) {
+      box.classList.add("completed");
     }
 
     if (index === round.viewIndex) {
@@ -184,6 +254,11 @@ function renderProgressTracker() {
 
 function startSpeedRoundTimer() {
   const round = state.speedRound;
+  if (state.speedRelaxedTimer) {
+    clearSpeedRoundTimer();
+    renderSpeedRoundTimer();
+    return;
+  }
   const token = round.timerToken + 1;
   clearSpeedRoundTimer({ keepToken: true });
   round.timerToken = token;
@@ -205,7 +280,9 @@ function startSpeedRoundTimer() {
   round.tickId = window.setInterval(() => {
     if (isSpeedRoundActive() && state.speedRound.timerToken === token) {
       renderSpeedRoundTimer();
-      playSpeedTick();
+      if (state.speedSoundEnabled) {
+        playSpeedTick();
+      }
     }
   }, 1000);
 
@@ -254,7 +331,7 @@ function renderSpeedRoundTimer() {
     return;
   }
 
-  elements.speedTimer.hidden = !isSpeedRoundActive();
+  elements.speedTimer.hidden = !isSpeedRoundActive() || state.speedRelaxedTimer;
   if (!isSpeedRoundActive()) {
     return;
   }
@@ -307,6 +384,21 @@ function updateQuizNavigation() {
   const lockSpeedRoundNavigation = isSpeedRoundActive();
   elements.quizBackButton.disabled = lockSpeedRoundNavigation || round.viewIndex <= 0;
   elements.quizForwardButton.disabled = lockSpeedRoundNavigation || round.viewIndex >= round.currentIndex;
+  if (elements.feedbackContinueButton) {
+    elements.feedbackContinueButton.hidden = !round.awaitingContinue;
+    const isRoundComplete = round.currentIndex >= round.totalQuestions - 1;
+    const isNaturalBreak =
+      !isSpeedRoundActive() &&
+      !isRoundComplete &&
+      (round.currentIndex + 1) % 10 === 0;
+    elements.feedbackContinueButton.textContent = isRoundComplete
+      ? isSpeedRoundActive() || !state.speedChallengeEnabled || state.sessionPreset === SESSION_PRESETS.practice
+        ? "See Results"
+        : "Start Challenge"
+      : isNaturalBreak
+        ? "Take a Break, Then Continue"
+        : "Continue";
+  }
 }
 
 function updateResultsNavigation() {
@@ -353,6 +445,9 @@ function renderQuizFeedback() {
       ${reviewRecord.reviewHtml}
     `;
     elements.feedback.className = "feedback-banner review";
+    if (elements.confidenceSelector) {
+      elements.confidenceSelector.hidden = true;
+    }
     return;
   }
 
@@ -364,6 +459,10 @@ function renderFeedback() {
   elements.feedback.className = state.feedbackMessage
     ? `feedback-banner ${state.feedbackTone}`
     : "feedback-banner";
+  if (elements.feedbackContinueButton) {
+    elements.feedbackContinueButton.hidden = !getActiveRoundState().awaitingContinue;
+  }
+  renderConfidenceSelector();
 }
 
 function showPreviousQuizQuestion() {
@@ -410,6 +509,96 @@ function switchScreen(activeScreen) {
   if (elements.dashboardScreen) {
     elements.dashboardScreen.hidden = activeScreen !== elements.dashboardScreen;
   }
+
+  const heading = activeScreen?.querySelector("h2, h1");
+  if (elements.screenStatusAnnouncer) {
+    elements.screenStatusAnnouncer.textContent = heading?.textContent || "Screen changed";
+  }
+  if (activeScreen !== elements.quizScreen && heading) {
+    heading.tabIndex = -1;
+    window.requestAnimationFrame?.(() => heading.focus({ preventScroll: true }));
+  }
+}
+
+function initializeUiEnhancements() {
+  elements.feedbackContinueButton?.addEventListener("click", continueAfterFeedback);
+  elements.readAloudButton?.addEventListener("click", readCurrentQuestionAloud);
+  elements.hintButton?.addEventListener("click", showNextHint);
+  elements.confidenceButtons?.forEach((button) => {
+    button.addEventListener("click", () => setAnswerConfidence(button.dataset.confidence));
+  });
+  elements.pauseSessionButton?.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("homework:pause-session"));
+  });
+  elements.resumeSessionButton?.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("homework:resume-session"));
+  });
+  elements.discardSessionButton?.addEventListener("click", () => {
+    window.dispatchEvent(new CustomEvent("homework:discard-session"));
+  });
+
+  const syncChallengeControls = () => {
+    state.speedChallengeEnabled = Boolean(elements.speedChallengeEnabled?.checked);
+    state.speedRelaxedTimer = Boolean(elements.speedRelaxedTimer?.checked);
+    state.speedSoundEnabled = Boolean(elements.speedSoundEnabled?.checked);
+    document.querySelectorAll(".challenge-dependent input").forEach((input) => {
+      input.disabled = !state.speedChallengeEnabled;
+    });
+  };
+  elements.speedChallengeEnabled?.addEventListener("change", syncChallengeControls);
+  elements.speedRelaxedTimer?.addEventListener("change", syncChallengeControls);
+  elements.speedSoundEnabled?.addEventListener("change", syncChallengeControls);
+  syncChallengeControls();
+
+  elements.exportHistoryButton?.addEventListener("click", exportSessionHistory);
+  elements.deleteHistoryButton?.addEventListener("click", deleteCurrentUserHistory);
+  elements.resultsPracticeButton?.addEventListener("click", practiceResultsWeakestTopic);
+}
+
+function practiceResultsWeakestTopic() {
+  const category = String(elements.resultsPracticeButton?.dataset.practiceCategory || "");
+  if (!SESSION_CATEGORY_ORDER.includes(category) || isAdultUserSelected()) {
+    return;
+  }
+
+  showStartScreen();
+  selectPracticeCategory(category);
+  if (elements.sessionCustomization) {
+    elements.sessionCustomization.open = true;
+  }
+  elements.practiceTopicPanel?.scrollIntoView?.({ behavior: "smooth", block: "nearest" });
+  showStartMessage(`Ready for a focused 10-question ${getCategoryLabel(category)} practice.`, "success");
+}
+
+function exportSessionHistory() {
+  const history = loadSessionHistory();
+  if (!history.length) {
+    showStartMessage("There is no history to export for this learner.", "error");
+    return;
+  }
+
+  const blob = new Blob([JSON.stringify(history, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `homework-history-${state.currentUserId}.json`;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+function deleteCurrentUserHistory() {
+  const profile = getCurrentUserProfile();
+  if (!window.confirm(`Delete all saved sessions for ${profile.name}? This cannot be undone.`)) {
+    return;
+  }
+
+  const historyByUser = loadAllSessionHistory();
+  historyByUser[state.currentUserId] = [];
+  sessionHistoryStore.write(historyByUser);
+  renderHistoryScreen();
+  if (elements.screenStatusAnnouncer) {
+    elements.screenStatusAnnouncer.textContent = `Saved history for ${profile.name} was deleted.`;
+  }
 }
 
 function clearStartMessage() {
@@ -440,6 +629,11 @@ function buildWrongCategoryCounts(records) {
 }
 
 function getQuestionCategoryKey(question) {
+  const explicitCategory = String(question?.category || "").trim();
+  if (explicitCategory) {
+    return explicitCategory;
+  }
+
   const type = String(question?.type || "").trim();
   if (!type) {
     return "general";
@@ -477,18 +671,57 @@ function getSessionPresetLabel(preset) {
 
 function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, selectedMeta = null) {
   const category = getQuestionCategoryKey(question);
+  const isGraded = selectedMeta?.isGraded !== false && question?.mode !== "practice";
   return {
     questionNumber,
     category,
     categoryLabel: getCategoryLabel(category),
+    contentId: String(question?.contentId || question?.id || ""),
+    skill: String(question?.skill || ""),
+    gradeMin: Number.isFinite(Number(question?.gradeMin)) ? Number(question.gradeMin) : undefined,
+    gradeMax: Number.isFinite(Number(question?.gradeMax)) ? Number(question.gradeMax) : undefined,
     questionText: formatQuestionForLog(question),
     answerOptions: formatAnswerOptionsForLog(question),
     chosenAnswer: selectedValue === "" ? "(no answer)" : String(selectedValue),
     ...(Array.isArray(selectedMeta?.tokens) ? { selectedTokens: [...selectedMeta.tokens] } : {}),
-    correctAnswer: question.answerLabel,
-    isCorrect,
-    reviewHtml: formatQuestionReview(question, selectedValue, { isCorrect }),
+    correctAnswer: isGraded ? question.answerLabel : "Parent/self review",
+    isCorrect: isGraded ? Boolean(isCorrect) : null,
+    isGraded,
+    explanation: String(question?.explanation || question?.rationale || ""),
+    source: normalizeQuestionSource(question?.source),
+    reviewedAt: String(question?.reviewedAt || ""),
+    hintsUsed: Number(selectedMeta?.hintsUsed) || 0,
+    questionDifficulty: Number.isFinite(Number(question?.difficulty))
+      ? Number(question.difficulty)
+      : undefined,
+    questionType: String(question?.type || ""),
+    responseTimeMs: Number.isFinite(Number(selectedMeta?.responseTimeMs))
+      ? Number(selectedMeta.responseTimeMs)
+      : undefined,
+    reviewHtml: isGraded
+      ? formatQuestionReview(question, selectedValue, { isCorrect })
+      : `<div class="feedback-outcome"><strong>Completed (not graded).</strong>${getQuestionExplanationHtml(
+          question
+        )}</div>`,
   };
+}
+
+function normalizeQuestionSource(source) {
+  if (!source) {
+    return "";
+  }
+  if (typeof source === "string") {
+    return source.trim();
+  }
+  if (Array.isArray(source)) {
+    return source.map(normalizeQuestionSource).filter(Boolean).join("; ");
+  }
+  if (typeof source === "object") {
+    const title = String(source.title || source.name || source.organization || "").trim();
+    const url = String(source.url || source.href || "").trim();
+    return [title, url].filter(Boolean).join(title && url ? " — " : "");
+  }
+  return String(source);
 }
 
 function formatAnswerOptionsForLog(question) {
@@ -538,17 +771,19 @@ function buildSessionHistoryEntry() {
     hebrewOnly: Boolean(state.hebrewOnly),
     sessionPreset: state.sessionPreset,
     totalQuestions: state.totalQuestions,
+    gradedQuestions: state.sessionRecords.filter((record) => record?.isGraded !== false).length,
     correctCount: state.correctCount,
+    completedPracticeCount: state.completedPracticeCount,
     speedRoundTotalQuestions:
-      state.sessionPreset === SESSION_PRESETS.practice
+      !state.speedChallengeEnabled || state.sessionPreset === SESSION_PRESETS.practice
         ? undefined
         : state.speedRound.totalQuestions || SPEED_ROUND_QUESTION_COUNT,
     speedRoundCorrectCount:
-      state.sessionPreset === SESSION_PRESETS.practice
+      !state.speedChallengeEnabled || state.sessionPreset === SESSION_PRESETS.practice
         ? undefined
         : state.speedRound.correctCount || 0,
     speedRoundRecords:
-      state.sessionPreset === SESSION_PRESETS.practice
+      !state.speedChallengeEnabled || state.sessionPreset === SESSION_PRESETS.practice
         ? []
         : state.speedRound.records.filter(Boolean).map((record) => ({ ...record })),
     records: state.sessionRecords.filter(Boolean).map((record) => ({ ...record })),
@@ -619,8 +854,11 @@ function createHistorySessionElement(session, shouldOpen) {
   const body = document.createElement("div");
   body.className = "history-session-body";
 
-  session.records.forEach((record) => {
-    body.appendChild(createHistoryQuestionElement(record, session.startedAt));
+  (Array.isArray(session.records) ? session.records : []).forEach((record) => {
+    body.appendChild(createHistoryQuestionElement(record, session.startedAt, "Main"));
+  });
+  (Array.isArray(session.speedRoundRecords) ? session.speedRoundRecords : []).forEach((record) => {
+    body.appendChild(createHistoryQuestionElement(record, session.startedAt, "Challenge"));
   });
 
   details.appendChild(body);
@@ -628,7 +866,13 @@ function createHistorySessionElement(session, shouldOpen) {
 }
 
 function formatSessionHistoryMeta(session) {
-  const parts = [`${session.correctCount}/${session.totalQuestions} correct`];
+  const gradedQuestions = Number.isFinite(Number(session.gradedQuestions))
+    ? Number(session.gradedQuestions)
+    : Number(session.totalQuestions) || 0;
+  const parts = [`${Number(session.correctCount) || 0}/${gradedQuestions} graded correct`];
+  if (Number(session.completedPracticeCount) > 0) {
+    parts.push(`${Number(session.completedPracticeCount)} activities completed`);
+  }
   if (Number.isFinite(Number(session?.speedRoundTotalQuestions))) {
     parts.push(
       `Speed ${Number(session.speedRoundCorrectCount) || 0}/${Number(session.speedRoundTotalQuestions) || SPEED_ROUND_QUESTION_COUNT}`
@@ -657,13 +901,13 @@ function formatSessionHistoryMeta(session) {
   return parts.join(" | ");
 }
 
-function createHistoryQuestionElement(record, sessionStartedAt) {
+function createHistoryQuestionElement(record, sessionStartedAt, roundLabel = "Main") {
   const wrapper = document.createElement("div");
   wrapper.className = "history-question";
 
   const title = document.createElement("p");
   title.className = "history-question-title";
-  title.textContent = `Question ${record.questionNumber} · ${record.categoryLabel || "Question"}`;
+  title.textContent = `${roundLabel} question ${record.questionNumber} · ${record.categoryLabel || "Question"}`;
   wrapper.appendChild(title);
 
   const questionText = document.createElement("p");
@@ -676,15 +920,33 @@ function createHistoryQuestionElement(record, sessionStartedAt) {
   chosenAnswer.textContent = `Chosen answer: ${record.chosenAnswer}`;
   wrapper.appendChild(chosenAnswer);
 
-  const correctAnswer = document.createElement("p");
-  correctAnswer.className = "history-answer-line";
-  correctAnswer.textContent = `Correct answer: ${record.correctAnswer}`;
-  wrapper.appendChild(correctAnswer);
+  if (record.isGraded !== false) {
+    const correctAnswer = document.createElement("p");
+    correctAnswer.className = "history-answer-line";
+    correctAnswer.textContent = `Correct answer: ${record.correctAnswer}`;
+    wrapper.appendChild(correctAnswer);
+  }
 
   const result = document.createElement("p");
-  result.className = `history-answer-line ${record.isCorrect ? "correct" : "wrong"}`;
-  result.textContent = `Result: ${record.isCorrect ? "Correct" : "Wrong"}`;
+  result.className = `history-answer-line ${record.isGraded === false ? "completed" : record.isCorrect ? "correct" : "wrong"}`;
+  result.textContent = record.isGraded === false
+    ? "Result: Completed (not graded)"
+    : `Result: ${record.isCorrect ? "Correct" : "Wrong"}`;
   wrapper.appendChild(result);
+
+  if (record.explanation) {
+    const explanation = document.createElement("p");
+    explanation.className = "history-answer-line explanation";
+    explanation.textContent = `Why: ${record.explanation}`;
+    wrapper.appendChild(explanation);
+  }
+
+  if (record.source) {
+    const source = document.createElement("p");
+    source.className = "history-answer-line source";
+    source.textContent = `Source: ${record.source}`;
+    wrapper.appendChild(source);
+  }
 
   return wrapper;
 }
@@ -720,6 +982,7 @@ function renderDashboardScreen() {
       ${renderDashboardStatCard("Sessions", stats.sessionCount)}
       ${renderDashboardStatCard("Accuracy", `${stats.accuracy}%`)}
       ${renderDashboardStatCard("Questions", stats.totalQuestions)}
+      ${stats.challengeQuestions ? renderDashboardStatCard("Challenge", `${stats.challengeCorrect}/${stats.challengeQuestions}`) : ""}
       ${renderDashboardStatCard("Last Session", stats.lastSessionLabel)}
     </div>
     <div class="dashboard-grid">
@@ -764,20 +1027,32 @@ function buildDashboardStats(sessions) {
   const totals = sessions.reduce(
     (accumulator, session) => {
       accumulator.correct += Number(session.correctCount) || 0;
-      accumulator.questions += Number(session.totalQuestions) || 0;
-      (session.records || []).forEach((record) => {
+      accumulator.questions += Number(session.gradedQuestions ?? session.totalQuestions) || 0;
+      const records = [
+        ...(session.records || []).map((record) => ({ record, isChallenge: false })),
+        ...(session.speedRoundRecords || []).map((record) => ({ record, isChallenge: true })),
+      ];
+      accumulator.challengeCorrect += Number(session.speedRoundCorrectCount) || 0;
+      accumulator.challengeQuestions += Number(session.speedRoundTotalQuestions) || 0;
+      records.forEach(({ record, isChallenge }) => {
+        if (record?.isGraded === false) {
+          return;
+        }
         const category = String(record?.category || "unknown");
-        if (!accumulator.categories.has(category)) {
-          accumulator.categories.set(category, {
-            category,
-            categoryLabel: getCategoryLabel(category),
+        const skill = String(record?.skill || "").trim();
+        const baseGroupingKey = skill ? `${category}:${skill}` : category;
+        const groupingKey = isChallenge ? `challenge:${baseGroupingKey}` : baseGroupingKey;
+        if (!accumulator.categories.has(groupingKey)) {
+          accumulator.categories.set(groupingKey, {
+            category: groupingKey,
+            categoryLabel: `${isChallenge ? "Challenge · " : ""}${skill ? `${getCategoryLabel(category)} · ${skill}` : getCategoryLabel(category)}`,
             attempts: 0,
             correct: 0,
             wrong: 0,
           });
         }
 
-        const entry = accumulator.categories.get(category);
+        const entry = accumulator.categories.get(groupingKey);
         entry.attempts += 1;
         if (record.isCorrect) {
           entry.correct += 1;
@@ -787,7 +1062,7 @@ function buildDashboardStats(sessions) {
       });
       return accumulator;
     },
-    { correct: 0, questions: 0, categories: new Map() }
+    { correct: 0, questions: 0, challengeCorrect: 0, challengeQuestions: 0, categories: new Map() }
   );
   const lastSession = sessions[0];
   const categoryStats = Array.from(totals.categories.values())
@@ -803,6 +1078,8 @@ function buildDashboardStats(sessions) {
     totalQuestions: totals.questions,
     accuracy: totals.questions ? Math.round((totals.correct / totals.questions) * 100) : 0,
     lastSessionLabel: lastSession ? formatHistoryDate(lastSession.startedAt) : "None",
+    challengeCorrect: totals.challengeCorrect,
+    challengeQuestions: totals.challengeQuestions,
     categoryStats,
   };
 }
@@ -822,7 +1099,7 @@ function renderSessionTrendChart(sessions) {
     <div class="dashboard-trend-chart">
       ${recentSessions
         .map((session) => {
-          const total = Number(session.totalQuestions) || 0;
+          const total = Number(session.gradedQuestions ?? session.totalQuestions) || 0;
           const percentage = total ? Math.round(((Number(session.correctCount) || 0) / total) * 100) : 0;
           return `
             <div class="dashboard-trend-item">
@@ -837,9 +1114,9 @@ function renderSessionTrendChart(sessions) {
 }
 
 function renderWeakTopicChart(categoryStats) {
-  const weakTopics = categoryStats.filter((entry) => entry.wrong > 0).slice(0, 6);
+  const weakTopics = categoryStats.filter((entry) => entry.wrong > 0 && entry.attempts >= 3).slice(0, 6);
   if (!weakTopics.length) {
-    return `<p class="dashboard-empty small">No weak topics in saved sessions.</p>`;
+    return `<p class="dashboard-empty small">Not enough evidence yet. A topic appears here after at least 3 graded attempts.</p>`;
   }
 
   return `

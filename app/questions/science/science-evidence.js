@@ -817,17 +817,17 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     visualSummary: "Salt amount is intentionally changed.",
   }),
   scienceEvidenceBuildQuestion({
-    question: "Which question is most scientific?",
-    displayText: "A student wants a measurable investigation.",
+    question: "Which question names one variable to change and one outcome to measure?",
+    displayText: "A student plans a fair investigation about dissolving sugar.",
     options: [
       "Does water temperature affect how fast sugar dissolves?",
-      "Which sugar is friendliest?",
-      "Is hot water more exciting?",
-      "Which cup looks happiest?",
+      "Does changing the water temperature and sugar amount change the result?",
+      "Does warm water make the dissolving experiment better?",
+      "What happens if the student changes every part of the test?",
     ],
     answer: "Does water temperature affect how fast sugar dissolves?",
     difficulty: 4,
-    visualSummary: "Dissolving time can be measured.",
+    visualSummary: "Water temperature is the changed variable and dissolving time is the measured outcome.",
   }),
   scienceEvidenceBuildQuestion({
     question: "Which evidence best supports the claim?",
@@ -1741,7 +1741,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     displayText: "A study finds that students who sleep more often score higher on quizzes. It did not assign sleep times or control study time.",
     options: [
       "More sleep is linked with higher scores in this study, but other factors may matter.",
-      "Sleep is proven to be the only cause of higher scores.",
+      "The study proves sleep alone causes higher scores even without controlling study time.",
       "Studying cannot affect quiz scores.",
       "The study proves sleep has no relationship to scores.",
     ],
@@ -1753,7 +1753,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     question: "Which design would best test whether a helmet material absorbs impact better?",
     options: [
       "Drop the same mass from the same height onto each material and measure force many times.",
-      "Drop different masses from different heights onto each material once.",
+      "Drop different masses from different heights onto each material and compare one trial.",
       "Ask which material looks safest.",
       "Use one material indoors and another outdoors on different days.",
     ],
@@ -1767,7 +1767,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "Without a comparison group, improvement might have happened for another reason.",
       "Reading speed cannot be measured.",
-      "Five students is always enough to prove anything.",
+      "Five students improving means the app is the only possible cause for every child.",
       "Apps cannot be studied scientifically.",
     ],
     answer: "Without a comparison group, improvement might have happened for another reason.",
@@ -1781,7 +1781,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
       "Particle counts before and after filtering for many samples with both filters",
       "A photo of the new filter box",
       "One person saying the water looks nice",
-      "The price of the new filter",
+      "Compare the prices and package colors of the two filters in several shops",
     ],
     answer: "Particle counts before and after filtering for many samples with both filters",
     difficulty: 9,
@@ -1799,7 +1799,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "Growth was lower at high light than at medium light.",
       "The low-light group grew some algae.",
-      "The light levels had names.",
+      "Growth at high light was greater than growth at medium light.",
       "The growth was recorded in units.",
     ],
     answer: "Growth was lower at high light than at medium light.",
@@ -1813,7 +1813,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
       "It reduces the chance that expectations affect the ratings.",
       "It makes the soap stronger.",
       "It means no data must be recorded.",
-      "It changes the amount of dirt on each cloth.",
+      "Tell the scorer which soap the researcher expects to win.",
     ],
     answer: "It reduces the chance that expectations affect the ratings.",
     difficulty: 9,
@@ -1829,7 +1829,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     ]),
     options: [
       "Some water helped, but too much water may have reduced growth.",
-      "More water always made plants taller.",
+      "The data prove that every extra amount of water increases growth.",
       "Water never affected growth.",
       "The least water made the tallest plants.",
     ],
@@ -1843,7 +1843,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "Results from other groups using the same design and method",
       "The favorite color of the group",
-      "A drawing of a plane that was not tested",
+      "Results from one group using a different plane and method",
       "The lunch menu from test day",
     ],
     answer: "Results from other groups using the same design and method",
@@ -1961,7 +1961,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     displayText: "A randomized test gives 50 plants fertilizer and 50 plants no fertilizer. Both groups use the same seed type, soil, light, and water. Fertilized plants average 24 cm; control plants average 18 cm.",
     options: [
       "In this test, fertilizer caused higher average growth under these conditions.",
-      "Fertilizer always makes every plant exactly 24 cm tall.",
+      "Fertilizer always makes every plant grow to the same exact height.",
       "Soil, light, and water were not controlled.",
       "The control plants grew taller than the fertilized plants.",
     ],
@@ -1976,7 +1976,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
       "Flashlight condition may have affected how long the batteries lasted.",
       "The batteries were compared using light.",
       "The test had too many identical flashlights.",
-      "Battery life cannot be measured with time.",
+      "Using two different flashlights cannot affect the battery comparison.",
     ],
     answer: "Flashlight condition may have affected how long the batteries lasted.",
     difficulty: 10,
@@ -1988,7 +1988,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "More sugar increased gas up to 2 tsp, but more than that did not increase it in this test.",
       "Sugar never affected gas production.",
-      "Four teaspoons produced the most gas by far.",
+      "The results prove each extra teaspoon of sugar always produces the same increase in gas.",
       "Yeast produced gas without any sugar.",
     ],
     answer: "More sugar increased gas up to 2 tsp, but more than that did not increase it in this test.",
@@ -2018,7 +2018,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "Plane B has a higher average, but its results are much less consistent.",
       "Plane A definitely always flies farther.",
-      "Plane B has no variation at all.",
+      "Plane B is completely consistent because its average is one meter higher.",
       "The range does not tell anything about consistency.",
     ],
     answer: "Plane B has a higher average, but its results are much less consistent.",
@@ -2044,7 +2044,7 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     options: [
       "Use more plants, repeat the test, and compare the variation in results.",
       "Pick the answer that sounds best.",
-      "Measure only the tallest Plant Food A plant.",
+      "Measure only the tallest plant given Food A and ignore every other result.",
       "Stop the test before Plant Food B grows.",
     ],
     answer: "Use more plants, repeat the test, and compare the variation in results.",
@@ -2169,6 +2169,9 @@ const SCIENCE_EVIDENCE_QUESTIONS = [
     visualSummary: "Temperature is measured evidence; appearance preference is opinion.",
   }),
 ];
+const SCIENCE_EVIDENCE_ACTIVE_QUESTIONS =
+  globalThis.HomeworkQuestionUtils?.filterAnswerLengthCues(SCIENCE_EVIDENCE_QUESTIONS, 15) ||
+  SCIENCE_EVIDENCE_QUESTIONS;
 
 function createScienceEvidenceGeneratedEntry(difficulty) {
   const level = clampScienceEvidenceDifficulty(difficulty);
@@ -2185,7 +2188,15 @@ function createScienceEvidenceGeneratedEntry(difficulty) {
     10: [createCausalClaimQuestion, createLimitationQuestion, createRevisionQuestion, createUncertaintyQuestion],
   }[level] || [createInterpretationQuestion];
 
-  return scienceEvidenceRandomChoice(generators)(level);
+  let fallback = null;
+  for (let attempt = 0; attempt < 8; attempt += 1) {
+    const candidate = scienceEvidenceRandomChoice(generators)(level);
+    fallback ||= candidate;
+    if (!globalThis.HomeworkQuestionUtils?.hasAnswerLengthCue(candidate.options, candidate.answer, 15)) {
+      return candidate;
+    }
+  }
+  return fallback;
 }
 
 function createFairTestQuestion(difficulty = 1) {
@@ -2806,6 +2817,9 @@ function scienceEvidenceBuildQuestion({
   displayText = "",
   visualHtml = "",
   visualSummary = "",
+  skill = "evidence-reasoning",
+  explanation = "",
+  source = null,
 }) {
   const normalizedOptions = Array.from(new Set((options || []).map((option) => String(option))));
   const normalizedAnswer = String(answer || "");
@@ -2818,15 +2832,27 @@ function scienceEvidenceBuildQuestion({
     throw new Error("Science evidence questions require exactly 4 unique options with one answer.");
   }
 
+  const level = clampScienceEvidenceDifficulty(difficulty);
   return {
     question: String(question),
     displayText: String(displayText || ""),
     visualHtml: String(visualHtml || ""),
     options: scienceEvidenceShuffleArray(normalizedOptions),
     answer: normalizedAnswer,
-    difficulty: clampScienceEvidenceDifficulty(difficulty),
+    difficulty: level,
     visualSummary: String(visualSummary || ""),
     type: "science-evidence-choice",
+    contentId: globalThis.HomeworkQuestionUtils?.stableContentId(
+      "science-evidence",
+      `${skill}|${question}|${displayText}|${normalizedAnswer}`
+    ),
+    skill: `science-practices.${skill}`,
+    gradeMin: level,
+    gradeMax: level,
+    explanation: String(explanation || visualSummary || normalizedAnswer),
+    reviewText: String(explanation || visualSummary || normalizedAnswer),
+    source,
+    reviewStatus: "author-curated",
   };
 }
 
@@ -2908,7 +2934,7 @@ function scienceEvidenceShuffleArray(values) {
 globalThis.HomeworkQuestions?.register({
   id: "science-evidence",
   label: "Science Evidence",
-  getStaticQuestions: () => SCIENCE_EVIDENCE_QUESTIONS,
+  getStaticQuestions: () => SCIENCE_EVIDENCE_ACTIVE_QUESTIONS,
   generatedEntryFactory: createScienceEvidenceGeneratedEntry,
   generatedShare: 0.85,
 });

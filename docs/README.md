@@ -51,13 +51,13 @@ device is temporarily offline.
 Repo files:
 
 - `app/core/config.js`: stores the deployed Apps Script `/exec` URL in
-  `GOOGLE_SHEETS_REPORT_WEB_APP_URL`, plus the report source, schema version, retry queue key, and
-  optional shared secret.
+  `GOOGLE_SHEETS_REPORT_WEB_APP_URL`, plus the report source, schema version, and retry queue key.
 - `app/core/results-reporter.js`: builds the sanitized session payload, removes review HTML, queues
-  reports, and POSTs them to the Apps Script web app.
+  reports, POSTs them to the Apps Script web app, and removes a queued report only after the public
+  status endpoint confirms that exact session ID.
 - `app/scripts/google_sheets_apps_script.gs`: repo copy of the Apps Script code attached to the
   Google Sheet. It receives POSTs, writes parent-friendly summary rows to `Sessions`, and writes
-  incorrect question rows to `QuestionResults`. It also sends a completion email to the configured
+  incorrect and completed-unscored activity rows to `QuestionResults`. It also sends a completion email to the configured
   parent addresses after a new session is saved. Completion emails use the `[Homework Alert]`
   subject prefix so Gmail can label and notify on only these messages.
 
@@ -77,6 +77,18 @@ layout when it sees the previous `Received At` header. Routine report submission
 manual column widths. Running `setup()` can reapply the default `Sessions` column widths and remove
 the old `CategorySummary` sheet.
 
+The receiver is intentionally public and does not require a login or shared secret. It strictly
+validates and bounds the report schema, stores user text as literal spreadsheet text, and makes
+retries idempotent. Before running or deploying the receiver, add these values under Apps Script
+`Project Settings` -> `Script Properties`:
+
+- `HOMEWORK_SPREADSHEET_ID`: the ID between `/d/` and `/edit` in the Google Sheet URL.
+- `HOMEWORK_EMAIL_RECIPIENTS`: optional comma-separated completion-email addresses. Leave this
+  property absent to disable completion email.
+
+These values are intentionally not committed to the repository. Configure them before replacing
+the currently deployed receiver code.
+
 The repo copy of `app/scripts/google_sheets_apps_script.gs` does not update Google Apps Script by
 itself. When changing the receiver, update both places:
 
@@ -84,13 +96,14 @@ itself. When changing the receiver, update both places:
    code is documented with the app.
 2. Open the bound Apps Script project from the Google Sheet.
 3. Paste the same code into the Apps Script editor.
-4. Save the Apps Script project with `Ctrl+S` or `Cmd+S`.
-5. Select `setup` in the function dropdown and run it once after header, sheet, or date-format
+4. Confirm the two Script Properties described above are present.
+5. Save the Apps Script project with `Ctrl+S` or `Cmd+S`.
+6. Select `setup` in the function dropdown and run it once after header, sheet, or date-format
    changes. Authorize it if Google asks, including the MailApp permission needed for completion
    emails.
-6. Go to `Deploy` -> `Manage deployments`.
-7. Edit the existing web app deployment.
-8. Set `Version` to `New version`, add a short description, then click `Deploy`.
+7. Go to `Deploy` -> `Manage deployments`.
+8. Edit the existing web app deployment.
+9. Set `Version` to `New version`, add a short description, then click `Deploy`.
 
 Editing the existing deployment keeps the same `/exec` URL, so `GOOGLE_SHEETS_REPORT_WEB_APP_URL`
 usually does not need to change. If a brand-new deployment is created instead, copy its new `/exec`
@@ -107,9 +120,10 @@ saying the homework results receiver is running.
 - Works offline from a normal folder.
 - Lets you choose:
   - student profile
-  - `20`, `30`, or `40` main-session questions
+  - `5`, `10`, `20`, or `30` main-session activities
   - difficulty level `1` to `10` for Guest sessions
-  - `Adaptive`, `Math`, or `Hebrew` session preset
+  - `Adaptive`, `Math`, `Hebrew`, or focused `Practice` preset
+  - an optional timed or untimed five-question challenge
 - Defaults to:
   - `30` questions
   - the `Adaptive` preset
@@ -122,15 +136,21 @@ saying the homework results receiver is running.
 - Miranda has a fixed adult Hebrew-focused profile with optional specialty vocabulary support when
   the corresponding UI control is present.
 - Tracks live progress with colored progress boxes and a score counter.
-- Runs a short `5` question speed round after the main session.
-- Multiple-choice questions check immediately when you click an answer.
+- Can run an optional `5` question challenge after the main session.
+- Keeps feedback and explanations beside the answered question until the learner chooses Continue.
+- Offers progressive hints and an optional confidence check.
+- Can read visible English or Hebrew question text aloud when the browser provides speech synthesis.
 - Drag questions support sentence completion, category sorting, matching, and image vocabulary.
 - Typed math questions check when you press `Enter`.
-- Hebrew writing-practice prompts are added near the end of non-adult sessions.
+- Hebrew writing-practice prompts are included only in Hebrew/adaptive sessions and are recorded as
+  completed, not graded.
 - Shows review feedback for wrong answers with the question, your answer, and the correct answer.
 - Shows a final results screen with category review, missed-question details, speed-round results,
   praise text, and confetti.
+- Offers one-tap focused practice for the category with the most missed answers.
 - Keeps previous sessions per student and includes a parent dashboard.
+- Checkpoints unfinished sessions so they can be resumed after closing or updating the app.
+- Lets a parent export or delete local session history.
 - Includes an offline browser smoke test for session generation, generated-question quality, speed
   round shape, and results reporting.
 
@@ -315,13 +335,15 @@ Each saved session includes:
 - per-category difficulty levels for that session
 - selected categories and adaptive-review setting
 - final score
-- speed-round score
+- optional challenge score
+- graded-question and completed-unscored activity counts
 - each main-session question
 - each speed-round question
 - chosen answer
 - correct answer
 - whether it was right or wrong
 - selected drag tokens, when the question used drag answers
+- hint count and confidence, when supplied
 
 Important:
 
@@ -379,4 +401,15 @@ Important:
 - `app/smoke-test.html`: offline browser smoke test for session generation, generated-question shape,
   speed round, and results reporting
 - `app/scripts/`: helper scripts, including the Google Sheets Apps Script receiver copy
-- `app/logs/`: saved generator/import logs
+
+## Automated QA
+
+Node.js 20 or newer is required for the command-line QA suite. No third-party packages are needed.
+
+- `npm test`: deterministic core-data, manifest, generation, grade-alignment, content-quality,
+  time/probability, and Hebrew checks.
+- `npm run qa:browser`: full workflow smoke test in installed Chrome/Chromium.
+- `npm run qa:all`: all command-line and browser checks.
+
+Set `QA_SEED` to reproduce a randomized failure with a specific seed. GitHub Actions runs the same
+suite on every push and pull request.

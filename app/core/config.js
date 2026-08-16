@@ -7,9 +7,8 @@ const GOOGLE_SHEETS_REPORT_WEB_APP_URL =
 const GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY = "homework-google-sheets-report-queue-v1";
 const GOOGLE_SHEETS_REPORT_SOURCE = "kids_homework_app";
 const GOOGLE_SHEETS_REPORT_SCHEMA_VERSION = 1;
-const GOOGLE_SHEETS_REPORT_SECRET = "";
 const MAX_SAVED_SESSIONS = 10;
-const QUESTION_COUNT_OPTIONS = [10, 20, 30];
+const QUESTION_COUNT_OPTIONS = [5, 10, 20, 30];
 const SPEED_ROUND_QUESTION_COUNT = 5;
 const SPEED_ROUND_SECONDS = 10;
 const SPEED_ROUND_MS = SPEED_ROUND_SECONDS * 1000;
@@ -171,7 +170,7 @@ const USER_PROFILES = [
     id: "guest",
     name: "Guest",
     defaultDifficulty: 1,
-    enableReviewFocus: false,
+    enableReviewFocus: true,
     avatarStyle: "girlCurls",
     palette: {
       sky: "#f4ecff",
@@ -227,7 +226,7 @@ const USER_PROFILES = [
       "fractions-and-ratios": 3,
       "spatial-reasoning": 3,
     },
-    enableReviewFocus: false,
+    enableReviewFocus: true,
     avatarStyle: "lightCurls",
     palette: {
       sky: "#ecf7ea",
@@ -283,7 +282,7 @@ const USER_PROFILES = [
       "fractions-and-ratios": 7,
       "spatial-reasoning": 7,
     },
-    enableReviewFocus: false,
+    enableReviewFocus: true,
     avatarStyle: "curlyHair",
     palette: {
       sky: "#e6f6ff",
@@ -339,7 +338,7 @@ const USER_PROFILES = [
       "fractions-and-ratios": 4,
       "spatial-reasoning": 4,
     },
-    enableReviewFocus: false,
+    enableReviewFocus: true,
     avatarStyle: "longHair",
     palette: {
       sky: "#fff1d2",
@@ -581,7 +580,6 @@ const PRACTICE_TOPIC_GROUPS = [
     GOOGLE_SHEETS_REPORT_QUEUE_STORAGE_KEY,
     GOOGLE_SHEETS_REPORT_SOURCE,
     GOOGLE_SHEETS_REPORT_SCHEMA_VERSION,
-    GOOGLE_SHEETS_REPORT_SECRET,
     MAX_SAVED_SESSIONS,
     QUESTION_COUNT_OPTIONS,
     SPEED_ROUND_QUESTION_COUNT,
