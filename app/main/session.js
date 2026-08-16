@@ -770,7 +770,6 @@ const QUESTION_METADATA_FIELDS = [
   "sourceDate",
   "reviewStatus",
   "hints",
-  "listenText",
   "geographyMapCountry",
   "geographyMapVisualKind",
   "distractorRationales",

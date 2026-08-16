@@ -518,7 +518,6 @@ function switchScreen(activeScreen) {
 
 function initializeUiEnhancements() {
   elements.feedbackContinueButton?.addEventListener("click", continueAfterFeedback);
-  elements.readAloudButton?.addEventListener("click", readCurrentQuestionAloud);
   elements.hintButton?.addEventListener("click", showNextHint);
   elements.pauseSessionButton?.addEventListener("click", () => {
     window.dispatchEvent(new CustomEvent("homework:pause-session"));

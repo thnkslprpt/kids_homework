@@ -243,7 +243,7 @@ was weakened.
 - [x] Add number-line/fraction-part selection, visual measurement, percentage models, equation/method
   choice, and equivalent-fraction interactions.
 - [x] Add Hebrew roots, gender/number/tense, homograph contrast, sentence/context, image matching, and
-  writing practice; speech synthesis supplies a listening/read-aloud layer when supported.
+  writing practice.
 - [x] Add reading evidence selection, paragraph ordering, source comparison, inference, and
   explanation feedback.
 - [x] Add science fair-test variables, claim/evidence/reasoning, experimental repair, causal-claim
@@ -256,9 +256,9 @@ was weakened.
   procedure sequencing, and emergency help-seeking scenarios.
 - [~] Confidence-based review and weak-skill recency weighting are implemented. A formal 1/3/7-day
   spaced-repetition scheduler and fully adaptive isomorphic retry generator are not yet complete.
-- [~] Browser text-to-speech is implemented. Recorded pronunciation scoring, speech recognition,
-  supplied audio assets, and free-form rubric-scored writing are not complete and require product/
-  privacy decisions beyond the current offline static architecture.
+- [~] Recorded pronunciation scoring, speech recognition, supplied audio assets, and free-form
+  rubric-scored writing are not complete and require product/privacy decisions beyond the current
+  offline static architecture.
 
 ## Content corrections completed or underway
 

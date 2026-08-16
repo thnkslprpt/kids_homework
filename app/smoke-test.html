@@ -55,7 +55,6 @@
         <button id="feedback-continue-button" type="button" hidden>Continue</button>
         <div id="question-support" hidden>
           <button id="hint-button" type="button">Show a hint</button>
-          <button id="read-aloud-button" type="button" hidden>Hear Question</button>
           <p id="hint-text"></p>
         </div>
         <p id="question-number"></p>
@@ -866,45 +865,6 @@
         });
       }
 
-      function validateReadAloudSupport() {
-        const question = {
-          type: "hebrew-listening-choice",
-          difficulty: 2,
-          mode: "choice",
-          questionText: "Listen to the word.",
-          displayText: "",
-          listenText: "שָׁלוֹם",
-          options: ["one", "two", "three", "four"],
-          answerValue: "one",
-          answerLabel: "one",
-          isHebrew: true,
-        };
-        renderSmokeQuestion(question, "read-aloud support");
-        const button = document.getElementById("read-aloud-button");
-        const supported =
-          typeof window.speechSynthesis !== "undefined" &&
-          typeof window.SpeechSynthesisUtterance === "function";
-        assert(button.hidden === !supported, "read-aloud button visibility should match browser support");
-        if (!supported) return;
-
-        const synthesis = window.speechSynthesis;
-        const originalCancel = synthesis.cancel;
-        const originalSpeak = synthesis.speak;
-        let didCancel = false;
-        let spokenUtterance = null;
-        try {
-          synthesis.cancel = () => { didCancel = true; };
-          synthesis.speak = (utterance) => { spokenUtterance = utterance; };
-          click(button, "read-aloud button");
-          assert(didCancel, "read-aloud should stop any prior utterance");
-          assert(spokenUtterance?.text === "שָׁלוֹם", "read-aloud should prefer listenText");
-          assert(spokenUtterance?.lang === "he-IL", "Hebrew read-aloud should use a Hebrew voice locale");
-        } finally {
-          synthesis.cancel = originalCancel;
-          synthesis.speak = originalSpeak;
-        }
-      }
-
       function validateQuestion(question, label) {
         const errors = api.validateHomeworkQuestionShape(question, label);
         if (errors.length) failures.push(...errors);
@@ -1392,7 +1352,6 @@
         validateNutritionLabelReaderCoverage();
         validateLogicSpatialPuzzleCoverage();
         validateScoringHelpers();
-        validateReadAloudSupport();
         validateGeneratedHebrewNikkudCoverage();
         validateHebrewActivityCoverage();
         const registeredQuestionIds = new Set(api.questionRegistry?.list?.().map((entry) => entry.id) || []);

@@ -52,7 +52,6 @@
   feedback: document.getElementById("feedback"),
   feedbackContinueButton: document.getElementById("feedback-continue-button"),
   questionSupport: document.getElementById("question-support"),
-  readAloudButton: document.getElementById("read-aloud-button"),
   hintButton: document.getElementById("hint-button"),
   hintText: document.getElementById("hint-text"),
   pauseSessionButton: document.getElementById("pause-session-button"),

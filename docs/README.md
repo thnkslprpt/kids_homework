@@ -139,7 +139,6 @@ saying the homework results receiver is running.
 - Can run an optional `5` question challenge after the main session.
 - Keeps feedback and explanations beside the answered question until the learner chooses Continue.
 - Offers progressive hints without adding an extra post-answer confidence step.
-- Can read visible English or Hebrew question text aloud when the browser provides speech synthesis.
 - Drag questions support sentence completion, category sorting, matching, and image vocabulary.
 - Typed math questions check when you press `Enter`.
 - Hebrew writing-practice prompts are included only in Hebrew/adaptive sessions and are recorded as

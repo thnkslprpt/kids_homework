@@ -58,12 +58,8 @@ function renderHintSupport(question, round, answerLocked) {
     : [];
   const used = Number(round.hintsUsed?.[round.viewIndex]) || 0;
   const hasAvailableHints = !answerLocked && hints.length > 0;
-  const canReadAloud = canSpeakQuestion(question);
-  elements.questionSupport.hidden = !hasAvailableHints && !canReadAloud;
+  elements.questionSupport.hidden = !hasAvailableHints;
   elements.hintButton.hidden = !hasAvailableHints;
-  if (elements.readAloudButton) {
-    elements.readAloudButton.hidden = !canReadAloud;
-  }
   elements.hintText.textContent = used > 0 ? hints[Math.min(used, hints.length) - 1] : "";
   elements.hintButton.disabled = used >= hints.length;
   elements.hintButton.textContent = used === 0
@@ -71,41 +67,6 @@ function renderHintSupport(question, round, answerLocked) {
     : used < hints.length
       ? "Show another hint"
       : "All hints shown";
-}
-
-function getQuestionSpeechText(question) {
-  const explicitText = String(question?.listenText || "").trim();
-  if (explicitText) {
-    return explicitText;
-  }
-
-  return [question?.questionText, question?.displayText]
-    .map((value) => String(value || "").trim())
-    .filter(Boolean)
-    .join(". ");
-}
-
-function canSpeakQuestion(question) {
-  return Boolean(
-    elements.readAloudButton &&
-    typeof window.speechSynthesis !== "undefined" &&
-    typeof window.SpeechSynthesisUtterance === "function" &&
-    getQuestionSpeechText(question)
-  );
-}
-
-function readCurrentQuestionAloud() {
-  const question = getActiveRoundState().questions[getActiveRoundState().viewIndex];
-  const text = getQuestionSpeechText(question);
-  if (!text || !canSpeakQuestion(question)) {
-    return;
-  }
-
-  window.speechSynthesis.cancel();
-  const utterance = new window.SpeechSynthesisUtterance(text);
-  utterance.lang = Boolean(question?.isHebrew) || containsHebrewText(text) ? "he-IL" : "en-US";
-  utterance.rate = 0.9;
-  window.speechSynthesis.speak(utterance);
 }
 
 function showNextHint() {
