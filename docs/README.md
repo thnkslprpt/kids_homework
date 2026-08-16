@@ -137,7 +137,8 @@ saying the homework results receiver is running.
   the corresponding UI control is present.
 - Tracks live progress with colored progress boxes and a score counter.
 - Can run an optional `5` question challenge after the main session.
-- Keeps feedback and explanations beside the answered question until the learner chooses Continue.
+- Advances immediately after a correct answer when there is nothing more to show; keeps explanations,
+  custom success feedback, practice completion notes, and wrong-answer review visible until Continue.
 - Offers progressive hints without adding an extra post-answer confidence step.
 - Drag questions support sentence completion, category sorting, matching, and image vocabulary.
 - Typed math questions check when you press `Enter`.

@@ -1855,6 +1855,14 @@ function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = nu
   } else {
     state.sessionRecords[round.currentIndex] = record;
   }
+
+  if (isGraded && normalizedResult === true && !hasAdditionalCorrectFeedback(question)) {
+    state.feedbackMessage = "";
+    state.feedbackTone = "";
+    advanceAfterAnswer(round);
+    return;
+  }
+
   state.feedbackMessage = isGraded
     ? buildOutcomeMessage(question, normalizedResult, selectedValue)
     : buildPracticeCompletionMessage(question);
@@ -1866,6 +1874,13 @@ function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = nu
   renderCurrentQuestion();
   document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
   focusContinueButton();
+}
+
+function hasAdditionalCorrectFeedback(question) {
+  return Boolean(
+    String(question?.explanation || question?.rationale || "").trim() ||
+    String(question?.successMessage || "").trim()
+  );
 }
 
 function continueAfterFeedback() {
@@ -1881,6 +1896,10 @@ function continueAfterFeedback() {
   state.feedbackMessage = "";
   state.feedbackTone = "";
 
+  advanceAfterAnswer(round);
+}
+
+function advanceAfterAnswer(round) {
   if (round.currentIndex >= round.totalQuestions - 1) {
     round.currentIndex = round.totalQuestions;
     round.viewIndex = round.totalQuestions;

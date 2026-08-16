@@ -558,8 +558,19 @@
           const canAnswerWrong = !usedIntentionalWrong && question && ["choice", "input"].includes(question.mode);
           const beforeRound = api.state.currentRound;
           const beforeIndex = round.currentIndex;
-            answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
-            if (canAnswerWrong) usedIntentionalWrong = true;
+          const hasAdditionalCorrectFeedback = Boolean(
+            String(question?.explanation || question?.rationale || "").trim() ||
+            String(question?.successMessage || "").trim()
+          );
+          answerCurrentVisibleQuestion({ allowIntentionalWrong: canAnswerWrong });
+          if (canAnswerWrong) usedIntentionalWrong = true;
+          const shouldWaitForContinue =
+            canAnswerWrong || question?.mode === "practice" || hasAdditionalCorrectFeedback;
+          assert(
+            round.awaitingContinue === shouldWaitForContinue,
+            `workflow: ${beforeRound} question ${beforeIndex + 1} had the wrong Continue behavior`
+          );
+          if (shouldWaitForContinue) {
             assert(round.awaitingContinue, `workflow: ${beforeRound} question ${beforeIndex + 1} should wait for Continue`);
             if (beforeRound === "main" && beforeIndex === 9 && round.totalQuestions > 10) {
               assert(
@@ -568,6 +579,7 @@
               );
             }
             click(document.getElementById("feedback-continue-button"), "workflow feedback continue");
+          }
 
           const afterRound = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
           const madeProgress =
@@ -764,6 +776,7 @@
           submit(document.getElementById("start-form"), "checkpoint start");
           assertVisibleScreen("quiz-screen", "checkpoint session started");
 
+          api.state.questions[0].explanation = "Checkpoint feedback should remain visible.";
           answerCurrentVisibleQuestion();
           assert(api.state.awaitingContinue, "checkpoint: answered question should wait for Continue");
           const savedBeforePause = JSON.parse(localStorage.getItem(SMOKE_ACTIVE_SESSION_STORAGE_KEY) || "null");

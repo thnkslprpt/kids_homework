@@ -209,7 +209,16 @@
           throw new Error(`unsupported question mode ${question.mode}`);
         }
 
-        assert(round.awaitingContinue, `${api.state.currentRound} answer did not pause for feedback`);
+        const shouldWaitForContinue =
+          question.mode === "practice" ||
+          Boolean(
+            String(question.explanation || question.rationale || "").trim() ||
+            String(question.successMessage || "").trim()
+          );
+        assert(
+          round.awaitingContinue === shouldWaitForContinue,
+          `${api.state.currentRound} answer had the wrong Continue behavior`
+        );
       }
 
       function continueFeedback(frame) {
@@ -222,7 +231,7 @@
         let count = 0;
         while (api.state.currentRound === "main" && doc.getElementById("results-screen").hidden) {
           answerCurrentQuestion(frame);
-          continueFeedback(frame);
+          if (api.state.awaitingContinue) continueFeedback(frame);
           count += 1;
           assert(count <= 30, "main round did not finish");
         }
@@ -233,7 +242,8 @@
         let count = 0;
         while (doc.getElementById("results-screen").hidden) {
           answerCurrentQuestion(frame);
-          continueFeedback(frame);
+          const round = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
+          if (round.awaitingContinue) continueFeedback(frame);
           count += 1;
           assert(count <= 40, `session did not finish; round=${api.state.currentRound}`);
         }
@@ -287,6 +297,7 @@
         submit(doc);
         await waitFor(() => !doc.getElementById("quiz-screen").hidden, "mobile session did not start");
         assertNoHorizontalOverflow(frame, "mobile question");
+        api.state.questions[0].explanation = "This explanation should remain visible until Continue.";
         answerCurrentQuestion(frame);
         assert(isVisible(doc.getElementById("feedback-continue-button")), "mobile feedback did not retain Continue");
         assert(!doc.getElementById("confidence-selector"), "mobile feedback still shows the confidence prompt");

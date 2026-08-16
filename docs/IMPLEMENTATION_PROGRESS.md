@@ -189,8 +189,8 @@ was weakened.
 - [x] Compact geography/history checkpoints without mutating the live question: multi-megabyte SVG
   markup is replaced with a stable map marker, capped at 1,000,000 serialized characters, then
   lazily rehydrated before a resumed map question is rendered.
-- [x] Replace instant answer advancement with a two-stage flow: answer, inspect feedback/explanation,
-  optionally record confidence, then press Continue.
+- [x] Use a two-stage flow when there is feedback worth reading: explanations, custom success notes,
+  practice completion, and wrong-answer review remain until Continue; plain correct answers advance.
 - [x] Keep answered controls locked while reviewing, with explicit Previous/Next navigation.
 - [x] Make the five-question challenge optional and off by default. Add no-countdown and sound
   preferences; speed mistakes now appear in results/history/dashboard.
@@ -350,14 +350,14 @@ are zero under the unchanged 15-character rule.
 - [x] Service-worker syntax: PASS.
 - [x] `git diff --check`: PASS.
 - [x] Headless Chrome integration workflow reaches all non-content assertions after the checkpoint
-  integration edits, including pause during feedback, exact-once Continue, confidence persistence,
+  integration edits, including conditional feedback pauses, exact-once Continue, confidence persistence,
   discard plus `pagehide`, malformed/oversized and adversarial main/speed state, map compaction and
   hydration, natural breaks, focused practice, and speech controls.
 - [x] Seeded structural generation: PASS — 8,200 questions in the infrastructure workstream.
 - [x] Time/Probability randomized QA: PASS — 1,000 Time and 1,000 Probability questions after the
   document-mock checkpoint-listener compatibility fix.
-- [x] Focused mobile Chrome flow: PASS — no horizontal overflow; answer remains until Continue;
-  confidence, multi-select, Save & Exit, and resume behave correctly.
+- [x] Focused mobile Chrome flow: PASS — no horizontal overflow; explanatory feedback remains until
+  Continue; confidence, multi-select, Save & Exit, and resume behave correctly.
 - [x] All standard components, the existing headless browser workflow, the larger seeded soaks, and
   the dedicated desktop/mobile/offline/update matrix pass against the final `quality-3` cache files.
 
