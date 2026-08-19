@@ -414,7 +414,16 @@
       const left = randomInt(12, 36);
       const right = randomInt(12, 28);
       const answer = left * right;
-      return pairedInteractive({ category, difficulty: level, question: `Find ${left} × ${right} and choose a reasonable estimate.`, answer: format(answer), reason: `${Math.round(left / 10) * 10} × ${Math.round(right / 10) * 10} is close to the exact product`, answers: [answer, answer + left, answer - right].map((value) => ({ label: format(value), summary: format(value) })), reasons: [{ label: "A", summary: `${Math.round(left / 10) * 10} × ${Math.round(right / 10) * 10} is close to the exact product` }, { label: "B", summary: "A product must be smaller than both factors" }, { label: "C", summary: "Add the factors to estimate a product" }], visualHtml: visualCard("Estimate, then calculate", `<div class="math-skill-expression">${left} × ${right}</div>`), reviewText: `${left} × ${right} = ${format(answer)}.` });
+      const splitFactor = right % 10 === 0 ? left : right;
+      const multiplier = splitFactor === right ? left : right;
+      const tens = Math.floor(splitFactor / 10) * 10;
+      const ones = splitFactor % 10;
+      const proof = ones === 0
+        ? `${left / 10} × ${right / 10} = ${answer / 100}, so ${left} × ${right} = ${format(answer)}`
+        : `${multiplier} × ${splitFactor} = ${multiplier} × ${tens} + ${multiplier} × ${ones} = ${format(multiplier * tens)} + ${format(multiplier * ones)} = ${format(answer)}`;
+      const roundedLeft = Math.round(left / 10) * 10;
+      const roundedRight = Math.round(right / 10) * 10;
+      return pairedInteractive({ category, difficulty: level, question: `Find ${left} × ${right} and choose the calculation that proves it.`, answer: format(answer), reason: proof, answers: [answer, answer + left, answer - right].map((value) => ({ label: format(value), summary: format(value) })), reasons: [{ label: "A", summary: proof }, { label: "B", summary: `${roundedLeft} × ${roundedRight} is an estimate, so it proves the exact product` }, { label: "C", summary: `${left} + ${right} gives the product` }], visualHtml: visualCard("Break apart a factor", `<div class="math-skill-expression">${left} × ${right}</div>`), reviewText: proof });
     }
     if (level === 6) {
       const denominator = randomChoice([3, 4, 5, 6]);
@@ -745,7 +754,7 @@
     }
     if (level === 8) {
       const slope = randomInt(-4, 5) || 2;
-      const intercept = randomInt(-4, 4);
+      const intercept = randomChoice([-4, -3, -2, -1, 1, 2, 3, 4].filter((value) => value !== slope));
       const points = [{ x: 0, y: intercept, label: "A" }, { x: 1, y: intercept + slope, label: "B" }];
       const answer = `y = ${slope}x ${intercept >= 0 ? "+" : "−"} ${Math.abs(intercept)}`;
       return pairedInteractive({ category, difficulty: level, question: "Which linear equation matches points A and B?", answer, reason: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}`, answers: [answer, `y = ${intercept}x + ${slope}`, `y = ${slope}x`, `y = ${slope + 1}x ${intercept >= 0 ? "+" : "−"} ${Math.abs(intercept)}`, `y = ${slope}x ${intercept + 1 >= 0 ? "+" : "−"} ${Math.abs(intercept + 1)}`].map((summary) => ({ label: summary, summary })), reasons: [{ label: "A", summary: `The rise for a run of 1 is ${slope}, and the y-intercept is ${intercept}` }, { label: "B", summary: "Slope and intercept can be swapped" }, { label: "C", summary: "Every line passes through the origin" }], visualHtml: visualCard("Slope and intercept", renderCoordinateGrid(points)), reviewText: `The matching equation is ${answer}.` });

@@ -35,6 +35,7 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
       ...normalizedAnswer,
       ...(Array.isArray(choices) ? choices.map((choice) => String(choice)) : []),
     ]);
+    const normalizedDifficulty = clampDifficulty(difficulty);
 
     if (!String(question || "").trim()) {
       throw new Error("Hebrew drag questions must have a question.");
@@ -48,12 +49,22 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
       throw new Error("Hebrew drag questions must include clear distractors.");
     }
 
+    // Early readers should only have to solve one idea at a time. Keep this
+    // guard close to the data so a future low-level blueprint cannot quietly
+    // introduce a multi-blank sentence again.
+    if (normalizedDifficulty <= 4 && normalizedAnswer.length !== 1) {
+      throw new Error("Hebrew drag questions at levels 1-4 must use exactly one blank.");
+    }
+
+    const displayedChoices =
+      normalizedDifficulty <= 3 ? normalizedChoices.slice(0, 3) : normalizedChoices;
+
     return {
       question,
       templateParts: normalizedTemplateParts,
-      choices: normalizedChoices,
+      choices: displayedChoices,
       answer: normalizedAnswer,
-      difficulty: clampDifficulty(difficulty),
+      difficulty: normalizedDifficulty,
       extraText: typeof extraText === "string" ? extraText : "",
       reviewText:
         typeof reviewText === "string"
@@ -171,23 +182,23 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["נועה וגדעון ", " בפארק אחרי הלימודים."],
+      templateParts: ["נועה וגדעון ", " בכדור בחצר."],
       answer: ["משחקים"],
-      distractors: ["מבשלים", "קוראים", "ישנים"],
+      distractors: ["שותים", "לובשים", "כותבים"],
       difficulty: 3,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אנחנו מדברים ", " המורה."],
-      answer: ["עם"],
-      distractors: ["על", "ליד", "אחרי"],
+      templateParts: ["אנחנו ", " עם המורה."],
+      answer: ["מדברים"],
+      distractors: ["שותים", "לובשים", "ישנים"],
       difficulty: 3,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הילדה ", " בזהירות את הכוס על השולחן."],
-      answer: ["מניחה"],
-      distractors: ["משאירה", "שוברת", "מרימה"],
+      templateParts: ["הילדה ", " מים מהכוס."],
+      answer: ["שותה"],
+      distractors: ["קוראת", "לובשת", "מציירת"],
       difficulty: 3,
     },
     {
@@ -199,37 +210,37 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["לפני השיעור אנחנו ", " את התיקים שלנו."],
-      answer: ["מכינים"],
-      distractors: ["שוברים", "מציירים", "זורקים"],
+      templateParts: ["לפני השיעור אנחנו ", " את הספרים."],
+      answer: ["פותחים"],
+      distractors: ["שותים", "לובשים", "אוכלים"],
       difficulty: 3,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["החברים ", " במפה כדי למצוא את הדרך לפארק."],
-      answer: ["משתמשים"],
-      distractors: ["בונים", "מציירים", "מכבסים"],
+      templateParts: ["הילדים ", " את הצעצועים על המדף."],
+      answer: ["מסדרים"],
+      distractors: ["שותים", "קוראים", "לובשים"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["לפני השיעור המורה ", " את הדפים ו", " את ההוראות על הלוח."],
-      answer: ["חילקה", "כתבה"],
-      distractors: ["קראה", "ציירה", "הקשיבה"],
+      templateParts: ["המורה ", " את הדפים לתלמידים."],
+      answer: ["מחלקת"],
+      distractors: ["שותה", "לובשת", "מטפסת"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["אחרי הארוחה אנחנו ", " את המטבח ו", " את הרצפה."],
-      answer: ["מנקים", "מטאטאים"],
-      distractors: ["מציירים", "קוראים", "מקשיבים"],
+      templateParts: ["אחרי הארוחה אנחנו ", " את השולחן."],
+      answer: ["מנקים"],
+      distractors: ["לובשים", "שותים", "קוראים"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["נועה ", " את החלון ואז ", " את הווילון."],
-      answer: ["פותחת", "סוגרת"],
-      distractors: ["בונה", "קוראת", "כותבת"],
+      templateParts: ["כשקר בחוץ, נועה ", " את החלון."],
+      answer: ["סוגרת"],
+      distractors: ["מציירת", "שותה", "לובשת"],
       difficulty: 4,
     },
     {
@@ -241,9 +252,9 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הילדה ", " בזהירות את הכוס ו", " אותה על השולחן."],
-      answer: ["מרימה", "מניחה"],
-      distractors: ["זורקת", "מסתירה", "מנפחת"],
+      templateParts: ["הילדה ", " את הכוס על השולחן."],
+      answer: ["מניחה"],
+      distractors: ["שותה", "קוראת", "לובשת"],
       difficulty: 4,
     },
     {
@@ -409,30 +420,30 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הילדים ", " את הצעצועים ו", " את החדר."],
-      answer: ["אוספים", "מסדרים"],
-      distractors: ["שוברים", "קוראים", "אופים"],
+      templateParts: ["הילדים ", " את הצעצועים על המדף."],
+      answer: ["מסדרים"],
+      distractors: ["שותים", "קוראים", "לובשים"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הטבח ", " את הירקות ואז ", " אותם לסלט."],
-      answer: ["שוטף", "חותך"],
-      distractors: ["מצייר", "זורק", "שר"],
+      templateParts: ["הטבח ", " את הירקות לסלט."],
+      answer: ["חותך"],
+      distractors: ["קורא", "שותה", "ישן"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["לפני המסיבה אנחנו ", " בלונים ו", " קישוטים."],
-      answer: ["מנפחים", "תולים"],
-      distractors: ["מוחקים", "קוראים", "שוחים"],
+      templateParts: ["לפני המסיבה אנחנו ", " בלונים."],
+      answer: ["מנפחים"],
+      distractors: ["קוראים", "שותים", "לובשים"],
       difficulty: 4,
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["הילדה ", " את המפתח ו", " אותו בתיק."],
-      answer: ["מחפשת", "מוצאת"],
-      distractors: ["אופה", "צובעת", "קופצת"],
+      templateParts: ["הילדה ", " את המפתח בתיק."],
+      answer: ["מוצאת"],
+      distractors: ["שותה", "לובשת", "מטפסת"],
       difficulty: 4,
     },
     {
@@ -444,9 +455,9 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
     },
     {
       question: "השלימו את המשפט.",
-      templateParts: ["המדריך ", " את הכללים ו", " על השאלות."],
-      answer: ["מסביר", "עונה"],
-      distractors: ["מוחק", "זורק", "שותה"],
+      templateParts: ["המדריך ", " את הכללים לילדים."],
+      answer: ["מסביר"],
+      distractors: ["שותה", "קורא", "מטפס"],
       difficulty: 4,
     },
     {
@@ -839,9 +850,9 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["הכדור נמצא ", " השולחן."],
-            answer: ["מתחת"],
-            distractors: ["על", "ליד", "בקצה"],
+            templateParts: ["הילד ", " בכדור."],
+            answer: ["משחק"],
+            distractors: ["קורא", "שותה", "ישן"],
           },
           {
             question: "השלימו את המשפט.",
@@ -865,27 +876,27 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
         const prompts = [
           {
             question: "השלימו את המשפט.",
-            templateParts: ["החברות ", " יחד אחרי בית הספר."],
+            templateParts: ["החברות ", " תמונה יחד."],
             answer: ["מציירות"],
-            distractors: ["שוברות", "טסות", "מרימות"],
+            distractors: ["קוראות", "רצות", "שרות"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["אנחנו מדברים ", " המורה שלנו."],
-            answer: ["עם"],
-            distractors: ["על", "ליד", "אחרי"],
+            templateParts: ["אנחנו ", " עם המורה שלנו."],
+            answer: ["מדברים"],
+            distractors: ["שותים", "לובשים", "ישנים"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["הילד ", " בזהירות את הספר החדש."],
+            templateParts: ["הילד ", " את הדלת."],
             answer: ["פותח"],
-            distractors: ["זורק", "מכין", "קונה"],
+            distractors: ["שותה", "קורא", "ישן"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["אחרי ההפסקה אנחנו ", " לכיתה."],
-            answer: ["חוזרים"],
-            distractors: ["מציירים", "נוסעים", "שוחים"],
+            templateParts: ["אחרי המשחק אנחנו ", " מים."],
+            answer: ["שותים"],
+            distractors: ["קוראים", "לובשים", "מציירים"],
           },
         ];
 
@@ -897,27 +908,27 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
         const prompts = [
           {
             question: "השלימו את המשפט.",
-            templateParts: ["לפני השיעור המורה ", " את הדפים ו", " את ההוראות על הלוח."],
-            answer: ["חילקה", "כתבה"],
-            distractors: ["קראה", "ציירה", "שמעה"],
+            templateParts: ["המורה ", " את הדפים לתלמידים."],
+            answer: ["מחלקת"],
+            distractors: ["שותה", "לובשת", "מטפסת"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["נוגה ", " את החלון ואז ", " את הווילון."],
-            answer: ["פותחת", "סוגרת"],
-            distractors: ["קוראת", "קופצת", "זורקת"],
+            templateParts: ["כשקר בחוץ, נוגה ", " את החלון."],
+            answer: ["סוגרת"],
+            distractors: ["שותה", "קוראת", "לובשת"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["אחרי הארוחה אנחנו ", " את המטבח ו", " את הרצפה."],
-            answer: ["מנקים", "מטאטאים"],
-            distractors: ["שוברים", "מציירים", "אופים"],
+            templateParts: ["אחרי הארוחה אנחנו ", " את השולחן."],
+            answer: ["מנקים"],
+            distractors: ["שותים", "קוראים", "לובשים"],
           },
           {
             question: "השלימו את המשפט.",
-            templateParts: ["הילדה ", " בזהירות את הכוס ו", " אותה על השולחן."],
-            answer: ["מרימה", "מניחה"],
-            distractors: ["זורקת", "מסתירה", "שוברת"],
+            templateParts: ["הילדה ", " את הכוס על השולחן."],
+            answer: ["מניחה"],
+            distractors: ["שותה", "קוראת", "לובשת"],
           },
         ];
 
@@ -1120,7 +1131,11 @@ const SENTENCE_DRAG_HEBREW_DATA = (() => {
 
   function createGeneratedEntry(difficulty) {
     const level = clampDifficulty(difficulty);
-    const generator = pick(GENERATED_BLUEPRINTS[level] || GENERATED_BLUEPRINTS[3]);
+    const generators = GENERATED_BLUEPRINTS[level] || GENERATED_BLUEPRINTS[3];
+    // The level-1 collection also contains legacy advanced variants. Restrict
+    // early readers to the four short, concrete, single-blank generators.
+    const levelAppropriateGenerators = level === 1 ? generators.slice(0, 4) : generators;
+    const generator = pick(levelAppropriateGenerators);
     return generator(level);
   }
 

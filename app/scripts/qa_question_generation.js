@@ -252,10 +252,31 @@ function textKey(value) {
     .replace(/\s+/g, " ");
 }
 
+function linearEquationKey(value) {
+  const normalized = String(value ?? "")
+    .trim()
+    .toLowerCase()
+    .replaceAll("−", "-")
+    .replace(/\s+/g, "");
+  const match = normalized.match(/^y=([+-]?\d*)x(.*)$/);
+  if (!match) return "";
+
+  const coefficientText = match[1];
+  const coefficient = coefficientText === "" || coefficientText === "+"
+    ? 1
+    : coefficientText === "-"
+      ? -1
+      : Number(coefficientText);
+  const interceptText = match[2].replaceAll("+-", "-").replaceAll("--", "+");
+  const intercept = interceptText === "" ? 0 : Number(interceptText);
+  if (!Number.isFinite(coefficient) || !Number.isFinite(intercept)) return "";
+  return `linear-equation:${coefficient}:${intercept}`;
+}
+
 function choiceComparisonKey(value, comparisonMode = "semantic") {
   return comparisonMode === "exact-text"
     ? String(value ?? "").trim().replace(/\s+/g, " ")
-    : textKey(value);
+    : linearEquationKey(value) || textKey(value);
 }
 
 function validateQuestion(question, meta) {
@@ -380,11 +401,36 @@ function validateQuestion(question, meta) {
         errors.push(`${meta}: interactive answers do not point to available parts`);
       }
     } else if (layout === "paired-select") {
+      const pairedEntries = {};
       for (const [field, label] of [["items", "answers"], ["reasons", "reasons"]]) {
         const entries = Array.isArray(interactive[field]) ? interactive[field] : [];
-        const entryKeys = entries.map((entry) => textKey(entry?.summary || entry?.label || ""));
+        pairedEntries[field] = entries;
+        const entryKeys = entries.map((entry) => choiceComparisonKey(entry?.summary || entry?.label || ""));
         if (entries.length < 2 || entryKeys.some((key) => !key) || new Set(entryKeys).size !== entryKeys.length) {
           errors.push(`${meta}: paired-select has blank, missing, or duplicate ${label}`);
+        }
+      }
+      const answerItemIndex = Number(interactive.answerItemIndex);
+      const answerReasonIndex = Number(interactive.answerReasonIndex);
+      if (!Number.isInteger(answerItemIndex) || answerItemIndex < 0 || answerItemIndex >= pairedEntries.items.length) {
+        errors.push(`${meta}: paired-select does not point to exactly one available answer`);
+      }
+      if (!Number.isInteger(answerReasonIndex) || answerReasonIndex < 0 || answerReasonIndex >= pairedEntries.reasons.length) {
+        errors.push(`${meta}: paired-select does not point to exactly one available reason`);
+      }
+      if (answerIndexes.length !== 1 || answerIndexes[0] !== answerItemIndex) {
+        errors.push(`${meta}: paired-select answerIndexes must contain only answerItemIndex`);
+      }
+
+      const questionText = String(question.questionText || "");
+      if (/choose the calculation that proves it/i.test(questionText)) {
+        const correctAnswer = String(pairedEntries.items[answerItemIndex]?.summary || "");
+        const correctReason = String(pairedEntries.reasons[answerReasonIndex]?.summary || "");
+        if (!correctAnswer || !textKey(correctReason).includes(textKey(`= ${correctAnswer}`))) {
+          errors.push(`${meta}: proof question's reason does not calculate the exact answer`);
+        }
+        if (/close to the exact product/i.test(correctReason)) {
+          errors.push(`${meta}: an estimate cannot be the proof of an exact product`);
         }
       }
     }
@@ -398,6 +444,16 @@ function run() {
   const failures = [];
   const counts = new Map();
   const seenByCategory = new Map();
+
+  if (choiceComparisonKey("y = 3x + 0") !== choiceComparisonKey("y = 3x")) {
+    failures.push("linear-equation QA does not recognize an omitted zero intercept");
+  }
+  if (choiceComparisonKey("y = -2x − 2") !== choiceComparisonKey("y = -2x + -2")) {
+    failures.push("linear-equation QA does not recognize equivalent negative-intercept notation");
+  }
+  if (choiceComparisonKey("y = 3x + 1") === choiceComparisonKey("y = 3x + 2")) {
+    failures.push("linear-equation QA merges equations with different intercepts");
+  }
 
   const percentCoverage = context.PERCENTAGES_QUESTION_COVERAGE;
   if (typeof percentCoverage?.renderPercentBar !== "function") {

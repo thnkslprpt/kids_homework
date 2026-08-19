@@ -493,10 +493,17 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
       }
       button.setAttribute("aria-pressed", isSelected ? "true" : "false");
 
-      const label = document.createElement("span");
-      label.className = "interactive-option-label";
-      label.textContent = item?.label || String(index + 1);
-      button.appendChild(label);
+      const labelText = String(item?.label || index + 1);
+      const summaryText = String(item?.summary || "");
+      const repeatsBody = !item?.html
+        && summaryText.trim()
+        && labelText.trim().toLocaleLowerCase() === summaryText.trim().toLocaleLowerCase();
+      if (!repeatsBody) {
+        const label = document.createElement("span");
+        label.className = "interactive-option-label";
+        label.textContent = labelText;
+        button.appendChild(label);
+      }
 
       const body = document.createElement("span");
       body.className = "interactive-option-body";

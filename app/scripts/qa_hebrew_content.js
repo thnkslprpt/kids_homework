@@ -116,6 +116,38 @@ for (const [source, expected] of pointingCases) {
   expectEqual(`nikud for ${source}`, actual, expected);
 }
 
+// Low-level sentence completion should stay approachable for early readers:
+// one short sentence, one missing word, and fewer choices before level 4.
+const lowLevelSentenceLimits = {
+  1: { choices: 3, words: 4 },
+  2: { choices: 3, words: 5 },
+  3: { choices: 3, words: 6 },
+  4: { choices: 4, words: 7 },
+};
+for (const [levelText, limits] of Object.entries(lowLevelSentenceLimits)) {
+  const level = Number(levelText);
+  for (let sample = 0; sample < 80; sample += 1) {
+    const entry = evaluate(`createHebrewSentenceDragGeneratedEntry(${level})`);
+    if (entry.answer.length !== 1) {
+      failures.push(`Hebrew sentence drag level ${level}: expected one blank, got ${entry.answer.length}`);
+      break;
+    }
+    if (entry.choices.length !== limits.choices) {
+      failures.push(
+        `Hebrew sentence drag level ${level}: expected ${limits.choices} choices, got ${entry.choices.length}`
+      );
+      break;
+    }
+    const wordCount = entry.reviewText.trim().split(/\s+/).length;
+    if (wordCount > limits.words) {
+      failures.push(
+        `Hebrew sentence drag level ${level}: expected at most ${limits.words} words, got ${wordCount}`
+      );
+      break;
+    }
+  }
+}
+
 evaluate(`
   globalThis.__hebrewUnknownTokens = new Map();
   const __originalFallbackHebrewNikkud = addFallbackHebrewNikkud;
