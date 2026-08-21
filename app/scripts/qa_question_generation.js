@@ -319,6 +319,29 @@ function validateQuestion(question, meta) {
     if (options.some((option) => !option.trim())) {
       errors.push(`${meta}: blank option`);
     }
+
+    const tokenPercentMatch = String(question.questionText || "").match(
+      /^(\d+(?:\.\d+)?)% of (\d+) game tokens are blue\./i
+    );
+    if (tokenPercentMatch) {
+      const percent = Number(tokenPercentMatch[1]);
+      const total = Number(tokenPercentMatch[2]);
+      const expectedFilled = (percent * total) / 100;
+      const visualTotal = Number(
+        String(question.visualHtml || "").match(/data-collection-total="(\d+)"/)?.[1]
+      );
+      const visualFilled = Number(
+        String(question.visualHtml || "").match(/data-filled-count="(\d+)"/)?.[1]
+      );
+      if (Number(answer) !== expectedFilled) {
+        errors.push(`${meta}: token percent answer should be ${expectedFilled}, got ${answer}`);
+      }
+      if (visualTotal !== total || visualFilled !== expectedFilled) {
+        errors.push(
+          `${meta}: token visual should contain ${total} cells with ${expectedFilled} filled, got ${visualTotal} and ${visualFilled}`
+        );
+      }
+    }
   }
 
   if (mode === "input") {
@@ -467,6 +490,25 @@ function run() {
         failures.push(`percentage bars for ${visualKeys.get(visualKey)}% and ${percent}% render identically`);
       } else {
         visualKeys.set(visualKey, percent);
+      }
+    }
+  }
+
+  if (typeof percentCoverage?.renderCollectionGrid !== "function") {
+    failures.push("percentage collection renderer is missing");
+  } else {
+    for (const total of [20, 40, 60, 80, 100]) {
+      const filled = total * 0.4;
+      const collectionHtml = percentCoverage.renderCollectionGrid(total, filled);
+      const cellCount = (collectionHtml.match(/<rect\b/g) || []).length;
+      const filledCellCount = (collectionHtml.match(/fill="#4bb9ad"/g) || []).length;
+      if (
+        cellCount !== total ||
+        filledCellCount !== filled ||
+        !collectionHtml.includes(`data-collection-total="${total}"`) ||
+        !collectionHtml.includes(`data-filled-count="${filled}"`)
+      ) {
+        failures.push(`percentage collection renderer does not model ${filled} of ${total} exactly`);
       }
     }
   }

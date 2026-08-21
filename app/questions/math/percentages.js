@@ -91,6 +91,20 @@ const PERCENTAGES_QUESTIONS = (() => {
     return `<svg class="percent-hundred-grid" viewBox="0 0 120 120" role="img" aria-label="${filled} of 100 squares shaded">${cells}</svg>`;
   }
 
+  function renderCollectionGrid(total, filled) {
+    const normalizedTotal = Math.max(1, Math.min(100, Math.round(Number(total) || 0)));
+    const normalizedFilled = Math.max(0, Math.min(normalizedTotal, Math.round(Number(filled) || 0)));
+    const columns = Math.min(10, normalizedTotal);
+    const rows = Math.ceil(normalizedTotal / columns);
+    const cellSize = 12;
+    const cells = Array.from({ length: normalizedTotal }, (_, index) => {
+      const x = (index % columns) * cellSize;
+      const y = Math.floor(index / columns) * cellSize;
+      return `<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="${index < normalizedFilled ? COLORS.fill : COLORS.empty}" stroke="${COLORS.line}" stroke-width="0.65"></rect>`;
+    }).join("");
+    return `<svg class="percent-hundred-grid percent-collection-grid" viewBox="0 0 ${columns * cellSize} ${rows * cellSize}" role="img" aria-label="${normalizedFilled} blue tokens out of ${normalizedTotal}" data-collection-total="${normalizedTotal}" data-filled-count="${normalizedFilled}">${cells}</svg>`;
+  }
+
   function renderPercentBar(percent, { showLabel = true } = {}) {
     const maxPercent = percent > 100 ? 200 : 100;
     const blocks = maxPercent / 10;
@@ -342,8 +356,8 @@ const PERCENTAGES_QUESTIONS = (() => {
         question: `${percent}% of ${total} game tokens are blue. How many blue tokens are there?`,
         answer: formatNumber(answer),
         options: numericOptions(answer, [-5, 5, -10, 10]).filter((value) => value !== formatNumber(answer)),
-        visualHtml: visualCard("Tokens", renderHundredGrid(percent), `${percent}% of the collection is blue.`),
-        visualSummary: `${percent}% of ${total} tokens are blue.`,
+        visualHtml: visualCard("Tokens", renderCollectionGrid(total, answer), `${percent}% of this ${total}-token collection is blue.`),
+        visualSummary: `The model contains ${total} tokens, with ${percent}% shaded blue.`,
         reviewText: `Find ${percent}% of ${total}: ${formatNumber(answer)} tokens.`,
       });
     }
@@ -550,11 +564,12 @@ const PERCENTAGES_QUESTIONS = (() => {
     [10, "What multiplier represents three consecutive 10% increases?", "1.1³", ["1.3", "0.9³", "3.1"]],
   ].map(([difficulty, question, answer, distractors]) => choiceEntry({ difficulty, question, answer, options: distractors }));
 
-  return { createGeneratedEntry, createModelQuestion, renderPercentBar, staticQuestions };
+  return { createGeneratedEntry, createModelQuestion, renderCollectionGrid, renderPercentBar, staticQuestions };
 })();
 
 globalThis.PERCENTAGES_QUESTION_COVERAGE = {
   createModelQuestion: PERCENTAGES_QUESTIONS.createModelQuestion,
+  renderCollectionGrid: PERCENTAGES_QUESTIONS.renderCollectionGrid,
   renderPercentBar: PERCENTAGES_QUESTIONS.renderPercentBar,
 };
 

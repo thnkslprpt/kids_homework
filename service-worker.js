@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-08-18-answer-clarity-1";
+const CACHE_VERSION = "homework-v2026-08-21-percent-collection-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const NAVIGATION_TIMEOUT_MS = 4000;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
