@@ -1814,15 +1814,32 @@ function renderMoneyVisualParts(parts) {
 }
 
 function renderRectangleMeasureVisual(length, width, measure) {
+  const maximumShapeWidth = 152;
+  const maximumShapeHeight = 88;
+  const horizontalUnits = Math.max(1, Number(length) || 1);
+  const verticalUnits = Math.max(1, Number(width) || 1);
+  const unitScale = Math.min(
+    maximumShapeWidth / horizontalUnits,
+    maximumShapeHeight / verticalUnits
+  );
+  const shapeWidth = Math.round(horizontalUnits * unitScale * 100) / 100;
+  const shapeHeight = Math.round(verticalUnits * unitScale * 100) / 100;
+  const shapeX = Math.round((130 - shapeWidth / 2) * 100) / 100;
+  const shapeY = Math.round((76 - shapeHeight / 2) * 100) / 100;
+  const horizontalMeasureY = Math.round((shapeY + shapeHeight + 14) * 100) / 100;
+  const horizontalLabelY = Math.round((shapeY + shapeHeight + 33) * 100) / 100;
+  const verticalMeasureX = Math.round((shapeX - 16) * 100) / 100;
+  const verticalLabelX = Math.round((shapeX - 34) * 100) / 100;
+
   return `
     <div class="visual-card math-visual-card measure-visual-card">
       <div class="visual-card-title">${capitalize(measure)}</div>
       <svg class="measure-rectangle-visual" viewBox="0 0 260 160" aria-hidden="true">
-        <rect x="54" y="32" width="152" height="88" rx="6"></rect>
-        <line x1="54" y1="134" x2="206" y2="134"></line>
-        <line x1="38" y1="32" x2="38" y2="120"></line>
-        <text x="130" y="152">${length} units</text>
-        <text x="20" y="82" transform="rotate(-90 20 82)">${width} units</text>
+        <rect class="measure-rectangle-shape" x="${shapeX}" y="${shapeY}" width="${shapeWidth}" height="${shapeHeight}" rx="6" data-length="${horizontalUnits}" data-width="${verticalUnits}"></rect>
+        <line x1="${shapeX}" y1="${horizontalMeasureY}" x2="${shapeX + shapeWidth}" y2="${horizontalMeasureY}"></line>
+        <line x1="${verticalMeasureX}" y1="${shapeY}" x2="${verticalMeasureX}" y2="${shapeY + shapeHeight}"></line>
+        <text x="130" y="${horizontalLabelY}">${length} units</text>
+        <text x="${verticalLabelX}" y="76" transform="rotate(-90 ${verticalLabelX} 76)">${width} units</text>
       </svg>
     </div>
   `;

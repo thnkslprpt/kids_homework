@@ -513,6 +513,33 @@ function run() {
     }
   }
 
+  for (const [length, width] of [[3, 9], [9, 3], [12, 50], [50, 12]]) {
+    const html = vm.runInContext(
+      `renderRectangleMeasureVisual(${length}, ${width}, "perimeter")`,
+      context
+    );
+    const shape = String(html).match(
+      /<rect class="measure-rectangle-shape"[^>]*width="([\d.]+)" height="([\d.]+)"[^>]*data-length="([\d.]+)" data-width="([\d.]+)"/
+    );
+    if (!shape) {
+      failures.push(`rectangle measurement visual is missing proportional shape metadata for ${length} by ${width}`);
+      continue;
+    }
+
+    const [, renderedWidth, renderedHeight, renderedLength, renderedDepth] = shape.map(Number);
+    const renderedRatio = renderedWidth / renderedHeight;
+    const expectedRatio = length / width;
+    if (
+      renderedLength !== length ||
+      renderedDepth !== width ||
+      Math.abs(renderedRatio - expectedRatio) > 0.001
+    ) {
+      failures.push(
+        `rectangle measurement visual distorts ${length} by ${width} into ${renderedWidth} by ${renderedHeight}`
+      );
+    }
+  }
+
   for (const category of categories) {
     for (let difficulty = 1; difficulty <= 10; difficulty += 1) {
       for (let sample = 0; sample < samplesPerDifficulty; sample += 1) {
