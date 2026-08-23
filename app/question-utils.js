@@ -141,19 +141,70 @@
     return `<div class="mini-data-card"><strong>${title}</strong><table>${body}</table></div>`;
   }
 
-  function renderLineGraph(title, points) {
-    const max = Math.max(...points.map((point) => point.value), 1);
-    const circles = points
+  function renderLineGraph(title, points, unit = "") {
+    const safePoints = Array.isArray(points)
+      ? points.filter((point) => Number.isFinite(Number(point?.value)))
+      : [];
+    if (!safePoints.length) {
+      return "";
+    }
+
+    const width = 320;
+    const height = 218;
+    const plotLeft = 44;
+    const plotRight = 20;
+    const plotTop = 48;
+    const plotBottom = 170;
+    const plotWidth = width - plotLeft - plotRight;
+    const plotHeight = plotBottom - plotTop;
+    const maxValue = Math.max(...safePoints.map((point) => Number(point.value)), 1);
+    const roughStep = maxValue / 5;
+    const magnitude = 10 ** Math.floor(Math.log10(Math.max(roughStep, 1)));
+    const normalizedStep = roughStep / magnitude;
+    const tickFactor = normalizedStep <= 1 ? 1 : normalizedStep <= 2 ? 2 : normalizedStep <= 5 ? 5 : 10;
+    const tickStep = tickFactor * magnitude;
+    const axisMax = Math.ceil(maxValue / tickStep) * tickStep;
+    const xFor = (index) =>
+      safePoints.length === 1
+        ? plotLeft + plotWidth / 2
+        : plotLeft + (index / (safePoints.length - 1)) * plotWidth;
+    const yFor = (value) => plotBottom - (Number(value) / axisMax) * plotHeight;
+
+    const ticks = [];
+    for (let value = 0; value <= axisMax; value += tickStep) {
+      const y = yFor(value);
+      ticks.push(
+        `<line class="question-chart-grid" x1="${plotLeft}" y1="${y}" x2="${width - plotRight}" y2="${y}"></line>` +
+        `<text class="question-chart-tick" x="${plotLeft - 8}" y="${y + 3.5}" text-anchor="end">${value}</text>`
+      );
+    }
+
+    const pointMarkup = safePoints
       .map((point, index) => {
-        const x = 25 + index * 42;
-        const y = 115 - (point.value / max) * 85;
-        return `<circle cx="${x}" cy="${y}" r="4" fill="#146c94"></circle><text x="${x}" y="135" text-anchor="middle" font-size="10">${point.label}</text>`;
+        const x = xFor(index);
+        const y = yFor(point.value);
+        const valueLabelY = y < plotTop + 17 ? y + 18 : y - 9;
+        return (
+          `<circle class="question-chart-point" cx="${x}" cy="${y}" r="5"></circle>` +
+          `<text class="question-chart-value" x="${x}" y="${valueLabelY}" text-anchor="middle">${point.value}</text>` +
+          `<text class="question-chart-label" x="${x}" y="${plotBottom + 23}" text-anchor="middle">${point.label}</text>`
+        );
       })
       .join("");
-    const line = points
-      .map((point, index) => `${25 + index * 42},${115 - (point.value / max) * 85}`)
-      .join(" ");
-    return `<svg class="question-svg" viewBox="0 0 190 150" role="img" aria-label="${title} line graph"><text x="10" y="14" font-size="11" font-weight="700">${title}</text><polyline points="${line}" fill="none" stroke="#146c94" stroke-width="3"></polyline>${circles}</svg>`;
+    const line = safePoints.map((point, index) => `${xFor(index)},${yFor(point.value)}`).join(" ");
+    const unitLabel = unit ? `Value (${unit})` : "Value";
+
+    return (
+      `<svg class="question-svg question-line-chart" viewBox="0 0 ${width} ${height}" role="img" aria-label="${title} line graph">` +
+      `<text class="question-chart-title" x="${width / 2}" y="18" text-anchor="middle">${title}</text>` +
+      `<text class="question-chart-unit" x="${plotLeft}" y="37">${unitLabel}</text>` +
+      ticks.join("") +
+      `<line class="question-chart-axis" x1="${plotLeft}" y1="${plotTop}" x2="${plotLeft}" y2="${plotBottom}"></line>` +
+      `<line class="question-chart-axis" x1="${plotLeft}" y1="${plotBottom}" x2="${width - plotRight}" y2="${plotBottom}"></line>` +
+      `<polyline class="question-chart-line" points="${line}"></polyline>` +
+      pointMarkup +
+      `</svg>`
+    );
   }
 
   function renderPieTable(title, parts) {

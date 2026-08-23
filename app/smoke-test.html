@@ -1435,6 +1435,41 @@
             validateEntry(factory(difficulty), `charts generated ${label}`);
           }
         });
+        const responsiveLineChartMarkup = globalThis.HomeworkQuestionUtils?.renderLineGraph?.(
+          "Bus wait times",
+          [
+            { label: "Stop A", value: 18 },
+            { label: "Stop B", value: 4 },
+            { label: "Stop C", value: 12 },
+            { label: "Stop D", value: 20 },
+            { label: "Stop E", value: 10 },
+          ],
+          "minutes"
+        );
+        const responsiveLineChartHost = document.createElement("div");
+        responsiveLineChartHost.innerHTML = responsiveLineChartMarkup || "";
+        const responsiveLineChart = responsiveLineChartHost.querySelector(".question-line-chart");
+        const responsiveLineChartLabels = Array.from(
+          responsiveLineChartHost.querySelectorAll(".question-chart-label")
+        ).map((label) => label.textContent);
+        const responsiveLineChartValues = Array.from(
+          responsiveLineChartHost.querySelectorAll(".question-chart-value")
+        ).map((label) => label.textContent);
+        if (!responsiveLineChart || responsiveLineChart.getAttribute("viewBox") !== "0 0 320 218") {
+          failures.push("responsive line chart: missing bounded responsive view box");
+        }
+        if (!responsiveLineChartHost.querySelector(".question-chart-axis")) {
+          failures.push("responsive line chart: missing numeric axes");
+        }
+        if (!responsiveLineChartHost.textContent.includes("Value (minutes)")) {
+          failures.push("responsive line chart: missing unit label");
+        }
+        if (responsiveLineChartLabels.join("|") !== "Stop A|Stop B|Stop C|Stop D|Stop E") {
+          failures.push("responsive line chart: category labels are missing or clipped from the markup");
+        }
+        if (responsiveLineChartValues.join("|") !== "18|4|12|20|10") {
+          failures.push("responsive line chart: exact point values are missing");
+        }
         const financialGeneratedCoverage = globalThis.FINANCIAL_LITERACY_GENERATOR_COVERAGE || {};
         [
           ["groceryShelf", 1],

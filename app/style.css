@@ -933,7 +933,8 @@ h2 {
 .math-skill-number-line {
   display: block;
   width: min(100%, 520px);
-  min-width: 330px;
+  min-width: 0;
+  height: auto;
   margin: 0 auto;
 }
 
@@ -1295,7 +1296,64 @@ h2 {
 .question-svg {
   display: block;
   width: min(420px, 100%);
+  max-width: 100%;
+  height: auto;
   margin: 0 auto;
+}
+
+.question-chart-grid {
+  stroke: rgba(39, 73, 114, 0.16);
+  stroke-width: 1;
+}
+
+.question-chart-axis {
+  stroke: #475569;
+  stroke-width: 1.6;
+}
+
+.question-chart-line {
+  fill: none;
+  stroke: #146c94;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.question-chart-point {
+  fill: #146c94;
+}
+
+.question-chart-title {
+  fill: #111827;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.question-chart-unit,
+.question-chart-tick,
+.question-chart-label,
+.question-chart-value {
+  fill: #334155;
+  font-family: inherit;
+}
+
+.question-chart-unit {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.question-chart-tick,
+.question-chart-label {
+  font-size: 10px;
+}
+
+.question-chart-value {
+  paint-order: stroke;
+  stroke: rgba(255, 255, 255, 0.96);
+  stroke-linejoin: round;
+  stroke-width: 4px;
+  font-size: 10px;
+  font-weight: 900;
 }
 
 .chart-note {
@@ -1907,7 +1965,38 @@ button:disabled {
 }
 
 .question-visual {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
   margin-top: 16px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.question-panel,
+.question-visual > *,
+.question-visual .visual-card,
+.question-visual .mini-data-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.question-visual svg,
+.question-visual img {
+  max-width: 100%;
+  height: auto;
+}
+
+.question-visual table {
+  max-width: 100%;
+}
+
+.question-visual th,
+.question-visual td {
+  overflow-wrap: anywhere;
+  word-break: normal;
 }
 
 .visual-card {
@@ -4629,6 +4718,20 @@ button:disabled {
   .question-count-button {
     width: 48px;
     height: 48px;
+  }
+
+  .question-visual .mini-data-card,
+  .question-visual .visual-card {
+    padding: 10px;
+  }
+
+  .question-visual th,
+  .question-visual td,
+  .mini-data-card td,
+  .visual-table th,
+  .visual-table td {
+    padding: 7px 6px;
+    font-size: 0.84rem;
   }
 
   .builder-presets {
