@@ -1422,6 +1422,7 @@
         const chartGeneratedCoverage = globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE || {};
         [
           ["line", 4],
+          ["pie", 5],
           ["trend", 5],
           ["outlier", 7],
           ["meanMedian", 7],
@@ -1433,6 +1434,21 @@
             failures.push(`charts generated ${label}: factory missing`);
           } else {
             validateEntry(factory(difficulty), `charts generated ${label}`);
+          }
+        });
+        [
+          ["line", 4],
+          ["pie", 5],
+        ].forEach(([label, difficulty]) => {
+          const factory = chartGeneratedCoverage[label];
+          if (typeof factory !== "function") return;
+          for (let sample = 0; sample < 100; sample += 1) {
+            const generated = factory(difficulty);
+            const values = Array.from(String(generated.visualSummary || "").matchAll(/:\s*(-?\d+(?:\.\d+)?)/g), (match) => match[1]);
+            if (values.length < 4 || new Set(values).size !== values.length) {
+              failures.push(`charts generated ${label}: extrema data should not contain ties`);
+              break;
+            }
           }
         });
         const responsiveLineChartMarkup = globalThis.HomeworkQuestionUtils?.renderLineGraph?.(

@@ -319,9 +319,23 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
     },
   ];
 
+  function distinctRandomInts(ranges) {
+    const used = new Set();
+    return ranges.map(([min, max]) => {
+      const available = Array.from({ length: max - min + 1 }, (_, index) => min + index)
+        .filter((value) => !used.has(value));
+      const value = randomChoice(available);
+      used.add(value);
+      return value;
+    });
+  }
+
   function makeSeries(context, difficulty, pattern = "mixed") {
     const spread = Math.max(5, Math.min(context.high - context.low, difficulty * 4 + 8));
     const start = randomInt(context.low, Math.max(context.low, context.high - spread));
+    const mixedValues = pattern === "mixed"
+      ? distinctRandomInts(context.labels.map(() => [context.low, context.high]))
+      : [];
     let current = start;
     return context.labels.map((label, index) => {
       if (pattern === "up") {
@@ -329,7 +343,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       } else if (pattern === "down") {
         current = index === 0 ? start + spread : current - randomInt(2, 7);
       } else {
-        current = randomInt(context.low, context.high);
+        current = mixedValues[index];
       }
       return { label, value: Math.max(1, current) };
     });
@@ -460,8 +474,8 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
       { title: "Snack choices", parts: ["Apple", "Yogurt", "Crackers", "Carrots"] },
     ];
     const context = randomChoice(contexts);
-    const rawValues = [randomInt(2, 5), randomInt(5, 9), randomInt(1, 4), randomInt(3, 7)];
-    const parts = context.parts.map((label, index) => ({ label, value: rawValues[index] + index }));
+    const rawValues = distinctRandomInts([[2, 5], [6, 10], [3, 6], [6, 10]]);
+    const parts = context.parts.map((label, index) => ({ label, value: rawValues[index] }));
     const askLargest = Math.random() < 0.65;
     const sorted = [...parts].sort((left, right) => right.value - left.value);
     return entry({
@@ -810,6 +824,7 @@ const CHARTS_AND_GRAPHS_QUESTIONS = (() => {
   globalThis.CHARTS_AND_GRAPHS_GENERATOR_COVERAGE = {
     picture: createPictureGraphQuestion,
     line: createLineGraphQuestion,
+    pie: createPieChartQuestion,
     trend: createTrendQuestion,
     outlier: createOutlierQuestion,
     meanMedian: createMeanMedianQuestion,

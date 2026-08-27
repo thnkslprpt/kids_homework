@@ -1156,10 +1156,18 @@ function createEqualGroupsWithLeftoverQuestion(difficulty = 3) {
 }
 
 function createTableQuestion(difficulty = 3) {
+  const usedCounts = new Set();
+  const distinctCount = (min, max) => {
+    const available = Array.from({ length: max - min + 1 }, (_, index) => min + index)
+      .filter((value) => !usedCounts.has(value));
+    const value = appliedWordProblemRandomChoice(available);
+    usedCounts.add(value);
+    return value;
+  };
   const rows = [
-    ["Snack", appliedWordProblemRandomInt(4, 9)],
-    ["Fruit", appliedWordProblemRandomInt(7, 14)],
-    ["Drink", appliedWordProblemRandomInt(3, 10)],
+    ["Snack", distinctCount(4, 9)],
+    ["Fruit", distinctCount(7, 14)],
+    ["Drink", distinctCount(3, 10)],
   ];
   rows.sort((a, b) => b[1] - a[1]);
   const answer = rows[0][0];

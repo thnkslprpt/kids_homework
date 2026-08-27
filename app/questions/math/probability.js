@@ -2130,7 +2130,7 @@ function createProbabilityGeneratedEntry(difficulty, options = {}) {
       () => {
         const red = probabilityRandomInt(2, 4);
         const blue = probabilityRandomInt(5, 7);
-        const green = probabilityRandomInt(3, 5);
+        const green = probabilityRandomChoice([3, 4, 5].filter((count) => count !== red));
         const counts = [
           { color: "Red", count: red },
           { color: "Blue", count: blue },
