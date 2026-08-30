@@ -649,6 +649,8 @@
             );
             if (enteredReview) {
               assert(document.getElementById("answer-input").disabled || document.getElementById("answer-form").hidden, "workflow: reviewed answer should be locked");
+              assert(!document.querySelector("#feedback .feedback-review-question"), "workflow: review banner should not repeat the question");
+              assert(!document.querySelector("#feedback .feedback-review-option"), "workflow: review banner should not repeat answer choices");
               click(document.getElementById("quiz-forward-button"), "quiz forward during review");
               assert(api.state.viewIndex <= api.state.currentIndex, "workflow: review forward should stay within answered range");
             }

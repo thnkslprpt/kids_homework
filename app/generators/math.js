@@ -781,17 +781,24 @@ function createFractionBarChoiceQuestion(difficulty) {
   const denominator = randomChoice(denominators);
   const numerator = randomInt(1, denominator - 1);
   const answer = `${numerator}/${denominator}`;
-  const options = new Set([
-    answer,
-    `${Math.max(1, numerator - 1)}/${denominator}`,
-    `${Math.min(denominator - 1, numerator + 1)}/${denominator}`,
-    `${numerator}/${Math.max(2, denominator - 1)}`,
-    `${denominator - numerator}/${denominator}`,
-  ]);
+  const options = [];
+  const optionValues = new Set();
+  const addOption = (optionNumerator, optionDenominator) => {
+    const valueKey = (optionNumerator / optionDenominator).toPrecision(15);
+    if (optionValues.has(valueKey)) return;
+    optionValues.add(valueKey);
+    options.push(`${optionNumerator}/${optionDenominator}`);
+  };
 
-  while (options.size < 4) {
+  addOption(numerator, denominator);
+  addOption(Math.max(1, numerator - 1), denominator);
+  addOption(Math.min(denominator - 1, numerator + 1), denominator);
+  addOption(numerator, Math.max(2, denominator - 1));
+  addOption(denominator - numerator, denominator);
+
+  while (options.length < 4) {
     const optionDenominator = randomChoice(denominators);
-    options.add(`${randomInt(1, optionDenominator - 1)}/${optionDenominator}`);
+    addOption(randomInt(1, optionDenominator - 1), optionDenominator);
   }
 
   return createVisualChoiceQuestion({
@@ -800,7 +807,7 @@ function createFractionBarChoiceQuestion(difficulty) {
     questionText: "Which fraction is shaded?",
     visualHtml: renderFractionBarVisual(numerator, denominator),
     visualSummary: `${numerator} out of ${denominator} equal parts are shaded.`,
-    options: shuffleArray([answer, ...shuffleArray(Array.from(options).filter((value) => value !== answer)).slice(0, 3)]),
+    options: shuffleArray(options.slice(0, 4)),
     answerValue: answer,
     answerLabel: answer,
   });

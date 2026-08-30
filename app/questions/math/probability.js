@@ -23,8 +23,21 @@ function probabilityShuffleArray(values) {
   return copy;
 }
 
-function probabilityUniqueStrings(values) {
-  return Array.from(new Set(values.map((value) => String(value))));
+function probabilityOptionMeaningKey(value) {
+  const normalized = String(value).trim().replaceAll("−", "-");
+  const fractionMatch = normalized.match(/^([+-]?\d+)\s*\/\s*(\d+)$/);
+  if (fractionMatch) {
+    const denominator = Number(fractionMatch[2]);
+    if (denominator) {
+      return `number:${Number(fractionMatch[1]) / denominator}`;
+    }
+  }
+  const percentMatch = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))%$/);
+  if (percentMatch) {
+    return `number:${Number(percentMatch[1]) / 100}`;
+  }
+  const numeric = Number(normalized.replaceAll(",", ""));
+  return Number.isFinite(numeric) ? `number:${numeric}` : `text:${normalized}`;
 }
 
 function probabilityGreatestCommonDivisor(left, right) {
@@ -85,12 +98,17 @@ function probabilityMakeOptions(answer, distractors) {
     "Certain",
     "Not enough information",
   ];
-  const options = probabilityUniqueStrings([normalizedAnswer, ...distractors, ...fallbackDistractors])
-    .filter((option) => option !== "" && option !== normalizedAnswer)
-    .slice(0, 3);
-  const allOptions = probabilityUniqueStrings([normalizedAnswer, ...options]);
+  const allOptions = [];
+  const seenMeanings = new Set();
+  [normalizedAnswer, ...distractors, ...fallbackDistractors].forEach((option) => {
+    const normalizedOption = String(option);
+    const meaning = probabilityOptionMeaningKey(normalizedOption);
+    if (!normalizedOption || seenMeanings.has(meaning) || allOptions.length >= 4) return;
+    seenMeanings.add(meaning);
+    allOptions.push(normalizedOption);
+  });
 
-  if (allOptions.length !== 4 || !allOptions.includes(normalizedAnswer)) {
+  if (allOptions.length !== 4 || allOptions[0] !== normalizedAnswer) {
     throw new Error(`Probability question must have exactly 4 unique choices: ${normalizedAnswer}`);
   }
 

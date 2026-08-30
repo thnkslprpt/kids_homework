@@ -1956,7 +1956,11 @@ function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
     return `<div class="feedback-outcome"><strong>${success}</strong>${getQuestionExplanationHtml(question)}</div>`;
   }
 
-  return `${formatQuestionReview(question, selectedValue, { isCorrect })}${getQuestionExplanationHtml(question)}`;
+  return `<div class="feedback-outcome"><strong>Not quite.</strong></div>${formatAnswerSummary(
+    question,
+    selectedValue,
+    { isCorrect }
+  )}${getQuestionExplanationHtml(question)}`;
 }
 
 function getQuestionExplanationHtml(question) {
@@ -1964,6 +1968,30 @@ function getQuestionExplanationHtml(question) {
   return explanation
     ? `<div class="feedback-explanation"><strong>Why:</strong> ${escapeHtml(explanation)}</div>`
     : "";
+}
+
+function formatAnswerSummary(question, selectedValue, { isCorrect = false } = {}) {
+  const lines = [];
+  const selectedAnswerText = String(selectedValue ?? "").trim();
+  const canonicalAnswerText = String(question?.answerLabel ?? question?.answerValue ?? "").trim();
+  const matchesCanonicalAnswer = selectedAnswerText === canonicalAnswerText;
+
+  if (selectedAnswerText) {
+    const selectedAnswerClass = isCorrect || matchesCanonicalAnswer ? "correct" : "selected";
+    lines.push(
+      `<div class="feedback-review-line"><span class="feedback-review-label">Your answer:</span> ` +
+        `<span class="feedback-review-answer ${selectedAnswerClass}">${escapeHtml(selectedAnswerText)}</span></div>`
+    );
+  }
+
+  if (!isCorrect && canonicalAnswerText && !matchesCanonicalAnswer) {
+    lines.push(
+      `<div class="feedback-review-line"><span class="feedback-review-label">Correct answer:</span> ` +
+        `<span class="feedback-review-answer correct">${escapeHtml(canonicalAnswerText)}</span></div>`
+    );
+  }
+
+  return lines.length ? `<div class="feedback-review feedback-answer-summary">${lines.join("")}</div>` : "";
 }
 
 function formatQuestionReview(question, selectedValue, { isCorrect = false } = {}) {

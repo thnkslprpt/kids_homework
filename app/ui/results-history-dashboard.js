@@ -434,9 +434,13 @@ function getViewedSessionRecord() {
 function renderQuizFeedback() {
   const reviewRecord = getViewedSessionRecord();
   if (reviewRecord) {
+    const round = getActiveRoundState();
+    const question = round.questions[round.viewIndex];
+    const selectedValue = round.answerSelections[round.viewIndex]?.value || "";
     elements.feedback.innerHTML = `
       <div class="feedback-review-note">Reviewing a previous question. Answers are locked.</div>
-      ${reviewRecord.reviewHtml}
+      ${formatAnswerSummary(question, selectedValue, { isCorrect: reviewRecord.isCorrect })}
+      ${getQuestionExplanationHtml(question)}
     `;
     elements.feedback.className = "feedback-banner review";
     return;

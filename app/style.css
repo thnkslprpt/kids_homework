@@ -1863,6 +1863,10 @@ button:disabled {
   font-weight: 800;
 }
 
+.feedback-answer-summary .feedback-review-line + .feedback-review-line {
+  margin-top: 6px;
+}
+
 .feedback-banner.error .feedback-review,
 .feedback-banner.review .feedback-review {
   color: var(--muted);

@@ -118,10 +118,10 @@
       answer,
       options: unique([
         answer,
-        `${answerNumerator}/${denominator}`,
         fractionText(answerNumerator + 1, denominator),
         fractionText(Math.max(1, answerNumerator), denominator + 1),
         fractionText(answerNumerator, denominator * 2),
+        fractionText(Math.max(1, answerNumerator - 1), denominator),
       ]).slice(0, 4),
     });
   }

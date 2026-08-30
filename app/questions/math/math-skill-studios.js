@@ -52,24 +52,45 @@
     return `<div class="math-skill-card"><div class="math-skill-card-title">${escapeHtml(title)}</div>${body}${note ? `<div class="math-skill-card-note">${escapeHtml(note)}</div>` : ""}</div>`;
   }
 
+  function optionMeaningKey(value) {
+    const normalized = String(value).trim().replaceAll("−", "-");
+    const fractionMatch = normalized.match(/^([+-]?\d+)\s*\/\s*(\d+)$/);
+    if (fractionMatch) {
+      const denominator = Number(fractionMatch[2]);
+      if (denominator) {
+        return `number:${Number(fractionMatch[1]) / denominator}`;
+      }
+    }
+    const numeric = Number(normalized.replaceAll(",", ""));
+    return Number.isFinite(numeric) ? `number:${numeric}` : `text:${normalized}`;
+  }
+
   function makeOptions(answer, distractors = []) {
     const correct = String(answer);
-    const values = Array.from(new Set([correct, ...distractors.map(String)]));
+    const values = [];
+    const seenMeanings = new Set();
+    const addValue = (value) => {
+      const normalized = String(value);
+      const meaning = optionMeaningKey(normalized);
+      if (!normalized || seenMeanings.has(meaning)) return;
+      seenMeanings.add(meaning);
+      values.push(normalized);
+    };
+    [correct, ...distractors.map(String)].forEach(addValue);
     const numeric = Number(correct.replaceAll(",", ""));
     if (Number.isFinite(numeric)) {
       [1, -1, 2, -2, 5, -5, 10, -10].forEach((offset) => {
         const candidate = format(numeric + offset);
-        if (values.length < 4 && !values.includes(candidate)) values.push(candidate);
+        if (values.length < 4) addValue(candidate);
       });
     }
     ["0", "1", "2", "10", "Cannot be determined"].forEach((fallback) => {
-      if (values.length < 4 && !values.includes(fallback)) values.push(fallback);
+      if (values.length < 4) addValue(fallback);
     });
-    const unique = Array.from(new Set(values)).filter((value) => value !== "");
-    if (unique.length < 4 || !unique.includes(correct)) {
+    if (values.length < 4 || values[0] !== correct) {
       throw new Error(`Math skill question could not build four choices for ${correct}.`);
     }
-    return shuffle([correct, ...unique.filter((value) => value !== correct).slice(0, 3)]);
+    return shuffle(values.slice(0, 4));
   }
 
   function numberOptions(answer, offsets = [-10, -5, -2, -1, 1, 2, 5, 10], min = -Infinity) {

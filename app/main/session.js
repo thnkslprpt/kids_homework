@@ -935,11 +935,24 @@ function hasDistinctChoiceMeanings(options) {
 }
 
 function getChoiceMeaningKey(value) {
-  const normalized = String(value)
+  const rawValue = String(value).trim();
+  const normalized = rawValue
     .trim()
     .toLowerCase()
     .replaceAll(",", "")
     .replace(/\s+/g, " ");
+
+  const percentMatch = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))%$/);
+  if (percentMatch) {
+    return `number:${Number(percentMatch[1]) / 100}`;
+  }
+
+  const numericCandidates = typeof buildNumericAnswerCandidates === "function"
+    ? buildNumericAnswerCandidates(rawValue, {})
+    : [];
+  if (numericCandidates.length === 1) {
+    return `number:${numericCandidates[0]}`;
+  }
 
   const minutesMatch = normalized.match(/^(about )?(\d+) minutes?$/);
   if (minutesMatch) {

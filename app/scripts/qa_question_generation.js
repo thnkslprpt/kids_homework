@@ -273,10 +273,49 @@ function linearEquationKey(value) {
   return `linear-equation:${coefficient}:${intercept}`;
 }
 
+function numericValueKey(value) {
+  const normalized = String(value ?? "")
+    .trim()
+    .replaceAll(",", "")
+    .replaceAll("−", "-")
+    .replace(/\s+/g, " ");
+  let numericValue;
+
+  const mixedNumberMatch = normalized.match(/^([+-]?\d+) (\d+)\s*\/\s*(\d+)$/);
+  if (mixedNumberMatch) {
+    const whole = Number(mixedNumberMatch[1]);
+    const numerator = Number(mixedNumberMatch[2]);
+    const denominator = Number(mixedNumberMatch[3]);
+    if (denominator === 0) return "";
+    numericValue = whole < 0
+      ? whole - numerator / denominator
+      : whole + numerator / denominator;
+  } else {
+    const fractionMatch = normalized.match(/^([+-]?\d+)\s*\/\s*([+-]?\d+)$/);
+    if (fractionMatch) {
+      const numerator = Number(fractionMatch[1]);
+      const denominator = Number(fractionMatch[2]);
+      if (denominator === 0) return "";
+      numericValue = numerator / denominator;
+    } else {
+      const percentMatch = normalized.match(/^([+-]?(?:\d+(?:\.\d+)?|\.\d+))%$/);
+      if (percentMatch) {
+        numericValue = Number(percentMatch[1]) / 100;
+      } else if (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(normalized)) {
+        numericValue = Number(normalized);
+      } else {
+        return "";
+      }
+    }
+  }
+
+  return Number.isFinite(numericValue) ? `numeric:${numericValue.toPrecision(15)}` : "";
+}
+
 function choiceComparisonKey(value, comparisonMode = "semantic") {
   return comparisonMode === "exact-text"
     ? String(value ?? "").trim().replace(/\s+/g, " ")
-    : linearEquationKey(value) || textKey(value);
+    : linearEquationKey(value) || numericValueKey(value) || textKey(value);
 }
 
 function validateQuestion(question, meta) {
