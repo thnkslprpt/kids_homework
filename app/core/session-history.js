@@ -222,6 +222,7 @@
         questionDifficulty: clampInteger(record.questionDifficulty, 1, 10, undefined),
         questionType: sanitizeIdentifier(record.questionType, 80),
         questionText: sanitizeText(record.questionText, 10000),
+        answerOptions: normalizeTextArray(record.answerOptions, 4, 5000),
         chosenAnswer: sanitizeText(record.chosenAnswer, 5000),
         correctAnswer: sanitizeText(record.correctAnswer, 5000),
         isCorrect: isGraded ? record.isCorrect : null,

@@ -149,7 +149,8 @@ saying the homework results receiver is running.
   praise text, and confetti.
 - Offers one-tap focused practice for the category with the most missed answers.
 - Keeps previous sessions per student and includes a parent dashboard.
-- Checkpoints unfinished sessions so they can be resumed after closing or updating the app.
+- Checkpoints unfinished sessions, including unsubmitted typed answers, drag placements, matching
+  connections, and interactive selections, so they can be resumed after closing or updating the app.
 - Lets a parent export or delete local session history.
 - Includes an offline browser smoke test for session generation, generated-question quality, speed
   round shape, and results reporting.
@@ -406,9 +407,12 @@ Important:
 
 Node.js 20 or newer is required for the command-line QA suite. No third-party packages are needed.
 
-- `npm test`: deterministic core-data, manifest, generation, grade-alignment, content-quality,
-  time/probability, and Hebrew checks.
+- `npm test`: deterministic core-data, session recovery, reporting, offline/update, randomized startup,
+  manifest, generation, grade-alignment, content-quality, time/probability, and Hebrew checks.
+- `npm run qa:regressions`: focused lifecycle regressions, including 300 startup seeds.
 - `npm run qa:browser`: full workflow smoke test in installed Chrome/Chromium.
+- `npm run qa:release-browser`: desktop/mobile flows, unsubmitted answer recovery, storage failures,
+  first-use offline maps, and service-worker updates in installed Chrome/Chromium.
 - `npm run qa:all`: all command-line and browser checks.
 
 Set `QA_SEED` to reproduce a randomized failure with a specific seed. GitHub Actions runs the same

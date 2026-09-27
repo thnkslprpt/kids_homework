@@ -345,6 +345,16 @@
         const exported = JSON.parse(await exportedBlob.text());
         assert(Array.isArray(exported) && exported.length >= 2, "history export JSON is incomplete");
         assert(exportedFilename === "homework-history-guest.json", `unexpected export name ${exportedFilename}`);
+        const originalSetItem = fresh.win.Storage.prototype.setItem;
+        fresh.win.Storage.prototype.setItem = function (key, value) {
+          if (key === HISTORY_KEY) throw new Error("QA storage unavailable");
+          return originalSetItem.call(this, key, value);
+        };
+        click(fresh.doc, "#delete-history-button", "failed history deletion");
+        assert(text(fresh.doc.getElementById("history-empty")).includes("could not"), "failed history deletion was reported as successful");
+        assert(!fresh.doc.getElementById("history-empty").hidden, "history failure message is not visible");
+        assert(fresh.doc.querySelectorAll("#history-list .history-session").length >= 2, "failed deletion removed visible history");
+        fresh.win.Storage.prototype.setItem = originalSetItem;
         click(fresh.doc, "#delete-history-button", "delete guest history");
         assert(fresh.doc.querySelectorAll("#history-list .history-session").length === 0, "history delete left sessions visible");
         const storedHistory = JSON.parse(localStorage.getItem(HISTORY_KEY) || "{}");
@@ -352,9 +362,142 @@
         return freshFrame;
       }
 
+      async function runSessionLoadingMatrix() {
+        const frame = await loadApp(375, "loading-guard");
+        const { api, doc, win } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "loading guest");
+        click(doc, '[data-session-preset="practice"]', "loading practice");
+        click(doc, '[data-practice-category="geography-map"]', "loading map");
+        click(doc, '[data-question-count="5"]', "loading five questions");
+        const originalLoad = win.ensureSelectedQuestionData;
+        let finishLoading;
+        let loadCalls = 0;
+        const pendingLoad = new Promise((resolve) => { finishLoading = resolve; });
+        win.ensureSelectedQuestionData = async (categories) => {
+          loadCalls += 1;
+          await pendingLoad;
+          return originalLoad(categories);
+        };
+        submit(doc);
+        const anotherLearner = doc.querySelector('[data-user-id]:not([data-user-id="guest"])');
+        assert(anotherLearner.disabled, "learner can change while session data is loading");
+        anotherLearner.click();
+        submit(doc);
+        assert(loadCalls === 1, "repeated submit started a second pending session");
+        finishLoading();
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "delayed session did not start");
+        assert(api.state.currentUserId === "guest", "loading changed the session learner");
+        assert(api.state.questions.length === 5, "loading changed the session question count");
+        click(doc, "#pause-session-button", "exit loading check");
+        frame.remove();
+        const resumeFrame = await loadApp(375, "resume-loading-guard");
+        const resumed = frameParts(resumeFrame);
+        const originalResumeLoad = resumed.win.ensureSelectedQuestionData;
+        let finishResume;
+        let resumeCalls = 0;
+        const pendingResume = new Promise((resolve) => { finishResume = resolve; });
+        resumed.win.ensureSelectedQuestionData = async (categories) => {
+          resumeCalls += 1;
+          await pendingResume;
+          return originalResumeLoad(categories);
+        };
+        click(resumed.doc, "#resume-session-button", "resume delayed map session");
+        const otherLearner = resumed.doc.querySelector('[data-user-id]:not([data-user-id="guest"])');
+        assert(otherLearner.disabled, "learner can change while a saved session is resuming");
+        otherLearner.click();
+        submit(resumed.doc);
+        void resumed.win.restoreActiveSessionCheckpoint();
+        assert(resumeCalls === 1, "resume and start operations can overlap");
+        finishResume();
+        await waitFor(() => !resumed.doc.getElementById("quiz-screen").hidden, "delayed resume did not finish");
+        assert(resumed.api.state.currentUserId === "guest", "resumed session has the wrong learner");
+        click(resumed.doc, "#pause-session-button", "exit resume loading check");
+        click(resumed.doc, "#discard-session-button", "discard loading check");
+        resumeFrame.remove();
+      }
+
+      async function runDraftRecoveryMatrix() {
+        let frame = await loadApp(375, "draft-recovery");
+        let { api, doc, win } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "draft guest");
+        click(doc, '[data-session-preset="math-heavy"]', "draft math");
+        click(doc, '[data-question-count="5"]', "draft five questions");
+        change(doc.getElementById("speed-challenge-enabled"), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "draft session did not start");
+        const base = { type: "math", category: "math", difficulty: 3, questionText: "Draft recovery", answerValue: "1" };
+        const cases = [
+          {
+            label: "typed answer", question: { ...base, mode: "input" },
+            edit() { doc.getElementById("answer-input").value = "12.5"; doc.getElementById("answer-input").dispatchEvent(new win.Event("input", { bubbles: true })); },
+            check() { return doc.getElementById("answer-input").value === "12.5"; },
+          },
+          {
+            label: "drag slots", question: { ...base, mode: "drag", dragTemplateParts: ["", " and ", ""], dragChoices: [{ id: "one", text: "one" }, { id: "two", text: "two" }], dragAnswerTokens: ["one", "two"] },
+            edit() { click(doc, '.drag-token[data-token-id="one"]', "draft drag token"); },
+            check() { return text(doc.querySelector('[data-slot-index="0"]')) === "one" && Boolean(doc.querySelector('.drag-token[data-token-id="two"]')); },
+          },
+          {
+            label: "matching", question: { ...base, mode: "drag", dragLayout: "matching", matchLeftItems: [{ text: "1" }, { text: "2" }], matchRightItems: [{ text: "one" }, { text: "two" }], dragAnswerTokens: ["one", "two"] },
+            edit() { click(doc, ".matching-anchor.left", "draft match left"); click(doc, ".matching-anchor.right", "draft match right"); },
+            check() { return doc.querySelectorAll(".matching-anchor.left.connected").length === 1; },
+          },
+          {
+            label: "selected option", question: { ...base, mode: "interactive", interactive: { layout: "option-select", choices: [{ summary: "one" }, { summary: "two" }], answerIndexes: [0] } },
+            edit() { click(doc, '.interactive-option[data-index="1"]', "draft option"); },
+            check() { return doc.querySelector('.interactive-option[data-index="1"]')?.getAttribute("aria-pressed") === "true"; },
+          },
+          {
+            label: "paired selection", question: { ...base, mode: "interactive", interactive: { layout: "paired-select", items: [{ summary: "one" }, { summary: "two" }], reasons: [{ summary: "first" }, { summary: "second" }], answerIndexes: [0], answerItemIndex: 0, answerReasonIndex: 0 } },
+            edit() { click(doc, '.paired-select-option[data-group="items"][data-index="1"]', "draft paired item"); },
+            check() { return doc.querySelector('.paired-select-option[data-group="items"][data-index="1"]')?.getAttribute("aria-pressed") === "true"; },
+          },
+          {
+            label: "command sequence", question: { ...base, mode: "interactive", interactive: { layout: "command-sequence", grid: { rows: 3, cols: 3 }, answerSequence: ["N", "N", "E", "E"] } },
+            edit() { click(doc, '.command-button[data-command="N"]', "draft command"); },
+            check() { return text(doc.querySelector(".command-sequence-slot")) === "N"; },
+          },
+        ];
+        for (const entry of cases) {
+          api.state.pendingAnswer = null;
+          api.state.questions[0] = entry.question;
+          win.renderCurrentQuestion();
+          entry.edit();
+          click(doc, "#pause-session-button", `save ${entry.label}`);
+          assert(!doc.getElementById("start-screen").hidden, `${entry.label}: pause failed`);
+          frame.remove();
+          frame = await loadApp(375, `resume-${entry.label}`);
+          ({ api, doc, win } = frameParts(frame));
+          click(doc, "#resume-session-button", `resume ${entry.label}`);
+          await waitFor(() => !doc.getElementById("quiz-screen").hidden, `${entry.label}: resume failed`);
+          await waitFor(entry.check, `${entry.label}: unsubmitted work was lost`, 3000);
+          assert(api.state.answeredCount === 0, `${entry.label}: saving graded an incomplete answer`);
+        }
+        // Finish a normal session and review it: completed work must stay completed.
+        api.state.questions[0] = { ...base, mode: "input" };
+        api.state.pendingAnswer = null;
+        win.renderCurrentQuestion();
+        const originalSetItem = win.Storage.prototype.setItem;
+        win.Storage.prototype.setItem = function (key, value) {
+          if (key === HISTORY_KEY) throw new Error("QA history quota exceeded");
+          return originalSetItem.call(this, key, value);
+        };
+        completeCurrentSession(frame);
+        assert(text(doc.getElementById("results-summary")).includes("could not save"),
+          "completed session hid the history save failure");
+        assert(api.state.sessionRecords.length === 5, "failed history save lost results in memory");
+        win.Storage.prototype.setItem = originalSetItem;
+        click(doc, "#results-back-button", "review completed session");
+        click(doc, "#pause-session-button", "exit completed review");
+        assert(localStorage.getItem(ACTIVE_SESSION_KEY) === null, "completed review recreated a checkpoint");
+        assert(!doc.getElementById("start-screen").hidden, "completed review did not exit");
+        frame.remove();
+      }
+
       async function runMapOfflineResumeMatrix() {
         const before = await qaStats();
-        assert(before.mapRequestCount === 0, `map bundle loaded eagerly ${before.mapRequestCount} time(s)`);
+        assert(before.mapRequestCount >= 1, "offline installation did not cache the map bundle");
+        await qaPost("/__qa/mode", "offline");
         const frame = await loadApp(1366, "desktop-map-online");
         const { api, doc, win } = frameParts(frame);
         assert(!win.GEOGRAPHY_MAP_COUNTRIES, "map data exists before a map/history selection");
@@ -368,7 +511,7 @@
           "lazy map session did not load"
         );
         const after = await qaStats();
-        assert(after.mapRequestCount >= 1, "lazy map bundle was not requested on demand");
+        assert(after.mapRequestCount === before.mapRequestCount, "first offline map session required a network request");
         assert(api.state.questions.length === 5, "map practice did not build five questions");
         click(doc, "#pause-session-button", "save map session");
         const serialized = localStorage.getItem(ACTIVE_SESSION_KEY) || "";
@@ -429,6 +572,15 @@
         await registration.update();
         await waitFor(() => registration.waiting, "updated service worker did not enter waiting state", 90000);
         const appDoc = appFrame.contentDocument;
+        const appWin = appFrame.contentWindow;
+        const appState = appWin.HOMEWORK_TEST_API.state;
+        appState.questions[appState.currentIndex] = {
+          type: "math-input", category: "math", mode: "input", difficulty: 3,
+          questionText: "Keep this draft during an app update", answerValue: 12.5,
+        };
+        appWin.renderCurrentQuestion();
+        appDoc.getElementById("answer-input").value = "12.5";
+        appDoc.getElementById("answer-input").dispatchEvent(new appWin.Event("input", { bubbles: true }));
         await waitFor(
           () => !appDoc.getElementById("app-update-banner").hidden,
           "production update banner did not appear",
@@ -449,6 +601,12 @@
           names.filter((name) => name.startsWith("homework-v") && !name.includes("-qa-update")).length === 0,
           `stale homework caches remain: ${JSON.stringify(names)}`
         );
+        await waitFor(() => appFrame.contentDocument !== appDoc && appFrame.contentWindow.HOMEWORK_TEST_API,
+          "updated app did not reload");
+        const updatedDoc = appFrame.contentDocument;
+        click(updatedDoc, "#resume-session-button", "resume after update");
+        await waitFor(() => !updatedDoc.getElementById("quiz-screen").hidden, "updated session did not resume");
+        assert(updatedDoc.getElementById("answer-input").value === "12.5", "app update lost the unsubmitted answer");
       }
 
       async function run() {
@@ -456,6 +614,8 @@
         const { registration, initialMainCache } = await installServiceWorker();
         const desktopFrame = await runDesktopChallengeMatrix();
         await runMobileCheckpointAndHistoryMatrix();
+        await runSessionLoadingMatrix();
+        await runDraftRecoveryMatrix();
         const offlineMapFrame = await runMapOfflineResumeMatrix();
         assert(reportAttempts === 0, `local QA attempted ${reportAttempts} production report(s)`);
         await runServiceWorkerUpdateMatrix(registration, initialMainCache, offlineMapFrame || desktopFrame);

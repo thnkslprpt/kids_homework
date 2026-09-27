@@ -6,6 +6,16 @@ function getActiveRoundState() {
   return state.currentRound === "speed" ? state.speedRound : state;
 }
 
+function updatePendingAnswer({ value = "", tokens = [] } = {}) {
+  const round = getActiveRoundState();
+  if (round.viewIndex !== round.currentIndex || isCurrentAnswerLocked(round)) return;
+  round.pendingAnswer = {
+    index: round.currentIndex,
+    value: String(value),
+    tokens: tokens.map((token) => String(token ?? "")),
+  };
+}
+
 function getMainRoundState() {
   return state;
 }
@@ -113,7 +123,9 @@ function renderCurrentQuestion() {
 
   const reviewingPreviousQuestion = isViewingPreviousQuestion();
   const answerLocked = reviewingPreviousQuestion || isCurrentAnswerLocked(round);
-  const answerSelection = round.answerSelections[round.viewIndex] || null;
+  const answerSelection = answerLocked
+    ? round.answerSelections[round.viewIndex] || null
+    : round.pendingAnswer?.index === round.viewIndex ? round.pendingAnswer : null;
   if (!answerLocked && round.timingQuestionIndex !== round.viewIndex) {
     round.timingQuestionIndex = round.viewIndex;
     round.questionStartedAt = Date.now();
@@ -186,7 +198,7 @@ function renderCurrentQuestion() {
     elements.answerInput.disabled = answerLocked;
     elements.answerSignButton.disabled = answerLocked;
     elements.answerSubmitButton.disabled = answerLocked;
-    elements.answerInput.value = answerLocked ? answerSelection?.value || "" : "";
+    elements.answerInput.value = answerSelection?.value || "";
     if (!answerLocked && shouldAutoFocusAnswerInput()) {
       focusAnswerInput();
     }
@@ -353,6 +365,7 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
       button.setAttribute("aria-pressed", isSelected ? "true" : "false");
     });
     syncStatus();
+    if (!readOnly) updatePendingAnswer({ tokens: Array.from(selectedIndexes).map(String) });
   };
 
   const toggleIndex = (index) => {
@@ -544,6 +557,10 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
       return;
     }
 
+    updatePendingAnswer({ tokens: [
+      ...(selectedItemIndex >= 0 ? [`item:${selectedItemIndex}`] : []),
+      ...(selectedReasonIndex >= 0 ? [`reason:${selectedReasonIndex}`] : []),
+    ] });
     const itemDone = selectedItemIndex >= 0 ? "item selected" : "pick an item";
     const reasonDone = selectedReasonIndex >= 0 ? "reason selected" : "pick a reason";
     status.textContent = `${itemDone}; ${reasonDone}`;
@@ -591,7 +608,7 @@ function renderCommandSequenceQuestion(question, config, { readOnly = false, sel
   const selectedSequence = Array.isArray(selectedTokens)
     ? selectedTokens.map((value) => String(value).toUpperCase()).filter(Boolean)
     : [];
-  const currentSequence = readOnly ? selectedSequence : [];
+  const currentSequence = selectedSequence;
   const maxCommands = Math.max(answerSequence.length + 2, Number.parseInt(config.maxCommands, 10) || answerSequence.length + 2);
   const commandLabels = {
     N: "North",
@@ -721,6 +738,7 @@ function renderCommandSequenceQuestion(question, config, { readOnly = false, sel
   function sync() {
     renderBoard();
     renderSequence();
+    if (!readOnly) updatePendingAnswer({ tokens: currentSequence });
     status.textContent = readOnly
       ? currentSequence.length
         ? `Answer: ${currentSequence.join(" ")}`
@@ -922,7 +940,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
         (bucket?.answers || []).some((answer) => containsHebrewText(answer))
     );
   const slotValues = Array.from({ length: getDragSlotCount(question) }, (_, index) => {
-    if (!readOnly || !Array.isArray(selectedTokens)) {
+    if (!Array.isArray(selectedTokens)) {
       return null;
     }
 
@@ -1403,6 +1421,7 @@ function renderDragQuestion(question, { readOnly = false, selectedTokens = [] } 
   }
 
   function sync() {
+    if (!readOnly) updatePendingAnswer({ tokens: slotValues.map((value) => value?.text || "") });
     elements.dragArea.innerHTML = "";
 
     const board = document.createElement("div");
@@ -1545,6 +1564,7 @@ function renderMatchingDragQuestion(question, { readOnly = false, selectedTokens
   }
 
   function sync() {
+    if (!readOnly) updatePendingAnswer({ tokens: connections.map((index) => rightItems[index]?.text || "") });
     if (typeof requestAnimationFrame === "function") {
       requestAnimationFrame(renderLines);
       return;
@@ -1826,6 +1846,7 @@ function handleAnswer(question, isCorrect, selectedValue = "", selectedMeta = nu
     clearSpeedRoundTimer();
   }
 
+  round.pendingAnswer = null;
   round.answeredCount += 1;
   const isGraded = selectedMeta?.isGraded !== false && question?.mode !== "practice";
   const normalizedResult = isGraded ? Boolean(isCorrect) : null;

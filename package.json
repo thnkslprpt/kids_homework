@@ -4,7 +4,7 @@
   "private": true,
   "description": "Offline-first family homework practice app",
   "scripts": {
-    "test": "npm run qa:core && npm run qa:integrity && npm run qa:generation && npm run qa:grade && npm run qa:content && npm run qa:time-probability && npm run qa:hebrew",
+    "test": "npm run qa:core && npm run qa:regressions && npm run qa:integrity && npm run qa:generation && npm run qa:grade && npm run qa:content && npm run qa:time-probability && npm run qa:hebrew",
     "qa:core": "node app/scripts/qa_core_data.js",
     "qa:integrity": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_project_integrity.js",
     "qa:generation": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_question_generation.js 20",
@@ -14,7 +14,8 @@
     "qa:hebrew": "node -r ./app/scripts/qa_seed_bootstrap.js app/scripts/qa_hebrew_content.js",
     "qa:browser": "node app/scripts/qa_browser_smoke.js",
     "qa:release-browser": "node app/scripts/qa_release_browser.js",
-    "qa:all": "npm test && npm run qa:browser"
+    "qa:all": "npm test && npm run qa:browser && npm run qa:release-browser",
+    "qa:regressions": "node --test app/scripts/qa_pwa.js app/scripts/qa_reporting.js app/scripts/qa_session_regressions.js app/scripts/qa_startup.js"
   },
   "engines": {
     "node": ">=20"

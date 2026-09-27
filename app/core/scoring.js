@@ -115,7 +115,10 @@ function parseExplicitFraction(value) {
 
 function buildNormalizedFlexibleNumberStrings(value) {
   const candidates = new Set();
-  const compactValue = value.replace(/(\d)[\s_'’](?=\d)/g, "$1");
+  // A separator between arbitrary digits could be two answers ("1 2"), not 12.
+  // Only strip consistent groups of three, preserving mixed-fraction parsing.
+  const grouped = /^[+-]?\d{1,3}([ _'’])\d{3}(?:\1\d{3})*(?:[.,]\d+)?$/.test(value);
+  const compactValue = grouped ? value.replace(/[ _'’]/g, "") : value;
   const addCandidate = (candidateText) => {
     if (/^[+-]?(?:\d+(?:\.\d+)?|\.\d+)$/.test(candidateText)) {
       candidates.add(candidateText);

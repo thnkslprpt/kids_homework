@@ -18,6 +18,8 @@
     const normalizedSchemaVersion = clampInteger(schemaVersion, 1, 100, 1);
     const queueLimit = clampInteger(maxQueuedReports, 1, 100, 25);
     let isFlushing = false;
+    let memoryQueue = [];
+    const confirmedSessionIds = new Set();
 
     function reportSession(session) {
       const payload = buildPayload(session);
@@ -210,7 +212,9 @@
           ) {
             throw new Error("The report receiver did not confirm this session.");
           }
-          queue = loadQueue().filter((entry) => entry?.session?.id !== payload?.session?.id);
+          // Do not resend a confirmed report if storage fails while removing it.
+          confirmedSessionIds.add(payload.session.id);
+          queue = loadQueue();
           saveQueue(queue);
         }
 
@@ -254,7 +258,16 @@
         return acknowledgement;
       }
 
-      return requestAcknowledgement(payload.session.id);
+      let acknowledgement;
+      for (const delay of [0, 1000, 3000]) {
+        if (delay) await new Promise((resolve) => setTimeout(resolve, delay));
+        acknowledgement = await requestAcknowledgement(payload.session.id);
+        if (acknowledgement?.ok === true ||
+            !["missing", "processing"].includes(acknowledgement?.status)) {
+          break;
+        }
+      }
+      return acknowledgement;
     }
 
     function requestAcknowledgement(sessionId) {
@@ -313,24 +326,20 @@
     }
 
     function loadQueue() {
-      const storage = getStorage();
-      if (!storage || !storageKey) {
-        return [];
-      }
-
+      let persisted = [];
       try {
-        const parsed = JSON.parse(storage.getItem(storageKey) || "[]");
-        if (!Array.isArray(parsed)) {
-          return [];
-        }
-
-        return parsed
-          .slice(-queueLimit)
-          .map((entry) => normalizeQueuedPayload(entry))
-          .filter((entry) => entry.session.id);
+        const parsed = JSON.parse(getStorage()?.getItem(storageKey) || "[]");
+        if (Array.isArray(parsed)) persisted = parsed.slice(-queueLimit);
       } catch {
-        return [];
+        // Reports collected while storage is unavailable still live in memory.
       }
+      const queueById = new Map();
+      [...persisted, ...memoryQueue].forEach((entry) => {
+        const payload = normalizeQueuedPayload(entry);
+        const id = payload.session.id;
+        if (id && !confirmedSessionIds.has(id)) queueById.set(id, payload);
+      });
+      return Array.from(queueById.values()).slice(-queueLimit);
     }
 
     function normalizeQueuedPayload(entry) {
@@ -343,13 +352,15 @@
     }
 
     function saveQueue(queue) {
+      memoryQueue = Array.isArray(queue) ? queue.slice(-queueLimit) : [];
       const storage = getStorage();
       if (!storage || !storageKey) {
         return false;
       }
 
       try {
-        storage.setItem(storageKey, JSON.stringify(Array.isArray(queue) ? queue.slice(-queueLimit) : []));
+        storage.setItem(storageKey, JSON.stringify(memoryQueue));
+        memoryQueue = [];
         return true;
       } catch {
         return false;

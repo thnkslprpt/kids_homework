@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-08-30-equivalent-choices-1";
+const CACHE_VERSION = "homework-v2026-09-27-review-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const NAVIGATION_TIMEOUT_MS = 4000;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
@@ -18,6 +18,9 @@ const CRITICAL_ASSETS = [
   "app/questions/manifest.js",
   "app/questions/load.js",
   ...QUESTION_SCRIPT_PATHS.map((scriptPath) => `app/${scriptPath}`),
+  ...Object.values(globalThis.HOMEWORK_LAZY_QUESTION_SCRIPT_PATHS || {}).map(
+    (scriptPath) => `app/${scriptPath}`
+  ),
   "app/core/namespace.js",
   "app/core/bootstrap-errors.js",
   "app/core/config.js",
@@ -127,13 +130,6 @@ const OPTIONAL_ASSETS = [
   "app/assets/hebrew-images/watermelon.svg",
 ];
 
-const QUESTION_ASSET_PATHS = new Set(
-  QUESTION_SCRIPT_PATHS.map((scriptPath) => `app/${scriptPath}`)
-);
-const REQUIRED_APP_SHELL_ASSETS = CRITICAL_ASSETS.filter(
-  (assetPath) => !QUESTION_ASSET_PATHS.has(assetPath)
-);
-
 function scopedUrl(path) {
   return new URL(path, self.registration.scope).toString();
 }
@@ -141,7 +137,7 @@ function scopedUrl(path) {
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(async (cache) => {
-      const shellResults = await cacheAssetsIndividually(cache, REQUIRED_APP_SHELL_ASSETS);
+      const shellResults = await cacheAssetsIndividually(cache, CRITICAL_ASSETS);
       const shellFailures = shellResults.filter((result) => !result.ok);
       if (shellFailures.length) {
         throw new Error(
@@ -151,10 +147,7 @@ self.addEventListener("install", (event) => {
         );
       }
 
-      const supplementalResults = await cacheAssetsIndividually(cache, [
-        ...QUESTION_ASSET_PATHS,
-        ...OPTIONAL_ASSETS,
-      ]);
+      const supplementalResults = await cacheAssetsIndividually(cache, OPTIONAL_ASSETS);
       const supplementalFailures = supplementalResults.filter((result) => !result.ok);
       if (supplementalFailures.length > 0) {
         console.warn(
@@ -200,23 +193,20 @@ self.addEventListener("fetch", (event) => {
   }
 
   if (request.mode === "navigate") {
-    event.respondWith(networkFirst(request, scopedUrl("homework.html"), NAVIGATION_TIMEOUT_MS));
-    return;
-  }
-
-  if (isAppCodeAsset(url)) {
-    event.respondWith(cacheFirst(request));
+    event.respondWith(cachedNavigation(request, scopedUrl("homework.html"), NAVIGATION_TIMEOUT_MS));
     return;
   }
 
   event.respondWith(cacheFirst(request));
 });
 
-function isAppCodeAsset(url) {
-  return [".html", ".js", ".css", ".json"].some((extension) => url.pathname.endsWith(extension));
-}
+async function cachedNavigation(request, fallbackUrl, timeoutMs = 0) {
+  // Keep HTML and scripts on the same installed version until an update activates.
+  const cached = await matchCurrentCaches(request);
+  if (cached) {
+    return cached;
+  }
 
-async function networkFirst(request, fallbackUrl, timeoutMs = 0) {
   let networkResponse = null;
   try {
     networkResponse = await fetchWithTimeout(request, timeoutMs);
@@ -226,11 +216,6 @@ async function networkFirst(request, fallbackUrl, timeoutMs = 0) {
     }
   } catch (error) {
     // A cached response below is the expected path when offline or timed out.
-  }
-
-  const cached = await matchCurrentCaches(request);
-  if (cached) {
-    return cached;
   }
 
   const fallback = fallbackUrl ? await matchCurrentCaches(fallbackUrl) : null;

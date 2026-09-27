@@ -9,15 +9,21 @@ function initializeOfflineApp(elements) {
   }
 
   let refreshingForUpdate = false;
+  let hasController = Boolean(navigator.serviceWorker.controller);
   navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hasController) {
+      hasController = true;
+      return;
+    }
     if (refreshingForUpdate) {
       return;
     }
     refreshingForUpdate = true;
+    window.dispatchEvent(new CustomEvent("homework:save-checkpoint"));
     window.location.reload();
   });
 
-  window.addEventListener("load", () => {
+  function registerServiceWorker() {
     navigator.serviceWorker
       .register("service-worker.js")
       .then((registration) => {
@@ -41,7 +47,13 @@ function initializeOfflineApp(elements) {
       .catch(() => {
         // The app still works online or from a downloaded folder without service-worker support.
       });
-  });
+  }
+
+  if (document.readyState === "complete") {
+    registerServiceWorker();
+  } else {
+    window.addEventListener("load", registerServiceWorker, { once: true });
+  }
 }
 
 function showAppUpdatePrompt(worker) {
@@ -52,7 +64,6 @@ function showAppUpdatePrompt(worker) {
   appElements.appUpdateBanner.hidden = false;
   appElements.appUpdateButton.onclick = () => {
     appElements.appUpdateButton.disabled = true;
-    document.dispatchEvent(new CustomEvent("homework:answer-recorded"));
     worker.postMessage({ type: "SKIP_WAITING" });
   };
   if (appElements.appUpdateLaterButton) {

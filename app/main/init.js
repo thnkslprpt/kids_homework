@@ -337,6 +337,7 @@ const statisticsGeneratorsByDifficulty = {
 elements.startForm.addEventListener("submit", startSession);
 elements.answerForm.addEventListener("submit", submitTypedAnswer);
 elements.answerInput.addEventListener("focus", scrollAnswerFormIntoView);
+elements.answerInput.addEventListener("input", () => updatePendingAnswer({ value: elements.answerInput.value }));
 elements.answerSignButton.addEventListener("click", toggleAnswerInputSign);
 elements.restartButton.addEventListener("click", showStartScreen);
 elements.historyButton.addEventListener("click", showHistoryScreen);

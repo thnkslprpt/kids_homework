@@ -73,6 +73,12 @@ function testNumericParsing(context) {
   assert(candidates("2 1/4").includes(2.25), "mixed numbers should be accepted as numeric answers");
   assert(candidates("-1 1/2").includes(-1.5), "negative mixed numbers should apply the sign to the whole value");
   assert(candidates("1/0").length === 0, "fractions with a zero denominator must be rejected");
+  ["1 2", "12 3", "1_2", "12'3", "1 234_567"].forEach((value) => {
+    assert(candidates(value).length === 0, `malformed grouping must be rejected: ${value}`);
+  });
+  ["1 234", "1_234", "1'234", "1’234", "1 234 567"].forEach((value) => {
+    assert(candidates(value).length === 1, `valid grouping should be accepted: ${value}`);
+  });
 }
 
 function testHistoryMigration() {
@@ -86,7 +92,7 @@ function testHistoryMigration() {
     totalQuestions: 2,
     correctCount: 1,
     records: [
-      { questionNumber: 1, isCorrect: true, category: "math", questionText: "1 + 1" },
+      { questionNumber: 1, isCorrect: true, category: "math", questionText: "1 + 1", answerOptions: ["1", "2", "3", "4"] },
       { questionNumber: 2, isGraded: false, isCorrect: null, category: "writing" },
       null,
     ],
@@ -108,6 +114,8 @@ function testHistoryMigration() {
   assert(store.write(loaded), "normalized history should be writable");
   const persisted = JSON.parse(storage.getItem("history"));
   assert(persisted.schemaVersion === 3, "history writes should use the current schema envelope");
+  assert(JSON.stringify(persisted.users.guest[0].records[0].answerOptions) === '["1","2","3","4"]',
+    "history normalization must retain the displayed choice options");
 }
 
 function testReportSanitizing(context) {
@@ -180,6 +188,13 @@ function testAppsScriptValidation() {
   })})`, context);
   assert(normalized.session.records[0].isCorrect === null, "receiver should accept ungraded null results");
   assert(normalized.session.records[0].confidence === "sure", "receiver should preserve confidence");
+  normalized.session.totalQuestions = 2;
+  normalized.session.correctCount = 1;
+  normalized.session.gradedQuestions = "";
+  assert(context.gradedQuestionCount_(normalized.session) === 2, "legacy reports must fall back to totalQuestions");
+  assert(context.accuracyPercent_(normalized.session) === 50, "legacy report accuracy must use totalQuestions");
+  normalized.session.gradedQuestions = 0;
+  assert(context.gradedQuestionCount_(normalized.session) === 0, "explicitly ungraded reports must retain zero");
 }
 
 function run() {

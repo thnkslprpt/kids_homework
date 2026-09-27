@@ -244,6 +244,7 @@
     }
 
     function sync() {
+      if (!readOnly) updatePendingAnswer({ tokens: connections.map((index) => rightItems[index]?.text || "") });
       if (renderFrame !== null || typeof requestAnimationFrame !== "function") {
         if (renderFrame === null) {
           renderLines();

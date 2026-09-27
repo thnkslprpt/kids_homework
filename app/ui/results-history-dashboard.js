@@ -74,10 +74,17 @@ function renderResultsScreen({ shouldPersist = false, shouldCelebrate = false } 
   updateResultsNavigation();
 
   if (shouldPersist) {
-    saveSessionHistory();
+    state.historySaveFailed = !saveSessionHistory();
     if (typeof clearActiveSessionCheckpoint === "function") {
       clearActiveSessionCheckpoint();
     }
+  }
+
+  if (state.historySaveFailed) {
+    elements.resultsSummary.appendChild(document.createElement("br"));
+    elements.resultsSummary.appendChild(document.createTextNode(
+      "This browser could not save the session history. Keep these results open."
+    ));
   }
 
   if (shouldCelebrate) {
@@ -477,6 +484,8 @@ function showPreviousQuizQuestion() {
     return;
   }
 
+  round.timingQuestionIndex = -1;
+  round.questionStartedAt = 0;
   round.viewIndex -= 1;
   renderCurrentQuestion();
 }
@@ -584,7 +593,13 @@ function deleteCurrentUserHistory() {
 
   const historyByUser = loadAllSessionHistory();
   historyByUser[state.currentUserId] = [];
-  sessionHistoryStore.write(historyByUser);
+  if (!sessionHistoryStore.write(historyByUser)) {
+    const message = "This browser could not delete the saved history. Please try again.";
+    elements.historyEmpty.textContent = message;
+    elements.historyEmpty.hidden = false;
+    if (elements.screenStatusAnnouncer) elements.screenStatusAnnouncer.textContent = message;
+    return;
+  }
   renderHistoryScreen();
   if (elements.screenStatusAnnouncer) {
     elements.screenStatusAnnouncer.textContent = `Saved history for ${profile.name} was deleted.`;
@@ -904,6 +919,13 @@ function createHistoryQuestionElement(record, sessionStartedAt, roundLabel = "Ma
   questionText.className = "history-question-text";
   questionText.textContent = formatHistoryQuestionText(record.questionText, sessionStartedAt);
   wrapper.appendChild(questionText);
+
+  if (Array.isArray(record.answerOptions) && record.answerOptions.length) {
+    const options = document.createElement("p");
+    options.className = "history-answer-line";
+    options.textContent = `Choices: ${record.answerOptions.join(" · ")}`;
+    wrapper.appendChild(options);
+  }
 
   const chosenAnswer = document.createElement("p");
   chosenAnswer.className = "history-answer-line";

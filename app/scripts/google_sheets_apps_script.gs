@@ -636,7 +636,8 @@ function accuracyPercent_(session) {
 }
 
 function gradedQuestionCount_(session) {
-  return Number.isFinite(Number(session && session.gradedQuestions))
+  return session?.gradedQuestions !== "" && session?.gradedQuestions != null &&
+    Number.isFinite(Number(session.gradedQuestions))
     ? Math.max(0, number_(session.gradedQuestions))
     : Math.max(0, number_(session && session.totalQuestions));
 }

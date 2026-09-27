@@ -1853,8 +1853,22 @@ async function ensureSelectedQuestionData(categories) {
   return lazyQuestionDataLoadPromise;
 }
 
+let sessionLoadPending = false;
+
+function lockSessionLoadingControls() {
+  sessionLoadPending = true;
+  const controls = Array.from(elements.startScreen.querySelectorAll("button, input, select"),
+    (control) => ({ control, disabled: control.disabled }));
+  controls.forEach(({ control }) => { control.disabled = true; });
+  return () => {
+    controls.forEach(({ control, disabled }) => { control.disabled = disabled; });
+    sessionLoadPending = false;
+  };
+}
+
 async function startSession(event) {
   event.preventDefault();
+  if (sessionLoadPending) return;
 
   const totalQuestions = Number.parseInt(elements.questionCount.value, 10);
   const selectedDifficulty = Number.parseInt(elements.difficultyLevel.value, 10);
@@ -1878,14 +1892,14 @@ async function startSession(event) {
     return;
   }
 
-  const startButton = elements.startForm?.querySelector('button[type="submit"]');
+  let unlockControls;
   try {
     if (
       (selectedCategories.includes(RESERVED_MAP_CATEGORY) || selectedCategories.includes("history")) &&
       !globalThis.GEOGRAPHY_MAP_COUNTRIES
     ) {
       showStartMessage("Preparing map activities…", "success");
-      if (startButton) startButton.disabled = true;
+      unlockControls = lockSessionLoadingControls();
       await ensureSelectedQuestionData(selectedCategories);
     }
   } catch (error) {
@@ -1893,7 +1907,7 @@ async function startSession(event) {
     showStartMessage("Map activities could not be loaded. Check the connection and try again.", "error");
     return;
   } finally {
-    if (startButton) startButton.disabled = false;
+    unlockControls?.();
   }
 
   if (isFocusedPractice && selectedCategories.length !== 1) {
@@ -1936,6 +1950,7 @@ async function startSession(event) {
   state.speedRound = createEmptySpeedRoundState();
   state.awaitingContinue = false;
   state.completedPracticeCount = 0;
+  state.historySaveFailed = false;
   state.speedChallengeEnabled = Boolean(elements.speedChallengeEnabled?.checked);
   state.speedSoundEnabled = Boolean(elements.speedSoundEnabled?.checked);
   state.speedRelaxedTimer = Boolean(elements.speedRelaxedTimer?.checked);
@@ -1945,6 +1960,7 @@ async function startSession(event) {
   state.correctCount = 0;
   state.answerResults = [];
   state.answerSelections = [];
+  state.pendingAnswer = null;
   state.hintsUsed = [];
   state.questionStartedAt = 0;
   state.timingQuestionIndex = -1;
@@ -3226,6 +3242,7 @@ function buildActiveSessionCheckpoint() {
   if (
     !hasActiveQuiz ||
     !["main", "speed"].includes(state.currentRound) ||
+    getActiveRoundState().currentIndex >= getActiveRoundState().totalQuestions ||
     !Array.isArray(state.questions) ||
     !state.questions.length
   ) {
@@ -3253,6 +3270,7 @@ function buildActiveSessionCheckpoint() {
       correctCount: state.correctCount,
       answerResults: state.answerResults,
       answerSelections: state.answerSelections,
+      pendingAnswer: state.pendingAnswer || null,
       hintsUsed: Array.isArray(state.hintsUsed) ? state.hintsUsed : [],
       questions: state.questions.map(cloneQuestionForCheckpoint),
       sessionRecords: state.sessionRecords,
@@ -3276,6 +3294,7 @@ function buildActiveSessionCheckpoint() {
         correctCount: speedRound.correctCount,
         answerResults: speedRound.answerResults,
         answerSelections: speedRound.answerSelections,
+        pendingAnswer: speedRound.pendingAnswer || null,
         hintsUsed: Array.isArray(speedRound.hintsUsed) ? speedRound.hintsUsed : [],
         questions: Array.isArray(speedRound.questions)
           ? speedRound.questions.map(cloneQuestionForCheckpoint)
@@ -3450,6 +3469,7 @@ function isValidActiveSessionCheckpoint(checkpoint) {
 
   if (savedState.currentRound === "main") {
     return (
+      savedState.currentIndex < savedState.totalQuestions &&
       savedState.awaitingContinue === Boolean(savedState.awaitingContinue) &&
       Array.isArray(speedRound.questions) &&
       speedRound.questions.length === 0 &&
@@ -3464,6 +3484,7 @@ function isValidActiveSessionCheckpoint(checkpoint) {
     Number.isInteger(speedRound.totalQuestions) &&
     speedRound.totalQuestions > 0 &&
     speedRound.totalQuestions <= SPEED_ROUND_QUESTION_COUNT &&
+    speedRound.currentIndex < speedRound.totalQuestions &&
     Array.isArray(speedRound.questions) &&
     speedRound.questions.length === speedRound.totalQuestions &&
     validateHomeworkQuestionList(speedRound.questions, "saved challenge").length === 0 &&
@@ -3501,6 +3522,7 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
     !Array.isArray(records) ||
     records.length !== round.answeredCount ||
     !records.every(isCheckpointPlainObject) ||
+    !isValidPendingAnswer(round.pendingAnswer, round.currentIndex, totalQuestions) ||
     !Array.isArray(hints) ||
     hints.length > totalQuestions ||
     !hints.every(
@@ -3513,6 +3535,17 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
   return awaitingContinue
     ? round.currentIndex < totalQuestions && round.answeredCount === round.currentIndex + 1
     : round.answeredCount === round.currentIndex;
+}
+
+function isValidPendingAnswer(draft, currentIndex, totalQuestions) {
+  return draft == null || (
+    isCheckpointPlainObject(draft) &&
+    draft.index === currentIndex &&
+    Number.isInteger(draft.index) && draft.index >= 0 && draft.index < totalQuestions &&
+    typeof draft.value === "string" && draft.value.length <= 10000 &&
+    Array.isArray(draft.tokens) && draft.tokens.length <= 100 &&
+    draft.tokens.every((token) => typeof token === "string" && token.length <= 1000)
+  );
 }
 
 function isDormantSavedSpeedRound(round) {
@@ -3590,6 +3623,7 @@ function getCheckpointPresetLabel(preset) {
 }
 
 async function restoreActiveSessionCheckpoint() {
+  if (sessionLoadPending) return false;
   let checkpoint = loadActiveSessionCheckpoint();
   if (!checkpoint) {
     showStartMessage("That saved session is no longer available.", "error");
@@ -3597,6 +3631,7 @@ async function restoreActiveSessionCheckpoint() {
     return false;
   }
 
+  const unlockControls = lockSessionLoadingControls();
   try {
     if (hasUnhydratedCheckpointMapVisuals(checkpoint)) {
       await ensureSelectedQuestionData(
@@ -3613,6 +3648,8 @@ async function restoreActiveSessionCheckpoint() {
     console.error(error);
     showStartMessage("The saved map activity could not be prepared. Check the connection and try again.", "error");
     return false;
+  } finally {
+    unlockControls();
   }
 
   cleanupInteractiveDragState();
@@ -3623,6 +3660,7 @@ async function restoreActiveSessionCheckpoint() {
       ? new Date(savedState.sessionStartedAt)
       : new Date(checkpoint.savedAt),
     dragState: null,
+    pendingAnswer: savedState.pendingAnswer || null,
     // A paused session must not count time spent away from the app as answer
     // latency. Rendering the restored item starts a fresh timing interval.
     questionStartedAt: 0,
@@ -3642,6 +3680,11 @@ async function restoreActiveSessionCheckpoint() {
 }
 
 function pauseActiveSession() {
+  const round = getActiveRoundState();
+  if (round.currentIndex >= round.totalQuestions) {
+    showStartScreen();
+    return true;
+  }
   if (!saveActiveSessionCheckpoint()) {
     state.feedbackMessage = "This browser could not save the session. Keep this page open and try again.";
     state.feedbackTone = "error";

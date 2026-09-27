@@ -615,7 +615,7 @@
       const w = randomInt(2, 6);
       const h = randomInt(2, 5);
       const volume = l * w * h;
-      return optionInteractive({ category, difficulty: level, question: "What is the volume of the rectangular prism?", answer: `${volume} cubic units`, choices: [`${volume} cubic units`, `${2 * (l + w + h)} cubic units`, `${l * w} cubic units`, `${l + w + h} cubic units`, `${l * h} cubic units`, `${w * h} cubic units`], visualHtml: visualCard("Layers of unit cubes", renderShape("prism", `${l} × ${w} × ${h}`)), reviewText: `${l} × ${w} × ${h} = ${volume} cubic units.` });
+      return optionInteractive({ category, difficulty: level, question: "What is the volume of the rectangular prism?", answer: `${volume} cubic units`, choices: [`${volume} cubic units`, `${2 * (l + w + h)} cubic units`, `${l * w} cubic units`, `${l + w + h} cubic units`, `${l * h} cubic units`, `${w * h} cubic units`, `${volume + 1} cubic units`], visualHtml: visualCard("Layers of unit cubes", renderShape("prism", `${l} × ${w} × ${h}`)), reviewText: `${l} × ${w} × ${h} = ${volume} cubic units.` });
     }
     if (level === 6) {
       const base = randomInt(6, 16);
@@ -784,7 +784,7 @@
       const h = randomInt(-3, 4);
       const k = randomInt(-3, 4);
       const answer = `(${h}, ${k})`;
-      return optionInteractive({ category, difficulty: level, question: "Find the vertex from vertex form.", displayText: `y = (x ${h >= 0 ? "−" : "+"} ${Math.abs(h)})² ${k >= 0 ? "+" : "−"} ${Math.abs(k)}`, answer, choices: [answer, `(${-h}, ${k})`, `(${h}, ${-k})`, `(${-h}, ${-k})`, `(${h + 1}, ${k})`, `(${h}, ${k + 1})`], visualHtml: visualCard("Vertex form y = (x − h)² + k", renderCoordinateGrid([{ x: h, y: k, label: "V" }])), reviewText: `The vertex is (h, k) = ${answer}.` });
+      return optionInteractive({ category, difficulty: level, question: "Find the vertex from vertex form.", displayText: `y = (x ${h >= 0 ? "−" : "+"} ${Math.abs(h)})² ${k >= 0 ? "+" : "−"} ${Math.abs(k)}`, answer, choices: [answer, `(${-h}, ${k})`, `(${h}, ${-k})`, `(${-h}, ${-k})`, `(${h + 1}, ${k})`, `(${h}, ${k + 1})`, `(${h - 1}, ${k})`], visualHtml: visualCard("Vertex form y = (x − h)² + k", renderCoordinateGrid([{ x: h, y: k, label: "V" }])), reviewText: `The vertex is (h, k) = ${answer}.` });
     }
     const a = randomInt(2, 5);
     const b = randomInt(1, 4);

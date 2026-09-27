@@ -23,3 +23,4 @@ jobs:
       - run: npm ci
       - run: npm test
       - run: npm run qa:browser
+      - run: npm run qa:release-browser
