@@ -280,6 +280,30 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
     ? question.interactive
     : {};
   const layout = config.layout || "option-select";
+  if (layout === "design-chance") {
+    renderDesignChanceQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "shape-architect") {
+    renderShapeArchitectQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "equation-balance") {
+    renderEquationBalanceQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "mystery-rule") {
+    renderMysteryRuleQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "build-graph") {
+    renderBuildGraphQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
+  if (layout === "pixel-code") {
+    renderPixelCodeQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
   if (layout === "command-sequence") {
     renderCommandSequenceQuestion(question, config, { readOnly, selectedTokens });
     return;
@@ -1831,7 +1855,9 @@ function submitTypedAnswer(event) {
   }
 
   const correctAnswer = Number(question.answerValue);
-  const isCorrect = parsedCandidates.some((candidate) => numericAnswersMatch(candidate, correctAnswer));
+  const isCorrect = parsedCandidates.some((candidate) => question.answerRule
+    ? globalThis.HomeworkBuildExample.evaluate(question.answerRule, candidate).isCorrect
+    : numericAnswersMatch(candidate, correctAnswer));
   elements.answerSubmitButton.disabled = true;
   handleAnswer(question, isCorrect, typedValue);
 }
@@ -1969,7 +1995,18 @@ function buildPracticeCompletionMessage(question) {
   return `<div class="feedback-outcome"><strong>${message}</strong>${explanation}</div>`;
 }
 
+function getExampleAnswerFeedback(question, selectedValue) {
+  const candidates = buildNumericAnswerCandidates(selectedValue, question);
+  const results = candidates.map(value => globalThis.HomeworkBuildExample.evaluate(question.answerRule, value));
+  return (results.find(result => result.isCorrect) || results[0])?.feedback || "Type one whole number.";
+}
+
 function buildOutcomeMessage(question, isCorrect, selectedValue = "") {
+  if (question.answerRule) {
+    return `<div class="feedback-outcome"><strong>${isCorrect ? "Your example works!" : "Not quite."}</strong></div>` +
+      formatAnswerSummary(question, selectedValue, { isCorrect }) +
+      `<div class="feedback-explanation">${escapeHtml(getExampleAnswerFeedback(question, selectedValue))}</div>`;
+  }
   if (isCorrect) {
     const success = question?.successMessage
       ? escapeHtml(String(question.successMessage))
@@ -2007,7 +2044,7 @@ function formatAnswerSummary(question, selectedValue, { isCorrect = false } = {}
 
   if (!isCorrect && canonicalAnswerText && !matchesCanonicalAnswer) {
     lines.push(
-      `<div class="feedback-review-line"><span class="feedback-review-label">Correct answer:</span> ` +
+      `<div class="feedback-review-line"><span class="feedback-review-label">${question.answerRule ? "One example:" : "Correct answer:"}</span> ` +
         `<span class="feedback-review-answer correct">${escapeHtml(canonicalAnswerText)}</span></div>`
     );
   }
@@ -2073,7 +2110,7 @@ function formatQuestionReview(question, selectedValue, { isCorrect = false } = {
     if (shouldShowCanonicalAnswer) {
       lines.push('<div class="feedback-review-spacer"></div>');
       addLine(
-        `<span class="feedback-review-label">Correct answer:</span> ` +
+        `<span class="feedback-review-label">${question.answerRule ? "One example:" : "Correct answer:"}</span> ` +
           `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
         "feedback-review-line"
       );
@@ -2081,11 +2118,14 @@ function formatQuestionReview(question, selectedValue, { isCorrect = false } = {
   } else {
     lines.push('<div class="feedback-review-spacer"></div>');
     addLine(
-      `<span class="feedback-review-label">Correct answer:</span> ` +
+      `<span class="feedback-review-label">${question.answerRule ? "One example:" : "Correct answer:"}</span> ` +
         `<span class="feedback-review-answer correct">${escapeHtml(String(question.answerLabel))}</span>`,
       "feedback-review-line"
     );
   }
 
+  if (question.answerRule && selectedValue !== "") {
+    addLine(escapeHtml(getExampleAnswerFeedback(question, selectedValue)), "feedback-explanation");
+  }
   return `<div class="feedback-review">${lines.join("")}</div>`;
 }

@@ -32,7 +32,7 @@ test("reviewing completed work cannot create a resumable checkpoint", () => {
 
 test("a checkpoint preserves a bounded unsubmitted answer without grading it", () => {
   const context = sessionContext();
-  vm.runInContext('state.pendingAnswer = { index: 0, value: "12.5", tokens: [] }', context);
+  vm.runInContext('state.questions[0] = createMathInputQuestion(3); state.pendingAnswer = { index: 0, value: "12.5", tokens: [] }', context);
   const saved = JSON.parse(JSON.stringify(context.buildActiveSessionCheckpoint()));
   assert.deepEqual(saved.state.pendingAnswer, { index: 0, value: "12.5", tokens: [] });
   assert.equal(saved.state.answeredCount, 0);

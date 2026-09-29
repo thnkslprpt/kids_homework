@@ -174,14 +174,22 @@ Other presets:
   fractions, ratios, spatial reasoning, logic, and applied word problems.
 - `Hebrew`: uses only Hebrew questions and uses the longer Hebrew writing-practice tail.
 
-Within math, the app uses both:
+Within math, the app uses:
 
 - input-answer questions
 - multiple-choice questions
+- interactive investigations such as Mystery rule lab
 
 ## Categories
 
 - `Math`
+  - Mystery rule lab (E06), levels 3–9: choose experiments to distinguish visible
+    candidate rules, with free exploration, evidence-based grading, and saved drafts.
+  - Build an example (E03), levels 2–10: construct any whole number satisfying the visible conditions;
+    progress from ranges and divisibility to bounded expressions and counterexamples. All valid
+    alternatives are accepted, feedback names unmet conditions, and review labels the reference as
+    “One example.” These appear sparingly in Math activities, outside the timed challenge, and
+    preserve unsubmitted answers when saving and resuming offline.
   - addition and subtraction, including negative numbers down to `-20`
   - multiplication tables up to `10x10`
   - division facts and missing-number equations
@@ -237,6 +245,16 @@ Within math, the app uses both:
 - `Computing`
   - precise instructions, algorithms, conditions, loops, variables / changing state, and Boolean logic
   - six balanced strands at every difficulty level from `1` to `10`
+  - Pixel codes: data representation activities at levels `2`–`7`, mixed sparingly into Computing
+    sessions (including focused Computing practice), outside the timed challenge
+  - Level `2`: decode a four-cell binary row; `3`: decode a 4×4 picture; `4`: encode a 4×4 picture;
+    `5`: decode a five-cell run-length row; `6`: decode a 4×4 run-length picture;
+    `7`: encode a 4×4 picture using run-length counts
+  - Pixel keys and examples stay visible. Read each row left to right, top row first. Run-length
+    counts always begin with empty, alternate empty/filled, and use a leading `0` for a filled start.
+    Tap or use keyboard controls, Undo, Clear row, and Check Answer. Unsubmitted cells/counts and
+    the highlighted row resume after closing the app; feedback and parent history record row codes
+    and identify the first mismatching cell. All Pixel codes content works offline.
 - `Financial Literacy`
   - saving, spending, needs vs wants, unit prices, delivered totals, multi-buy offers, and discounts
   - receipt and transaction checks, account fees, simple interest, and practical budgeting
@@ -417,3 +435,170 @@ Node.js 20 or newer is required for the command-line QA suite. No third-party pa
 
 Set `QA_SEED` to reproduce a randomized failure with a specific seed. GitHub Actions runs the same
 suite on every push and pull request.
+
+
+## Build the graph (E04)
+
+Charts and Graphs includes construction activities at levels 2–8. Children copy a
+source table into labelled bars using large +/− buttons; all controls also work
+with the keyboard. The current values, scale, and axis numbers remain visible.
+
+- Levels 2–3: three bars, values 0–8, one item per step.
+- Levels 4–5: three bars, fixed scales of two and five items per step.
+- Level 6: three bars and a choice of scales.
+- Levels 7–8: four/five horizontal bars and a choice of scales.
+
+Every scale that fits all values exactly into eight whole steps is accepted.
+Changing scale preserves step counts and changes the represented values. Undo
+and Reset allow corrections before Check; checking explains the first mismatch.
+Submitted graphs become read-only. Draft bars and scale survive Save & Exit,
+reload, and offline resume. Results include the table, the child's graph values,
+a reference graph, and feedback; a correct alternative earns full credit.
+
+Construction appears once per four chart activities, with at most two in a mixed
+session, and is excluded from the timed challenge. All assets are bundled for
+folder mode and cached for hosted offline use. `node --test app/scripts/qa_build_the_graph.js` checks generation, grading, review, session
+selection and checkpoint validation. The release browser matrix covers 320px
+layouts, controls, undo/reset, offline draft recovery, and submitted review.
+
+## Mystery rule lab (E06)
+
+Math includes short investigations at levels 3–9. The machine uses one of the
+visible candidate rules. Children choose inputs from 0–10, run up to three free
+tests, and select a rule consistent with the starting observation and their
+collected evidence. Each investigation counts as one activity; exploring has no
+score penalty.
+
+- Levels 3–4: two candidate arithmetic rules.
+- Levels 5–6: three candidates, including two-step rules.
+- Levels 7–9: four candidates; also select a test from the history that separated
+  possibilities still consistent immediately before that test, and explain why.
+
+For example, “add 2” and “multiply by 2” both send 2 to 4. Either is accepted if
+that is all the evidence collected. Testing 3 produces different predictions,
+5 and 6, so the observed result distinguishes them. Feedback identifies a
+contradictory row or explains why a chosen test was uninformative. No arbitrary
+rule text is evaluated.
+
+Candidate cards, input selection, and explanation controls support touch and
+keyboard use at 320px portrait width. Conclusions can be changed or cleared
+before Check; collected observations remain in the history and duplicate inputs
+do not consume another test. Draft inputs, tests, choices, and explanations
+survive Save & Exit, reload, and offline resume. Submitted labs are read-only;
+parent review records the evidence, conclusion, explanation, and feedback.
+
+Labs appear once per eight Math activities at eligible levels, capped at two in
+mixed sessions, and are excluded from the timed challenge. Scripts load directly
+from the folder and are cached for hosted offline use. Regression tests live in
+`app/scripts/qa_mystery_rule.js`; the release browser matrix covers ambiguous and
+wrong conclusions, the test budget, 320px layout, and offline recovery.
+
+## Keep the equation balanced (E07)
+
+Math and Algebra include equation construction at levels 3–9:
+
+- Level 3: a mystery box plus counters; level 4: equal groups of mystery boxes.
+- Levels 5–6: two-step equations, including subtraction at level 6.
+- Levels 7–9: unknowns on both sides, including negative intermediate coefficients.
+
+Choose an amount and apply addition, subtraction, multiplication, or division to
+both sides. Later levels also allow adding or subtracting x terms. Whole numbers,
+negative numbers, and exact fractions such as `3/2` are supported. For example,
+`2x + 3 = 11` can be solved by subtracting 3 then dividing by 2, or by dividing by
+2 then subtracting `3/2`. Either side may hold the isolated unknown.
+
+Legal detours preserve equality and never lower the score. Invalid operations,
+including division by zero and multiplication by zero (which loses the original
+solution), leave the equation unchanged and explain why. Check keeps unfinished
+work open; a valid isolated solution earns credit. Undo reverses individual moves.
+The activity stores up to 40 moves and bounds exact numerators/denominators to
+one million; limit messages distinguish these activity limits from mathematical errors.
+
+Draft amounts and moves survive reload, Save & Exit, and offline resume. Submitted
+work is read-only, and parent review includes every operation and intermediate
+equation. All scripts are bundled for folder mode and cached offline. Activities
+appear once per eight Math questions and once per four Algebra questions, capped
+at two combined in mixed sessions, and are excluded from timed challenges.
+
+`app/scripts/qa_equation_balance.js` checks alternate paths, generation, corrupt
+saved moves, checkpoint grading, and session inclusion. The release browser matrix
+checks 320px controls, boxes, fractions, undo, offline resume, and submitted review.
+
+## Shape architect (E08)
+
+Shape architect appears in normal **Math** and **Geometry** practice, outside
+speed challenges. Children fill a small grid to satisfy geometric constraints;
+any arrangement meeting all the requirements is accepted.
+
+- Levels 2–3: area and one connected shape on a 4×4 board.
+- Levels 4–5: add a target perimeter on the 4×4 board.
+- Levels 6–7: use a 5×5 board with symmetry across a marked vertical or horizontal
+  centre line, alongside area, perimeter, and connectivity.
+- Levels 8–9: also leave marked blocked cells empty.
+
+Connectivity means sharing an edge: touching corners alone does not connect
+squares. Area counts filled squares; perimeter counts exposed unit edges,
+including boundaries around holes. The marked symmetry line belongs to the
+board, so a symmetric shape shifted away from that line may not qualify.
+Every target is derived from an actual connected construction, and configuration
+validation checks that this example satisfies all the constraints.
+
+Tap cells or use keyboard buttons (Tab, Enter/Space, with arrow keys between
+neighbouring cells). Filled cells have a visible symbol and pressed state;
+blocked cells show ×. Undo restores the last square change, keeping the most
+recent 40 changes. Counts are revealed after **Check shape**, alongside feedback
+for each requirement. An empty board is not submitted; a nonempty board receives
+the usual single assessed result.
+
+Unfinished cells and Undo history survive pause/reload, including hosted offline
+reloads. Submitted boards are read-only and retain the learner's exact arrangement
+in review, history, and report data. A reference arrangement is labelled **One
+example**. Both new scripts load in folder mode and are precached for hosted
+offline use. Shape architect needs no network calls or additional dependencies.
+
+`node --test app/scripts/qa_shape_architect.js` checks geometry, alternative
+solutions, solvable generation, progression, session placement, corrupted saves,
+and history/report preservation. Browser smoke and release checks cover the grid,
+keyboard navigation, blocked squares, alternate and incorrect answers, offline
+resume and review, and 44px touch targets at a 320px portrait width.
+
+## Design the chance (E09)
+
+Design the chance appears in normal **Math** and **Probability** practice,
+outside speed challenges. Children fill bag slots or colour equal spinner
+sectors to create a requested probability. Every space must be filled, and
+all arrangements with the right counts are accepted.
+
+- Levels 1–2: certain and impossible outcomes in a six-slot, two-colour bag.
+- Level 3: halves and thirds in the same six-slot bag.
+- Level 4: other achievable fractions, including sixths.
+- Level 5: bags and equal-sector spinners with 4, 6, or 8 spaces.
+- Levels 6–7: three colours and two simultaneous probability conditions.
+- Levels 8–9: choose a feasible total from 4, 6, 8, or 12 spaces and satisfy
+  both conditions. More than one total may work.
+
+Choose a labelled colour/symbol, then tap a numbered space. Blue circles,
+orange triangles, and purple stars remain distinguishable without colour.
+Spinner numbers correspond to large sector buttons below the diagram. All
+controls support Tab and Enter/Space; arrow keys move between space buttons.
+Erase empties a space; Undo restores up to 40 changes, including total changes.
+Changing the total clears the design and can be undone.
+
+Each counter or equal sector is explicitly equally likely. **Check chance**
+uses exact integer cross-multiplication, so equivalent fractions and different
+arrangements pass. Incomplete designs are not graded. Completed designs receive
+the usual single assessed result and exact count/total feedback for each target.
+No random draws determine correctness. Configuration validation proves that at
+least one allowed total can satisfy every target with whole-number counts.
+
+Partial designs, their chosen total, and Undo history survive pause/reload,
+including hosted offline reloads. Submitted work is read-only in review and
+retains the learner's exact arrangement in history and report data. The reference
+answer is labelled **One possible design**. The model and renderer load in folder
+mode and are precached for offline use, with no new dependencies or network calls.
+
+`node --test app/scripts/qa_design_chance.js` covers exact grading, alternative
+arrangements/totals, solvability, progression, session placement, malformed saves,
+and history/report preservation. Browser smoke and release checks cover bags,
+spinners, keyboard navigation, erase/undo, total changes, correct and incorrect
+answers, offline resume/review, and 44px touch targets at a 320px portrait width.

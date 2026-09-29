@@ -144,7 +144,7 @@
       }
 
       function answerCurrentQuestion(frame) {
-        const { api, doc } = frameParts(frame);
+        const { api, doc, win } = frameParts(frame);
         const round = api.state.currentRound === "speed" ? api.state.speedRound : api.state;
         const question = round.questions[round.currentIndex];
         assert(question, `missing ${api.state.currentRound} question ${round.currentIndex + 1}`);
@@ -161,7 +161,81 @@
         } else if (question.mode === "practice") {
           click(doc, "#choices-area .practice-button", "practice completion");
         } else if (question.mode === "interactive") {
-          if (question.interactive?.layout === "command-sequence") {
+          if (question.interactive?.layout === "design-chance") {
+            const cells = win.HomeworkDesignChance.solution(question.interactive);
+            if (question.interactive.totals.length > 1) {
+              click(doc, `.design-chance-totals [data-total="${cells.length}"]`, 'choose total');
+            }
+            [...cells].forEach((code,i) => {
+              click(doc, `.design-chance-swatch[data-colour="${code}"]`, 'choose colour');
+              click(doc, `.design-chance-cell[data-cell="${i}"]`, 'fill chance space');
+            });
+            click(doc, '.interactive-check-button', 'check chance');
+            return;
+          }
+          if (question.interactive?.layout === "shape-architect") {
+            [...question.interactive.example].forEach((v,i) => {
+              if (v === '1') click(doc, `.shape-architect-cell[data-cell="${i}"]`, 'fill shape');
+            });
+            click(doc, '.interactive-check-button', 'check shape');
+            return;
+          }
+          if (question.interactive?.layout === "equation-balance") {
+            const c = question.interactive;
+            for (const [op,value] of [['subtract-x',c.right.a],['subtract',c.left.b],['divide',c.left.a-c.right.a]]) {
+              if (!value || (op === 'divide' && value === 1)) continue;
+              const input = doc.querySelector('.equation-balance-amount');
+              input.value = String(value);
+              input.dispatchEvent(new win.Event('input',{bubbles:true}));
+              click(doc, `.equation-balance-operation[data-operation="${op}"]`, "balance equation");
+            }
+            click(doc, ".interactive-check-button", "check equation");
+            return;
+          }
+          if (question.interactive?.layout === "mystery-rule") {
+            const config = question.interactive;
+            const select = doc.querySelector('.mystery-rule-input');
+            select.value = String(config.initialInput === 0 ? 1 : 0);
+            select.dispatchEvent(new win.Event('change', {bubbles:true}));
+            click(doc, '.mystery-rule-test', 'test rule');
+            click(doc, `.mystery-rule-card[data-rule="${config.hidden}"]`, 'select rule');
+            if (config.requireReason) {
+              for (const [selector,value] of [['.mystery-rule-evidence','0'],['.mystery-rule-reason','different']]) {
+                const control = doc.querySelector(selector);
+                control.value = value;
+                control.dispatchEvent(new win.Event('change', {bubbles:true}));
+              }
+            }
+            click(doc, '.interactive-check-button', 'check rule');
+            return;
+          }
+          if (question.interactive?.layout === "build-graph") {
+            const config = question.interactive;
+            const scale = config.scales.find(value => config.values.every(count => count % value === 0 && count / value <= config.maxSteps));
+            click(doc, '.build-graph-reset', 'reset graph');
+            const select = doc.querySelector('.build-graph-scale');
+            if (select) { select.value = String(scale); select.dispatchEvent(new win.Event('change', {bubbles:true})); }
+            config.values.forEach((value, index) => {
+              for (let step = 0; step < value / scale; step++) click(doc, `.build-graph-increase[data-index="${index}"]`, 'build bar');
+            });
+            click(doc, '.interactive-check-button', 'check graph');
+            return;
+          }
+          if (question.interactive?.layout === "pixel-code") {
+            const config = question.interactive;
+            if (config.variant === "runs-encode") {
+              const inputs = doc.querySelectorAll(".pixel-run-input");
+              win.HomeworkPixelCodes.rowsOf(config).forEach((bits, row) => {
+                inputs[row].value = win.HomeworkPixelCodes.encodeRuns(bits).join(", ");
+                inputs[row].dispatchEvent(new win.Event("input", { bubbles: true }));
+              });
+            } else {
+              config.target.forEach((bit, index) => {
+                const cell = doc.querySelector(`.pixel-cell[data-index="${index}"]`);
+                if ((cell.getAttribute("aria-pressed") === "true") !== Boolean(bit)) cell.click();
+              });
+            }
+          } else if (question.interactive?.layout === "command-sequence") {
             (question.interactive.answerSequence || []).forEach((command) => {
               click(
                 doc,
@@ -416,6 +490,447 @@
         resumeFrame.remove();
       }
 
+      async function runDesignChanceMatrix() {
+        let frame = await loadApp(320, 'design-chance');
+        let {api,doc,win} = frameParts(frame);
+        click(doc,'[data-user-id="guest"]','chance guest');
+        click(doc,'[data-session-preset="math-heavy"]','chance session');
+        click(doc,'[data-question-count="5"]','chance count');
+        change(doc.getElementById('speed-challenge-enabled'),false);
+        submit(doc);
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'chance start');
+        const install = config => {
+          const entry = win.HomeworkDesignChance.createEntry(3);
+          entry.interactive = config;
+          entry.extraText = entry.reviewText = win.HomeworkDesignChance.requirements(config).join('; ');
+          entry.answer = entry.answerLabel = 'One possible design: ' + win.HomeworkDesignChance.describe(config,win.HomeworkDesignChance.solution(config));
+          api.state.pendingAnswer = null;
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry,'probability-choice'),'probability-choice');
+          win.renderCurrentQuestion();
+        };
+        const cell = i => doc.querySelector(`.design-chance-cell[data-cell="${i}"]`);
+        const paint = (code,indices) => {
+          click(doc,`.design-chance-swatch[data-colour="${code}"]`,'select symbol');
+          indices.forEach(i=>click(doc,cell(i),'paint space'));
+        };
+        const config = {layout:'design-chance',kind:'bag',colours:['blue','orange'],totals:[6],conditions:[{colour:'blue',numerator:1,denominator:3}]};
+        install(config);
+        click(doc,'.interactive-check-button','empty bag');
+        assert(api.state.answeredCount===0,'empty bag was graded');
+        paint('b',[0,2]);
+        click(doc,'.interactive-check-button','unfinished bag');
+        assert(api.state.answeredCount===0,'unfinished bag was graded');
+        assert(!/2\/6/.test(doc.querySelector('.design-chance-status').textContent),'probability revealed before complete check');
+        cell(0).focus();
+        cell(0).dispatchEvent(new win.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+        assert(doc.activeElement===cell(1),'chance arrow navigation failed');
+        assert(cell(0).getAttribute('aria-label').includes('Blue circle'),'slot accessible colour and symbol missing');
+        paint('.',[2]);
+        assert(cell(2).dataset.value==='.' ,'eraser failed');
+        click(doc,'.design-chance-undo','undo erase');
+        assert(cell(2).dataset.value==='b','undo erase failed');
+        click(doc,'#pause-session-button','pause chance');
+        frame.remove();
+        await qaPost('/__qa/mode','offline');
+        frame=await loadApp(320,'offline-design-chance');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume chance');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'chance resume');
+        assert(cell(0).dataset.value==='b' && cell(2).dataset.value==='b','offline colours lost');
+        click(doc,'.design-chance-undo','undo after offline reload');
+        assert(cell(2).dataset.value==='.' ,'offline undo lost');
+        paint('b',[2]);
+        paint('o',[1,3,4,5]);
+        click(doc,'.interactive-check-button','check alternative arrangement');
+        assert(api.state.answerResults[0]===true,'alternative arrangement rejected');
+        assert(api.state.sessionRecords[0].chosenAnswer.includes('Blue circle, Orange triangle, Blue circle'),'review replaced actual arrangement');
+        assert(!doc.querySelector('.design-chance-question button:not(:disabled)'),'submitted design editable');
+        click(doc,'#pause-session-button','pause chance review');
+        frame.remove();
+        frame=await loadApp(320,'offline-chance-review');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume chance review');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'chance review resume');
+        assert(cell(0).dataset.value==='b' && cell(1).dataset.value==='o' && cell(2).dataset.value==='b','submitted design lost');
+        assert(!doc.querySelector('.design-chance-question button:not(:disabled)'),'restored review editable');
+        await qaPost('/__qa/mode','online');
+        click(doc,'#feedback-continue-button','wrong chance');
+        install(config);
+        paint('b',[0,1,2]);paint('o',[3,4,5]);
+        click(doc,'.interactive-check-button','check wrong chance');
+        assert(api.state.answerResults[1]===false,'wrong probability accepted');
+        assert(/3\/6/.test(doc.querySelector('.design-chance-status').textContent),'exact feedback missing');
+        click(doc,'#feedback-continue-button','advanced chance');
+        install({...config,kind:'spinner',colours:['blue','orange','purple'],totals:[4,6,8,12],conditions:[{colour:'blue',numerator:1,denominator:2},{colour:'orange',numerator:1,denominator:3}]});
+        paint('p',[0]);
+        const unchangedTotalTokens = JSON.stringify(api.state.pendingAnswer.tokens);
+        click(doc,'.design-chance-totals [data-total="4"]','select unchanged total');
+        assert(cell(0).dataset.value==='p' && JSON.stringify(api.state.pendingAnswer.tokens)===unchangedTotalTokens,'unchanged total erased the design or changed undo');
+        click(doc,'.design-chance-totals [data-total="6"]','resize');
+        assert(doc.querySelectorAll('.design-chance-cell').length===6 && cell(0).dataset.value==='.' ,'resize failed');
+        click(doc,'.design-chance-undo','undo resize');
+        assert(doc.querySelectorAll('.design-chance-cell').length===4 && cell(0).dataset.value==='p','undo resize lost construction');
+        click(doc,'.design-chance-totals [data-total="12"]','choose alternate feasible total');
+        paint('b',[0,1,2,3,4,5]);paint('o',[6,7,8,9]);paint('p',[10,11]);
+        assert(doc.querySelectorAll('.design-chance-spinner path').length===12,'equal sectors missing');
+        assertNoHorizontalOverflow(frame,'320px chance');
+        for(const el of doc.querySelectorAll('.design-chance-question button')) {
+          const rect=el.getBoundingClientRect();
+          assert(rect.width>=44 && rect.height>=44,'chance target smaller than 44px');
+        }
+        click(doc,'.interactive-check-button','check advanced chance');
+        assert(api.state.answerResults[2]===true,'alternate total or simultaneous targets rejected');
+        click(doc,'#pause-session-button','exit chance matrix');
+        click(doc,'#discard-session-button','discard chance matrix');
+        frame.remove();
+      }
+
+      async function runShapeArchitectMatrix() {
+        let frame = await loadApp(320, 'shape-architect');
+        let {api,doc,win} = frameParts(frame);
+        click(doc,'[data-user-id="guest"]','shape guest');
+        click(doc,'[data-session-preset="math-heavy"]','shape session');
+        click(doc,'[data-question-count="5"]','shape count');
+        change(doc.getElementById('speed-challenge-enabled'),false);
+        submit(doc);
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'shape start');
+        const install = (level,config) => {
+          const entry = win.HomeworkShapeArchitect.createEntry(level);
+          if (config) {
+            entry.interactive = config;
+            entry.extraText = entry.reviewText = 'Area 6 square units; perimeter 10 units; one connected shape.';
+            entry.answer = entry.answerLabel = 'One example: ' + win.HomeworkShapeArchitect.describe(config,config.example);
+          }
+          api.state.pendingAnswer = null;
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry,'geometry-choice'),'geometry-choice');
+          win.renderCurrentQuestion();
+          return entry.interactive;
+        };
+        const cell = i => doc.querySelector(`.shape-architect-cell[data-cell="${i}"]`);
+        const fill = indices => indices.forEach(i=>click(doc,cell(i),'fill shape cell'));
+        const config = {layout:'shape-architect',size:4,area:6,perimeter:10,symmetry:null,blocked:[],example:'1110111000000000'};
+        install(4,config);
+        click(doc,'.interactive-check-button','empty shape');
+        assert(api.state.answeredCount===0,'empty shape was graded');
+        fill([0,1]);
+        assert(!/Area: 2|Perimeter: 6/.test(doc.querySelector('.shape-architect-status').textContent),'live totals leaked before Check');
+        cell(0).focus();
+        cell(0).dispatchEvent(new win.KeyboardEvent('keydown',{key:'ArrowRight',bubbles:true}));
+        assert(doc.activeElement===cell(1),'arrow navigation failed');
+        assert(cell(1).getAttribute('aria-pressed')==='true','filled cell missing accessible state');
+        click(doc,'.shape-architect-undo','undo square');
+        assert(cell(1).getAttribute('aria-pressed')==='false','undo did not empty square');
+        fill([1]);
+        click(doc,'#pause-session-button','pause shape');
+        frame.remove();
+        await qaPost('/__qa/mode','offline');
+        frame=await loadApp(320,'offline-shape-architect');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume shape');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'shape resume');
+        assert(cell(0).getAttribute('aria-pressed')==='true' && cell(1).getAttribute('aria-pressed')==='true','offline board lost');
+        click(doc,'.shape-architect-undo','undo after reload');
+        assert(cell(1).getAttribute('aria-pressed')==='false','offline undo lost');
+        fill([1,4,5,8,9]);
+        click(doc,'.interactive-check-button','alternate shape');
+        assert(api.state.answerResults[0]===true,'alternate shape rejected');
+        assert(api.state.sessionRecords[0].chosenAnswer.includes('1100 / 1100 / 1100 / 0000'),'review replaced learner shape');
+        assert(!doc.querySelector('.shape-architect-question button:not(:disabled)'),'submitted board editable');
+        click(doc,'#pause-session-button','pause shape review');
+        frame.remove();
+        frame=await loadApp(320,'offline-shape-review');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume shape review');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'shape review resume');
+        assert(doc.querySelectorAll('.shape-architect-cell[aria-pressed="true"]').length===6,'submitted board lost');
+        assert(!doc.querySelector('.shape-architect-question button:not(:disabled)'),'restored board editable');
+        await qaPost('/__qa/mode','online');
+        click(doc,'#feedback-continue-button','incorrect shape');
+        install(4,config);
+        fill([0,1,2,8,9,10]);
+        click(doc,'.interactive-check-button','check disconnected shape');
+        assert(api.state.answerResults[1]===false,'disconnected shape accepted');
+        assert(/2 connected components/.test(doc.querySelector('.shape-architect-status').textContent),'connectivity diagnostic missing');
+        click(doc,'#feedback-continue-button','advanced shape');
+        const advanced=install(9);
+        assert(doc.querySelector(`.shape-symmetry-${advanced.symmetry}`),'symmetry line missing');
+        for(const i of advanced.blocked) {
+          assert(cell(i).disabled && cell(i).textContent==='×','blocked cell not distinguished');
+          cell(i).click();
+          assert(cell(i).getAttribute('aria-pressed')==='false','blocked cell filled');
+        }
+        assertNoHorizontalOverflow(frame,'320px shape');
+        for(const el of doc.querySelectorAll('.shape-architect-question button')) {
+          const rect=el.getBoundingClientRect();
+          assert(rect.width>=44 && rect.height>=44,'shape target smaller than 44px');
+        }
+        fill([...advanced.example].flatMap((v,i)=>v==='1'?[i]:[]));
+        click(doc,'.interactive-check-button','check advanced shape');
+        assert(api.state.answerResults[2]===true,'advanced shape rejected');
+        click(doc,'#pause-session-button','exit shape matrix');
+        click(doc,'#discard-session-button','discard shape matrix');
+        frame.remove();
+      }
+
+      async function runEquationBalanceMatrix() {
+        let frame = await loadApp(320, 'equation-balance');
+        let {api,doc,win} = frameParts(frame);
+        click(doc,'[data-user-id="guest"]','equation guest');
+        click(doc,'[data-session-preset="math-heavy"]','equation session');
+        click(doc,'[data-question-count="5"]','equation count');
+        change(doc.getElementById('speed-challenge-enabled'),false);
+        submit(doc);
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'equation start');
+        const install = (level,config) => {
+          const entry = win.HomeworkEquationBalance.createEntry(level);
+          entry.interactive = config;
+          entry.reviewText = 'Starting equation: ' + win.HomeworkEquationBalance.formatEquation(win.HomeworkEquationBalance.replay(config,[]).equation);
+          entry.answer = entry.answerLabel = 'x = 4';
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry,'algebra-choice'),'algebra-choice');
+          win.renderCurrentQuestion();
+        };
+        const amount = value => {
+          const input = doc.querySelector('.equation-balance-amount');
+          input.value = String(value);
+          input.dispatchEvent(new win.Event('input',{bubbles:true}));
+        };
+        const operate = (op,value) => {
+          amount(value);
+          click(doc,`.equation-balance-operation[data-operation="${op}"]`,'equation '+op);
+        };
+        const equation = () => doc.querySelector('.equation-balance-current').textContent;
+        const config = {layout:'equation-balance',left:{a:2,b:3},right:{a:0,b:11},visual:false};
+        install(5,config);
+        click(doc,'.interactive-check-button','incomplete equation');
+        assert(api.state.answeredCount===0,'unfinished equation graded');
+        operate('divide',0);
+        assert(equation()==='2x + 3 = 11','invalid division changed equation');
+        assert(/zero/.test(doc.querySelector('.equation-balance-status').textContent),'invalid move not explained');
+        operate('add',5);
+        assert(equation()==='2x + 8 = 16','legal detour rejected');
+        assert(/legal/.test(doc.querySelector('.equation-balance-status').textContent),'legal detour not distinguished');
+        assert(api.state.answeredCount===0 && api.state.correctCount===0,'exploration changed score');
+        click(doc,'.equation-balance-undo','undo detour');
+        assert(equation()==='2x + 3 = 11','undo did not restore equation');
+        operate('divide',2);
+        assert(equation()==='x + 3/2 = 11/2','divide-first fractions incorrect');
+        amount('3/');
+        assertNoHorizontalOverflow(frame,'320px equation');
+        for (const el of doc.querySelectorAll('.equation-balance-question button, .equation-balance-question input')) {
+          const rect=el.getBoundingClientRect();
+          assert(rect.width>=44 && rect.height>=44,'equation control is smaller than 44px');
+        }
+        click(doc,'#pause-session-button','pause equation');
+        frame.remove();
+        await qaPost('/__qa/mode','offline');
+        frame=await loadApp(320,'offline-equation-balance');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume equation');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'equation resume');
+        assert(equation()==='x + 3/2 = 11/2','offline equation draft lost');
+        assert(doc.querySelector('.equation-balance-amount').value==='3/','unfinished amount lost');
+        assert(doc.querySelectorAll('.equation-balance-history li').length===2,'move history lost');
+        click(doc,'.equation-balance-undo','undo after reload');
+        assert(equation()==='2x + 3 = 11','resumed move cannot be undone');
+        operate('divide',2);
+        operate('subtract','3/2');
+        click(doc,'.interactive-check-button','check alternate solution');
+        assert(api.state.answerResults[0]===true,'alternate solution rejected');
+        assert(api.state.sessionRecords[0].chosenAnswer.includes('x + 3/2 = 11/2'),'parent review lost intermediate steps');
+        assert(api.state.sessionRecords[0].selectedTokens.length===1,'review lost move tokens');
+        assert(doc.querySelectorAll('.equation-balance-question button:not(:disabled), .equation-balance-question input:not(:disabled)').length===0,'submitted solution editable');
+        click(doc,'#pause-session-button','pause submitted equation');
+        frame.remove();
+        frame=await loadApp(320,'offline-equation-review');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume submitted equation');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'equation review resume');
+        assert(doc.querySelectorAll('.equation-balance-history li').length===3,'submitted equation history lost');
+        assert(doc.querySelector('.equation-balance-amount').disabled,'resumed submitted equation editable');
+        await qaPost('/__qa/mode','online');
+        click(doc,'#feedback-continue-button','both-sides equation');
+        install(7,{...config,left:{a:3,b:2},right:{a:1,b:10}});
+        operate('subtract-x',3);
+        operate('subtract',10);
+        operate('divide',-2);
+        assert(equation()==='4 = x','reversed solution not supported');
+        click(doc,'.interactive-check-button','check reversed solution');
+        assert(api.state.answerResults[1]===true,'reversed solution rejected');
+        click(doc,'#feedback-continue-button','boxes equation');
+        install(3,{...config,left:{a:1,b:3},right:{a:0,b:7},visual:true});
+        assert(doc.querySelectorAll('.equation-balance-box').length===1,'mystery box missing');
+        assert(doc.querySelectorAll('.equation-balance-counter').length===10,'counter representation incorrect');
+        assertNoHorizontalOverflow(frame,'320px boxes');
+        operate('subtract',3);
+        assert(equation()==='□ = 4','box solution incorrect');
+        click(doc,'.interactive-check-button','check box solution');
+        assert(api.state.answerResults[2]===true,'box solution rejected');
+        click(doc,'#pause-session-button','exit equation matrix');
+        click(doc,'#discard-session-button','discard equation matrix');
+        frame.remove();
+      }
+
+      async function runMysteryRuleMatrix() {
+        let frame = await loadApp(320, "mystery-rule");
+        let {api, doc, win} = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', 'lab guest');
+        click(doc, '[data-session-preset="math-heavy"]', 'lab session');
+        click(doc, '[data-question-count="5"]', 'lab count');
+        change(doc.getElementById('speed-challenge-enabled'), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'lab start');
+        const install = level => {
+          const entry = win.HomeworkMysteryRule.createEntry(level);
+          entry.interactive = {layout:'mystery-rule',rules:[{a:1,b:2},{a:2,b:0}],hidden:0,min:0,max:10,initialInput:2,maxTests:3,requireReason:level>=7};
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry,'math-choice'),'math-choice');
+          win.renderCurrentQuestion();
+        };
+        const choose = (selector,value) => {
+          const el = doc.querySelector(selector);
+          el.value=String(value);
+          el.dispatchEvent(new win.Event('change',{bubbles:true}));
+        };
+        install(3);
+        click(doc,'.interactive-check-button','incomplete lab');
+        assert(api.state.answeredCount===0,'incomplete lab was graded');
+        click(doc,'.mystery-rule-test','ambiguous test');
+        assert(api.state.answeredCount===0 && api.state.correctCount===0,'exploration changed score');
+        assert(doc.querySelector('.mystery-rule-test').disabled,'duplicate test is enabled');
+        click(doc,'.mystery-rule-card[data-rule="1"]','equivalent rule');
+        assertNoHorizontalOverflow(frame,'320px lab');
+        for (const el of doc.querySelectorAll('.mystery-rule-question button, .mystery-rule-question select')) {
+          const rect=el.getBoundingClientRect();
+          assert(rect.width>=44 && rect.height>=44,'lab control is smaller than 44px');
+        }
+        click(doc,'#pause-session-button','pause lab');
+        frame.remove();
+        await qaPost('/__qa/mode','offline');
+        frame=await loadApp(320,'offline-mystery-rule');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume lab');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'lab resume');
+        const draft=JSON.parse(api.state.pendingAnswer.tokens[0]);
+        assert(draft.tests.join(',')==='2' && draft.choice===1,'lab draft lost evidence or conclusion');
+        assert(doc.querySelectorAll('.mystery-rule-history tbody tr').length===2,'lab history not restored');
+        click(doc,'.interactive-check-button','check equivalent rule offline');
+        assert(api.state.answerResults[0]===true,'observationally equivalent rule rejected');
+        assert(api.state.sessionRecords[0].chosenAnswer.includes('2 → 4'),'unreadable lab history');
+        assert(!api.state.sessionRecords[0].reviewHtml.includes('Correct answer:'),'valid alternative shown as mistake');
+        assert(doc.querySelectorAll('.mystery-rule-question button:not(:disabled), .mystery-rule-question select:not(:disabled)').length===0,'submitted lab editable');
+        await qaPost('/__qa/mode','online');
+        click(doc,'#feedback-continue-button','next lab');
+        install(7);
+        for (const x of [2,3,4]) { choose('.mystery-rule-input',x); click(doc,'.mystery-rule-test','collect evidence'); }
+        choose('.mystery-rule-input',5);
+        assert(doc.querySelector('.mystery-rule-test').disabled,'fourth test enabled');
+        click(doc,'.mystery-rule-card[data-rule="1"]','select contradicted rule');
+        click(doc,'.mystery-rule-clear','revise conclusion');
+        assert(JSON.parse(api.state.pendingAnswer.tokens[0]).tests.length===3,'clearing conclusion erased evidence');
+        click(doc,'.mystery-rule-card[data-rule="0"]','select fitting rule');
+        choose('.mystery-rule-evidence',1);
+        choose('.mystery-rule-reason','different');
+        assertNoHorizontalOverflow(frame,'320px advanced lab');
+        click(doc,'#pause-session-button','save explanation');
+        frame.remove();
+        frame=await loadApp(320,'resume-lab-explanation');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume explanation');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'explanation resume');
+        assert(doc.querySelector('.mystery-rule-evidence').value==='1' && doc.querySelector('.mystery-rule-reason').value==='different','explanation lost');
+        click(doc,'.interactive-check-button','check explained rule');
+        assert(api.state.answerResults[1]===true,'correct informative explanation rejected');
+        assert(api.state.sessionRecords[1].chosenAnswer.includes('3 → 5'),'explanation missing from history');
+        click(doc,'#feedback-continue-button','wrong lab');
+        install(3);
+        choose('.mystery-rule-input',3);
+        click(doc,'.mystery-rule-test','distinguish rules');
+        click(doc,'.mystery-rule-card[data-rule="1"]','wrong conclusion');
+        click(doc,'.interactive-check-button','check wrong rule');
+        assert(api.state.answerResults[2]===false,'contradicted rule accepted');
+        assert(/predicts 6.*gave 5/.test(api.state.sessionRecords[2].explanation),'missing specific mismatch feedback');
+        click(doc,'#pause-session-button','exit lab matrix');
+        click(doc,'#discard-session-button','discard lab matrix');
+        frame.remove();
+      }
+
+      async function runBuildGraphMatrix() {
+        let frame = await loadApp(320, "build-graph");
+        let { api, doc, win } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "graph guest");
+        click(doc, '[data-session-preset="math-heavy"]', "graph session");
+        click(doc, '[data-question-count="5"]', "graph count");
+        change(doc.getElementById("speed-challenge-enabled"), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "graph start");
+        const entry = win.HomeworkBuildGraph.createEntry(6);
+        entry.interactive = {layout:"build-graph", title:"Fruit votes", unit:"votes", labels:["Apples","Bananas","Pears"], values:[0,4,8], scales:[1,2,3,4], maxSteps:8, orientation:"vertical"};
+        api.state.questions[0] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry, "charts-and-graphs-choice"), "charts-and-graphs-choice");
+        win.renderCurrentQuestion();
+        assert(doc.querySelector(".build-graph-source"), "graph source table missing");
+        const assertGraphAxis = orientation => {
+          const ticks = [...doc.querySelectorAll('.build-graph-tick')];
+          const track = doc.querySelector('.build-graph-track').getBoundingClientRect();
+          ticks.forEach((tick, index) => {
+            const rect = tick.getBoundingClientRect();
+            const fraction = index / (ticks.length - 1);
+            const position = orientation === 'vertical' ? (rect.top + rect.bottom) / 2 : (rect.left + rect.right) / 2;
+            const expected = orientation === 'vertical' ? track.bottom - 2 - fraction * (track.height - 3) : track.left + 1 + fraction * (track.width - 2);
+            assert(Math.abs(position - expected) <= 1, `${orientation} graph tick ${index} does not align with bars: ${position} vs ${expected}`);
+          });
+        };
+        assertGraphAxis('vertical');
+        const increase = index => click(doc, `.build-graph-increase[data-index="${index}"]`, "increase bar");
+        increase(1);
+        assert(api.state.pendingAnswer.tokens.join(",") === "1,0,1,0", "bar edit was not checkpointed");
+        const scale = doc.querySelector(".build-graph-scale");
+        scale.value = "2";
+        scale.dispatchEvent(new win.Event("change", {bubbles:true}));
+        assert(text(doc.querySelector('[data-bar-value="1"]')).includes("2 votes"), "scale did not update represented value");
+        click(doc, ".build-graph-undo", "undo scale");
+        assert(scale.value === "1", "undo failed to restore scale");
+        click(doc, ".build-graph-reset", "reset graph");
+        assert(api.state.pendingAnswer.tokens.join(",") === "1,0,0,0", "reset did not clear bars");
+        click(doc, ".build-graph-undo", "undo reset");
+        assert(api.state.pendingAnswer.tokens.join(",") === "1,0,1,0", "reset is not reversible");
+        scale.value = "2";
+        scale.dispatchEvent(new win.Event("change", {bubbles:true}));
+        increase(1);
+        for (let i = 0; i < 4; i++) increase(2);
+        assertNoHorizontalOverflow(frame, "320px graph");
+        for (const button of doc.querySelectorAll('.build-graph-question button')) {
+          const rect = button.getBoundingClientRect();
+          assert(rect.width >= 44 && rect.height >= 44, "graph button is smaller than 44px");
+        }
+        click(doc, "#pause-session-button", "save graph");
+        frame.remove();
+        await qaPost("/__qa/mode", "offline");
+        frame = await loadApp(320, "resume-graph");
+        ({api, doc, win} = frameParts(frame));
+        click(doc, "#resume-session-button", "resume graph");
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "graph resume");
+        await qaPost("/__qa/mode", "online");
+        assert(api.state.pendingAnswer.tokens.join(",") === "2,0,2,4", "graph draft lost scale or steps");
+        assert(api.state.answeredCount === 0, "graph draft was graded");
+        click(doc, ".interactive-check-button", "check alternate scale");
+        assert(api.state.answerResults[0] === true, "valid alternate scale rejected");
+        assert(api.state.sessionRecords[0].chosenAnswer.includes("Bananas: 4 votes"), "graph history is unreadable");
+        assert(!api.state.sessionRecords[0].reviewHtml.includes("Correct answer:"), "valid alternate marked as needing correction");
+        assert(doc.querySelectorAll('.build-graph-question button:not(:disabled)').length === 0, "submitted graph can be edited");
+        assert(doc.querySelector('.build-graph-scale').disabled, "submitted scale can be edited");
+        click(doc, "#feedback-continue-button", "continue graph");
+        api.state.questions[1] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(win.HomeworkBuildGraph.createEntry(8), "charts-and-graphs-choice"), "charts-and-graphs-choice");
+        win.renderCurrentQuestion();
+        assert(doc.querySelector('.build-graph-chart.horizontal'), "five categories need horizontal bars");
+        assertNoHorizontalOverflow(frame, "320px horizontal graph");
+        assertGraphAxis("horizontal");
+        click(doc, ".interactive-check-button", "check wrong graph");
+        assert(api.state.answerResults[1] === false, "empty graph unexpectedly correct");
+        assert(/shows|scale/.test(api.state.sessionRecords[1].explanation), "graph history lacks mismatch feedback");
+        click(doc, "#pause-session-button", "exit graph matrix");
+        click(doc, "#discard-session-button", "discard graph matrix");
+        frame.remove();
+      }
+
       async function runDraftRecoveryMatrix() {
         let frame = await loadApp(375, "draft-recovery");
         let { api, doc, win } = frameParts(frame);
@@ -494,6 +1009,171 @@
         frame.remove();
       }
 
+      async function runPixelCodesMatrix() {
+        let frame = await loadApp(320, "pixel-codes");
+        let { api, doc, win } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "pixel guest");
+        click(doc, '[data-question-count="5"]', "pixel five questions");
+        change(doc.getElementById("speed-challenge-enabled"), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "pixel session did not start");
+        const loadPixel = (level) => {
+          api.state.currentIndex = 0;
+          api.state.viewIndex = 0;
+          api.state.answeredCount = 0;
+          api.state.correctCount = 0;
+          api.state.answerResults = [];
+          api.state.answerSelections = [];
+          api.state.sessionRecords = [];
+          api.state.pendingAnswer = null;
+          api.state.awaitingContinue = false;
+          const entry = win.HomeworkPixelCodes.createEntry(level);
+          api.state.questions[0] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry, "computing-choice"), "computing-choice");
+          win.renderCurrentQuestion();
+          return api.state.questions[0];
+        };
+        for (const level of [2, 3, 4, 5, 6, 7]) {
+          const question = loadPixel(level);
+          assert(doc.querySelector(".pixel-key"), "pixel key is missing");
+          assertNoHorizontalOverflow(frame, `pixel level ${level}`);
+          const board = doc.querySelector(".pixel-question");
+          assert(win.getComputedStyle(board).direction === "ltr", "pixel reading order changed");
+          for (const control of board.querySelectorAll("button, input")) {
+            const rect = control.getBoundingClientRect();
+            assert(rect.width >= 44 && rect.height >= 44, `pixel control too small: ${control.textContent}`);
+          }
+          if ([3, 4, 6].includes(level)) {
+            const firstRowCell = doc.querySelector('.pixel-cell[data-index="0"]').getBoundingClientRect();
+            const secondRowCell = doc.querySelector('.pixel-cell[data-index="4"]').getBoundingClientRect();
+            assert(secondRowCell.top - firstRowCell.bottom <= 4, "picture rows must form one compact board");
+            assert(Math.abs(firstRowCell.width - firstRowCell.height) <= 1, "pixels must stay square");
+          }
+          if (level === 7) {
+            click(doc, ".pixel-check", "incomplete runs");
+            assert(api.state.answeredCount === 0, "incomplete runs were graded");
+            const inputs = [...doc.querySelectorAll(".pixel-run-input")];
+            win.HomeworkPixelCodes.rowsOf(question.interactive).forEach((bits, row) => {
+              inputs[row].value = win.HomeworkPixelCodes.encodeRuns(bits).join(" ");
+              inputs[row].dispatchEvent(new win.Event("input", { bubbles: true }));
+            });
+          } else {
+            question.interactive.target.forEach((bit, index) => {
+              if (bit) click(doc, `.pixel-cell[data-index="${index}"]`, "fill pixel");
+            });
+            const first = doc.querySelector('.pixel-cell[data-index="0"]');
+            const before = first.getAttribute("aria-pressed");
+            first.focus();
+            first.dispatchEvent(new win.KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }));
+            assert(doc.activeElement.dataset.index === "1", "pixel arrow navigation failed");
+            first.click();
+            click(doc, ".pixel-undo", "undo pixel");
+            assert(first.getAttribute("aria-pressed") === before, "undo lost pixel state");
+          }
+          click(doc, ".pixel-check", "grade pixel");
+          assert(api.state.correctCount === 1, `pixel level ${level} marked correct work wrong`);
+          assert(api.state.awaitingContinue, "pixel explanation was skipped");
+          assert(api.state.sessionRecords[0].chosenAnswer.includes("Row 1:"), "pixel answer is unreadable in history");
+          assert([...doc.querySelectorAll(".pixel-cell, .pixel-run-input")].every((control) => control.disabled), "submitted pixels remain editable");
+          assertNoHorizontalOverflow(frame, `pixel level ${level} feedback`);
+        }
+        // Wrong answers must identify a position, not just the number of filled cells.
+        const wrong = loadPixel(3);
+        wrong.interactive.target.forEach((bit, index) => {
+          if (index === 0 ? !bit : bit) click(doc, `.pixel-cell[data-index="${index}"]`, "wrong picture");
+        });
+        click(doc, ".pixel-check", "grade wrong picture");
+        assert(api.state.correctCount === 0 && api.state.answeredCount === 1, "wrong picture scoring failed");
+        assert(/row 1, column 1/i.test(doc.querySelector(".pixel-result").textContent), "specific pixel feedback is missing");
+        assert(/row 1, column 1/i.test(api.state.sessionRecords[0].explanation), "pixel feedback lost in parent record");
+
+        // A saved bitmap must also resume when the server is unavailable.
+        loadPixel(3);
+        click(doc, '.pixel-cell[data-index="9"]', "draft bitmap cell");
+        click(doc, ".pixel-clear", "clear bitmap row");
+        assert(doc.querySelector('.pixel-cell[data-index="9"]').getAttribute("aria-pressed") === "false", "clear row failed");
+        click(doc, ".pixel-undo", "restore cleared row");
+        click(doc, "#pause-session-button", "save bitmap draft");
+        frame.remove();
+        await qaPost("/__qa/mode", "offline");
+        frame = await loadApp(320, "pixel-offline-resume");
+        ({ api, doc, win } = frameParts(frame));
+        click(doc, "#resume-session-button", "resume offline bitmap");
+        await waitFor(() => doc.querySelector('.pixel-cell[data-index="9"]')?.getAttribute("aria-pressed") === "true", "offline bitmap draft lost");
+        assert(api.state.answeredCount === 0, "offline bitmap was graded on resume");
+        assert(typeof win.HomeworkPixelCodes.createEntry === "function", "offline pixel generator missing");
+        await qaPost("/__qa/mode", "online");
+
+        // Persist an unfinished run, including the highlighted row, through a real reload.
+        loadPixel(7);
+        let input = doc.querySelectorAll(".pixel-run-input")[2];
+        input.focus();
+        input.value = "0, 2";
+        input.dispatchEvent(new win.Event("input", { bubbles: true }));
+        click(doc, "#pause-session-button", "save pixel draft");
+        frame.remove();
+        frame = await loadApp(320, "pixel-resume");
+        ({ api, doc, win } = frameParts(frame));
+        click(doc, "#resume-session-button", "resume pixel draft");
+        await waitFor(() => doc.querySelectorAll(".pixel-run-input")[2]?.value === "0, 2", "pixel draft was lost");
+        assert(api.state.answeredCount === 0, "pixel draft was graded on resume");
+        assert(doc.querySelector('.pixel-row[data-row="2"]').classList.contains("active"), "highlighted row was lost");
+        click(doc, "#pause-session-button", "exit pixel draft");
+        click(doc, "#discard-session-button", "discard pixel draft");
+        frame.remove();
+      }
+
+      async function runBuildExampleMatrix() {
+        let frame = await loadApp(320, "build-example");
+        let { api, doc, win } = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', "example guest");
+        click(doc, '[data-question-count="5"]', "example five questions");
+        change(doc.getElementById("speed-challenge-enabled"), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "example session did not start");
+        for (let level = 2; level <= 10; level++) {
+          api.state.questions[0] = win.HomeworkBuildExample.createQuestion(level);
+          win.renderCurrentQuestion();
+          assert(doc.querySelectorAll(".build-example-conditions li").length >= 2, "example conditions missing");
+          assertNoHorizontalOverflow(frame, `example level ${level}`);
+        }
+        const question = win.HomeworkBuildExample.createQuestion(4);
+        api.state.questions[0] = question;
+        win.renderCurrentQuestion();
+        const alternative = Array.from({length: question.answerRule.max + 1}, (_, n) => n)
+          .find(n => n !== question.answerValue && win.HomeworkBuildExample.evaluate(question.answerRule, n).isCorrect);
+        assert(alternative !== undefined, "example has no alternative solution");
+        const input = doc.getElementById("answer-input");
+        input.value = String(alternative);
+        input.dispatchEvent(new win.Event("input", {bubbles: true}));
+        click(doc, "#pause-session-button", "save example draft");
+        frame.remove();
+        await qaPost("/__qa/mode", "offline");
+        frame = await loadApp(320, "example-offline-resume");
+        ({ api, doc, win } = frameParts(frame));
+        click(doc, "#resume-session-button", "resume example draft offline");
+        await waitFor(() => !doc.getElementById("quiz-screen").hidden, "example resume failed");
+        assert(doc.getElementById("answer-input").value === String(alternative), "example draft lost");
+        assert(api.state.answeredCount === 0, "draft was graded before Submit");
+        doc.getElementById("answer-form").dispatchEvent(new win.Event("submit", {bubbles: true, cancelable: true}));
+        assert(api.state.correctCount === 1, "valid alternative was rejected");
+        assert(api.state.awaitingContinue, "example feedback disappeared");
+        assert(text(doc.getElementById("feedback")).includes(String(alternative)), "feedback lost the learner's example");
+        assert(api.state.sessionRecords[0].correctAnswer.startsWith("One example:"), "reference answer is not labelled as an example");
+        assertNoHorizontalOverflow(frame, "example feedback");
+        continueFeedback(frame);
+        api.state.questions[1] = question;
+        win.renderCurrentQuestion();
+        doc.getElementById("answer-input").value = String(question.answerRule.max + 1);
+        doc.getElementById("answer-form").dispatchEvent(new win.Event("submit", {bubbles: true, cancelable: true}));
+        assert(api.state.sessionRecords[1].isCorrect === false, "out-of-range example was accepted");
+        assert(api.state.sessionRecords[1].explanation.includes("including both ends"), "failed condition was not recorded");
+        assert(api.state.sessionRecords[1].reviewHtml.includes("One example:"), "review implies a unique answer");
+        click(doc, "#pause-session-button", "save example feedback");
+        click(doc, "#discard-session-button", "discard example test");
+        await qaPost("/__qa/mode", "online");
+        frame.remove();
+      }
+
       async function runMapOfflineResumeMatrix() {
         const before = await qaStats();
         assert(before.mapRequestCount >= 1, "offline installation did not cache the map bundle");
@@ -551,8 +1231,8 @@
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map((name) => caches.delete(name)));
         const registration = await navigator.serviceWorker.register("/service-worker.js", { scope: "/" });
-        await navigator.serviceWorker.ready;
         await waitFor(() => registration.active, "service worker did not activate", 90000);
+        await navigator.serviceWorker.ready;
         await waitFor(() => navigator.serviceWorker.controller, "service worker did not claim the release runner", 30000);
         const names = await caches.keys();
         const mainCache = names.find((name) => /^homework-v.*(?<!-runtime)$/.test(name));
@@ -560,6 +1240,15 @@
         const cache = await caches.open(mainCache);
         assert(await cache.match("/homework.html"), "installed cache is missing homework.html");
         assert(await cache.match("/app/main/session.js"), "installed cache is missing session.js");
+        assert(await cache.match("/app/questions/math/build-example.js"), "installed cache is missing Build an example");
+        assert(await cache.match("/app/questions/math/mystery-rule.js"), "installed cache is missing mystery rule model");
+        assert(await cache.match("/app/ui/mystery-rule.js"), "installed cache is missing mystery rule UI");
+        assert(await cache.match("/app/questions/math/equation-balance.js"), "cache missing equation model");
+        assert(await cache.match("/app/ui/equation-balance.js"), "cache missing equation UI");
+        assert(await cache.match("/app/questions/math/shape-architect.js"), "cache missing shape model");
+        assert(await cache.match("/app/ui/shape-architect.js"), "cache missing shape UI");
+        assert(await cache.match("/app/questions/math/design-chance.js"), "cache missing chance model");
+        assert(await cache.match("/app/ui/design-chance.js"), "cache missing chance UI");
         return { registration, initialMainCache: mainCache };
       }
 
@@ -611,13 +1300,34 @@
 
       async function run() {
         assert("serviceWorker" in navigator, "service workers are unavailable in Chrome");
+        await qaPost("/__qa/progress", "installServiceWorker");
         const { registration, initialMainCache } = await installServiceWorker();
+        await qaPost("/__qa/progress", "runDesktopChallengeMatrix");
         const desktopFrame = await runDesktopChallengeMatrix();
+        await qaPost("/__qa/progress", "runMobileCheckpointAndHistoryMatrix");
         await runMobileCheckpointAndHistoryMatrix();
+        await qaPost("/__qa/progress", "runSessionLoadingMatrix");
         await runSessionLoadingMatrix();
+        await qaPost("/__qa/progress", "runBuildGraphMatrix");
+        await runBuildGraphMatrix();
+        await qaPost("/__qa/progress", "runShapeArchitectMatrix");
+        await runShapeArchitectMatrix();
+        await qaPost("/__qa/progress", "runDesignChanceMatrix");
+        await runDesignChanceMatrix();
+        await qaPost("/__qa/progress", "runEquationBalanceMatrix");
+        await runEquationBalanceMatrix();
+        await qaPost("/__qa/progress", "runMysteryRuleMatrix");
+        await runMysteryRuleMatrix();
+        await qaPost("/__qa/progress", "runDraftRecoveryMatrix");
         await runDraftRecoveryMatrix();
+        await qaPost("/__qa/progress", "runPixelCodesMatrix");
+        await runPixelCodesMatrix();
+        await qaPost("/__qa/progress", "runBuildExampleMatrix");
+        await runBuildExampleMatrix();
+        await qaPost("/__qa/progress", "runMapOfflineResumeMatrix");
         const offlineMapFrame = await runMapOfflineResumeMatrix();
         assert(reportAttempts === 0, `local QA attempted ${reportAttempts} production report(s)`);
+        await qaPost("/__qa/progress", "runServiceWorkerUpdateMatrix");
         await runServiceWorkerUpdateMatrix(registration, initialMainCache, offlineMapFrame || desktopFrame);
         result.textContent = "PASS";
         await qaPost("/__qa/done", result.textContent);

@@ -689,10 +689,14 @@ function buildSessionRecord(questionNumber, question, selectedValue, isCorrect, 
     answerOptions: formatAnswerOptionsForLog(question),
     chosenAnswer: selectedValue === "" ? "(no answer)" : String(selectedValue),
     ...(Array.isArray(selectedMeta?.tokens) ? { selectedTokens: [...selectedMeta.tokens] } : {}),
-    correctAnswer: isGraded ? question.answerLabel : "Parent/self review",
+    correctAnswer: isGraded
+      ? question.answerRule ? `One example: ${question.answerLabel}` : question.answerLabel
+      : "Parent/self review",
     isCorrect: isGraded ? Boolean(isCorrect) : null,
     isGraded,
-    explanation: String(question?.explanation || question?.rationale || ""),
+    explanation: question.answerRule
+      ? getExampleAnswerFeedback(question, selectedValue)
+      : String(question?.explanation || question?.rationale || ""),
     source: normalizeQuestionSource(question?.source),
     reviewedAt: String(question?.reviewedAt || ""),
     hintsUsed: Number(selectedMeta?.hintsUsed) || 0,
@@ -935,7 +939,9 @@ function createHistoryQuestionElement(record, sessionStartedAt, roundLabel = "Ma
   if (record.isGraded !== false) {
     const correctAnswer = document.createElement("p");
     correctAnswer.className = "history-answer-line";
-    correctAnswer.textContent = `Correct answer: ${record.correctAnswer}`;
+    correctAnswer.textContent = record.skill === "build-example"
+      ? record.correctAnswer
+      : `Correct answer: ${record.correctAnswer}`;
     wrapper.appendChild(correctAnswer);
   }
 

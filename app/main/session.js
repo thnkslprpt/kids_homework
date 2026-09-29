@@ -802,7 +802,19 @@ function normalizeChoiceBankEntry(entry, type) {
       !String(entry?.question || "").trim() ||
       !answer ||
       !interactive ||
-      (!answerIndexes.length && !(interactive.layout === "command-sequence" && answerSequence.length))
+      (interactive.layout === "pixel-code"
+        ? !globalThis.HomeworkPixelCodes?.isValidConfig(interactive)
+        : interactive.layout === "design-chance"
+          ? !globalThis.HomeworkDesignChance?.isValidConfig(interactive)
+        : interactive.layout === "shape-architect"
+          ? !globalThis.HomeworkShapeArchitect?.isValidConfig(interactive)
+        : interactive.layout === "equation-balance"
+          ? !globalThis.HomeworkEquationBalance?.isValidConfig(interactive)
+          : interactive.layout === "mystery-rule"
+          ? !globalThis.HomeworkMysteryRule?.isValidConfig(interactive)
+          : interactive.layout === "build-graph"
+          ? !globalThis.HomeworkBuildGraph?.isValidConfig(interactive)
+          : (!answerIndexes.length && !(interactive.layout === "command-sequence" && answerSequence.length)))
     ) {
       return null;
     }
@@ -1664,6 +1676,14 @@ function validateHomeworkQuestionShape(question, context = "question") {
     addError("input questions need an answer");
   }
 
+  if (question.answerRule && (
+    question.mode !== "input" ||
+    !globalThis.HomeworkBuildExample.isValidRule(question.answerRule) ||
+    !globalThis.HomeworkBuildExample.evaluate(question.answerRule, Number(question.answerValue)).isCorrect
+  )) {
+    addError("example questions need a valid rule and a satisfying reference example");
+  }
+
   if (question.mode === "drag") {
     const usesMatchingLayout = question.dragLayout === "matching";
     if (usesMatchingLayout) {
@@ -1706,9 +1726,39 @@ function validateHomeworkQuestionShape(question, context = "question") {
         "part-select",
         "command-sequence",
         "paired-select",
+        "pixel-code",
+        "build-graph",
+        "mystery-rule",
+        "equation-balance",
+        "shape-architect",
+        "design-chance",
       ].includes(interactive.layout)
     ) {
       addError("interactive questions need a supported layout");
+    } else if (interactive.layout === "pixel-code") {
+      if (!globalThis.HomeworkPixelCodes?.isValidConfig(interactive)) {
+        addError("pixel code questions need a valid variant, board size, and binary target");
+      }
+    } else if (interactive.layout === "design-chance") {
+      if (!globalThis.HomeworkDesignChance?.isValidConfig(interactive)) {
+        addError("chance designs need achievable exact probability conditions and bounded totals");
+      }
+    } else if (interactive.layout === "shape-architect") {
+      if (!globalThis.HomeworkShapeArchitect?.isValidConfig(interactive)) {
+        addError("shape architect questions need achievable geometric constraints and a valid example");
+      }
+    } else if (interactive.layout === "equation-balance") {
+      if (!globalThis.HomeworkEquationBalance?.isValidConfig(interactive)) {
+        addError("equation balance questions need a structural equation with one positive integer solution");
+      }
+    } else if (interactive.layout === "mystery-rule") {
+      if (!globalThis.HomeworkMysteryRule?.isValidConfig(interactive)) {
+        addError("mystery rule questions need valid, distinguishable candidates and bounded inputs");
+      }
+    } else if (interactive.layout === "build-graph") {
+      if (!globalThis.HomeworkBuildGraph?.isValidConfig(interactive)) {
+        addError("graph questions need valid labels, values, and a usable scale");
+      }
     } else if (interactive.layout === "command-sequence") {
       const grid = interactive.grid && typeof interactive.grid === "object" ? interactive.grid : null;
       if (!answerSequence.length) {
@@ -2350,7 +2400,21 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
     categoryDifficulties,
     hebrewQuestionMode,
     mathModeIndex: 0,
+    designChanceCount: 0,
+    designChanceIndex: 0,
+    designChanceLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 4) : 2,
+    shapeArchitectCount: 0,
+    shapeArchitectIndex: 0,
+    shapeArchitectLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 4) : 2,
+    equationBalanceCount: 0,
+    equationBalanceIndex: 0,
+    equationBalanceLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 4) : 2,
+    mysteryRuleCount: 0,
+    mysteryRuleLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 8) : 2,
     languageQuestionIndex: 0,
+    graphQuestionIndex: 0,
+    graphQuestionCount: 0,
+    graphQuestionLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 4) : 2,
     hebrewQuestionIndex: 0,
     hebrewStandardQuestionIndex: 0,
     mapCountries: new Set(),
@@ -2596,8 +2660,42 @@ function createSessionQuestionForCategory(
       nonHebrewDifficultyQueues?.[category] || [],
       categoryDifficulty
     );
+    if (runtime.mathModeIndex % 8 === 7 && runtime.designChanceCount < runtime.designChanceLimit) {
+      const entry = globalThis.HomeworkDesignChance?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.designChanceCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
+    if (runtime.mathModeIndex % 8 === 6 && runtime.shapeArchitectCount < runtime.shapeArchitectLimit) {
+      const entry = globalThis.HomeworkShapeArchitect?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.shapeArchitectCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
+    if (runtime.mathModeIndex % 8 === 4 && runtime.equationBalanceCount < runtime.equationBalanceLimit) {
+      const entry = globalThis.HomeworkEquationBalance?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.equationBalanceCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
+    if (runtime.mathModeIndex % 8 === 0 && runtime.mysteryRuleCount < runtime.mysteryRuleLimit) {
+      const entry = globalThis.HomeworkMysteryRule?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.mysteryRuleCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
     const question =
-      runtime.mathModeIndex % 2 === 0
+      effectiveDifficulty >= 2 && runtime.mathModeIndex % 8 === 2
+        ? globalThis.HomeworkBuildExample.createQuestion(effectiveDifficulty)
+        : runtime.mathModeIndex % 2 === 0
         ? createMathInputQuestion(effectiveDifficulty)
         : createMathChoiceQuestion(effectiveDifficulty);
     runtime.mathModeIndex += 1;
@@ -2637,6 +2735,30 @@ function createSessionQuestionForCategory(
     return createGeographyMapQuestion(effectiveDifficulty, runtime, resources);
   }
 
+  if (category === "probability" && runtime.designChanceIndex++ % 4 === 0 && runtime.designChanceCount < runtime.designChanceLimit) {
+    const entry = globalThis.HomeworkDesignChance?.createEntry(effectiveDifficulty);
+    if (entry) {
+      runtime.designChanceCount += 1;
+      return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "probability-choice"), "probability-choice");
+    }
+  }
+
+  if (category === "geometry" && runtime.shapeArchitectIndex++ % 4 === 0 && runtime.shapeArchitectCount < runtime.shapeArchitectLimit) {
+    const entry = globalThis.HomeworkShapeArchitect?.createEntry(effectiveDifficulty);
+    if (entry) {
+      runtime.shapeArchitectCount += 1;
+      return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "geometry-choice"), "geometry-choice");
+    }
+  }
+
+  if (category === "algebra" && runtime.equationBalanceIndex++ % 4 === 0 && runtime.equationBalanceCount < runtime.equationBalanceLimit) {
+    const entry = globalThis.HomeworkEquationBalance?.createEntry(effectiveDifficulty);
+    if (entry) {
+      runtime.equationBalanceCount += 1;
+      return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "algebra-choice"), "algebra-choice");
+    }
+  }
+
   const dragQuestion = maybeCreateSessionDragQuestion(category, resources, effectiveDifficulty, runtime);
   if (dragQuestion) {
     return dragQuestion;
@@ -2651,6 +2773,16 @@ function createSessionQuestionForCategory(
   }
 
   if (category === "charts-and-graphs") {
+    const chartIndex = runtime.graphQuestionIndex++;
+    if (chartIndex % 4 === 0 && runtime.graphQuestionCount < runtime.graphQuestionLimit) {
+      const entry = globalThis.HomeworkBuildGraph?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.graphQuestionCount += 1;
+        return createBankChoiceQuestion(
+          normalizeChoiceBankEntry(entry, "charts-and-graphs-choice"), "charts-and-graphs-choice"
+        );
+      }
+    }
     if (generatedChoiceCategoryConfigs["charts-and-graphs"]?.factory) {
       const generatedChartQuestion = createChartsAndGraphsGeneratedChoiceQuestion(effectiveDifficulty);
       if (generatedChartQuestion) {
@@ -3522,7 +3654,8 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
     !Array.isArray(records) ||
     records.length !== round.answeredCount ||
     !records.every(isCheckpointPlainObject) ||
-    !isValidPendingAnswer(round.pendingAnswer, round.currentIndex, totalQuestions) ||
+    !isValidPendingAnswer(round.pendingAnswer, round.currentIndex, totalQuestions,
+      round.questions?.[round.currentIndex]?.interactive?.layout === "equation-balance" ? 6000 : 1000) ||
     !Array.isArray(hints) ||
     hints.length > totalQuestions ||
     !hints.every(
@@ -3532,19 +3665,62 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
     return false;
   }
 
+  const validInteractiveSelection = (question, selection) => {
+    if (question?.interactive?.layout === "design-chance") {
+      return Boolean(globalThis.HomeworkDesignChance?.parseTokens(question.interactive, selection?.tokens));
+    }
+    if (question?.interactive?.layout === "shape-architect") {
+      return Boolean(globalThis.HomeworkShapeArchitect?.parseTokens(question.interactive, selection?.tokens));
+    }
+    if (question?.interactive?.layout === "equation-balance") {
+      return Boolean(globalThis.HomeworkEquationBalance?.parseTokens(question.interactive, selection?.tokens));
+    }
+    if (question?.interactive?.layout === "mystery-rule") {
+      return Boolean(globalThis.HomeworkMysteryRule?.parseTokens(question.interactive, selection?.tokens));
+    }
+    return question?.interactive?.layout !== "build-graph" ||
+      Boolean(globalThis.HomeworkBuildGraph?.parseTokens(question.interactive, selection?.tokens));
+  };
+  if (round.pendingAnswer && !validInteractiveSelection(round.questions?.[round.pendingAnswer.index], round.pendingAnswer)) {
+    return false;
+  }
+  if (!selections.every((selection, index) => {
+    const question = round.questions?.[index];
+    if (!validInteractiveSelection(question, selection)) return false;
+    if (question?.interactive?.layout === "design-chance") {
+      const result = globalThis.HomeworkDesignChance.evaluate(question.interactive, selection.tokens);
+      return result.complete && result.isCorrect === results[index];
+    }
+    if (question?.interactive?.layout === "shape-architect") {
+      const result = globalThis.HomeworkShapeArchitect.evaluate(question.interactive, selection.tokens);
+      return result.complete && result.isCorrect === results[index];
+    }
+    if (question?.interactive?.layout === "equation-balance") {
+      const result = globalThis.HomeworkEquationBalance.evaluate(question.interactive, selection.tokens);
+      return result.complete && result.isCorrect === results[index];
+    }
+    if (question?.interactive?.layout === "mystery-rule") {
+      const result = globalThis.HomeworkMysteryRule.evaluate(question.interactive, selection.tokens);
+      return result.complete && result.isCorrect === results[index];
+    }
+    return true;
+  })) {
+    return false;
+  }
+
   return awaitingContinue
     ? round.currentIndex < totalQuestions && round.answeredCount === round.currentIndex + 1
     : round.answeredCount === round.currentIndex;
 }
 
-function isValidPendingAnswer(draft, currentIndex, totalQuestions) {
+function isValidPendingAnswer(draft, currentIndex, totalQuestions, maxTokenLength = 1000) {
   return draft == null || (
     isCheckpointPlainObject(draft) &&
     draft.index === currentIndex &&
     Number.isInteger(draft.index) && draft.index >= 0 && draft.index < totalQuestions &&
     typeof draft.value === "string" && draft.value.length <= 10000 &&
     Array.isArray(draft.tokens) && draft.tokens.length <= 100 &&
-    draft.tokens.every((token) => typeof token === "string" && token.length <= 1000)
+    draft.tokens.every((token) => typeof token === "string" && token.length <= maxTokenLength)
   );
 }
 

@@ -433,6 +433,41 @@ function validateQuestion(question, meta) {
       : [];
     if (!interactive) {
       errors.push(`${meta}: interactive question is missing its configuration`);
+    } else if (layout === "pixel-code") {
+      if (!["binary-decode", "binary-encode", "runs-decode", "runs-encode"].includes(interactive.variant) ||
+          !((interactive.rows === 1 && [4, 5].includes(interactive.cols)) || (interactive.rows === 4 && interactive.cols === 4)) ||
+          !Array.isArray(interactive.target) || interactive.target.length !== interactive.rows * interactive.cols ||
+          !interactive.target.every(bit => bit === 0 || bit === 1)) {
+        errors.push(`${meta}: pixel configuration is invalid`);
+      }
+    } else if (layout === "design-chance") {
+      if (!Array.isArray(interactive.conditions) || !interactive.conditions.length ||
+          !Array.isArray(interactive.totals) || !interactive.totals.length ||
+          !["bag", "spinner"].includes(interactive.kind)) {
+        errors.push(`${meta}: chance design configuration is invalid`);
+      }
+    } else if (layout === "shape-architect") {
+      if (![4, 5].includes(interactive.size) || !Number.isInteger(interactive.area) ||
+          typeof interactive.example !== "string" || interactive.example.length !== interactive.size ** 2 ||
+          !/^[01]+$/.test(interactive.example) || !Array.isArray(interactive.blocked)) {
+        errors.push(`${meta}: shape architect configuration is invalid`);
+      }
+    } else if (layout === "equation-balance") {
+      const c = interactive;
+      const solution = (c.right?.b - c.left?.b) / (c.left?.a - c.right?.a);
+      if (!Number.isInteger(solution) || solution <= 0 || typeof c.visual !== "boolean") {
+        errors.push(`${meta}: equation balance configuration is invalid`);
+      }
+    } else if (layout === "mystery-rule") {
+      if (!Array.isArray(interactive.rules) || interactive.rules.length < 2 || interactive.rules.length > 4 ||
+          !interactive.rules[interactive.hidden] || interactive.maxTests !== 3) {
+        errors.push(`${meta}: mystery rule configuration is invalid`);
+      }
+    } else if (layout === "build-graph") {
+      if (!Array.isArray(interactive.labels) || interactive.labels.length !== interactive.values?.length ||
+          !interactive.scales?.some(scale => interactive.values.every(value => value % scale === 0 && value / scale <= interactive.maxSteps))) {
+        errors.push(`${meta}: graph configuration is invalid`);
+      }
     } else if (layout === "command-sequence") {
       if (!Array.isArray(interactive.answerSequence) || !interactive.answerSequence.length) {
         errors.push(`${meta}: command sequence is missing its answer steps`);

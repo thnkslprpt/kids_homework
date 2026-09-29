@@ -106,8 +106,12 @@ function run() {
         const label = `${category} grade ${grade} sample ${sample + 1}`;
         let question;
         try {
-          [question] = vm.runInContext(
-            `buildSessionQuestions(1, ${grade}, { adaptiveReview: false, selectedCategories: [${JSON.stringify(category)}], minDifficulty: ${grade} })`,
+          // Sample the construction and ordinary geometry slots, retaining coverage
+          // of existing grade-specific families such as Pythagoras at grade 8.
+          const count = ["geometry", "probability"].includes(category) ? 4 : 1;
+          const index = ["geometry", "probability"].includes(category) ? sample % 4 : 0;
+          question = vm.runInContext(
+            `buildSessionQuestions(${count}, ${grade}, { adaptiveReview: false, selectedCategories: [${JSON.stringify(category)}], minDifficulty: ${grade} })[${index}]`,
             context,
             { timeout: 1000 }
           );
@@ -136,7 +140,23 @@ function run() {
           failures.push(`${label}: out-of-grade topic matched ${forbidden}: ${JSON.stringify(text)}`);
         }
         const required = requiredRules[category]?.[grade];
-        if (required && !required.test(text)) {
+        if (question.interactive?.layout === "design-chance") {
+          const c = question.interactive;
+          if (grade > 9 || c.conditions.length !== (grade >= 6 ? 2 : 1) ||
+              (c.totals.length > 1) !== (grade >= 8) ||
+              (grade <= 2 && c.conditions.some(x => x.denominator !== 1)) ||
+              (grade <= 4 && (c.kind !== "bag" || c.totals[0] !== 6))) {
+            failures.push(`${label}: probability construction does not match the grade progression`);
+          }
+        } else if (question.interactive?.layout === "shape-architect") {
+          const c = question.interactive;
+          if (grade < 2 || grade > 9 || c.size !== (grade >= 6 ? 5 : 4) ||
+              (c.perimeter !== null) !== (grade >= 4) ||
+              (c.symmetry !== null) !== (grade >= 6) ||
+              (c.blocked.length > 0) !== (grade >= 8)) {
+            failures.push(`${label}: shape constraints do not match the grade progression`);
+          }
+        } else if (required && !required.test(text)) {
           failures.push(`${label}: expected grade focus ${required}: ${JSON.stringify(text)}`);
         }
       }

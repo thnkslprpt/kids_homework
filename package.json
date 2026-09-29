@@ -15,7 +15,7 @@
     "qa:browser": "node app/scripts/qa_browser_smoke.js",
     "qa:release-browser": "node app/scripts/qa_release_browser.js",
     "qa:all": "npm test && npm run qa:browser && npm run qa:release-browser",
-    "qa:regressions": "node --test app/scripts/qa_pwa.js app/scripts/qa_reporting.js app/scripts/qa_session_regressions.js app/scripts/qa_startup.js"
+    "qa:regressions": "node --test app/scripts/qa_design_chance.js app/scripts/qa_shape_architect.js app/scripts/qa_equation_balance.js app/scripts/qa_mystery_rule.js app/scripts/qa_build_the_graph.js app/scripts/qa_pixel_codes.js app/scripts/qa_build_example.js app/scripts/qa_pwa.js app/scripts/qa_reporting.js app/scripts/qa_session_regressions.js app/scripts/qa_startup.js"
   },
   "engines": {
     "node": ">=20"

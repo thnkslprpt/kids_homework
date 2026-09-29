@@ -487,6 +487,81 @@
         }
 
         if (question.mode === "interactive") {
+          if (question.interactive?.layout === "design-chance") {
+            const cells = globalThis.HomeworkDesignChance.solution(question.interactive);
+            if (question.interactive.totals.length > 1) {
+              click(document.querySelector(`.design-chance-totals [data-total="${cells.length}"]`), 'choose total');
+            }
+            [...cells].forEach((code,i) => {
+              click(document.querySelector(`.design-chance-swatch[data-colour="${code}"]`), 'choose colour');
+              click(document.querySelector(`.design-chance-cell[data-cell="${i}"]`), 'fill chance space');
+            });
+            click(document.querySelector('.interactive-check-button'), 'check chance');
+            return;
+          }
+          if (question.interactive?.layout === "shape-architect") {
+            [...question.interactive.example].forEach((v,i) => {
+              if (v === '1') click(document.querySelector(`.shape-architect-cell[data-cell="${i}"]`), 'fill shape');
+            });
+            click(document.querySelector('.interactive-check-button'), 'check shape');
+            return;
+          }
+          if (question.interactive?.layout === "equation-balance") {
+            const c = question.interactive;
+            for (const [op,value] of [['subtract-x',c.right.a],['subtract',c.left.b],['divide',c.left.a-c.right.a]]) {
+              if (!value || (op === 'divide' && value === 1)) continue;
+              const input = document.querySelector('.equation-balance-amount');
+              input.value = String(value);
+              input.dispatchEvent(new Event('input',{bubbles:true}));
+              click(document.querySelector(`.equation-balance-operation[data-operation="${op}"]`), "balance equation");
+            }
+            click(document.querySelector(".interactive-check-button"), "check equation");
+            return;
+          }
+          if (question.interactive?.layout === "mystery-rule") {
+            const config = question.interactive;
+            const select = document.querySelector('.mystery-rule-input');
+            select.value = String(config.initialInput === 0 ? 1 : 0);
+            select.dispatchEvent(new Event('change', {bubbles:true}));
+            click(document.querySelector('.mystery-rule-test'), 'test rule');
+            click(document.querySelector(`.mystery-rule-card[data-rule="${config.hidden}"]`), 'select rule');
+            if (config.requireReason) {
+              for (const [selector,value] of [['.mystery-rule-evidence','0'],['.mystery-rule-reason','different']]) {
+                const control = document.querySelector(selector);
+                control.value = value;
+                control.dispatchEvent(new Event('change', {bubbles:true}));
+              }
+            }
+            click(document.querySelector('.interactive-check-button'), 'check rule');
+            return;
+          }
+          if (question.interactive?.layout === "build-graph") {
+            const config = question.interactive;
+            const scale = config.scales.find(value => config.values.every(count => count % value === 0 && count / value <= config.maxSteps));
+            click(document.querySelector('.build-graph-reset'), 'reset graph');
+            const select = document.querySelector('.build-graph-scale');
+            if (select) { select.value = String(scale); select.dispatchEvent(new Event('change', {bubbles:true})); }
+            config.values.forEach((value, index) => {
+              for (let step = 0; step < value / scale; step++) click(document.querySelector(`.build-graph-increase[data-index="${index}"]`), 'build bar');
+            });
+            return click(document.querySelector('.interactive-check-button'), 'check graph');
+          }
+          if (question.interactive?.layout === "pixel-code") {
+            const config = question.interactive;
+            if (config.variant === "runs-encode") {
+              const inputs = document.querySelectorAll(".pixel-run-input");
+              globalThis.HomeworkPixelCodes.rowsOf(config).forEach((bits, row) => {
+                inputs[row].value = globalThis.HomeworkPixelCodes.encodeRuns(bits).join(", ");
+                inputs[row].dispatchEvent(new Event("input", { bubbles: true }));
+              });
+            } else {
+              config.target.forEach((bit, index) => {
+                const cell = document.querySelector(`.pixel-cell[data-index="${index}"]`);
+                if ((cell.getAttribute("aria-pressed") === "true") !== Boolean(bit)) cell.click();
+              });
+            }
+            return click(document.querySelector(".pixel-check"), "workflow pixel check");
+          }
           if (question.interactive?.layout === "command-sequence") {
             const sequence = Array.isArray(question.interactive?.answerSequence)
               ? question.interactive.answerSequence
@@ -963,7 +1038,25 @@
           if (!normalizeEntryQuestionText(entry)) failures.push(`${label}: missing question`);
           if (!String(entry.answer || entry.answerLabel || "").trim()) failures.push(`${label}: missing answer`);
           if (!interactive) failures.push(`${label}: missing interactive config`);
-          if (!answerIndexes.length && !(interactive?.layout === "command-sequence" && answerSequence.length)) {
+          if (interactive?.layout === "design-chance" && !globalThis.HomeworkDesignChance?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid chance configuration`);
+          }
+          if (interactive?.layout === "shape-architect" && !globalThis.HomeworkShapeArchitect?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid shape configuration`);
+          }
+          if (interactive?.layout === "equation-balance" && !globalThis.HomeworkEquationBalance?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid equation configuration`);
+          }
+          if (interactive?.layout === "mystery-rule" && !globalThis.HomeworkMysteryRule?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid mystery rule configuration`);
+          }
+          if (interactive?.layout === "build-graph" && !globalThis.HomeworkBuildGraph?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid graph configuration`);
+          }
+          if (interactive?.layout === "pixel-code" && !globalThis.HomeworkPixelCodes?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid pixel board`);
+          }
+          if (!answerIndexes.length && interactive?.layout !== "pixel-code" && interactive?.layout !== "build-graph" && interactive?.layout !== "mystery-rule" && interactive?.layout !== "equation-balance" && interactive?.layout !== "shape-architect" && interactive?.layout !== "design-chance" && !(interactive?.layout === "command-sequence" && answerSequence.length)) {
             failures.push(`${label}: missing interactive answer indexes`);
           }
           if (answerIndexes.length && new Set(answerIndexes).size !== answerIndexes.length) {
@@ -1349,9 +1442,78 @@
         }
       }
 
+      function validateDesignChanceCoverage() {
+        for (const level of [1, 3, 5, 6, 9]) for (const kind of ['bag', 'spinner']) {
+          const entry = globalThis.HomeworkDesignChance.createEntry(level);
+          entry.interactive.kind = kind;
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry,'probability-choice'),'probability-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `design chance ${level} ${kind}`);
+          const cells = globalThis.HomeworkDesignChance.solution(entry.interactive);
+          if (entry.interactive.totals.length > 1) click(document.querySelector(`.design-chance-totals [data-total="${cells.length}"]`), 'choose total');
+          [...cells].forEach((code,i) => {
+            click(document.querySelector(`.design-chance-swatch[data-colour="${code}"]`), 'choose symbol');
+            click(document.querySelector(`.design-chance-cell[data-cell="${i}"]`), 'fill chance');
+          });
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(globalThis.HomeworkDesignChance.evaluate(entry.interactive,tokens).isCorrect, `chance ${level}: solution rejected`);
+          renderInteractiveQuestion(question,{readOnly:true,selectedTokens:tokens});
+          assert(!document.querySelector('.design-chance-question button:not(:disabled)'), `chance ${level}: review editable`);
+          assert([...document.querySelectorAll('.design-chance-cell')].map(el=>el.dataset.value).join('') === cells, `chance ${level}: review lost arrangement`);
+          if (kind === 'spinner') assert(document.querySelectorAll('.design-chance-spinner path').length === cells.length, 'spinner sectors missing');
+        }
+        api.state.pendingAnswer = null;
+      }
+
+      function validateShapeArchitectCoverage() {
+        for (const level of [2, 4, 6, 9]) {
+          const entry = globalThis.HomeworkShapeArchitect.createEntry(level);
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry,'geometry-choice'),'geometry-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `shape architect ${level}`);
+          [...entry.interactive.example].forEach((v,i) => {
+            if (v === '1') click(document.querySelector(`.shape-architect-cell[data-cell="${i}"]`), 'fill shape');
+          });
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(globalThis.HomeworkShapeArchitect.evaluate(entry.interactive,tokens).isCorrect, `shape ${level}: solution rejected`);
+          renderInteractiveQuestion(question,{readOnly:true,selectedTokens:tokens});
+          assert(!document.querySelector('.shape-architect-question button:not(:disabled)'), `shape ${level}: review editable`);
+          assert(document.querySelectorAll('.shape-architect-cell[aria-pressed="true"]').length === entry.interactive.area, `shape ${level}: review lost cells`);
+        }
+        api.state.pendingAnswer = null;
+      }
+
+      function validateEquationBalanceCoverage() {
+        const before = failures.length;
+        for (const level of [3, 5, 7, 9]) {
+          const entry = globalThis.HomeworkEquationBalance.createEntry(level);
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry,'algebra-choice'),'algebra-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `equation balance ${level}`);
+          const c = entry.interactive;
+          for (const [op,value] of [['subtract-x',c.right.a],['subtract',c.left.b],['divide',c.left.a-c.right.a]]) {
+            if (!value || (op === 'divide' && value === 1)) continue;
+            const input = document.querySelector('.equation-balance-amount');
+            input.value = String(value);
+            input.dispatchEvent(new Event('input',{bubbles:true}));
+            click(document.querySelector(`.equation-balance-operation[data-operation="${op}"]`),'equation operation');
+          }
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(globalThis.HomeworkEquationBalance.evaluate(c,tokens).isCorrect, `equation ${level}: solution not accepted`);
+          renderInteractiveQuestion(question,{readOnly:true,selectedTokens:tokens});
+          assert(!document.querySelector('.equation-balance-question button:not(:disabled)'), `equation ${level}: read-only controls active`);
+          assert(document.querySelectorAll('.equation-balance-history li').length >= 2, `equation ${level}: move history missing`);
+        }
+        api.state.pendingAnswer = null;
+        result.dataset.equationBalance = failures.length === before ? 'PASS' : 'FAIL';
+      }
+
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
         validateRegistryModules();
+        validateDesignChanceCoverage();
+        validateShapeArchitectCoverage();
+        validateEquationBalanceCoverage();
         validateEnglishSentenceDragTenseCoverage();
         validateVocabularyGrammarActivityCoverage();
         validateHouseholdProblemSolvingActivityCoverage();

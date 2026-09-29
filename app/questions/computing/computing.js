@@ -251,7 +251,12 @@
     id: "computing",
     label: "Computing",
     getStaticQuestions: () => COMPUTING_QUESTIONS,
-    supplementalGeneratedEntryFactory: createComputingSafetyChooseAllEntry,
+    supplementalGeneratedEntryFactory: (difficulty) => {
+      if (difficulty >= 2 && difficulty <= 7 && Math.random() < 0.35) {
+        return globalThis.HomeworkPixelCodes.createEntry(difficulty);
+      }
+      return createComputingSafetyChooseAllEntry(difficulty);
+    },
     generatedShare: 0.42,
     supplementalShare: 1,
   });

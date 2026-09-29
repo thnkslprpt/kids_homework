@@ -48,6 +48,12 @@ function startServer() {
   const server = http.createServer(async (request, response) => {
     const requestUrl = new URL(request.url || "/", "http://localhost");
 
+    if (request.method === "POST" && requestUrl.pathname === "/__qa/progress") {
+      console.log(`Release check: ${await readRequestBody(request)}`);
+      response.writeHead(204).end();
+      return;
+    }
+
     if (request.method === "POST" && requestUrl.pathname === "/__qa/mode") {
       state.offline = (await readRequestBody(request)) === "offline";
       response.writeHead(204).end();
@@ -169,6 +175,8 @@ async function run() {
       "--no-sandbox",
       "--disable-gpu",
       "--disable-dev-shm-usage",
+      "--disable-extensions",
+      "--disable-background-networking",
       `--user-data-dir=${profileDirectory}`,
       url,
     ]);
