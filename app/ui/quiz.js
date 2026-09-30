@@ -280,6 +280,10 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
     ? question.interactive
     : {};
   const layout = config.layout || "option-select";
+  if (layout === "find-every-possibility") {
+    renderPossibilitiesQuestion(question, config, { readOnly, selectedTokens });
+    return;
+  }
   if (layout === "design-chance") {
     renderDesignChanceQuestion(question, config, { readOnly, selectedTokens });
     return;
@@ -471,6 +475,9 @@ function renderInteractiveQuestion(question, { readOnly = false, selectedTokens 
 }
 
 function renderPairedSelectQuestion(question, config, { readOnly = false, selectedTokens = [] } = {}) {
+  const itemName = config.itemName || "item";
+  const reasonName = config.reasonName || "reason";
+  const answerJoiner = config.answerJoiner || " because ";
   const items = Array.isArray(config.items) ? config.items : [];
   const reasons = Array.isArray(config.reasons) ? config.reasons : [];
   const answerItemIndex = Number.parseInt(config.answerItemIndex, 10);
@@ -485,6 +492,7 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
 
   const shell = document.createElement("div");
   shell.className = "interactive-question paired-select-question";
+  shell.classList.toggle("first-wrong-step-question", config.type === "first-wrong-step");
 
   if (config.prompt) {
     const prompt = document.createElement("div");
@@ -559,6 +567,8 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
             selectedReasonIndex = index;
           }
           sync();
+          // sync rebuilds the buttons; keep keyboard focus on the selected choice.
+          board.querySelector(`[data-group="${group}"][data-index="${index}"]`)?.focus({ preventScroll: true });
         });
       }
 
@@ -576,7 +586,7 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
     if (readOnly) {
       status.textContent =
         selectedItemIndex >= 0 && selectedReasonIndex >= 0
-          ? `Answer: ${selectedLabel(items, selectedItemIndex)} because ${selectedLabel(reasons, selectedReasonIndex)}`
+          ? `Answer: ${selectedLabel(items, selectedItemIndex)}${answerJoiner}${selectedLabel(reasons, selectedReasonIndex)}`
           : "";
       return;
     }
@@ -585,8 +595,8 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
       ...(selectedItemIndex >= 0 ? [`item:${selectedItemIndex}`] : []),
       ...(selectedReasonIndex >= 0 ? [`reason:${selectedReasonIndex}`] : []),
     ] });
-    const itemDone = selectedItemIndex >= 0 ? "item selected" : "pick an item";
-    const reasonDone = selectedReasonIndex >= 0 ? "reason selected" : "pick a reason";
+    const itemDone = selectedItemIndex >= 0 ? `${itemName} selected` : config.itemName ? `pick a ${itemName}` : "pick an item";
+    const reasonDone = selectedReasonIndex >= 0 ? `${reasonName} selected` : `pick a ${reasonName}`;
     status.textContent = `${itemDone}; ${reasonDone}`;
   }
 
@@ -597,14 +607,14 @@ function renderPairedSelectQuestion(question, config, { readOnly = false, select
     checkButton.textContent = config.checkLabel || "Check Answer";
     checkButton.addEventListener("click", () => {
       if (selectedItemIndex < 0 || selectedReasonIndex < 0) {
-        state.feedbackMessage = "Choose one item and one reason before checking.";
+        state.feedbackMessage = `Choose one ${itemName} and one ${reasonName} before checking.`;
         state.feedbackTone = "error";
         renderFeedback();
         return;
       }
 
       const isCorrect = selectedItemIndex === answerItemIndex && selectedReasonIndex === answerReasonIndex;
-      const selectedValue = `${selectedLabel(items, selectedItemIndex)} because ${selectedLabel(reasons, selectedReasonIndex)}`;
+      const selectedValue = `${selectedLabel(items, selectedItemIndex)}${answerJoiner}${selectedLabel(reasons, selectedReasonIndex)}`;
       handleAnswer(question, isCorrect, selectedValue, {
         tokens: [`item:${selectedItemIndex}`, `reason:${selectedReasonIndex}`],
       });

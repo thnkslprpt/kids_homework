@@ -161,6 +161,15 @@
         } else if (question.mode === "practice") {
           click(doc, "#choices-area .practice-button", "practice completion");
         } else if (question.mode === "interactive") {
+          if (question.interactive?.layout === "find-every-possibility") {
+            while (doc.querySelector('.possibilities-card')) click(doc,'.possibilities-card','clear collection');
+            for (const pair of win.HomeworkPossibilities.solution(question.interactive)) {
+              [...pair].forEach((index,row) => click(doc,`.possibilities-choice[data-row="${row}"][data-index="${index}"]`,'choose item'));
+              click(doc,'.possibilities-add','add possibility');
+            }
+            click(doc,'.interactive-check-button','check collection');
+            return;
+          }
           if (question.interactive?.layout === "design-chance") {
             const cells = win.HomeworkDesignChance.solution(question.interactive);
             if (question.interactive.totals.length > 1) {
@@ -488,6 +497,253 @@
         click(resumed.doc, "#pause-session-button", "exit resume loading check");
         click(resumed.doc, "#discard-session-button", "discard loading check");
         resumeFrame.remove();
+      }
+
+      async function runFirstWrongStepMatrix() {
+        let frame = await loadApp(320, 'first-wrong-step');
+        let {api, doc, win} = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', 'E14 guest');
+        click(doc, '[data-session-preset="math-heavy"]', 'E14 session');
+        click(doc, '[data-question-count="5"]', 'E14 count');
+        change(doc.getElementById('speed-challenge-enabled'), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'E14 start');
+        const install = (level, correctWork = false) => {
+          let entry;
+          for (let n = 0; n < 100; n++) {
+            entry = win.HomeworkFirstWrongStep.createEntry(level);
+            if ((entry.interactive.work.firstWrongStep === null) === correctWork) break;
+          }
+          assert((entry.interactive.work.firstWrongStep === null) === correctWork, 'E14 scenario missing');
+          api.state.pendingAnswer = null;
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry, 'math-choice'), 'math-choice');
+          win.renderCurrentQuestion();
+          return entry.interactive;
+        };
+        const select = (group, index) => {
+          click(doc, `.paired-select-option[data-group="${group}"][data-index="${index}"]`, `E14 ${group}`);
+          assert(doc.activeElement?.dataset.group === group && doc.activeElement?.dataset.index === String(index), 'E14 selection must retain keyboard focus');
+        };
+        const c = install(7);
+        const original = doc.querySelector('.wrong-step-start').textContent;
+        click(doc, '.interactive-check-button', 'empty E14');
+        assert(api.state.answeredCount === 0, 'empty E14 graded');
+        assert(doc.body.textContent.includes('Choose one step and one repair'), 'E14 missing step/repair guidance');
+        select('items', c.answerItemIndex);
+        click(doc, '.interactive-check-button', 'incomplete E14');
+        assert(api.state.answeredCount === 0, 'step-only E14 graded');
+        assertNoHorizontalOverflow(frame, '320px E14');
+        for (const button of doc.querySelectorAll('.paired-select-option')) {
+          const rect = button.getBoundingClientRect();
+          assert(rect.width >= 44 && rect.height >= 44, 'E14 touch target too small');
+          assert(button.tagName === 'BUTTON' && button.tabIndex >= 0, 'E14 choices not keyboard accessible');
+        }
+        click(doc, '#pause-session-button', 'pause E14');
+        frame.remove();
+        await qaPost('/__qa/mode', 'offline');
+        frame = await loadApp(320, 'offline-first-wrong-step');
+        ({api, doc, win} = frameParts(frame));
+        click(doc, '#resume-session-button', 'resume E14');
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'E14 resume');
+        assert(doc.querySelector('.wrong-step-start').textContent === original, 'E14 original changed offline');
+        assert(JSON.stringify(api.state.questions[0].interactive.work) === JSON.stringify(c.work), 'E14 work changed offline');
+        assert(doc.querySelector(`.paired-select-option[data-group="items"][data-index="${c.answerItemIndex}"]`).getAttribute('aria-pressed') === 'true', 'E14 lost selected step');
+        select('reasons', c.answerReasonIndex);
+        click(doc, '.interactive-check-button', 'correct E14');
+        assert(api.state.answerResults[0] === true, 'E14 correct pair rejected');
+        const record = api.state.sessionRecords[0];
+        assert(record.chosenAnswer.includes(c.items[c.answerItemIndex].summary) && record.chosenAnswer.includes(c.reasons[c.answerReasonIndex].summary), 'E14 review missing selections');
+        assert(record.questionText.includes(c.work.original) && record.explanation.includes(c.work.correctResult), 'E14 parent review missing work or explanation');
+        assert(!doc.querySelector('.paired-select-question button:not(:disabled)'), 'E14 review editable');
+        click(doc, '#pause-session-button', 'pause E14 review');
+        frame.remove();
+        frame = await loadApp(320, 'offline-first-wrong-step-review');
+        ({api, doc, win} = frameParts(frame));
+        click(doc, '#resume-session-button', 'resume E14 review');
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'E14 review resume');
+        assert(doc.querySelectorAll('.paired-select-option[aria-pressed="true"]').length === 2, 'E14 review lost choices');
+        assert(!doc.querySelector('.paired-select-question button:not(:disabled)'), 'E14 resumed review editable');
+        await qaPost('/__qa/mode', 'online');
+        for (const [level, wrongGroup] of [[3, 'items'], [10, 'reasons'], [6, null]]) {
+          click(doc, '#feedback-continue-button', 'next E14');
+          const config = install(level, wrongGroup === null), index = api.state.currentIndex;
+          select('items', wrongGroup === 'items' ? (config.answerItemIndex + 1) % config.items.length : config.answerItemIndex);
+          select('reasons', wrongGroup === 'reasons' ? (config.answerReasonIndex + 1) % config.reasons.length : config.answerReasonIndex);
+          click(doc, '.interactive-check-button', 'check E14 pair');
+          assert(api.state.answerResults[index] === (wrongGroup === null), `E14 wrong grading for ${wrongGroup}`);
+          assert(doc.querySelectorAll('.paired-select-option.is-correct').length === 2, 'E14 review missing correct choices');
+          assertNoHorizontalOverflow(frame, `320px E14 level ${level} review`);
+        }
+        click(doc, '#pause-session-button', 'exit E14 matrix');
+        click(doc, '#discard-session-button', 'discard E14 matrix');
+        frame.remove();
+      }
+
+      async function runRepairDataMatrix() {
+        let frame = await loadApp(320, 'repair-data');
+        let {api, doc, win} = frameParts(frame);
+        click(doc, '[data-user-id="guest"]', 'repair guest');
+        click(doc, '[data-session-preset="math-heavy"]', 'repair session');
+        click(doc, '[data-question-count="5"]', 'repair count');
+        change(doc.getElementById('speed-challenge-enabled'), false);
+        submit(doc);
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'repair start');
+        const install = level => {
+          const entry = win.HomeworkRepairData.createEntry(level);
+          api.state.pendingAnswer = null;
+          api.state.questions[api.state.currentIndex] = win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry, 'computing-choice'), 'computing-choice');
+          win.renderCurrentQuestion();
+          return entry.interactive;
+        };
+        const select = (group, index) => click(doc, `.paired-select-option[data-group="${group}"][data-index="${index}"]`, `repair ${group}`);
+        const c = install(7);
+        const evidence = doc.querySelector('.repair-data-evidence').textContent;
+        click(doc, '.interactive-check-button', 'empty repair');
+        assert(api.state.answeredCount === 0, 'empty repair graded');
+        select('reasons', c.answerReasonIndex);
+        click(doc, '.interactive-check-button', 'incomplete repair');
+        assert(api.state.answeredCount === 0, 'reason-only repair graded');
+        assertNoHorizontalOverflow(frame, '320px repair');
+        for (const button of doc.querySelectorAll('.paired-select-option')) {
+          const rect = button.getBoundingClientRect();
+          assert(rect.width >= 44 && rect.height >= 44, 'repair touch target too small');
+          assert(button.tagName === 'BUTTON' && button.tabIndex >= 0, 'repair choices are not keyboard accessible');
+        }
+        click(doc, '#pause-session-button', 'pause repair draft');
+        frame.remove();
+        await qaPost('/__qa/mode', 'offline');
+        frame = await loadApp(320, 'offline-repair-data');
+        ({api, doc, win} = frameParts(frame));
+        click(doc, '#resume-session-button', 'resume repair draft');
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'repair resume');
+        assert(doc.querySelector('.repair-data-evidence').textContent === evidence, 'repair evidence changed on reload');
+        assert(doc.querySelector(`.paired-select-option[data-group="reasons"][data-index="${c.answerReasonIndex}"]`).getAttribute('aria-pressed') === 'true', 'repair reason lost offline');
+        select('items', c.answerItemIndex);
+        click(doc, '.interactive-check-button', 'correct repair');
+        assert(api.state.answerResults[0] === true, 'correct repair rejected');
+        const chosen = api.state.sessionRecords[0].chosenAnswer;
+        assert(chosen.includes(c.items[c.answerItemIndex].summary) && chosen.includes(c.reasons[c.answerReasonIndex].summary), 'repair review missing action or reason');
+        assert(!doc.querySelector('.paired-select-question button:not(:disabled)'), 'submitted repair editable');
+        click(doc, '#pause-session-button', 'pause repair review');
+        frame.remove();
+        frame = await loadApp(320, 'offline-repair-review');
+        ({api, doc, win} = frameParts(frame));
+        click(doc, '#resume-session-button', 'resume repair review');
+        await waitFor(() => !doc.getElementById('quiz-screen').hidden, 'repair review resume');
+        assert(doc.querySelectorAll('.paired-select-option[aria-pressed="true"]').length === 2, 'repair review selections lost');
+        assert(!doc.querySelector('.paired-select-question button:not(:disabled)'), 'resumed repair review editable');
+        assert(api.state.sessionRecords[0].chosenAnswer === chosen, 'repair review answer changed');
+        await qaPost('/__qa/mode', 'online');
+        for (const [level, wrongGroup] of [[4, 'reasons'], [8, 'items']]) {
+          click(doc, '#feedback-continue-button', 'next repair');
+          const config = install(level);
+          const index = api.state.currentIndex;
+          select('items', wrongGroup === 'items' ? (config.answerItemIndex + 1) % 3 : config.answerItemIndex);
+          select('reasons', wrongGroup === 'reasons' ? (config.answerReasonIndex + 1) % 3 : config.answerReasonIndex);
+          click(doc, '.interactive-check-button', 'incorrect repair');
+          assert(api.state.answerResults[index] === false, `repair accepted wrong ${wrongGroup}`);
+          assert(doc.querySelectorAll('.paired-select-option.is-wrong').length === 1, 'repair review does not identify the wrong choice');
+          assert(doc.querySelectorAll('.paired-select-option.is-correct').length === 2, 'repair review missing correct action/reason');
+          assertNoHorizontalOverflow(frame, `320px repair level ${level} review`);
+        }
+        click(doc, '#pause-session-button', 'exit repair matrix');
+        click(doc, '#discard-session-button', 'discard repair matrix');
+        frame.remove();
+      }
+
+      async function runPossibilitiesMatrix() {
+        let frame = await loadApp(320,'possibilities');
+        let {api,doc,win} = frameParts(frame);
+        click(doc,'[data-user-id="guest"]','possibilities guest');
+        click(doc,'[data-session-preset="math-heavy"]','possibilities session');
+        click(doc,'[data-question-count="5"]','possibilities count');
+        change(doc.getElementById('speed-challenge-enabled'),false);
+        submit(doc);
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'possibilities start');
+        const config = {layout:'find-every-possibility',kind:'outfits',left:['stripe','dot'],right:['cap','sun'],excluded:[]};
+        const install = c => {
+          const entry = win.HomeworkPossibilities.createEntry(2);
+          entry.interactive=c;
+          entry.extraText=entry.reviewText=win.HomeworkPossibilities.requirements(c);
+          entry.answer=entry.answerLabel='Complete collection: '+win.HomeworkPossibilities.describe(c,win.HomeworkPossibilities.solution(c));
+          api.state.pendingAnswer=null;
+          api.state.questions[api.state.currentIndex]=win.createBankChoiceQuestion(win.normalizeChoiceBankEntry(entry,'probability-choice'),'probability-choice');
+          win.renderCurrentQuestion();
+        };
+        const choose = (row,index) => click(doc,`.possibilities-choice[data-row="${row}"][data-index="${index}"]`,'choose item');
+        const add = pair => {
+          [...pair].forEach((index,row)=>choose(row,index));
+          click(doc,'.possibilities-add','add possibility');
+        };
+        const pairs = () => [...doc.querySelectorAll('.possibilities-card')].map(el=>el.dataset.pair).join(',');
+        install(config);
+        assert(doc.querySelector('.possibilities-add').disabled,'add enabled before choices');
+        click(doc,'.interactive-check-button','check empty collection');
+        assert(api.state.answeredCount===0,'empty collection graded');
+        add('11'); add('00');
+        click(doc,'.possibilities-card','remove first pair');
+        assert(pairs()==='00','removal failed');
+        assert(doc.activeElement===doc.querySelector('.possibilities-card'),'removal lost keyboard focus');
+        click(doc,'.possibilities-undo','undo removal');
+        assert(pairs()==='11,00','undo changed tray order');
+        choose(0,0); choose(1,1);
+        const selected=doc.querySelector('.possibilities-choice[data-row="1"][data-index="1"]');
+        selected.focus();
+        assert(doc.activeElement===selected && selected.getAttribute('aria-pressed')==='true','choice focus/state missing');
+        assertNoHorizontalOverflow(frame,'320px possibilities');
+        for (const el of doc.querySelectorAll('.possibilities-question button')) {
+          const rect=el.getBoundingClientRect();
+          assert(rect.width>=44&&rect.height>=44,'possibilities touch target below 44px');
+        }
+        click(doc,'#pause-session-button','pause possibilities');
+        frame.remove();
+        await qaPost('/__qa/mode','offline');
+        frame=await loadApp(320,'offline-possibilities');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume possibilities');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'possibilities resume');
+        assert(pairs()==='11,00','offline collection lost');
+        assert(doc.querySelector('.possibilities-choice[data-row="0"][data-index="0"]').getAttribute('aria-pressed')==='true','first selection lost');
+        assert(doc.querySelector('.possibilities-choice[data-row="1"][data-index="1"]').getAttribute('aria-pressed')==='true','second selection lost');
+        click(doc,'.possibilities-undo','undo offline');
+        assert(pairs()==='11','offline undo lost');
+        add('00'); add('10'); add('01');
+        click(doc,'.interactive-check-button','check complete collection');
+        assert(api.state.answerResults[0]===true,'alternate tray order rejected');
+        assert(api.state.sessionRecords[0].chosenAnswer.startsWith('Dotted shirt + Sun hat'),'review lost actual order');
+        assert(!doc.querySelector('.possibilities-question button:not(:disabled)'),'submitted collection editable');
+        click(doc,'#pause-session-button','pause submitted collection');
+        frame.remove();
+        frame=await loadApp(320,'offline-possibilities-review');
+        ({api,doc,win}=frameParts(frame));
+        click(doc,'#resume-session-button','resume submitted collection');
+        await waitFor(()=>!doc.getElementById('quiz-screen').hidden,'submitted possibilities resume');
+        assert(pairs()==='11,00,10,01','submitted collection not restored');
+        assert(!doc.querySelector('.possibilities-question button:not(:disabled)'),'restored review editable');
+        await qaPost('/__qa/mode','online');
+        click(doc,'#feedback-continue-button','duplicate task');
+        install(config); add('00'); add('00'); add('10'); add('11');
+        click(doc,'.interactive-check-button','check duplicate collection');
+        assert(api.state.answerResults[1]===false,'duplicate accepted');
+        assert(/repeated/.test(doc.querySelector('.possibilities-status').textContent)&&/missing/.test(doc.querySelector('.possibilities-status').textContent),'duplicate/missing feedback absent');
+        click(doc,'#feedback-continue-button','exclusion task');
+        install({...config,excluded:['01']}); add('00'); add('01'); add('10'); add('11');
+        click(doc,'.interactive-check-button','check forbidden pair');
+        assert(api.state.answerResults[2]===false && /rule/.test(doc.querySelector('.possibilities-status').textContent),'exclusion not checked');
+        click(doc,'#feedback-continue-button','unordered task');
+        install({...config,kind:'unordered',left:['star','moon','heart','diamond'],right:['star','moon','heart','diamond']});
+        for(const pair of ['10','20','30','21','31','32']) add(pair);
+        assertNoHorizontalOverflow(frame,'320px six unordered possibilities');
+        click(doc,'.interactive-check-button','check reversed unordered pairs');
+        assert(api.state.answerResults[3]===true,'reversed unordered pairs rejected');
+        click(doc,'#feedback-continue-button','ordered task');
+        install({...config,kind:'ordered',left:['star','moon','heart'],right:['star','moon','heart']});
+        add('00'); add('01'); add('02');
+        answerCurrentQuestion(frame);
+        assert(api.state.answerResults[4]===true,'ordered pairs rejected');
+        click(doc,'#pause-session-button','exit possibilities matrix');
+        click(doc,'#discard-session-button','discard possibilities matrix');
+        frame.remove();
       }
 
       async function runDesignChanceMatrix() {
@@ -1247,8 +1503,12 @@
         assert(await cache.match("/app/ui/equation-balance.js"), "cache missing equation UI");
         assert(await cache.match("/app/questions/math/shape-architect.js"), "cache missing shape model");
         assert(await cache.match("/app/ui/shape-architect.js"), "cache missing shape UI");
+        assert(await cache.match("/app/questions/math/first-wrong-step.js"), "cache missing first-wrong-step module");
+        assert(await cache.match("/app/questions/computing/repair-data.js"), "cache missing repair-data module");
         assert(await cache.match("/app/questions/math/design-chance.js"), "cache missing chance model");
         assert(await cache.match("/app/ui/design-chance.js"), "cache missing chance UI");
+        assert(await cache.match("/app/questions/math/find-every-possibility.js"), "cache missing enumeration model");
+        assert(await cache.match("/app/ui/find-every-possibility.js"), "cache missing enumeration UI");
         return { registration, initialMainCache: mainCache };
       }
 
@@ -1314,6 +1574,12 @@
         await runShapeArchitectMatrix();
         await qaPost("/__qa/progress", "runDesignChanceMatrix");
         await runDesignChanceMatrix();
+        await qaPost("/__qa/progress", "runPossibilitiesMatrix");
+        await runPossibilitiesMatrix();
+        await qaPost("/__qa/progress", "runRepairDataMatrix");
+        await runRepairDataMatrix();
+        await qaPost("/__qa/progress", "runFirstWrongStepMatrix");
+        await runFirstWrongStepMatrix();
         await qaPost("/__qa/progress", "runEquationBalanceMatrix");
         await runEquationBalanceMatrix();
         await qaPost("/__qa/progress", "runMysteryRuleMatrix");

@@ -17,6 +17,7 @@
     "ui/equation-balance.js",
     "ui/shape-architect.js",
     "ui/design-chance.js",
+    "ui/find-every-possibility.js",
     "ui/results-history-dashboard.js",
     "ui/confetti.js",
     "main/math-utils.js",

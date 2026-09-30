@@ -440,6 +440,10 @@ function validateQuestion(question, meta) {
           !interactive.target.every(bit => bit === 0 || bit === 1)) {
         errors.push(`${meta}: pixel configuration is invalid`);
       }
+    } else if (layout === "find-every-possibility") {
+      if (!["outfits", "ordered", "unordered"].includes(interactive.kind) || !Array.isArray(interactive.left) || !Array.isArray(interactive.right)) {
+        errors.push(`${meta}: possibility collection configuration is invalid`);
+      }
     } else if (layout === "design-chance") {
       if (!Array.isArray(interactive.conditions) || !interactive.conditions.length ||
           !Array.isArray(interactive.totals) || !interactive.totals.length ||

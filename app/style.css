@@ -5013,3 +5013,83 @@ button:disabled {
 .design-chance-spinner { width: min(100%, 260px); margin-inline: auto; }
 .design-chance-spinner svg { display: block; width: 100%; }
 .design-chance-spinner text { font: 12px sans-serif; fill: #192b43; }
+
+/* E11: readable record cards with one explicitly highlighted field. */
+.repair-data {
+  width: 100%;
+  text-align: start;
+  overflow-wrap: anywhere;
+  font-size: 1rem;
+}
+.repair-data-rule, .repair-data-evidence {
+  margin: 0 0 12px;
+  padding: 12px;
+  border-radius: 12px;
+  background: #eef5ff;
+  color: #243d58;
+}
+.repair-data-evidence { margin: 12px 0 0; }
+.repair-data-records { display: grid; gap: 8px; }
+.repair-data-record {
+  padding: 10px 12px;
+  border: 2px solid #b8c9da;
+  border-radius: 12px;
+  background: #fff;
+  color: #243d58;
+}
+.repair-data-record dl { margin: 6px 0 0; }
+.repair-data-record dl > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  padding: 5px;
+}
+.repair-data-record dt { font-weight: 600; }
+.repair-data-record dd { margin: 0; }
+.repair-data-focus {
+  outline: 2px solid #785100;
+  border-radius: 6px;
+  background: #fff0bd;
+}
+
+/* E12: compact choice rows and a wrapping collection at phone widths. */
+.possibilities-question { width: 100%; min-width: 0; text-align: left; }
+.possibilities-choices { display: flex; flex-wrap: wrap; gap: 8px; min-width: 0; margin: 12px 0; padding: 10px; border: 2px solid #65758b; border-radius: 12px; }
+.possibilities-choices legend { padding: 0 6px; font-weight: 700; }
+.possibilities-question button { min-width: 44px; min-height: 44px; white-space: normal; overflow-wrap: anywhere; }
+.possibilities-choice { flex: 1 1 100px; }
+.possibilities-choice[aria-pressed="true"] { outline: 3px solid #235795; outline-offset: 1px; background: #dcecff; }
+.possibilities-question button:focus-visible { outline: 3px solid #152f62; outline-offset: 3px; }
+.possibilities-tray { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; padding: 10px; border: 2px dashed #65758b; border-radius: 12px; min-height: 64px; }
+.possibilities-card { flex: 1 1 150px; max-width: 100%; }
+.possibilities-rules, .possibilities-status { overflow-wrap: anywhere; }
+
+
+/* E14 keeps the worked derivation in reading order above its repair choices. */
+.wrong-step-start {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  text-align: center;
+  border: 1px solid rgba(39, 73, 114, 0.2);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+}
+.wrong-step-expression {
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.first-wrong-step-question .paired-select-board {
+  grid-template-columns: minmax(0, 1fr);
+}
+.first-wrong-step-question .paired-select-option {
+  min-height: 56px;
+  overflow-wrap: anywhere;
+}
+.first-wrong-step-question .paired-select-column.items .paired-select-option {
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+}
+.first-wrong-step-question .paired-select-column.items .paired-select-option:last-child {
+  grid-template-columns: minmax(0, 1fr);
+}

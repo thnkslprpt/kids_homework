@@ -143,7 +143,7 @@
         selectedTokens: sanitizeStringArray(
           record.selectedTokens,
           MAX_SELECTED_TOKENS,
-          record.skill === "equation-balance" ? 6000 : record.skill === "design-chance" ? 800 : 300,
+          record.skill === "equation-balance" ? 6000 : record.skill === "design-chance" ? 800 : record.skill === "find-every-possibility" ? 1000 : 300,
           false
         ),
         reviewText: sanitizeText(record.reviewText, 10000),

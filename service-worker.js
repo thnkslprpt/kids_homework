@@ -1,6 +1,6 @@
 importScripts("app/questions/manifest.js");
 
-const CACHE_VERSION = "homework-v2026-09-29-e09-1";
+const CACHE_VERSION = "homework-v2026-09-30-e14-1";
 const RUNTIME_CACHE = `${CACHE_VERSION}-runtime`;
 const NAVIGATION_TIMEOUT_MS = 4000;
 const QUESTION_SCRIPT_PATHS = Array.isArray(globalThis.HOMEWORK_QUESTION_SCRIPT_PATHS)
@@ -48,6 +48,7 @@ const CRITICAL_ASSETS = [
   "app/ui/equation-balance.js",
   "app/ui/shape-architect.js",
   "app/ui/design-chance.js",
+  "app/ui/find-every-possibility.js",
   "app/ui/results-history-dashboard.js",
   "app/ui/confetti.js",
 ];

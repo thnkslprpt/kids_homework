@@ -252,6 +252,9 @@
     label: "Computing",
     getStaticQuestions: () => COMPUTING_QUESTIONS,
     supplementalGeneratedEntryFactory: (difficulty) => {
+      if (difficulty >= 4 && difficulty <= 10 && Math.random() < 0.4) {
+        return globalThis.HomeworkRepairData.createEntry(difficulty);
+      }
       if (difficulty >= 2 && difficulty <= 7 && Math.random() < 0.35) {
         return globalThis.HomeworkPixelCodes.createEntry(difficulty);
       }

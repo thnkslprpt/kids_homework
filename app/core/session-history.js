@@ -230,7 +230,7 @@
         hintsUsed: clampInteger(record.hintsUsed, 0, 20, undefined),
         confidence: sanitizeEnum(record.confidence, ["not-sure", "somewhat", "sure"]),
         // Construction answers can include a bounded move or undo history in one token.
-        selectedTokens: normalizeTextArray(record.selectedTokens, 30, record.skill === "equation-balance" ? 6000 : record.skill === "design-chance" ? 800 : 300),
+        selectedTokens: normalizeTextArray(record.selectedTokens, 30, record.skill === "equation-balance" ? 6000 : record.skill === "design-chance" ? 800 : record.skill === "find-every-possibility" ? 1000 : 300),
         reviewText: sanitizeText(record.reviewText, 10000),
         explanation: sanitizeText(record.explanation, 10000),
         source: sanitizeText(record.source, 1000),

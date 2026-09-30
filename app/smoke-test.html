@@ -1038,6 +1038,9 @@
           if (!normalizeEntryQuestionText(entry)) failures.push(`${label}: missing question`);
           if (!String(entry.answer || entry.answerLabel || "").trim()) failures.push(`${label}: missing answer`);
           if (!interactive) failures.push(`${label}: missing interactive config`);
+          if (interactive?.layout === "find-every-possibility" && !globalThis.HomeworkPossibilities?.isValidConfig(interactive)) {
+            failures.push(`${label}: invalid possibility configuration`);
+          }
           if (interactive?.layout === "design-chance" && !globalThis.HomeworkDesignChance?.isValidConfig(interactive)) {
             failures.push(`${label}: invalid chance configuration`);
           }
@@ -1056,7 +1059,7 @@
           if (interactive?.layout === "pixel-code" && !globalThis.HomeworkPixelCodes?.isValidConfig(interactive)) {
             failures.push(`${label}: invalid pixel board`);
           }
-          if (!answerIndexes.length && interactive?.layout !== "pixel-code" && interactive?.layout !== "build-graph" && interactive?.layout !== "mystery-rule" && interactive?.layout !== "equation-balance" && interactive?.layout !== "shape-architect" && interactive?.layout !== "design-chance" && !(interactive?.layout === "command-sequence" && answerSequence.length)) {
+          if (!answerIndexes.length && interactive?.layout !== "pixel-code" && interactive?.layout !== "build-graph" && interactive?.layout !== "mystery-rule" && interactive?.layout !== "equation-balance" && interactive?.layout !== "shape-architect" && interactive?.layout !== "design-chance" && interactive?.layout !== "find-every-possibility" && !(interactive?.layout === "command-sequence" && answerSequence.length)) {
             failures.push(`${label}: missing interactive answer indexes`);
           }
           if (answerIndexes.length && new Set(answerIndexes).size !== answerIndexes.length) {
@@ -1442,6 +1445,71 @@
         }
       }
 
+      function validateFirstWrongStepCoverage() {
+        for (let level = 2; level <= 10; level++) {
+          const entry = globalThis.HomeworkFirstWrongStep.createEntry(level);
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry, 'math-choice'), 'math-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `first wrong step ${level}`);
+          assert(document.querySelector('.wrong-step-start').textContent.includes(entry.interactive.work.original), 'E14 original missing');
+          const c = entry.interactive;
+          assert(document.querySelectorAll('.paired-select-column.items button').length === 4, 'E14 step choices missing');
+          click(document.querySelector(`.paired-select-option[data-group="items"][data-index="${c.answerItemIndex}"]`), 'E14 step');
+          click(document.querySelector(`.paired-select-option[data-group="reasons"][data-index="${c.answerReasonIndex}"]`), 'E14 repair');
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(tokens.includes(`item:${c.answerItemIndex}`) && tokens.includes(`reason:${c.answerReasonIndex}`), 'E14 draft lost');
+          renderInteractiveQuestion(question, {readOnly: true, selectedTokens: tokens});
+          assert(!document.querySelector('.paired-select-question button:not(:disabled)'), 'E14 review editable');
+          assert(document.querySelectorAll('.paired-select-option[aria-pressed="true"]').length === 2, 'E14 review lost choices');
+        }
+        api.state.pendingAnswer = null;
+      }
+
+      function validateRepairDataCoverage() {
+        for (let level = 4; level <= 10; level++) {
+          const entry = globalThis.HomeworkRepairData.createEntry(level);
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry, 'computing-choice'), 'computing-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `repair data ${level}`);
+          assert(document.querySelectorAll('.repair-data-record').length === entry.interactive.repair.records.length, 'repair record cards missing');
+          assert(document.querySelectorAll('.repair-data-focus').length === 1, 'repair needs one highlighted field');
+          assert(document.querySelector('.repair-data-evidence').textContent.includes(entry.interactive.repair.evidence), 'repair evidence missing');
+          const c = entry.interactive;
+          click(document.querySelector(`.paired-select-option[data-group="items"][data-index="${c.answerItemIndex}"]`), 'select repair');
+          click(document.querySelector(`.paired-select-option[data-group="reasons"][data-index="${c.answerReasonIndex}"]`), 'justify repair');
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(tokens.includes(`item:${c.answerItemIndex}`) && tokens.includes(`reason:${c.answerReasonIndex}`), 'repair draft lost');
+          renderInteractiveQuestion(question, {readOnly: true, selectedTokens: tokens});
+          assert(!document.querySelector('.paired-select-question button:not(:disabled)'), 'repair review editable');
+          assert(document.querySelectorAll('.paired-select-option[aria-pressed="true"]').length === 2, 'repair review lost selections');
+        }
+        api.state.pendingAnswer = null;
+      }
+
+      function validatePossibilitiesCoverage() {
+        for (let level=2;level<=8;level++) {
+          const entry = globalThis.HomeworkPossibilities.createEntry(level);
+          const question = createBankChoiceQuestion(normalizeChoiceBankEntry(entry,'probability-choice'),'probability-choice');
+          api.state.pendingAnswer = null;
+          renderSmokeQuestion(question, `possibilities ${level}`);
+          const pairs = globalThis.HomeworkPossibilities.solution(entry.interactive).reverse();
+          for (const pair of pairs) {
+            [...pair].forEach((index,row) => click(document.querySelector(`.possibilities-choice[data-row="${row}"][data-index="${index}"]`),'choose item'));
+            click(document.querySelector('.possibilities-add'),'add pair');
+          }
+          const tokens = api.state.pendingAnswer.tokens;
+          assert(globalThis.HomeworkPossibilities.evaluate(entry.interactive,tokens).isCorrect, `possibilities ${level}: solution rejected`);
+          click(document.querySelector('.possibilities-card'),'remove pair');
+          assert(document.querySelectorAll('.possibilities-card').length===pairs.length-1,'pair removal failed');
+          click(document.querySelector('.possibilities-undo'),'undo removal');
+          assert(document.querySelectorAll('.possibilities-card').length===pairs.length,'undo removal failed');
+          renderInteractiveQuestion(question,{readOnly:true,selectedTokens:tokens});
+          assert(!document.querySelector('.possibilities-question button:not(:disabled)'), 'possibilities review editable');
+          assert([...document.querySelectorAll('.possibilities-card')].map(el=>el.dataset.pair).join(',')===pairs.join(','),'review lost tray order');
+        }
+        api.state.pendingAnswer = null;
+      }
+
       function validateDesignChanceCoverage() {
         for (const level of [1, 3, 5, 6, 9]) for (const kind of ['bag', 'spinner']) {
           const entry = globalThis.HomeworkDesignChance.createEntry(level);
@@ -1511,6 +1579,9 @@
       try {
         if (!api) throw new Error("HOMEWORK_TEST_API was not exposed by app.js");
         validateRegistryModules();
+        validateRepairDataCoverage();
+        validateFirstWrongStepCoverage();
+        validatePossibilitiesCoverage();
         validateDesignChanceCoverage();
         validateShapeArchitectCoverage();
         validateEquationBalanceCoverage();

@@ -804,6 +804,8 @@ function normalizeChoiceBankEntry(entry, type) {
       !interactive ||
       (interactive.layout === "pixel-code"
         ? !globalThis.HomeworkPixelCodes?.isValidConfig(interactive)
+        : interactive.layout === "find-every-possibility"
+          ? !globalThis.HomeworkPossibilities?.isValidConfig(interactive)
         : interactive.layout === "design-chance"
           ? !globalThis.HomeworkDesignChance?.isValidConfig(interactive)
         : interactive.layout === "shape-architect"
@@ -1732,12 +1734,17 @@ function validateHomeworkQuestionShape(question, context = "question") {
         "equation-balance",
         "shape-architect",
         "design-chance",
+        "find-every-possibility",
       ].includes(interactive.layout)
     ) {
       addError("interactive questions need a supported layout");
     } else if (interactive.layout === "pixel-code") {
       if (!globalThis.HomeworkPixelCodes?.isValidConfig(interactive)) {
         addError("pixel code questions need a valid variant, board size, and binary target");
+      }
+    } else if (interactive.layout === "find-every-possibility") {
+      if (!globalThis.HomeworkPossibilities?.isValidConfig(interactive)) {
+        addError("possibility collections need valid choices and three to six allowed pairs");
       }
     } else if (interactive.layout === "design-chance") {
       if (!globalThis.HomeworkDesignChance?.isValidConfig(interactive)) {
@@ -2400,6 +2407,11 @@ function buildSessionQuestions(totalQuestions, difficulty, options = {}) {
     categoryDifficulties,
     hebrewQuestionMode,
     mathModeIndex: 0,
+    firstWrongStepCount: 0,
+    firstWrongStepLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 8) : 2,
+    possibilitiesCount: 0,
+    possibilitiesIndex: 0,
+    possibilitiesLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 8) : 2,
     designChanceCount: 0,
     designChanceIndex: 0,
     designChanceLimit: Object.keys(categoryCounts).length === 1 ? Math.ceil(totalQuestions / 4) : 2,
@@ -2660,6 +2672,22 @@ function createSessionQuestionForCategory(
       nonHebrewDifficultyQueues?.[category] || [],
       categoryDifficulty
     );
+    if (runtime.mathModeIndex % 8 === 1 && runtime.firstWrongStepCount < runtime.firstWrongStepLimit) {
+      const entry = globalThis.HomeworkFirstWrongStep?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.firstWrongStepCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
+    if (runtime.mathModeIndex % 8 === 3 && runtime.possibilitiesCount < runtime.possibilitiesLimit) {
+      const entry = globalThis.HomeworkPossibilities?.createEntry(effectiveDifficulty);
+      if (entry) {
+        runtime.mathModeIndex += 1;
+        runtime.possibilitiesCount += 1;
+        return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "math-choice"), "math-choice");
+      }
+    }
     if (runtime.mathModeIndex % 8 === 7 && runtime.designChanceCount < runtime.designChanceLimit) {
       const entry = globalThis.HomeworkDesignChance?.createEntry(effectiveDifficulty);
       if (entry) {
@@ -2733,6 +2761,14 @@ function createSessionQuestionForCategory(
 
   if (category === RESERVED_MAP_CATEGORY) {
     return createGeographyMapQuestion(effectiveDifficulty, runtime, resources);
+  }
+
+  if (category === "probability" && runtime.possibilitiesIndex++ % 8 === 2 && runtime.possibilitiesCount < runtime.possibilitiesLimit) {
+    const entry = globalThis.HomeworkPossibilities?.createEntry(effectiveDifficulty);
+    if (entry) {
+      runtime.possibilitiesCount += 1;
+      return createBankChoiceQuestion(normalizeChoiceBankEntry(entry, "probability-choice"), "probability-choice");
+    }
   }
 
   if (category === "probability" && runtime.designChanceIndex++ % 4 === 0 && runtime.designChanceCount < runtime.designChanceLimit) {
@@ -3666,6 +3702,9 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
   }
 
   const validInteractiveSelection = (question, selection) => {
+    if (question?.interactive?.layout === "find-every-possibility") {
+      return Boolean(globalThis.HomeworkPossibilities?.parseTokens(question.interactive, selection?.tokens));
+    }
     if (question?.interactive?.layout === "design-chance") {
       return Boolean(globalThis.HomeworkDesignChance?.parseTokens(question.interactive, selection?.tokens));
     }
@@ -3687,6 +3726,10 @@ function isValidSavedRoundState(round, totalQuestions, recordsField) {
   if (!selections.every((selection, index) => {
     const question = round.questions?.[index];
     if (!validInteractiveSelection(question, selection)) return false;
+    if (question?.interactive?.layout === "find-every-possibility") {
+      const result = globalThis.HomeworkPossibilities.evaluate(question.interactive, selection.tokens);
+      return result.complete && result.isCorrect === results[index];
+    }
     if (question?.interactive?.layout === "design-chance") {
       const result = globalThis.HomeworkDesignChance.evaluate(question.interactive, selection.tokens);
       return result.complete && result.isCorrect === results[index];

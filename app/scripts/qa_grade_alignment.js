@@ -140,7 +140,13 @@ function run() {
           failures.push(`${label}: out-of-grade topic matched ${forbidden}: ${JSON.stringify(text)}`);
         }
         const required = requiredRules[category]?.[grade];
-        if (question.interactive?.layout === "design-chance") {
+        if (question.interactive?.layout === "find-every-possibility") {
+          const c = question.interactive;
+          if (grade < 2 || grade > 8 || c.kind !== (grade <= 5 ? "outfits" : grade === 6 ? "ordered" : "unordered") ||
+              c.excluded.length !== ([4, 5, 8].includes(grade) ? 1 : 0)) {
+            failures.push(`${label}: enumeration does not match the grade progression`);
+          }
+        } else if (question.interactive?.layout === "design-chance") {
           const c = question.interactive;
           if (grade > 9 || c.conditions.length !== (grade >= 6 ? 2 : 1) ||
               (c.totals.length > 1) !== (grade >= 8) ||

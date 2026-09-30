@@ -602,3 +602,120 @@ arrangements/totals, solvability, progression, session placement, malformed save
 and history/report preservation. Browser smoke and release checks cover bags,
 spinners, keyboard navigation, erase/undo, total changes, correct and incorrect
 answers, offline resume/review, and 44px touch targets at a 320px portrait width.
+
+## Repair the data (E11)
+
+Repair the data appears in normal **Computing** practice and mixed sessions that
+include Computing, outside speed challenges. Each activity shows three or four
+record cards, one highlighted field, a data rule, and supplied evidence. Choose
+an action and the reason that supports it, then press **Check repair**. Both
+choices must be correct; incomplete answers are not graded.
+
+- Level 4: mark a later exact duplicate by checkout ID, or keep separate IDs
+  that happen to have the same book title. The rule explicitly keeps the first copy.
+- Level 5: convert whole centimetre measurements into metres.
+- Level 6: convert fractional quantities in cm/m, g/kg, and mL/L. The conversion
+  rule is supplied; changing only a unit label is not a valid conversion.
+- Level 7: fill missing book counts from a log for the same visit ID, including
+  a verified zero, or leave the value unknown when the source is unavailable.
+- Levels 8–9: repair a value contradicted by a checked source, keep a verified
+  unusual measurement, or flag an unverified outlier for further checking.
+- Level 10: mixed cases, including conflicting titles under one ID where the
+  original source is unavailable and a correction cannot be determined.
+
+An unusual value is never treated as an error just because it differs from its
+neighbours. Missing data is never guessed from another record. **Keep** and
+**Cannot determine** are correct answers when supported by the rule and evidence.
+Actions and reasons are shuffled independently. Before checking, tap another
+choice to revise either selection; the native buttons support keyboard operation.
+
+Partial action/reason selections, records, and evidence survive pause/reload,
+including hosted offline reloads. Review retains the learner's selections,
+marks the correct action and reason, and explains the evidence. History and report
+data preserve a readable action and justification. The module loads directly in
+folder mode and is precached for hosted offline use, without new dependencies.
+
+`node --test app/scripts/qa_repair_data.js` checks record identity, conversions,
+missing-value evidence, outlier decisions, progression, Computing session
+placement, and persistence/reporting. Browser smoke and release checks cover
+cards, both halves of grading, incomplete answers, offline draft and review
+recovery, and 44px touch targets at 320px portrait width.
+
+
+## Find every possibility (E12)
+
+Math and probability practice now include small collection-building tasks. Choose one
+item from each row and tap **Add possibility**. Tap a tray card to remove it, use
+**Undo last tray change** to reverse up to 20 edits, and **Check collection** when all
+possibilities have been found. Empty trays stay ungraded; a submitted nonempty tray
+is checked for missing pairs, repetitions, and broken rules.
+
+- Level 2: two shirts × two hats (four outfits).
+- Level 3: two shirts × three hats (six outfits).
+- Levels 4–5: two shirts × three hats with one forbidden outfit (five outfits).
+- Level 6: ordered lines of two different badges from three choices (six lines).
+- Level 7: unordered pairs of different badges from four choices (six collections).
+- Level 8: unordered badge pairs with one forbidden pair (five collections).
+
+Prompts explicitly explain whether swapping the two items changes the result.
+Every valid set has at most six members. The tray allows eight cards so learners
+can notice and correct repeats without increasing the required answer set.
+Feedback points to a missing family of pairs; submitted review includes the actual
+collection and the complete solution. Reversed unordered pairs and any tray order
+are accepted. Unfinished selections, the tray, and undo history survive pause/reload,
+including offline use after caching. Submitted collections are read-only.
+
+E12 uses the existing math and probability categories, appears at most twice in a
+mixed session and at most once per eight questions (rounded up) in single-category
+practice, and stays out of timed challenges. All instructions, item symbols,
+generation, and grading are bundled for folder and installed offline modes.
+
+The model is `app/questions/math/find-every-possibility.js`; the renderer is
+`app/ui/find-every-possibility.js`. Run `node --test app/scripts/qa_find_every_possibility.js`
+for grading, generation, checkpoint, and reporting checks. `npm run qa:all` also
+checks the browser controls, 320px targets/layout, actual-order review, and offline
+recovery of unfinished and submitted collections.
+
+
+## Find the first wrong step (E14)
+
+Math practice includes worked-solution audits at levels 2–10. Children read the
+starting expression and three numbered steps, choose the earliest invalid
+transition, and select a replacement for that step. Both choices must be correct.
+Some solutions are fully correct: choose “All steps are correct” and “No repair
+needed”. Repair choices do not name the erroneous step.
+
+| Level | Worked-solution family |
+| --- | --- |
+| 2 | Addition regrouping with a carried ten |
+| 3 | Regrouping and subtracting a sum |
+| 4 | Brackets, multiplication, then addition |
+| 5 | Order of operations and distribution |
+| 6 | Adding fractions with the same denominator |
+| 7 | Multiplying and dividing fractions |
+| 8 | Operations on both sides of a linear equation |
+| 9 | Distribution in a linear equation |
+| 10 | Equations with unknowns on both sides |
+
+Errors occur in different positions, including the final calculation. Each
+incorrect example has exactly one invalid transition; later steps correctly
+follow the mistaken line. Feedback identifies the first error, explains the
+rule, and shows the corrected derivation. The original work and both selected
+answers remain available for parent review and reporting.
+
+E14 appears in the regular Math rotation, at most twice in mixed sessions or
+roughly once per eight questions in Math-only sessions. It is excluded from
+speed rounds and level 1. There are no new categories or dependencies.
+
+Step-only, repair-only, and complete choices use the existing paired-selection
+checkpoint format, so unfinished work and submitted review survive reloads.
+Native buttons support keyboard use, and steps and repairs stack on narrow
+screens. The question module is included in the offline asset manifest.
+
+Verification: `node --test app/scripts/qa_first_wrong_step.js` independently
+checks displayed arithmetic/equation equivalence, the first invalid transition,
+unique repairs, correct examples, session inclusion, and checkpoints.
+`npm run qa:browser` renders all levels; `npm run qa:release-browser` checks
+320px layouts, touch targets, incomplete/incorrect/correct submissions, offline
+draft and review reloads, and cached assets. The focused test also runs in
+`npm test`.
